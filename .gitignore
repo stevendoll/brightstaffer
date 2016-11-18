@@ -4,7 +4,6 @@
 *.xml
 *.pyc
 *.pyo
-*.html
 *.csv
 .DS_Store
 .idea
