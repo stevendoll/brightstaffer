@@ -1,0 +1,10 @@
+*.name
+*.iml
+*.log
+*.xml
+*.pyc
+*.pyo
+*.html
+*.csv
+.DS_Store
+.idea

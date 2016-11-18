@@ -7,22 +7,29 @@ Function views
     1. Add an import:  from my_app import views
     2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
 Class-based views
-    1. Add an import:  from other_app.views import Home
+    1. Add an import:  from other_app.views import Homeo
     2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
 Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url,include
+from brightStafferapp import views,resetpassword
 from django.contrib import admin
-from django.contrib.auth import views
+from django.contrib.auth import views as auth_views
+from brightStafferapp import views
 
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+
+
+urlpatterns =[
+    url(r'^admin/', include(admin.site.urls)),
     url(r'', include('brightStafferapp.urls')),
-    url(r'^login/$', views.login, {'template_name': 'Login.html'}),
-    url(r'^sign_up/$', views.login, {'template_name': 'Account.html'}),
-    url(r'^forgot_password/$', views.login, {'template_name': 'Forgot_Password.html'}),
-    url(r'^dashboard/$', views.login, {'template_name': 'Dashboard.html'}),
+    url(r'^login/$', views.login),
+    url(r'^logout/$', views.user_logout),
+    url(r'^dashboard/$', views.dashboard),
+    url(r'^account/$', views.register),
+    url(r'^forgot/$', resetpassword.ResetPasswordRequestView.as_view()),
+    url(r'^account/reset_password_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', resetpassword.PasswordResetConfirmView.as_view(),name='reset_password_confirm'),
 
 ]
+

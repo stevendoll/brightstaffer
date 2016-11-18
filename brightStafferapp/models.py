@@ -1,3 +1,3 @@
-from django.db import models
+from brightStaffer import settings
 
-# Create your models here.
+
