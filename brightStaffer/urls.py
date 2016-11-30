@@ -14,22 +14,28 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url,include
-from brightStafferapp import views,resetpassword
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django import template
+from django.conf import settings
+from django.conf.urls.static import static
 from brightStafferapp import views
+
 
 
 
 urlpatterns =[
     url(r'^admin/', include(admin.site.urls)),
-    url(r'', include('brightStafferapp.urls')),
-    url(r'^login/$', views.login),
-    url(r'^logout/$', views.user_logout),
-    url(r'^dashboard/$', views.dashboard),
-    url(r'^account/$', views.register),
-    url(r'^forgot/$', resetpassword.ResetPasswordRequestView.as_view()),
-    url(r'^account/reset_password_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', resetpassword.PasswordResetConfirmView.as_view(),name='reset_password_confirm'),
+    url(r'^user_account/', views.user_account),
+    url(r'^user_login/', views.user_login),
+    url(r'', views.home),
+
 
 ]
 
+#     url(r'^brightStaffer/$', include(app)),
+#     url(r'^logout/$', views.user_logout),
+#     url(r'^dashboard/$', views.dashboard),
+#     url(r'^account/$', views.register),
+#     url(r'^forgot/$', resetpassword.ResetPasswordRequestView.as_view()),
+#     url(r'^account/reset_password_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', resetpassword.PasswordResetConfirmView.as_view(),name='reset_password_confirm'),
