@@ -35,3 +35,11 @@ pip install django-widget-tweaks
 
 for social login connection need to run below command
 python-social-auth==0.2.12
+
+###########################################################
+pip install djangorestframework
+pip install markdown       # Markdown support for the browsable API.
+pip install django-filter  # Filtering support
+
+###########################################################
+pip install simplejson
