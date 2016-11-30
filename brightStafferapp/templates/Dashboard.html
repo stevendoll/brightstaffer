@@ -1,0 +1,1050 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title>
+      
+        Dashboard · 
+      
+    </title>
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/toolkit.css' %}" rel="stylesheet">
+    <link href="{% static 'css/assets_css_application.css' %}" rel="stylesheet">
+    <link href="{% static 'css/assets_css_dashboard.css' %}" rel="stylesheet">
+
+</head>
+  
+<body class="with-top-navbar">
+
+<div class="growl" id="app-growl"></div>
+
+<nav class="navbar navbar-inverse navbar-fixed-top app-navbar">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-main">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://bright-mcweeney.rhcloud.com/index.html">
+        <img src="{% static 'images/icon.png' %}" alt="brand">
+      </a>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar-collapse-main">
+
+        <ul class="nav navbar-nav hidden-xs">
+          <li class="active">
+            <a href="http://bright-mcweeney.rhcloud.com/index.html">Activity</a>
+          </li>
+          <li>
+            <a href="#">Projects</a>
+          </li>
+          <li>
+            <a href="#">Talent</a>
+          </li>
+          <li>
+            <a href="#">Team</a>
+          </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right m-r-0 hidden-xs">
+          <li>	
+          	<a class="app-notifications" data-toggle="modal" href="#msgModal">
+<!--             <a class="app-notifications" href="notifications/index.html"> -->
+              <span class="icon icon-bell"></span>
+            </a>
+          </li>
+          <li>
+            <button class="btn btn-default navbar-btn navbar-btn-avitar" data-toggle="popover" data-original-title="" title="">
+              <img class="img-circle" src="Dashboard_files/avatar-booz.png">
+            </button>
+          </li>
+        </ul>
+
+        <form class="navbar-form navbar-right app-search" role="search">
+          <div class="form-group">
+            <input class="form-control" data-action="grow" placeholder="Search" type="text">
+          </div>
+        </form>
+
+        <ul class="nav navbar-nav hidden-sm hidden-md hidden-lg">
+          <li><a href="http://bright-mcweeney.rhcloud.com/index.html">Dashboard</a></li>
+          <li><a href="http://bright-mcweeney.rhcloud.com/profile/index.html">Projects</a></li>
+          <li><a href="http://bright-mcweeney.rhcloud.com/notifications/index.html">Talent</a></li>
+          <li><a data-toggle="modal" href="#msgModal">Messages</a></li>
+          <li><a href="#" data-action="growl">Growl</a></li>
+          <li><a href="/login/">Logout</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav hidden">
+	      <li><a href="#">Profile</a></li>  
+          <li><a href="#" data-action="growl">Help</a></li>
+          <li><a href="/logout/">Logout</a></li>
+        </ul>
+      </div>
+  </div>
+</nav>
+
+<div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="msgModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<!--         <button type="button" class="btn btn-sm btn-primary pull-right app-new-msg js-newMsg">New message</button> -->
+        <h4 class="modal-title">Notifications</h4>
+      </div>
+
+      <div class="modal-body p-a-0 js-modalBody">
+        <div class="modal-body-scroller">
+          <div class="media-list media-list-users list-group js-msgGroup">
+            <a href="#" class="list-group-item">
+              <div class="media">
+                <span class="media-left">
+                <img class="img-circle media-object" src="Dashboard_files/avatar-fat.jpg">
+                </span>
+                <div class="media-body">
+                  <strong>Jacob Thornton</strong> and <strong>1 other</strong>
+                  <div class="media-body-secondary">
+                    Aenean eu leo quam. Pellentesque ornare sem lacinia quam …
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="#" class="list-group-item">
+              <div class="media">
+                <span class="media-left">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-mdo.png">
+                </span>
+                <div class="media-body">
+                  <strong>Mark Otto</strong> and <strong>3 others</strong>
+                  <div class="media-body-secondary">
+                    Brunch sustainable placeat vegan bicycle rights yeah…
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="#" class="list-group-item">
+              <div class="media">
+                <span class="media-left">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-jmm.png">
+                </span>
+                <div class="media-body">
+                  <strong>Jeff McWeeney</strong>
+                  <div class="media-body-secondary">
+                    Brunch sustainable placeat vegan bicycle rights yeah…
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="#" class="list-group-item">
+              <div class="media">
+                <span class="media-left">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-fat.jpg">
+                </span>
+                <div class="media-body">
+                  <strong>Jacob Thornton</strong> and <strong>1 other</strong>
+                  <div class="media-body-secondary">
+                    Aenean eu leo quam. Pellentesque ornare sem lacinia quam …
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="#" class="list-group-item">
+              <div class="media">
+                <span class="media-left">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-mdo.png">
+                </span>
+                <div class="media-body">
+                  <strong>Mark Otto</strong> and <strong>3 others</strong>
+                  <div class="media-body-secondary">
+                    Brunch sustainable placeat vegan bicycle rights yeah…
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="#" class="list-group-item">
+              <div class="media">
+                <span class="media-left">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-jmm.png">
+                </span>
+                <div class="media-body">
+                  <strong>Jeff McWeeney</strong>
+                  <div class="media-body-secondary">
+                    Brunch sustainable placeat vegan bicycle rights yeah…
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="#" class="list-group-item">
+              <div class="media">
+                <span class="media-left">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-fat.jpg">
+                </span>
+                <div class="media-body">
+                  <strong>Jacob Thornton</strong> and <strong>1 other</strong>
+                  <div class="media-body-secondary">
+                    Aenean eu leo quam. Pellentesque ornare sem lacinia quam …
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="#" class="list-group-item">
+              <div class="media">
+                <span class="media-left">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-mdo.png">
+                </span>
+                <div class="media-body">
+                  <strong>Mark Otto</strong> and <strong>3 others</strong>
+                  <div class="media-body-secondary">
+                    Brunch sustainable placeat vegan bicycle rights yeah…
+                  </div>
+                </div>
+              </div>
+            </a>
+            <a href="#" class="list-group-item">
+              <div class="media">
+                <span class="media-left">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-jmm.png">
+                </span>
+                <div class="media-body">
+                  <strong>Jeff McWeeney</strong>
+                  <div class="media-body-secondary">
+                    Brunch sustainable placeat vegan bicycle rights yeah…
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="hide m-a js-conversation">
+            <ul class="media-list media-list-conversation">
+              <li class="media media-current-user m-b-md">
+                <div class="media-body">
+                  <div class="media-body-text">
+                    Aenean eu leo quam. Pellentesque ornare sem lacinia 
+quam venenatis vestibulum. Nulla vitae elit libero, a pharetra augue. 
+Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi 
+leo risus, porta ac consectetur ac, vestibulum at eros. Sed posuere 
+consectetur est at lobortis.
+                  </div>
+                  <div class="media-footer">
+                    <small class="text-muted">
+                      <a href="#">Jeff McWeeney</a> at 4:20PM
+                    </small>
+                  </div>
+                </div>
+                <a class="media-right" href="#">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-jmm.png">
+                </a>
+              </li>
+
+              <li class="media m-b-md">
+                <a class="media-left" href="#">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-fat.jpg">
+                </a>
+                <div class="media-body">
+                  <div class="media-body-text">
+                   Cras justo odio, dapibus ac facilisis in, egestas 
+eget quam. Duis mollis, est non commodo luctus, nisi erat porttitor 
+ligula, eget lacinia odio sem nec elit. Praesent commodo cursus magna, 
+vel scelerisque nisl consectetur et.
+                  </div>
+                  <div class="media-body-text">
+                   Vestibulum id ligula porta felis euismod semper. 
+Aenean lacinia bibendum nulla sed consectetur. Cras justo odio, dapibus 
+ac facilisis in, egestas eget quam. Morbi leo risus, porta ac 
+consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel 
+scelerisque nisl consectetur et. Nullam quis risus eget urna mollis 
+ornare vel eu leo. Morbi leo risus, porta ac consectetur ac, vestibulum 
+at eros.
+                  </div>
+                  <div class="media-body-text">
+                   Cras mattis consectetur purus sit amet fermentum. 
+Donec sed odio dui. Integer posuere erat a ante venenatis dapibus 
+posuere velit aliquet. Nulla vitae elit libero, a pharetra augue. Donec 
+id elit non mi porta gravida at eget metus.
+                  </div>
+                  <div class="media-footer">
+                    <small class="text-muted">
+                      <a href="#">Fat</a> at 4:28PM
+                    </small>
+                  </div>
+                </div>
+              </li>
+
+              <li class="media m-b-md">
+                <a class="media-left" href="#">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-mdo.png">
+                </a>
+                <div class="media-body">
+                  <div class="media-body-text">
+                   Etiam porta sem malesuada magna mollis euismod. Donec
+ id elit non mi porta gravida at eget metus. Praesent commodo cursus 
+magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada 
+magna mollis euismod. Morbi leo risus, porta ac consectetur ac, 
+vestibulum at eros. Aenean lacinia bibendum nulla sed consectetur.
+                  </div>
+                  <div class="media-body-text">
+                   Curabitur blandit tempus porttitor. Integer posuere 
+erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est 
+non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem 
+nec elit.
+                  </div>
+                  <div class="media-footer">
+                    <small class="text-muted">
+                      <a href="#">Mark Otto</a> at 4:20PM
+                    </small>
+                  </div>
+                </div>
+              </li>
+
+              <li class="media media-current-user m-b-md">
+                <div class="media-body">
+                  <div class="media-body-text">
+                    Aenean eu leo quam. Pellentesque ornare sem lacinia 
+quam venenatis vestibulum. Nulla vitae elit libero, a pharetra augue. 
+Maecenas sed diam eget risus varius blandit sit amet non magna. Morbi 
+leo risus, porta ac consectetur ac, vestibulum at eros. Sed posuere 
+consectetur est at lobortis.
+                  </div>
+                  <div class="media-footer">
+                    <small class="text-muted">
+                      <a href="#">Jeff McWeeney</a> at 4:20PM
+                    </small>
+                  </div>
+                </div>
+                <a class="media-right" href="#">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-jmm.png">
+                </a>
+              </li>
+
+              <li class="media m-b-md">
+                <a class="media-left" href="#">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-fat.jpg">
+                </a>
+                <div class="media-body">
+                  <div class="media-body-text">
+                   Cras justo odio, dapibus ac facilisis in, egestas 
+eget quam. Duis mollis, est non commodo luctus, nisi erat porttitor 
+ligula, eget lacinia odio sem nec elit. Praesent commodo cursus magna, 
+vel scelerisque nisl consectetur et.
+                  </div>
+                  <div class="media-body-text">
+                   Vestibulum id ligula porta felis euismod semper. 
+Aenean lacinia bibendum nulla sed consectetur. Cras justo odio, dapibus 
+ac facilisis in, egestas eget quam. Morbi leo risus, porta ac 
+consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel 
+scelerisque nisl consectetur et. Nullam quis risus eget urna mollis 
+ornare vel eu leo. Morbi leo risus, porta ac consectetur ac, vestibulum 
+at eros.
+                  </div>
+                  <div class="media-body-text">
+                   Cras mattis consectetur purus sit amet fermentum. 
+Donec sed odio dui. Integer posuere erat a ante venenatis dapibus 
+posuere velit aliquet. Nulla vitae elit libero, a pharetra augue. Donec 
+id elit non mi porta gravida at eget metus.
+                  </div>
+                  <div class="media-footer">
+                    <small class="text-muted">
+                      <a href="#">Fat</a> at 4:28PM
+                    </small>
+                  </div>
+                </div>
+              </li>
+
+              <li class="media m-b">
+                <a class="media-left" href="#">
+                  <img class="img-circle media-object" src="Dashboard_files/avatar-jmm.png">
+                </a>
+                <div class="media-body">
+                  <div class="media-body-text">
+                   Etiam porta sem malesuada magna mollis euismod. Donec
+ id elit non mi porta gravida at eget metus. Praesent commodo cursus 
+magna, vel scelerisque nisl consectetur et. Etiam porta sem malesuada 
+magna mollis euismod. Morbi leo risus, porta ac consectetur ac, 
+vestibulum at eros. Aenean lacinia bibendum nulla sed consectetur.
+                  </div>
+                  <div class="media-body-text">
+                   Curabitur blandit tempus porttitor. Integer posuere 
+erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est 
+non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem 
+nec elit.
+                  </div>
+                  <div class="media-footer">
+                    <small class="text-muted">
+                      <a href="#">Mark Otto</a> at 4:20PM
+                    </small>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-labelledby="projectModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Projects</h4>
+      </div>
+
+      <div class="modal-body p-a-0">
+        <div class="modal-body-scroller">
+          <ul class="media-list media-list-users list-group">
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-bs.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> View
+                  </button>
+                  <strong>Creative Director</strong>
+                  <p><a href="#">Capitol One</a> - Washington DC</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-bs.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> View
+                  </button>
+                  <strong>UX Designer</strong>
+                  <p><a href="#">Avanade</a> - New York, NY</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-bs.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> View
+                  </button>
+                  <strong>UX Designer</strong>
+                  <p><a href="#">J.P. Morgan Chase</a> - New York, NY</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="talentModal" tabindex="-1" role="dialog" aria-labelledby="talentModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Talent</h4>
+      </div>
+
+      <div class="modal-body p-a-0">
+        <div class="modal-body-scroller">
+          <ul class="media-list media-list-users list-group">
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-fat.jpg">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Jacob Thornton</strong>
+                  <p>@fat - San Francisco</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-jmm.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Jeff McWeeney</strong>
+                  <p>@dhg - Palo Alto</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-mdo.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Mark Otto</strong>
+                  <p>@mdo - San Francisco</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-fat.jpg">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Jacob Thornton</strong>
+                  <p>@fat - San Francisco</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-jmm.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Jeff McWeeney</strong>
+                  <p>@dhg - Palo Alto</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-mdo.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Mark Otto</strong>
+                  <p>@mdo - San Francisco</p>
+                </div>
+              </div>
+            </li>
+
+			<li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-fat.jpg">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Jacob Thornton</strong>
+                  <p>@fat - San Francisco</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-jmm.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Jeff McWeeney</strong>
+                  <p>@dhg - Palo Alto</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-mdo.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Mark Otto</strong>
+                  <p>@mdo - San Francisco</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-jmm.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Jeff McWeeney</strong>
+                  <p>@dhg - Palo Alto</p>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-mdo.png">
+                </a>
+                <div class="media-body">
+                  <button class="btn btn-default btn-sm pull-right">
+                    <span class="glyphicon glyphicon-user"></span> Follow
+                  </button>
+                  <strong>Mark Otto</strong>
+                  <p>@mdo - San Francisco</p>
+                </div>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container p-t-md">
+  <div class="row">
+    <div class="col-md-3">
+	    
+    <div class="alert alert-warning alert-dismissible hidden-xs" role="alert">
+        <div><a class="btn btn-success" href="http://bright-mcweeney.rhcloud.com/new/index.html">Create a New Project</a></div>
+        <p class="m-t">Save time. Recruit intelligently.</p>
+    </div>
+<!--
+      <div class="panel panel-default panel-profile m-b-md">
+        <div class="panel-heading" style="background-image: url(assets/img/iceland.jpg);"></div>
+        <div class="panel-body text-center">
+          <a href="profile/index.html">
+            <img
+              class="panel-profile-img"
+              src="assets/img/avatar-booz.png">
+          </a>
+
+          <h5 class="panel-title">
+            <a class="text-inherit" href="profile/index.html">Booz | Allen | Hamilton</a>
+          </h5>
+
+          <p class="m-b-md">I wish I was a little bit taller, wish I was a baller...</p>
+
+          <ul class="panel-menu">
+            <li class="panel-menu-item">
+              <a href="#projectModal" class="text-inherit" data-toggle="modal">
+                Projects
+                <h5 class="m-y-0">3</h5>
+              </a>
+            </li>
+
+            <li class="panel-menu-item">
+              <a href="#talentModal" class="text-inherit" data-toggle="modal">
+                Talent
+                <h5 class="m-y-0">11</h5>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+-->
+
+<!--
+      <div class="panel panel-default visible-md-block visible-lg-block">
+        <div class="panel-body">
+          <h5 class="m-t-0">About <small>· <a href="#">Edit</a></small></h5>
+          <ul class="list-unstyled list-spaced">
+            <li><span class="text-muted icon icon-calendar m-r"></span>Went to <a href="#">Oh, Canada</a>
+            <li><span class="text-muted icon icon-users m-r"></span>Became friends with <a href="#">Obama</a>
+            <li><span class="text-muted icon icon-github m-r"></span>Worked at <a href="#">Github</a>
+            <li><span class="text-muted icon icon-home m-r"></span>Lives in <a href="#">San Francisco, CA</a>
+            <li><span class="text-muted icon icon-location-pin m-r"></span>From <a href="#">Seattle, WA</a>
+          </ul>
+        </div>
+      </div>
+-->
+
+       <div class="panel panel-default visible-md-block visible-lg-block">
+        <div class="panel-body">
+          <h5 class="m-t-0">Trending <small>· <a href="#">Edit</a></small></h5>
+          <ul class="list-unstyled list-spaced">
+            <li><a href="#">#node</a>
+            </li><li><a href="#">#angular</a>
+            </li><li><a href="#">#ux</a>
+            </li><li><a href="#">#meanstack</a>
+            </li><li><a href="#">@att</a>
+            </li><li><a href="#">#bootstrap</a>
+            </li><li><a href="#">#doawesomestuff</a>
+            </li><li><a href="#">#nyc</a>
+          </li></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+	    <div class="row m-b-md">
+		  <div class="col-sm-6 col-md-6">
+		    <div class="statcard statcard-primary">
+		      <div class="p-a">
+		        <span class="statcard-desc">Candidates Searched</span>
+		        <h2 class="statcard-number">
+		          126,938
+		          <small class="delta-indicator delta-positive">65%</small>
+		        </h2>
+		        <hr class="statcard-hr m-b-0">
+		      </div>
+		      <canvas class="sparkline" data-chart="spark-line" data-value="[{data:[28,68,41,43,96,45,100]}]" data-labels="['a','b','c','d','e','f','g']" width="378" height="94">
+		      </canvas>
+		    </div>
+		  </div>
+		  <div class="col-sm-6 col-md-6">
+		    <div class="statcard statcard-info">
+		      <div class="p-a">
+		        <span class="statcard-desc">Candidates Analyzed</span>
+		        <h2 class="statcard-number">
+		          938
+		          <small class="delta-indicator delta-positive">23%</small>
+		        </h2>
+		        <hr class="statcard-hr m-b-0">
+		      </div>
+		      <canvas class="sparkline" data-chart="spark-line" data-value="[{data:[28,68,41,43,96,45,100]}]" data-labels="['a','b','c','d','e','f','g']" width="378" height="94">
+		      </canvas>
+		    </div>
+		  </div>
+		</div>
+	    
+      <ul class="list-group media-list media-list-stream">
+
+        <li class="media list-group-item p-a">
+          <div class="input-group">
+            <input class="form-control" placeholder="Type or paste a job description, talent description or talent name..." type="text">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-primary">
+                <span class="icon icon-magnifying-glass"></span>
+              </button>
+            </div>
+          </div>
+        </li>
+
+        <li class="media list-group-item p-a">
+          <a class="media-left" href="#">
+            <img class="media-object img-circle" src="Dashboard_files/avatar-bs.png">
+          </a>
+          <div class="media-body">
+            <div class="media-heading">
+              <small class="pull-right text-muted">4 min</small>
+              <h5>Creative Director</h5>
+              <p><a href="#">Avanade</a> - New York, NY</p>
+            </div>
+
+            <p>
+              Aenean lacinia bibendum nulla sed consectetur. Vestibulum 
+id ligula porta felis euismod semper. Morbi leo risus, porta ac 
+consectetur ac, vestibulum at eros. Cras justo odio, dapibus ac 
+facilisis in, egestas eget quam. Vestibulum id ligula porta felis 
+euismod semper. Cum sociis natoque penatibus et magnis dis parturient 
+montes, nascetur ridiculus mus.
+            </p>
+            
+            <div class="media-body-inline-grid">
+				<div class="m-b-sm">
+					<button class="btn btn-default btn-sm">
+						design
+					</button>
+					<button class="btn btn-default btn-sm">
+						strategy
+					</button>
+					<button class="btn btn-default btn-sm">
+						full stack
+					</button>
+					<button class="btn btn-default btn-sm">
+						user experience
+					</button>
+					<button class="btn btn-default btn-sm">
+						backend
+					</button>
+				</div>
+				<div class="m-b-sm">
+					<button class="btn btn-default btn-sm">
+						<span class="icon icon-globe"></span> new york
+					</button>
+				</div>
+            </div>
+
+            <p class="m-t text-muted">Candidates:</p>
+
+            <ul class="media-list m-y-md">
+              <li class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-fat.jpg">
+                </a>
+                <div class="media-body">
+                  <strong>Jacon Thornton: </strong>
+                  Donec id elit non mi porta gravida at eget metus. 
+Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. 
+Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo 
+cursus magna, vel scelerisque nisl consectetur et. Sed posuere 
+consectetur est at lobortis.
+                </div>
+              </li>
+              <li class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-mdo.png">
+                </a>
+                <div class="media-body">
+                  <strong>Mark Otto: </strong>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing 
+elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+ nibh, ut fermentum massa justo sit amet risus.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="media list-group-item p-a">
+          <a class="media-left" href="#">
+            <img class="media-object img-circle" src="Dashboard_files/avatar-bs.png">
+          </a>
+          <div class="media-body">
+            <div class="media-body-text">
+              <div class="media-heading">
+                <small class="pull-right text-muted">12 min</small>
+                <h5>UX Designer</h5>
+                <p><a href="#">Capitol One</a> - Washington DC</p>
+              </div>
+              <p>
+                Donec id elit non mi porta gravida at eget metus. 
+Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cum
+ sociis natoque penatibus et magnis dis parturient montes, nascetur 
+ridiculus mus. Morbi leo risus, porta ac consectetur ac, vestibulum at 
+eros. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </p>
+              <div class="media-body-inline-grid">
+	              <div class="m-b-sm">
+					<button class="btn btn-default btn-sm">
+						design
+					</button>
+					<button class="btn btn-default btn-sm">
+						strategy
+					</button>
+					<button class="btn btn-default btn-sm">
+						full stack
+					</button>
+					<button class="btn btn-default btn-sm">
+						backend
+					</button>
+				</div>
+				<div class="m-b-sm">
+					<button class="btn btn-default btn-sm">
+						<span class="icon icon-globe"></span> washington dc
+					</button>
+				</div>
+             </div>
+              <p class="m-t text-muted">Candidates:</p>
+
+              <ul class="media-list m-y-md">
+              <li class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-fat.jpg">
+                </a>
+                <div class="media-body">
+                  <strong>Thomas Nutter: </strong>
+                  Donec id elit non mi porta gravida at eget metus. 
+Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. 
+Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo 
+cursus magna, vel scelerisque nisl consectetur et. Sed posuere 
+consectetur est at lobortis.
+                </div>
+              </li>
+              <li class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-mdo.png">
+                </a>
+                <div class="media-body">
+                  <strong>Buzz Miller: </strong>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing 
+elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+ nibh, ut fermentum massa justo sit amet risus.
+                </div>
+              </li>
+            </ul>
+            </div>
+          </div>
+        </li>
+
+        <li class="media list-group-item p-a">
+          <a class="media-left" href="#">
+            <img class="media-object img-circle" src="Dashboard_files/avatar-bs.png">
+          </a>
+          <div class="media-body">
+            <div class="media-heading">
+              <small class="pull-right text-muted">34 min</small>
+              <h5>UX Designer</h5>
+              <p><a href="#">J.P. Morgan Chase</a> - New York, NY</p>
+            </div>
+
+            <p>
+              Donec ullamcorper nulla non metus auctor fringilla. 
+Vestibulum id ligula porta felis euismod semper. Aenean eu leo quam. 
+Pellentesque ornare sem lacinia quam venenatis vestibulum. Etiam porta 
+sem malesuada magna mollis euismod. Donec sed odio dui.
+            </p>
+            <div class="media-body-inline-grid">
+				<div class="m-b-sm">
+					<button class="btn btn-default btn-sm">
+						design
+					</button>
+					<button class="btn btn-default btn-sm">
+						interface
+					</button>
+					<button class="btn btn-default btn-sm">
+						user experience
+					</button>
+					<button class="btn btn-default btn-sm">
+						<span class="icon icon-globe"></span> new york
+					</button>
+				</div>
+            </div>
+			<p class="m-t text-muted">Candidate:</p>
+
+            <ul class="media-list m-y-md">
+              <li class="media">
+                <a class="media-left" href="#">
+                  <img class="media-object img-circle" src="Dashboard_files/avatar-jmm.png">
+                </a>
+                <div class="media-body">
+                  <strong>Jeff McWeeney: </strong>
+                  Donec id elit non mi porta gravida at eget metus. 
+Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. 
+Donec ullamcorper nulla non metus auctor fringilla. Praesent commodo 
+cursus magna, vel scelerisque nisl consectetur et. Sed posuere 
+consectetur est at lobortis.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-3">
+
+<!--
+      <div class="panel panel-default m-b-md hidden-xs">
+        <div class="panel-body">
+          <h5 class="m-t-0">Sponsored</h5>
+          <div data-grid="images" data-target-height="150">
+            <img class="media-object" data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_2.jpg">
+          </div>
+          <p><strong>It might be time to visit Iceland.</strong> Iceland is so chill, and everything looks cool here. Also, we heard the people are pretty nice. What are you waiting for?</p>
+          <button class="btn btn-primary-outline btn-sm">Buy a ticket</button>
+        </div>
+      </div>
+-->
+
+      <div class="panel panel-default m-b-md hidden-xs">
+        <div class="panel-body">
+        <h5 class="m-t-0">New Talent <small>· <a href="#">View All</a></small></h5>
+        <ul class="media-list media-list-stream">
+          <li class="media m-b">
+            <a class="media-left" href="#">
+              <img class="media-object img-circle" src="Dashboard_files/avatar-fat.jpg">
+            </a>
+            <div class="media-body">
+              <strong>Jacob Thornton</strong> @fat
+              <div class="media-body-actions">
+                <button class="btn btn-primary-outline btn-sm">
+                  <span class="icon icon-add-user"></span> Follow</button>
+              </div>
+            </div>
+          </li>
+           <li class="media">
+            <a class="media-left" href="#">
+              <img class="media-object img-circle" src="Dashboard_files/avatar-mdo.png">
+            </a>
+            <div class="media-body">
+              <strong>Mark Otto</strong> @mdo
+              <div class="media-body-actions">
+                <button class="btn btn-primary-outline btn-sm">
+                  <span class="icon icon-add-user"></span> Follow</button>
+              </div>
+            </div>
+          </li>
+        </ul>
+        </div>
+        <div class="panel-footer">
+          You're seeing this talent because we're learning what your needs are.
+        </div>
+      </div>
+
+      <div class="panel panel-default panel-link-list">
+        <div class="panel-body">
+          © 2016 BrightStaffer
+
+          <a href="#">About</a>
+          <a href="#">Help</a>
+          <a href="#">Terms</a>
+<!--
+          <a href="#">Privacy</a>
+          <a href="#">Cookies</a>
+          <a href="#">Ads </a>
+          <a href="#">info</a>
+          <a href="#">Brand</a>
+          <a href="#">Blog</a>
+          <a href="#">Status</a>
+          <a href="#">Apps</a>
+          <a href="#">Jobs</a>
+          <a href="#">Advertise</a>
+-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block content %}
+                {% endblock %}
+
+    <script src = "{% static 'js/assets_js_jquery.min.js' %}"></script>
+    <script src = "{% static 'js/assets_js_chart.js' %}"></script>
+    <script src = "{% static 'js/assets_js_toolkit.js' %}"></script>
+    <script src = "{% static 'js/assets_js_application.js' %}"></script>
+    <script src = "{% static 'js/assets_js_dashboard.js' %}"></script>
+<script>
+      // execute/clear BS loaders for docs
+      $(function(){
+        if (window.BS&&window.BS.loader&&window.BS.loader.length) {
+          while(BS.loader.length){(BS.loader.pop())()}
+        }
+      })
+    </script>
+
+
+{% block javascript %}
+        {% endblock %}
+
+</body></html>
+
+

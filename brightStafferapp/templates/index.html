@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title></title>
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/toolkit.css' %}" rel="stylesheet">
+    <link href="{% static 'css/assets_css_application.css' %}" rel="stylesheet">
+    <link href="{% static 'css/assets_css_dashboard.css' %}" rel="stylesheet">
+    <script src = "{% static 'js/assets_js_jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/angular.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/angular-route.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/angularLocalStorage.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/angular-resource.min.js' %}"></script>
+</head>
+<body  class="with-top-navbar" ng-app="myApp">
+        <!--Start Top Header-->
+        <div ng-view>
+        </div>
+        <!--End Top Header-->
+
+
+
+    <script type="text/javascript">
+      $(function(){
+    if (window.BS&&window.BS.loader&&window.BS.loader.length) {
+      while(BS.loader.length){(BS.loader.pop())()}
+    }
+    })
+    var static_url = '{{ STATIC_URL}}';
+    var mainApp = angular.module("myApp", ['ngRoute','ngResource']);
+    </script>
+<script type="text/javascript" src="{% static 'app/app.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/directives/directive.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/services/services.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/controllers/loginController.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/controllers/forgotPasswordController.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/controllers/signupController.js' %}"></script>
+<script src = "{% static 'js/assets_js_application.js' %}"></script>
+<script src = "{% static 'js/assets_js_chart.js' %}"></script>
+<script src = "{% static 'js/assets_js_toolkit.js' %}"></script>
+</body>
+</html>

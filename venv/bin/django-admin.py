@@ -1,4 +1,4 @@
-#!/home/kiwitech/Desktop/brightStaffer/venv/bin/python3.5
+#!/home/kiwitech/Desktop/project/brightstaff/brightstaffer/venv/bin/python3.5
 from django.core import management
 
 if __name__ == "__main__":
