@@ -1,45 +1,9 @@
-#OS environement:-linux
-
-
-#Project prerequisties
-First we need to setup a python language,for brightstaff client we are using python 3.0x series.
-python 3.4
-
-After that need to install pip file.pip is useful for dev env to install python modules and libraries.you can download pip
-software directly and run the setup.py file:-
-python setup.py install
-
-Install Django webframework,for brightStaff we are using django==1.10
-pip install django==1.10
-
-Now creatre a project repository using below command:-
-django-admin startproject projectname
-
-If you want to create an app then you'll use below command afterthat abvoe command
-python manage.py startapp appname
-
-now create a virtual env under the main project repo:-
-pip install virtualenv
-cd project name
-virtualenv venv
-virtual env installed, now connect the python and associated libraries to virtual env,use below command:-
-virtualenv -p /usr/bin/python3.4 venv
-for activate the virtual env use below command:-
-source venv/bin/activate
-
-for postgresql db we need to install python connector with postgresql
-pip install psycopg2#psycopg2-2.6.2
-
-for template widget need to run below command
-pip install django-widget-tweaks
-
-for social login connection need to run below command
+django==1.10
+psycopg2==2.6.2
+django-widget-tweaks
 python-social-auth==0.2.12
-
-###########################################################
-pip install djangorestframework
-pip install markdown       # Markdown support for the browsable API.
-pip install django-filter  # Filtering support
-
-###########################################################
-pip install simplejson
+djangorestframework
+markdown
+django-filter
+simplejson
+watson-developer-cloud==0.22.0
