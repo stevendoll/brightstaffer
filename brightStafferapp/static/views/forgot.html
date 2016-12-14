@@ -1,0 +1,33 @@
+
+    <div class="forgotbox text-center animated fadeInDown" ng-controller="forgotCtrl as forgot">
+	<div class="row">
+        <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+	  		<div class="text-center">
+	          <h2 class="m-b-0">Ok, let's get you a new password.</h2>
+	          <h4 class="m-b-lg text-muted">Enter your email address, and we'll send the reset instructions.</h4>
+	          
+				<form name="forgotForm" method="post" ng-submit="forgotPassword()" novalidate>
+					<ul class="list-group media-list media-list-stream">
+						<li class="media list-group-item p-a">
+						  <div class="input-group input-group-lg">
+						    <input type="text" class="form-control" placeholder="Email address..." ng-pattern="emailPattern"
+							ng-model="user_email" name="email" required>
+						    <div class="input-group-btn">
+			               <button type="submit" class="btn btn-primary" id="forgotPwd" value="" ng-disabled="isDisabled">
+						       <i class="fa fa-paper-plane"></i>
+						      </button>
+						    </div>
+						  </div>
+						</li>
+					          <span style="color:red" ng-show="forgotForm.$submitted &&forgotForm.email.$error.required">Required field.</span>
+					          <span style="color:red" ng-show="forgotForm.email.$error.pattern">Please enter valid email address.</span>
+						    <span  ng-model="errorMessage">[[errorMessage]]</span>
+					</ul>
+					<footer class="screen-login">
+						<a ui-sref="register" class="text-muted">Want to create a new account?</a>
+					</footer>
+				</form>
+	  		</div>
+        </div>
+	</div>
+    </div>

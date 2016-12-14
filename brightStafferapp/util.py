@@ -18,6 +18,11 @@ def returnresponsejson(pass_dict, httpstatus=200):
 def returnUnAuthorized(param_dict={}):
     param_dict['message'] = 'UnAuthorized User'
     return returnresponsejson(param_dict)
+
+def returnTokenTimeout(param_dict={}):
+    param_dict['message'] = 'Email link is no longer valid'
+    return returnresponsejson(param_dict)
+
 #
 # def retrunEmailError(param_dict={}):
 #     param_dict['message'] = 'Email id is not Registered'

@@ -1,0 +1,65 @@
+<!-- <!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sona &middot; Login</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/product.css" rel="stylesheet">
+
+</head>
+ -->
+<!-- <body class="gray-bg"> -->
+
+    <div class="lbox middle-box text-center loginscreen animated fadeInDown" ng-controller="loginCtrl as login">
+        <div>
+            <div>
+            	<span class="login-brand"><img src="static/img/brand-temp.png"></span>
+            </div>
+            <h2>Welcome back Matthew!</h2>
+            <h4 class="m-b-lg">Lets do this.</h4>
+            <form class="m-t" name="loginForm" method="post" ng-submit="userLogin()" id="loginForm" novalidate>
+                <div class="form-group">
+                    <input type="email" ng-pattern="emailPattern" class="form-control" placeholder="Email address" name="username" ng-model="data.user_name" required="">
+                 <span style="color:red" ng-show="loginForm.$submitted && loginForm.username.$error.required">Required.</span>
+                  <span style="color:red" ng-show="loginForm.username.$error.pattern">Please enter valid email address.</span>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Password" name="password" ng-model="data.user_password" required="">
+                    <span style="color:red" ng-show="loginForm.$submitted && loginForm.password.$error.required">Required.</span>
+                </div>
+                 <span style="color:red" ng-if="showErr"> The username or password entered is incorrect.</span>
+                <div class="text-center m-t-md m-b">
+	                <button type="submit" class="btn btn-lg btn-primary m-b" ng-disabled="isDisabled">Log in</button>
+                </div>
+                 <!--<script type="in/Login">-->
+
+                  <!--</script>-->
+                <p class="text-center"><a ui-sref="forgot"><small>Forgot your password?</small></a></p>
+                <a class="btn btn-sm btn-white p-xs m-t-md" ui-sref="register">Create an account</a>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Mainly scripts -->
+
+   <!-- <script src="js/jquery-2.1.1.js"></script>
+//     <script src="js/bootstrap.min.js"></script>
+//     <script>
+// $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+//     options.async = true;
+// });
+// </script>
+// </body>
+
+// </html>
+ -->

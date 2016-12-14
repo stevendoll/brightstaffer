@@ -1,0 +1,277 @@
+/*
+ * Product level styles
+ * (things that dont make sense in the basic style :)
+ */
+
+
+/* ----- Basics ---- */
+
+body {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+hr { 
+    border: 0;
+    border-top: 1px solid #dedede;
+}
+
+
+
+.hr-card { 
+	margin: 15px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+
+/* ----- Content ----- */
+
+.wrapper-content {
+    padding: 20px 10px 0px;
+}
+
+/* ----- Login ----- */
+
+.login-brand img {
+	margin: 0 0 15px;
+	width: 64px;
+	height: 64px;
+}
+
+
+/* ----- Nav ----- */
+
+.navbar-fixed-top,
+.navbar-static-top {
+  background: #fff;
+}
+
+.navbar-static-side .sidebar-brand img {
+	margin: 10px 0 10px 11px;
+	width: 40px;
+	height: 40px;
+}
+
+.nav > li > a {
+	font-weight: 400;
+	font-size: 13px;
+}
+
+.nav > li > a.all-projects {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.nav > li > a.arc-projects {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.nav > li > a.new-project {
+	padding-top: 0;
+	padding-bottom: 25px;
+	opacity: 0.7;
+}
+
+.nav > li.active {
+    border-left: 0;
+    background: #293846;
+}
+
+.nav-second-level li a {
+    padding: 5px 10px 5px 10px;
+    padding-left: 45px;
+}
+
+
+.nav > li.sidebar-divider {
+    height: 1px;
+    margin: 15px 50px 15px 50px;
+    overflow: hidden;
+    background-color: #2f4050;
+}
+
+
+/* ----- UI & Text Colors ----- */
+
+.btn-active {
+  background-color: #67b903;
+  color: #fff;
+}
+
+.btn-primary {
+  background-color: #0362a1;
+  border-color: #0362a1;
+  color: #FFFFFF;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.btn-primary.active:hover,
+.btn-primary.active:focus {
+  background-color: #004a7c;
+  border-color: #004a7c;
+  color: #FFFFFF;
+}
+
+.text-light {
+	font-weight: 300;
+}
+
+.text-project {
+  color: #2a80b9;
+}
+
+.text-role {
+  color: #2a80b9;
+}
+.text-company {
+	color: #2a80b9;	
+}
+
+.text-detail {
+	color: #000;
+}
+.text-navy {
+  color: #1ab394;
+}
+.text-success {
+  color: #1c84c6;
+}
+.text-info {
+  color: #23c6c8;
+}
+.text-warning {
+  color: #f8ac59;
+}
+.text-danger {
+  color: #ed5565;
+}
+.text-muted {
+  color: #999999;
+}
+
+
+/* ----- Cards ----- */
+
+.lbox {
+	clear: both;
+	margin-top: 48px;
+	padding: 30px;
+	border: 1px solid #dedede;
+	border-radius: 3px;
+	background-color: #fff;
+}
+
+
+.loginscreen.middle-box {
+  width: 360px;
+}
+
+.ibox {
+	clear: both;
+	margin-bottom: 30px;
+	margin-top: 0;
+	padding: 0;
+	border: 1px solid #dedede;
+	border-radius: 3px;
+	background-color: #fff;
+}
+
+.ibox-title {
+	border-width: 0;
+	background-color: transparent;
+}
+
+.ibox-content {
+	background-color: transparent;
+}
+
+.concept-tag {
+	margin: 0 6px 6px 0;
+}
+
+/* ----- Images ----- */
+
+.img-circle-sm {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+
+/* ----- Metrics ----- */
+
+.widget .flot-chart {
+  height: 20px;
+}
+
+/* ----- Chat ----- */
+
+.open-small-chat {
+  height: 38px;
+  width: 38px;
+  display: block;
+  background: #ff9e00;
+  padding: 9px 8px;
+  text-align: center;
+  color: #fff;
+  border-radius: 50%;
+}
+.open-small-chat:hover {
+  color: white;
+  background: #ff5600;
+}
+
+.label-warning,
+.badge-warning {
+  background-color: #000;
+  color: #FFFFFF;
+}
+
+/* ----- Forms ----- */
+
+.form-control {
+	height: 40px;
+}
+.form-control:focus,
+.single-line:focus {
+  border-color: orange !important;
+}
+.form-control, .single-line {
+	background-color: #FFF;
+	background-image: none;
+	border: 1px solid #e5e6e7;
+	border-radius: 3px;
+	color: inherit;
+	display: block;
+	padding: 8px 14px;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+	width: 100%;
+	font-size: 15px;
+}
+
+.passwordBox {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 100px 20px 20px 20px;
+}
+
+.forgotbox {
+	margin: 100px auto;
+}
+
+
+/* ----- Projects ----- */
+.project-people,
+.project-actions {
+  text-align: left;
+  vertical-align: middle;
+}
+
+

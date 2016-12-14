@@ -15,27 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
-from django import template
-from django.conf import settings
-from django.conf.urls.static import static
-from brightStafferapp import views
+from brightStafferapp import views,resetpassword
 
 
 
 
 urlpatterns =[
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^user_account/', views.user_account),
-    url(r'^user_login/', views.user_login),
-    url(r'', views.home),
-
+    url(r'^user_account/', views.UserData.user_account,name='user_signup'),
+    url(r'^user_login/', views.UserData.user_login,name='user_login'),
+    url(r'^forget/$', resetpassword.ForgetPassword.forget,name='forget_password'),
+    url(r'^account/reset_password_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',resetpassword.ResetPassword.passwordresetconfirmView, name='reset_password_confirm'),
+    url(r'^resetapi/$', resetpassword.ResetPassword.resetpasswordApi,name='reset_password_api'),
+    url(r'', views.UserData.home),
 
 ]
-
-#     url(r'^brightStaffer/$', include(app)),
-#     url(r'^logout/$', views.user_logout),
-#     url(r'^dashboard/$', views.dashboard),
-#     url(r'^account/$', views.register),
-#     url(r'^forgot/$', resetpassword.ResetPasswordRequestView.as_view()),
-#     url(r'^account/reset_password_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', resetpassword.PasswordResetConfirmView.as_view(),name='reset_password_confirm'),
