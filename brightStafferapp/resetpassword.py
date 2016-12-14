@@ -56,7 +56,7 @@ class ForgetPassword():
         try:
             profile_data = json.loads(request.body.decode("utf-8"))
         except ValueError:
-            return util.ReturnErrorResponse(500)
+            return util.returnErrorShorcut(500,'Invalid Forrm Fields')
         data = profile_data["email"]
         # uses the method written above
         if ForgetPassword.validate_email_address(data) is True:
@@ -71,7 +71,7 @@ class ForgetPassword():
 
                 param_dict['message'] = 'success'
                 return util.returnSuccessShorcut(param_dict)
-            return util.returnUnAuthorized()
+            return util.returnErrorShorcut(500,'UnAuthorized User')
 
 
 class ResetPassword():
@@ -92,7 +92,7 @@ class ResetPassword():
             uidb64=user_pasword['token'].split('-')[0]
             token=user_pasword['token'].split('-')[1]+'-'+user_pasword['token'].split('-')[2]
         except ValueError:
-            return util.ReturnErrorResponse(500)
+            return util.returnErrorShorcut(500,'Invalid Forrm Fields')
         UserModel = get_user_model()
         assert uidb64 is not None and token is not None  # checked by URLconf
         try:
@@ -109,7 +109,7 @@ class ResetPassword():
             return util.returnSuccessShorcut(param_dict)
 
         else:
-            return util.returnTokenTimeout(param_dict)
+            return util.returnErrorShorcut(500,'Email link is no longer valid')
 
 
 

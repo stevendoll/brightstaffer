@@ -22,3 +22,4 @@ def returnSuccessShorcut(param_dict={}, httpstatus=200):
 def returnresponsejson(pass_dict, httpstatus=200):
     json_out = simplejson.dumps(pass_dict)
     return HttpResponse(json_out, status=httpstatus, content_type="application/json")
+
