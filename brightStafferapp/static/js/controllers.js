@@ -6,17 +6,14 @@
 /**
  * MainCtrl - controller
  */
-function MainCtrl($scope, $rootScope, $location, $http) {
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore) {
 
-    this.userName = 'Example user';
-    this.helloText = 'Welcome in SeedProject';
-    this.descriptionText = 'It is an application skeleton for a typical AngularJS web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.';
+    this.userName = 'BrightStaffer';
 
 };
 
-function loginCtrl($scope, $rootScope, $state, $http, loginService) {
+function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, loginService) {
      $scope.showErr = false;
-     //$scope.loginForm.$setPristine();
      $scope.isDisabled = false;
      $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
          $scope.data = {
@@ -41,7 +38,8 @@ function loginCtrl($scope, $rootScope, $state, $http, loginService) {
               userData.token = response.user_token;
               userData.user_email = response.user_name;
            $rootScope.globals.currentUser = userData;
-           console.log($rootScope.globals.currentUser);
+           $cookieStore.put('userData',userData);
+           console.log($cookieStore);
            $state.go('dashboard', "");
          }else{
             $scope.showErr = true;
@@ -53,7 +51,7 @@ function loginCtrl($scope, $rootScope, $state, $http, loginService) {
 }
 
 
-function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout, signupService) {
+function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookies, $cookieStore, signupService) {
     $scope.userRegistration = {};
     $scope.isDisabled = false;
     $scope.errorMessage = '';
@@ -75,10 +73,11 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout, signup
                $scope.errorMessage = "Your account has been created!";
                $scope.signupForm.$setPristine();
                $scope.userRegistration = {};
-               $scope.success = true;
-//               $timeout(function() {
-//                  $state.go('login');
-//                  }, 3000);
+              var userData = {};
+              userData.message = response.message;
+               $rootScope.globals.currentUser = userData;
+               $cookieStore.put('userData',userData);
+               $state.go('dashboard', "");
              }else{
               $scope.errorMessage ="User with this email already exists!";
               $scope.isDisabled = false;
@@ -144,11 +143,11 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
     }
 }
 
-function dashboardCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $location ){
+function dashboardCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookieStore, $location ){
   $scope.logout = function(){
-       IN.User.logout(function() {
-          $state.go('login','');
-       });
+        $cookieStore.remove('userData');
+          $rootScope.globals = {};
+          $state.go('login', "");
     }
 
 }

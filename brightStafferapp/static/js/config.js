@@ -35,7 +35,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
 angular
     .module('brightStaffer')
     .config(config)
-    .run(function($rootScope, $state, $location, $timeout) {
+    .run(function($rootScope, $state, $location, $timeout, $cookies, $cookieStore) {
     $rootScope.globals = {};
     $rootScope.$state = $state;
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
@@ -44,10 +44,13 @@ angular
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var shouldLogin = toState.data.requireAuthentication !== undefined
             && toState.data.requireAuthentication;
-
+        if($cookieStore.get('userData'))
+        {
+         $rootScope.globals.currentUser = $cookieStore.get('userData');
+        }
         // NOT authenticated - wants any private stuff
         if(shouldLogin || fromState.name === "") {
-            var token = $rootScope.globals.currentUser == null ? null : $rootScope.globals.currentUser;
+            var token =  $rootScope.globals.currentUser == null ? null : $rootScope.globals.currentUser;
             if (token == null) {
                 if(toState.name === 'login')
                     return;

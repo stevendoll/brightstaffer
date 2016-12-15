@@ -13,7 +13,6 @@ import json
 class UserData():
 
     #SignupAPI
-    #http://127.0.0.1:8080/user_account/?&firstName=chandan&lastName=varma&userEmail=chandan.varma@kiwitech.com&password=chandan@123
     @csrf_exempt
     def user_account(request):
         param_dict = {}
@@ -30,7 +29,6 @@ class UserData():
 
 
     #Login API
-    #http://127.0.0.1:8080/user_login/?username=chandan.varma@kiwitech.com&password=chandan@123
     @csrf_exempt
     def user_login(request):
         param_dict = {}
