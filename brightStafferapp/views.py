@@ -58,3 +58,6 @@ class UserData():
 
 
 
+
+class JobAnalsys():
+    print ("hello")

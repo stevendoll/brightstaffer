@@ -23,7 +23,7 @@ class Account(models.Model):
     domain_name=models.TextField(verbose_name='Domain Name', null=False, blank=False)
     account_manager=models.EmailField(verbose_name='Email ID', null=False, blank=False)
     def __unicode__(self):
-        return self.client_id
+        return self.client_name
 
 
 class Projects(models.Model):
