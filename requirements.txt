@@ -7,3 +7,4 @@ markdown
 django-filter
 simplejson
 watson-developer-cloud==0.22.0
+uuid==1.30
