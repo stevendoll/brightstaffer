@@ -1,13 +1,14 @@
-from django.shortcuts import render
-from django.conf import settings
-from django.db import IntegrityError
-from brightStafferapp import util
-from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.views.decorators.csrf import csrf_exempt
 import json
 
+from django.conf import settings
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.db import IntegrityError
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authtoken.models import Token
+
+from brightStafferapp import util
 
 
 class UserData():
@@ -57,7 +58,3 @@ class UserData():
         return render(request, 'index.html', {'STATIC_URL': settings.STATIC_URL})
 
 
-
-
-class JobAnalsys():
-    print ("hello")

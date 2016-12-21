@@ -9,3 +9,4 @@
 .idea
 brightStaffer/settings.py
 venv/
+*.txt
