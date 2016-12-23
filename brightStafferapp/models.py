@@ -24,6 +24,7 @@ class Projects(models.Model):
     company_name = models.CharField(max_length=255,verbose_name='Company Name', null=True, blank=True)
     location = models.CharField(max_length=255,verbose_name='Location', null=True, blank=True)
     description = models.TextField(verbose_name='Job Description', null=True, blank=True)
+    is_published=models.TextField(verbose_name='Published',default=False,null=False)
     class Meta:
         verbose_name_plural = 'Projects'
         verbose_name = 'Projects'
@@ -31,6 +32,8 @@ class Projects(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
 
 class Concepts(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

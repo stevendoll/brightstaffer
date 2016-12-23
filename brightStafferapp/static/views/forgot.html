@@ -1,10 +1,10 @@
 
-    <div class="forgotbox text-center animated fadeInDown" ng-controller="forgotCtrl as forgot">
+    <div class="forgotbox text-center" ng-controller="forgotCtrl as forgot">
 	<div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
 	  		<div class="text-center">
 	          <h2 class="m-b-0">Ok, let's get you a new password.</h2>
-	          <h4 class="m-b-lg text-muted">Enter your email address, and we'll send the reset instructions.</h4>
+	          <h2 class="m-b-lg text-muted">Enter your email address, and we'll send the reset instructions.</h2>
 	          
 				<form name="forgotForm" method="post" ng-submit="forgotPassword()" novalidate>
 					<ul class="list-group media-list media-list-stream">
@@ -24,7 +24,7 @@
 						    <span  ng-model="errorMessage">[[errorMessage]]</span>
 					</ul>
 					<footer class="screen-login">
-						<a ui-sref="register" class="text-muted">Want to create a new account?</a>
+						<small><a ui-sref="register" class="text-muted">Want to create a new account?</a></small>
 					</footer>
 				</form>
 	  		</div>

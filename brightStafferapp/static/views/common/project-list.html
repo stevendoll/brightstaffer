@@ -1,0 +1,84 @@
+<div id="wrapper" >
+    <div ng-include="'static/views/common/nav-side.html'"></div>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <div ng-include="'static/views/common/nav-top.html'"></div>
+
+        <div ng-include="'static/views/list.html'"></div>
+
+    </div>
+   <div ng-include="'static/views/common/smallChat.html'"></div>
+</div>
+<script>
+     $(document).ready(function(){
+     console.log('asdasdad')
+            $('#loading-example-btn').click(function () {
+                btn = $(this);
+                simpleLoad(btn, true)
+                simpleLoad(btn, false)
+            });
+
+            $('.dataTables').DataTable({
+                pageLength: 25,
+                responsive: true,
+                dom: '<"col-sm-4 col-md-4 p-a-0 m-t m-b-lg"B><"col-sm-4 col-md-4 p-a-0 m-t small text-muted text-center"i><"col-sm-4 col-md-4 p-a-0 m-t input-group-sm small"f>rt<"col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm"l><"col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm"p><"clear">',
+
+                /* Results in:
+                            <div class="col-md-4 p-a-o">
+                              {buttons}
+                            </div>
+                            <div class="col-md-4 p-a-o">
+                              {information}
+                            </div>
+                            <div class="col-md-4 p-a-o text-center">
+                              {filter}
+                            </div>
+                            {processing}
+                            {table}
+                            <div class="col-md-6 p-a-o">
+                              {length}
+                            </div>
+                            <div class="col-md-6 p-a-o">
+                              {pagination}
+                            </div>
+                            <div class="clear"></div>
+                */
+
+//                 dom: '<"html5buttons"B>lTfgitp',
+select: {
+            style: 'multi'
+        },
+                buttons: [
+                    {extend: 'copy', className: 'btn btn-default btn-sm', title: 'Copy'},
+                    {extend: 'csv', className: 'btn btn-default btn-sm', title: 'CSV'},
+                    {extend: 'excel', className: 'btn btn-default btn-sm', title: 'Excel'},
+                    {extend: 'pdf', className: 'btn btn-default btn-sm', title: 'PDF'},
+                    {extend: 'print', className: 'btn btn-default btn-sm', title: 'Print',
+                     customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '15px');
+
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    	}
+                    }
+                ]
+
+            });
+
+        });
+
+        function simpleLoad(btn, state) {
+            if (state) {
+                btn.children().addClass('fa-spin');
+                btn.contents().last().replaceWith(" Loading");
+            } else {
+                setTimeout(function () {
+                    btn.children().removeClass('fa-spin');
+                    btn.contents().last().replaceWith(" Refresh");
+                }, 2000);
+            }
+        }
+</script>

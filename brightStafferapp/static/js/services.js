@@ -1,11 +1,10 @@
 angular
     .module('brightStaffer')
-    .constant('REQUEST_URL', 'http://127.0.0.1:8080/');
+    .constant('REQUEST_URL', 'http://35.161.233.149:8080/');
 
 function loginService($http ,REQUEST_URL){
     return {
       userLogin: function(data){
-        console.log(data);
         return $http({
             url: REQUEST_URL+'user_login/',
             method: "POST", // or "get"
@@ -75,9 +74,28 @@ function resetPasswordService($http ,REQUEST_URL){
     }
  }
 
+ function jobPostService($http ,REQUEST_URL){
+    return {
+    jobPost: function(data){
+    return $http({
+        url: REQUEST_URL+'job_posting/',
+        method: "POST", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      }
+    }
+ }
+
 angular
     .module('brightStaffer')
     .service('loginService', loginService)
     .service('forgotService', forgotService)
     .service('resetPasswordService', resetPasswordService)
-    .service('signupService', signupService);
+    .service('signupService', signupService)
+    .service('jobPostService', jobPostService);

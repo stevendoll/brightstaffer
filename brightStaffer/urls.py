@@ -27,6 +27,7 @@ urlpatterns =[
     url(r'^forget/$', resetpassword.ForgetPassword.forget,name='forget_password'),
     url(r'^account/reset_password_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',resetpassword.ResetPassword.passwordresetconfirmView, name='reset_password_confirm'),
     url(r'^resetapi/$', resetpassword.ResetPassword.resetpasswordApi,name='reset_password_api'),
+    url(r'^job_posting/$', views.JobPosting.job_posting,name='JobPosting'),
     url(r'', views.UserData.home),
 
 ]

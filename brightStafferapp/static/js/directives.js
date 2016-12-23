@@ -147,6 +147,9 @@ function minimalizaSidebar($timeout) {
     };
 }
 
+
+
+
 function validPasswordC() {
     return {
         require: 'ngModel',
@@ -167,6 +170,49 @@ function validPasswordC() {
         }
     }
 }
+
+
+function focusOut() {
+          return {
+              require: 'ngModel',
+              link: function (scope, element, attrs, modelCtrl) {
+                  modelCtrl.$parsers.push(function (inputValue) {
+                  console.log(inputValue)
+//                      if (inputValue == undefined) return '';
+//                      var transformedInput = inputValue.replace(/[^0-9]/g, '');
+//                      if (transformedInput !== inputValue) {
+//                          modelCtrl.$setViewValue(transformedInput);
+//                          modelCtrl.$render();
+//                      }
+                     return;
+                  });
+              }
+          };
+}
+
+function ngModelOnblur(jobPostService, $rootScope ,$state) {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        priority: 1, // needed for angular 1.5.x
+        link: function(scope, elm, attr, ngModelCtrl) {
+            if (attr.type === 'radio' || attr.type === 'checkbox') return;
+
+            elm.unbind('input').unbind('keydown').unbind('change');
+            elm.bind('blur', function() {
+                scope.$apply(function() {
+                       var value = elm.val();
+                       var name = elm[0].name;
+                       scope.update(elm, name , value);
+
+                    //ngModelCtrl.update(elm.val());
+                });
+            });
+        }
+    };
+}
+
+
 /**
  *
  * Pass all functions into module
@@ -178,4 +224,5 @@ angular
     .directive('iboxTools', iboxTools)
     .directive('minimalizaSidebar', minimalizaSidebar)
     .directive('iboxToolsFullScreen', iboxToolsFullScreen)
-    .directive('validPasswordC', validPasswordC);
+    .directive('validPasswordC', validPasswordC)
+    .directive('ngModelOnblur', ngModelOnblur);

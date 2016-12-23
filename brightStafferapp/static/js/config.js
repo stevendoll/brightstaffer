@@ -14,6 +14,15 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
             url: "/dashboard",
             templateUrl: static_url +'views/common/content.html',
             data: { pageTitle: 'Dashboard' , specialClass: 'no-skin-config',requireAuthentication: true}
+//            resolve: {
+//                loadPlugin: function ($ocLazyLoad) {
+//                    return $ocLazyLoad.load([
+//                        {
+//                            files: ['css/plugins/toastr/toastr.min.css','js/plugins/gritter/jquery.gritter.css','css/plugins/iCheck/custom.css']
+//                        }
+//                    ]);
+//                }
+//            }
         })
         .state('login', {
             url: "/login",
@@ -30,24 +39,57 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
             templateUrl:  static_url + "views/register.html",
             data: { pageTitle: 'Register.', specialClass: 'gray-bg' , requireAuthentication: false}
         })
+        .state('create', {
+            abstract: true,
+            templateUrl: static_url +'views/create.html',
+            data: { pageTitle: 'Create Project' , requireAuthentication: true}
+        })
+        .state('create.step1', {
+            url: "/create",
+            templateUrl: static_url +'views/common/create-step1.html',
+            data: { pageTitle: 'Create Project' , requireAuthentication: true}
+        })
+        .state('create.step2', {
+            url: "/create",
+            templateUrl: static_url +'views/common/create-step2.html',
+            data: { pageTitle: 'Create Project' , requireAuthentication: true}
+        })
+        .state('create.step3', {
+            url: "/create",
+            templateUrl: static_url +'views/common/create-step3.html',
+            data: { pageTitle: 'Create Project' , requireAuthentication: true}
+        })
+        .state('create.step4', {
+            url: "/create",
+            templateUrl: static_url +'views/common/create-step4.html',
+            data: { pageTitle: 'Create Project' , requireAuthentication: true}
+        })
+        .state('projects', {
+            url: "/projects",
+            templateUrl: static_url +'views/common/project-list.html',
+            data: { pageTitle: 'All Projects' , requireAuthentication: true}
+        })
+
 }
 
 angular
     .module('brightStaffer')
     .config(config)
     .run(function($rootScope, $state, $location, $timeout, $cookies, $cookieStore) {
-    $rootScope.globals = {};
     $rootScope.$state = $state;
+    $rootScope.globals ={};
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 		$rootScope.title = toState.data.pageTitle;
 	});
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var shouldLogin = toState.data.requireAuthentication !== undefined
             && toState.data.requireAuthentication;
-        if($cookieStore.get('userData'))
-        {
-         $rootScope.globals.currentUser = $cookieStore.get('userData');
-        }
+         if($cookieStore.get('userData'))
+            {
+             $rootScope.globals.currentUser = $cookieStore.get('userData');
+            }else if($rootScope.globals.currentUser){
+              $cookieStore.put('userData', $rootScope.globals.currentUser)
+            }
         // NOT authenticated - wants any private stuff
         if(shouldLogin || fromState.name === "") {
             var token =  $rootScope.globals.currentUser == null ? null : $rootScope.globals.currentUser;

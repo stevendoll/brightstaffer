@@ -2631,6 +2631,7 @@ input[type="search"] {
 .form-group {
   margin-bottom: 15px;
 }
+
 .radio,
 .checkbox {
   position: relative;
@@ -6754,4 +6755,5 @@ button.close {
     display: none !important;
   }
 }
+
 /*# sourceMappingURL=bootstrap.css.map */

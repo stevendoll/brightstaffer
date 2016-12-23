@@ -1,0 +1,41 @@
+<div class="row">
+			<div class="col-xs-12 col-md-8 col-md-offset-2">
+			    <div class="ibox create-project m-t-md">
+			        <div class="ibox-content">
+				        <div class="ibox-title p-b">
+				            <h1 class="p-b">Create a New Project</h1>
+				            <p class="p-r-lg"> In just four steps you'll have an active project, providing incredible insights so you can spend more time doing what you love—interacting with people.</p>
+				        </div>
+						<form id="createProjectForm" name="createProjectForm" class="wizard-big wizard clearfix" ng-keyup="checkMessage()">
+			                <h1></h1>
+					<div class="steps clearfix">
+						<ul role="tablist">
+						<li role="tab" id="form-t-0" class="first current" aria-disabled="false" aria-selected="true">
+						<a  aria-controls="form-p-0" ui-sref-active="active" ui-sref=".step1">
+							<span class="current-info audible">current step: </span><span class="number">1.</span>
+						</a></li>
+						<li role="tab" id="form-t-1" class="disabled" aria-disabled="true">
+						<a aria-controls="form-p-1"  ui-sref=".step2">
+						<span class="number">2.</span>
+						</a></li>
+						<li role="tab" id="form-t-2" class="disabled" aria-disabled="true">
+							<a  ui-sref=".step3" aria-controls="form-p-2">
+							<span class="number">3.</span> </a>
+						</li>
+						<li role="tab" id="form-t-3" class="disabled last" aria-disabled="true">
+							<a  ui-sref=".step4" aria-controls="form-p-3">
+								<span class="number">4.</span> </a></li>
+						</ul></div>
+						<div id="form-views" class="content clearfix" ui-view></div>
+							<div class="actions clearfix">
+							<ul >
+							<li class="disabled" ng-disabled="[[ $state.current.name == create.step1]]" id="previous">
+							<a ng-click="goToBack()">Previous</a></li>
+							<li aria-hidden="false" aria-disabled="false" id="next" ng-disabled="[[ $state.current.name == create.step4]]"><a  ng-click="SwitchFuction()">Next</a></li>
+							<li aria-hidden="false" ng-disabled="[[ $state.current.name != create.step4]]" class="disabled"><a ng-click="publishProject()" >Publish</a></li>
+							<li><a href="#cancel" role="menuitem">Cancel</a></li></ul></div>
+			            </form>
+					</div>
+				</div>
+			</div>
+</div>
