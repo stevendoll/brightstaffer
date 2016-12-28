@@ -1,4 +1,4 @@
-      window.onload=function(){
+  window.onload=function(){
   jQuery(document).ready(function(){
         jQuery("#wizard").steps();
         jQuery("#createProjectForm").steps({

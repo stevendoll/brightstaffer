@@ -1,6 +1,6 @@
 angular
     .module('brightStaffer')
-    .constant('REQUEST_URL', 'http://35.161.233.149:8080/');
+    .constant('REQUEST_URL', 'http://35.164.5.146:8080/');
 
 function loginService($http ,REQUEST_URL){
     return {
@@ -92,10 +92,29 @@ function resetPasswordService($http ,REQUEST_URL){
     }
  }
 
+ function alchemyAnalysis($http ,REQUEST_URL){
+    return {
+    alchemyAPI: function(data){
+    return $http({
+        url: REQUEST_URL+'alchemy_analysis/',
+        method: "POST", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      }
+    }
+ }
+
 angular
     .module('brightStaffer')
     .service('loginService', loginService)
     .service('forgotService', forgotService)
     .service('resetPasswordService', resetPasswordService)
     .service('signupService', signupService)
-    .service('jobPostService', jobPostService);
+    .service('jobPostService', jobPostService)
+    .service('alchemyAnalysis', alchemyAnalysis);

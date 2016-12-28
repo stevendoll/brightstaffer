@@ -172,46 +172,47 @@ function validPasswordC() {
 }
 
 
-function focusOut() {
-          return {
-              require: 'ngModel',
-              link: function (scope, element, attrs, modelCtrl) {
-                  modelCtrl.$parsers.push(function (inputValue) {
-                  console.log(inputValue)
-//                      if (inputValue == undefined) return '';
-//                      var transformedInput = inputValue.replace(/[^0-9]/g, '');
-//                      if (transformedInput !== inputValue) {
-//                          modelCtrl.$setViewValue(transformedInput);
-//                          modelCtrl.$render();
-//                      }
-                     return;
-                  });
-              }
-          };
+function autoCapitaliseFirstLetter($timeout) {
+  return {
+    require: 'ngModel',
+    link: function (scope, element, attrs, modelCtrl) {
+
+        modelCtrl.$parsers.push(function (inputValue) {
+
+            var transformedInput = (!!inputValue) ? inputValue.charAt(0).toUpperCase() + inputValue.substr(1).toLowerCase() : '';
+
+            if (transformedInput != inputValue) {
+                modelCtrl.$setViewValue(transformedInput);
+                modelCtrl.$render();
+            }
+
+            return transformedInput;
+        });
+      }
+    }
 }
 
-function ngModelOnblur(jobPostService, $rootScope ,$state) {
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        priority: 1, // needed for angular 1.5.x
-        link: function(scope, elm, attr, ngModelCtrl) {
-            if (attr.type === 'radio' || attr.type === 'checkbox') return;
-
-            elm.unbind('input').unbind('keydown').unbind('change');
-            elm.bind('blur', function() {
-                scope.$apply(function() {
-                       var value = elm.val();
-                       var name = elm[0].name;
-                       scope.update(elm, name , value);
-
-                    //ngModelCtrl.update(elm.val());
+function removeMe($rootScope) {
+      return {
+            link:function(scope,element,attrs)
+            {
+                element.bind("click",function() {
+                console.log(element[0]);
+                var skillName = element[0].id.split('_')[1];
+                console.log(skillName);
+                console.log(element.parent())
+                    element.parent().remove();
+                    element.remove();
+                    var index = $rootScope.jobDescriptionResult.concepts.indexOf(skillName);
+                    console.log(index);
+                    if(index > -1){
+                       $rootScope.jobDescriptionResult.concepts.splice(index,1);
+                    }
                 });
-            });
-        }
-    };
-}
+            }
+      }
 
+}
 
 /**
  *
@@ -225,4 +226,5 @@ angular
     .directive('minimalizaSidebar', minimalizaSidebar)
     .directive('iboxToolsFullScreen', iboxToolsFullScreen)
     .directive('validPasswordC', validPasswordC)
-    .directive('ngModelOnblur', ngModelOnblur);
+    .directive('removeMe', removeMe)
+    .directive('autoCapitaliseFirstLetter', autoCapitaliseFirstLetter);

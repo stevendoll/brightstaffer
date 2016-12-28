@@ -34,7 +34,8 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
            $state.go('dashboard', "");                  // after successful log in redirection to dashboard view
          }else{
             $scope.showErr = true;
-            $timeout( function(){$scope.showErr = false;$scope.isDisabled = false;} , 9000); // removing unsuccessfull error message after 9s
+             $scope.isDisabled = true;
+           // $timeout( function(){$scope.showErr = false;$scope.isDisabled = false;} , 9000); // removing unsuccessfull error message after 9s
 
          }
          });
@@ -43,6 +44,8 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
      }
 
       $scope.hideMessages = function(){ /*Hide error messages when user interact with fieds*/
+      $scope.showErr = false;
+      $scope.isDisabled = false;
        $("#loginForm input").each(function(){
             var spanClass = $(this).next('span').attr('class');
             if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
@@ -169,16 +172,29 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
        }
 }
 
-function createProjectCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location , jobPostService){
-    $scope.projectForm = {};
+function createProjectCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location , $timeout, jobPostService, alchemyAnalysis){
+     $scope.projectForm ={
+        project_name :'',
+        company_name :'',
+        location :'',
+        description:''
+     };
     $rootScope.globals.currentProject_id = '';
     $scope.isValid = false;
-    this.projectNamePattern = /^[a-z0-9]+$/i;///((^[ A-Za-z0-9_@./#-]*)|(^[a-zA-Z]+[_@./#-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;
+    $scope.isExisting = false;
+    $scope.isVisited = false;
+    $scope.isError = false;
+    $scope.apiErrorMsg = '';
+    $rootScope.jobDescriptionResult = '';
+    $rootScope.globals.projectDetails = [];
+    this.projectNamePattern =/((^[ A-Za-z0-9_@./#-]*)|(^[a-zA-Z]+[_@./#-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;// /^[a-z0-9]+$/i;
     this.companyNamePattern = /^[a-zA-Z]*$/;
-    this.locationPattern =/((^^(?!0{5})\d{5})|(^[a-z]*))$/;
+    this.locationPattern =/((^^(?!0{5})\d{5})|(^[a-z_ ]*))$/i;
+    this.skillPattern = /(^[a-zA-Z][a-zA-Z0-9.,#$@]{1,50})+$/;
+
     $scope.checkMessage = function(){ /*Hide error messages when user interact with fieds*/
+         $scope.isRequired = false;
        $("#createProjectForm input").each(function(){
-           $scope.isValid = false;
             var spanClass = $(this).next('span').attr('class');
             if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
                 $(this).next('span').removeClass('error').text("");
@@ -188,122 +204,295 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         });
     }
 
-     $scope.submitStepOne = function(currentState,prevTabId,currentTabId){
-         $("#createProjectForm input").each(function(){ /*Show error on blank field when user submit*/
-                var spanClass = $(this).next('span').attr('class');
-                if($(this).val().length <= 0){
-                    $(this).next('span').css('display','block');
-                    $(this).next('span').addClass('error').text("Required.");
-                }else if($(this).val().length > 0 && ($(this).next('span').hasClass('error'))){
-                    $(this).next('span').removeClass('error').text("");
-                }
-		});
-
-		if($scope.projectForm.projectName && $scope.projectForm.companyDivsion && $scope.projectForm.nameZip)
+     $scope.takeNext = function(currentState,prevTabId,currentTabId){  // next button view change functionality
+          $("#createProjectForm input").each(function(){ /*Show error on blank field when user submit*/
+                    var spanClass = $(this).next('span').attr('class');
+                    if($(this).val().length <= 0){
+                        $(this).next('span').css('display','block');
+                        $(this).next('span').addClass('error').text("Required.");
+                    }else if($(this).val().length > 0 && ($(this).next('span').hasClass('error'))){
+                        $(this).next('span').removeClass('error').text("");
+                    }
+            });
+		if($scope.projectForm.project_name && $scope.projectForm.company_name && $scope.projectForm.location && currentState == "create.step1")
 		  {
             var backButton = angular.element(document.querySelector('#previous'));
-              backButton.removeClass('disabled');
+               backButton.removeClass('disabled');
             var prevTab = angular.element(document.querySelector(prevTabId));
             prevTab.removeClass('current');
             prevTab.addClass('done');
             prevTab.attr('aria-selected','false');
             var currentTab = angular.element(document.querySelector(currentTabId));
+                if(currentTab.hasClass('done'))
+                currentTab.removeClass('done');
             currentTab.addClass('current');
-            currentTab.attr('aria-selected','true');
+            currentTab.children(':first').attr("ui-sref",".step2");
              $state.go('create.step2','');
 		  }
 
-      }
+    }
 
+  $scope.takeToStepThree = function(currentState,prevTabId,currentTabId){
+   if(!$rootScope.jobDescriptionResult)
+     $(".loader").css('display','block');
 
+   if($scope.projectForm.description &&  currentState == "create.step2"){
+          var prevTab = angular.element(document.querySelector(prevTabId));
+            prevTab.removeClass('current');
+            prevTab.addClass('done');
+            prevTab.attr('aria-selected','false');
+            var currentTab = angular.element(document.querySelector(currentTabId));
+              if(currentTab.hasClass('done'))
+                currentTab.removeClass('done');
+             currentTab.addClass('current');
+             currentTab.children(':first').attr("ui-sref",".step3");
+            $state.go('create.step3','');
+	  }else{
+	     $scope.isRequired = true;
+	  }
+  }
 
-     $scope.SwitchFuction = function () {
+  var takeToStepFour = function(currentState,prevTabId,currentTabId){
+   if($rootScope.jobDescriptionResult.concepts.length > 0 &&  currentState == "create.step3"){
+        var nextButton = angular.element(document.querySelector('#next'));
+        nextButton.css('display','none');
+        var backButton = angular.element(document.querySelector('#publish'));
+        backButton.removeClass('disabled');
+        var prevTab = angular.element(document.querySelector(prevTabId));
+        prevTab.removeClass('current');
+        prevTab.addClass('done');
+        prevTab.attr('aria-selected','false');
+        var currentTab = angular.element(document.querySelector(currentTabId));
+        if(currentTab.hasClass('done'))
+        currentTab.removeClass('done');
+        currentTab.addClass('current');
+        currentTab.children(':first').attr("ui-sref",".step4");
+        $state.go('create.step4','');
+	  }else if($rootScope.jobDescriptionResult.concepts.length == 0){
+	       $scope.isError = true;
+           $scope.apiErrorMsg = 'There is no skills.';
+	  }
+  }
+
+     $scope.SwitchFuction = function () {   // generic function which call different stepwise function
       var currentState = $state.current.name;
+      console.log(currentState);
       var prevTabId;
       var currentTabId;
         switch (currentState) {
             case 'create.step1':
                 prevTabId = '#form-t-0';
                 currentTabId = '#form-t-1';
-                $scope.submitStepOne(currentState,prevTabId,currentTabId);
+                $scope.takeNext(currentState,prevTabId,currentTabId);
                 break;
             case 'create.step2':
                 prevTabId = '#form-t-1';
                 currentTabId = '#form-t-2';
-                $scope.changeState(currentState,prevTabId,currentTabId);
-                $state.go('create.step3','');
+                $scope.takeToStepThree(currentState,prevTabId,currentTabId);
                 break;
             case 'create.step3':
                 prevTabId = '#form-t-2';
                 currentTabId = '#form-t-3';
-                $scope.changeState(currentState,prevTabId,currentTabId);
-                $state.go('create.step4','');
-                 var nextButton = angular.element(document.querySelector('#next'));
-                 nextButton.css('display','none');
+                takeToStepFour(currentState,prevTabId,currentTabId);
                 break;
         }
 
      }
+
+  $scope.takeBack = function(currentState,prevTabId,currentTabId){
+            var prevTab = angular.element(document.querySelector(prevTabId));
+            prevTab.addClass('current');
+            prevTab.removeClass('done');
+            prevTab.attr('aria-selected','true');
+            var currentTab = angular.element(document.querySelector(currentTabId));
+            currentTab.addClass('done');
+            currentTab.attr('aria-selected','false');
+      if(currentState == "create.step2"){
+         var backButton = angular.element(document.querySelector('#previous'));
+             backButton.addClass('disabled');
+              $state.go('create.step1','');
+      }else if(currentState == "create.step3"){
+              $scope.isError = false;
+              $scope.apiErrorMsg = '';
+             $state.go('create.step2','');
+      }else if(currentState == "create.step4"){
+              var nextButton = angular.element(document.querySelector('#next'));
+                 nextButton.css('display','block');
+              $state.go('create.step3','');
+      }
+  }
 
      $scope.goToBack = function () {
       var currentState = $state.current.name;
         switch (currentState) {
             case 'create.step2':
-                $state.go('create.step1','');
+                prevTabId = '#form-t-0';
+                currentTabId = '#form-t-1';
+                $scope.takeBack(currentState,prevTabId,currentTabId);
                 break;
             case 'create.step3':
-                $state.go('create.step2','');
+                prevTabId = '#form-t-1';
+                currentTabId = '#form-t-2';
+                $scope.takeBack(currentState,prevTabId,currentTabId);
                 break;
             case 'create.step4':
-                var nextButton = angular.element(document.querySelector('#next'));
-                 nextButton.css('display','block');
-                $state.go('create.step3','');
-                prevTabId = '#form-t-3';
-                currentTabId = '#form-t-2';
-                $scope.changeState(currentState,prevTabId,currentTabId);
+                prevTabId = '#form-t-2';
+                currentTabId = '#form-t-3';
+                $scope.takeBack(currentState,prevTabId,currentTabId);
                 break;
         }
 
      }
-  $scope.update = function(elm , name, value){
-  console.log(elm[0].name);
-  console.log( $rootScope.globals.currentProject_id)
-       var is_published = false;
-       var token = $rootScope.globals.currentUser.token;
-       var recuriter = $rootScope.globals.currentUser.user_email;
-       var requestObject = {};
-            if(elm[0].name == "company_name" || "location"){
-                var element = angular.element(document.querySelector('#project_name'));
-                  if(element && !element[0].value ){
-                        element[0].focus();
-                        $scope.isValid = true;
-                      }
-               }
 
-            if($state.current.name == "create.state4")
-               is_published = true;
 
-            if(value) {
+  $scope.removeValidationMsg = function($event){
+         $scope.isValid = false;
+         $scope.isExisting = false;
+  }
+
+  $scope.checkProjectName = function($event){
+    if($event.target.name == "company_name" || "location"){   // if projectName is blank prompt for it
+        var element = angular.element(document.querySelector('#project_name'));
+          if(element && !element[0].value ){
+                $scope.isValid = true;
+                element[0].focus();
+                $event.preventDefault();
+              }
+       }
+    }
+
+  $scope.updateProjectName = function($event){
+    if($event.target.value != ''){
+    var projectName = $event.target.value;
+    var is_published = false;
+    var token = $rootScope.globals.currentUser.token;
+    var recuriter = $rootScope.globals.currentUser.user_email;
+    var requestObject = {};
+       requestObject["id"] = $rootScope.globals.currentProject_id;
+       requestObject["project_name"] = projectName;
+       requestObject["token"] = token;
+       requestObject["recuriter"] = recuriter;
+       requestObject["is_published"] = is_published;
+          jobPostService.jobPost(requestObject).then(function(response){
+                 if(response.message == "success") {
+                   if( $rootScope.globals.currentProject_id == '')
+                     $rootScope.globals.currentProject_id = response.project_id;
+                        var ProjectData = [];
+                        var valueObj = {'key':'project_id','value':$rootScope.globals.currentProject_id};
+                            ProjectData.push(valueObj);
+                            valueObj = {'key':'project_name','value':projectName};
+                            ProjectData.push(valueObj);
+                           $cookies.put('currentProjectId',JSON.stringify(ProjectData));
+                 }else{
+                       if(response.errorstring){
+                         $scope.isExisting = true;
+                       }
+                 }
+          });
+    }
+}
+
+$scope.timeout;
+  $scope.saveData = function(name,value){
+    if(value){
+         $timeout(saveUpdates(name,value), 2000);  // 5000 = 5 second
+      }
+
+  }
+
+     var saveUpdates = function(name , value){
+           var is_published = false;
+           var token = $rootScope.globals.currentUser.token;
+           var recuriter = $rootScope.globals.currentUser.user_email;
+           var requestObject = {};
                requestObject["id"] = $rootScope.globals.currentProject_id;
-               requestObject[elm[0].name] = value;
+               requestObject[name] = value;
                requestObject["token"] = token;
                requestObject["recuriter"] = recuriter;
                requestObject["is_published"] = is_published;
-            console.log(requestObject)
-                jobPostService.jobPost(requestObject).then(function(response){
+              jobPostService.jobPost(requestObject).then(function(response){
                      if(response.message == "success") {
-                       if( $rootScope.globals.currentProject_id == '')
-                         $rootScope.globals.currentProject_id = response.project_id;
-
-                         console.log($rootScope.globals.currentProject_id)
-                         console.log(response)
+                       if ($scope.timeout) {
+                                $timeout.cancel($scope.timeout)
+                           }
                      }else{
-
+                             $scope.timeout = $timeout(saveUpdates(name,value), 3000);
                      }
-                   });
-              }
+                });
+   }
 
-    }
+   $scope.updateJobDescription = function($event){
+     if($event.target.value){
+     $rootScope.jobDescriptionResult = '';
+     $scope.isError = false;
+     $scope.apiErrorMsg = '';
+     var is_published = false;
+     var token = $rootScope.globals.currentUser.token;
+     var recuriter = $rootScope.globals.currentUser.user_email;
+     var requestObject = {};
+               requestObject["id"] = $rootScope.globals.currentProject_id;
+               requestObject[$event.target.name] = $event.target.value;
+               requestObject["token"] = token;
+               requestObject["recuriter"] = recuriter;
+               requestObject["is_published"] = is_published;
+             alchemyAnalysis.alchemyAPI(requestObject).then(function(response){
+                     if(response.message == "success") {
+                        $rootScope.jobDescriptionResult = response;
+                        if($rootScope.jobDescriptionResult.concepts.length == 0){
+                          $scope.isError = true;
+                          $scope.apiErrorMsg = "There is no relevant keywords in your description.";
+                        }
+
+                         $(".loader").css('display','none');
+
+                     }else{
+                           if(response.errorstring){
+                               $scope.isError = true;
+                               $scope.apiErrorMsg = "Description text data is not valid.";
+                            }
+                           $(".loader").css('display','none');
+                            console.log('error');
+                     }
+                });
+          }
+
+   }
+    var validateSkillName = function(skillName) {
+        var re =/(^[a-zA-Z][a-zA-Z0-9.,#$@]{1,50})+$/;
+        return re.test(skillName);
+   }
+
+   $scope.updateView = function($event){
+   console.log('called')
+      $scope.isError = false;
+        console.log( $rootScope.jobDescriptionResult.concepts);
+      if($event.target.value){
+        var skill = $event.target.value;
+          if(skill.length<2){
+               $scope.isError = true;
+               $scope.apiErrorMsg = 'Please provide atleast 2 character!';
+             }
+              else if(!validateSkillName(skill)){
+                 $scope.isError = true;
+                 $scope.apiErrorMsg ='First letter sholud be a character.' ;
+               }else{
+                   var newSkill = $event.target.value;
+                   console.log(newSkill);
+                   var index = $rootScope.jobDescriptionResult.concepts.indexOf(newSkill);
+                       if(index == -1){
+                            $rootScope.jobDescriptionResult.concepts.push(newSkill);
+
+                       }
+                          $event.target.value = '';
+
+                     console.log( $rootScope.jobDescriptionResult.concepts);
+
+                 }
+       }
+   }
+
+
+
 }
 
 angular

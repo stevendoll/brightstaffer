@@ -7,7 +7,7 @@ from time import time
 from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
-
+import datetime
 
 
 # This code is triggered whenever a new user has been created and saved to the database
@@ -25,6 +25,7 @@ class Projects(models.Model):
     location = models.CharField(max_length=255,verbose_name='Location', null=True, blank=True)
     description = models.TextField(verbose_name='Job Description', null=True, blank=True)
     is_published=models.TextField(verbose_name='Published',default=False,null=False)
+    create_date=models.DateTimeField(verbose_name='CreateDate',null=True, blank=True)
     class Meta:
         verbose_name_plural = 'Projects'
         verbose_name = 'Projects'

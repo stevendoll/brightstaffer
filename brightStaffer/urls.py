@@ -28,6 +28,13 @@ urlpatterns =[
     url(r'^account/reset_password_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',resetpassword.ResetPassword.passwordresetconfirmView, name='reset_password_confirm'),
     url(r'^resetapi/$', resetpassword.ResetPassword.resetpasswordApi,name='reset_password_api'),
     url(r'^job_posting/$', views.JobPosting.job_posting,name='JobPosting'),
+    url(r'^alchemy_analysis/$', views.Alchemy_api.analsys,name='JobPosting'),
+    url(r'^update_concept/$', views.JobPosting.update_concept,name='Update Concept'),
+    url(r'^backbuttoninfo/$', views.JobPosting.backButtonInfo,name='Back Button Info'),
+    url(r'^publish_jobPost/$', views.JobPosting.publish, name='Publish Project'),
+    #url(r'^unpublish/$', views.ProjectList.upublish_project, name='Unpublish Project'),
+    url(r'^publish_project/$', views.ProjectList.publish_project, name='Publish Project'),
+    url(r'^top_projectlist/$', views.ProjectList.top_project_list, name='Top 6 Project'),
     url(r'', views.UserData.home),
 
 ]

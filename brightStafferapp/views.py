@@ -1,5 +1,7 @@
 import json
-
+from django.utils import timezone
+from watson_developer_cloud import AlchemyLanguageV1
+from watson_developer_cloud import WatsonException
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -12,6 +14,9 @@ from brightStafferapp import util
 from django.views import View
 from django.views.generic import View
 from django.db.models import Q
+from brightStaffer.settings import Alchmey_api_key
+from json import dumps
+
 
 class UserData():
 
@@ -121,4 +126,209 @@ class JobPosting():
                         return util.returnSuccessShorcut(param_dict)
                 except:
                     return util.returnErrorShorcut(400, 'API parameter is not valid')
+
+    #This API is returned a previous page info
+    @csrf_exempt
+    def backButtonInfo(request):
+        param_dict = {}
+        try:
+            user_data = json.loads(request.body.decode("utf-8"))
+        except ValueError:
+            return util.returnErrorShorcut(400, 'API parameter is not valid')
+        recuriter_email = User.objects.filter(email=user_data['recuriter'])
+        if not recuriter_email:
+            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+        values = Token.objects.filter(user=recuriter_email, key=user_data['token'])  # .select_related().exists()
+        if not values:
+            return util.returnErrorShorcut(404, 'Access Token is not valid')
+        try:
+            project_id = Projects.objects.filter(id=user_data['id'])
+            if not project_id:
+                return util.returnErrorShorcut(400, 'Project id is not valid')
+        except:
+            return util.returnErrorShorcut(400, 'Project id is not valid')
+        param_dict['project_id'] = user_data['id']
+        param_dict['user_token'] = user_data['token']
+        param_dict['recuriter'] = user_data['recuriter']
+        value = Projects.objects.filter(id=user_data['id']).values()
+        for param_value in value:
+            if user_data['page']==1:
+                param_dict['company_name']=param_value['company_name']
+                param_dict['project_name']=param_value['project_name']
+                param_dict['location']=param_value['location']
+            if user_data['page']==2:
+                param_dict['description']=param_value['description']
+            if user_data['page']==3:
+                concept_dict=Concepts.objects.filter(project=user_data['id']).values('concepts')
+                for concept_key in concept_dict:
+                    param_dict['concepts']=concept_key['concepts']
+
+        return util.returnSuccessShorcut(param_dict)
+
+    # This API is publish a project
+    @csrf_exempt
+    def publish(request):
+        param_dict = {}
+        try:
+            user_data = json.loads(request.body.decode("utf-8"))
+        except ValueError:
+            return util.returnErrorShorcut(400, 'API parameter is not valid')
+        recuriter_email = User.objects.filter(email=user_data['recuriter'])
+        if not recuriter_email:
+            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+        values = Token.objects.filter(user=recuriter_email, key=user_data['token'])  # .select_related().exists()
+        if not values:
+            return util.returnErrorShorcut(404, 'Access Token is not valid')
+        try:
+            project_id = Projects.objects.filter(id=user_data['id'])
+            if not project_id:
+                return util.returnErrorShorcut(400, 'Project id is not valid')
+        except:
+            return util.returnErrorShorcut(400, 'Project id is not valid')
+        try:
+            del user_data['token']
+            del user_data['recuriter']
+        except KeyError:
+            pass
+        Projects.objects.filter(id=user_data['id']).update(**user_data)
+        Projects.objects.filter(id=user_data['id']).update(create_date=timezone.now())
+        return util.returnSuccessShorcut(param_dict)
+
+    # This API is update a concepts
+    @csrf_exempt
+    def update_concept(request):
+        param_dict = {}
+        try:
+            user_data = json.loads(request.body.decode("utf-8"))
+        except ValueError:
+            return util.returnErrorShorcut(400, 'API parameter is not valid')
+        recuriter_email = User.objects.filter(email=user_data['recuriter'])
+        if not recuriter_email:
+            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+        values = Token.objects.filter(user=recuriter_email, key=user_data['token'])  # .select_related().exists()
+        if not values:
+            return util.returnErrorShorcut(404, 'Access Token is not valid')
+        try:
+            project_id = Projects.objects.filter(id=user_data['id'])
+            if not project_id:
+                return util.returnErrorShorcut(400, 'Project id is not valid')
+        except:
+            return util.returnErrorShorcut(400, 'Project id is not valid')
+
+        Concepts.objects.filter(project=user_data['id']).update(concepts=user_data['concepts'])
+        param_dict['concepts']=user_data['concepts']
+        return util.returnSuccessShorcut(param_dict)
+
+
+
+#This Class will take a input as a job description and it will retun the output as a concepts(skills)
+class Alchemy_api():
+    @csrf_exempt
+
+    #This API is analsys a project description and reuturn a concepts
+    def analsys(request):
+        concepts_obj=Concepts()
+        param_dict = {}
+        try:
+            user_data=json.loads(request.body.decode("utf-8"))
+        except ValueError:
+            return util.returnErrorShorcut(400,'API parameter is not valid')
+        recuriter_email = User.objects.filter(email=user_data['recuriter'])
+        if not recuriter_email:
+            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+        values = Token.objects.filter(user=recuriter_email, key=user_data['token'])#.select_related().exists()
+        if not values:
+            return util.returnErrorShorcut(404, 'Access Token is not valid')
+        try:
+            project_id = Projects.objects.filter(id=user_data['id'])
+            if not project_id:
+                return util.returnErrorShorcut(400, 'Project id is not valid')
+        except:
+            return util.returnErrorShorcut(400, 'Project id is not valid')
+        for project_idd in project_id:
+            concepts_obj.project=project_idd
+            param_dict['project_id'] = str(project_idd)
+        try:
+            keyword_concepts = Alchemy_api.alchemy_api(user_data)
+        except:
+            return util.returnErrorShorcut(400,"Description text data is not valid.")
+        concepts_obj.concepts = keyword_concepts
+        concept_empty=Concepts.objects.filter(project=project_id).values()
+        if not concept_empty:
+            concepts_obj.save()
+            Projects.objects.filter(id=project_id).update(description=user_data['description'])
+            param_dict['concepts'] = keyword_concepts
+        else:
+            try:
+                del user_data['token']
+                del user_data['recuriter']
+            except KeyError:
+                pass
+            Projects.objects.filter(id=project_id).update(**user_data)
+            Concepts.objects.filter(project=project_id).update(concepts=keyword_concepts)
+            param_dict['concepts']=keyword_concepts
+        return util.returnSuccessShorcut(param_dict)
+
+
+    def alchemy_api(user_data):
+        keyword_list = []
+        alchemy_language = AlchemyLanguageV1(api_key=Alchmey_api_key)
+        data=json.dumps(
+            alchemy_language.entities(
+                text=user_data['description']),indent=2)
+        d = json.loads(data)
+        for list_value in d['entities']:
+            if list_value['type']=='JobTitle':
+                keyword_list.append(list_value['text'])
+        return keyword_list
+
+
+class ProjectList():
+    # @csrf_exempt
+    # def upublish_project(request):
+    #     output = {'unpublis_project': []}
+    #     project=Projects.objects.filter(is_published=False).values()
+    #     for i in project:
+    #         print (i)
+
+
+    @csrf_exempt
+    def publish_project(request):
+        output = {'publish_project': []}
+        try:
+            user_data=json.loads(request.body.decode("utf-8"))
+        except ValueError:
+            return util.returnErrorShorcut(400,'API parameter is not valid')
+        rec_name = User.objects.filter(username=user_data['recuriter'])
+        if not rec_name:
+            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+        project = Projects.objects.filter(is_published=True,recuriter=rec_name).values().order_by('-create_date')
+        for project_data in project:
+            param_dict = {}
+            param_dict['project_name']=project_data['project_name']
+            user_data=User.objects.filter(id=project_data['recuriter_id']).values('email')
+            for email in user_data:
+                param_dict['recuriter']=email['email']
+            param_dict['location']=project_data['location']
+            param_dict['company_name']=project_data['company_name']
+            param_dict['create_date']=str(project_data['create_date'].day)+'/'+str(project_data['create_date'].month)+'/'+str(project_data['create_date'].year)
+            output['publish_project'].append(param_dict)
+        return util.returnSuccessShorcut(output)
+
+    @csrf_exempt
+    def top_project_list(request):
+        param_dict={}
+        try:
+            user_data=json.loads(request.body.decode("utf-8"))
+        except ValueError:
+            return util.returnErrorShorcut(400,'API parameter is not valid')
+        rec_name = User.objects.filter(username=user_data['recuriter'])
+        if not rec_name:
+            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+        project = Projects.objects.filter(is_published=True,recuriter=rec_name).values().order_by('-create_date')[:6]
+        for project_info in project:
+            print(project_info)
+        return util.returnSuccessShorcut(param_dict)
+
+
 
