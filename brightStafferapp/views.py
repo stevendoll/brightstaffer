@@ -302,9 +302,15 @@ class ProjectList():
         rec_name = User.objects.filter(username=user_data['recuriter'])
         if not rec_name:
             return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+        values = Token.objects.filter(user=rec_name, key=user_data['token'])  # .select_related().exists()
+        if not values:
+            return util.returnErrorShorcut(404, 'Access Token is not valid')
         project = Projects.objects.filter(is_published=True,recuriter=rec_name).values().order_by('-create_date')
         for project_data in project:
             param_dict = {}
+            project_id = Projects.objects.filter(id=project_data['id'])
+            for project_idd in project_id:
+                param_dict['project_id']=str(project_idd)
             param_dict['project_name']=project_data['project_name']
             user_data=User.objects.filter(id=project_data['recuriter_id']).values('email')
             for email in user_data:
@@ -317,7 +323,7 @@ class ProjectList():
 
     @csrf_exempt
     def top_project_list(request):
-        param_dict={}
+        output = {'top_project': []}
         try:
             user_data=json.loads(request.body.decode("utf-8"))
         except ValueError:
@@ -325,10 +331,24 @@ class ProjectList():
         rec_name = User.objects.filter(username=user_data['recuriter'])
         if not rec_name:
             return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
-        project = Projects.objects.filter(is_published=True,recuriter=rec_name).values().order_by('-create_date')[:6]
+        values = Token.objects.filter(user=rec_name, key=user_data['token'])  # .select_related().exists()
+        if not values:
+            return util.returnErrorShorcut(404, 'Access Token is not valid')
+        project = Projects.objects.filter(is_published=True,recuriter=rec_name).values().order_by("-create_date")[:6]
         for project_info in project:
-            print(project_info)
-        return util.returnSuccessShorcut(param_dict)
+            param_dict = {}
+            param_dict['project_name']=project_info['project_name']
+            param_dict['location']=project_info['location']
+            param_dict['company_name']=project_info['company_name']
+            param_dict['create_date']=str(project_info['create_date'].day)+'/'+str(project_info['create_date'].month)+'/'+str(project_info['create_date'].year)
+            project_id = Projects.objects.filter(id=project_info['id'])
+            for project_idd in project_id:
+                concepts_keywords=Concepts.objects.filter(project=project_idd).values('concepts')
+                for concepts_key in concepts_keywords:
+                    param_dict['concepts'] = concepts_key['concepts']
+                    param_dict['project_id']=str(project_idd)
+            output['top_project'].append(param_dict)
+        return util.returnSuccessShorcut(output)
 
 
 
