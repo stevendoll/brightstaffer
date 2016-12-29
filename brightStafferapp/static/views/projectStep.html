@@ -31,9 +31,9 @@
 							<ul >
 							<li class="disabled" ng-disabled="[[ $state.current.name == create.step1]]" id="previous">
 							<a ng-click="goToBack()">Previous</a></li>
-							<li aria-hidden="false" aria-disabled="false" id="next" ng-disabled="[[ $state.current.name == create.step4]]"><a  ng-click="SwitchFuction()">Next</a></li>
-							<li aria-hidden="false" id="publish" class="disabled"><a ng-click="publishProject()" >Publish</a></li>
-							</ul></div>
+							<li  id="next" ng-disabled="[[ $state.current.name == create.step4]]"><a  ng-click="SwitchFuction()">Next</a></li>
+							<li  id="publish" ng-disabled="[[ $state.current.name != create.step4]]" class="disabled"><a ng-click="publishProject()" >Publish</a></li>
+							<li><a href="#" role="menuitem">Cancel</a></li></ul></div>
 			            </form>
 					</div>
 				</div>

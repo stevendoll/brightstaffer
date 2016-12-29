@@ -207,6 +207,7 @@ function removeMe($rootScope) {
                     console.log(index);
                     if(index > -1){
                        $rootScope.jobDescriptionResult.concepts.splice(index,1);
+                       scope.updateSkillSet();
                     }
                 });
             }

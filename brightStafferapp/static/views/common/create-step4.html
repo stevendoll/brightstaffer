@@ -8,15 +8,15 @@
                               <div class="col-sm-8 m-t">
                                   <div class="p-b">
                                     <label>Project Name</label>
-                                    <p class="form-control text-black"></p>
+                                    <p class="form-control text-black">#[[projectForm.project_name]]</p>
                                   </div>
                                   <div class="p-b">
                                     <label>Company or Division</label>
-                                    <p class="form-control text-black"></p>
+                                    <p class="form-control text-black">@[[projectForm.company_name]]</p>
                                   </div>
                                <div class="p-b">
                                 <label>Location</label>
-                                <p class="form-control text-black"></p>
+                                <p class="form-control text-black">[[projectForm.location]]</p>
                               </div>
                           </div>
                           </div>
@@ -26,7 +26,9 @@
 								        <div class="row">
 			                        <div class="col-sm-12">
 						                <label>Job Description</label>
-											<p class="publish-textarea text-black"></p>
+											<p class="publish-textarea text-black">
+                                                [[projectForm.description]]
+                                            </p>
 									</div>
 								</div>
 								<!-- Review Concepts -->
@@ -34,7 +36,16 @@
 			            <div class="col-sm-12">
 										<label>Concepts</label>
 											<div class="ibox-content p-a-0">
-
+                                            <span class="btn btn-default btn-lg concept-tag" ng-repeat="concepts in jobDescriptionResult.concepts" id="skill_[[concepts]]">[[concepts]]</span>
 			                        		</div>
 								  </div>
 			                </div></fieldset>
+
+
+  <!--Modal window-->
+<div class="modal-outer" id="breakPopup" style="display:none">
+  <div class="modal-content">
+    <p>[[publishMsg]]</p>
+    <a href="" ng-show="isSuccess" ng-click="removePopupBox()"><i class="fa fa-thumbs-up"></i> Ok</a>
+  </div>
+</div>

@@ -172,7 +172,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
        }
 }
 
-function createProjectCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location , $timeout, jobPostService, alchemyAnalysis){
+function createProjectCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location , $timeout, jobPostService, alchemyAnalysis, updateConcepts, publishProject){
      $scope.projectForm ={
         project_name :'',
         company_name :'',
@@ -233,22 +233,21 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     }
 
   $scope.takeToStepThree = function(currentState,prevTabId,currentTabId){
-   if(!$rootScope.jobDescriptionResult)
-     $(".loader").css('display','block');
+   if(!$scope.projectForm.description){
+          $scope.isRequired = true;
 
-   if($scope.projectForm.description &&  currentState == "create.step2"){
-          var prevTab = angular.element(document.querySelector(prevTabId));
+	  }else if($scope.projectForm.description &&  currentState == "create.step2"){
+	       if(!$rootScope.jobDescriptionResult)
+               $(".loader").css('display','block');
+	     var prevTab = angular.element(document.querySelector(prevTabId));
             prevTab.removeClass('current');
             prevTab.addClass('done');
-            prevTab.attr('aria-selected','false');
             var currentTab = angular.element(document.querySelector(currentTabId));
               if(currentTab.hasClass('done'))
                 currentTab.removeClass('done');
              currentTab.addClass('current');
              currentTab.children(':first').attr("ui-sref",".step3");
             $state.go('create.step3','');
-	  }else{
-	     $scope.isRequired = true;
 	  }
   }
 
@@ -261,7 +260,6 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         var prevTab = angular.element(document.querySelector(prevTabId));
         prevTab.removeClass('current');
         prevTab.addClass('done');
-        prevTab.attr('aria-selected','false');
         var currentTab = angular.element(document.querySelector(currentTabId));
         if(currentTab.hasClass('done'))
         currentTab.removeClass('done');
@@ -301,15 +299,14 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 
   $scope.takeBack = function(currentState,prevTabId,currentTabId){
             var prevTab = angular.element(document.querySelector(prevTabId));
+            var backButton = angular.element(document.querySelector('#publish'));
+                backButton.addClass('disabled');
             prevTab.addClass('current');
             prevTab.removeClass('done');
-            prevTab.attr('aria-selected','true');
             var currentTab = angular.element(document.querySelector(currentTabId));
             currentTab.addClass('done');
-            currentTab.attr('aria-selected','false');
       if(currentState == "create.step2"){
-         var backButton = angular.element(document.querySelector('#previous'));
-             backButton.addClass('disabled');
+              $scope.isRequired = false;
               $state.go('create.step1','');
       }else if(currentState == "create.step3"){
               $scope.isError = false;
@@ -450,7 +447,7 @@ $scope.timeout;
                                $scope.isError = true;
                                $scope.apiErrorMsg = "Description text data is not valid.";
                             }
-                           $(".loader").css('display','none');
+                              $(".loader").css('display','none');
                             console.log('error');
                      }
                 });
@@ -458,11 +455,11 @@ $scope.timeout;
 
    }
     var validateSkillName = function(skillName) {
-        var re =/(^[a-zA-Z][a-zA-Z0-9.,#$@]{1,50})+$/;
+        var re =/(^[a-zA-Z][a-zA-Z0-9.,#$@_ ]{1,50})+$/;
         return re.test(skillName);
    }
 
-   $scope.updateView = function($event){
+   $scope.updateSkillView = function($event){
    console.log('called')
       $scope.isError = false;
         console.log( $rootScope.jobDescriptionResult.concepts);
@@ -481,17 +478,73 @@ $scope.timeout;
                    var index = $rootScope.jobDescriptionResult.concepts.indexOf(newSkill);
                        if(index == -1){
                             $rootScope.jobDescriptionResult.concepts.push(newSkill);
-
                        }
                           $event.target.value = '';
-
-                     console.log( $rootScope.jobDescriptionResult.concepts);
-
+                          $scope.updateSkillSet();
                  }
-       }
+         }
    }
 
+     $scope.updateSkillSet = function(){
+      var is_published = false;
+      var token = $rootScope.globals.currentUser.token;
+      var recuriter = $rootScope.globals.currentUser.user_email;
+      var requestObject = {};
+           requestObject["id"] = $rootScope.globals.currentProject_id;
+           requestObject["concepts"] = $rootScope.jobDescriptionResult.concepts;
+           requestObject["token"] = token;
+           requestObject["recuriter"] = recuriter;
+           requestObject["is_published"] = is_published;
+           updateConcepts.conceptsAPI(requestObject).then(function(response){
+                 if(response.message == "success") {
+                         console.log(response);
+                 }else{
+                        console.log('error');
+                 }
+            });
 
+     }
+
+     $scope.publishProject = function(){
+      $scope.isSuccess = false;
+      $scope.publishMsg = '';
+        $(".loader").css('display','block');
+        var is_published = true;
+        var token = $rootScope.globals.currentUser.token;
+        var recuriter = $rootScope.globals.currentUser.user_email;
+        var requestObject = {};
+        requestObject["id"] = $rootScope.globals.currentProject_id;
+        requestObject["token"] = token;
+        requestObject["recuriter"] = recuriter;
+        requestObject["is_published"] = is_published;
+        publishProject.publish(requestObject).then(function(response){
+             if(response.message == "success") {
+                   console.log(response);
+                $(".loader").css('display','none');
+                $scope.publishMsg = "Project created successfully.";
+                  $('#breakPopup').css('display','block');
+                $timeout( function(){
+                $('#breakPopup').css('display','none');
+                $state.go('dashboard','');} , 3000);
+
+             }else{
+                $(".loader").css('display','none');
+                  $scope.isSuccess = true;
+                $scope.publishMsg = "Please try again.";
+                $('#breakPopup').css('display','block');
+                    console.log('error');
+             }
+        });
+         $timeout( function(){$(".loader").css('display','none');
+                  $scope.isSuccess = true;
+                $scope.publishMsg = "Please try again.";
+                $('#breakPopup').css('display','block');} , 30000); //timeout after three minutes
+     }
+
+     $scope.removePopupBox = function(){
+       $('#breakPopup').css('display','none');
+        $scope.isSuccess = false;
+     }
 
 }
 

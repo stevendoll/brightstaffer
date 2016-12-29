@@ -1,6 +1,6 @@
 angular
     .module('brightStaffer')
-    .constant('REQUEST_URL', 'http://35.164.5.146:8080/');
+    .constant('REQUEST_URL', 'http://127.0.0.1:8080/');
 
 function loginService($http ,REQUEST_URL){
     return {
@@ -110,6 +110,43 @@ function resetPasswordService($http ,REQUEST_URL){
     }
  }
 
+ function updateConcepts($http ,REQUEST_URL){
+    return {
+    conceptsAPI: function(data){
+    return $http({
+        url: REQUEST_URL+'update_concept/',
+        method: "POST", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      }
+    }
+ }
+
+
+ function publishProject($http ,REQUEST_URL){
+    return {
+    publish: function(data){
+    return $http({
+        url: REQUEST_URL+'publish_jobPost/',
+        method: "POST", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      }
+    }
+ }
+
 angular
     .module('brightStaffer')
     .service('loginService', loginService)
@@ -117,4 +154,6 @@ angular
     .service('resetPasswordService', resetPasswordService)
     .service('signupService', signupService)
     .service('jobPostService', jobPostService)
-    .service('alchemyAnalysis', alchemyAnalysis);
+    .service('alchemyAnalysis', alchemyAnalysis)
+    .service('updateConcepts', updateConcepts)
+    .service('publishProject', publishProject);
