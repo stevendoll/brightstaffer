@@ -1,7 +1,89 @@
 
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData) { /*global controller */
+      $rootScope.projectList = [];
+      $rootScope.count='';
+      $scope.options = [{name:'10',value:10},{name:'25',value:25},{name:'50',value:50},{name:'100',value:100}];
+      $scope.countList = $scope.options[0];
+      $scope.counter= 1;
+        this.getTopSixProjects = function(){
+             console.log('abc')
+              var requestObject = {
+                'token': $rootScope.globals.currentUser.token,       // username field value
+                'recuriter': $rootScope.globals.currentUser.user_email   // password filed value
+             };
+             console.log(requestObject);
+             getTopSixProjects.topSix(requestObject).then(function(response){
+                if(response.message == "success") {
+                    $rootScope.projectList = response.top_project;
 
-    this.userName = 'BrightStaffer';
+                  }else{
+                    console.log('error');
+                }
+             });
+
+           }
+ $scope.allProjectList = [];
+        this.showAllProjects = function(){
+             console.log('abc')
+              var requestObject = {
+                'token': $rootScope.globals.currentUser.token,       // username field value
+                'recuriter': $rootScope.globals.currentUser.user_email   // password filed value
+             };
+             console.log(requestObject);
+             getAllProjects.allProjects(requestObject).then(function(response){
+                if(response.message == "success") {
+                    $scope.allProjectList = response.publish_project;
+                     $rootScope.count = response.publish_project.length;
+                  }else{
+                    console.log('error');
+                }
+             });
+
+           }
+
+    this.getValue = function(countList){
+      console.log(countList.value);
+        var requestObject = {
+                'token': $rootScope.globals.currentUser.token,       // username field value
+                'recuriter': $rootScope.globals.currentUser.user_email,   // password filed value
+                'page':$scope.counter,
+                'count':countList.value
+             };
+             console.log(requestObject);
+             paginationData.paginationApi(requestObject).then(function(response){
+                if(response.message == "success") {
+                    console.log(response);
+
+                  }else{
+                    console.log('error');
+                }
+             });
+    }
+
+    this.changePage = function($event){
+    console.log('asdasd')
+         if($event.target.name == "next"){
+           $scope.counter++;
+         }else if($event.target.name == "prev"){
+           if($scope.counter >1)
+              $scope.counter--;
+         }
+         var requestObject = {
+                'token': $rootScope.globals.currentUser.token,       // username field value
+                'recuriter': $rootScope.globals.currentUser.user_email,   // password filed value
+                'page':$scope.counter,
+                'count':$scope.countList.value
+             };
+             console.log(requestObject);
+             paginationData.paginationApi(requestObject).then(function(response){
+                if(response.message == "success") {
+                    console.log(response);
+
+                  }else{
+                    console.log('error');
+                }
+         });
+    }
 
 };
 
@@ -548,6 +630,13 @@ $scope.timeout;
 
 }
 
+function sideNavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location , $timeout){
+
+
+
+
+}
+
 angular
     .module('brightStaffer')
     .controller('MainCtrl', MainCtrl)
@@ -556,4 +645,5 @@ angular
     .controller('forgotCtrl', forgotCtrl)
     .controller('resetPwCtrl', resetPwCtrl)
     .controller('topnavCtrl', topnavCtrl)
-    .controller('createProjectCtrl', createProjectCtrl);
+    .controller('createProjectCtrl', createProjectCtrl)
+    .controller('sideNavCtrl', sideNavCtrl);

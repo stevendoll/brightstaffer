@@ -16,6 +16,9 @@ from django.views.generic import View
 from django.db.models import Q
 from brightStaffer.settings import Alchmey_api_key
 from json import dumps
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render
+import ast
 
 
 class UserData():
@@ -278,20 +281,12 @@ class Alchemy_api():
                 text=user_data['description']),indent=2)
         d = json.loads(data)
         for list_value in d['entities']:
-            if list_value['type']=='JobTitle':
+            if list_value['type']=='JobTitle' or list_value['type']=='Company' or list_value['type']=='Quantity' or list_value['type']=='Person': #or list_value['type']=='FieldTerminology':
                 keyword_list.append(list_value['text'])
         return keyword_list
 
 
 class ProjectList():
-    # @csrf_exempt
-    # def upublish_project(request):
-    #     output = {'unpublis_project': []}
-    #     project=Projects.objects.filter(is_published=False).values()
-    #     for i in project:
-    #         print (i)
-
-
     @csrf_exempt
     def publish_project(request):
         output = {'publish_project': []}
@@ -302,7 +297,7 @@ class ProjectList():
         rec_name = User.objects.filter(username=user_data['recuriter'])
         if not rec_name:
             return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
-        values = Token.objects.filter(user=rec_name, key=user_data['token'])  # .select_related().exists()
+        values = Token.objects.filter(user=rec_name, key=user_data['token'])
         if not values:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
         project = Projects.objects.filter(is_published=True,recuriter=rec_name).values().order_by('-create_date')
@@ -344,11 +339,52 @@ class ProjectList():
             project_id = Projects.objects.filter(id=project_info['id'])
             for project_idd in project_id:
                 concepts_keywords=Concepts.objects.filter(project=project_idd).values('concepts')
-                for concepts_key in concepts_keywords:
-                    param_dict['concepts'] = concepts_key['concepts']
+                for value in concepts_keywords:
+                    concepts=ast.literal_eval(value['concepts'])
+                    param_dict['concepts'] = concepts
                     param_dict['project_id']=str(project_idd)
             output['top_project'].append(param_dict)
         return util.returnSuccessShorcut(output)
 
 
+
+    @csrf_exempt
+    def pagination(request):
+        output = {'Pagination': []}
+        try:
+            user_data = json.loads(request.body.decode("utf-8"))
+        except ValueError:
+            return util.returnErrorShorcut(400, 'API parameter is not valid')
+        rec_name = User.objects.filter(username=user_data['recuriter'])
+        if not rec_name:
+            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+        values = Token.objects.filter(user=rec_name, key=user_data['token'])  # .select_related().exists()
+        if not values:
+            return util.returnErrorShorcut(404, 'Access Token is not valid')
+
+        project = Projects.objects.filter(is_published=True, recuriter=rec_name).values().order_by("-create_date")#[:count]
+
+        paginator = Paginator(project,user_data['count'])
+        try:
+            page = paginator.page(user_data['page'])
+        except:
+            return util.returnErrorShorcut(404, 'No longer data is available')
+
+        project_data=page.object_list
+
+        for project_data in project_data:
+            param_dict = {}
+            project_id = Projects.objects.filter(id=project_data['id'])
+            for project_idd in project_id:
+                param_dict['project_id'] = str(project_idd)
+            param_dict['project_name'] = project_data['project_name']
+            user_data = User.objects.filter(id=project_data['recuriter_id']).values('email')
+            for email in user_data:
+                param_dict['recuriter'] = email['email']
+            param_dict['location'] = project_data['location']
+            param_dict['company_name'] = project_data['company_name']
+            param_dict['create_date'] = str(project_data['create_date'].day) + '/' + str(
+                project_data['create_date'].month) + '/' + str(project_data['create_date'].year)
+            output['Pagination'].append(param_dict)
+        return util.returnSuccessShorcut(output)
 

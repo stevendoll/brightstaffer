@@ -1,87 +1,72 @@
- <div class="wrapper wrapper-content">
+ <div class="wrapper wrapper-content" ng-init="main.getTopSixProjects()">
             <div class="row">
                 <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h2 class="p-l p-t">All Projects</h2>
                     </div>
+
                     <div class="ibox-content">
 
                     <div class="table-responsive">
-                    <table class="table table-hover dataTables">
+                        <div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="col-sm-4 col-md-4 p-a-0 m-t m-b-lg"><div class="dt-buttons btn-group"><a class="btn btn-default buttons-copy buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>Copy</span></a><a class="btn btn-default buttons-csv buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>CSV</span></a><a class="btn btn-default buttons-excel buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>Excel</span></a><a class="btn btn-default buttons-pdf buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>PDF</span></a><a class="btn btn-default buttons-print btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>Print</span></a></div></div>
+                    <div class="col-sm-4 col-md-4 p-a-0 m-t small text-muted text-center"><div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to 6 of 6 entries</div></div>
+                    <div class="col-sm-4 col-md-4 p-a-0 m-t input-group-sm small"><div id="DataTables_Table_0_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="DataTables_Table_0"></label></div></div>
+                    <table class="table table-hover dataTables dataTable no-footer dtr-inline" >
                     <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Company</th>
-                        <th>Location</th>
-                        <th>Candidates</th>
-                        <th>Owner</th>
-                        <th>Shared</th>
-                        <th>Created</th>
+                        <th class="sorting" tabindex="0" style="width: 132px;">Title</th>
+                        <th class="sorting" tabindex="0" style="width: 132px;">Company</th>
+                        <th class="sorting" tabindex="0" style="width: 132px;">Location</th>
+                        <th class="sorting" tabindex="0" style="width: 132px;">Candidates</th>
+                        <th class="sorting" tabindex="0" style="width: 132px;">Owner</th>
+                        <th class="sorting" tabindex="0" style="width: 132px;">Shared</th>
+                        <th class="sorting" tabindex="0" style="width: 132px;">Created</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="gradeX">
-                        <td>#designeraccenture</td>
-                        <td>Accenture</td>
-                        <td>Chicago</td>
-                        <td>21</td>
-                        <td>@shannon.madden</td>
-                        <td>12/5/16</td>
-                        <td>12/1/16</td>
+                    <tr class="gradeX" ng-repeat="projects in allProjectList" >
+                        <td>#[[projects.project_name]]</td>
+                        <td>[[projects.company_name]]</td>
+                        <td>[[projects.location]]</td>
+                        <td>-</td>
+                        <td>@[[globals.currentUser.first_name]].[[globals.currentUser.last_name]]</td>
+                        <td>-</td>
+                        <td>[[projects.create_date]]</td>
                     </tr>
-                    <tr class="gradeX">
-                        <td>#uxleadavande</td>
-                        <td>Avande</td>
-                        <td>San Francisco</td>
-                        <td>21</td>
-                        <td>@shannon.madden</td>
-                        <td>12/5/16</td>
-                        <td>12/1/16</td>
-                    </tr>
-                    <tr class="gradeX">
-                        <td>#strategistbooz</td>
-                        <td>Booz Allen Hamilton</td>
-                        <td>Seattle</td>
-                        <td>21</td>
-                        <td>@shannon.madden</td>
-                        <td>12/5/16</td>
-                        <td>12/1/16</td>
-                    </tr>
-                    <tr class="gradeX">
-                        <td>#fullstackibm</td>
-                        <td>IBM</td>
-                        <td>Montauk</td>
-                        <td>21</td>
-                        <td>@shannon.madden</td>
-                        <td>12/5/16</td>
-                        <td>12/1/16</td>
-                    </tr>
-                    <tr class="gradeX">
-                        <td>#designercapitalone</td>
-                        <td>McLean</td>
-                        <td>Chicago</td>
-                        <td>21</td>
-                        <td>@shannon.madden</td>
-                        <td>12/5/16</td>
-                        <td>12/1/16</td>
-                    </tr>
-                    <tr class="gradeX">
-                        <td>#directornytimes</td>
-                        <td>NY Times</td>
-                        <td>New York</td>
-                        <td>21</td>
-                        <td>@shannon.madden</td>
-                        <td>12/5/16</td>
-                        <td>12/1/16</td>
-                    </tr>
-
                     </tbody>
                     <tfoot>
 
                     </tfoot>
                     </table>
                         </div>
+                        <div class="dataTables_wrapper">
+                      <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm">
+                          <div class="dataTables_length" id="DataTables_Table_0_length">
+                              <label>Show
+                                  <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control input-sm" ng-model="countList" ng-change="main.getValue(countList)"  ng-options="option.name for option in options">
+                                  </select> entries
+                              </label>
+                          </div>
+                      </div>
+
+                      <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm">
+                        <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+                          <ul class="pagination">
+                            <li class="paginate_button previous" id="DataTables_Table_0_previous" >
+                              <a href="" name="prev" tabindex="0" ng-click="main.changePage($event)">Previous</a>
+                            </li>
+                            <li class="paginate_button active">
+                              <a  tabindex="0">[[counter]]</a>
+                            </li>
+                            <li class="paginate_button next " id="DataTables_Table_0_next" >
+                              <a href=""tabindex="0" name="next" ng-click="main.changePage($event)">Next</a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
 
                     </div>
                 </div>

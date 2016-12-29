@@ -1,6 +1,6 @@
 angular
     .module('brightStaffer')
-    .constant('REQUEST_URL', 'http://35.164.5.146:8080/');
+    .constant('REQUEST_URL', 'http://127.0.0.1:8080/');
 
 function loginService($http ,REQUEST_URL){
     return {
@@ -147,6 +147,64 @@ function resetPasswordService($http ,REQUEST_URL){
     }
  }
 
+function getTopSixProjects($http ,REQUEST_URL){
+    return {
+    topSix: function(data){
+    return $http({
+        url: REQUEST_URL+'top_projectlist/',
+        method: "POST", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      }
+    }
+ }
+
+ function getAllProjects($http ,REQUEST_URL){
+    return {
+    allProjects: function(data){
+    return $http({
+        url: REQUEST_URL+'publish_project/',
+        method: "POST", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      }
+    }
+ }
+
+
+function paginationData($http ,REQUEST_URL){
+    return {
+    paginationApi: function(data){
+    return $http({
+        url: REQUEST_URL+'pagination/',
+        method: "POST", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      }
+    }
+ }
+
+
+
+
 angular
     .module('brightStaffer')
     .service('loginService', loginService)
@@ -156,4 +214,7 @@ angular
     .service('jobPostService', jobPostService)
     .service('alchemyAnalysis', alchemyAnalysis)
     .service('updateConcepts', updateConcepts)
-    .service('publishProject', publishProject);
+    .service('publishProject', publishProject)
+    .service('getTopSixProjects', getTopSixProjects)
+    .service('getAllProjects', getAllProjects)
+    .service('paginationData', paginationData);

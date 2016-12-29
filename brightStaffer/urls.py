@@ -35,6 +35,7 @@ urlpatterns =[
     #url(r'^unpublish/$', views.ProjectList.upublish_project, name='Unpublish Project'),
     url(r'^publish_project/$', views.ProjectList.publish_project, name='Publish Project'),
     url(r'^top_projectlist/$', views.ProjectList.top_project_list, name='Top 6 Project'),
+    url(r'^pagination/$', views.ProjectList.pagination, name='Top 6 Project'),
     url(r'', views.UserData.home),
 
 ]

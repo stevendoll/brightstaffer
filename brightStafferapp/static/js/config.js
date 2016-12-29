@@ -69,6 +69,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
             templateUrl: static_url +'views/common/project-list.html',
             data: { pageTitle: 'All Projects' , requireAuthentication: true}
         })
+        .state('development', {
+            url: "/development",
+            templateUrl: static_url +'views/common/development.html',
+            data: { pageTitle: 'Under Dev' ,specialClass: 'gray-bg', requireAuthentication: true}
+        })
 
 }
 
@@ -76,6 +81,7 @@ angular
     .module('brightStaffer')
     .config(config)
     .run(function($rootScope, $state, $location, $timeout, $cookies, $cookieStore) {
+
     $rootScope.$state = $state;
     $rootScope.globals ={};
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
