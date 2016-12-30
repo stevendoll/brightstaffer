@@ -472,3 +472,33 @@ div.dtr-modal div.dtr-modal-background {
         width: 95%
     }
 }
+
+.elepsis-100 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    overflow: hidden
+}
+
+@media (max-width:767px) {
+    .loginscreen.middle-box {
+        width: 100%;
+        max-width: 500px;
+     }
+}
+@media (max-width:767px) and (orientation:landscape) {
+  /* Styles for Landscape screen */
+  #page-wrapper {
+    min-height: 850px;
+  }
+}
+@media (max-width:767px) and (orientation: portrait) {
+  /* Styles for portrait screen */
+
+   .wizard > .actions a {
+        padding: 0.5em 0.5em;
+    }
+    .wizard > .actions > ul > li {
+        margin: 0 0.1em;
+    }
+}

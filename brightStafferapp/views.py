@@ -281,7 +281,8 @@ class Alchemy_api():
                 text=user_data['description']),indent=2)
         d = json.loads(data)
         for list_value in d['entities']:
-            if list_value['type']=='JobTitle' or list_value['type']=='Company' or list_value['type']=='Quantity' or list_value['type']=='Person': #or list_value['type']=='FieldTerminology':
+            print(list_value)
+            if list_value['type']=='JobTitle' or list_value['type']=='Quantity' or list_value['type']=='Person': #or list_value['type']=='FieldTerminology':
                 keyword_list.append(list_value['text'])
         return keyword_list
 
