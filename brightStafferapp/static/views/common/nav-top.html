@@ -4,15 +4,15 @@
 		             <div class="visible-xs">
 						<a class="navbar-minimalize minimalize-ui btn btn-default" href=""><span class="icon icon-unread"></span> </a>
 						</div>
-						<form role="search" class="navbar-form-custom" ui-sref=".development">
+						<form role="search" class="navbar-form-custom" ui-sref="development">
 							<div class="form-group">
 								<input type="text" placeholder="Search Sona..." class="form-control" name="top-search" id="top-search">
 							</div>
 						</form>
 		        </div>
 	             <ul class="nav navbar-top-links navbar-right">
-            <li class="dropdown">
-                <a class="dropdown-toggle count-info app-notifications" data-toggle="dropdown" ui-sref=".development">
+            <li >
+                <a class="dropdown-toggle count-info app-notifications"  ui-sref="development">
                     <span class="icon icon-mail"></span>  <span class="badge badge-warning pull-right">21</span>
                 </a>
                 <!--<ul class="dropdown-menu dropdown-messages">-->
@@ -64,54 +64,54 @@
                     <!--&lt;!&ndash;</li>&ndash;&gt;-->
                 <!--</ul>-->
             </li>
-            <li class="dropdown">
-                <a class="dropdown-toggle count-info app-notifications" data-toggle="dropdown" href="">
+            <li >
+                <a class="dropdown-toggle count-info app-notifications"  ui-sref="development">
                     <span class="icon icon-bell"></span> <span class="badge badge-warning pull-right">3</span>
                 </a>
-                <ul class="dropdown-menu dropdown-alerts">
-                    <li>
-                        <a href="">
-                            <div>
-                                <i class="fa fa-envelope fa-fw"></i> You have 16 messages
-                                <span class="pull-right text-muted small">4 minutes ago</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="profile.html">
-                            <div>
-                                <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                <span class="pull-right text-muted small">12 minutes ago</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="">
-                            <div>
-                                <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                <span class="pull-right text-muted small">4 minutes ago</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <div class="text-center link-block">
-                            <a href="">
-                                <strong>See All Alerts</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
+                <!--<ul class="dropdown-menu dropdown-alerts">-->
+                    <!--<li>-->
+                        <!--<a href="">-->
+                            <!--<div>-->
+                                <!--<i class="fa fa-envelope fa-fw"></i> You have 16 messages-->
+                                <!--<span class="pull-right text-muted small">4 minutes ago</span>-->
+                            <!--</div>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li class="divider"></li>-->
+                    <!--<li>-->
+                        <!--<a href="profile.html">-->
+                            <!--<div>-->
+                                <!--<i class="fa fa-twitter fa-fw"></i> 3 New Followers-->
+                                <!--<span class="pull-right text-muted small">12 minutes ago</span>-->
+                            <!--</div>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li class="divider"></li>-->
+                    <!--<li>-->
+                        <!--<a href="">-->
+                            <!--<div>-->
+                                <!--<i class="fa fa-upload fa-fw"></i> Server Rebooted-->
+                                <!--<span class="pull-right text-muted small">4 minutes ago</span>-->
+                            <!--</div>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li class="divider"></li>-->
+                    <!--<li>-->
+                        <!--<div class="text-center link-block">-->
+                            <!--<a href="">-->
+                                <!--<strong>See All Alerts</strong>-->
+                                <!--<i class="fa fa-angle-right"></i>-->
+                            <!--</a>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                <!--</ul>-->
             </li>
             <li class="dropdown">
-                <a class="dropdown-toggle app-profile" data-toggle="dropdown" ui-sref=".developement">
+                <a class="dropdown-toggle app-profile" data-toggle="dropdown" >
                   <img alt="Profile Photo" class="img-circle-sm" src="static/img/profile_small.jpg" />
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a ui-sref=".developement">Profile</a></li>
+                    <li ><a ui-sref="developement">Profile</a></li>
                     <li class="divider"></li>
                     <li ng-click="tn.logout()"><a >Logout</a></li>
                 </ul>

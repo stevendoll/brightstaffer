@@ -15,18 +15,18 @@
                     <div class="col-sm-4 col-md-4 p-a-0 m-t input-group-sm small"><div id="DataTables_Table_0_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="DataTables_Table_0"></label></div></div>
                     <table class="table table-hover dataTables dataTable no-footer dtr-inline" >
                     <thead>
-                    <tr>
-                        <th class="sorting" tabindex="0" style="width: 132px;">Title</th>
-                        <th class="sorting" tabindex="0" style="width: 132px;">Company</th>
-                        <th class="sorting" tabindex="0" style="width: 132px;">Location</th>
-                        <th class="sorting" tabindex="0" style="width: 132px;">Candidates</th>
-                        <th class="sorting" tabindex="0" style="width: 132px;">Owner</th>
-                        <th class="sorting" tabindex="0" style="width: 132px;">Shared</th>
-                        <th class="sorting" tabindex="0" style="width: 132px;">Created</th>
+                    <tr id="headRow">
+                        <th class="sorting" id="project_name" tabindex="0" style="width: 132px;" ng-click="main.sortBy('project_name')">Title<span class="sortorder" ng-show="propertyName === 'project_name'" ng-class="{reverse: reverse}"></span></th>
+                        <th class="sorting" id="company_name" tabindex="0" style="width: 132px;" ng-click="main.sortBy('company_name')" >Company<span class="sortorder" ng-show="propertyName === 'company_name'" ng-class="{reverse: reverse}"></span></th>
+                        <th class="sorting" id="location" tabindex="0" style="width: 132px;" ng-click="main.sortBy('location')" >Location<span class="sortorder" ng-show="propertyName === 'location'" ng-class="{reverse: reverse}"></span></th>
+                        <th class="sorting" id="candidate" tabindex="0" style="width: 132px;" >Candidates</th>
+                        <th class="sorting" id="Owner" tabindex="0" style="width: 132px;" ng-click="main.sortBy('Owner')" >Owner<span class="sortorder" ng-show="propertyName === 'location'" ng-class="{reverse: reverse}"></span></th>
+                        <th class="sorting" id="shared" tabindex="0" style="width: 132px;">Shared</th>
+                        <th class="sorting" id="created_date" tabindex="0" style="width: 132px;" ng-click="main.sortBy('created_date')" >Created<span class="sortorder" ng-show="propertyName === 'location'" ng-class="{reverse: reverse}"></span></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="gradeX" ng-repeat="projects in allProjectList" >
+                    <tr class="gradeX" ng-repeat="projects in allProjectList | orderBy:propertyName:reverse" >
                         <td>#[[projects.project_name]]</td>
                         <td>[[projects.company_name]]</td>
                         <td>[[projects.location]]</td>
@@ -54,14 +54,14 @@
                       <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm">
                         <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
                           <ul class="pagination">
-                            <li class="paginate_button previous" id="DataTables_Table_0_previous" >
+                            <li class="paginate_button previous" id="Table_previous" >
                               <a href="" name="prev" tabindex="0" ng-click="main.changePage($event)">Previous</a>
                             </li>
                             <li class="paginate_button active">
                               <a  tabindex="0">[[counter]]</a>
                             </li>
-                            <li class="paginate_button next " id="DataTables_Table_0_next" >
-                              <a href=""tabindex="0" name="next" ng-click="main.changePage($event)">Next</a>
+                            <li class="paginate_button next " id="Table_next" >
+                              <a href="" tabindex="0" name="next" ng-click="main.changePage($event)">Next</a>
                             </li>
                           </ul>
                         </div>
@@ -73,3 +73,10 @@
             </div>
             </div>
         </div>
+     <!--Modal window-->
+<div class="modal-outer" id="breakPopup" style="display:none">
+  <div class="modal-content">
+    <p>[[publishMsg]]</p>
+    <a href="" ng-show="isSuccess" ng-click="main.removePopupBox()"><i class="fa fa-thumbs-up"></i> Ok</a>
+  </div>
+</div>

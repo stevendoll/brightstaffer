@@ -13,8 +13,8 @@
           <div class="col-lg-4" ng-repeat="projects in projectList">
               <div class="ibox">
                   <div class="ibox-title" ng-init="conceptList = [[projects.concepts]]">
-                      <span class="label label-primary pull-right">NEW</span>
-                      <h5 class="dash"><a ui-sref=".development" class="text-project">#[[projects.project_name]]</a></h5>
+                      <span class="label label-primary pull-right" ng-if="$first">NEW</span>
+                      <h5 class="dash"><a ui-sref="development" class="text-project">#[[projects.project_name]]</a></h5>
                   </div>
                   <div class="ibox-content">
                       <div class="talent-members m-n">
@@ -149,7 +149,7 @@
 
   <div id="small-chat">
       <span class="badge badge-warning pull-right">5</span>
-      <a class="open-small-chat">
+      <a class="open-small-chat" ui-sref="development">
           <i class="fa fa-comments"></i>
       </a>
   </div>

@@ -43,6 +43,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
 
     this.getValue = function(countList){
       console.log(countList.value);
+        $(".loader").css('display','block');
         var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
                 'recuriter': $rootScope.globals.currentUser.user_email,   // password filed value
@@ -53,21 +54,34 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
              paginationData.paginationApi(requestObject).then(function(response){
                 if(response.message == "success") {
                     console.log(response);
-
+                    if(response.Pagination.length > 0)
+                       $scope.allProjectList = response.Pagination;
+                     $(".loader").css('display','none');
                   }else{
                     console.log('error');
+                    $(".loader").css('display','none');
+                      if(response.success == false){
+                            $scope.isSuccess = true;
+                            $scope.publishMsg = "No longer data is available.";
+                            $('#breakPopup').css('display','block');
+                         }
+
                 }
              });
     }
 
     this.changePage = function($event){
-    console.log('asdasd')
+     $scope.isSuccess = false;
+     var nextButton = angular.element(document.querySelector('#Table_next'));
          if($event.target.name == "next"){
            $scope.counter++;
          }else if($event.target.name == "prev"){
+          if(nextButton.hasClass('disable'))
+                nextButton.removeClass('disabled');
            if($scope.counter >1)
               $scope.counter--;
          }
+         $(".loader").css('display','block');
          var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
                 'recuriter': $rootScope.globals.currentUser.user_email,   // password filed value
@@ -78,13 +92,45 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
              paginationData.paginationApi(requestObject).then(function(response){
                 if(response.message == "success") {
                     console.log(response);
-
+                    if(response.Pagination.length > 0)
+                       $scope.allProjectList = response.Pagination;
+                   $(".loader").css('display','none');
                   }else{
                     console.log('error');
+                    $(".loader").css('display','none');
+                    if(response.success == false){
+                        if($event.target.name == "next"){
+                           nextButton.addClass('disabled');}
+                        $scope.isSuccess = true;
+                        $scope.publishMsg = "No longer data is available.";
+                        $('#breakPopup').css('display','block');
+
+                    }
                 }
          });
     }
+ this.removePopupBox = function(){
+       $('#breakPopup').css('display','none');
+        $scope.isSuccess = false;
+     }
 
+    $scope.reverse = false;
+ this.sortBy = function(propertyName) {
+        $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+        $scope.propertyName = propertyName;
+        if($scope.reverse == false){
+        if($("#headRow").find(".sorting_asc").length>0){
+           $("#headRow").find(".sorting_asc").removeClass("sorting_asc");
+         }
+         $('#'+propertyName).addClass('sorting_asc');
+      } else if($scope.reverse == true){
+         if($("#headRow").find(".sorting_desc").length>0){
+           $("#headRow").find(".sorting_desc").removeClass("sorting_desc");
+         }
+         $('#'+propertyName).addClass('sorting_desc');
+
+      }
+  };
 };
 
 function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $timeout, loginService) { /* login controller responsible for login functionality */
@@ -308,7 +354,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                 if(currentTab.hasClass('done'))
                 currentTab.removeClass('done');
             currentTab.addClass('current');
-            currentTab.children(':first').attr("ui-sref",".step2");
+            currentTab.children(':first').attr("ui-sref","step2");
              $state.go('create.step2','');
 		  }
 
@@ -328,7 +374,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
               if(currentTab.hasClass('done'))
                 currentTab.removeClass('done');
              currentTab.addClass('current');
-             currentTab.children(':first').attr("ui-sref",".step3");
+             currentTab.children(':first').attr("ui-sref","step3");
             $state.go('create.step3','');
 	  }
   }
@@ -346,7 +392,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         if(currentTab.hasClass('done'))
         currentTab.removeClass('done');
         currentTab.addClass('current');
-        currentTab.children(':first').attr("ui-sref",".step4");
+        currentTab.children(':first').attr("ui-sref","step4");
         $state.go('create.step4','');
 	  }else if($rootScope.jobDescriptionResult.concepts.length == 0){
 	       $scope.isError = true;
@@ -623,19 +669,9 @@ $scope.timeout;
                 $('#breakPopup').css('display','block');} , 30000); //timeout after three minutes
      }
 
-     $scope.removePopupBox = function(){
-       $('#breakPopup').css('display','none');
-        $scope.isSuccess = false;
-     }
-
 }
 
-function sideNavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location , $timeout){
 
-
-
-
-}
 
 angular
     .module('brightStaffer')
@@ -645,5 +681,4 @@ angular
     .controller('forgotCtrl', forgotCtrl)
     .controller('resetPwCtrl', resetPwCtrl)
     .controller('topnavCtrl', topnavCtrl)
-    .controller('createProjectCtrl', createProjectCtrl)
-    .controller('sideNavCtrl', sideNavCtrl);
+    .controller('createProjectCtrl', createProjectCtrl);
