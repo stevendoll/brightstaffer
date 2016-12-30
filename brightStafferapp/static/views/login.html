@@ -26,14 +26,14 @@
             </div>
             <h2>Welcome back Matthew!</h2>
             <h4 class="m-b-lg">Lets do this.</h4>
-            <form class="m-t" name="loginForm"  method="post" ng-submit="userLogin()" ng-keyup="hideMessages()" id="loginForm" novalidate>
+            <form class="m-t" name="loginForm"  method="post" ng-submit="userLogin()" id="loginForm" novalidate>
                 <div class="form-group">
-                    <input type="email" ng-pattern="emailPattern" class="form-control" placeholder="Email address" name="username" ng-model="data.user_name" required="">
+                    <input type="email" ng-pattern="emailPattern" class="form-control" placeholder="Email address" name="username" ng-model="data.user_name" ng-keyup="hideMessages()" required="">
                  <span class="error" style="color:red" ng-show="loginForm.$submitted && loginForm.username.$error.required">Required.</span>
                   <span style="color:red" ng-show="loginForm.username.$error.pattern">Please enter valid email address.</span>
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Password" name="password" ng-model="data.user_password" required="">
+                    <input type="password" class="form-control" placeholder="Password" name="password" ng-model="data.user_password"  ng-keyup="hideMessages()" required="">
                     <span class="error" style="color:red" ng-show="loginForm.$submitted && loginForm.password.$error.required">Required.</span>
                 </div>
                  <span style="color:red" ng-show="showErr"> Your email or password entered is incorrect.</span>

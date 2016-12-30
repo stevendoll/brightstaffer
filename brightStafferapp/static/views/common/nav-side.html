@@ -10,9 +10,9 @@
                    <a href=""><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
                    <ul class="nav nav-second-level collapse">
                       <li ng-repeat="projects in projectList"><a href="" id="[[projects.project_id]]">#[[projects.project_name]]</a></li>
-
+                         [[counter1]]
                       <li class="sidebar-divider"></li>
-                      <li ><a class="all-projects m-t-sm" ui-sref="projects" ng-init="main.showAllProjects()">All Projects <small class="text-muted m-l-sm">([[count]])</small></a></li>
+                      <li ><a class="all-projects m-t-sm" ui-sref="projects" ng-init="main.showAllProjects()">All Projects <small class="text-muted m-l-sm">([[counter1]])</small></a></li>
                       <li class="sidebar-divider"></li>
                       <li><a class="new-project" ui-sref="create.step1">Create New Project <small class="text-muted m-l-xs">+</small></a></li>
                     </ul>

@@ -1,9 +1,10 @@
 
 function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData) { /*global controller */
       $rootScope.projectList = [];
-      $rootScope.count='';
+      $rootScope.counter1 ='';
       $scope.options = [{name:'10',value:10},{name:'25',value:25},{name:'50',value:50},{name:'100',value:100}];
       $scope.countList = $scope.options[0];
+     /// $scope.listCounter = $scope.options[0].value;
       $scope.counter= 1;
         this.getTopSixProjects = function(){
              console.log('abc')
@@ -33,7 +34,13 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
              getAllProjects.allProjects(requestObject).then(function(response){
                 if(response.message == "success") {
                     $scope.allProjectList = response.publish_project;
-                     $rootScope.count = response.publish_project.length;
+                    if($rootScope.counter1 == ''){
+                         $rootScope.counter1 = response.publish_project.pop();
+                         $rootScope.counter1 = $rootScope.counter1.count;
+                     }
+                     $rootScope.projectCount = response.publish_project.length;
+                     console.log($rootScope.counter1);
+                     console.log($rootScope.projectCount);
                   }else{
                     console.log('error');
                 }
@@ -44,6 +51,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     this.getValue = function(countList){
       console.log(countList.value);
         $(".loader").css('display','block');
+
         var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
                 'recuriter': $rootScope.globals.currentUser.user_email,   // password filed value
@@ -81,7 +89,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
            if($scope.counter >1)
               $scope.counter--;
          }
-         $(".loader").css('display','block');
+
+           $(".loader").css('display','block');
          var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
                 'recuriter': $rootScope.globals.currentUser.user_email,   // password filed value
@@ -108,7 +117,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
 
                     }
                 }
-         });
+           });
     }
    this.removePopupBox = function(){
        $('#breakPopup').css('display','none');
@@ -291,8 +300,10 @@ function forgotCtrl($scope, $rootScope, $state, $http, forgotService) {
             $scope.isDisabled = true;
            forgotService.forgotPassword(requestObject).then(function(response){
              if(response.message == "success") {
+               $scope.user_email='';
                $scope.errorMessage = 'Link to reset password is sent on your mail! Please check.';
              }else{
+
                 $scope.errorMessage = 'No account with this email id.';
                 $scope.isDisabled = false;
 

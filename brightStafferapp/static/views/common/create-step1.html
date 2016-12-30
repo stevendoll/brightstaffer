@@ -6,20 +6,21 @@
 		<div class="col-sm-8 m-t">
 			  <div class="form-group p-b">
 					<label>Project Name</label>
-					  <input type="text" class="form-control" id="project_name" name="project_name" ng-model="projectForm.project_name" placeholder="Keep it simple, like uidesigner..." ng-pattern="project.projectNamePattern" ng-blur="updateProjectName($event)"  auto-Capitalise-First-Letter ="" ng-keyup="removeValidationMsg($event)" required>
+					  <input type="text" class="form-control" id="project_name" name="project_name" ng-model="projectForm.project_name" placeholder="Keep it simple, like uidesigner..." ng-pattern="project.projectNamePattern" ng-blur="updateProjectName($event)"  auto-Capitalise-First-Letter ="" ng-keyup="removeValidationMsg($event)" ng-maxlength="30" required>
 					  <span  class="error"  style='display:none;color:red'></span>
 				      <span  style='color:red' ng-if="isValid">Enter project name first!</span>
 					  <span style="color:red" ng-show="createProjectForm.project_name.$error.pattern">Please enter only alphanumeric value.</span>
 				      <span style='color:red' ng-if="isExisting">Same project name is existing in your account!</span>
+				      <span style='color:red' ng-show="createProjectForm.project_name.$error.pattern">Same project name is existing in your account!</span>
 			</div>
 		   <div class="form-group p-b">
 				<label>Company or Division</label>
-				<input id="company_name" name="company_name" ng-model="projectForm.company_name" type="text" class="form-control" placeholder="Go for a single word..."  ng-blur="saveData('company_name',projectForm.company_name)" ng-click="checkProjectName($event)" auto-Capitalise-First-Letter ="" required>
+				<input id="company_name" name="company_name" ng-model="projectForm.company_name" type="text" class="form-control" placeholder="Go for a single word..."  ng-blur="saveData('company_name',projectForm.company_name)" ng-click="checkProjectName($event)" auto-Capitalise-First-Letter ="" ng-maxlength="30" required>
 			   <span  class="error"  style='display:none;color:red'></span>
 			</div>
 			<div class="form-group p-b">
 				<label>Location</label>
-				<input id="location" name="location" ng-model="projectForm.location" type="text" class="form-control" placeholder="Use a city name, or the zip code..." ng-pattern="project.locationPattern" ng-blur="saveData('location',projectForm.location)" ng-click="checkProjectName($event)"  required>
+				<input id="location" name="location" ng-model="projectForm.location" type="text" class="form-control" placeholder="Use a city name, or the zip code..." ng-pattern="project.locationPattern" ng-blur="saveData('location',projectForm.location)" ng-click="checkProjectName($event)"  ng-maxlength="30" required>
 				<span  class="error" style='display:none;color:red'></span>
 				<span style="color:red" ng-show="createProjectForm.location.$error.pattern">Enter 5 digit zipcode.</span>
 			</div>

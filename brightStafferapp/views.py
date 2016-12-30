@@ -282,7 +282,7 @@ class Alchemy_api():
         d = json.loads(data)
         for list_value in d['entities']:
             print(list_value)
-            if list_value['type']=='JobTitle' or list_value['type']=='Quantity' or list_value['type']=='Person': #or list_value['type']=='FieldTerminology':
+            if list_value['type']=='JobTitle' or list_value['type']=='Quantity' or list_value['type']=='Person':
                 keyword_list.append(list_value['text'])
         return keyword_list
 
@@ -301,7 +301,10 @@ class ProjectList():
         values = Token.objects.filter(user=rec_name, key=user_data['token'])
         if not values:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
-        project = Projects.objects.filter(is_published=True,recuriter=rec_name).values().order_by('-create_date')
+        counter = Projects.objects.filter(is_published=True, recuriter=rec_name).values().order_by('-create_date').count()
+        project_list_count={}
+        project_list_count['count']=counter
+        project = Projects.objects.filter(is_published=True,recuriter=rec_name).values().order_by('-create_date')[:10]
         for project_data in project:
             param_dict = {}
             project_id = Projects.objects.filter(id=project_data['id'])
@@ -315,6 +318,7 @@ class ProjectList():
             param_dict['company_name']=project_data['company_name']
             param_dict['create_date']=str(project_data['create_date'].day)+'/'+str(project_data['create_date'].month)+'/'+str(project_data['create_date'].year)
             output['publish_project'].append(param_dict)
+        output['publish_project'].append(project_list_count)
         return util.returnSuccessShorcut(output)
 
     @csrf_exempt

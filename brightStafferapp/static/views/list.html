@@ -11,7 +11,7 @@
                     <div class="table-responsive">
                         <div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
                     <div class="col-sm-4 col-md-4 p-a-0 m-t m-b-lg"><div class="dt-buttons btn-group"><a class="btn btn-default buttons-copy buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>Copy</span></a><a class="btn btn-default buttons-csv buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>CSV</span></a><a class="btn btn-default buttons-excel buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>Excel</span></a><a class="btn btn-default buttons-pdf buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>PDF</span></a><a class="btn btn-default buttons-print btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>Print</span></a></div></div>
-                    <div class="col-sm-4 col-md-4 p-a-0 m-t small text-muted text-center"><div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to 6 of 6 entries</div></div>
+                    <div class="col-sm-4 col-md-4 p-a-0 m-t small text-muted text-center"><div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to [[projectCount]] of [[countList.value]] entries</div></div>
                     <div class="col-sm-4 col-md-4 p-a-0 m-t input-group-sm small"><div id="DataTables_Table_0_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="DataTables_Table_0"></label></div></div>
                     <table class="table table-hover dataTables dataTable no-footer dtr-inline" >
                     <thead>
@@ -54,8 +54,8 @@
                       <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm">
                         <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
                           <ul class="pagination">
-                            <li class="paginate_button previous" id="Table_previous" >
-                              <a href="" name="prev" tabindex="0" ng-click="main.changePage($event)">Previous</a>
+                            <li class="paginate_button previous" id="Table_previous" ng-class="{'disabled':[[counter == 1]]}">
+                              <a href="" name="prev" tabindex="0" ng-click="main.changePage($event)" >Previous</a>
                             </li>
                             <li class="paginate_button active">
                               <a  tabindex="0">[[counter]]</a>
