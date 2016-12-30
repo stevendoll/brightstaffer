@@ -22,7 +22,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
              });
 
            }
- $scope.allProjectList = [];
+     $scope.allProjectList = [];
         this.showAllProjects = function(){
              console.log('abc')
               var requestObject = {
@@ -40,39 +40,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
              });
 
            }
-
-           this.openNav = function(){
-               $("#side-menu").metisMenu();
-           }
-
-       this.openSideMenu = function(){
-
-            $("body").toggleClass("mini-navbar");
-            SmoothlyMenu();
-
-            function SmoothlyMenu() {
-                if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
-                    // Hide menu in order to smoothly turn on when maximize menu
-                    $('#side-menu').hide();
-                    // For smoothly turn on menu
-                    setTimeout(
-                        function () {
-                            $('#side-menu').fadeIn(400);
-                        }, 200);
-                } else if ($('body').hasClass('fixed-sidebar')) {
-                    $('#side-menu').hide();
-                    setTimeout(
-                        function () {
-                            $('#side-menu').fadeIn(400);
-                        }, 100);
-                } else {
-                    // Remove all inline style from jquery fadeIn function to reset menu state
-                    $('#side-menu').removeAttr('style');
-                }
-            }
-
-       }
-
 
     this.getValue = function(countList){
       console.log(countList.value);
@@ -136,19 +103,20 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                            nextButton.addClass('disabled');}
                         $scope.isSuccess = true;
                         $scope.publishMsg = "No longer data is available.";
+                        $scope.counter--;
                         $('#breakPopup').css('display','block');
 
                     }
                 }
          });
     }
- this.removePopupBox = function(){
+   this.removePopupBox = function(){
        $('#breakPopup').css('display','none');
         $scope.isSuccess = false;
      }
 
     $scope.reverse = false;
- this.sortBy = function(propertyName) {
+   this.sortBy = function(propertyName) {
         $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
         $scope.propertyName = propertyName;
         if($scope.reverse == false){
@@ -163,7 +131,47 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
          $('#'+propertyName).addClass('sorting_desc');
 
       }
-  };
+  }
+
+   this.openNav = function(){
+
+      $("#side-menu").metisMenu();
+   }
+
+//   $scope.totalCount = 0;
+//    $scope.countInit = function() {
+//
+//       return $scope.totalCount++;
+//    }
+
+    this.openSideMenu = function(){
+
+            $("body").toggleClass("mini-navbar");
+            SmoothlyMenu();
+
+            function SmoothlyMenu() {
+                if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+                    // Hide menu in order to smoothly turn on when maximize menu
+                    $('#side-menu').hide();
+                    // For smoothly turn on menu
+                    setTimeout(
+                        function () {
+                            $('#side-menu').fadeIn(400);
+                        }, 200);
+                } else if ($('body').hasClass('fixed-sidebar')) {
+                    $('#side-menu').hide();
+                    setTimeout(
+                        function () {
+                            $('#side-menu').fadeIn(400);
+                        }, 100);
+                } else {
+                    // Remove all inline style from jquery fadeIn function to reset menu state
+                    $('#side-menu').removeAttr('style');
+                }
+            }
+
+       }
+
 };
 
 function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $timeout, loginService) { /* login controller responsible for login functionality */
@@ -398,8 +406,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
           $scope.isRequired = true;
 
 	  }else if($scope.projectForm.description &&  currentState == "create.step2"){
-	       if(!$rootScope.jobDescriptionResult)
+	         if(!$rootScope.jobDescriptionResult)
                $(".loader").css('display','block');
+
+
 	     var prevTab = angular.element(document.querySelector(prevTabId));
             prevTab.removeClass('current');
             prevTab.addClass('done');

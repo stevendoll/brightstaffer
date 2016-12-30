@@ -1,18 +1,18 @@
 <nav class="navbar-default navbar-static-side" role="navigation" >
             <div class="sidebar-collapse">
-                <ul class="nav metismenu" id="side-menu" >
+                <ul class="nav metismenu" id="side-menu">
                     <li class="sidebar-brand"><img src="static/img/brand-temp.png">
                 </li>
                     <li class="active">
                         <a ui-sref="dashboard"><i class="fa fa-th"></i> <span class="nav-label">Dashboard</span></a>
                     </li>
-                 <li ng-init="main.openNav()">
-                   <a href=''><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
-                   <ul class="nav nav-second-level collapse" >
+                 <li ng-init="main.openNav()" id="projectNav">
+                   <a href=""><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
+                   <ul class="nav nav-second-level collapse">
                       <li ng-repeat="projects in projectList"><a href="" id="[[projects.project_id]]">#[[projects.project_name]]</a></li>
 
                       <li class="sidebar-divider"></li>
-                      <li><a class="all-projects m-t-sm" ui-sref="projects" ng-init="main.showAllProjects()">All Projects <small class="text-muted m-l-sm">([[count]])</small></a></li>
+                      <li ><a class="all-projects m-t-sm" ui-sref="projects" ng-init="main.showAllProjects()">All Projects <small class="text-muted m-l-sm">([[count]])</small></a></li>
                       <li class="sidebar-divider"></li>
                       <li><a class="new-project" ui-sref="create.step1">Create New Project <small class="text-muted m-l-xs">+</small></a></li>
                     </ul>

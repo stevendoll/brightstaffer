@@ -33,7 +33,7 @@ function sideNavigation($timeout) {
         link: function(scope, element) {
             // Call the metsiMenu plugin and plug it to sidebar navigation
             $timeout(function(){
-                    element.metisMenu();
+                element.metisMenu();
             });
         }
     };
