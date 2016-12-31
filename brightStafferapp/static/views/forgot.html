@@ -6,7 +6,7 @@
 	          <h2 class="m-b-0">Ok, let's get you a new password.</h2>
 	          <h2 class="m-b-lg text-muted">Enter your email address, and we'll send the reset instructions.</h2>
 	          
-				<form name="forgotForm" method="post" ng-submit="forgotPassword()" novalidate>
+				<form name="forgotForm" method="post" ng-submit="forgotPassword()" ng-keyup="isRequired = false"novalidate>
 					<ul class="list-group media-list media-list-stream">
 						<li class="media list-group-item p-a">
 						  <div class="input-group input-group-lg">
@@ -19,9 +19,9 @@
 						    </div>
 						  </div>
 						</li>
-					          <span style="color:red" ng-show="forgotForm.$submitted &&forgotForm.email.$error.required">Required field.</span>
+					          <span style="color:red" ng-show="isRequired">Required field.</span>
 					          <span style="color:red" ng-show="forgotForm.email.$error.pattern">Please enter valid email address.</span>
-						    <span  ng-model="errorMessage">[[errorMessage]]</span>
+						    <span  ng-model="errorMessage" style="font-weight: bold;">[[errorMessage]]</span>
 					</ul>
 					<footer class="screen-login">
 						<small><a ui-sref="register" class="text-muted">Want to create a new account?</a></small>

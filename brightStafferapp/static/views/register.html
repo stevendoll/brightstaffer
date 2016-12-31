@@ -7,29 +7,29 @@
 			<div class="text-center p-sm">
 				<h2 class="m-b">We're excited you're joining us.</h2>
 				<h5 class="m-b-lg text-primary">Let's find you talent like never before.</h5>
-				<form name="signupForm" id="signupForm" method="post" ng-submit="user_Signup()" ng-keyup="hideMessages()" novalidate>
+				<form name="signupForm" id="signupForm" method="post" ng-submit="user_Signup()" ng-keyup="hideMessages($event)" novalidate>
 					<div class="form-group">
 					<input class="form-control" placeholder="First Name" name="firstName" ng-model="userRegistration.first_name" id="firstName" ng-pattern="/^[a-zA-Z]*$/" required="required">
-						<span class="error" style="color:red" ng-show="signupForm.$submitted && signupForm.firstName.$error.required">Required.</span>
+						<span class="error" style="color:red;display:none" ></span>
 						<span style="color:red" ng-show="signupForm.firstName.$error.pattern">Please enter only characters.</span>
 					</div>
 					
 					<div class="form-group">
 					<input class="form-control" placeholder="Last Name" name="lastName" ng-model="userRegistration.last_name" id="lastName" ng-pattern="/^[a-zA-Z]*$/" required>
-                     <span class="error" style="color:red" ng-show="signupForm.$submitted && signupForm.lastName.$error.required">Required.</span>
+                     <span class="error" style="color:red;display:none" ></span>
 				     <span style="color:red" ng-show="signupForm.lastName.$error.pattern">Please enter only characters.</span>
 					</div>
 					
 					<div class="form-group">
 					<input class="form-control" placeholder="Email" name="userEmail" ng-model="userRegistration.user_email" id="userEmail" type="email" ng-pattern="emailPattern" required>
-                     <span class="error" style="color:red" ng-show="signupForm.$submitted && signupForm.userEmail.$error.required">Required.</span>
+                     <span class="error" style="color:red;display:none"></span>
 				     <span style="color:red" ng-show="signupForm.userEmail.$error.pattern">Please enter valid email address.</span>
 					</div>
 					
 					<div class="form-group">
 					<input type="password" class="form-control" placeholder="Password" name="password" id="password" ng-model="userRegistration.password" data-ng-minlength="8" autocomplete="off"
 						   ng-cut="$event.preventDefault()" ng-copy="$event.preventDefault()" ng-paste="$event.preventDefault()"  ng-pattern="passwordStrength" required>
-                     <span class="error" style="color:red" ng-show="signupForm.$submitted && signupForm.password.$error.required">Required.</span>
+                     <span class="error" style="color:red;display:none" ></span>
 					<span ng-show='signupForm.password.$error.pattern'>Password should be atleast 8 characters
                     long and should contain one number and one special
                     character</span>
@@ -37,7 +37,7 @@
 					
 					<div class="form-group">
 						<input type="password" class="form-control" placeholder="Confirm Password" id="confirmPassword" name="confirmPassword" ng-model="userRegistration.confirmPassword" valid-password-c="userRegistration.password" required>
-						<span class="error" style="color:red" ng-show="signupForm.$submitted && signupForm.password.$error.required">Required.</span>
+						<span class="error" style="color:red;display:none" ></span>
 				        <span ng-show="signupForm.confirmPassword.$error.noMatch">Password not matched.</span>
 					</div>
 					<span ng-model="errorMessage">[[errorMessage]]</span>

@@ -6,7 +6,7 @@
 				            <h1 class="p-b">Create a New Project</h1>
 				            <p class="p-r-lg"> In just four steps you'll have an active project, providing incredible insights so you can spend more time doing what you love—interacting with people.</p>
 				        </div>
-						<form id="createProjectForm" name="createProjectForm" class="wizard-big wizard clearfix" ng-keyup="checkMessage()" ng-init="reFillData()">
+						<form id="createProjectForm" name="createProjectForm" class="wizard-big wizard clearfix" ng-keyup="checkMessage()" >
 			                <h1></h1>
 					<div class="steps clearfix">
 						<ul role="tablist">
@@ -29,10 +29,10 @@
 						<div id="form-views" class="content clearfix" ui-view></div>
 							<div class="actions clearfix">
 							<ul >
-							<li class="disabled" ng-disabled="[[ $state.current.name == create.step1]]" id="previous">
-							<a ng-click="goToBack()">Previous</a></li>
-							<li  id="next" ng-disabled="[[ $state.current.name == create.step4]]"><a  ng-click="SwitchFuction()">Next</a></li>
-							<li  id="publish" ng-disabled="[[ $state.current.name != create.step4]]" class="disabled"><a ng-click="publishProject()" >Publish</a></li>
+							<li class="disabled" ng-disabled="[[ $state.current.name == 'create.step1']]" id="previous">
+							<a ng-class="{'disable': [[ $state.current.name == 'create.step1']]}"ng-click="goToBack()">Previous</a></li>
+							<li  id="next" ng-disabled="[[ $state.current.name == 'create.step4']]"><a  ng-class="{'disable': [[ $state.current.name == 'create.step4']]}" ng-click="SwitchFuction()">Next</a></li>
+							<li  id="publish" ng-disabled="[[ $state.current.name != 'create.step4']]" class="disabled"><a ng-class="{'disable': [[ $state.current.name != 'create.step4']]}"  ng-click="publishProject()" >Publish</a></li>
 							<li><a href="#" role="menuitem">Cancel</a></li></ul></div>
 			            </form>
 					</div>

@@ -8394,3 +8394,7 @@ body.md-skin {
 div.dataTables_wrapper div.dataTables_filter {
     text-align: right;
 }
+
+.disable{
+ cursor: default;
+}

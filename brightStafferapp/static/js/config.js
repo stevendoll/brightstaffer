@@ -84,6 +84,21 @@ angular
 
     $rootScope.$state = $state;
     $rootScope.globals ={};
+
+    $rootScope.checkReqValidation = function(formName){
+      $('#'+formName+ ' input').each(function(){ /*Show error on blank field when user submit*/
+                    var spanClass = $(this).next('span').attr('class');
+                    if($(this).val().length <= 0){
+                        $(this).next('span').css('display','block');
+                        $(this).next('span').addClass('error').text("Required.");
+                    }else if($(this).val().length > 0 && ($(this).next('span').hasClass('error'))){
+                        $(this).next('span').removeClass('error').text("");
+                    }
+            });
+
+    }
+
+
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 		$rootScope.title = toState.data.pageTitle;
 	});

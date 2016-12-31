@@ -4,7 +4,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
       $rootScope.counter1 ='';
       $scope.options = [{name:'10',value:10},{name:'25',value:25},{name:'50',value:50},{name:'100',value:100}];
       $scope.countList = $scope.options[0];
-     /// $scope.listCounter = $scope.options[0].value;
       $scope.counter= 1;
         this.getTopSixProjects = function(){
              console.log('abc')
@@ -192,14 +191,15 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
          user_password:''
          };
 	/**Create function for user login **/
-	$scope.userLogin = function() {
+	this.userLogin = function() {
 	  $scope.showErr = false;
+       $rootScope.checkReqValidation('loginForm');
         var requestObject = {
         	'username': $scope.data.user_name,       // username field value
         	'password': $scope.data.user_password    // password filed value
         };
         if($scope.loginForm.$valid){
-        $scope.isDisabled = true;
+         $scope.isDisabled = true;
          loginService.userLogin(requestObject).then(function(response){
          if(response.message == "success") {
           var userData = {};
@@ -221,17 +221,19 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
        }
      }
 
-      $scope.hideMessages = function(){ /*Hide error messages when user interact with fieds*/
-      $scope.showErr = false;
-      $scope.isDisabled = false;
-       $("#loginForm input").each(function(){
-            var spanClass = $(this).next('span').attr('class');
-            if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
-                $(this).next('span').removeClass('error').text("");
-            }else if($(this).val().length > 0 && ($(this).next('span').hasClass('error'))){
-                $(this).next('span').removeClass('error').text("");
+      this.hideMessages = function($event){ /*Hide error messages when user interact with fieds*/
+       if($event.keyCode !== 13 ){
+          $scope.showErr = false;
+          $scope.isDisabled = false;
+           $("#loginForm input").each(function(){
+                var spanClass = $(this).next('span').attr('class');
+                if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
+                    $(this).next('span').removeClass('error').text("");
+                }else if($(this).val().length > 0 && ($(this).next('span').hasClass('error'))){
+                    $(this).next('span').removeClass('error').text("");
+                }
+               });
             }
-        });
     }
 }
 
@@ -245,6 +247,7 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookie
     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;                             // email pattern
     $scope.user_Signup = function() { /* signup function submitting user details to API*/
      $scope.errorMessage = '';
+      $rootScope.checkReqValidation('signupForm');
          var requestObject = {
             'firstName':$scope.userRegistration.first_name,
         	'lastName': $scope.userRegistration.last_name,
@@ -274,33 +277,39 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookie
        }
     }
 
-    $scope.hideMessages = function(){ /*Hide error messages when user interact with fieds*/
-       $("#signupForm input").each(function(){
-            var spanClass = $(this).next('span').attr('class');
-            if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
-                $(this).next('span').removeClass('error').text("");
-            }else if($(this).val().length > 0 && ($(this).next('span').hasClass('error'))){
-                $(this).next('span').removeClass('error').text("");
-            }
-        });
+    $scope.hideMessages = function($event){ /*Hide error messages when user interact with fieds*/
+    if($event.keyCode !== 13 ){
+           $("#signupForm input").each(function(){
+                var spanClass = $(this).next('span').attr('class');
+                if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
+                    $(this).next('span').removeClass('error').text("");
+                }else if($(this).val().length > 0 && ($(this).next('span').hasClass('error'))){
+                    $(this).next('span').removeClass('error').text("");
+                }
+            });
+        }
     }
 }
 
 function forgotCtrl($scope, $rootScope, $state, $http, forgotService) {
      $scope.isDisabled = false;
      $scope.errorMessage = '';
+     $scope.isRequired = false;
      $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
 	/**Create function for forgot password **/
 	$scope.forgotPassword = function() {
 	   $scope.errorMessage = '';
+	   $scope.isRequired = true;
         var requestObject = {
         	'email': $scope.user_email
         };
        if($scope.forgotForm.$valid){
+            $scope.isRequired = false;
             $scope.isDisabled = true;
            forgotService.forgotPassword(requestObject).then(function(response){
              if(response.message == "success") {
-               $scope.user_email='';
+                 $scope.user_email = '';
+                 $scope.isDisabled = false;
                $scope.errorMessage = 'Link to reset password is sent on your mail! Please check.';
              }else{
 
@@ -360,20 +369,27 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         description:''
      };
     $rootScope.globals.currentProject_id = '';
+    $scope.isProjMaxlength = false;
+    $scope.isComMaxlength = false;
+    $scope.isLocationMaxlength = false;
     $scope.isValid = false;
     $scope.isExisting = false;
     $scope.isVisited = false;
     $scope.isError = false;
     $scope.apiErrorMsg = '';
+    $scope.timeout;
+    $scope.patternError = false;
+    $scope.locationPatternMsg = '';
     $rootScope.jobDescriptionResult = '';
     $rootScope.globals.projectDetails = [];
     this.projectNamePattern =/((^[ A-Za-z0-9_@./#-]*)|(^[a-zA-Z]+[_@./#-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;// /^[a-z0-9]+$/i;
     this.companyNamePattern = /^[a-zA-Z]*$/;
     this.locationPattern =/((^^(?!0{5})\d{5})|(^[a-z_ ]*))$/i;
-    this.skillPattern = /(^[a-zA-Z][a-zA-Z0-9.,#$@]{1,50})+$/;
+
 
     $scope.checkMessage = function(){ /*Hide error messages when user interact with fieds*/
          $scope.isRequired = false;
+
        $("#createProjectForm input").each(function(){
             var spanClass = $(this).next('span').attr('class');
             if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
@@ -571,11 +587,34 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     }
 }
 
-$scope.timeout;
+ $scope.validateLocation = function(abc){
+ console.log(abc);
+ var value = abc;
+  $scope.patternError = false;
+  var zip = /^(?!0{5})\d{5}$/;
+  var city = /((^[ A-Za-z-]*)|(^[a-zA-Z]+[-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]$/;
+   if(!isNaN(value) && value)
+     {
+             console.log('jasjgdjas');
+       if(!zip.test(value)){
+          $scope.patternError = true;
+          $scope.locationPatternMsg = 'Enter 5 digit zipcode!';
+       }
+     }
+     else if(value){
+        if(!city.test(value)){
+           $scope.patternError = true;
+           $scope.locationPatternMsg = 'Enter valid city name!';
+        }
+     }
+
+
+ }
+
   $scope.saveData = function(name,value){
-    if(value){
-         $timeout(saveUpdates(name,value), 2000);  // 5000 = 5 second
-      }
+     if(value){
+          $timeout(saveUpdates(name,value), 2000);  // 5000 = 5 second
+        }
 
   }
 
@@ -637,7 +676,7 @@ $scope.timeout;
 
    }
     var validateSkillName = function(skillName) {
-        var re =/(^[a-zA-Z][a-zA-Z0-9.,#$@_ ]{1,50})+$/;
+        var re =/(^[a-zA-Z-][a-zA-Z0-9.-]{1,50})+$/;
         return re.test(skillName);
    }
 
@@ -660,6 +699,9 @@ $scope.timeout;
                    var index = $rootScope.jobDescriptionResult.concepts.indexOf(newSkill);
                        if(index == -1){
                             $rootScope.jobDescriptionResult.concepts.push(newSkill);
+                       }else{
+                            $scope.isError = true;
+                            $scope.apiErrorMsg = 'Concept is existing!';
                        }
                           $event.target.value = '';
                           $scope.updateSkillSet();
@@ -688,6 +730,7 @@ $scope.timeout;
      }
 
      $scope.publishProject = function(){
+     if( $state.current.name == 'create.step4'){
       $scope.isSuccess = false;
       $scope.publishMsg = '';
         $(".loader").css('display','block');
@@ -721,6 +764,7 @@ $scope.timeout;
                   $scope.isSuccess = true;
                 $scope.publishMsg = "Please try again.";
                 $('#breakPopup').css('display','block');} , 30000); //timeout after three minutes
+         }
      }
 
 }

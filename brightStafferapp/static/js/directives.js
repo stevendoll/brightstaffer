@@ -215,6 +215,27 @@ function removeMe($rootScope) {
 
 }
 
+
+function limitTo(){
+    return {
+        restrict: "A",
+        link: function(scope, elem, attrs) {
+            var limit = parseInt(attrs.limitTo);
+            angular.element(elem).on("keypress", function(e) {
+
+                if (this.value.length == limit){
+                    e.preventDefault();
+                        if(this.name == 'project_name')
+                           scope.isProjMaxlength = true;
+                        if(this.name == 'company_name')
+                           scope.isComMaxlength = true;
+                        if(this.name == 'location')
+                            scope.isLocationMaxlength = true;
+                }
+            });
+        }
+    }
+}
 /**
  *
  * Pass all functions into module
@@ -228,4 +249,5 @@ angular
     .directive('iboxToolsFullScreen', iboxToolsFullScreen)
     .directive('validPasswordC', validPasswordC)
     .directive('removeMe', removeMe)
-    .directive('autoCapitaliseFirstLetter', autoCapitaliseFirstLetter);
+    .directive('autoCapitaliseFirstLetter', autoCapitaliseFirstLetter)
+    .directive('limitTo', limitTo);
