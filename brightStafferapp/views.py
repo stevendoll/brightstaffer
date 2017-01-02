@@ -281,13 +281,13 @@ class Alchemy_api():
                 text=user_data['description']),indent=2)
         d = json.loads(data)
         for list_value in d['entities']:
-            print(list_value)
             if list_value['type']=='JobTitle' or list_value['type']=='Quantity' or list_value['type']=='Person':
                 keyword_list.append(list_value['text'])
         return keyword_list
 
 
 class ProjectList():
+    # This API is publishing a project if is_published=true,bu default project list count is 10
     @csrf_exempt
     def publish_project(request):
         output = {'publish_project': []}
@@ -321,6 +321,7 @@ class ProjectList():
         output['publish_project'].append(project_list_count)
         return util.returnSuccessShorcut(output)
 
+    # This API is returning a top 6 project
     @csrf_exempt
     def top_project_list(request):
         output = {'top_project': []}
@@ -351,8 +352,7 @@ class ProjectList():
             output['top_project'].append(param_dict)
         return util.returnSuccessShorcut(output)
 
-
-
+    ## This API is returning a poject list according the page count
     @csrf_exempt
     def pagination(request):
         output = {'Pagination': []}

@@ -28,10 +28,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
              };
              getAllProjects.allProjects(requestObject).then(function(response){
                 if(response.message == "success") {
-                    if($rootScope.counter1 == ''){
                          $rootScope.counter1 = response.publish_project.pop();
                          $rootScope.counter1 = $rootScope.counter1.count;
-                     }
                       $scope.allProjectList = response.publish_project;
                      $rootScope.projectCount = response.publish_project.length;
                   }else{
@@ -54,6 +52,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 if(response.message == "success") {
                     if(response.Pagination.length > 0)
                        $scope.allProjectList = response.Pagination;
+                       $rootScope.projectCount = response.Pagination.length;
                      $(".loader").css('display','none');
                   }else{
                     console.log('error');
@@ -71,15 +70,26 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     this.changePage = function($event){
      $scope.isSuccess = false;
      var nextButton = angular.element(document.querySelector('#Table_next'));
+     var prevButton = angular.element(document.querySelector('#Table_previous'));
          if($event.target.name == "next"){
            $scope.counter++;
          }else if($event.target.name == "prev"){
-          if(nextButton.hasClass('disable'))
+          if(nextButton.hasClass('disabled'))
                 nextButton.removeClass('disabled');
-           if($scope.counter >1)
+           if($scope.counter >1){
               $scope.counter--;
-         }
 
+             }
+         }
+          if($scope.counter >1){
+                         if(prevButton.hasClass('disabled'))
+                          prevButton.removeClass('disabled');
+                          }
+                          else if($scope.counter ==1){
+                           prevButton.addClass('disabled');
+                            if(nextButton.hasClass('disabled'))
+                             nextButton.removeClass('disabled');
+                          }
            $(".loader").css('display','block');
          var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
@@ -91,6 +101,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 if(response.message == "success") {
                     if(response.Pagination.length > 0)
                        $scope.allProjectList = response.Pagination;
+                       $rootScope.projectCount = response.Pagination.length;
                    $(".loader").css('display','none');
                   }else{
                     console.log('error');
@@ -99,8 +110,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                         if($event.target.name == "next"){
                            nextButton.addClass('disabled');}
                         $scope.isSuccess = true;
-                        $scope.publishMsg = "No longer data is available.";
-                        $scope.counter--;
+                        $scope.publishMsg = "No data available.";
                         $('#breakPopup').css('display','block');
 
                     }
@@ -319,6 +329,7 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
     $scope.successMsg = false;
     $scope.failMessage = false;
     $scope.success = false;
+    $scope.data = {};
     $scope.passwordStrength = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     $scope.changePassword = function(){
          $scope.isDisabled = true;
@@ -328,9 +339,11 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
         };
        resetPasswordService.resetPassword(requestObject).then(function(response){
          if(response.message == "success") {
+           $scope.data = {};
            $scope.successMsg = true;
            $scope.success = true;
          }else{
+             $scope.data = {};
              $scope.failMessage = true;
          }
        });
@@ -365,6 +378,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     $scope.isExisting = false;
     $scope.isVisited = false;
     $scope.isError = false;
+    $scope.isJobError =false;
     $scope.apiErrorMsg = '';
     $scope.timeout;
     $scope.patternError = false;
@@ -540,7 +554,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 
   $scope.checkProjectName = function($event){
     if($event.target.name == "company_name" || "location"){   // if projectName is blank prompt for it
-    $scope.checkMessage();
+        $scope.checkMessage();
         var element = angular.element(document.querySelector('#project_name'));
           if(element && !element[0].value ){
                 $scope.isValid = true;
@@ -634,7 +648,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
    $scope.updateJobDescription = function($event){
      if($event.target.value){
      $rootScope.jobDescriptionResult = '';
-     $scope.isError = false;
+     $scope.isJobError = false;
      $scope.apiErrorMsg = '';
      var is_published = false;
      var token = $rootScope.globals.currentUser.token;
@@ -649,7 +663,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                      if(response.message == "success") {
                         $rootScope.jobDescriptionResult = response;
                         if($rootScope.jobDescriptionResult.concepts.length == 0){
-                          $scope.isError = true;
+                          $scope.isJobError = true;
                           $scope.apiErrorMsg = "There is no relevant keywords in your description.";
                         }
 
@@ -657,7 +671,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 
                      }else{
                            if(response.errorstring){
-                               $scope.isError = true;
+                               $scope.isJobError = true;
                                $scope.apiErrorMsg = "Description text data is not valid.";
                             }
                               $(".loader").css('display','none');
@@ -668,30 +682,30 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 
    }
     var validateSkillName = function(skillName) {
-        var re =/(^[a-zA-Z-][a-zA-Z0-9.-]{1,50})+$/;
+        var re =/(^[a-zA-Z_. -][a-zA-Z0-9_. -]{1,50})+$/;
         return re.test(skillName);
    }
 
    $scope.updateSkillView = function($event){
-      $scope.isError = false;
+      $scope.isJobError = false;
       $scope.apiErrorMsg = '';
       if($event.target.value){
         var skill = $event.target.value;
           if(skill.length<2){
-               $scope.isError = true;
+               $scope.isJobError = true;
                $scope.apiErrorMsg = 'Please provide atleast 2 character!';
              }
               else if(!validateSkillName(skill)){
-                 $scope.isError = true;
-                 $scope.apiErrorMsg ='First letter sholud be a character.' ;
+                 $scope.isJobError = true;
+                 $scope.apiErrorMsg ='First letter sholud be a character!' ;
                }else{
                    var newSkill = $event.target.value;
                    var index = $rootScope.jobDescriptionResult.concepts.indexOf(newSkill);
                        if(index == -1){
                             $rootScope.jobDescriptionResult.concepts.push(newSkill);
                        }else{
-                            $scope.isError = true;
-                            $scope.apiErrorMsg = 'Concept is existing!';
+                            $scope.isJobError = true;
+                            $scope.apiErrorMsg = 'Already existing!';
                        }
                           $event.target.value = '';
                           $scope.updateSkillSet();

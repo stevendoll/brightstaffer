@@ -30,7 +30,7 @@ class ForgetPassword():
         c = {
             'email': user.email,
                                 'domain': request.META['HTTP_HOST'],
-                                'site_name': 'Bright Staff',
+                                'site_name': 'brightStaffer',
                                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                                 'user': user,
                                 'token': default_token_generator.make_token(user),
@@ -109,7 +109,7 @@ class ResetPassword():
             return util.returnSuccessShorcut(param_dict)
 
         else:
-            return util.returnErrorShorcut(500,'Email link is no longer valid')
+            return util.returnErrorShorcut(500,'Link has been expired')
 
 
 
