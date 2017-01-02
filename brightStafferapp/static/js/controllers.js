@@ -6,12 +6,10 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
       $scope.countList = $scope.options[0];
       $scope.counter= 1;
         this.getTopSixProjects = function(){
-             console.log('abc')
               var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
                 'recuriter': $rootScope.globals.currentUser.user_email   // password filed value
              };
-             console.log(requestObject);
              getTopSixProjects.topSix(requestObject).then(function(response){
                 if(response.message == "success") {
                     $rootScope.projectList = response.top_project;
@@ -24,22 +22,18 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
            }
      $scope.allProjectList = [];
         this.showAllProjects = function(){
-             console.log('abc')
               var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
                 'recuriter': $rootScope.globals.currentUser.user_email   // password filed value
              };
-             console.log(requestObject);
              getAllProjects.allProjects(requestObject).then(function(response){
                 if(response.message == "success") {
-                    $scope.allProjectList = response.publish_project;
                     if($rootScope.counter1 == ''){
                          $rootScope.counter1 = response.publish_project.pop();
                          $rootScope.counter1 = $rootScope.counter1.count;
                      }
+                      $scope.allProjectList = response.publish_project;
                      $rootScope.projectCount = response.publish_project.length;
-                     console.log($rootScope.counter1);
-                     console.log($rootScope.projectCount);
                   }else{
                     console.log('error');
                 }
@@ -48,7 +42,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
            }
 
     this.getValue = function(countList){
-      console.log(countList.value);
         $(".loader").css('display','block');
 
         var requestObject = {
@@ -57,10 +50,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 'page':$scope.counter,
                 'count':countList.value
              };
-             console.log(requestObject);
              paginationData.paginationApi(requestObject).then(function(response){
                 if(response.message == "success") {
-                    console.log(response);
                     if(response.Pagination.length > 0)
                        $scope.allProjectList = response.Pagination;
                      $(".loader").css('display','none');
@@ -96,10 +87,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 'page':$scope.counter,
                 'count':$scope.countList.value
              };
-             console.log(requestObject);
              paginationData.paginationApi(requestObject).then(function(response){
                 if(response.message == "success") {
-                    console.log(response);
                     if(response.Pagination.length > 0)
                        $scope.allProjectList = response.Pagination;
                    $(".loader").css('display','none');
@@ -410,20 +399,20 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                         $(this).next('span').removeClass('error').text("");
                     }
             });
-		if($scope.projectForm.project_name && $scope.projectForm.company_name && $scope.projectForm.location && currentState == "create.step1")
+		if($scope.projectForm.project_name && $scope.projectForm.company_name && $scope.projectForm.location && currentState == "create.step1" && !$scope.patternError)
 		  {
             var backButton = angular.element(document.querySelector('#previous'));
-               backButton.removeClass('disabled');
+                backButton.removeClass('disabled');
+                backButton.children(':first').removeClass('disable');
             var prevTab = angular.element(document.querySelector(prevTabId));
-            prevTab.removeClass('current');
-            prevTab.addClass('done');
-            prevTab.attr('aria-selected','false');
+                prevTab.removeClass('current');
+                prevTab.addClass('done');
             var currentTab = angular.element(document.querySelector(currentTabId));
                 if(currentTab.hasClass('done'))
-                currentTab.removeClass('done');
-            currentTab.addClass('current');
-            currentTab.children(':first').attr("ui-sref","step2");
-             $state.go('create.step2','');
+                   currentTab.removeClass('done');
+              currentTab.removeClass('disabled');
+              currentTab.addClass('current');
+              $state.go('create.step2','');
 		  }
 
     }
@@ -440,12 +429,11 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 	     var prevTab = angular.element(document.querySelector(prevTabId));
             prevTab.removeClass('current');
             prevTab.addClass('done');
-            var currentTab = angular.element(document.querySelector(currentTabId));
-              if(currentTab.hasClass('done'))
-                currentTab.removeClass('done');
+         var currentTab = angular.element(document.querySelector(currentTabId));
+            if(currentTab.hasClass('done'))
+             currentTab.removeClass('done');
              currentTab.addClass('current');
-             currentTab.children(':first').attr("ui-sref","step3");
-            $state.go('create.step3','');
+             $state.go('create.step3','');
 	  }
   }
 
@@ -453,8 +441,9 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
    if($rootScope.jobDescriptionResult.concepts.length > 0 &&  currentState == "create.step3"){
         var nextButton = angular.element(document.querySelector('#next'));
         nextButton.css('display','none');
-        var backButton = angular.element(document.querySelector('#publish'));
-        backButton.removeClass('disabled');
+        var publishButton = angular.element(document.querySelector('#publish'));
+        publishButton.removeClass('disabled');
+        publishButton.children(':first').removeClass('disable');
         var prevTab = angular.element(document.querySelector(prevTabId));
         prevTab.removeClass('current');
         prevTab.addClass('done');
@@ -462,7 +451,6 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         if(currentTab.hasClass('done'))
         currentTab.removeClass('done');
         currentTab.addClass('current');
-        currentTab.children(':first').attr("ui-sref","step4");
         $state.go('create.step4','');
 	  }else if($rootScope.jobDescriptionResult.concepts.length == 0){
 	       $scope.isError = true;
@@ -472,7 +460,6 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 
      $scope.SwitchFuction = function () {   // generic function which call different stepwise function
       var currentState = $state.current.name;
-      console.log(currentState);
       var prevTabId;
       var currentTabId;
         switch (currentState) {
@@ -496,7 +483,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
      }
 
   $scope.takeBack = function(currentState,prevTabId,currentTabId){
-            var prevTab = angular.element(document.querySelector(prevTabId));
+          var prevTab = angular.element(document.querySelector(prevTabId));
             var backButton = angular.element(document.querySelector('#publish'));
                 backButton.addClass('disabled');
             prevTab.addClass('current');
@@ -505,6 +492,9 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
             currentTab.addClass('done');
       if(currentState == "create.step2"){
               $scope.isRequired = false;
+              var prevButton = angular.element(document.querySelector('#previous'));
+                  prevButton.addClass('disabled');
+                 prevButton.children(':first').addClass('disable');
               $state.go('create.step1','');
       }else if(currentState == "create.step3"){
               $scope.isError = false;
@@ -513,6 +503,9 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
       }else if(currentState == "create.step4"){
               var nextButton = angular.element(document.querySelector('#next'));
                  nextButton.css('display','block');
+              var publishButton = angular.element(document.querySelector('#publish'));
+                  publishButton.addClass('disabled');
+                  publishButton.children(':first').addClass('disable');
               $state.go('create.step3','');
       }
   }
@@ -547,6 +540,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 
   $scope.checkProjectName = function($event){
     if($event.target.name == "company_name" || "location"){   // if projectName is blank prompt for it
+    $scope.checkMessage();
         var element = angular.element(document.querySelector('#project_name'));
           if(element && !element[0].value ){
                 $scope.isValid = true;
@@ -588,14 +582,12 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 }
 
  $scope.validateLocation = function(abc){
- console.log(abc);
  var value = abc;
   $scope.patternError = false;
   var zip = /^(?!0{5})\d{5}$/;
-  var city = /((^[ A-Za-z-]*)|(^[a-zA-Z]+[-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]$/;
+  var city = /((^[ A-Za-z-]*)|(^[a-zA-Z]+[-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]$/i;
    if(!isNaN(value) && value)
      {
-             console.log('jasjgdjas');
        if(!zip.test(value)){
           $scope.patternError = true;
           $scope.locationPatternMsg = 'Enter 5 digit zipcode!';
@@ -681,9 +673,8 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
    }
 
    $scope.updateSkillView = function($event){
-   console.log('called')
       $scope.isError = false;
-        console.log( $rootScope.jobDescriptionResult.concepts);
+      $scope.apiErrorMsg = '';
       if($event.target.value){
         var skill = $event.target.value;
           if(skill.length<2){
@@ -695,7 +686,6 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                  $scope.apiErrorMsg ='First letter sholud be a character.' ;
                }else{
                    var newSkill = $event.target.value;
-                   console.log(newSkill);
                    var index = $rootScope.jobDescriptionResult.concepts.indexOf(newSkill);
                        if(index == -1){
                             $rootScope.jobDescriptionResult.concepts.push(newSkill);
@@ -744,7 +734,6 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         requestObject["is_published"] = is_published;
         publishProject.publish(requestObject).then(function(response){
              if(response.message == "success") {
-                   console.log(response);
                 $(".loader").css('display','none');
                 $scope.publishMsg = "Project created successfully.";
                   $('#breakPopup').css('display','block');
