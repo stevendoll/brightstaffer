@@ -66,30 +66,46 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 }
              });
     }
-
+    $scope.tableNext = true;
     this.changePage = function($event){
+    if( !$scope.tableNext && $event.target.name == "next"){
+        return;
+    }else if($event.target.name == "prev"){
+        $scope.tableNext = true;
+    }
      $scope.isSuccess = false;
      var nextButton = angular.element(document.querySelector('#Table_next'));
      var prevButton = angular.element(document.querySelector('#Table_previous'));
          if($event.target.name == "next"){
            $scope.counter++;
+           if(prevButton.hasClass('disabled')){
+              prevButton.removeClass('disabled');
+           }
+
          }else if($event.target.name == "prev"){
           if(nextButton.hasClass('disabled'))
                 nextButton.removeClass('disabled');
            if($scope.counter >1){
               $scope.counter--;
+             }else{
+                prevButton.addClass('disabled');
+                if(nextButton.hasClass('disabled'))
+                    nextButton.removeClass('disabled');
 
+                return;
              }
          }
-          if($scope.counter >1){
-                         if(prevButton.hasClass('disabled'))
-                          prevButton.removeClass('disabled');
-                          }
-                          else if($scope.counter ==1){
-                           prevButton.addClass('disabled');
-                            if(nextButton.hasClass('disabled'))
-                             nextButton.removeClass('disabled');
-                          }
+
+         /* if($scope.counter >1){
+             if(prevButton.hasClass('disabled'))
+              prevButton.removeClass('disabled');
+              }
+              else if($scope.counter ==1){
+               prevButton.addClass('disabled');
+                if(nextButton.hasClass('disabled'))
+                 nextButton.removeClass('disabled');
+              }*/
+
            $(".loader").css('display','block');
          var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
@@ -108,7 +124,9 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     $(".loader").css('display','none');
                     if(response.success == false){
                         if($event.target.name == "next"){
-                           nextButton.addClass('disabled');}
+                           nextButton.addClass('disabled');
+                           $scope.tableNext = false;
+                        }
                         $scope.isSuccess = true;
                         $scope.publishMsg = "No data available.";
                         $('#breakPopup').css('display','block');
@@ -257,7 +275,7 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookie
             $scope.isDisabled = true;
              signupService.userSignup(requestObject).then(function(response){
              if(response.message == "success") {
-               $scope.errorMessage = "Your account has been created!";
+              // $scope.errorMessage = "Your account has been created!";
                $scope.signupForm.$setPristine();
                $scope.userRegistration = {};
               var userData = {};
@@ -490,6 +508,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
             case 'create.step3':
                 prevTabId = '#form-t-2';
                 currentTabId = '#form-t-3';
+                $scope.isJobError = false;
                 takeToStepFour(currentState,prevTabId,currentTabId);
                 break;
         }
@@ -705,7 +724,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                             $rootScope.jobDescriptionResult.concepts.push(newSkill);
                        }else{
                             $scope.isJobError = true;
-                            $scope.apiErrorMsg = 'Already existing!';
+                            $scope.apiErrorMsg = 'Already exists!';
                        }
                           $event.target.value = '';
                           $scope.updateSkillSet();

@@ -10,27 +10,27 @@
 			                <h1></h1>
 					<div class="steps clearfix">
 						<ul role="tablist">
-						<li role="tab" id="form-t-0" class="first current">
-						<a  id="form-p-0">
+						<li role="tab" id="form-t-0" class="first current" >
+						<a  id="form-p-0" style="cursor: default;">
 							<span class="current-info audible">current step: </span><span class="number">1.</span>
 						</a></li>
-						<li role="tab" id="form-t-1" class="disabled">
-						<a id="form-p-1" >
+						<li role="tab" id="form-t-1" class="disabled" >
+						<a id="form-p-1" style="cursor: default;">
 						<span class="number">2.</span>
 						</a></li>
-						<li role="tab" id="form-t-2" class="disabled">
-							<a id="form-p-2" >
+						<li role="tab" id="form-t-2" class="disabled" >
+							<a id="form-p-2" style="cursor: default;">
 							<span class="number">3.</span> </a>
 						</li>
 						<li role="tab" id="form-t-3" class="disabled last">
-							<a id="form-p-3" >
+							<a id="form-p-3" style="cursor: default;">
 								<span class="number">4.</span> </a></li>
 						</ul></div>
 						<div id="form-views" class="content clearfix" ui-view></div>
 							<div class="actions clearfix">
 							<ul >
 							<li class="disabled" ng-disabled="[[ $state.current.name == 'create.step1']]" id="previous">
-							<a ng-class="{'disable': [[ $state.current.name == 'create.step1']]}"ng-click="goToBack()">Previous</a></li>
+							<a ng-class="{'disable': [[ $state.current.name == 'create.step1']]}" ng-click="goToBack()">Previous</a></li>
 							<li  id="next" ng-disabled="[[ $state.current.name == 'create.step4']]"><a  ng-class="{'disable': [[ $state.current.name == 'create.step4']]}" ng-click="SwitchFuction()">Next</a></li>
 							<li  id="publish" ng-disabled="[[ $state.current.name != 'create.step4']]" class="disabled"><a ng-class="{'disable': [[ $state.current.name != 'create.step4']]}"  ng-click="publishProject()" >Publish</a></li>
 							<li><a href="#" role="menuitem">Cancel</a></li></ul></div>

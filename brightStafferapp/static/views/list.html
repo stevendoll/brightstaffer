@@ -54,14 +54,14 @@
                       <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm">
                         <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
                           <ul class="pagination">
-                            <li class="paginate_button previous" id="Table_previous" ng-class="{'disabled':[[counter == 1]]}">
-                              <a href="" name="prev" tabindex="0" ng-click="main.changePage($event)" >Previous</a>
+                            <li class="paginate_button previous disabled" id="Table_previous" ng-disabled="[[counter == 1]]" >
+                              <a name="prev" tabindex="0" ng-click="main.changePage($event)" ng-class="{'disable':[[counter == 1]]}" >Previous</a>
                             </li>
                             <li class="paginate_button active">
                               <a  tabindex="0">[[counter]]</a>
                             </li>
                             <li class="paginate_button next " id="Table_next" >
-                              <a href="" tabindex="0" name="next" ng-click="main.changePage($event)">Next</a>
+                              <a tabindex="0" name="next" ng-click="main.changePage($event)">Next</a>
                             </li>
                           </ul>
                         </div>
