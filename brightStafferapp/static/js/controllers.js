@@ -124,6 +124,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     $(".loader").css('display','none');
                     if(response.success == false){
                         if($event.target.name == "next"){
+                           $scope.counter--;
                            nextButton.addClass('disabled');
                            $scope.tableNext = false;
                         }
