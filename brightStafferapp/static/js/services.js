@@ -1,6 +1,6 @@
 angular
     .module('brightStaffer')
-    .constant('REQUEST_URL', 'http://35.164.5.146:8080/');
+    .constant('REQUEST_URL', 'http://35.161.233.149:8080/');
 
 function loginService($http ,REQUEST_URL){
     return {
