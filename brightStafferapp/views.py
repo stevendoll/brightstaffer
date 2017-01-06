@@ -19,7 +19,7 @@ from json import dumps
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 import ast
-
+from itertools import chain
 
 class UserData():
 
@@ -284,7 +284,6 @@ class Alchemy_api():
             if list_value['type']=='JobTitle' or list_value['type']=='Quantity' or list_value['type']=='Person':
                 keyword_list.append(list_value['text'])
         return keyword_list
-
 
 class ProjectList():
     # This API is publishing a project if is_published=true,bu default project list count is 10

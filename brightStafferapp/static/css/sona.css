@@ -274,8 +274,7 @@ li.active a {
     display: inline-block;
   }
   .nav.navbar-top-links li.dropdown > ul {
-    left: auto;
-    right: 0;
+    display: none;
   }
   .nav.navbar-top-links {
    float: right;
