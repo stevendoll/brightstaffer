@@ -9,7 +9,7 @@ from django.db import IntegrityError
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
-from brightStafferapp.models import Projects,Concepts
+from brightStafferapp.models import Projects,Concept
 from brightStafferapp import util
 from django.views import View
 from django.views.generic import View
@@ -85,26 +85,26 @@ class JobPosting():
             user_data=json.loads(request.body.decode("utf-8"))
         except ValueError:
             return util.returnErrorShorcut(400,'API parameter is not valid')
-        recuriter_email = User.objects.filter(email=user_data['recuriter'])
-        recuriter_email_valid=User.objects.filter(email=user_data['recuriter']).exists()
+        recuriter_email = User.objects.filter(email=user_data['recruiter'])
+        recuriter_email_valid=User.objects.filter(email=user_data['recruiter']).exists()
         projects=Projects()
         if recuriter_email_valid == False:
-            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
         values = Token.objects.filter(user=recuriter_email,key=user_data['token']).select_related().exists()
         if values == False:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
         else:
             if user_data['id']=='':
                 try:
-                    rec_name = User.objects.get(username=user_data['recuriter'])
-                    pname_valid = Projects.objects.filter(project_name=user_data['project_name'],recuriter=rec_name).exists()
+                    rec_name = User.objects.get(username=user_data['recruiter'])
+                    pname_valid = Projects.objects.filter(project_name=user_data['project_name'],recruiter=rec_name).exists()
                     if pname_valid == False:
                         projects.project_name = user_data['project_name']
-                        projects.recuriter = rec_name
+                        projects.recruiter = rec_name
                         projects.is_published = user_data['is_published']
                         projects.save()
                         p_id = Projects.objects.filter(project_name=user_data['project_name'],
-                                                       recuriter=rec_name).values('id')
+                                                       recruiter=rec_name).values('id')
                         for a_id in p_id:
                             for item, values in a_id.items():
                                 param_dict['project_id'] = str(values)
@@ -122,7 +122,7 @@ class JobPosting():
                     else:
                         try:
                             del user_data['token']
-                            del user_data['recuriter']
+                            del user_data['recruiter']
                         except KeyError:
                             pass
                         Projects.objects.filter(id=user_data['id']).update(**user_data)
@@ -138,9 +138,9 @@ class JobPosting():
             user_data = json.loads(request.body.decode("utf-8"))
         except ValueError:
             return util.returnErrorShorcut(400, 'API parameter is not valid')
-        recuriter_email = User.objects.filter(email=user_data['recuriter'])
+        recuriter_email = User.objects.filter(email=user_data['recruiter'])
         if not recuriter_email:
-            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
         values = Token.objects.filter(user=recuriter_email, key=user_data['token'])  # .select_related().exists()
         if not values:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
@@ -152,7 +152,7 @@ class JobPosting():
             return util.returnErrorShorcut(400, 'Project id is not valid')
         param_dict['project_id'] = user_data['id']
         param_dict['user_token'] = user_data['token']
-        param_dict['recuriter'] = user_data['recuriter']
+        param_dict['recruiter'] = user_data['recruiter']
         value = Projects.objects.filter(id=user_data['id']).values()
         for param_value in value:
             if user_data['page']==1:
@@ -162,9 +162,9 @@ class JobPosting():
             if user_data['page']==2:
                 param_dict['description']=param_value['description']
             if user_data['page']==3:
-                concept_dict=Concepts.objects.filter(project=user_data['id']).values('concepts')
+                concept_dict=Concept.objects.filter(project=user_data['id']).values('concept')
                 for concept_key in concept_dict:
-                    param_dict['concepts']=concept_key['concepts']
+                    param_dict['concept']=concept_key['concept']
 
         return util.returnSuccessShorcut(param_dict)
 
@@ -176,9 +176,9 @@ class JobPosting():
             user_data = json.loads(request.body.decode("utf-8"))
         except ValueError:
             return util.returnErrorShorcut(400, 'API parameter is not valid')
-        recuriter_email = User.objects.filter(email=user_data['recuriter'])
+        recuriter_email = User.objects.filter(email=user_data['recruiter'])
         if not recuriter_email:
-            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
         values = Token.objects.filter(user=recuriter_email, key=user_data['token'])  # .select_related().exists()
         if not values:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
@@ -190,7 +190,7 @@ class JobPosting():
             return util.returnErrorShorcut(400, 'Project id is not valid')
         try:
             del user_data['token']
-            del user_data['recuriter']
+            del user_data['recruiter']
         except KeyError:
             pass
         Projects.objects.filter(id=user_data['id']).update(**user_data)
@@ -205,9 +205,9 @@ class JobPosting():
             user_data = json.loads(request.body.decode("utf-8"))
         except ValueError:
             return util.returnErrorShorcut(400, 'API parameter is not valid')
-        recuriter_email = User.objects.filter(email=user_data['recuriter'])
+        recuriter_email = User.objects.filter(email=user_data['recruiter'])
         if not recuriter_email:
-            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
         values = Token.objects.filter(user=recuriter_email, key=user_data['token'])  # .select_related().exists()
         if not values:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
@@ -218,8 +218,8 @@ class JobPosting():
         except:
             return util.returnErrorShorcut(400, 'Project id is not valid')
 
-        Concepts.objects.filter(project=user_data['id']).update(concepts=user_data['concepts'])
-        param_dict['concepts']=user_data['concepts']
+        Concept.objects.filter(project=user_data['id']).update(concept=user_data['concept'])
+        param_dict['concept']=user_data['concept']
         return util.returnSuccessShorcut(param_dict)
 
 
@@ -230,15 +230,15 @@ class Alchemy_api():
 
     #This API is analsys a project description and reuturn a concepts
     def analsys(request):
-        concepts_obj=Concepts()
+        concepts_obj=Concept()
         param_dict = {}
         try:
             user_data=json.loads(request.body.decode("utf-8"))
         except ValueError:
             return util.returnErrorShorcut(400,'API parameter is not valid')
-        recuriter_email = User.objects.filter(email=user_data['recuriter'])
+        recuriter_email = User.objects.filter(email=user_data['recruiter'])
         if not recuriter_email:
-            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
         values = Token.objects.filter(user=recuriter_email, key=user_data['token'])#.select_related().exists()
         if not values:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
@@ -255,21 +255,21 @@ class Alchemy_api():
             keyword_concepts = Alchemy_api.alchemy_api(user_data)
         except:
             return util.returnErrorShorcut(400,"Description text data is not valid.")
-        concepts_obj.concepts = keyword_concepts
-        concept_empty=Concepts.objects.filter(project=project_id).values()
+        concepts_obj.concept = keyword_concepts
+        concept_empty=Concept.objects.filter(project=project_id).values()
         if not concept_empty:
             concepts_obj.save()
             Projects.objects.filter(id=project_id).update(description=user_data['description'])
-            param_dict['concepts'] = keyword_concepts
+            param_dict['concept'] = keyword_concepts
         else:
             try:
                 del user_data['token']
-                del user_data['recuriter']
+                del user_data['recruiter']
             except KeyError:
                 pass
             Projects.objects.filter(id=project_id).update(**user_data)
-            Concepts.objects.filter(project=project_id).update(concepts=keyword_concepts)
-            param_dict['concepts']=keyword_concepts
+            Concept.objects.filter(project=project_id).update(concept=keyword_concepts)
+            param_dict['concept']=keyword_concepts
         return util.returnSuccessShorcut(param_dict)
 
 
@@ -294,25 +294,25 @@ class ProjectList():
             user_data=json.loads(request.body.decode("utf-8"))
         except ValueError:
             return util.returnErrorShorcut(400,'API parameter is not valid')
-        rec_name = User.objects.filter(username=user_data['recuriter'])
+        rec_name = User.objects.filter(username=user_data['recruiter'])
         if not rec_name:
-            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
         values = Token.objects.filter(user=rec_name, key=user_data['token'])
         if not values:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
-        counter = Projects.objects.filter(is_published=True, recuriter=rec_name).values().order_by('-create_date').count()
+        counter = Projects.objects.filter(is_published=True, recruiter=rec_name).values().order_by('-create_date').count()
         project_list_count={}
         project_list_count['count']=counter
-        project = Projects.objects.filter(is_published=True,recuriter=rec_name).values().order_by('-create_date')[:10]
+        project = Projects.objects.filter(is_published=True,recruiter=rec_name).values().order_by('-create_date')[:10]
         for project_data in project:
             param_dict = {}
             project_id = Projects.objects.filter(id=project_data['id'])
             for project_idd in project_id:
                 param_dict['project_id']=str(project_idd)
             param_dict['project_name']=project_data['project_name']
-            user_data=User.objects.filter(id=project_data['recuriter_id']).values('email')
+            user_data=User.objects.filter(id=project_data['recruiter_id']).values('email')
             for email in user_data:
-                param_dict['recuriter']=email['email']
+                param_dict['recruiter']=email['email']
             param_dict['location']=project_data['location']
             param_dict['company_name']=project_data['company_name']
             param_dict['create_date']=str(project_data['create_date'].day)+'/'+str(project_data['create_date'].month)+'/'+str(project_data['create_date'].year)
@@ -328,13 +328,13 @@ class ProjectList():
             user_data=json.loads(request.body.decode("utf-8"))
         except ValueError:
             return util.returnErrorShorcut(400,'API parameter is not valid')
-        rec_name = User.objects.filter(username=user_data['recuriter'])
+        rec_name = User.objects.filter(username=user_data['recruiter'])
         if not rec_name:
-            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
         values = Token.objects.filter(user=rec_name, key=user_data['token'])  # .select_related().exists()
         if not values:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
-        project = Projects.objects.filter(is_published=True,recuriter=rec_name).values().order_by("-create_date")[:6]
+        project = Projects.objects.filter(is_published=True,recruiter=rec_name).values().order_by("-create_date")[:6]
         for project_info in project:
             param_dict = {}
             param_dict['project_name']=project_info['project_name']
@@ -343,10 +343,10 @@ class ProjectList():
             param_dict['create_date']=str(project_info['create_date'].day)+'/'+str(project_info['create_date'].month)+'/'+str(project_info['create_date'].year)
             project_id = Projects.objects.filter(id=project_info['id'])
             for project_idd in project_id:
-                concepts_keywords=Concepts.objects.filter(project=project_idd).values('concepts')
+                concepts_keywords=Concept.objects.filter(project=project_idd).values('concept')
                 for value in concepts_keywords:
-                    concepts=ast.literal_eval(value['concepts'])
-                    param_dict['concepts'] = concepts
+                    concept=ast.literal_eval(value['concept'])
+                    param_dict['concept'] = concept
                     param_dict['project_id']=str(project_idd)
             output['top_project'].append(param_dict)
         return util.returnSuccessShorcut(output)
@@ -359,14 +359,14 @@ class ProjectList():
             user_data = json.loads(request.body.decode("utf-8"))
         except ValueError:
             return util.returnErrorShorcut(400, 'API parameter is not valid')
-        rec_name = User.objects.filter(username=user_data['recuriter'])
+        rec_name = User.objects.filter(username=user_data['recruiter'])
         if not rec_name:
-            return util.returnErrorShorcut(404, 'Recuriter email id is not valid')
+            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
         values = Token.objects.filter(user=rec_name, key=user_data['token'])  # .select_related().exists()
         if not values:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
 
-        project = Projects.objects.filter(is_published=True, recuriter=rec_name).values().order_by("-create_date")#[:count]
+        project = Projects.objects.filter(is_published=True, recruiter=rec_name).values().order_by("-create_date")#[:count]
 
         paginator = Paginator(project,user_data['count'])
         try:
@@ -382,9 +382,9 @@ class ProjectList():
             for project_idd in project_id:
                 param_dict['project_id'] = str(project_idd)
             param_dict['project_name'] = project_data['project_name']
-            user_data = User.objects.filter(id=project_data['recuriter_id']).values('email')
+            user_data = User.objects.filter(id=project_data['recruiter_id']).values('email')
             for email in user_data:
-                param_dict['recuriter'] = email['email']
+                param_dict['recruiter'] = email['email']
             param_dict['location'] = project_data['location']
             param_dict['company_name'] = project_data['company_name']
             param_dict['create_date'] = str(project_data['create_date'].day) + '/' + str(

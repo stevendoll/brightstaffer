@@ -8,5 +8,5 @@
 .DS_Store
 .idea
 brightStaffer/settings.py
-venv/
+venv/*
 *.txt
