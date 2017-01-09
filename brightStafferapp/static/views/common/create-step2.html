@@ -6,7 +6,7 @@
                 <p class="p-y p-r-lg">Paste in or start typing a job description. We'll use it to assemble unique concepts you can review, and add to in step 3.</p>
                 <div class="form-group w-full">
                   <textarea class="form-control" id="description" rows="10" name="description" ng-model="projectForm.description" placeholder="Don't worry, you can always edit this later..." ng-blur="updateJobDescription($event)" required></textarea>
-                   <span  ng-if="isRequired"  style='color:red'>Required.</span>
+                   <span ng-if="isDescriptionRequired"  style='color:red'>Required.</span>
                 </div>
               </div>
           </div>

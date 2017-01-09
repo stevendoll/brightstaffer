@@ -36,7 +36,7 @@
 			            <div class="col-sm-12">
 										<label>Concepts</label>
 											<div class="ibox-content p-a-0">
-                                            <span class="btn btn-default btn-lg concept-tag" ng-repeat="concepts in jobDescriptionResult.concepts" id="skill_[[concepts]]">[[concepts]]</span>
+                                            <span class="btn btn-default btn-lg concept-tag" ng-repeat="concepts in jobDescriptionResult.concept" id="skill_[[concepts]]">[[concepts]]</span>
 			                        		</div>
 								  </div>
 			                </div></fieldset>
@@ -46,6 +46,6 @@
 <div class="modal-outer" id="breakPopup" style="display:none">
   <div class="modal-content">
     <p>[[publishMsg]]</p>
-    <a href="" ng-show="isSuccess" ng-click="main.removePopupBox()">Ok</a>
+    <a ng-if="isSuccess" ng-click="main.removePopupBox()">Ok</a>
   </div>
 </div>

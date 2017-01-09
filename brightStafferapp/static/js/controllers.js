@@ -1,51 +1,52 @@
 
 function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData) { /*global controller */
-      $rootScope.projectList = [];
-      $rootScope.counter1 ='';
-      $scope.options = [{name:'10',value:10},{name:'25',value:25},{name:'50',value:50},{name:'100',value:100}];
-      $scope.countList = $scope.options[0];
-      $scope.counter= 1;
-        this.getTopSixProjects = function(){
-              var requestObject = {
-                'token': $rootScope.globals.currentUser.token,       // username field value
-                'recuriter': $rootScope.globals.currentUser.user_email   // password filed value
-             };
-             getTopSixProjects.topSix(requestObject).then(function(response){
-                if(response.message == "success") {
-                    $rootScope.projectList = response.top_project;
+    $rootScope.topSixProjectList = [];   // top six project list array
+    $scope.allProjectList = [];          // all project array
+    $rootScope.totalProjectCount ='';
+    $scope.options = [{name:'10',value:10},{name:'25',value:25},{name:'50',value:50},{name:'100',value:100}]; // select drop-down options
+    $scope.countList = $scope.options[0];
+    $scope.paginationCounter= 1;
+    $scope.tableNext = true;
 
-                  }else{
-                    console.log('error');
-                }
-             });
+    this.getTopSixProjects = function(){             // function to fetch top 6 projects
+          var requestObject = {
+            'token': $rootScope.globals.currentUser.token,       // username field value
+            'recruiter': $rootScope.globals.currentUser.user_email   // password field value
+         };
+         getTopSixProjects.topSix(requestObject).then(function(response){
+            if(response.message == "success") {
+                $rootScope.topSixProjectList = response.top_project;
 
-           }
-     $scope.allProjectList = [];
-        this.showAllProjects = function(){
-              var requestObject = {
-                'token': $rootScope.globals.currentUser.token,       // username field value
-                'recuriter': $rootScope.globals.currentUser.user_email   // password filed value
-             };
-             getAllProjects.allProjects(requestObject).then(function(response){
-                if(response.message == "success") {
-                         $rootScope.counter1 = response.publish_project.pop();
-                         $rootScope.counter1 = $rootScope.counter1.count;
-                      $scope.allProjectList = response.publish_project;
+              }else{
+                console.log('error');
+            }
+         });
+    }
+
+    this.showAllProjects = function(){
+          var requestObject = {
+            'token': $rootScope.globals.currentUser.token,       // username field value
+            'recruiter': $rootScope.globals.currentUser.user_email   // password filed value
+         };
+         getAllProjects.allProjects(requestObject).then(function(response){
+            if(response.message == "success") {
+                     $rootScope.totalProjectCount = response.publish_project.pop();
+                     $rootScope.totalProjectCount = $rootScope.totalProjectCount.count;
+                     $scope.allProjectList = response.publish_project;
                      $rootScope.projectCount = response.publish_project.length;
-                  }else{
-                    console.log('error');
-                }
-             });
+              }else{
+                console.log('error');
+            }
+         });
+    }
 
-           }
-
-    this.getValue = function(countList){
+    this.getValue = function(countList){    //record count change functionality in all project list view
         $(".loader").css('display','block');
 
         var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
-                'recuriter': $rootScope.globals.currentUser.user_email,   // password filed value
-                'page':$scope.counter,
+                'recruiter': $rootScope.globals.currentUser.user_email,   // password filed value
+                'page':$scope.paginationCounter,
                 'count':countList.value
              };
              paginationData.paginationApi(requestObject).then(function(response){
@@ -59,15 +60,15 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     $(".loader").css('display','none');
                       if(response.success == false){
                             $scope.isSuccess = true;
-                            $scope.publishMsg = "No longer data is available.";
+                            $scope.publishMsg = "No data available.";
                             $('#breakPopup').css('display','block');
                          }
 
                 }
              });
     }
-    $scope.tableNext = true;
-    this.changePage = function($event){
+
+    this.changePage = function($event){                      // page counter pagination functionality
     if( !$scope.tableNext && $event.target.name == "next"){
         return;
     }else if($event.target.name == "prev"){
@@ -77,7 +78,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
      var nextButton = angular.element(document.querySelector('#Table_next'));
      var prevButton = angular.element(document.querySelector('#Table_previous'));
          if($event.target.name == "next"){
-           $scope.counter++;
+           $scope.paginationCounter++;
            if(prevButton.hasClass('disabled')){
               prevButton.removeClass('disabled');
            }
@@ -85,32 +86,22 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
          }else if($event.target.name == "prev"){
           if(nextButton.hasClass('disabled'))
                 nextButton.removeClass('disabled');
-           if($scope.counter >1){
-              $scope.counter--;
-             }else{
-                prevButton.addClass('disabled');
-                if(nextButton.hasClass('disabled'))
-                    nextButton.removeClass('disabled');
+               if($scope.paginationCounter >1){
+                  $scope.paginationCounter--;
+                     }else{
+                        prevButton.addClass('disabled');
+                        if(nextButton.hasClass('disabled'))
+                            nextButton.removeClass('disabled');
 
-                return;
-             }
+                        return;
+                     }
          }
 
-         /* if($scope.counter >1){
-             if(prevButton.hasClass('disabled'))
-              prevButton.removeClass('disabled');
-              }
-              else if($scope.counter ==1){
-               prevButton.addClass('disabled');
-                if(nextButton.hasClass('disabled'))
-                 nextButton.removeClass('disabled');
-              }*/
-
-           $(".loader").css('display','block');
+         $(".loader").css('display','block');
          var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
-                'recuriter': $rootScope.globals.currentUser.user_email,   // password filed value
-                'page':$scope.counter,
+                'recruiter': $rootScope.globals.currentUser.user_email,   // password filed value
+                'page':$scope.paginationCounter,
                 'count':$scope.countList.value
              };
              paginationData.paginationApi(requestObject).then(function(response){
@@ -124,8 +115,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     $(".loader").css('display','none');
                     if(response.success == false){
                         if($event.target.name == "next"){
-                           $scope.counter--;
                            nextButton.addClass('disabled');
+                           $scope.paginationCounter--;
                            $scope.tableNext = false;
                         }
                         $scope.isSuccess = true;
@@ -136,13 +127,14 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 }
            });
     }
+
    this.removePopupBox = function(){
        $('#breakPopup').css('display','none');
         $scope.isSuccess = false;
-     }
+   }
 
     $scope.reverse = false;
-   this.sortBy = function(propertyName) {
+   this.sortBy = function(propertyName) {                   // filed sorting functionality in all project view
         $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
         $scope.propertyName = propertyName;
         if($scope.reverse == false){
@@ -157,64 +149,56 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
          $('#'+propertyName).addClass('sorting_desc');
 
       }
-  }
+   }
 
    this.openNav = function(){
 
       $("#side-menu").metisMenu();
    }
 
-//   $scope.totalCount = 0;
-//    $scope.countInit = function() {
-//
-//       return $scope.totalCount++;
-//    }
-
     this.openSideMenu = function(){
+        $("body").toggleClass("mini-navbar");
+        SmoothlyMenu();
 
-            $("body").toggleClass("mini-navbar");
-            SmoothlyMenu();
-
-            function SmoothlyMenu() {
-                if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
-                    // Hide menu in order to smoothly turn on when maximize menu
-                    $('#side-menu').hide();
-                    // For smoothly turn on menu
-                    setTimeout(
-                        function () {
-                            $('#side-menu').fadeIn(400);
-                        }, 200);
-                } else if ($('body').hasClass('fixed-sidebar')) {
-                    $('#side-menu').hide();
-                    setTimeout(
-                        function () {
-                            $('#side-menu').fadeIn(400);
-                        }, 100);
-                } else {
-                    // Remove all inline style from jquery fadeIn function to reset menu state
-                    $('#side-menu').removeAttr('style');
-                }
+        function SmoothlyMenu() {
+            if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+                // Hide menu in order to smoothly turn on when maximize menu
+                $('#side-menu').hide();
+                // For smoothly turn on menu
+                setTimeout(
+                    function () {
+                        $('#side-menu').fadeIn(400);
+                    }, 200);
+            } else if ($('body').hasClass('fixed-sidebar')) {
+                $('#side-menu').hide();
+                setTimeout(
+                    function () {
+                        $('#side-menu').fadeIn(400);
+                    }, 100);
+            } else {
+                // Remove all inline style from jquery fadeIn function to reset menu state
+                $('#side-menu').removeAttr('style');
             }
-
-       }
+        }
+    }
 
 };
 
 function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $timeout, loginService) { /* login controller responsible for login functionality */
-     $scope.showErr = false;
-     $scope.isDisabled = false;
-     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;  //email validation pattern
-         $scope.data = {
-         user_name: '',
-         user_password:''
-         };
-	/**Create function for user login **/
-	this.userLogin = function() {
-	  $scope.showErr = false;
-       $rootScope.checkReqValidation('loginForm');
+    $scope.showErr = false;
+    $scope.isDisabled = false;
+    $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;  //email validation pattern
+     $scope.data = {
+     user_name: '',
+     user_password:''
+     };
+    /**Create function for user login **/
+    this.userLogin = function() {
+        $scope.showErr = false;
+        $rootScope.checkReqValidation('loginForm');
         var requestObject = {
-        	'username': $scope.data.user_name,       // username field value
-        	'password': $scope.data.user_password    // password filed value
+            'username': $scope.data.user_name,       // username field value
+            'password': $scope.data.user_password    // password filed value
         };
         if($scope.loginForm.$valid){
          $scope.isDisabled = true;
@@ -229,18 +213,16 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
            $cookieStore.put('userData',userData);
            $state.go('dashboard', "");                  // after successful log in redirection to dashboard view
          }else{
-            $scope.showErr = true;
-             $scope.isDisabled = true;
-           // $timeout( function(){$scope.showErr = false;$scope.isDisabled = false;} , 9000); // removing unsuccessfull error message after 9s
-
-         }
+              $scope.showErr = true;
+              $scope.isDisabled = true;
+            }
          });
 
-       }
-     }
+        }
+    }
 
-      this.hideMessages = function($event){ /*Hide error messages when user interact with fieds*/
-       if($event.keyCode !== 13 ){
+    this.hideMessages = function($event){ /*Hide error messages when user interact with fieds*/
+        if($event.keyCode !== 13 ){
           $scope.showErr = false;
           $scope.isDisabled = false;
            $("#loginForm input").each(function(){
@@ -251,7 +233,7 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
                     $(this).next('span').removeClass('error').text("");
                 }
                });
-            }
+        }
     }
 }
 
@@ -262,21 +244,21 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookie
     $scope.errorMessage = '';
     $scope.success = false;
     $scope.passwordStrength = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;  // password validation pattern
-    $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;                             // email pattern
+    $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
+                               // email pattern
     $scope.user_Signup = function() { /* signup function submitting user details to API*/
-     $scope.errorMessage = '';
-      $rootScope.checkReqValidation('signupForm');
-         var requestObject = {
-            'firstName':$scope.userRegistration.first_name,
-        	'lastName': $scope.userRegistration.last_name,
-        	'userEmail': $scope.userRegistration.user_email,
-        	'password': $scope.userRegistration.password
-         };
+    $scope.errorMessage = '';
+    $rootScope.checkReqValidation('signupForm');
+        var requestObject = {
+        'firstName':$scope.userRegistration.first_name,
+        'lastName': $scope.userRegistration.last_name,
+        'userEmail': $scope.userRegistration.user_email,
+        'password': $scope.userRegistration.password
+        };
        if($scope.signupForm.$valid){
             $scope.isDisabled = true;
              signupService.userSignup(requestObject).then(function(response){
              if(response.message == "success") {
-              // $scope.errorMessage = "Your account has been created!";
                $scope.signupForm.$setPristine();
                $scope.userRegistration = {};
               var userData = {};
@@ -321,7 +303,7 @@ function forgotCtrl($scope, $rootScope, $state, $http, forgotService) {
         var requestObject = {
         	'email': $scope.user_email
         };
-       if($scope.forgotForm.$valid){
+        if($scope.forgotForm.$valid){
             $scope.isRequired = false;
             $scope.isDisabled = true;
            forgotService.forgotPassword(requestObject).then(function(response){
@@ -330,19 +312,16 @@ function forgotCtrl($scope, $rootScope, $state, $http, forgotService) {
                  $scope.isDisabled = false;
                $scope.errorMessage = 'Link to reset password is sent on your mail! Please check.';
              }else{
-
                 $scope.errorMessage = 'No account with this email id.';
                 $scope.isDisabled = false;
-
              }
            });
-         }
-     }
+        }
+    }
 }
 
 
 function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $location , resetPasswordService) {
-
     var token =$window.location.href.split('reset_password_confirm/')[1].replace('/','');
     $scope.isDisabled = false;
     $scope.successMsg = false;
@@ -379,8 +358,9 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
           $cookieStore.remove('userData');
           $rootScope.globals = {};
           $state.go('login','');
-       }
+    }
 }
+
 
 function createProjectCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location , $timeout, jobPostService, alchemyAnalysis, updateConcepts, publishProject){
      $scope.projectForm ={
@@ -393,25 +373,26 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     $scope.isProjMaxlength = false;
     $scope.isComMaxlength = false;
     $scope.isLocationMaxlength = false;
-    $scope.isValid = false;
-    $scope.isExisting = false;
-    $scope.isVisited = false;
+    $scope.isProjectnmValid = false;
+    $scope.isProjectnmExists = false;
+    $scope.isLastStepVisited = false;
     $scope.isError = false;
-    $scope.isJobError =false;
+    $scope.isDescriptionError =false;
     $scope.apiErrorMsg = '';
     $scope.timeout;
     $scope.patternError = false;
+    $scope.isFirstStepVisited = true;
+    $scope.isSecondStepVisited = false;
+    $scope.isthirdStepVisited = false;
+    $scope.isLastStepVisited = false;
     $scope.locationPatternMsg = '';
     $rootScope.jobDescriptionResult = '';
     $rootScope.globals.projectDetails = [];
     this.projectNamePattern =/((^[ A-Za-z0-9_@./#-]*)|(^[a-zA-Z]+[_@./#-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;// /^[a-z0-9]+$/i;
-    this.companyNamePattern = /^[a-zA-Z]*$/;
-    this.locationPattern =/((^^(?!0{5})\d{5})|(^[a-z_ ]*))$/i;
 
 
     $scope.checkMessage = function(){ /*Hide error messages when user interact with fieds*/
-         $scope.isRequired = false;
-
+       $scope.isDescriptionRequired = false;
        $("#createProjectForm input").each(function(){
             var spanClass = $(this).next('span').attr('class');
             if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
@@ -422,74 +403,140 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         });
     }
 
-     $scope.takeNext = function(currentState,prevTabId,currentTabId){  // next button view change functionality
-          $("#createProjectForm input").each(function(){ /*Show error on blank field when user submit*/
-                    var spanClass = $(this).next('span').attr('class');
-                    if($(this).val().length <= 0){
-                        $(this).next('span').css('display','block');
-                        $(this).next('span').addClass('error').text("Required.");
-                    }else if($(this).val().length > 0 && ($(this).next('span').hasClass('error'))){
-                        $(this).next('span').removeClass('error').text("");
+
+    $scope.takeNext = function(currentState,prevTabId,currentTabId){  // next button view change functionality
+        $scope.isProjectnmValid = false;
+        $scope.isDescriptionRequired = false;
+        $("#createProjectForm input").each(function(){ /*Show error on blank field when user submit*/
+                var spanClass = $(this).next('span').attr('class');
+                if($(this).val().length <= 0){
+                    $(this).next('span').css('display','block');
+                    $(this).next('span').addClass('error').text("Required.");
+                }else if($(this).val().length > 0 && ($(this).next('span').hasClass('error'))){
+                    $(this).next('span').removeClass('error').text("");
+                }
+        });
+        if($scope.projectForm.project_name && $scope.projectForm.company_name && $scope.projectForm.location && !$scope.patternError)
+              {
+                var backButton = angular.element(document.querySelector('#previous'));
+                    backButton.removeClass('disabled');
+                    backButton.children(':first').removeClass('disable');
+                if($("#tablist").find(".current").length>0){
+                    $("#tablist").find(".current").addClass("done");
+                    $("#tablist").find(".current").removeClass("current");
+                }
+                var currentTab = angular.element(document.querySelector(currentTabId));
+                    if(currentTab.hasClass('done')){
+                       currentTab.removeClass('done');
                     }
-            });
-		if($scope.projectForm.project_name && $scope.projectForm.company_name && $scope.projectForm.location && currentState == "create.step1" && !$scope.patternError)
-		  {
-            var backButton = angular.element(document.querySelector('#previous'));
-                backButton.removeClass('disabled');
-                backButton.children(':first').removeClass('disable');
-            var prevTab = angular.element(document.querySelector(prevTabId));
-                prevTab.removeClass('current');
-                prevTab.addClass('done');
-            var currentTab = angular.element(document.querySelector(currentTabId));
-                if(currentTab.hasClass('done'))
-                   currentTab.removeClass('done');
-              currentTab.removeClass('disabled');
-              currentTab.addClass('current');
-              $state.go('create.step2','');
-		  }
+                  currentTab.removeClass('disabled');
+                  currentTab.addClass('current');
+                  $scope.isSecondStepVisited = true;
+                  $state.go('create.step2','');
+              }
 
     }
 
-  $scope.takeToStepThree = function(currentState,prevTabId,currentTabId){
-   if(!$scope.projectForm.description){
-          $scope.isRequired = true;
+    $scope.takeToStepThree = function(currentState,prevTabId,currentTabId){
+    if(!$scope.projectForm.description){
+          $scope.isDescriptionRequired = true;
 
-	  }else if($scope.projectForm.description &&  currentState == "create.step2"){
-	         if(!$rootScope.jobDescriptionResult)
-               $(".loader").css('display','block');
+          }else if($scope.projectForm.description){
+                 if(!$rootScope.jobDescriptionResult){
+                   $(".loader").css('display','block');
+                  }
 
+             if($("#tablist").find(".current").length>0){
+                    $("#tablist").find(".current").addClass("done");
+                    $("#tablist").find(".current").removeClass("current");
+                }
+             var currentTab = angular.element(document.querySelector(currentTabId));
+                if(currentTab.hasClass('done')){
+                 currentTab.removeClass('done');
+                 }
+                 currentTab.removeClass('disabled');
+                 currentTab.addClass('current');
+                 $scope.isthirdStepVisited = true;
+                 $state.go('create.step3','');
+          }
+    }
 
-	     var prevTab = angular.element(document.querySelector(prevTabId));
-            prevTab.removeClass('current');
-            prevTab.addClass('done');
-         var currentTab = angular.element(document.querySelector(currentTabId));
-            if(currentTab.hasClass('done'))
-             currentTab.removeClass('done');
-             currentTab.addClass('current');
-             $state.go('create.step3','');
-	  }
-  }
-
-  var takeToStepFour = function(currentState,prevTabId,currentTabId){
-   if($rootScope.jobDescriptionResult.concepts.length > 0 &&  currentState == "create.step3"){
+    $scope.takeToStepFour = function(currentState,prevTabId,currentTabId){
+    if($rootScope.jobDescriptionResult.concept.length > 0){
         var nextButton = angular.element(document.querySelector('#next'));
-        nextButton.css('display','none');
+            nextButton.css('display','none');
         var publishButton = angular.element(document.querySelector('#publish'));
-        publishButton.removeClass('disabled');
-        publishButton.children(':first').removeClass('disable');
-        var prevTab = angular.element(document.querySelector(prevTabId));
-        prevTab.removeClass('current');
-        prevTab.addClass('done');
+            publishButton.removeClass('disabled');
+            publishButton.children(':first').removeClass('disable');
+        if($("#tablist").find(".current").length>0){
+                $("#tablist").find(".current").addClass("done");
+                $("#tablist").find(".current").removeClass("current");
+            }
         var currentTab = angular.element(document.querySelector(currentTabId));
-        if(currentTab.hasClass('done'))
-        currentTab.removeClass('done');
-        currentTab.addClass('current');
-        $state.go('create.step4','');
-	  }else if($rootScope.jobDescriptionResult.concepts.length == 0){
-	       $scope.isError = true;
-           $scope.apiErrorMsg = 'There is no skills.';
-	  }
-  }
+            if(currentTab.hasClass('done')){
+            currentTab.removeClass('done');
+            }
+            currentTab.removeClass('disabled');
+            currentTab.addClass('current');
+            $scope.isLastStepVisited = true;
+            $state.go('create.step4','');
+      }else if($rootScope.jobDescriptionResult.concept.length == 0){
+            $scope.isError = true;
+            $scope.apiErrorMsg = 'There is no skills.';
+      }
+    }
+
+    this.activateTab = function($event){
+        var elementId = $event.target.id;
+        console.log($event);
+        var currentState = $state.current.name;
+        var currentTabId;
+        var prevTabId;
+        var nextButton = angular.element(document.querySelector('#next'));
+            nextButton.css('display','block');
+        var publishButton = angular.element(document.querySelector('#publish'));
+            publishButton.addClass('disabled');
+            publishButton.children(':first').addClass('disable');
+        if($scope.isFirstStepVisited && elementId == 'form-p-0'){
+            if($("#tablist").find(".current").length>0){
+                $("#tablist").find(".current").addClass("done");
+                $("#tablist").find(".current").removeClass("current");
+            }
+            if($('#form-t-0').hasClass('done')){
+               $('#form-t-0').removeClass('done');
+            }
+            $('#form-t-0').addClass('current');
+            var prevButton = angular.element(document.querySelector('#previous'));
+                prevButton.addClass('disabled');
+                prevButton.children(':first').addClass('disable');
+            $state.go('create.step1','');
+        }
+        if($scope.isSecondStepVisited && elementId == 'form-p-1'){
+           angular.element($event.target).removeAttr('style');
+           currentTabId = '#form-t-1';
+           prevTabId = '';
+           $scope.takeNext(currentState,prevTabId,currentTabId);
+        }
+        if($scope.isthirdStepVisited && elementId == 'form-p-2'){
+           angular.element($event.target).removeAttr('style');
+           currentTabId = '#form-t-2';
+           prevTabId = '';
+           var backButton = angular.element(document.querySelector('#previous'));
+            backButton.removeClass('disabled');
+            backButton.children(':first').removeClass('disable');
+           $scope.takeToStepThree(currentState,prevTabId,currentTabId);
+        }
+        if($scope.isLastStepVisited && elementId == 'form-p-3'){
+           angular.element($event.target).removeAttr('style');
+           currentTabId = '#form-t-3';
+           prevTabId = '';
+           var backButton = angular.element(document.querySelector('#previous'));
+            backButton.removeClass('disabled');
+            backButton.children(':first').removeClass('disable');
+           $scope.takeToStepFour(currentState,prevTabId,currentTabId);
+        }
+    }
+
 
      $scope.SwitchFuction = function () {   // generic function which call different stepwise function
       var currentState = $state.current.name;
@@ -509,92 +556,90 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
             case 'create.step3':
                 prevTabId = '#form-t-2';
                 currentTabId = '#form-t-3';
-                $scope.isJobError = false;
-                takeToStepFour(currentState,prevTabId,currentTabId);
+                $scope.isDescriptionError = false;
+                $scope.takeToStepFour(currentState,prevTabId,currentTabId);
                 break;
         }
 
      }
 
-  $scope.takeBack = function(currentState,prevTabId,currentTabId){
-          var prevTab = angular.element(document.querySelector(prevTabId));
-            var backButton = angular.element(document.querySelector('#publish'));
-                backButton.addClass('disabled');
+    $scope.takeBack = function(currentState,prevTabId,currentTabId){
+        var prevTab = angular.element(document.querySelector(prevTabId));
+        var publishButton = angular.element(document.querySelector('#publish'));
+            publishButton.addClass('disabled');
+            publishButton.children(':first').addClass('disable');
             prevTab.addClass('current');
             prevTab.removeClass('done');
-            var currentTab = angular.element(document.querySelector(currentTabId));
+        var currentTab = angular.element(document.querySelector(currentTabId));
             currentTab.addClass('done');
-      if(currentState == "create.step2"){
-              $scope.isRequired = false;
+        if(currentState == "create.step2"){
+              $scope.isDescriptionRequired = false;
               var prevButton = angular.element(document.querySelector('#previous'));
                   prevButton.addClass('disabled');
-                 prevButton.children(':first').addClass('disable');
+                  prevButton.children(':first').addClass('disable');
               $state.go('create.step1','');
-      }else if(currentState == "create.step3"){
+        }else if(currentState == "create.step3"){
               $scope.isError = false;
               $scope.apiErrorMsg = '';
-             $state.go('create.step2','');
-      }else if(currentState == "create.step4"){
+              $state.go('create.step2','');
+        }else if(currentState == "create.step4"){
               var nextButton = angular.element(document.querySelector('#next'));
-                 nextButton.css('display','block');
-              var publishButton = angular.element(document.querySelector('#publish'));
-                  publishButton.addClass('disabled');
-                  publishButton.children(':first').addClass('disable');
+              nextButton.css('display','block');
               $state.go('create.step3','');
-      }
-  }
+        }
+    }
 
-     $scope.goToBack = function () {
-      var currentState = $state.current.name;
-        switch (currentState) {
-            case 'create.step2':
-                prevTabId = '#form-t-0';
-                currentTabId = '#form-t-1';
-                $scope.takeBack(currentState,prevTabId,currentTabId);
-                break;
-            case 'create.step3':
-                prevTabId = '#form-t-1';
-                currentTabId = '#form-t-2';
-                $scope.takeBack(currentState,prevTabId,currentTabId);
-                break;
-            case 'create.step4':
-                prevTabId = '#form-t-2';
-                currentTabId = '#form-t-3';
-                $scope.takeBack(currentState,prevTabId,currentTabId);
-                break;
+    $scope.goToBack = function () {
+    var currentState = $state.current.name;
+    switch (currentState) {
+        case 'create.step2':
+            prevTabId = '#form-t-0';
+            currentTabId = '#form-t-1';
+            $scope.takeBack(currentState,prevTabId,currentTabId);
+            break;
+        case 'create.step3':
+            prevTabId = '#form-t-1';
+            currentTabId = '#form-t-2';
+            $scope.takeBack(currentState,prevTabId,currentTabId);
+            break;
+        case 'create.step4':
+            prevTabId = '#form-t-2';
+            currentTabId = '#form-t-3';
+            $scope.takeBack(currentState,prevTabId,currentTabId);
+            break;
         }
 
-     }
+    }
 
 
-  $scope.removeValidationMsg = function($event){
-         $scope.isValid = false;
-         $scope.isExisting = false;
-  }
+    $scope.removeValidationMsg = function($event){
+         $scope.isProjectnmValid = false;
+         $scope.isProjectnmExists = false;
+    }
 
-  $scope.checkProjectName = function($event){
+    $scope.checkProjectName = function($event){
     if($event.target.name == "company_name" || "location"){   // if projectName is blank prompt for it
         $scope.checkMessage();
         var element = angular.element(document.querySelector('#project_name'));
           if(element && !element[0].value ){
-                $scope.isValid = true;
+                $scope.isProjectnmValid = true;
                 element[0].focus();
                 $event.preventDefault();
               }
        }
     }
 
-  $scope.updateProjectName = function($event){
+    $scope.updateProjectName = function($event){
     if($event.target.value != ''){
     var projectName = $event.target.value;
     var is_published = false;
     var token = $rootScope.globals.currentUser.token;
-    var recuriter = $rootScope.globals.currentUser.user_email;
+    var recruiter = $rootScope.globals.currentUser.user_email;
     var requestObject = {};
        requestObject["id"] = $rootScope.globals.currentProject_id;
        requestObject["project_name"] = projectName;
        requestObject["token"] = token;
-       requestObject["recuriter"] = recuriter;
+       requestObject["recruiter"] = recruiter;
        requestObject["is_published"] = is_published;
           jobPostService.jobPost(requestObject).then(function(response){
                  if(response.message == "success") {
@@ -608,19 +653,18 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                            $cookies.put('currentProjectId',JSON.stringify(ProjectData));
                  }else{
                        if(response.errorstring){
-                         $scope.isExisting = true;
+                         $scope.isProjectnmExists = true;
                        }
                  }
           });
+        }
     }
-}
 
- $scope.validateLocation = function(abc){
- var value = abc;
-  $scope.patternError = false;
-  var zip = /^(?!0{5})\d{5}$/;
-  var city = /((^[ A-Za-z-]*)|(^[a-zA-Z]+[-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]$/i;
-   if(!isNaN(value) && value)
+    $scope.validateLocation = function(value){
+        $scope.patternError = false;
+        var zip = /^(?!0{5})\d{5}$/;
+        var city = /((^[ A-Za-z-]*)|(^[a-zA-Z]+[-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]$/i;
+    if(!isNaN(value) && value)
      {
        if(!zip.test(value)){
           $scope.patternError = true;
@@ -633,115 +677,114 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
            $scope.locationPatternMsg = 'Enter valid city name!';
         }
      }
+    }
 
-
- }
-
-  $scope.saveData = function(name,value){
+    $scope.saveData = function(name,value){
      if(value){
-          $timeout(saveUpdates(name,value), 2000);  // 5000 = 5 second
+          $timeout(saveUpdates(name,value), 2000);  // 2000 = 2 second
         }
 
-  }
+    }
 
-     var saveUpdates = function(name , value){
-           var is_published = false;
-           var token = $rootScope.globals.currentUser.token;
-           var recuriter = $rootScope.globals.currentUser.user_email;
-           var requestObject = {};
-               requestObject["id"] = $rootScope.globals.currentProject_id;
-               requestObject[name] = value;
-               requestObject["token"] = token;
-               requestObject["recuriter"] = recuriter;
-               requestObject["is_published"] = is_published;
-              jobPostService.jobPost(requestObject).then(function(response){
-                     if(response.message == "success") {
-                       if ($scope.timeout) {
-                                $timeout.cancel($scope.timeout)
-                           }
-                     }else{
-                             $scope.timeout = $timeout(saveUpdates(name,value), 3000);
-                     }
-                });
-   }
+    var saveUpdates = function(name , value){
+       var is_published = false;
+       var token = $rootScope.globals.currentUser.token;
+       var recruiter = $rootScope.globals.currentUser.user_email;
+       var requestObject = {};
+           requestObject["id"] = $rootScope.globals.currentProject_id;
+           requestObject[name] = value;
+           requestObject["token"] = token;
+           requestObject["recruiter"] = recruiter;
+           requestObject["is_published"] = is_published;
+          jobPostService.jobPost(requestObject).then(function(response){
+                 if(response.message == "success") {
+                   if ($scope.timeout) {
+                            $timeout.cancel($scope.timeout)
+                       }
+                 }else{
+                         $scope.timeout = $timeout(saveUpdates(name,value), 3000);
+                 }
+            });
+    }
 
-   $scope.updateJobDescription = function($event){
-     if($event.target.value){
-     $rootScope.jobDescriptionResult = '';
-     $scope.isJobError = false;
-     $scope.apiErrorMsg = '';
-     var is_published = false;
-     var token = $rootScope.globals.currentUser.token;
-     var recuriter = $rootScope.globals.currentUser.user_email;
-     var requestObject = {};
-               requestObject["id"] = $rootScope.globals.currentProject_id;
-               requestObject[$event.target.name] = $event.target.value;
-               requestObject["token"] = token;
-               requestObject["recuriter"] = recuriter;
-               requestObject["is_published"] = is_published;
-             alchemyAnalysis.alchemyAPI(requestObject).then(function(response){
-                     if(response.message == "success") {
-                        $rootScope.jobDescriptionResult = response;
-                        if($rootScope.jobDescriptionResult.concepts.length == 0){
-                          $scope.isJobError = true;
-                          $scope.apiErrorMsg = "There is no relevant keywords in your description.";
+    $scope.updateJobDescription = function($event){
+    if($event.target.value){
+    $rootScope.jobDescriptionResult = '';
+    $scope.isDescriptionError = false;
+    $scope.apiErrorMsg = '';
+    var is_published = false;
+    var token = $rootScope.globals.currentUser.token;
+    var recruiter = $rootScope.globals.currentUser.user_email;
+    var requestObject = {};
+           requestObject["id"] = $rootScope.globals.currentProject_id;
+           requestObject[$event.target.name] = $event.target.value;
+           requestObject["token"] = token;
+           requestObject["recruiter"] = recruiter;
+           requestObject["is_published"] = is_published;
+         alchemyAnalysis.alchemyAPI(requestObject).then(function(response){
+                 if(response.message == "success") {
+                    $rootScope.jobDescriptionResult = response;
+                    if($rootScope.jobDescriptionResult.concept.length == 0){
+                      $scope.isDescriptionError = true;
+                      $scope.apiErrorMsg = "There is no relevant keywords in your description.";
+                    }
+
+                     $(".loader").css('display','none');
+
+                 }else{
+                       if(response.errorstring){
+                           $scope.isDescriptionError = true;
+                           $scope.apiErrorMsg = "Description text data is not valid.";
                         }
+                          $(".loader").css('display','none');
+                        console.log('error');
+                 }
+            });
+        }
 
-                         $(".loader").css('display','none');
+    }
 
-                     }else{
-                           if(response.errorstring){
-                               $scope.isJobError = true;
-                               $scope.apiErrorMsg = "Description text data is not valid.";
-                            }
-                              $(".loader").css('display','none');
-                            console.log('error');
-                     }
-                });
-          }
-
-   }
-    var validateSkillName = function(skillName) {
+  var validateSkillName = function(skillName) {
         var re =/(^[a-zA-Z_. -][a-zA-Z0-9_. -]{1,50})+$/;
         return re.test(skillName);
-   }
+  }
 
-   $scope.updateSkillView = function($event){
-      $scope.isJobError = false;
+  $scope.updateSkillView = function($event){
+      $scope.isDescriptionError = false;
       $scope.apiErrorMsg = '';
       if($event.target.value){
         var skill = $event.target.value;
           if(skill.length<2){
-               $scope.isJobError = true;
+               $scope.isDescriptionError = true;
                $scope.apiErrorMsg = 'Please provide atleast 2 character!';
              }
               else if(!validateSkillName(skill)){
-                 $scope.isJobError = true;
+                 $scope.isDescriptionError = true;
                  $scope.apiErrorMsg ='First letter sholud be a character!' ;
                }else{
                    var newSkill = $event.target.value;
-                   var index = $rootScope.jobDescriptionResult.concepts.indexOf(newSkill);
+                   var index = $rootScope.jobDescriptionResult.concept.indexOf(newSkill);
                        if(index == -1){
-                            $rootScope.jobDescriptionResult.concepts.push(newSkill);
+                            $rootScope.jobDescriptionResult.concept.push(newSkill);
                        }else{
-                            $scope.isJobError = true;
+                            $scope.isDescriptionError = true;
                             $scope.apiErrorMsg = 'Already exists!';
                        }
                           $event.target.value = '';
                           $scope.updateSkillSet();
                  }
          }
-   }
+  }
 
-     $scope.updateSkillSet = function(){
+   $scope.updateSkillSet = function(){
       var is_published = false;
       var token = $rootScope.globals.currentUser.token;
-      var recuriter = $rootScope.globals.currentUser.user_email;
+      var recruiter = $rootScope.globals.currentUser.user_email;
       var requestObject = {};
            requestObject["id"] = $rootScope.globals.currentProject_id;
-           requestObject["concepts"] = $rootScope.jobDescriptionResult.concepts;
+           requestObject["concept"] = $rootScope.jobDescriptionResult.concept;
            requestObject["token"] = token;
-           requestObject["recuriter"] = recuriter;
+           requestObject["recruiter"] = recruiter;
            requestObject["is_published"] = is_published;
            updateConcepts.conceptsAPI(requestObject).then(function(response){
                  if(response.message == "success") {
@@ -751,20 +794,20 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                  }
             });
 
-     }
+   }
 
-     $scope.publishProject = function(){
-     if( $state.current.name == 'create.step4'){
-      $scope.isSuccess = false;
-      $scope.publishMsg = '';
+    $scope.publishProject = function(){
+        if( $state.current.name == 'create.step4'){
+        $scope.isSuccess = false;
+        $scope.publishMsg = '';
         $(".loader").css('display','block');
         var is_published = true;
         var token = $rootScope.globals.currentUser.token;
-        var recuriter = $rootScope.globals.currentUser.user_email;
+        var recruiter = $rootScope.globals.currentUser.user_email;
         var requestObject = {};
         requestObject["id"] = $rootScope.globals.currentProject_id;
         requestObject["token"] = token;
-        requestObject["recuriter"] = recuriter;
+        requestObject["recruiter"] = recruiter;
         requestObject["is_published"] = is_published;
         publishProject.publish(requestObject).then(function(response){
              if(response.message == "success") {
@@ -788,11 +831,8 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                 $scope.publishMsg = "Please try again.";
                 $('#breakPopup').css('display','block');} , 30000); //timeout after three minutes
          }
-     }
-
+    }
 }
-
-
 
 angular
     .module('brightStaffer')
