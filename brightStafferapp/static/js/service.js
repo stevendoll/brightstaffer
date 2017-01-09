@@ -1,3 +1,4 @@
+
 var baseUrl = 'http://'+window.location.host+'/';
 angular
     .module('brightStaffer')
