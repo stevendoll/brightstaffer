@@ -19,7 +19,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 class Projects(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    recuriter = models.ForeignKey(User,null=False, verbose_name='Recuriter ID')
+    recruiter = models.ForeignKey(User,null=False, verbose_name='Recruiter ID')
     project_name= models.CharField(max_length=255,verbose_name='Job Title', null=True, blank=True)
     company_name = models.CharField(max_length=255,verbose_name='Company Name', null=True, blank=True)
     location = models.CharField(max_length=255,verbose_name='Location', null=True, blank=True)
@@ -36,13 +36,13 @@ class Projects(models.Model):
 
 
 
-class Concepts(models.Model):
+class Concept(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = models.ForeignKey(Projects, null=False, verbose_name='Project ID')
-    concepts=models.TextField(verbose_name='Job Concepts',null=True, blank=True)
+    concept=models.TextField(verbose_name='Job Concept',null=True, blank=True)
     class Meta:
         verbose_name_plural = 'Concepts'
-        verbose_name = 'Concepts'
+        verbose_name = 'Concept'
         db_table = 'concepts'
 
     def __int__(self):

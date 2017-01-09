@@ -1,6 +1,7 @@
+var baseUrl = 'http://'+window.location.host+'/';
 angular
     .module('brightStaffer')
-    .constant('REQUEST_URL', 'http://35.161.233.149:8080/');
+    .constant('REQUEST_URL', baseUrl);
 
 function loginService($http ,REQUEST_URL){
     return {

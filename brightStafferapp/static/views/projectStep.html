@@ -9,21 +9,21 @@
 						<form id="createProjectForm" name="createProjectForm" class="wizard-big wizard clearfix" ng-keyup="checkMessage()" >
 			                <h1></h1>
 					<div class="steps clearfix">
-						<ul role="tablist">
+						<ul id="tablist">
 						<li role="tab" id="form-t-0" class="first current" >
-						<a  id="form-p-0" style="cursor: default;">
+						<a  id="form-p-0" ng-click="project.activateTab($event)">
 							<span class="current-info audible">current step: </span><span class="number">1.</span>
 						</a></li>
 						<li role="tab" id="form-t-1" class="disabled" >
-						<a id="form-p-1" style="cursor: default;">
+						<a id="form-p-1" style="cursor: default;" ng-click="project.activateTab($event)">
 						<span class="number">2.</span>
 						</a></li>
 						<li role="tab" id="form-t-2" class="disabled" >
-							<a id="form-p-2" style="cursor: default;">
+							<a id="form-p-2" style="cursor: default;" ng-click="project.activateTab($event)">
 							<span class="number">3.</span> </a>
 						</li>
-						<li role="tab" id="form-t-3" class="disabled last">
-							<a id="form-p-3" style="cursor: default;">
+						<li role="tab" id="form-t-3" class="disabled last" >
+							<a id="form-p-3" style="cursor: default;" ng-click="project.activateTab($event)">
 								<span class="number">4.</span> </a></li>
 						</ul></div>
 						<div id="form-views" class="content clearfix" ui-view></div>
