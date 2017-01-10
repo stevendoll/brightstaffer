@@ -111,6 +111,18 @@ function limitTo(){
     }
 }
 
+function onFinishRender($timeout) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attr) {
+            if (scope.$last === true) {
+                $timeout(function () {
+                    scope.$emit(attr.onFinishRender);
+                });
+            }
+        }
+    }
+}
 
 /**
  *
@@ -122,4 +134,5 @@ angular
     .directive('validPasswordC', validPasswordC)
     .directive('removeMe', removeMe)
     .directive('autoCapitaliseFirstLetter', autoCapitaliseFirstLetter)
-    .directive('limitTo', limitTo);
+    .directive('limitTo', limitTo)
+    .directive('onFinishRender', onFinishRender);

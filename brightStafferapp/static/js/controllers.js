@@ -1,5 +1,5 @@
 
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window) { /*global controller */
     $rootScope.topSixProjectList = [];   // top six project list array
     $scope.allProjectList = [];          // all project array
     $rootScope.totalProjectCount ='';
@@ -181,6 +181,35 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
             }
         }
     }
+   $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
+   console.log('finished');
+    $('.dataTables').DataTable({
+                //pageLength: 10,
+                responsive: true,
+               // dom: '<"col-sm-4 col-md-4 p-a-0 m-t m-b-lg"B><"col-sm-4 col-md-4 p-a-0 m-t small text-muted text-center"i><"col-sm-4 col-md-4 p-a-0 m-t input-group-sm small"f>rt<"col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm"l><"col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm"p><"clear">',
+
+//select: {
+//            style: 'multi'
+//        },
+                buttons: [
+                    {extend: 'copy', className: 'btn btn-default btn-sm', title: 'Copy'},
+                    {extend: 'csv', className: 'btn btn-default btn-sm', title: 'CSV'},
+                    {extend: 'excel', className: 'btn btn-default btn-sm', title: 'Excel'},
+                    {extend: 'pdf', className: 'btn btn-default btn-sm', title: 'PDF'},
+                    {extend: 'print', className: 'btn btn-default btn-sm', title: 'Print',
+                     customize: function ($window){
+                            $window.document.body.addClass('white-bg');
+                            $window.document.body.css('font-size', '15px');
+
+                            $window.document.body.find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    	}
+                    }
+                ]
+
+            });
+       });
 
 };
 
