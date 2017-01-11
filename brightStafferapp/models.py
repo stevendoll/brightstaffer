@@ -26,6 +26,7 @@ class Projects(models.Model):
     description = models.TextField(verbose_name='Job Description', null=True, blank=True)
     is_published=models.TextField(verbose_name='Published',default=False,null=False)
     create_date=models.DateTimeField(verbose_name='CreateDate',null=True, blank=True)
+    description_analysis=models.TextField(verbose_name='Job Description Analysis', null=True, blank=True)
     class Meta:
         verbose_name_plural = 'Projects'
         verbose_name = 'Projects'
