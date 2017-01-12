@@ -24,6 +24,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     this.showAllProjects = function(){
+    $scope.tableNext = true;
+    $scope.paginationCounter =1;
           var requestObject = {
             'token': $rootScope.globals.currentUser.token,       // username field value
             'recruiter': $rootScope.globals.currentUser.user_email   // password filed value
@@ -117,6 +119,9 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                         if($event.target.name == "next"){
                            nextButton.addClass('disabled');
                            $scope.paginationCounter--;
+                           if($scope.paginationCounter == 1){
+                            prevButton.addClass('disabled');
+                           }
                            $scope.tableNext = false;
                         }
                         $scope.isSuccess = true;
@@ -802,6 +807,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         $scope.publishMsg = '';
         $(".loader").css('display','block');
         var is_published = true;
+        $scope.isPublish = false;
         var token = $rootScope.globals.currentUser.token;
         var recruiter = $rootScope.globals.currentUser.user_email;
         var requestObject = {};
@@ -813,6 +819,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
              if(response.message == "success") {
                 $(".loader").css('display','none');
                 $scope.publishMsg = "Project created successfully.";
+                 $scope.isPublish = true;
                   $('#breakPopup').css('display','block');
                 $timeout( function(){
                 $('#breakPopup').css('display','none');
@@ -826,10 +833,13 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                     console.log('error');
              }
         });
-         $timeout( function(){$(".loader").css('display','none');
+         $timeout( function(){
+                 if( $scope.isPublish == false){
+                 $(".loader").css('display','none');
                   $scope.isSuccess = true;
                 $scope.publishMsg = "Please try again.";
-                $('#breakPopup').css('display','block');} , 30000); //timeout after three minutes
+                $('#breakPopup').css('display','block');}
+                } , 30000); //timeout after three minutes
          }
     }
 }
