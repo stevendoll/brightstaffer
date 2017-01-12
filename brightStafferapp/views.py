@@ -1,21 +1,16 @@
 import json
+from brightStaffer.settings import concept_relevance
 from django.utils import timezone
 from watson_developer_cloud import AlchemyLanguageV1
-from watson_developer_cloud import WatsonException
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from brightStafferapp.models import Projects,Concept
 from brightStafferapp import util
-from django.views import View
-from django.views.generic import View
-from django.db.models import Q
 from brightStaffer.settings import Alchmey_api_key
-from json import dumps
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 import ast
@@ -252,7 +247,7 @@ class Alchemy_api():
             concepts_obj.project=project_idd
             param_dict['project_id'] = str(project_idd)
         try:
-            keyword_concepts = Alchemy_api.alchemy_api(user_data)
+            keyword_concepts = Alchemy_api.alchemy_api(user_data,project_id)
         except:
             return util.returnErrorShorcut(400,"Description text data is not valid.")
         concepts_obj.concept = keyword_concepts
@@ -272,18 +267,22 @@ class Alchemy_api():
             param_dict['concept']=keyword_concepts
         return util.returnSuccessShorcut(param_dict)
 
-
-    def alchemy_api(user_data):
+    def alchemy_api(user_data,project_id):
         keyword_list = []
         alchemy_language = AlchemyLanguageV1(api_key=Alchmey_api_key)
-        data=json.dumps(
-            alchemy_language.entities(
-                text=user_data['description']),indent=2)
+        data = json.dumps(
+            alchemy_language.combined(
+                text=user_data['description'],
+                extract='entities,keywords',
+                max_items=200))
         d = json.loads(data)
-        for list_value in d['entities']:
-            if list_value['type']=='JobTitle' or list_value['type']=='Quantity' or list_value['type']=='Person':
-                keyword_list.append(list_value['text'])
-        return keyword_list
+        print (d)
+        Projects.objects.filter(id=project_id).update(description_analysis=d)
+        for item in chain(d["keywords"], d["entities"]):
+            if round(float(item['relevance']),2)>=concept_relevance:
+                keyword_list.append(item['text'].lower())
+        print (list(set(keyword_list)))
+        return list(set(keyword_list))
 
 class ProjectList():
     # This API is publishing a project if is_published=true,bu default project list count is 10
