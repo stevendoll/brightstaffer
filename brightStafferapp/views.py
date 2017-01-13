@@ -1,21 +1,16 @@
 import json
+from brightStaffer.settings import concept_relevance
 from django.utils import timezone
 from watson_developer_cloud import AlchemyLanguageV1
-from watson_developer_cloud import WatsonException
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from brightStafferapp.models import Projects,Concept
 from brightStafferapp import util
-from django.views import View
-from django.views.generic import View
-from django.db.models import Q
 from brightStaffer.settings import Alchmey_api_key
-from json import dumps
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 import ast
@@ -284,7 +279,7 @@ class Alchemy_api():
         print (d)
         Projects.objects.filter(id=project_id).update(description_analysis=d)
         for item in chain(d["keywords"], d["entities"]):
-            if round(float(item['relevance']),2)>=0.65:
+            if round(float(item['relevance']),2)>=concept_relevance:
                 keyword_list.append(item['text'].lower())
         print (list(set(keyword_list)))
         return list(set(keyword_list))
