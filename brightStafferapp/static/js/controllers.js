@@ -7,7 +7,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $scope.countList = $scope.options[0];
     $scope.paginationCounter= 1;
     $scope.tableNext = true;
-
+    $scope.publishMsg = '';
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
           var requestObject = {
             'token': $rootScope.globals.currentUser.token,       // username field value
@@ -24,6 +24,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     this.showAllProjects = function(){
+        $scope.tableNext = true;
+        $scope.paginationCounter = 1;
           var requestObject = {
             'token': $rootScope.globals.currentUser.token,       // username field value
             'recruiter': $rootScope.globals.currentUser.user_email   // password filed value
@@ -69,12 +71,14 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     this.changePage = function($event){                      // page counter pagination functionality
+    $(".loader").css('display','none');
     if( !$scope.tableNext && $event.target.name == "next"){
         return;
     }else if($event.target.name == "prev"){
         $scope.tableNext = true;
     }
      $scope.isSuccess = false;
+     $scope.publishMsg = '';
      var nextButton = angular.element(document.querySelector('#Table_next'));
      var prevButton = angular.element(document.querySelector('#Table_previous'));
          if($event.target.name == "next"){
@@ -128,6 +132,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
            });
     }
 
+
    this.removePopupBox = function(){
        $('#breakPopup').css('display','none');
         $scope.isSuccess = false;
@@ -151,46 +156,15 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
       }
    }
 
-   this.openNav = function(){
 
-      $("#side-menu").metisMenu();
-   }
-
-    this.openSideMenu = function(){
-        $("body").toggleClass("mini-navbar");
-        SmoothlyMenu();
-
-        function SmoothlyMenu() {
-            if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
-                // Hide menu in order to smoothly turn on when maximize menu
-                $('#side-menu').hide();
-                // For smoothly turn on menu
-                setTimeout(
-                    function () {
-                        $('#side-menu').fadeIn(400);
-                    }, 200);
-            } else if ($('body').hasClass('fixed-sidebar')) {
-                $('#side-menu').hide();
-                setTimeout(
-                    function () {
-                        $('#side-menu').fadeIn(400);
-                    }, 100);
-            } else {
-                // Remove all inline style from jquery fadeIn function to reset menu state
-                $('#side-menu').removeAttr('style');
-            }
-        }
-    }
    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
    console.log('finished');
     $('.dataTables').DataTable({
-                //pageLength: 10,
+                pageLength: 10,
                 responsive: true,
-               // dom: '<"col-sm-4 col-md-4 p-a-0 m-t m-b-lg"B><"col-sm-4 col-md-4 p-a-0 m-t small text-muted text-center"i><"col-sm-4 col-md-4 p-a-0 m-t input-group-sm small"f>rt<"col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm"l><"col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm"p><"clear">',
+                retrieve: true,
+                paging: false,
 
-//select: {
-//            style: 'multi'
-//        },
                 buttons: [
                     {extend: 'copy', className: 'btn btn-default btn-sm', title: 'Copy'},
                     {extend: 'csv', className: 'btn btn-default btn-sm', title: 'CSV'},
@@ -829,6 +803,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         if( $state.current.name == 'create.step4'){
         $scope.isSuccess = false;
         $scope.publishMsg = '';
+        $scope.isPublish = false;
         $(".loader").css('display','block');
         var is_published = true;
         var token = $rootScope.globals.currentUser.token;
@@ -843,9 +818,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                 $(".loader").css('display','none');
                 $scope.publishMsg = "Project created successfully.";
                   $('#breakPopup').css('display','block');
+                 $scope.isPublish = true;
                 $timeout( function(){
                 $('#breakPopup').css('display','none');
-                $state.go('dashboard','');} , 3000);
+                $state.go('dashboard','');} , 2000);
 
              }else{
                 $(".loader").css('display','none');
@@ -856,9 +832,12 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
              }
         });
          $timeout( function(){$(".loader").css('display','none');
-                  $scope.isSuccess = true;
+               if($scope.isPublish == false){
+                $scope.isSuccess = true;
                 $scope.publishMsg = "Please try again.";
-                $('#breakPopup').css('display','block');} , 30000); //timeout after three minutes
+                $('#breakPopup').css('display','block');
+                  }
+                } , 30000); //timeout after three minutes
          }
     }
 }

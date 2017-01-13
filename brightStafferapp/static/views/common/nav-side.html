@@ -1,22 +1,22 @@
-<nav class="navbar-default navbar-static-side" role="navigation" >
+<nav class="navbar-default navbar-static-side" role="navigation" ng-init="main.getTopSixProjects()">
             <div class="sidebar-collapse">
-                <ul class="nav metismenu" id="side-menu">
+                <ul side-navigation class="nav metismenu" id="side-menu">
                     <li class="sidebar-brand"><img src="static/img/brand-temp.png">
                 </li>
-                    <li class="active">
+                    <li ng-class="{'active':[[$state.current.name == 'dashboard']]}">
                         <a ui-sref="dashboard"><i class="fa fa-th"></i> <span class="nav-label">Dashboard</span></a>
                     </li>
-                 <li ng-init="main.openNav()" id="projectNav">
+                 <li id="projectNav" ng-class="{'active':[[$state.current.name == 'create.step1' || $state.current.name == 'projects']]}">
                    <a href=""><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
                    <ul class="nav nav-second-level collapse">
                       <li ng-repeat="projects in topSixProjectList"><a href="" id="[[projects.project_id]]">#[[projects.project_name]]</a></li>
                       <li class="sidebar-divider"></li>
-                      <li ><a class="all-projects m-t-sm" ui-sref="projects" ng-init="main.showAllProjects()">All Projects <small class="text-muted m-l-sm">([[totalProjectCount]])</small></a></li>
+                      <li ng-class="{'active':[[$state.current.name == 'projects']]}"><a class="all-projects m-t-sm" ui-sref="projects" ng-init="main.showAllProjects()">All Projects <small class="text-muted m-l-sm">([[totalProjectCount]])</small></a></li>
                       <li class="sidebar-divider"></li>
-                      <li><a class="new-project" ui-sref="create.step1">Create New Project <small class="text-muted m-l-xs">+</small></a></li>
+                      <li ng-class="{'active':[[$state.current.name == 'create.step1']]}"><a class="new-project" ui-sref="create.step1">Create New Project <small class="text-muted m-l-xs">+</small></a></li>
                     </ul>
                  </li>
-                     <li>
+                     <li ng-class="{'active':[[$state.current.name == 'development']]}">
                      <a ui-sref="development"><i class="fa fa-user"></i> <span class="nav-label">Team</span><span class="fa arrow"></span></a>
                      <!--<ul class="nav nav-second-level collapse">-->
                       <!--<li><a href="#">@shannon.madden</a></li>-->
