@@ -8401,3 +8401,51 @@ div.dataTables_wrapper div.dataTables_filter {
 .disable{
  cursor: default;
 }
+/************new css**************/
+.loginscreen.middle-box {
+    width: 100% !important;
+}
+.forgotbox .row
+{
+  margin-right: 0;
+  margin-left: 0;
+}
+@media (max-width: 375px)
+{
+  .nav.navbar-top-links li.dropdown.open > ul {
+    display: block !important;
+  }
+}
+.dropdown-menu
+{
+  left: auto;
+  right: 0;
+}
+@media (min-width: 768px) and (max-width: 768px)
+{
+  .body-small .navbar-static-side {
+    display: block;
+    width: 240px;
+  }
+  body
+  {
+    background-color: #2f4050 !important;
+  }
+  #page-wrapper
+  {
+    min-height: 1024px !important;
+  }
+}
+
+
+@media (max-width: 767px)
+{
+  .wizard .actions > ul > li
+  {
+      margin-left: 3px !important;
+  }
+  .wizard .actions > ul > li a
+  {
+
+  }
+}

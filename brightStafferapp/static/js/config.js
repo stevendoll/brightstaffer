@@ -149,7 +149,6 @@ angular
 
 	});
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-        $('#side-menu').hide();
         var shouldLogin = toState.data.requireAuthentication !== undefined
             && toState.data.requireAuthentication;
          if($cookieStore.get('userData'))

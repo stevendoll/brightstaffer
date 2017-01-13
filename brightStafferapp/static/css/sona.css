@@ -792,7 +792,8 @@ li.active a {
     background: #1c84c6;
     color: #fff;
     display: block;
-    padding: 0.5em 1em;
+    /*padding: 0.5em 1em;*/
+    padding: 0.5em 0.5em;
     text-decoration: none;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
