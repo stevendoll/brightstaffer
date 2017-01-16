@@ -159,8 +159,21 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
       }
    }
 
+   this.detectmob = function(){
+     if( navigator.userAgent.match(/Android/i)
+     || navigator.userAgent.match(/webOS/i)
+     || navigator.userAgent.match(/iPhone/i)
+     || navigator.userAgent.match(/iPad/i)
+     || navigator.userAgent.match(/iPod/i)
+     || navigator.userAgent.match(/BlackBerry/i)
+     || navigator.userAgent.match(/Windows Phone/i)
+         ){
+            openSideMenu();
+         }
+     }
 
-   this.openSideMenu = function(){
+
+    function openSideMenu(){
         $("body").toggleClass("mini-navbar");
         SmoothlyMenu();
 
@@ -187,13 +200,11 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
-   console.log('finished');
     $('.dataTables').DataTable({
                 pageLength: 10,
                 responsive: true,
                 retrieve: true,
                 paging: false,
-
                 buttons: [
                     {extend: 'copy', className: 'btn btn-default btn-sm', title: 'Copy'},
                     {extend: 'csv', className: 'btn btn-default btn-sm', title: 'CSV'},
@@ -210,9 +221,18 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     	}
                     }
                 ]
-
             });
+            if(navigator.userAgent.match(/iPhone/i)){
+                 $('.buttons-excel').css('display','none');
+                }
        });
+
+//    this.setActive = function(){
+//     if($('#side-menu').find('.active').length>0){
+//          $("#side-menu li").find(".active").removeClass("active");
+//            }
+//        }
+
 
 };
 
