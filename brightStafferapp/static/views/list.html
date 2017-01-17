@@ -10,19 +10,43 @@
 
                     <div class="table-responsive" >
                      <div id="DataTables_Table_0_wrapper"  class="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                      <div class="col-sm-4 col-md-4 p-a-0 m-t m-b-lg"><div class="dt-buttons btn-group"><a class="btn btn-default buttons-copy buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>Copy</span></a><a class="btn btn-default buttons-csv buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>CSV</span></a><a class="btn btn-default buttons-excel buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>Excel</span></a><a class="btn btn-default buttons-pdf buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>PDF</span></a><a class="btn btn-default buttons-print btn-sm" tabindex="0" aria-controls="DataTables_Table_0"><span>Print</span></a></div></div>
-                    <div class="col-sm-4 col-md-4 p-a-0 m-t small text-muted text-center"><div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to [[projectCount]] of [[countList.value]] entries</div></div>
-                    <div class="col-sm-4 col-md-4 p-a-0 m-t input-group-sm small"><div id="DataTables_Table_0_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="DataTables_Table_0"></label></div></div>
-                     <table class="table table-hover dataTables dataTable" >
+                      <div class="col-sm-4 col-md-4 p-a-0 m-t m-b-lg">
+                          <div class="dt-buttons btn-group">
+                              <a class="btn btn-default buttons-copy buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0">
+                                  <span>Copy</span>
+                              </a>
+                              <a class="btn btn-default buttons-csv buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0">
+                                  <span>CSV</span>
+                              </a>
+                              <a class="btn btn-default buttons-excel buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0">
+                                  <span>Excel</span>
+                              </a>
+                              <a class="btn btn-default buttons-pdf buttons-html5 btn-sm" tabindex="0" aria-controls="DataTables_Table_0">
+                                  <span>PDF</span>
+                              </a>
+                              <a class="btn btn-default buttons-print btn-sm" tabindex="0" aria-controls="DataTables_Table_0">
+                                  <span>Print</span>
+                              </a>
+                          </div>
+                      </div>
+                    <div class="col-sm-4 col-md-4 p-a-0 m-t small text-muted text-center">
+                        <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to [[projectCount]] of [[countList.value]] entries</div>
+                    </div>
+                    <div class="col-sm-4 col-md-4 p-a-0 m-t input-group-sm small">
+                        <div id="DataTables_Table_0_filter" class="dataTables_filter">
+                            <label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="DataTables_Table_0"></label>
+                        </div>
+                    </div>
+                     <table class="table table-hover dataTables" >
                     <thead>
                     <tr>
-                        <th class="sorting" id="project_name" tabindex="0" >Title</th>
-                        <th class="sorting" id="company_name" tabindex="0" >Company</th>
-                        <th class="sorting" id="location" tabindex="0">Location</th>
-                        <th class="sorting" id="candidate" tabindex="0" >Candidates</th>
-                        <th class="sorting" id="Owner" tabindex="0" >Owner</span></th>
-                        <th class="sorting" id="shared" tabindex="0" >Shared</th>
-                        <th class="sorting" id="created_date" tabindex="0">Created</th>
+                        <th class="sorting" id="project_name">Title</th>
+                        <th class="sorting" id="company_name">Company</th>
+                        <th class="sorting" id="location" >Location</th>
+                        <th class="sorting" id="candidate">Candidates</th>
+                        <th class="sorting" id="Owner" >Owner</span></th>
+                        <th class="sorting" id="shared" >Shared</th>
+                        <th class="sorting" id="created_date" >Created</th>
                     </tr>
                     </thead>
                     <tbody>

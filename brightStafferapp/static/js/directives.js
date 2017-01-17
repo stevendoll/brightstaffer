@@ -173,6 +173,42 @@ function minimalizaSidebar($timeout) {
 }
 
 
+function clickOutside($document, $state) {
+        return {
+           restrict: 'A',
+           scope: {
+               clickOutside: '&'
+           },
+           link: function (scope, el, attr) {
+
+               $document.on('click', function (e) {
+                   if (el !== e.target && !el[0].contains(e.target)) {
+                        scope.$apply(function () {
+                            if($state.current.name == 'dashboard'){
+                                 $(".nav li.active").removeClass('active');
+                                 $('#dashboard').addClass('active');
+                            }
+                            if($state.current.name == 'projects'){
+                                 $(".nav li.active").removeClass('active');
+                                 $('#project').addClass('active');
+                                 $('#allProject').addClass('active');
+                            }
+                            if($state.current.name == 'create'){
+                                 $(".nav li.active").removeClass('active');
+                                 $('#project').addClass('active');
+                                 $('#createProject').addClass('active');
+                            }
+
+                            scope.$eval(scope.clickOutside);
+                        });
+                    }
+               });
+           }
+        }
+
+}
+
+
 /**
  *
  * Pass all functions into module
@@ -186,4 +222,5 @@ angular
     .directive('limitTo', limitTo)
     .directive('onFinishRender', onFinishRender)
     .directive('sideNavigation', sideNavigation)
-    .directive('minimalizaSidebar', minimalizaSidebar);
+    .directive('minimalizaSidebar', minimalizaSidebar)
+    .directive('clickOutside', clickOutside);

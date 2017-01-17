@@ -3918,6 +3918,11 @@ table.table-mail tr td {
 .bg-muted {
   background-color: #f3f3f4;
 }
+
+.development-bg {
+  background-color: #f3f3f4 !important;
+}
+
 .white-bg {
   background-color: #ffffff;
 }
@@ -8478,4 +8483,11 @@ div.dataTables_wrapper div.dataTables_filter {
         margin-right: 0.5em;
     }
 
+}
+
+@media (min-width: 768px)
+{
+  .navbar-right {
+    margin-right: 0 !important;
+}
 }
