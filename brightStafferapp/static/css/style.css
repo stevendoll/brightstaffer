@@ -8434,7 +8434,7 @@ div.dataTables_wrapper div.dataTables_filter {
   }
   body
   {
-    background-color: #f3f3f4 !important;
+    background-color: #2f4050 !important;
   }
   #page-wrapper
   {
@@ -8514,4 +8514,9 @@ input[type=password]
 {
   -webkit-appearance: none;
   box-shadow: none;
+}
+
+.logn-bg-color
+{
+    background-color: #f3f3f4 !important;
 }
