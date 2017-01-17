@@ -38,7 +38,7 @@
 					<div class="form-group">
 						<input type="password" class="form-control" placeholder="Confirm Password" id="confirmPassword" name="confirmPassword" ng-model="userRegistration.confirmPassword" valid-password-c="userRegistration.password" required>
 						<span class="error" style="color:red;display:none" ></span>
-				        <span ng-show="signupForm.confirmPassword.$error.noMatch">Password not matched.</span>
+				        <span style="color:red;" ng-show="signupForm.confirmPassword.$error.noMatch">Password not matched.</span>
 					</div>
 					<span ng-model="errorMessage" style="color:red">[[errorMessage]]</span>
 					<div ng-if="success"><a ui-sref="login">Click here for login</a></div>
