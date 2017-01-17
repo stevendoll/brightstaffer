@@ -27,7 +27,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
         .state('login', {
             url: "/login",
             templateUrl:  static_url + "views/login.html",
-            data: { pageTitle: 'Login.', specialClass: 'gray-bg', requireAuthentication: false }
+            data: { pageTitle: 'Login.', specialClass: 'logn-bg-color', requireAuthentication: false }
 //            resolve: {
 //                loadPlugin: function ($ocLazyLoad) {
 //                    return $ocLazyLoad.load([
@@ -41,7 +41,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
         .state('forgot', {
             url: "/forgot",
             templateUrl:  static_url + "views/forgot.html",
-            data: { pageTitle: 'Forgot Password.', specialClass: 'gray-bg', requireAuthentication: false }
+            data: { pageTitle: 'Forgot Password.', specialClass: 'logn-bg-color', requireAuthentication: false }
 //            resolve: {
 //                loadPlugin: function ($ocLazyLoad) {
 //                    return $ocLazyLoad.load([
@@ -55,7 +55,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
         .state('register', {
             url: "/register",
             templateUrl:  static_url + "views/register.html",
-            data: { pageTitle: 'Register.', specialClass: 'gray-bg' , requireAuthentication: false}
+            data: { pageTitle: 'Register.', specialClass: 'logn-bg-color' , requireAuthentication: false}
 //            resolve: {
 //                loadPlugin: function ($ocLazyLoad) {
 //                    return $ocLazyLoad.load([

@@ -21,7 +21,7 @@
 			</div>
 			<div class="form-group p-b">
 				<label>Location</label>
-				<input id="location" name="location" ng-model="projectForm.location"  class="form-control" placeholder="Use a city name, or the zip code..."  ng-blur="saveData('location',projectForm.location)" ng-click="checkProjectName($event)" ng-keyup="validateLocation(projectForm.location)" ng-maxlength="30" required>
+				<input type="text" id="location" name="location" ng-model="projectForm.location"  class="form-control" placeholder="Use a city name, or the zip code..."  ng-blur="saveData('location',projectForm.location)" ng-click="checkProjectName($event)" ng-keyup="validateLocation(projectForm.location)" ng-maxlength="30" required>
 				<span  class="error" style='display:none;color:red'></span>
 				<span style="color:red" ng-show="patternError">[[locationPatternMsg]]</span>
 				<span style='color:red' ng-show="createProjectForm.location.$error.maxlength">Your input is too long!</span>

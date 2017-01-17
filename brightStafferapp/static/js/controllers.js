@@ -1,5 +1,5 @@
 
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state) { /*global controller */
     $rootScope.topSixProjectList = [];   // top six project list array
     $scope.allProjectList = [];          // all project array
     $rootScope.totalProjectCount ='';
@@ -26,6 +26,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     this.showAllProjects = function(){
         $scope.tableNext = true;
         $scope.paginationCounter = 1;
+         $('html, body').animate({ scrollTop: 0 }, 'fast');
           var requestObject = {
             'token': $rootScope.globals.currentUser.token,       // username field value
             'recruiter': $rootScope.globals.currentUser.user_email   // password filed value
@@ -201,7 +202,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
 
    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
     $('.dataTables').DataTable({
-                pageLength: 10,
                 responsive: true,
                 retrieve: true,
                 paging: false,
@@ -225,6 +225,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
             if(navigator.userAgent.match(/iPhone/i)){
                  $('.buttons-excel').css('display','none');
                 }
+
        });
 
 //    this.setActive = function(){
@@ -349,7 +350,10 @@ function forgotCtrl($scope, $rootScope, $state, $http, forgotService) {
 	/**Create function for forgot password **/
 	$scope.forgotPassword = function() {
 	   $scope.errorMessage = '';
-	   $scope.isRequired = true;
+	   var value = document.getElementById('emailInput').value;
+	   if(!value)
+	    $scope.isRequired = true;
+
         var requestObject = {
         	'email': $scope.user_email
         };
@@ -470,6 +474,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
               {
                 var backButton = angular.element(document.querySelector('#previous'));
                     backButton.removeClass('disabled');
+                var mainUl = angular.element(document.querySelector('#projectBtns'));
+                    if(mainUl.hasClass('twobtn')){
+                       mainUl.removeClass('twobtn');
+                    }
                     backButton.children(':first').removeClass('disable');
                 if($("#tablist").find(".current").length>0){
                     $("#tablist").find(".current").addClass("done");
@@ -504,6 +512,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                 if(currentTab.hasClass('done')){
                  currentTab.removeClass('done');
                  }
+             var mainUl = angular.element(document.querySelector('#projectBtns'));
+                    if(mainUl.hasClass('twobtn')){
+                       mainUl.removeClass('twobtn');
+                    }
                  currentTab.removeClass('disabled');
                  currentTab.addClass('current');
                  $scope.isthirdStepVisited = true;
@@ -515,6 +527,8 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     if($rootScope.jobDescriptionResult.concept.length > 0){
         var nextButton = angular.element(document.querySelector('#next'));
             nextButton.css('display','none');
+        var mainUl = angular.element(document.querySelector('#projectBtns'));
+            mainUl.addClass('twobtn');
         var publishButton = angular.element(document.querySelector('#publish'));
             publishButton.removeClass('disabled');
             publishButton.children(':first').removeClass('disable');
@@ -894,6 +908,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                 $('#breakPopup').css('display','block');}
                 } , 30000); //timeout after three minutes
          }
+    }
+
+    $scope.gotoTop = function(){
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
     }
 }
 

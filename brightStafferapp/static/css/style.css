@@ -8458,7 +8458,18 @@ div.dataTables_wrapper div.dataTables_filter {
   .wizard > .actions ul {
       width: 100%;
       max-width: 250px;
+      white-space: nowrap;
   }
+  .wizard > .actions ul.twobtn {
+      max-width: 170px;
+  }
+  .wizard > .actions ul.twobtn li:first-child {
+      width: 47%;
+  }
+  .wizard > .actions ul.twobtn li:nth-child(3) {
+      width: 47%;
+  }
+
   .wizard > .actions ul li a,
   .wizard > .actions ul li a:hover
   .wizard > .actions ul li a:active
@@ -8469,7 +8480,7 @@ div.dataTables_wrapper div.dataTables_filter {
     text-align: center;
   }
   .wizard > .actions ul li:first-child {
-      width: 37%;
+      width: 36%;
   }
   .wizard > .actions ul li:nth-child(2) {
       width: 24%;
@@ -8490,4 +8501,22 @@ div.dataTables_wrapper div.dataTables_filter {
   .navbar-right {
     margin-right: 0 !important;
 }
-}l
+}
+
+.nav.navbar-top-links.navbar-right
+{
+    float: right;
+}
+
+
+input[type=text],
+input[type=password]
+{
+  -webkit-appearance: none;
+  box-shadow: none;
+}
+
+.logn-bg-color
+{
+    background-color: #f3f3f4 !important;
+}
