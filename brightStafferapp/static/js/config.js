@@ -117,7 +117,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
         .state('development', {
             url: "/development",
             templateUrl: static_url +'views/common/development.html',
-            data: { pageTitle: 'Under Dev' ,specialClass: 'gray-bg', requireAuthentication: true}
+            data: { pageTitle: 'Under Dev' ,specialClass: 'development-bg', requireAuthentication: true}
         })
 
 }

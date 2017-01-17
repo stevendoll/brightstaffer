@@ -227,12 +227,10 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 }
        });
 
-//    this.setActive = function(){
-//     if($('#side-menu').find('.active').length>0){
-//          $("#side-menu li").find(".active").removeClass("active");
-//            }
-//        }
-
+    this.setActive = function(){
+            $(".nav li.active").removeClass('active');
+             $(this).parent().addClass('active');
+    }
 
 };
 
@@ -785,6 +783,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 
                  }else{
                        if(response.errorstring){
+                          if($rootScope.jobDescriptionResult == ''){
+                             $rootScope.jobDescriptionResult = {};
+                             $rootScope.jobDescriptionResult.concept = [];
+                          }
                            $scope.isDescriptionError = true;
                            $scope.apiErrorMsg = "Description text data is not valid.";
                         }
@@ -815,8 +817,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                  $scope.apiErrorMsg ='First letter sholud be a character!' ;
                }else{
                    var newSkill = $event.target.value;
-                   var index = $rootScope.jobDescriptionResult.concept.indexOf(newSkill);
+                        var index = $rootScope.jobDescriptionResult.concept.indexOf(newSkill);
+
                        if(index == -1){
+                       console.log($rootScope.jobDescriptionResult.concept);
                             $rootScope.jobDescriptionResult.concept.push(newSkill);
                        }else{
                             $scope.isDescriptionError = true;
