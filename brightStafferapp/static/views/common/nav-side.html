@@ -7,7 +7,7 @@
                         <a ui-sref="dashboard" ng-click="main.detectmob()"><i class="fa fa-th"></i> <span class="nav-label">Dashboard</span></a>
                     </li>
                  <li  id="project" ng-class="{'active':[[$state.current.name == 'create.step1' || $state.current.name == 'projects']]}" >
-                   <a href="" ng-click="main.setActive()"><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
+                   <a href="" ><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
                    <ul class="nav nav-second-level collapse">
                       <li ng-repeat="projects in topSixProjectList"><a href="" id="[[projects.project_id]]">#[[projects.project_name]]</a></li>
                       <li class="sidebar-divider"></li>
@@ -25,8 +25,8 @@
                       <!--<li><a href="#">@jeff.mcweeney</a></li>-->
                      <!--</ul>-->
                     </li>
-					<li>
-                      <a ui-sref="developement"><i class="fa fa-diamond"></i> <span class="nav-label">Talent</span></a>
+					<li ng-class="{'active':[[$state.current.name == 'development']]}">
+                      <a ui-sref="development"><i class="fa fa-diamond"></i> <span class="nav-label">Talent</span></a>
                     </li>
                 </ul>
 
