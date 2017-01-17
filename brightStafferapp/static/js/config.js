@@ -18,7 +18,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
 //                loadPlugin: function ($ocLazyLoad) {
 //                    return $ocLazyLoad.load([
 //                        {
-//                            files: ['css/plugins/toastr/toastr.min.css','js/plugins/gritter/jquery.gritter.css','css/plugins/iCheck/custom.css']
+//                            files: [static_url +'css/bootstrap.min.css',static_url +'font-awesome/css/font-awesome.css',static_url +'css/plugins/toastr/toastr.min.css',static_url +'js/plugins/gritter/jquery.gritter.css',static_url +'css/plugins/iCheck/custom.css',static_url +'css/animate.css',static_url +'css/style.css',static_url +'css/sona.css']
 //                        }
 //                    ]);
 //                }
@@ -28,21 +28,57 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
             url: "/login",
             templateUrl:  static_url + "views/login.html",
             data: { pageTitle: 'Login.', specialClass: 'gray-bg', requireAuthentication: false }
+//            resolve: {
+//                loadPlugin: function ($ocLazyLoad) {
+//                    return $ocLazyLoad.load([
+//                        {
+//                            files: [static_url +'css/bootstrap.min.css',static_url +'font-awesome/css/font-awesome.css',static_url +'css/animate.css',static_url +'css/style.css',static_url +'css/sona.css']
+//                        }
+//                    ]);
+//                }
+//            }
         })
         .state('forgot', {
             url: "/forgot",
             templateUrl:  static_url + "views/forgot.html",
             data: { pageTitle: 'Forgot Password.', specialClass: 'gray-bg', requireAuthentication: false }
+//            resolve: {
+//                loadPlugin: function ($ocLazyLoad) {
+//                    return $ocLazyLoad.load([
+//                        {
+//                            files: [static_url +'css/bootstrap.min.css',static_url +'font-awesome/css/font-awesome.css',static_url +'css/animate.css',static_url +'css/style.css',static_url +'css/sona.css']
+//                        }
+//                    ]);
+//                }
+//            }
         })
         .state('register', {
             url: "/register",
             templateUrl:  static_url + "views/register.html",
             data: { pageTitle: 'Register.', specialClass: 'gray-bg' , requireAuthentication: false}
+//            resolve: {
+//                loadPlugin: function ($ocLazyLoad) {
+//                    return $ocLazyLoad.load([
+//                        {
+//                            files: [static_url +'css/bootstrap.min.css',static_url +'css/plugins/iCheck/custom.css',static_url +'css/animate.css',static_url +'css/style.css',static_url +'css/sona.css']
+//                        }
+//                    ]);
+//                }
+//            }
         })
         .state('create', {
             abstract: true,
             templateUrl: static_url +'views/create.html',
             data: { pageTitle: 'Create Project' , requireAuthentication: true}
+//            resolve: {
+//                loadPlugin: function ($ocLazyLoad) {
+//                    return $ocLazyLoad.load([
+//                        {
+//                            files: [static_url +'css/bootstrap.min.css',static_url +'font-awesome/css/font-awesome.css',static_url +'css/animate.css',static_url +'css/style.css',static_url +'css/sona.css']
+//                        }
+//                    ]);
+//                }
+//            }
         })
         .state('create.step1', {
             url: "/create",
@@ -67,7 +103,16 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
         .state('projects', {
             url: "/projects",
             templateUrl: static_url +'views/common/project-list.html',
-            data: { pageTitle: 'All Projects' , requireAuthentication: true}
+            data: { pageTitle: 'All Projects' , requireAuthentication: true},
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            files: [static_url +'css/plugins/dataTables/datatables.min.css',static_url +'css/animate.css',static_url +'css/style.css',static_url +'css/sona.css']
+                        }
+                    ]);
+                }
+            }
         })
         .state('development', {
             url: "/development",
@@ -101,6 +146,7 @@ angular
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 		$rootScope.title = toState.data.pageTitle;
+
 	});
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var shouldLogin = toState.data.requireAuthentication !== undefined

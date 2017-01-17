@@ -1,5 +1,5 @@
 
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window) { /*global controller */
     $rootScope.topSixProjectList = [];   // top six project list array
     $scope.allProjectList = [];          // all project array
     $rootScope.totalProjectCount ='';
@@ -7,7 +7,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $scope.countList = $scope.options[0];
     $scope.paginationCounter= 1;
     $scope.tableNext = true;
-
+    $scope.publishMsg = '';
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
           var requestObject = {
             'token': $rootScope.globals.currentUser.token,       // username field value
@@ -24,8 +24,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     this.showAllProjects = function(){
-    $scope.tableNext = true;
-    $scope.paginationCounter =1;
+        $scope.tableNext = true;
+        $scope.paginationCounter = 1;
           var requestObject = {
             'token': $rootScope.globals.currentUser.token,       // username field value
             'recruiter': $rootScope.globals.currentUser.user_email   // password filed value
@@ -71,12 +71,14 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     this.changePage = function($event){                      // page counter pagination functionality
+    $(".loader").css('display','none');
     if( !$scope.tableNext && $event.target.name == "next"){
         return;
     }else if($event.target.name == "prev"){
         $scope.tableNext = true;
     }
      $scope.isSuccess = false;
+     $scope.publishMsg = '';
      var nextButton = angular.element(document.querySelector('#Table_next'));
      var prevButton = angular.element(document.querySelector('#Table_previous'));
          if($event.target.name == "next"){
@@ -133,6 +135,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
            });
     }
 
+
    this.removePopupBox = function(){
        $('#breakPopup').css('display','none');
         $scope.isSuccess = false;
@@ -156,12 +159,21 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
       }
    }
 
-   this.openNav = function(){
+   this.detectmob = function(){
+     if( navigator.userAgent.match(/Android/i)
+     || navigator.userAgent.match(/webOS/i)
+     || navigator.userAgent.match(/iPhone/i)
+     || navigator.userAgent.match(/iPad/i)
+     || navigator.userAgent.match(/iPod/i)
+     || navigator.userAgent.match(/BlackBerry/i)
+     || navigator.userAgent.match(/Windows Phone/i)
+         ){
+            openSideMenu();
+         }
+     }
 
-      $("#side-menu").metisMenu();
-   }
 
-    this.openSideMenu = function(){
+    function openSideMenu(){
         $("body").toggleClass("mini-navbar");
         SmoothlyMenu();
 
@@ -186,6 +198,41 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
             }
         }
     }
+
+   $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
+    $('.dataTables').DataTable({
+                pageLength: 10,
+                responsive: true,
+                retrieve: true,
+                paging: false,
+                buttons: [
+                    {extend: 'copy', className: 'btn btn-default btn-sm', title: 'Copy'},
+                    {extend: 'csv', className: 'btn btn-default btn-sm', title: 'CSV'},
+                    {extend: 'excel', className: 'btn btn-default btn-sm', title: 'Excel'},
+                    {extend: 'pdf', className: 'btn btn-default btn-sm', title: 'PDF'},
+                    {extend: 'print', className: 'btn btn-default btn-sm', title: 'Print',
+                     customize: function ($window){
+                            $window.document.body.addClass('white-bg');
+                            $window.document.body.css('font-size', '15px');
+
+                            $window.document.body.find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    	}
+                    }
+                ]
+            });
+            if(navigator.userAgent.match(/iPhone/i)){
+                 $('.buttons-excel').css('display','none');
+                }
+       });
+
+//    this.setActive = function(){
+//     if($('#side-menu').find('.active').length>0){
+//          $("#side-menu li").find(".active").removeClass("active");
+//            }
+//        }
+
 
 };
 
@@ -805,6 +852,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         if( $state.current.name == 'create.step4'){
         $scope.isSuccess = false;
         $scope.publishMsg = '';
+        $scope.isPublish = false;
         $(".loader").css('display','block');
         var is_published = true;
         $scope.isPublish = false;
@@ -821,9 +869,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                 $scope.publishMsg = "Project created successfully.";
                  $scope.isPublish = true;
                   $('#breakPopup').css('display','block');
+                 $scope.isPublish = true;
                 $timeout( function(){
                 $('#breakPopup').css('display','none');
-                $state.go('dashboard','');} , 3000);
+                $state.go('dashboard','');} , 2000);
 
              }else{
                 $(".loader").css('display','none');
