@@ -30,7 +30,7 @@
                           </div>
                       </div>
                     <div class="col-sm-4 col-md-4 p-a-0 m-t small text-muted text-center">
-                        <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to [[projectCount]] of [[countList.value]] entries</div>
+                        <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing [[projectCountStart]] to [[projectCountEnd]] of [[projectCountEnd]] entries</div>
                     </div>
                     <div class="col-sm-4 col-md-4 p-a-0 m-t input-group-sm small">
                         <div id="DataTables_Table_0_filter" class="dataTables_filter">
@@ -102,6 +102,6 @@
 <div class="modal-outer" id="breakPopup" style="display:none">
   <div class="modal-content">
     <p>[[publishMsg]]</p>
-    <a ng-if="isSuccess" ng-click="main.removePopupBox()">Ok</a>
+    <a ng-if="isSuccess" ng-click="main.removePopupBox()">OK</a>
   </div>
 </div>
