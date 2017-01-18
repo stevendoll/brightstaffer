@@ -278,7 +278,6 @@ class Alchemy_api():
         d = json.loads(data)
         Projects.objects.filter(id=project_id).update(description_analysis=d)
         for item in chain(d["keywords"], d["entities"]):
-            print (item)
             if round(float(item['relevance']),2)>=concept_relevance:
                 keyword_list.append(item['text'].lower())
         return list(set(keyword_list))[:25]
