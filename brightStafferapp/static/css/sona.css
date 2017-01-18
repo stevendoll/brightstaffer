@@ -17,6 +17,7 @@ body {
   font-size: 1rem;
   line-height: 1.5;
   color: #373a3c;
+  background-color: #f3f3f4;
 }
 
 
@@ -286,12 +287,12 @@ li.active a {
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 240px;
-    min-height: 1200px;
   }
   .navbar-static-side {
     z-index: 2001;
-    position: absolute;
+    position: fixed;
     width: 240px;
+    overflow-y: auto;
   }
   .navbar-top-links .dropdown-messages,
   .navbar-top-links .dropdown-tasks,
@@ -398,17 +399,20 @@ li.active a {
 
 .lbox {
 	clear: both;
-	margin-top: 48px;
+	/* margin-top: 48px; */
 	padding: 30px;
 	border: 1px solid #dedede;
 	border-radius: 3px;
 	background-color: #fff;
+	position: relative;
+	top: 40px;
+	margin-bottom: 40px;
 }
 
 .ibox-content {
   background-color: #ffffff;
   color: inherit;
-  padding: 15px 20px 20px 20px;
+  padding: 15px 0.5rem 20px 0.5rem;
   border-color: #e7eaec;
   border-image: none;
   border-style: none;
