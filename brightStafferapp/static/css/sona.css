@@ -17,6 +17,7 @@ body {
   font-size: 1rem;
   line-height: 1.5;
   color: #373a3c;
+  background-color: #f3f3f4;
 }
 
 
@@ -286,12 +287,12 @@ li.active a {
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 240px;
-    min-height: 1200px;
   }
   .navbar-static-side {
     z-index: 2001;
-    position: absolute;
+    position: fixed;
     width: 240px;
+    overflow-y: auto;
   }
   .navbar-top-links .dropdown-messages,
   .navbar-top-links .dropdown-tasks,
@@ -398,17 +399,20 @@ li.active a {
 
 .lbox {
 	clear: both;
-	margin-top: 48px;
+	/* margin-top: 48px; */
 	padding: 30px;
 	border: 1px solid #dedede;
 	border-radius: 3px;
 	background-color: #fff;
+	position: relative;
+	top: 40px;
+	margin-bottom: 40px;
 }
 
 .ibox-content {
   background-color: #ffffff;
   color: inherit;
-  padding: 15px 20px 20px 20px;
+  padding: 15px 0.5rem 20px 0.5rem;
   border-color: #e7eaec;
   border-image: none;
   border-style: none;
@@ -792,7 +796,8 @@ li.active a {
     background: #1c84c6;
     color: #fff;
     display: block;
-    padding: 0.5em 1em;
+    /*padding: 0.5em 1em;*/
+    padding: 0.5em 0.7em;
     text-decoration: none;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -2402,4 +2407,25 @@ table.dataTable tbody tr.selected {
 }
 .icon-youtube:before {
   content: "\EB9D";
+}
+
+.pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+    opacity:0.5;
+}
+@media (max-width: 992px){
+    .tab-device-margin{
+        margin-bottom: 10px !important;
+    }
+}
+@media (max-width: 568px){
+    .tab-device-margin{
+        margin-bottom: 10px !important;
+    }
+    .nav > li > a.new-project{
+        padding: 15px 5px 15px 5px;
+    }
 }

@@ -14,30 +14,22 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
             url: "/dashboard",
             templateUrl: static_url +'views/common/content.html',
             data: { pageTitle: 'Dashboard' , specialClass: 'no-skin-config',requireAuthentication: true}
-//            resolve: {
-//                loadPlugin: function ($ocLazyLoad) {
-//                    return $ocLazyLoad.load([
-//                        {
-//                            files: ['css/plugins/toastr/toastr.min.css','js/plugins/gritter/jquery.gritter.css','css/plugins/iCheck/custom.css']
-//                        }
-//                    ]);
-//                }
-//            }
         })
         .state('login', {
             url: "/login",
             templateUrl:  static_url + "views/login.html",
-            data: { pageTitle: 'Login.', specialClass: 'gray-bg', requireAuthentication: false }
+            data: { pageTitle: 'Login.', specialClass: 'logn-bg-color', requireAuthentication: false }
         })
         .state('forgot', {
             url: "/forgot",
             templateUrl:  static_url + "views/forgot.html",
-            data: { pageTitle: 'Forgot Password.', specialClass: 'gray-bg', requireAuthentication: false }
+            data: { pageTitle: 'Forgot Password.', specialClass: 'logn-bg-color', requireAuthentication: false }
+
         })
         .state('register', {
             url: "/register",
             templateUrl:  static_url + "views/register.html",
-            data: { pageTitle: 'Register.', specialClass: 'gray-bg' , requireAuthentication: false}
+            data: { pageTitle: 'Register.', specialClass: 'logn-bg-color' , requireAuthentication: false}
         })
         .state('create', {
             abstract: true,
@@ -67,12 +59,21 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
         .state('projects', {
             url: "/projects",
             templateUrl: static_url +'views/common/project-list.html',
-            data: { pageTitle: 'All Projects' , requireAuthentication: true}
+            data: { pageTitle: 'All Projects' , requireAuthentication: true},
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            files: [static_url +'css/plugins/dataTables/datatables.min.css',static_url +'css/animate.css',static_url +'css/style.css',static_url +'css/sona.css']
+                        }
+                    ]);
+                }
+            }
         })
         .state('development', {
             url: "/development",
             templateUrl: static_url +'views/common/development.html',
-            data: { pageTitle: 'Under Dev' ,specialClass: 'gray-bg', requireAuthentication: true}
+            data: { pageTitle: 'Under Dev' ,specialClass: 'development-bg', requireAuthentication: true}
         })
 
 }
@@ -101,6 +102,7 @@ angular
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 		$rootScope.title = toState.data.pageTitle;
+
 	});
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var shouldLogin = toState.data.requireAuthentication !== undefined

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row"  ng-init="gotoTop()">
 			<div class="col-xs-12 col-md-8 col-md-offset-2">
 			    <div class="ibox create-project m-t-md">
 			        <div class="ibox-content">
@@ -28,7 +28,7 @@
 						</ul></div>
 						<div id="form-views" class="content clearfix" ui-view></div>
 							<div class="actions clearfix">
-							<ul >
+							<ul id="projectBtns">
 							<li class="disabled" ng-disabled="[[ $state.current.name == 'create.step1']]" id="previous">
 							<a ng-class="{'disable': [[ $state.current.name == 'create.step1']]}" ng-click="goToBack()">Previous</a></li>
 							<li  id="next" ng-disabled="[[ $state.current.name == 'create.step4']]"><a  ng-class="{'disable': [[ $state.current.name == 'create.step4']]}" ng-click="SwitchFuction()">Next</a></li>
