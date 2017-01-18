@@ -15,6 +15,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 import ast
 from itertools import chain
+from collections import OrderedDict
 
 class UserData():
 
@@ -273,16 +274,13 @@ class Alchemy_api():
         data = json.dumps(
             alchemy_language.combined(
                 text=user_data['description'],
-                extract='entities,keywords',
-                max_items=200))
+                extract='entities,keywords',max_items=25))
         d = json.loads(data)
-        print (d)
         Projects.objects.filter(id=project_id).update(description_analysis=d)
         for item in chain(d["keywords"], d["entities"]):
             if round(float(item['relevance']),2)>=concept_relevance:
                 keyword_list.append(item['text'].lower())
-        print (list(set(keyword_list)))
-        return list(set(keyword_list))
+        return list(set(keyword_list))[:25]
 
 class ProjectList():
     # This API is publishing a project if is_published=true,bu default project list count is 10
@@ -390,4 +388,3 @@ class ProjectList():
                 project_data['create_date'].month) + '/' + str(project_data['create_date'].year)
             output['Pagination'].append(param_dict)
         return util.returnSuccessShorcut(output)
-
