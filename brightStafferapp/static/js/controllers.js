@@ -241,8 +241,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
        });
 
     this.setActive = function(){
-            $(".nav li.active").removeClass('active');
-            $(this).parent().addClass('active');
+            $("#dashboard").removeClass('active');
     }
 
 };
