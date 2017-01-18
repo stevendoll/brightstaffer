@@ -3,6 +3,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.topSixProjectList = [];   // top six project list array
     $scope.allProjectList = [];          // all project array
     $rootScope.totalProjectCount ='';
+    $rootScope.totalCount ='';
+    $rootScope.projectCountStart = 1;
     $scope.options = [{name:'10',value:10},{name:'25',value:25},{name:'50',value:50},{name:'100',value:100}]; // select drop-down options
     $scope.countList = $scope.options[0];
     $scope.paginationCounter= 1;
@@ -36,7 +38,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                      $rootScope.totalProjectCount = response.publish_project.pop();
                      $rootScope.totalProjectCount = $rootScope.totalProjectCount.count;
                      $scope.allProjectList = response.publish_project;
-                     $rootScope.projectCount = response.publish_project.length;
+                     $rootScope.projectCountEnd = response.publish_project.length;
+
               }else{
                 console.log('error');
             }
@@ -45,7 +48,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
 
     this.getValue = function(countList){    //record count change functionality in all project list view
         $(".loader").css('display','block');
-
+        $rootScope.projectCountEnd = countList.value;
         var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
                 'recruiter': $rootScope.globals.currentUser.user_email,   // password filed value
@@ -56,7 +59,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 if(response.message == "success") {
                     if(response.Pagination.length > 0)
                        $scope.allProjectList = response.Pagination;
-                       $rootScope.projectCount = response.Pagination.length;
+                       $rootScope.projectCountEnd = response.Pagination.length;
                      $(".loader").css('display','none');
                   }else{
                     console.log('error');
@@ -113,7 +116,17 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 if(response.message == "success") {
                     if(response.Pagination.length > 0)
                        $scope.allProjectList = response.Pagination;
-                       $rootScope.projectCount = response.Pagination.length;
+                       if($event.target.name == "next"){
+                       $rootScope.projectCountStart =  $rootScope.projectCountEnd;
+                       $rootScope.projectCountEnd = $rootScope.projectCountEnd + response.Pagination.length;
+                       }else if($event.target.name == "prev"){
+                       $rootScope.projectCountStart = $rootScope.projectCountStart -response.Pagination.length;
+                       if($rootScope.projectCountStart <= 0)
+                          $rootScope.projectCountStart = 1;
+                       $rootScope.projectCountEnd = $rootScope.projectCountEnd - response.Pagination.length;
+                       if($rootScope.projectCountEnd <10)
+                         $rootScope.projectCountEnd = 10 ;
+                       }
                    $(".loader").css('display','none');
                   }else{
                     console.log('error');
@@ -164,7 +177,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
      if( navigator.userAgent.match(/Android/i)
      || navigator.userAgent.match(/webOS/i)
      || navigator.userAgent.match(/iPhone/i)
-     || navigator.userAgent.match(/iPad/i)
      || navigator.userAgent.match(/iPod/i)
      || navigator.userAgent.match(/BlackBerry/i)
      || navigator.userAgent.match(/Windows Phone/i)
@@ -228,10 +240,10 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
 
        });
 
-//    this.setActive = function(){
-//            $(".nav li.active").removeClass('active');
-//             $(this).parent().addClass('active');
-//    }
+    this.setActive = function(){
+            $(".nav li.active").removeClass('active');
+            $(this).parent().addClass('active');
+    }
 
 };
 
