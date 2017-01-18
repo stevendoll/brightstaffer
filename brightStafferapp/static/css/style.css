@@ -8457,7 +8457,7 @@ div.dataTables_wrapper div.dataTables_filter {
 {
   .wizard > .actions ul {
       width: 100%;
-      max-width: 250px;
+      max-width: 100%;
       white-space: nowrap;
   }
   .wizard > .actions ul.twobtn {
@@ -8480,13 +8480,13 @@ div.dataTables_wrapper div.dataTables_filter {
     text-align: center;
   }
   .wizard > .actions ul li:first-child {
-      width: 36%;
+      width: 34%;
   }
   .wizard > .actions ul li:nth-child(2) {
       width: 24%;
   }
   .wizard > .actions ul li:nth-child(3) {
-      width: 31%;
+      width: 28%;
   }
 
      div.dataTables_wrapper div.dataTables_filter input {

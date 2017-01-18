@@ -6,8 +6,8 @@
                     <li id="dashboard" ng-class="{'active':[[$state.current.name == 'dashboard']]}" ng-click="main.setActive($event)">
                         <a ui-sref="dashboard" ng-click="main.detectmob()"><i class="fa fa-th"></i> <span class="nav-label">Dashboard</span></a>
                     </li>
-                 <li  id="project" ng-class="{'active':[[$state.current.name == 'create.step1' || $state.current.name == 'projects']]}" ng-click="main.setActive($event)">
-                   <a href="" ><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
+                 <li  id="project"  >
+                   <a href="" ng-click="main.setActive($event)"><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
                    <ul class="nav nav-second-level collapse">
                       <li ng-repeat="projects in topSixProjectList"><a href="" id="[[projects.project_id]]">#[[projects.project_name]]</a></li>
                       <li class="sidebar-divider"></li>

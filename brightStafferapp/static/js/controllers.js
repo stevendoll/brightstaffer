@@ -241,6 +241,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
        });
 
     this.setActive = function(){
+    $event.stopPropagation();
             if($(this).hasClass('active'))
                $(this).removeClass('active');
             else
