@@ -2416,3 +2416,16 @@ table.dataTable tbody tr.selected {
     border-color: #ddd;
     opacity:0.5;
 }
+@media (max-width: 992px){
+    .tab-device-margin{
+        margin-bottom: 10px !important;
+    }
+}
+@media (max-width: 568px){
+    .tab-device-margin{
+        margin-bottom: 10px !important;
+    }
+    .nav > li > a.new-project{
+        padding: 15px 5px 15px 5px;
+    }
+}

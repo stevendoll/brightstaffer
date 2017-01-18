@@ -1644,6 +1644,8 @@ table.dataTable thead .sorting_desc_disabled {
 }
 .dataTables_filter label {
   margin-right: 5px;
+  white-space: normal;
+  margin-left: 0;
 }
 .html5buttons {
   float: right;
@@ -1664,6 +1666,15 @@ table.dataTable thead .sorting_desc_disabled {
 }
 div.dt-button-info {
   z-index: 100;
+}
+.clear{
+    clear:both;
+}
+.table.dataTable{
+    margin-top:20px !important;
+}
+#project .active{
+    background: #293846;
 }
 @media (max-width: 768px) {
   .html5buttons {
