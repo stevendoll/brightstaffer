@@ -134,6 +134,8 @@ function sideNavigation($timeout) {
             link: function(scope, ele, atts) {
                 setTimeout(function(){
                  $(ele).metisMenu();
+                 if($('.nav-second-level').hasClass('in'))
+                        $('.nav-second-level').removeClass('in');
               }, 1);
             }
     };
@@ -151,6 +153,8 @@ function minimalizaSidebar($timeout) {
                 $("body").toggleClass("mini-navbar");
                 if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
                     // Hide menu in order to smoothly turn on when maximize menu
+                    if($('.nav-second-level').hasClass('in'))
+                        $('.nav-second-level').removeClass('in');
                     $('#side-menu').hide();
                     // For smoothly turn on menu
                     setTimeout(
@@ -158,12 +162,16 @@ function minimalizaSidebar($timeout) {
                             $('#side-menu').fadeIn(400);
                         }, 200);
                 } else if ($('body').hasClass('fixed-sidebar')){
+                if($('.nav-second-level').hasClass('in'))
+                        $('.nav-second-level').removeClass('in');
                     $('#side-menu').hide();
                     setTimeout(
                         function () {
                             $('#side-menu').fadeIn(400);
                         }, 100);
                 } else {
+                if($('.nav-second-level').hasClass('in'))
+                        $('.nav-second-level').removeClass('in');
                     // Remove all inline style from jquery fadeIn function to reset menu state
                     $('#side-menu').removeAttr('style');
                 }

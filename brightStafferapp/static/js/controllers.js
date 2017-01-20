@@ -10,6 +10,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $scope.paginationCounter= 1;
     $scope.tableNext = true;
     $scope.publishMsg = '';
+    $scope.isSelected = false;
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
           var requestObject = {
             'token': $rootScope.globals.currentUser.token,       // username field value
@@ -242,11 +243,19 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
        });
 
     this.setActive = function($event){
-    $event.stopPropagation();
-            if($(this).hasClass('active'))
+     var childEle = $('.nav-first-level').children('.ch');
+        angular.forEach(childEle, function(li) {
+          if(!li.contains($event.target))
+             angular.element(li).removeClass('active');
+
+        }, function(){
+          if($(this).hasClass('active'))
                $(this).removeClass('active');
             else
                $(this).addClass('active');
+        });
+     if($('.nav-second-level').parent().hasClass('active'))
+              $('.nav-second-level').addClass('in');
     }
 
 };
