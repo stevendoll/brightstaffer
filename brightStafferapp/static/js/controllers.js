@@ -213,7 +213,9 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
-    $('.dataTables').DataTable({
+  // $scope.loadScript("js/plugins/dataTables/datatables.min.js", function(){
+            //initialization code
+             $('.dataTables').DataTable({
                 responsive: true,
                 retrieve: true,
                 paging: false,
@@ -234,15 +236,20 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     }
                 ]
             });
+        //});
+
             if(navigator.userAgent.match(/iPhone/i)){
                  $('.buttons-excel').css('display','none');
                 }
 
        });
 
-    this.setActive = function(){
-            $(".nav li.active").removeClass('active');
-            $(this).parent().addClass('active');
+    this.setActive = function($event){
+        $event.stopPropagation();
+            if($(this).hasClass('active'))
+               $(this).removeClass('active');
+            else
+               $(this).addClass('active');
     }
 
 };

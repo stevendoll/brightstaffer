@@ -1,9 +1,9 @@
-<nav class="navbar-default navbar-static-side" role="navigation" ng-init="main.getTopSixProjects()" click-outside>
+<nav class="navbar-default navbar-static-side" role="navigation" ng-init="main.getTopSixProjects()" >
             <div class="sidebar-collapse">
                 <ul side-navigation class="nav metismenu" id="side-menu" >
                     <li class="sidebar-brand"><img src="static/img/brand-temp.png">
                 </li>
-                    <li id="dashboard" ng-class="{'active':[[$state.current.name == 'dashboard']]}" >
+                    <li id="dashboard" ng-class="{'active':[[$state.current.name == 'dashboard']]}" ng-click="main.setActive($event)">
                         <a ui-sref="dashboard" ng-click="main.detectmob()"><i class="fa fa-th"></i> <span class="nav-label">Dashboard</span></a>
                     </li>
                  <li  id="project" ng-class="{'active':[[$state.current.name == 'create.step1' || $state.current.name == 'projects']]}" ng-click="main.setActive($event)">
