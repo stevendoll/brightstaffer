@@ -213,8 +213,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
-  // $scope.loadScript("js/plugins/dataTables/datatables.min.js", function(){
-            //initialization code
              $('.dataTables').DataTable({
                 responsive: true,
                 retrieve: true,
@@ -236,7 +234,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     }
                 ]
             });
-        //});
 
             if(navigator.userAgent.match(/iPhone/i)){
                  $('.buttons-excel').css('display','none');
@@ -244,8 +241,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
 
        });
 
-    this.setActive = function($event){
-        $event.stopPropagation();
+    this.setActive = function(){
+    $event.stopPropagation();
             if($(this).hasClass('active'))
                $(this).removeClass('active');
             else

@@ -2416,3 +2416,39 @@ table.dataTable tbody tr.selected {
     border-color: #ddd;
     opacity:0.5;
 }
+
+@media (max-width: 992px){
+    .tab-device-margin{
+        margin-bottom: 10px !important;
+    }
+    div.dataTables_wrapper div.dataTables_info{
+    text-align:left;
+    }
+    div.dataTables_wrapper div.dataTables_filter label{
+        white-space:normal;
+    }
+    div.dataTables_wrapper div.dataTables_filter input{
+       width: 150px !important;
+    }
+}
+@media (max-width: 568px){
+    .tab-device-margin{
+        margin-bottom: 10px !important;
+    }
+    .nav > li > a.new-project{
+        padding: 15px 5px 15px 5px;
+    }
+    .nav > li.sidebar-divider {
+        height: 1px;
+        margin: 15px 5px 15px 5px;
+        overflow: hidden;
+        background-color: #1e2a35;
+    }
+    .nav-second-level{
+        min-width: 150px !important;
+        padding: 0 !important;
+    }
+    .nav-second-level li a{
+    padding: 10px 5px !important;
+
+}

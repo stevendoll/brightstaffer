@@ -85,7 +85,7 @@
   width: 100%;
   left: 0;
   top: 0;
-  z-index: 1033;
+  z-index: 2033;
   background: rgba(0, 0, 0, 0.6);
 }
 .modal-outer .modal-content {
