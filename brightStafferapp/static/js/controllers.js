@@ -194,6 +194,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         function SmoothlyMenu() {
             if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
                 // Hide menu in order to smoothly turn on when maximize menu
+                if($('.nav-second-level').hasClass('in'))
+                        $('.nav-second-level').removeClass('in');
                 $('#side-menu').hide();
                 // For smoothly turn on menu
                 setTimeout(
@@ -201,6 +203,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                         $('#side-menu').fadeIn(400);
                     }, 200);
             } else if ($('body').hasClass('fixed-sidebar')) {
+                    if($('.nav-second-level').hasClass('in'))
+                        $('.nav-second-level').removeClass('in');
                 $('#side-menu').hide();
                 setTimeout(
                     function () {
@@ -208,6 +212,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     }, 100);
             } else {
                 // Remove all inline style from jquery fadeIn function to reset menu state
+                 if($('.nav-second-level').hasClass('in'))
+                        $('.nav-second-level').removeClass('in');
                 $('#side-menu').removeAttr('style');
             }
         }
@@ -243,19 +249,20 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
        });
 
     this.setActive = function($event){
+    $event.stopPropagation();
      var childEle = $('.nav-first-level').children('.ch');
         angular.forEach(childEle, function(li) {
           if(!li.contains($event.target))
              angular.element(li).removeClass('active');
 
-        }, function(){
-          if($(this).hasClass('active'))
-               $(this).removeClass('active');
-            else
-               $(this).addClass('active');
         });
-     if($('.nav-second-level').parent().hasClass('active'))
-              $('.nav-second-level').addClass('in');
+        if($(this).hasClass('active')){
+               $(this).removeClass('active');
+               }
+            else{
+               $(this).addClass('active');
+                }
+
     }
 
 };
