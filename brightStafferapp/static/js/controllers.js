@@ -11,6 +11,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $scope.tableNext = true;
     $scope.publishMsg = '';
     $scope.isSelected = false;
+    $scope.hidenData = {};
+    $scope.apiHit = false;
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
           var requestObject = {
             'token': $rootScope.globals.currentUser.token,       // username field value
@@ -57,6 +59,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 'count':countList.value
              };
              paginationData.paginationApi(requestObject).then(function(response){
+             $scope.apiHit = true;
                 if(response.message == "success") {
                     if(response.Pagination.length > 0)
                        $scope.allProjectList = response.Pagination;
@@ -114,6 +117,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 'count':$scope.countList.value
              };
              paginationData.paginationApi(requestObject).then(function(response){
+             $scope.apiHit = true;
                 if(response.message == "success") {
                     if(response.Pagination.length > 0)
                        $scope.allProjectList = response.Pagination;
@@ -221,6 +225,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
 
    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
       $timeout(function () {
+                $scope.hidenData = {};
           var table = $('.dataTables').DataTable({
                 responsive: true,
                 retrieve: true,
@@ -243,17 +248,73 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     }
                 ]
             });
-               // table.columns.adjust().draw();
-            //update_size(table);
+                  showHideColumn();
           },2000);
             if(navigator.userAgent.match(/iPhone/i)){
                  $('.buttons-excel').css('display','none');
                 }
-             var update_size = function(table) {
-                $('.dataTables').css({ width: $('.dataTables').parent().width() });
-                $('.dataTables').fnAdjustColumnSizing();
-              };
        });
+
+   var update_size = function() {
+            $('.dataTables').css({ width: $('.dataTables').parent().width() });
+          };
+
+    $(window).resize(function() {
+        clearTimeout(window.refresh_size);
+        window.refresh_size = setTimeout(function() { update_size(); }, 250);
+    });
+
+    var showHideColumn = function(){
+     var tableHead = document.getElementsByTagName('th');
+     var displayRows =   $(".dataTables").find("tbody>tr");
+         angular.forEach(tableHead, function(th) {
+            if(th.style['display'] == "none"){
+             var columnIndex = th.cellIndex;
+             for(var currentRow =0; currentRow < displayRows.length; currentRow++){
+              if($scope.hidenData[currentRow]){
+                     $scope.hidenData[currentRow] = $scope.hidenData[currentRow];
+              }else{
+                    $scope.hidenData[currentRow]=[];
+              }
+                 var data = {};
+                     data["title"] = th.innerText;
+                     data["index"] = columnIndex;
+                if(currentRow !=0 && currentRow%2 == 0){
+                   $(displayRows[currentRow]).addClass('even');
+                 }else{
+                    $(displayRows[currentRow]).addClass('odd');
+                 }
+
+                $(displayRows[currentRow]).find("td:eq(0)").addClass("sorting_1");
+                $(displayRows[currentRow]).find("td:eq("+columnIndex+")").css('display','none');
+                data["value"] = $(displayRows[currentRow]).find("td:eq("+columnIndex+")").text();
+
+                $scope.hidenData[currentRow].push(data);
+               }
+
+            }
+         });
+   }
+
+    $scope.showChild = function($event,row){
+       if($scope.apiHit){
+         if($($event.target.parentElement).hasClass('parent')){
+              $($event.target.parentElement).removeClass('parent');
+              angular.element($('#'+row)).remove();
+           }
+         else{
+            $($event.target.parentElement).addClass('parent');
+
+             var childEle = '<tr class="child" id="'+row+'"><td class="child" colspan="7"><ul data-dtr-index="7">';
+              for(var i=0;i<$scope.hidenData[row].length;i++){
+                 childEle = childEle+'<li data-dtr-index="'+$scope.hidenData[row][i].index+'"><span class="dtr-title">'+$scope.hidenData[row][i].title+'</span><span class="dtr-data">'+$scope.hidenData[row][i].value+'</span></li>';
+
+              }
+            childEle = childEle+'</ul></td></tr>';
+            angular.element($event.target.parentElement).after(childEle);
+         }
+      }
+    }
 
     $scope.setActive = function($event){
     $event.stopPropagation();
@@ -606,7 +667,6 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 
     this.activateTab = function($event){
         var elementId = $event.target.id;
-        console.log($event);
         var currentState = $state.current.name;
         var currentTabId;
         var prevTabId;
@@ -888,7 +948,6 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                         var index = $rootScope.jobDescriptionResult.concept.indexOf(newSkill);
 
                        if(index == -1){
-                       console.log($rootScope.jobDescriptionResult.concept);
                             $rootScope.jobDescriptionResult.concept.push(newSkill);
                        }else{
                             $scope.isDescriptionError = true;

@@ -53,7 +53,7 @@
                     </thead>
                     <tbody>
                     <tr class="gradeX" ng-repeat="projects in allProjectList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">
-                        <td>#[[projects.project_name]]</td>
+                        <td ng-click="showChild($event,$index)">#[[projects.project_name]]</td>
                         <td>[[projects.company_name]]</td>
                         <td>[[projects.location]]</td>
                         <td>-</td>
