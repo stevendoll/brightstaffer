@@ -221,7 +221,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
 
    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
       $timeout(function () {
-      alert('called')
           var table = $('.dataTables').DataTable({
                 responsive: true,
                 retrieve: true,

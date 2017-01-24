@@ -117,7 +117,6 @@ function onFinishRender($timeout) {
         link: function (scope, element, attr) {
             if (scope.$last === true) {
                 $timeout(function () {
-                   alert('called ng repeat');
                     scope.$emit(attr.onFinishRender);
                 });
             }
