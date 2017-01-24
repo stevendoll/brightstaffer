@@ -1,5 +1,5 @@
 
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout) { /*global controller */
     $rootScope.topSixProjectList = [];   // top six project list array
     $scope.allProjectList = [];          // all project array
     $rootScope.totalProjectCount ='';
@@ -174,7 +174,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
       }
    }
 
-   this.detectmob = function(){
+   this.detectmob = function($event){
      if( navigator.userAgent.match(/Android/i)
      || navigator.userAgent.match(/webOS/i)
      || navigator.userAgent.match(/iPhone/i)
@@ -220,10 +220,13 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
-             $('.dataTables').DataTable({
+      $timeout(function () {
+      alert('called')
+          var table = $('.dataTables').DataTable({
                 responsive: true,
                 retrieve: true,
-                paging: false,
+                paging: true,
+                autoWidth: false,
                 buttons: [
                     {extend: 'copy', className: 'btn btn-default btn-sm', title: 'Copy'},
                     {extend: 'csv', className: 'btn btn-default btn-sm', title: 'CSV'},
@@ -241,14 +244,19 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     }
                 ]
             });
-
+               // table.columns.adjust().draw();
+            //update_size(table);
+          },2000);
             if(navigator.userAgent.match(/iPhone/i)){
                  $('.buttons-excel').css('display','none');
                 }
-
+             var update_size = function(table) {
+                $('.dataTables').css({ width: $('.dataTables').parent().width() });
+                $('.dataTables').fnAdjustColumnSizing();
+              };
        });
 
-    this.setActive = function($event){
+    $scope.setActive = function($event){
     $event.stopPropagation();
      var childEle = $('.nav-first-level').children('.ch');
         angular.forEach(childEle, function(li) {
@@ -256,13 +264,28 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
              angular.element(li).removeClass('active');
 
         });
+
+        if($event.type == "touchstart"){
+            if($($event.currentTarget).hasClass('active')){
+                $($event.currentTarget).removeClass('active');
+               }
+            else{
+                $($event.currentTarget).addClass('active');
+                   if($event.currentTarget.id == "project"){
+                     $('.nav-second-level').addClass('in');
+                      $('.nav-second-level').css('display','block');
+                   }
+
+               }
+
+        }else{
         if($(this).hasClass('active')){
                $(this).removeClass('active');
                }
             else{
                $(this).addClass('active');
-                }
-
+               }
+          }
     }
 
 };

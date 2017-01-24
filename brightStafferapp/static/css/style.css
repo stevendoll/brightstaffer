@@ -8527,3 +8527,10 @@ input[type=password]
 .height-full{
     height: 100%;
 }
+
+.pagination>li:first-child a,
+.pagination>li:last-child a
+{
+    min-width: 75px;
+    text-align: center;
+}
