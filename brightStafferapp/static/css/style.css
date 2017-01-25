@@ -8450,6 +8450,9 @@ div.dataTables_wrapper div.dataTables_filter {
       margin-left: 3px !important;
       margin-top: 5px !important;
   }
+  div.dataTables_wrapper div.dataTables_filter {
+    text-align: center;
+  }
 
 }
 
@@ -8480,12 +8483,14 @@ div.dataTables_wrapper div.dataTables_filter {
     text-align: center;
   }
   .wizard > .actions ul li:first-child {
+      /*width: 34%;*/
       width: 36%;
   }
   .wizard > .actions ul li:nth-child(2) {
       width: 24%;
   }
   .wizard > .actions ul li:nth-child(3) {
+      /*width: 28%;*/
       width: 31%;
   }
 
@@ -8527,3 +8532,18 @@ input[type=password]
 .height-full{
     height: 100%;
 }
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> 3de61ed3e56590aa541186722f09df6033535aee
+.pagination>li:first-child a,
+.pagination>li:last-child a
+{
+    min-width: 75px;
+    text-align: center;
+<<<<<<< HEAD
+}
+=======
+}
+>>>>>>> 3de61ed3e56590aa541186722f09df6033535aee

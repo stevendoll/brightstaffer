@@ -158,6 +158,7 @@ function minimalizaSidebar($timeout) {
                             $('#side-menu').fadeIn(400);
                         }, 200);
                 } else if ($('body').hasClass('fixed-sidebar')){
+
                     $('#side-menu').hide();
                     setTimeout(
                         function () {
@@ -204,11 +205,32 @@ function clickOutside($document, $state) {
                     }
                });
            }
-        }
+        };
 
 }
 
 
+function onTouch($parse) {
+  return {
+        restrict: 'A',
+        link: function(scope, elm, attrs) {
+            var ontouchFn = $parse(attrs.onTouch);
+            elm.bind('touchstart', function(evt) {
+               evt.stopPropagation();
+            });
+            elm.bind('touchend', function(evt) {
+                scope.$apply(function(){
+                 ontouchFn.call(scope.setActive(evt), evt.which);
+                });
+            });
+            elm.bind('click', function(evt){
+                scope.$apply(function(){
+                 ontouchFn.call(scope.setActive(evt),evt.which);
+                });
+            });
+        }
+    };
+}
 /**
  *
  * Pass all functions into module
@@ -223,4 +245,5 @@ angular
     .directive('onFinishRender', onFinishRender)
     .directive('sideNavigation', sideNavigation)
     .directive('minimalizaSidebar', minimalizaSidebar)
-    .directive('clickOutside', clickOutside);
+    .directive('clickOutside', clickOutside)
+    .directive('onTouch', onTouch);
