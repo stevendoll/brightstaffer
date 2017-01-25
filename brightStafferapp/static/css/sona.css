@@ -2422,7 +2422,8 @@ table.dataTable tbody tr.selected {
         margin-bottom: 10px !important;
     }
     div.dataTables_wrapper div.dataTables_info{
-    text-align:left;
+    /*text-align:left;*/
+    text-align: center;
     }
     div.dataTables_wrapper div.dataTables_filter label{
         white-space:normal;
