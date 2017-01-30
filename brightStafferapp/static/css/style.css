@@ -8461,7 +8461,7 @@ div.dataTables_wrapper div.dataTables_filter {
 {
   .wizard > .actions ul {
       width: 100%;
-      max-width: 100%;
+      max-width: 250px;
       white-space: nowrap;
   }
   .wizard > .actions ul.twobtn {
@@ -8484,13 +8484,15 @@ div.dataTables_wrapper div.dataTables_filter {
     text-align: center;
   }
   .wizard > .actions ul li:first-child {
-      width: 34%;
+      /*width: 34%;*/
+      width: 36%;
   }
   .wizard > .actions ul li:nth-child(2) {
       width: 24%;
   }
   .wizard > .actions ul li:nth-child(3) {
-      width: 28%;
+      /*width: 28%;*/
+      width: 31%;
   }
 
      div.dataTables_wrapper div.dataTables_filter input {
@@ -8532,14 +8534,12 @@ input[type=password]
     height: 100%;
 }
 
+
 .pagination>li:first-child a,
 .pagination>li:last-child a
 {
     min-width: 75px;
     text-align: center;
+
 }
 
-.highlight{
-    border-left: 0;
-    background: #293846;
-}
