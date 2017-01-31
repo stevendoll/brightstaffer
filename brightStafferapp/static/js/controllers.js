@@ -91,12 +91,11 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     $scope.setActive = function($event){
-    //alert('function call')
     $event.stopPropagation();
      var childEle = $('.nav-first-level').children('.ch');
         angular.forEach(childEle, function(li) {
           if(!li.contains($event.target))
-             angular.element(li).removeClass('active');
+             angular.element(li).removeClass('highlight');
 
         });
 
@@ -114,7 +113,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                }
 
         }else if($event.type == "click"){
-        //alert('click')
         if($(this).hasClass('active')){
                $(this).removeClass('active');
                }
@@ -814,7 +812,7 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
     this.getValue = function(countList){    //record count change functionality in all project list view
         $(".loader").css('display','block');
-        $rootScope.projectCountEnd = countList.value;
+        //$rootScope.projectCountEnd = countList.value;
         var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
                 'recruiter': $rootScope.globals.currentUser.user_email,   // password filed value
@@ -833,7 +831,7 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                     $(".loader").css('display','none');
                       if(response.success == false){
                             $rootScope.isSuccess = true;
-                            $scope.apiMsg = "No data available.";
+                            $scope.popupMsg = "No data available.";
                             $('#breakPopup').css('display','block');
                          }
 
@@ -854,6 +852,7 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
      var prevButton = angular.element(document.querySelector('#Table_previous'));
          if($event.target.name == "next"){
            $rootScope.paginationCounter++;
+           $('#countDropdown').css('display','none');
            if(prevButton.hasClass('disabled')){
               prevButton.removeClass('disabled');
            }
@@ -863,8 +862,13 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                 nextButton.removeClass('disabled');
                if($rootScope.paginationCounter >1){
                   $rootScope.paginationCounter--;
+
+                    if($rootScope.paginationCounter ==1)
+                    {
+                      prevButton.addClass('disabled');
+                      $('#countDropdown').css('display','');
+                    }
                      }else{
-                        prevButton.addClass('disabled');
                         if(nextButton.hasClass('disabled'))
                             nextButton.removeClass('disabled');
 
@@ -904,7 +908,7 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                            nextButton.addClass('disabled');
                            $rootScope.paginationCounter--;
                            if($rootScope.paginationCounter == 1){
-                            prevButton.addClass('disabled');
+                                 prevButton.addClass('disabled');
                            }
                            $scope.tableNext = false;
                         }
@@ -919,7 +923,29 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
     $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
       $timeout(function () {
-                $scope.hidenData = {};
+             tableInitialise();
+          },1000);
+        if(navigator.userAgent.match(/iPhone/i)){
+             $('.buttons-excel').css('display','none');
+            }
+       });
+
+   var update_size = function() {
+//        alert('resize')
+//        alert($('.dataTables').parent().width());
+            $('.dataTables').css({ width: $('.dataTables').parent().width() });
+            if($scope.apiHit){
+             tableInitialise();
+              }
+          };
+
+    $(window).resize(function() {
+        clearTimeout(window.refresh_size);
+        window.refresh_size = setTimeout(function() { update_size(); }, 250);
+    });
+
+    var tableInitialise = function(){
+           $scope.hidenData = {};
           var table = $('.dataTables').DataTable({
                 responsive: true,
                 retrieve: true,
@@ -942,50 +968,49 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                     }
                 ]
             });
-                  showHideColumn();
-          },1000);
-            if(navigator.userAgent.match(/iPhone/i)){
-                 $('.buttons-excel').css('display','none');
-                }
-       });
-
-   var update_size = function() {
-            $('.dataTables').css({ width: $('.dataTables').parent().width() });
-            //showHideColumn();
-          };
-
-    $(window).resize(function() {
-        clearTimeout(window.refresh_size);
-        window.refresh_size = setTimeout(function() { update_size(); }, 25);
-    });
-
+          showHideColumn();
+    }
     var showHideColumn = function(){
      var tableHead = document.getElementsByTagName('th');
      var displayRows = $(".dataTables").find("tbody>tr");
-         angular.forEach(tableHead, function(th) {
-            if(th.style['display'] == "none"){
-             var columnIndex = th.cellIndex;
-             for(var currentRow =0; currentRow < displayRows.length; currentRow++){
-              if($scope.hidenData[currentRow]){
+         angular.forEach(tableHead, function(th)
+         {
+          var columnIndex = th.cellIndex;
+            if(th.style['display'] == "none")
+            {
+             for(var currentRow =0; currentRow < displayRows.length; currentRow++)
+             {
+              if($scope.hidenData[currentRow])
+              {
                      $scope.hidenData[currentRow] = $scope.hidenData[currentRow];
-              }else{
+              }else
+              {
                     $scope.hidenData[currentRow]=[];
               }
                  var data = {};
                      data["title"] = th.innerText;
                      data["index"] = columnIndex;
-                if(currentRow !=0 && currentRow%2 == 0){
+                if(currentRow !=0 && currentRow%2 == 0)
+                {
                    $(displayRows[currentRow]).addClass('even');
-                 }else{
+                 }else
+                 {
                     $(displayRows[currentRow]).addClass('odd');
                  }
 
                 $(displayRows[currentRow]).find("td:eq(0)").addClass("sorting_1");
                 $(displayRows[currentRow]).find("td:eq("+columnIndex+")").css('display','none');
                 data["value"] = $(displayRows[currentRow]).find("td:eq("+columnIndex+")").text();
-
                 $scope.hidenData[currentRow].push(data);
-               }
+              }
+
+            }
+            else {
+                for(var currentRow =0; currentRow < displayRows.length; currentRow++)
+                 {
+                    $(displayRows[currentRow]).find("td:eq(0)").addClass("sorting_1");
+                    $(displayRows[currentRow]).find("td:eq("+columnIndex+")").css('display','');
+                 }
 
             }
          });

@@ -17,7 +17,7 @@ body {
   font-size: 1rem;
   line-height: 1.5;
   color: #373a3c;
-  /*background-color: #f3f3f4;*/
+  background-color: #f3f3f4;
 }
 
 
@@ -2444,7 +2444,7 @@ table.dataTable tbody tr.selected {
         /*margin: 15px 5px 15px 5px;*/
         margin: 10px 5px 10px 5px;
         overflow: hidden;
-        /*background-color: #2f4050;*/
+        background-color: #2f4050;
         background-color: #f3f3f4;
     }
     .nav-second-level{

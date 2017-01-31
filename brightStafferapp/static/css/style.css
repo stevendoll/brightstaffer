@@ -8543,3 +8543,7 @@ input[type=password]
 
 }
 
+.highlight{
+    border-left: 0;
+    background: #293846;
+}
