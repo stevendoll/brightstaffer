@@ -3383,7 +3383,7 @@ body {
   font-size: 13px;
   color: #676a6c;
   overflow-x: hidden;
-  background-color: #2f4050;
+  background-color: #2f4050 !important;
 }
 html,
 body {
@@ -8454,15 +8454,22 @@ div.dataTables_wrapper div.dataTables_filter {
   div.dataTables_wrapper div.dataTables_filter {
     text-align: center;
   }
-
+ .nav > li.sidebar-divider {
+    height: 1px;
+    /* margin: 15px 5px 15px 5px; */
+    margin: 10px 5px 10px 5px !important;
+    overflow: hidden;
+    background-color: #f3f3f4 !important;
+}
 }
 
 @media (max-width: 480px)
 {
   .wizard > .actions ul {
       width: 100%;
-      max-width: 250px;
+      max-width: 240px;
       white-space: nowrap;
+      /*background: green;*/
   }
   .wizard > .actions ul.twobtn {
       max-width: 170px;
@@ -8485,14 +8492,14 @@ div.dataTables_wrapper div.dataTables_filter {
   }
   .wizard > .actions ul li:first-child {
       /*width: 34%;*/
-      width: 36%;
+      width: 32%;
   }
   .wizard > .actions ul li:nth-child(2) {
-      width: 24%;
+      width: 21%;
   }
   .wizard > .actions ul li:nth-child(3) {
       /*width: 28%;*/
-      width: 31%;
+      width: 28%;
   }
 
      div.dataTables_wrapper div.dataTables_filter input {
@@ -8545,3 +8552,5 @@ input[type=password]
     border-left: 0;
     background: #293846;
 }
+
+
