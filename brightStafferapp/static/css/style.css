@@ -8534,13 +8534,11 @@ input[type=password]
     height: 100%;
 }
 
-
 .pagination>li:first-child a,
 .pagination>li:last-child a
 {
     min-width: 75px;
     text-align: center;
-
 }
 
 .highlight{
