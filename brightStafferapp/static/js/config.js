@@ -122,6 +122,9 @@ angular
                 $state.go('login');
                 event.preventDefault();
             } else {
+                $('.nav-second-level').parent().removeClass('active');
+                 $('.nav-second-level').removeClass('in');
+                 $('.nav-second-level').css('height','0px');
                 if(toState.name === toState.name)
                     return;
                 $state.go(toState.name);

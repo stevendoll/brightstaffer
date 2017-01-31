@@ -210,24 +210,36 @@ function clickOutside($document, $state) {
 }
 
 
-function onTouch($parse) {
+function onTouch($parse, $rootScope) {
   return {
         restrict: 'A',
         link: function(scope, elm, attrs) {
             var ontouchFn = $parse(attrs.onTouch);
-            elm.bind('touchstart', function(evt) {
-               evt.stopPropagation();
-            });
-            elm.bind('touchend', function(evt) {
+             if( navigator.userAgent.match(/Android/i)
+                 || navigator.userAgent.match(/webOS/i)
+                 || navigator.userAgent.match(/iPhone/i)
+                 || navigator.userAgent.match(/iPod/i)
+                 || navigator.userAgent.match(/BlackBerry/i)
+                 || navigator.userAgent.match(/Windows Phone/i)
+                     ){
+                    elm.bind('touchstart', function(evt) {
+                       evt.stopPropagation();
+                    });
+                        $rootScope.eventType = 'touchend';
+                     }else{
+                        $rootScope.eventType = 'click';
+                     }
+
+            elm.bind($rootScope.eventType, function(evt) {
                 scope.$apply(function(){
                  ontouchFn.call(scope.setActive(evt), evt.which);
                 });
             });
-            elm.bind('click', function(evt){
+            /*elm.bind('click', function(evt){
                 scope.$apply(function(){
                  ontouchFn.call(scope.setActive(evt),evt.which);
                 });
-            });
+            });*/
         }
     };
 }

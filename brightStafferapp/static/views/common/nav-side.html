@@ -3,10 +3,10 @@
                 <ul side-navigation class="nav nav-first-level metismenu" id="side-menu" >
                     <li class="sidebar-brand"><img src="static/img/brand-temp.png">
                 </li>
-                    <li class="ch" ng-class="{active:[[$state.current.name == 'dashboard']]}"   on-touch="setActive()">
+                    <li class="ch" ng-class="{highlight:[[$state.current.name == 'dashboard']]}"   on-touch="setActive()">
                         <a id="dashboard" ui-sref="dashboard" ng-click="main.detectmob($event)"><i class="fa fa-th"></i> <span class="nav-label">Dashboard</span></a>
                     </li>
-                 <li id="project" class="ch" ng-class="{active:[[$state.current.name == 'projects']] || [[$state.current.name == 'create.step1']] }"  on-touch="setActive()">
+                 <li id="project" class="ch" ng-class="{highlight:[[$state.current.name == 'projects']] || [[$state.current.name == 'create.step1']] }"  on-touch="setActive()">
                    <a href="" ><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
                    <ul class="nav nav-second-level collapse">
                       <li ng-repeat="projects in topSixProjectList"><a href="" id="[[projects.project_id]]">#[[projects.project_name]]</a></li>
@@ -16,10 +16,10 @@
                       <li ng-class="{active:[[$state.current.name == 'create.step1']]}" ><a id="create.step1" class="new-project" ui-sref="create.step1" ng-click="main.detectmob($event)">Create New Project <small class="text-muted m-l-xs">+</small></a></li>
                     </ul>
                  </li>
-                     <li class="ch" ng-class="{active:[[$state.current.name == 'development']]}">
+                     <li class="ch" ng-class="{highlight:[[$state.current.name == 'development']]}">
                      <a ui-sref="development"><i class="fa fa-user"></i> <span class="nav-label">Team</span><span class="fa arrow"></span></a>
                     </li>
-					<li class="ch" ng-class="{active:[[$state.current.name == 'development']]}">
+					<li class="ch" ng-class="{highlight:[[$state.current.name == 'development']]}">
                       <a ui-sref="development"><i class="fa fa-diamond"></i> <span class="nav-label">Talent</span></a>
                     </li>
                 </ul>

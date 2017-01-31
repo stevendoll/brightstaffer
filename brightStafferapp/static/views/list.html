@@ -1,5 +1,5 @@
-
-<div class="wrapper wrapper-content" ng-init="main.getTopSixProjects()">
+<div ng-controller="tableCtrl as table">
+<div class="wrapper wrapper-content">
             <div class="row">
                 <div class="col-lg-12">
                 <div class="ibox float-e-margins">
@@ -67,10 +67,10 @@
                     </tfoot>
                     </table >
 
-                      <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm">
+                      <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm" id="countDropdown">
                           <div class="dataTables_length" id="DataTables_Table_0_length">
                               <label>Show
-                                  <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control input-sm" ng-model="countList" ng-change="main.getValue(countList)"  ng-options="option.name for option in options">
+                                  <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control input-sm" ng-model="countList" ng-change="table.getValue(countList)"  ng-options="option.name for option in options">
                                   </select> entries
                               </label>
                           </div>
@@ -80,13 +80,13 @@
                         <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
                           <ul class="pagination">
                             <li class="paginate_button previous disabled" id="Table_previous" ng-disabled="[[paginationCounter == 1]]" >
-                              <a name="prev" tabindex="0" ng-click="main.changePage($event)" ng-class="{'disable':[[paginationCounter == 1]]}" >Previous</a>
+                              <a name="prev" tabindex="0" ng-click="table.changePage($event)" ng-class="{'disable':[[paginationCounter == 1]]}" >Previous</a>
                             </li>
                             <li class="paginate_button active">
                               <a  tabindex="0">[[paginationCounter]]</a>
                             </li>
                             <li class="paginate_button next " id="Table_next" >
-                              <a tabindex="0" name="next" ng-click="main.changePage($event)">Next</a>
+                              <a tabindex="0" name="next" ng-click="table.changePage($event)">Next</a>
                             </li>
                           </ul>
                         </div>
@@ -99,11 +99,12 @@
               </div>
             </div>
         </div>
-     </div>
      <!--Modal window-->
-<div class="modal-outer" id="breakPopup" style="display:none">
-  <div class="modal-content">
-    <p>[[publishMsg]]</p>
-    <a ng-if="isSuccess" ng-click="main.removePopupBox()">OK</a>
-  </div>
+    <div class="modal-outer" id="breakPopup" style="display:none">
+      <div class="modal-content">
+        <p>[[popupMsg]]</p>
+        <a ng-if="isSuccess" ng-click="main.removePopupBox()">OK</a>
+      </div>
+    </div>
 </div>
+
