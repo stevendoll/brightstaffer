@@ -142,7 +142,7 @@ function sideNavigation($timeout) {
 /**
  * minimalizaSidebar - Directive for minimalize sidebar
 */
-function minimalizaSidebar($timeout) {
+function minimalizaSidebar($timeout,$state) {
     return {
         restrict: 'A',
         template: '<a class="navbar-minimalize minimalize-ui btn btn-default" href="" ng-click="minimalize()"><i class="icon icon-unread"></i></a>',
@@ -151,11 +151,17 @@ function minimalizaSidebar($timeout) {
                 $("body").toggleClass("mini-navbar");
                 if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
                     // Hide menu in order to smoothly turn on when maximize menu
+                    $('.nav-second-level').parent().removeClass('active');
+                    $('.nav-second-level').removeClass('in');
+                    $('.nav-second-level').css('height','0px');
                     $('#side-menu').hide();
                     // For smoothly turn on menu
                     setTimeout(
                         function () {
-                            $('#side-menu').fadeIn(400);
+                           if($state.current.name == "dashboard"){
+                             $('#dashboard').addClass('highlight');
+                           }
+                                 $('#side-menu').fadeIn(400);
                         }, 200);
                 } else if ($('body').hasClass('fixed-sidebar')){
 

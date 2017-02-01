@@ -9,9 +9,9 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
      $rootScope.isDevice = false;
 
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
-          var requestObject = {
-            'token': $rootScope.globals.currentUser.token,       // username field value
-            'recruiter': $rootScope.globals.currentUser.user_email   // password field value
+        var requestObject = {
+        'token': $rootScope.globals.currentUser.token,       // username field value
+        'recruiter': $rootScope.globals.currentUser.user_email   // password field value
          };
          getTopSixProjects.topSix(requestObject).then(function(response){
             if(response.message == "success") {
@@ -26,42 +26,41 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     this.showAllProjects = function(){
         $rootScope.tableNext = true;
         $rootScope.paginationCounter = 1;
-         $('html, body').animate({ scrollTop: 0 }, 'fast');
-          var requestObject = {
-            'token': $rootScope.globals.currentUser.token,       // username field value
-            'recruiter': $rootScope.globals.currentUser.user_email   // password filed value
-         };
-         getAllProjects.allProjects(requestObject).then(function(response){
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+        var requestObject = {
+        'token': $rootScope.globals.currentUser.token,       // username field value
+        'recruiter': $rootScope.globals.currentUser.user_email   // password filed value
+        };
+        getAllProjects.allProjects(requestObject).then(function(response){
             if(response.message == "success") {
-                     $rootScope.totalProjectCount = response.publish_project.pop();
-                     $rootScope.totalProjectCount = $rootScope.totalProjectCount.count;
-                     $rootScope.allProjectList = response.publish_project;
-                     $rootScope.projectCountEnd = response.publish_project.length;
+                 $rootScope.totalProjectCount = response.publish_project.pop();
+                 $rootScope.totalProjectCount = $rootScope.totalProjectCount.count;
+                 $rootScope.allProjectList = response.publish_project;
+                 $rootScope.projectCountEnd = response.publish_project.length;
 
-              }else{
+            }else{
                 console.log('error');
             }
-         });
+        });
     }
 
 
    this.removePopupBox = function(){
-       $('#breakPopup').css('display','none');
+        $('#breakPopup').css('display','none');
         $rootScope.isSuccess = false;
    }
 
-   this.detectmob = function($event){
-     if( navigator.userAgent.match(/Android/i)
-     || navigator.userAgent.match(/webOS/i)
-     || navigator.userAgent.match(/iPhone/i)
-     || navigator.userAgent.match(/iPod/i)
-     || navigator.userAgent.match(/BlackBerry/i)
-     || navigator.userAgent.match(/Windows Phone/i)
+    this.detectmob = function($event){
+        if( navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)
          ){
             openSideMenu();
          }
-
-     }
+    }
 
 
     function openSideMenu(){
@@ -91,8 +90,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     $scope.setActive = function($event){
-    $event.stopPropagation();
-     var childEle = $('.nav-first-level').children('.ch');
+        $event.stopPropagation();
+        var childEle = $('.nav-first-level').children('.ch');
         angular.forEach(childEle, function(li) {
           if(!li.contains($event.target))
              angular.element(li).removeClass('highlight');
@@ -109,19 +108,16 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                      $('.nav-second-level').addClass('in');
                       $('.nav-second-level').css('display','block');
                    }
-
                }
-
         }else if($event.type == "click"){
-        if($(this).hasClass('active')){
+            if($(this).hasClass('active')){
                $(this).removeClass('active');
                }
             else{
                $(this).addClass('active');
                }
-          }
+        }
     }
-
 };
 
 function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $timeout, loginService) { /* login controller responsible for login functionality */
@@ -187,15 +183,15 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookie
     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
                                // email pattern
     $scope.user_Signup = function() { /* signup function submitting user details to API*/
-    $scope.errorMessage = '';
-    $rootScope.checkReqValidation('signupForm');
+        $scope.errorMessage = '';
+        $rootScope.checkReqValidation('signupForm');
         var requestObject = {
         'firstName':$scope.userRegistration.first_name,
         'lastName': $scope.userRegistration.last_name,
         'userEmail': $scope.userRegistration.user_email,
         'password': $scope.userRegistration.password
         };
-       if($scope.signupForm.$valid){
+        if($scope.signupForm.$valid){
             $scope.isDisabled = true;
              signupService.userSignup(requestObject).then(function(response){
              if(response.message == "success") {
@@ -214,12 +210,12 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookie
               $scope.isDisabled = false;
              }
            });
-       }
+        }
     }
 
     $scope.hideMessages = function($event){ /*Hide error messages when user interact with fieds*/
-    if($event.keyCode !== 13 ){
-           $("#signupForm input").each(function(){
+        if($event.keyCode !== 13 ){
+            $("#signupForm input").each(function(){
                 var spanClass = $(this).next('span').attr('class');
                 if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
                     $(this).next('span').removeClass('error').text("");
@@ -232,19 +228,19 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookie
 }
 
 function forgotCtrl($scope, $rootScope, $state, $http, forgotService) {
-     $scope.isDisabled = false;
-     $scope.errorMessage = '';
-     $scope.isRequired = false;
-     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
-	/**Create function for forgot password **/
+    $scope.isDisabled = false;
+    $scope.errorMessage = '';
+    $scope.isRequired = false;
+    $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
+    /**Create function for forgot password **/
 	$scope.forgotPassword = function() {
-	   $scope.errorMessage = '';
-	   var value = document.getElementById('emailInput').value;
-	   if(!value)
-	    $scope.isRequired = true;
+        $scope.errorMessage = '';
+        var value = document.getElementById('emailInput').value;
+        if(!value)
+        $scope.isRequired = true;
 
         var requestObject = {
-        	'email': $scope.user_email
+            'email': $scope.user_email
         };
         if($scope.forgotForm.$valid){
             $scope.isRequired = false;
@@ -273,26 +269,26 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
     $scope.data = {};
     $scope.passwordStrength = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     $scope.changePassword = function(){
-         $scope.isDisabled = true;
-         var requestObject = {
-        	'token': token,
-        	'password': $scope.data.password
+        $scope.isDisabled = true;
+        var requestObject = {
+        'token': token,
+        'password': $scope.data.password
         };
-       resetPasswordService.resetPassword(requestObject).then(function(response){
-         if(response.message == "success") {
-           $scope.data = {};
-           $scope.successMsg = true;
-           $scope.success = true;
-         }else{
+        resetPasswordService.resetPassword(requestObject).then(function(response){
+            if(response.message == "success") {
+            $scope.data = {};
+            $scope.successMsg = true;
+            $scope.success = true;
+            }else{
              $scope.data = {};
              $scope.failMessage = true;
-         }
-       });
+            }
+        });
     }
 
     $scope.changePath= function () {
-     var path = 'http://'+$window.location.host + '/#/login';
-     $window.location.href = path;
+         var path = 'http://'+$window.location.host + '/#/login';
+         $window.location.href = path;
     }
 }
 
@@ -333,10 +329,9 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     $rootScope.globals.projectDetails = [];
     this.projectNamePattern =/((^[ A-Za-z0-9_@./#-]*)|(^[a-zA-Z]+[_@./#-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;// /^[a-z0-9]+$/i;
 
-
     $scope.checkMessage = function(){ /*Hide error messages when user interact with fieds*/
-       $scope.isDescriptionRequired = false;
-       $("#createProjectForm input").each(function(){
+        $scope.isDescriptionRequired = false;
+        $("#createProjectForm input").each(function(){
             var spanClass = $(this).next('span').attr('class');
             if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
                 $(this).next('span').removeClass('error').text("");
@@ -385,13 +380,13 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     }
 
     $scope.takeToStepThree = function(currentState,prevTabId,currentTabId){
-    if(!$scope.projectForm.description){
+        if(!$scope.projectForm.description){
           $scope.isDescriptionRequired = true;
-
-          }else if($scope.projectForm.description){
-                 if(!$rootScope.jobDescriptionResult){
-                   $(".loader").css('display','block');
-                  }
+        }
+        else if($scope.projectForm.description){
+             if(!$rootScope.jobDescriptionResult){
+               $(".loader").css('display','block');
+              }
 
              if($("#tablist").find(".current").length>0){
                     $("#tablist").find(".current").addClass("done");
@@ -409,7 +404,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                  currentTab.addClass('current');
                  $scope.isthirdStepVisited = true;
                  $state.go('create.step3','');
-          }
+        }
     }
 
     $scope.takeToStepFour = function(currentState,prevTabId,currentTabId){
@@ -839,7 +834,7 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
              });
     }
 
-    this.changePage = function($event){                      // page counter pagination functionality
+    this.changePage = function($event){                  // pagination with previous and next button event handler
     $(".loader").css('display','none');
     if( !$scope.tableNext && $event.target.name == "next"){
         return;
@@ -921,7 +916,7 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
            });
     }
 
-    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
+    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
       $timeout(function () {
              tableInitialise();
           },1000);
@@ -931,15 +926,13 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
        });
 
    var update_size = function() {
-//        alert('resize')
-//        alert($('.dataTables').parent().width());
-            $('.dataTables').css({ width: $('.dataTables').parent().width() });
-            if($scope.apiHit){
-             tableInitialise();
-              }
-          };
+        $('.dataTables').css({ width: $('.dataTables').parent().width() });
+        if($scope.apiHit){
+         tableInitialise();
+          }
+   };
 
-    $(window).resize(function() {
+    $(window).resize(function() {       // on window resize table resize for responsiveness
         clearTimeout(window.refresh_size);
         window.refresh_size = setTimeout(function() { update_size(); }, 250);
     });
@@ -970,70 +963,67 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
             });
           showHideColumn();
     }
-    var showHideColumn = function(){
-     var tableHead = document.getElementsByTagName('th');
-     var displayRows = $(".dataTables").find("tbody>tr");
-         angular.forEach(tableHead, function(th)
+    var showHideColumn = function(){        // on table responsiveness show and hide column value
+    var tableHead = document.getElementsByTagName('th');
+    var displayRows = $(".dataTables").find("tbody>tr");
+     angular.forEach(tableHead, function(th)
+     {
+      var columnIndex = th.cellIndex;
+        if(th.style['display'] == "none")
+        {
+         for(var currentRow =0; currentRow < displayRows.length; currentRow++)
          {
-          var columnIndex = th.cellIndex;
-            if(th.style['display'] == "none")
+          if($scope.hidenData[currentRow])
+          {
+                 $scope.hidenData[currentRow] = $scope.hidenData[currentRow];
+          }else
+          {
+                $scope.hidenData[currentRow]=[];
+          }
+             var data = {};
+                 data["title"] = th.innerText;
+                 data["index"] = columnIndex;
+            if(currentRow !=0 && currentRow%2 == 0)
             {
-             for(var currentRow =0; currentRow < displayRows.length; currentRow++)
+               $(displayRows[currentRow]).addClass('even');
+            }else
              {
-              if($scope.hidenData[currentRow])
-              {
-                     $scope.hidenData[currentRow] = $scope.hidenData[currentRow];
-              }else
-              {
-                    $scope.hidenData[currentRow]=[];
-              }
-                 var data = {};
-                     data["title"] = th.innerText;
-                     data["index"] = columnIndex;
-                if(currentRow !=0 && currentRow%2 == 0)
-                {
-                   $(displayRows[currentRow]).addClass('even');
-                 }else
-                 {
-                    $(displayRows[currentRow]).addClass('odd');
-                 }
-
+                $(displayRows[currentRow]).addClass('odd');
+             }
+            $(displayRows[currentRow]).find("td:eq(0)").addClass("sorting_1");
+            $(displayRows[currentRow]).find("td:eq("+columnIndex+")").css('display','none');
+            data["value"] = $(displayRows[currentRow]).find("td:eq("+columnIndex+")").text();
+            $scope.hidenData[currentRow].push(data);
+          }
+       }
+        else {
+            for(var currentRow =0; currentRow < displayRows.length; currentRow++)
+             {
                 $(displayRows[currentRow]).find("td:eq(0)").addClass("sorting_1");
-                $(displayRows[currentRow]).find("td:eq("+columnIndex+")").css('display','none');
-                data["value"] = $(displayRows[currentRow]).find("td:eq("+columnIndex+")").text();
-                $scope.hidenData[currentRow].push(data);
-              }
+                $(displayRows[currentRow]).find("td:eq("+columnIndex+")").css('display','');
+             }
 
-            }
-            else {
-                for(var currentRow =0; currentRow < displayRows.length; currentRow++)
-                 {
-                    $(displayRows[currentRow]).find("td:eq(0)").addClass("sorting_1");
-                    $(displayRows[currentRow]).find("td:eq("+columnIndex+")").css('display','');
-                 }
-
-            }
-         });
+        }
+     });
    }
 
     $scope.showChild = function($event,row){
-       if($scope.apiHit){
-         if($($event.target.parentElement).hasClass('parent')){
-              $($event.target.parentElement).removeClass('parent');
-              angular.element($('#'+row)).remove();
-           }
-         else{
-            $($event.target.parentElement).addClass('parent');
+        if($scope.apiHit){
+            if($($event.target.parentElement).hasClass('parent')){
+                  $($event.target.parentElement).removeClass('parent');
+                  angular.element($('#'+row)).remove();
+            }
+            else{
+                $($event.target.parentElement).addClass('parent');
 
-             var childEle = '<tr class="child" id="'+row+'"><td class="child" colspan="7"><ul data-dtr-index="7">';
-              for(var i=0;i<$scope.hidenData[row].length;i++){
-                 childEle = childEle+'<li data-dtr-index="'+$scope.hidenData[row][i].index+'"><span class="dtr-title">'+$scope.hidenData[row][i].title+'</span><span class="dtr-data">'+$scope.hidenData[row][i].value+'</span></li>';
-
-              }
-            childEle = childEle+'</ul></td></tr>';
-            angular.element($event.target.parentElement).after(childEle);
-         }
-      }
+                 var childEle = '<tr class="child" id="'+row+'"><td class="child" colspan="7"><ul data-dtr-index="7">';
+                  for(var i=0;i<$scope.hidenData[row].length;i++){
+                     childEle = childEle+'<li data-dtr-index="'+$scope.hidenData[row][i].index+'"><span class="dtr-title">'+$scope.hidenData[row][i].title+'</span><span class="dtr-data">'+$scope.hidenData[row][i].value+'</span></li>';
+                  }
+                childEle = childEle+'</ul></td></tr>';
+                angular.element($event.target.parentElement).after(childEle);
+            }
+        }
     }
 
 }
