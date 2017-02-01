@@ -26,17 +26,23 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     this.showAllProjects = function(){
         $rootScope.tableNext = true;
         $rootScope.paginationCounter = 1;
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
-        var requestObject = {
-        'token': $rootScope.globals.currentUser.token,       // username field value
-        'recruiter': $rootScope.globals.currentUser.user_email   // password filed value
-        };
-        getAllProjects.allProjects(requestObject).then(function(response){
+        var count = 10;
+        if($rootScope.countList){
+            count=$rootScope.countList.value;
+
+        }
+         $('html, body').animate({ scrollTop: 0 }, 'fast');
+          var requestObject = {
+            'token': $rootScope.globals.currentUser.token,       // username field value
+            'recruiter': $rootScope.globals.currentUser.user_email,
+            'count':count                                    // password filed value
+         };
+         getAllProjects.allProjects(requestObject).then(function(response){
             if(response.message == "success") {
-                 $rootScope.totalProjectCount = response.publish_project.pop();
-                 $rootScope.totalProjectCount = $rootScope.totalProjectCount.count;
-                 $rootScope.allProjectList = response.publish_project;
-                 $rootScope.projectCountEnd = response.publish_project.length;
+                     //$rootScope.totalProjectCount = response.published_projects.pop();
+                     $rootScope.totalProjectCount = response.count;
+                     $rootScope.allProjectList = response.published_projects;
+                     $rootScope.projectCountEnd = response.published_projects.length;
 
             }else{
                 console.log('error');
@@ -800,7 +806,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 
 function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout) { /*global controller */
     $scope.options = [{name:'10',value:10},{name:'25',value:25},{name:'50',value:50},{name:'100',value:100}]; // select drop-down options
-    $scope.countList = $scope.options[0];
+    $rootScope.countList = $scope.options[0];
     $scope.hidenData = {};
     $scope.popupMsg = '';
     $scope.apiHit = false;
