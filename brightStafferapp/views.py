@@ -323,7 +323,8 @@ class TopProjectList(generics.ListCreateAPIView):
     def get_queryset(self):
         count = self.request.query_params['count']
         self.pagination_class.page_size = count
-        return Projects.objects.filter(is_published=True).order_by('-create_date')
+        rec_name = User.objects.filter(username=self.request.query_params['recruiter'])
+        return Projects.objects.filter(is_published=True, recruiter=rec_name).order_by('-create_date')
 
     # def paginate_queryset(self, queryset):
     #     queryset = super(TopProjectList, self).paginate_queryset(queryset)
