@@ -33,10 +33,11 @@ urlpatterns =[
     url(r'^backbuttoninfo/$', views.JobPosting.backButtonInfo,name='Back Button Info'),
     url(r'^publish_jobPost/$', views.JobPosting.publish, name='Publish Project'),
     #url(r'^publish_project/$', views.ProjectList.publish_project, name='Publish Project'),
-    url(r'^top_projectlist/$', views.ProjectList.top_project_list, name='Top 6 Project'),
-    url(r'^pagination/$', views.ProjectList.pagination, name='Pagination'),
+    url(r'^atop_projectlist/$', views.AProjectList.atop_project_list, name='Top 6 Project'),
+    #url(r'^pagination/$', views.ProjectList.pagination, name='Pagination'),
     #url(r'^unpublish/$', views.ProjectList.upublish_project, name='Unpublish Project'),
-    url(r'^publish_project/$', views.TopProjectList.as_view()),
+    url(r'^project_list/$', views.ProjectList.as_view()),
+    url(r'^top_project_list/$', views.TopProjectList.as_view()),
     url(r'', views.UserData.home),
 
 ]

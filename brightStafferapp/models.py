@@ -18,13 +18,13 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 class Projects(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     recruiter = models.ForeignKey(User, null=False, verbose_name='Recruiter ID')
-    project_name= models.CharField(max_length=255, verbose_name='Job Title', null=True, blank=True)
+    project_name = models.CharField(max_length=255, verbose_name='Job Title', null=True, blank=True)
     company_name = models.CharField(max_length=255, verbose_name='Company Name', null=True, blank=True)
     location = models.CharField(max_length=255,verbose_name='Location', null=True, blank=True)
     description = models.TextField(verbose_name='Job Description', null=True, blank=True)
-    is_published=models.TextField(verbose_name='Published', default=False,null=False)
-    create_date=models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
-    description_analysis=models.TextField(verbose_name='Job Description Analysis', null=True, blank=True)
+    is_published = models.TextField(verbose_name='Published', default=False, null=False)
+    create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
+    description_analysis = models.TextField(verbose_name='Job Description Analysis', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Projects'
@@ -37,6 +37,7 @@ class Projects(models.Model):
     @property
     def get_date(self):
         return self.create_date.date().strftime('%d/%m/%Y')
+
 
 class Concept(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
