@@ -228,6 +228,7 @@ function onTouch($parse, $rootScope) {
                  || navigator.userAgent.match(/BlackBerry/i)
                  || navigator.userAgent.match(/Windows Phone/i)
                      ){
+                     $rootScope.isDevice = true;
                     elm.bind('touchstart', function(evt) {
                        evt.stopPropagation();
                     });

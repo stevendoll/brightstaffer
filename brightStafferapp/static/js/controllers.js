@@ -2,11 +2,12 @@
 function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout) { /*global controller */
     $rootScope.topSixProjectList = [];   // top six project list array
     $rootScope.allProjectList = [];          // all project array
-    $rootScope.totalProjectCount ='';
+    $rootScope.totalProjectCount =0;
     $rootScope.projectCountStart = 1;
+    $rootScope.projectCountEnd = 0;
     $rootScope.paginationCounter= 1;
-    $rootScope.tableNext = true;
-     $rootScope.isDevice = false;
+    $scope.stateArray = ['projects','create.step1','create.step2','create.step3','create.step4'];
+    $rootScope.isDevice = false;
 
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
         var requestObject = {
@@ -24,13 +25,13 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     this.showAllProjects = function(){
-        $rootScope.tableNext = true;
+        var nextButton = angular.element(document.querySelector('#Table_next'));
+        var prevButton = angular.element(document.querySelector('#Table_previous'));
         $rootScope.paginationCounter = 1;
         var count = 10;
         if($rootScope.countList){
             count=$rootScope.countList.value;
-
-        }
+         }
          $('html, body').animate({ scrollTop: 0 }, 'fast');
           var requestObject = {
             'token': $rootScope.globals.currentUser.token,       // username field value
@@ -39,11 +40,17 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
          };
          getAllProjects.allProjects(requestObject).then(function(response){
             if(response.message == "success") {
-                     //$rootScope.totalProjectCount = response.published_projects.pop();
                      $rootScope.totalProjectCount = response.count;
                      $rootScope.allProjectList = response.published_projects;
                      $rootScope.projectCountEnd = response.published_projects.length;
-
+                     $rootScope.projectNext = response.next;
+                     $rootScope.projectPrevious = response.previous;
+                     if($rootScope.projectNext == null){
+                          nextButton.addClass('disabled');
+                         }
+                     if($rootScope.projectPrevious == null){
+                        prevButton.addClass('disabled');
+                     }
             }else{
                 console.log('error');
             }
@@ -123,6 +130,15 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                $(this).addClass('active');
                }
         }
+    }
+
+    $scope.stateSelected = function(){
+        if($scope.stateArray.indexOf($state.current.name)> -1 && !$rootScope.isDevice){
+          $('#project').addClass('active');
+           return true;
+        }
+
+      return false;
     }
 };
 
@@ -812,21 +828,33 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
     $scope.apiHit = false;
 
     this.getValue = function(countList){    //record count change functionality in all project list view
+        var nextButton = angular.element(document.querySelector('#Table_next'));
+        var prevButton = angular.element(document.querySelector('#Table_previous'));
         $(".loader").css('display','block');
-        //$rootScope.projectCountEnd = countList.value;
         var requestObject = {
                 'token': $rootScope.globals.currentUser.token,       // username field value
                 'recruiter': $rootScope.globals.currentUser.user_email,   // password filed value
-                'page':$scope.paginationCounter,
                 'count':countList.value
              };
-             paginationData.paginationApi(requestObject).then(function(response){
-             $scope.apiHit = true;
+             getAllProjects.allProjects(requestObject).then(function(response){
+                $scope.apiHit = true;
                 if(response.message == "success") {
-                    if(response.Pagination.length > 0)
-                       $rootScope.allProjectList = response.Pagination;
-                       $rootScope.projectCountEnd = response.Pagination.length;
-                     $(".loader").css('display','none');
+                    if(response.published_projects.length > 0)
+                       $rootScope.allProjectList = response.published_projects;
+
+                       $rootScope.projectCountEnd = response.published_projects.length;
+                       $rootScope.projectNext = response.next;
+                       $rootScope.projectPrevious = response.previous;
+                        if($rootScope.projectNext == null){
+                          nextButton.addClass('disabled');
+                         }else{
+                            if(nextButton.hasClass('disabled'))
+                                nextButton.removeClass('disabled');
+                         }
+                         if($rootScope.projectPrevious == null){
+                            prevButton.addClass('disabled');
+                         }
+                       $(".loader").css('display','none');
                   }else{
                     console.log('error');
                     $(".loader").css('display','none');
@@ -834,75 +862,68 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                             $rootScope.isSuccess = true;
                             $scope.popupMsg = "No data available.";
                             $('#breakPopup').css('display','block');
-                         }
-
+                      }
                 }
              });
     }
 
     this.changePage = function($event){                  // pagination with previous and next button event handler
-    $(".loader").css('display','none');
-    if( !$scope.tableNext && $event.target.name == "next"){
-        return;
-    }else if($event.target.name == "prev"){
-        $scope.tableNext = true;
-    }
      $rootScope.isSuccess = false;
+     var url = '';
      $scope.popupMsg = '';
      var nextButton = angular.element(document.querySelector('#Table_next'));
      var prevButton = angular.element(document.querySelector('#Table_previous'));
          if($event.target.name == "next"){
            $rootScope.paginationCounter++;
            $('#countDropdown').css('display','none');
-           if(prevButton.hasClass('disabled')){
-              prevButton.removeClass('disabled');
-           }
-
+            url = $rootScope.projectNext;
          }else if($event.target.name == "prev"){
-          if(nextButton.hasClass('disabled'))
-                nextButton.removeClass('disabled');
                if($rootScope.paginationCounter >1){
-                  $rootScope.paginationCounter--;
-
+                    $rootScope.paginationCounter--;
                     if($rootScope.paginationCounter ==1)
                     {
-                      prevButton.addClass('disabled');
                       $('#countDropdown').css('display','');
                     }
-                     }else{
-                        if(nextButton.hasClass('disabled'))
-                            nextButton.removeClass('disabled');
-
-                        return;
-                     }
+                  }
+                url = $rootScope.projectPrevious;
          }
 
          $(".loader").css('display','block');
          var requestObject = {
-                'token': $rootScope.globals.currentUser.token,       // username field value
-                'recruiter': $rootScope.globals.currentUser.user_email,   // password filed value
-                'page':$scope.paginationCounter,
-                'count':$scope.countList.value
+              'url': url
              };
-             paginationData.paginationApi(requestObject).then(function(response){
+         paginationData.paginationApi(requestObject).then(function(response){
              $scope.apiHit = true;
                 if(response.message == "success") {
-                    if(response.Pagination.length > 0)
-                       $rootScope.allProjectList = response.Pagination;
+                    if(response.published_projects.length > 0)
+                       $rootScope.allProjectList = response.published_projects;
+                       $rootScope.projectNext = response.next;
+                       $rootScope.projectPrevious = response.previous;
                        if($event.target.name == "next"){
                        $rootScope.projectCountStart =  $rootScope.projectCountEnd +1;
-                       $rootScope.projectCountEnd = $rootScope.projectCountEnd + response.Pagination.length;
+                       $rootScope.projectCountEnd = $rootScope.projectCountEnd + response.published_projects.length;
                        }else if($event.target.name == "prev"){
-                       $rootScope.projectCountStart = $rootScope.projectCountStart -response.Pagination.length;
+                       $rootScope.projectCountStart = $rootScope.projectCountStart -response.published_projects.length;
                        if($rootScope.projectCountStart <= 0)
                           $rootScope.projectCountStart = 1;
-                       $rootScope.projectCountEnd = $rootScope.projectCountEnd - response.Pagination.length;
+                       $rootScope.projectCountEnd = $rootScope.projectCountEnd - response.published_projects.length;
                        if($rootScope.projectCountEnd <10)
                          $rootScope.projectCountEnd = 10 ;
                        }
+                       if($rootScope.projectNext == null){
+                          nextButton.addClass('disabled');
+                         }else{
+                            if(nextButton.hasClass('disabled'))
+                                nextButton.removeClass('disabled');
+                         }
+                         if($rootScope.projectPrevious == null){
+                            prevButton.addClass('disabled');
+                         }else{
+                             if(prevButton.hasClass('disabled'))
+                                prevButton.removeClass('disabled');
+                         }
                    $(".loader").css('display','none');
                   }else{
-                    console.log('error');
                     $(".loader").css('display','none');
                     if(response.success == false){
                         if($event.target.name == "next"){

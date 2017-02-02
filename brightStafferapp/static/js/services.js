@@ -190,8 +190,8 @@ function paginationData($http ,REQUEST_URL){
     return {
     paginationApi: function(data){
     return $http({
-        url: REQUEST_URL+'pagination/',
-        method: "POST", // or "get"
+        url: data.url,
+        method: "GET", // or "get"
         headers: {
 					'Content-Type': 'application/json; charset=utf-8',
 				},

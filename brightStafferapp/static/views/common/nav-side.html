@@ -6,7 +6,7 @@
                     <li id="dashboard" class="ch" ng-class="{highlight:[[$state.current.name == 'dashboard']]}"   on-touch="setActive()">
                         <a ui-sref="dashboard" ng-click="main.detectmob($event)"><i class="fa fa-th"></i> <span class="nav-label">Dashboard</span></a>
                     </li>
-                 <li id="project" class="ch" ng-class="{highlight:[[$state.current.name == 'projects']] || [[$state.current.name == 'create.step1']] }"  on-touch="setActive()">
+                 <li id="project" class="ch" ng-class="{'active':[[stateSelected()]], 'highlight':[[isDevice]] && [[stateSelected()]]}"  on-touch="setActive()">
                    <a href="" ><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
                    <ul class="nav nav-second-level collapse">
                       <li ng-repeat="projects in topSixProjectList"><a href="" id="[[projects.project_id]]">#[[projects.project_name]]</a></li>
