@@ -4,29 +4,29 @@ from django.utils import timezone
 from watson_developer_cloud import AlchemyLanguageV1
 from django.conf import settings
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from brightStafferapp.models import Projects,Concept
 from brightStafferapp import util
 from brightStaffer.settings import Alchemy_api_key
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+#from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 import ast
 from itertools import chain
-from collections import OrderedDict
-from brightStafferapp.serializers import ProjectSerializer, UserSerializer, ConceptSerializer
+#from collections import OrderedDict
+from brightStafferapp.serializers import ProjectSerializer, TopProjectSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
-from rest_framework import permissions
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
-from rest_framework import renderers
+# from rest_framework import permissions
+# from rest_framework.decorators import api_view
+# from rest_framework.response import Response
+# from rest_framework.reverse import reverse
+# from rest_framework import renderers
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
-from rest_framework.decorators import api_view
+#from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 
@@ -290,7 +290,7 @@ class Alchemy_api():
         d = json.loads(data)
         Projects.objects.filter(id=project_id).update(description_analysis=d)
         for item in chain(d["keywords"], d["entities"]):
-            if round(float(item['relevance']),2)>=concept_relevance:
+            if round(float(item['relevance']),2) >= concept_relevance:
                 keyword_list.append(item['text'].lower())
         return list(set(keyword_list))[:25]
 
@@ -307,9 +307,36 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 
-class TopProjectList(generics.ListCreateAPIView):
+class ProjectList(generics.ListCreateAPIView):
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
+    pagination_class = LargeResultsSetPagination
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs):
+        result = user_validation(request.query_params)
+        if not result:
+            return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return super(ProjectList, self).get(request, *args, *kwargs)
+
+    def get_queryset(self):
+        count = self.request.query_params['count']
+        self.pagination_class.page_size = count
+        return Projects.objects.filter(is_published=True, recruiter__username=self.request.query_params['recruiter'])\
+            .order_by('-create_date')
+
+    def list(self, request, *args, **kwargs):
+        response = super(ProjectList, self).list(request, *args, **kwargs)
+        response.data['published_projects'] = response.data['results']
+        response.data['message'] = 'success'
+        del (response.data['results'])
+        return response
+
+
+class TopProjectList(generics.ListCreateAPIView):
+    queryset = Projects.objects.all()
+    serializer_class = TopProjectSerializer
     pagination_class = LargeResultsSetPagination
     http_method_names = ['get']
 
@@ -321,20 +348,16 @@ class TopProjectList(generics.ListCreateAPIView):
             return super(TopProjectList, self).get(request, *args, *kwargs)
 
     def get_queryset(self):
-        count = self.request.query_params['count']
-        self.pagination_class.page_size = count
         rec_name = User.objects.filter(username=self.request.query_params['recruiter'])
         return Projects.objects.filter(is_published=True, recruiter=rec_name).order_by('-create_date')
 
-    # def paginate_queryset(self, queryset):
-    #     queryset = super(TopProjectList, self).paginate_queryset(queryset)
-    #     count = int(self.request.query_params['count'])
-    #     self.pagination_class.page_size = count
-    #     return queryset
-
     def list(self, request, *args, **kwargs):
         response = super(TopProjectList, self).list(request, *args, **kwargs)
-        response.data['published_projects'] = response.data['results']
+        for result in response.data['results']:
+            result['concepts'] = result['concepts'][0]
+            concept = ast.literal_eval(result['concepts'])
+            result['concepts'] = concept
+        response.data['top_project'] = response.data['results']
         response.data['message'] = 'success'
         del (response.data['results'])
         return response
@@ -366,44 +389,44 @@ def user_validation(data):
 #     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
-class ProjectList():
-    # This API is publishing a project if is_published=true,by default project list count is 10
-    # @csrf_exempt
-    # def publish_project(request):
-    #     output = {'publish_project': []}
-    #     try:
-    #         user_data=json.loads(request.body.decode("utf-8"))
-    #     except ValueError:
-    #         return util.returnErrorShorcut(400,'API parameter is not valid')
-    #     rec_name = User.objects.filter(username=user_data['recruiter'])
-    #     if not rec_name:
-    #         return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
-    #     values = Token.objects.filter(user=rec_name, key=user_data['token'])
-    #     if not values:
-    #         return util.returnErrorShorcut(404, 'Access Token is not valid')
-    #     counter = Projects.objects.filter(is_published=True, recruiter=rec_name).values().order_by('-create_date').count()
-    #     project_list_count={}
-    #     project_list_count['count']=counter
-    #     project = Projects.objects.filter(is_published=True,recruiter=rec_name).values().order_by('-create_date')[:10]
-    #     for project_data in project:
-    #         param_dict = {}
-    #         project_id = Projects.objects.filter(id=project_data['id'])
-    #         for project_idd in project_id:
-    #             param_dict['project_id']=str(project_idd)
-    #         param_dict['project_name']=project_data['project_name']
-    #         user_data=User.objects.filter(id=project_data['recruiter_id']).values('email')
-    #         for email in user_data:
-    #             param_dict['recruiter']=email['email']
-    #         param_dict['location']=project_data['location']
-    #         param_dict['company_name']=project_data['company_name']
-    #         param_dict['create_date']=str(project_data['create_date'].day)+'/'+str(project_data['create_date'].month)+'/'+str(project_data['create_date'].year)
-    #         output['publish_project'].append(param_dict)
-    #     output['publish_project'].append(project_list_count)
-    #     return util.returnSuccessShorcut(output)
-
-    # This API is returning a top 6 project
+class AProjectList():
+#     # This API is publishing a project if is_published=true,by default project list count is 10
+#     # @csrf_exempt
+#     # def publish_project(request):
+#     #     output = {'publish_project': []}
+#     #     try:
+#     #         user_data=json.loads(request.body.decode("utf-8"))
+#     #     except ValueError:
+#     #         return util.returnErrorShorcut(400,'API parameter is not valid')
+#     #     rec_name = User.objects.filter(username=user_data['recruiter'])
+#     #     if not rec_name:
+#     #         return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
+#     #     values = Token.objects.filter(user=rec_name, key=user_data['token'])
+#     #     if not values:
+#     #         return util.returnErrorShorcut(404, 'Access Token is not valid')
+#     #     counter = Projects.objects.filter(is_published=True, recruiter=rec_name).values().order_by('-create_date').count()
+#     #     project_list_count={}
+#     #     project_list_count['count']=counter
+#     #     project = Projects.objects.filter(is_published=True,recruiter=rec_name).values().order_by('-create_date')[:10]
+#     #     for project_data in project:
+#     #         param_dict = {}
+#     #         project_id = Projects.objects.filter(id=project_data['id'])
+#     #         for project_idd in project_id:
+#     #             param_dict['project_id']=str(project_idd)
+#     #         param_dict['project_name']=project_data['project_name']
+#     #         user_data=User.objects.filter(id=project_data['recruiter_id']).values('email')
+#     #         for email in user_data:
+#     #             param_dict['recruiter']=email['email']
+#     #         param_dict['location']=project_data['location']
+#     #         param_dict['company_name']=project_data['company_name']
+#     #         param_dict['create_date']=str(project_data['create_date'].day)+'/'+str(project_data['create_date'].month)+'/'+str(project_data['create_date'].year)
+#     #         output['publish_project'].append(param_dict)
+#     #     output['publish_project'].append(project_list_count)
+#     #     return util.returnSuccessShorcut(output)
+#
+#     # This API is returning a top 6 project
     @csrf_exempt
-    def top_project_list(request):
+    def atop_project_list(request):
         output = {'top_project': []}
         try:
             user_data=json.loads(request.body.decode("utf-8"))
@@ -426,49 +449,50 @@ class ProjectList():
             for project_idd in project_id:
                 concepts_keywords=Concept.objects.filter(project=project_idd).values('concept')
                 for value in concepts_keywords:
+                    print (value)
                     concept=ast.literal_eval(value['concept'])
                     param_dict['concept'] = concept
                     param_dict['project_id']=str(project_idd)
             output['top_project'].append(param_dict)
         return util.returnSuccessShorcut(output)
-
-    # This API is returning a poject list according the page count
-    @csrf_exempt
-    def pagination(request):
-        output = {'Pagination': []}
-        try:
-            user_data = json.loads(request.body.decode("utf-8"))
-        except ValueError:
-            return util.returnErrorShorcut(400, 'API parameter is not valid')
-        rec_name = User.objects.filter(username=user_data['recruiter'])
-        if not rec_name:
-            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
-        values = Token.objects.filter(user=rec_name, key=user_data['token'])  # .select_related().exists()
-        if not values:
-            return util.returnErrorShorcut(404, 'Access Token is not valid')
-
-        project = Projects.objects.filter(is_published=True, recruiter=rec_name).values().order_by("-create_date")#[:count]
-
-        paginator = Paginator(project,user_data['count'])
-        try:
-            page = paginator.page(user_data['page'])
-        except:
-            return util.returnErrorShorcut(404, 'No longer data is available')
-
-        project_data=page.object_list
-
-        for project_data in project_data:
-            param_dict = {}
-            project_id = Projects.objects.filter(id=project_data['id'])
-            for project_idd in project_id:
-                param_dict['project_id'] = str(project_idd)
-            param_dict['project_name'] = project_data['project_name']
-            user_data = User.objects.filter(id=project_data['recruiter_id']).values('email')
-            for email in user_data:
-                param_dict['recruiter'] = email['email']
-            param_dict['location'] = project_data['location']
-            param_dict['company_name'] = project_data['company_name']
-            param_dict['create_date'] = str(project_data['create_date'].day) + '/' + str(
-                project_data['create_date'].month) + '/' + str(project_data['create_date'].year)
-            output['Pagination'].append(param_dict)
-        return util.returnSuccessShorcut(output)
+#
+#     # This API is returning a poject list according the page count
+#     @csrf_exempt
+#     def pagination(request):
+#         output = {'Pagination': []}
+#         try:
+#             user_data = json.loads(request.body.decode("utf-8"))
+#         except ValueError:
+#             return util.returnErrorShorcut(400, 'API parameter is not valid')
+#         rec_name = User.objects.filter(username=user_data['recruiter'])
+#         if not rec_name:
+#             return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
+#         values = Token.objects.filter(user=rec_name, key=user_data['token'])  # .select_related().exists()
+#         if not values:
+#             return util.returnErrorShorcut(404, 'Access Token is not valid')
+#
+#         project = Projects.objects.filter(is_published=True, recruiter=rec_name).values().order_by("-create_date")#[:count]
+#
+#         paginator = Paginator(project,user_data['count'])
+#         try:
+#             page = paginator.page(user_data['page'])
+#         except:
+#             return util.returnErrorShorcut(404, 'No longer data is available')
+#
+#         project_data=page.object_list
+#
+#         for project_data in project_data:
+#             param_dict = {}
+#             project_id = Projects.objects.filter(id=project_data['id'])
+#             for project_idd in project_id:
+#                 param_dict['project_id'] = str(project_idd)
+#             param_dict['project_name'] = project_data['project_name']
+#             user_data = User.objects.filter(id=project_data['recruiter_id']).values('email')
+#             for email in user_data:
+#                 param_dict['recruiter'] = email['email']
+#             param_dict['location'] = project_data['location']
+#             param_dict['company_name'] = project_data['company_name']
+#             param_dict['create_date'] = str(project_data['create_date'].day) + '/' + str(
+#                 project_data['create_date'].month) + '/' + str(project_data['create_date'].year)
+#             output['Pagination'].append(param_dict)
+#         return util.returnSuccessShorcut(output)

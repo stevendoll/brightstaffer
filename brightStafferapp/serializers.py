@@ -15,7 +15,7 @@ class ConceptSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Concept
-        fields = ('id', 'concept')
+        fields = ('concept',)
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -25,3 +25,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Projects
         fields = ('id', 'get_date', 'location', 'recruiter', 'project_name', 'company_name')
 
+
+class TopProjectSerializer(serializers.ModelSerializer):
+    #recruiter = serializers.CharField()
+    concepts = serializers.StringRelatedField(many=True, )
+    # concepts = ConceptSerializer(many=True)
+
+    class Meta:
+        model = Projects
+        fields = ('id', 'get_date', 'location', 'concepts', 'project_name', 'company_name')
