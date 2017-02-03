@@ -135,9 +135,14 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $scope.stateSelected = function(){
         if($scope.stateArray.indexOf($state.current.name)> -1 && !$rootScope.isDevice){
           $('#project').addClass('active');
+           $('.nav-second-level').addClass('in');
+             $('.nav-second-level').css('display','block');
            return true;
         }
-
+        if($scope.stateArray.indexOf($state.current.name)> -1 && $rootScope.isDevice){
+            $('#project').addClass('highlight');
+             return true;
+        }
       return false;
     }
 };

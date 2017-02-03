@@ -153,8 +153,8 @@ function getTopSixProjects($http ,REQUEST_URL){
     return {
     topSix: function(data){
     return $http({
-        url: REQUEST_URL+'top_projectlist/',
-        method: "POST", // or "get"
+        url: REQUEST_URL+'top_project_list/?format=json&recruiter='+data.recruiter+'&token='+data.token,
+        method: "GET", // or "get"
         headers: {
 					'Content-Type': 'application/json; charset=utf-8',
 				},
@@ -171,7 +171,7 @@ function getTopSixProjects($http ,REQUEST_URL){
     return {
     allProjects: function(data){
     return $http({
-        url: REQUEST_URL+'publish_project/?recruiter='+data.recruiter+'&token='+data.token+'&count='+data.count,
+        url: REQUEST_URL+'project_list/?recruiter='+data.recruiter+'&token='+data.token+'&count='+data.count,
         method: "GET", // or "get"
         headers: {
 					'Content-Type': 'application/json; charset=utf-8',
