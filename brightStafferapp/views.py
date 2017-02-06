@@ -4,106 +4,100 @@ from django.utils import timezone
 from watson_developer_cloud import AlchemyLanguageV1
 from django.conf import settings
 from django.contrib.auth import authenticate
-#from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from brightStafferapp.models import Projects,Concept
 from brightStafferapp import util
 from brightStaffer.settings import Alchemy_api_key
-#from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 import ast
 from itertools import chain
-#from collections import OrderedDict
-from brightStafferapp.serializers import ProjectSerializer, TopProjectSerializer
+# from collections import OrderedDict
+from brightStafferapp.serializers import ProjectSerializer, TopProjectSerializer, UserSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
 # from rest_framework import permissions
 # from rest_framework.decorators import api_view
 # from rest_framework.response import Response
 # from rest_framework.reverse import reverse
-# from rest_framework import renderers
+# from rest_framework import renderer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
-#from rest_framework.decorators import api_view
+# from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 
-class UserData():
-
-    #SignupAPI
-    @csrf_exempt
+class UserData(generics.ListCreateAPIView):
+    queryset = Projects.objects.all()
+    serializer_class = UserSerializer
+    # SignupAPI
+    @api_view(['POST'])
     def user_account(request):
         param_dict = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
         try:
-            profile_data=json.loads(request.body.decode("utf-8"))
-        except ValueError:
-            return util.returnErrorShorcut(400,'Invalid Forrm Fields')
-        try:
-            User.objects.create_user(first_name=profile_data['firstName'],last_name=profile_data['lastName'],email=profile_data['userEmail'],password=profile_data['password'],username=profile_data['userEmail'])
+            User.objects.create_user(first_name=profile_data['firstName'], last_name=profile_data['lastName'],
+                                     email=profile_data['userEmail'], password=profile_data['password'],
+                                     username=profile_data['userEmail'])
             user = authenticate(username=profile_data['userEmail'], password=profile_data["password"])
             token = Token.objects.get(user=user)
-            param_dict['first_name']=profile_data['firstName']
-            param_dict['last_name']=profile_data['lastName']
+            param_dict['first_name'] = profile_data['firstName']
+            param_dict['last_name'] = profile_data['lastName']
             param_dict['user_name'] = profile_data["userEmail"]
             param_dict['user_token'] = token.key
         except IntegrityError:
-            return util.returnErrorShorcut(404,'Email id is already exist')
+            return util.returnErrorShorcut(404, 'Email id is already exist')
         return util.returnSuccessShorcut(param_dict)
 
 
-
-    #Login API
+    # Login API
     @csrf_exempt
     def user_login(request):
         param_dict = {}
         try:
-            user_data=json.loads(request.body.decode("utf-8"))
+            user_data = json.loads(request.body.decode("utf-8"))
         except ValueError:
-            return util.returnErrorShorcut(400,'Invalid Forrm Fields')
+            return util.returnErrorShorcut(400, 'Invalid Form Fields')
         user = authenticate(username=user_data["username"], password=user_data["password"])
         try:
             user_profile = User.objects.all().values('first_name', 'last_name').filter(username=user)
             list_result = [entry for entry in user_profile]
             result_set = list_result[0]
-            token=Token.objects.get(user=user)
+            token = Token.objects.get(user=user)
             param_dict['user_name'] = user_data["username"]
             param_dict['user_token'] = token.key
-            param_dict['first_name']=result_set['first_name']
-            param_dict['last_name']=result_set['last_name']
+            param_dict['first_name'] = result_set['first_name']
+            param_dict['last_name'] = result_set['last_name']
         except:
-            return util.returnErrorShorcut(401,'UnAuthorized User')
+            return util.returnErrorShorcut(401, 'UnAuthorized User')
         return util.returnSuccessShorcut(param_dict)
-
-
-
 
     def home(request):
         return render(request, 'index.html', {'STATIC_URL': settings.STATIC_URL})
 
 
-
-
-
 class JobPosting():
     @csrf_exempt
     def job_posting(request):
-        param_dict={}
+        param_dict = {}
         try:
-            user_data=json.loads(request.body.decode("utf-8"))
+            user_data = json.loads(request.body.decode("utf-8"))
         except ValueError:
-            return util.returnErrorShorcut(400,'API parameter is not valid')
-        recuriter_email = User.objects.filter(email=user_data['recruiter'])
-        recuriter_email_valid=User.objects.filter(email=user_data['recruiter']).exists()
-        projects=Projects()
-        if recuriter_email_valid == False:
+            return util.returnErrorShorcut(400, 'API parameter is not valid')
+        recruiter_email = User.objects.filter(email=user_data['recruiter'])
+        recruiter_email_valid = User.objects.filter(email=user_data['recruiter']).exists()
+        projects = Projects()
+        if recruiter_email_valid == False:
             return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
-        values = Token.objects.filter(user=recuriter_email,key=user_data['token']).select_related().exists()
+        values = Token.objects.filter(user=recruiter_email, key=user_data['token']).select_related().exists()
         if values == False:
             return util.returnErrorShorcut(404, 'Access Token is not valid')
         else:
-            if user_data['id']=='':
+            if user_data['id'] == '':
                 try:
                     rec_name = User.objects.get(username=user_data['recruiter'])
                     pname_valid = Projects.objects.filter(project_name=user_data['project_name'],recruiter=rec_name).exists()
@@ -164,16 +158,16 @@ class JobPosting():
         param_dict['recruiter'] = user_data['recruiter']
         value = Projects.objects.filter(id=user_data['id']).values()
         for param_value in value:
-            if user_data['page']==1:
+            if user_data['page'] == 1:
                 param_dict['company_name']=param_value['company_name']
                 param_dict['project_name']=param_value['project_name']
                 param_dict['location']=param_value['location']
-            if user_data['page']==2:
+            if user_data['page'] == 2:
                 param_dict['description']=param_value['description']
-            if user_data['page']==3:
-                concept_dict=Concept.objects.filter(project=user_data['id']).values('concept')
+            if user_data['page'] == 3:
+                concept_dict = Concept.objects.filter(project=user_data['id']).values('concept')
                 for concept_key in concept_dict:
-                    param_dict['concept']=concept_key['concept']
+                    param_dict['concept'] = concept_key['concept']
 
         return util.returnSuccessShorcut(param_dict)
 
@@ -232,7 +226,7 @@ class JobPosting():
         return util.returnSuccessShorcut(param_dict)
 
 
-# This Class will take a input as a job description and it will retun the output as a concepts(skills)
+# This Class will take a input as a job description and it will return the output as a concepts(skills)
 class Alchemy_api():
 
     @csrf_exempt
@@ -349,7 +343,7 @@ class TopProjectList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         rec_name = User.objects.filter(username=self.request.query_params['recruiter'])
-        return Projects.objects.filter(is_published=True, recruiter=rec_name).order_by('-create_date')
+        return Projects.objects.filter(is_published=True, recruiter=rec_name).order_by('-create_date')[:6]
 
     def list(self, request, *args, **kwargs):
         response = super(TopProjectList, self).list(request, *args, **kwargs)

@@ -8,7 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('url', 'username')
+        fields = ('username', 'first_name', 'last_name', 'password')
 
 
 class ConceptSerializer(serializers.ModelSerializer):
@@ -27,9 +27,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class TopProjectSerializer(serializers.ModelSerializer):
-    #recruiter = serializers.CharField()
     concepts = serializers.StringRelatedField(many=True, )
-    # concepts = ConceptSerializer(many=True)
 
     class Meta:
         model = Projects
