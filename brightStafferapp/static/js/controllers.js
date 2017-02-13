@@ -853,8 +853,10 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                         if($rootScope.projectNext == null){
                           nextButton.addClass('disabled');
                          }else{
-                            if(nextButton.hasClass('disabled'))
-                                nextButton.removeClass('disabled');
+                            if(nextButton.hasClass('disabled')){
+                             nextButton.removeClass('disabled');
+                            }
+
                          }
                          if($rootScope.projectPrevious == null){
                             prevButton.addClass('disabled');
@@ -892,7 +894,6 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                   }
                 url = $rootScope.projectPrevious;
          }
-
          $(".loader").css('display','block');
          var requestObject = {
               'url': url
@@ -911,21 +912,23 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                        $rootScope.projectCountStart = $rootScope.projectCountStart -response.published_projects.length;
                        if($rootScope.projectCountStart <= 0)
                           $rootScope.projectCountStart = 1;
-                       $rootScope.projectCountEnd = $rootScope.projectCountEnd - response.published_projects.length;
+                       $rootScope.projectCountEnd = $rootScope.projectCountStart + response.published_projects.length -1;
                        if($rootScope.projectCountEnd <10)
                          $rootScope.projectCountEnd = 10 ;
                        }
                        if($rootScope.projectNext == null){
                           nextButton.addClass('disabled');
                          }else{
-                            if(nextButton.hasClass('disabled'))
-                                nextButton.removeClass('disabled');
+                            if(nextButton.hasClass('disabled')){
+                              nextButton.removeClass('disabled');
+                            }
                          }
                          if($rootScope.projectPrevious == null){
                             prevButton.addClass('disabled');
                          }else{
-                             if(prevButton.hasClass('disabled'))
-                                prevButton.removeClass('disabled');
+                             if(prevButton.hasClass('disabled')){
+                             prevButton.removeClass('disabled');
+                             }
                          }
                    $(".loader").css('display','none');
                   }else{
@@ -1040,9 +1043,15 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
    }
 
     $scope.showChild = function($event,row){
+        if($($event.target.parentElement).hasClass('parent')){
+           $($event.target.parentElement).css("background-color",'#ffffff');
+        }else{
+           $($event.target.parentElement).css("background-color",'#f5f5f5');
+        }
         if($scope.apiHit){
             if($($event.target.parentElement).hasClass('parent')){
                   $($event.target.parentElement).removeClass('parent');
+                   $($event.target.parentElement).css("background-color",'#ffffff');
                   angular.element($('#'+row)).remove();
             }
             else{
@@ -1054,6 +1063,7 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                   }
                 childEle = childEle+'</ul></td></tr>';
                 angular.element($event.target.parentElement).after(childEle);
+                $($event.target.parentElement).css("background-color",'#f5f5f5');
             }
         }
     }
