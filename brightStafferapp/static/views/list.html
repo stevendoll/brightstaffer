@@ -1,4 +1,4 @@
-<div ng-controller="tableCtrl as table">
+<div ng-controller="tableCtrl as table" ng-init="table.setButton()">
 <div class="wrapper wrapper-content">
             <div class="row">
                 <div class="col-lg-12">
@@ -79,14 +79,14 @@
                       <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm">
                         <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
                           <ul class="pagination">
-                            <li class="paginate_button previous disabled" id="Table_previous" ng-disabled="[[paginationCounter == 1]]" >
-                              <a name="prev" tabindex="0" ng-click="table.changePage($event)" ng-class="{'disabled':[[paginationCounter == 1]]}" >Previous</a>
+                            <li class="paginate_button previous disabled" ng-disabled="[[paginationCounter == 1]]" >
+                              <a name="prev" tabindex="0" ng-click="table.changePage($event)" id="Table_previous" ng-class="{'disabled':[[!projectPrevious]]}" >Previous</a>
                             </li>
                             <li class="paginate_button active">
                               <a  tabindex="0">[[paginationCounter]]</a>
                             </li>
-                            <li class="paginate_button next " id="Table_next" >
-                              <a tabindex="0" name="next" ng-click="table.changePage($event)">Next</a>
+                            <li class="paginate_button next disabled"  ng-disabled="[[!projectNext]]" >
+                              <a tabindex="0" name="next" ng-click="table.changePage($event)" id="Table_next" ng-class="{'disabled':[[!projectNext]]}" >Next</a>
                             </li>
                           </ul>
                         </div>
