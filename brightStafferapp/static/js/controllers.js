@@ -25,8 +25,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     this.showAllProjects = function(){
-        var nextButton = angular.element(document.querySelector('#Table_next'));
-        var prevButton = angular.element(document.querySelector('#Table_previous'));
         $rootScope.paginationCounter = 1;
         var count = 10;
         if($rootScope.countList){
@@ -40,16 +38,22 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
          };
          getAllProjects.allProjects(requestObject).then(function(response){
             if(response.message == "success") {
+                    var nextButton = document.getElementById('Table_next');
+                    nextButton = angular.element(nextButton);
+                    var prevButton = document.getElementById('Table_previous');
+                    prevButton = angular.element(prevButton);
                      $rootScope.totalProjectCount = response.count;
                      $rootScope.allProjectList = response.published_projects;
                      $rootScope.projectCountEnd = response.published_projects.length;
                      $rootScope.projectNext = response.next;
                      $rootScope.projectPrevious = response.previous;
-                     if($rootScope.projectNext == null){
-                          nextButton.addClass('disabled');
+                     if($rootScope.projectNext != null){
+                          nextButton.removeClass('disabled');
+                          nextButton.parent().removeClass('disabled');
                          }
-                     if($rootScope.projectPrevious == null){
-                        prevButton.addClass('disabled');
+                     if($rootScope.projectPrevious != null){
+                        prevButton.removeClass('disabled');
+                        prevButton.parent().removeClass('disabled');
                      }
             }else{
                 console.log('error');
@@ -456,8 +460,8 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
             $scope.isLastStepVisited = true;
             $state.go('create.step4','');
       }else if($rootScope.jobDescriptionResult.concept.length == 0){
-            $scope.isError = true;
-            $scope.apiErrorMsg = 'There is no skills.';
+            $scope.isDescriptionError = true;
+            $scope.apiErrorMsg = 'Required.';
       }
     }
 
@@ -559,6 +563,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         }else if(currentState == "create.step4"){
               var nextButton = angular.element(document.querySelector('#next'));
               nextButton.css('display','block');
+              var mainUl = angular.element(document.querySelector('#projectBtns'));
+                if(mainUl.hasClass('twobtn')){
+                   mainUl.removeClass('twobtn');
+                }
               $state.go('create.step3','');
         }
     }
@@ -738,7 +746,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
              }
               else if(!validateSkillName(skill)){
                  $scope.isDescriptionError = true;
-                 $scope.apiErrorMsg ='First letter sholud be a character!' ;
+                 $scope.apiErrorMsg ='Input should contain first letter as character and allowed special characters are (. - _).';
                }else{
                    var newSkill = $event.target.value;
                         var index = $rootScope.jobDescriptionResult.concept.indexOf(newSkill);
@@ -832,6 +840,19 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
     $scope.popupMsg = '';
     $scope.apiHit = false;
 
+    this.setButton = function(){
+        var nextButton = angular.element(document.querySelector('#Table_next'));
+        var prevButton = angular.element(document.querySelector('#Table_previous'));
+        if($rootScope.projectNext != null){
+          nextButton.removeClass('disabled');
+          nextButton.parent().removeClass('disabled');
+         }
+         if($rootScope.projectPrevious != null){
+            prevButton.removeClass('disabled');
+            prevButton.parent().removeClass('disabled');
+         }
+    }
+
     this.getValue = function(countList){    //record count change functionality in all project list view
         var nextButton = angular.element(document.querySelector('#Table_next'));
         var prevButton = angular.element(document.querySelector('#Table_previous'));
@@ -852,14 +873,17 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                        $rootScope.projectPrevious = response.previous;
                         if($rootScope.projectNext == null){
                           nextButton.addClass('disabled');
+                          nextButton.parent().addClass('disabled');
                          }else{
                             if(nextButton.hasClass('disabled')){
                              nextButton.removeClass('disabled');
+                             nextButton.parent().removeClass('disabled');
                             }
 
                          }
                          if($rootScope.projectPrevious == null){
                             prevButton.addClass('disabled');
+                            prevButton.parent().addClass('disabled');
                          }
                        $(".loader").css('display','none');
                   }else{
@@ -918,16 +942,20 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                        }
                        if($rootScope.projectNext == null){
                           nextButton.addClass('disabled');
+                          nextButton.parent().addClass('disabled');
                          }else{
                             if(nextButton.hasClass('disabled')){
                               nextButton.removeClass('disabled');
+                              nextButton.parent().removeClass('disabled');
                             }
                          }
                          if($rootScope.projectPrevious == null){
                             prevButton.addClass('disabled');
+                            prevButton.parent().addClass('disabled');
                          }else{
                              if(prevButton.hasClass('disabled')){
                              prevButton.removeClass('disabled');
+                             prevButton.parent().removeClass('disabled');
                              }
                          }
                    $(".loader").css('display','none');
