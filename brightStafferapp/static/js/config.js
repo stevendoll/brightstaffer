@@ -82,10 +82,10 @@ angular
     .module('brightStaffer')
     .config(config)
     .run(function($rootScope, $state, $location, $timeout, $cookies, $cookieStore) {
-
+    $rootScope.isDevice = false;
     $rootScope.$state = $state;
     $rootScope.globals ={};
-
+   // console.log('load');
     $rootScope.checkReqValidation = function(formName){
       $('#'+formName+ ' input').each(function(){ /*Show error on blank field when user submit*/
                     var spanClass = $(this).next('span').attr('class');

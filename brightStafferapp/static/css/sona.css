@@ -2415,6 +2415,7 @@ table.dataTable tbody tr.selected {
     background-color: #fff;
     border-color: #ddd;
     opacity:0.5;
+    pointer-events: none;
 }
 
 @media (max-width: 992px){
