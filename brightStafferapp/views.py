@@ -252,9 +252,12 @@ class Alchemy_api():
         for project_idd in project_id:
             concepts_obj.project=project_idd
             param_dict['project_id'] = str(project_idd)
+        keyword_concepts=[]
         try:
             keyword_concepts = Alchemy_api.alchemy_api(user_data,project_id)
         except:
+            concepts_obj.concept = keyword_concepts
+            concepts_obj.save()
             return util.returnErrorShorcut(400,"Description text data is not valid.")
         concepts_obj.concept = keyword_concepts
         concept_empty=Concept.objects.filter(project=project_id).values()
