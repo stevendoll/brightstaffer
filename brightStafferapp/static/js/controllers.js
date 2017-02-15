@@ -1098,6 +1098,49 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 }
 
+function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout) {
+    this.analysedData = [
+        {   "key":"analysedData",
+            "values": [[6,5],[7,11],[8,6],[9,11],[10,30],[11,10],[12,13],[13,4],[14,3],[15,3],[16,6]]
+        }];
+
+    this.activeCardData = [
+        {   "key":"activeCardData",
+            "values": [[6,1],[7,5],[8,2],[9,3],[10,2],[11,1],[12,0],[13,2],[14,8],[15,0],[16,0]]
+        }];
+
+    this.interviewCardData = [
+        {   "key":"interviewCardData",
+            "values": [[4,1],[8,3],[12,1],[16,5],[20,2],[24,3],[28,2]]
+        }];
+
+    this.fourthCardData = [
+        {   "key":"fourthCardData",
+            "values": [[3,0],[8,1],[13,0],[18,2],[28,8],[38,0],[56,0]]
+        }];
+
+    $scope.xAxisTicksFunction = function(){
+        console.log('xAxisTicksFunction');
+        console.log(d3.svg.axis().ticks(d3.time.minutes, 5));
+        return function(d){
+            return d3.svg.axis().ticks(d3.time.minutes, 5);
+        }
+    };
+
+    $scope.xAxisTickFormatFunction = function(){
+        console.log('xAxisTicksFunction');
+        return function(d){
+            return d3.time.format('%H:%M')(moment.unix(d).toDate());
+        }
+    };
+
+    $scope.colorFunction = function() {
+	return function(d, i) {
+    	return 'rgb(255, 255, 255)'
+    };
+}
+}
+
 angular
     .module('brightStaffer')
     .controller('MainCtrl', MainCtrl)
@@ -1107,4 +1150,5 @@ angular
     .controller('resetPwCtrl', resetPwCtrl)
     .controller('topnavCtrl', topnavCtrl)
     .controller('createProjectCtrl', createProjectCtrl)
-    .controller('tableCtrl', tableCtrl);
+    .controller('tableCtrl', tableCtrl)
+    .controller('scoreCardCtrl', scoreCardCtrl);
