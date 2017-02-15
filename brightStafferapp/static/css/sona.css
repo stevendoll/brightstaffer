@@ -18,6 +18,10 @@ body {
   line-height: 1.5;
   color: #373a3c;
   background-color: #f3f3f4;
+   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 
@@ -43,6 +47,7 @@ h1, .h1 {
 
 h2, .h2 {
   font-size: 2rem;
+  font-family: 'open_sanslight';
 }
 
 h3, .h3 {
@@ -69,7 +74,7 @@ h6, .h6 {
 /* ----- Content ----- */
 
 .wrapper-content {
-    padding: 20px 10px 0px;
+    padding: 10px 10px 0px;
 }
 
 .b-t {
@@ -817,6 +822,8 @@ li.active a {
 
 .concept-tag {
 	margin: 0 6px 6px 0;
+	font-size: 18px;
+    font-family: 'open_sansregular';
 }
 
 .bootstrap-tagsinput {
