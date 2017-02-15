@@ -22,7 +22,7 @@ class Projects(models.Model):
     company_name = models.CharField(max_length=255, verbose_name='Company Name', null=True, blank=True)
     location = models.CharField(max_length=255,verbose_name='Location', null=True, blank=True)
     description = models.TextField(verbose_name='Job Description', null=True, blank=True)
-    is_published = models.TextField(verbose_name='Published', default=False, null=False)
+    is_published = models.BooleanField(verbose_name='Published', default=False, null=False)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
     description_analysis = models.TextField(verbose_name='Job Description Analysis', null=True, blank=True)
 

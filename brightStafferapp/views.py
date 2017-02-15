@@ -228,7 +228,6 @@ class JobPosting():
 
 # This Class will take a input as a job description and it will return the output as a concepts(skills)
 class Alchemy_api():
-
     @csrf_exempt
     # This API is analsys a project description and reuturn a concepts
     def analsys(request):
@@ -253,9 +252,12 @@ class Alchemy_api():
         for project_idd in project_id:
             concepts_obj.project=project_idd
             param_dict['project_id'] = str(project_idd)
+        keyword_concepts=[]
         try:
             keyword_concepts = Alchemy_api.alchemy_api(user_data,project_id)
         except:
+            concepts_obj.concept = keyword_concepts
+            concepts_obj.save()
             return util.returnErrorShorcut(400,"Description text data is not valid.")
         concepts_obj.concept = keyword_concepts
         concept_empty=Concept.objects.filter(project=project_id).values()
@@ -287,6 +289,7 @@ class Alchemy_api():
             if round(float(item['relevance']),2) >= concept_relevance:
                 keyword_list.append(item['text'].lower())
         return list(set(keyword_list))[:25]
+
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -348,9 +351,12 @@ class TopProjectList(generics.ListCreateAPIView):
     def list(self, request, *args, **kwargs):
         response = super(TopProjectList, self).list(request, *args, **kwargs)
         for result in response.data['results']:
-            result['concepts'] = result['concepts'][0]
-            concept = ast.literal_eval(result['concepts'])
-            result['concepts'] = concept
+            if len(result['concepts'])>0:
+                result['concepts'] = result['concepts'][0]
+                concept = ast.literal_eval(result['concepts'])
+                result['concepts'] = concept
+            else:
+                result['concepts']=result['concepts']
         response.data['top_project'] = response.data['results']
         response.data['message'] = 'success'
         del (response.data['results'])
