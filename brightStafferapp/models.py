@@ -53,7 +53,7 @@ class Concept(models.Model):
         return str(self.id)
 
     def __str__(self):
-        return self.concept
+        return str(self.concept)
 
 
 def get_upload_file_name(instance, filename):
