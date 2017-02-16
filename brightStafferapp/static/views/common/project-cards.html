@@ -12,8 +12,8 @@
           <div class="clearfix" ng-show="[[(($index) % 3) == 0]]"></div>
           <div class="col-lg-4">
               <div class="ibox">
-                <div class="ibox-title align-center" ng-init="conceptList = [[projects.concepts]]">
-                      <span class="label label-primary pull-right" ng-if="$first">NEW</span>
+                <div class="ibox-title align-center position-rel" ng-init="conceptList = [[projects.concepts]]">
+                      <span class="label label-primary pull-right new-cards" ng-if="$first">New</span>
                       <h5 class="dash"><a ui-sref="development" class="text-project">#[[projects.project_name]]</a></h5>
                       <div class="cls"></div>
                       <div class="box-location"><a>@[[projects.company_name]]</a> in <span class="text-detail">[[projects.location | capitalize]]</span></div>
