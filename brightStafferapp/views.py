@@ -262,8 +262,10 @@ class AlchemyAPI(View):
         project_id = validate_project_by_id(user_data)
 
         if project_id:
-            project_id = str(project_id[0])
+            print (project_id)
+            project_id = str(project_id)
             concept_obj, created = Concept.objects.get_or_create(project_id=project_id)
+            Projects.objects.filter(id=project_id).update(description=user_data['description'])
             context['project_id'] = str(project_id)
 
         # call the alchemy api and get list of concepts
