@@ -5,7 +5,7 @@ from brightStafferapp.models import Projects,Concept
 
 
 class ProjectsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'recruiter','project_name','company_name','location','create_date','is_published')
+    list_display = ('id', 'recruiter','project_name','company_name','location','create_date',)
     list_filter = ('recruiter','project_name','company_name','create_date')
     list_per_page = 2000
 

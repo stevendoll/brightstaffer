@@ -624,6 +624,15 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .top-navigation .navbar-nav .open .dropdown-menu .dropdown-header {
   padding: 10px 15px 10px 20px;
 }
+
+.navbar-form-custom .search-icon {
+  background: url(../img/search-icon.png) no-repeat 14px 19px;
+  padding: 8px 14px 8px 42px;
+  color: #a2acbd;
+  font-size: 16px;
+  font-family: 'open_sansregular';
+}
+
 @media (max-width: 768px) {
   .top-navigation .navbar-header {
     display: block;
@@ -8407,6 +8416,15 @@ body.md-skin {
 }
 
 @media (max-width: 568px) {
+.box-location {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.recent-talents {
+  padding: 15px 0px;
+}
+
 .heading-section {
   padding: 0px 0px !important;
 }
@@ -8423,18 +8441,33 @@ body.md-skin {
   padding: 0px 0px;
 }
 
-.align-right span a.add-talent-bttn {
-    padding: 7px 20px !important;
+.view-details a.view-project-bttn {
+    padding: 6px 8px !important;
     font-size: 13px !important;
+}
+
+.align-right span a.add-talent-bttn {
+    font-size: 14px !important;
+    width: 120px !important;
+    height: 30px !important;
+    padding: 6px 0px;
+}
+
+.wrapper-content .m-t {
+  margin-top: 4px !important;
 }
 
 .align-right span a.new-project {
-    padding: 7px 8px !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
+    width: 120px !important;
+    height: 30px !important;
+    padding: 6px 0px;
 }
 
 .heading-section h2, .h2 {
-    font-size: 1.4rem;
+  font-size: 20px;
+  color: #373a3c;
+  margin-top: 7px;
 }
 
 .m-bttm20 {
@@ -8648,10 +8681,14 @@ input[type=password]
 
 .align-right span a.add-talent-bttn {
   background-color: #1c84c6;
- border-color: #1c84c6;
- padding: 10px 45px;
- font-size: 16px;
- font-family: 'OpenSans-Semibold';
+  border-color: #1c84c6;
+  font-size: 16px;
+  font-family: 'OpenSans-Semibold';
+  width: 178px;
+  height: 41px;
+  float: right;
+  text-align: center;
+  border-radius: 2px;
 }
 
 .p-m15 {
@@ -8669,7 +8706,7 @@ input[type=password]
 }
 
 .widget .p-m15 h6.m-top15 {
-  margin: 15px 0px 10px 0px;
+  margin: 7px 0px 10px 0px;
   font-family: 'OpenSans-Semibold';
 }
 
@@ -8724,6 +8761,7 @@ input[type=password]
   text-align: center;
   color: #999999;
   margin-bottom: 20px;
+  font-family: 'open_sansregular';
 }
 
 .box-location span {
@@ -8731,23 +8769,38 @@ input[type=password]
 }
 
 .box-location a {
-  color: #2a80b9;
+  color: #2b6abe;
 }
 
 .started-panel {
   width: 100%;
   float: left;
   text-align: center;
-  color: #adadad;
-  font-family: 'open_sanslight';
+  color: #898989;
+  font-family: 'open_sansregular';
   font-size: 12px;
 }
 
 .started-panel span {
-  color: #676a6c;
+  color: #545759;
   margin-left: 10px;
   font-size: 12px;
   font-family: 'OpenSans-Semibold';
+}
+
+.position-rel {
+  position: relative;
+}
+
+.ibox-title .new-cards {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  border-radius: 2px;
+  padding: 8px 11px !important;
+  font-size: 13px;
+  color: #ffffff;
+  font-family: 'open_sansregular';
 }
 
 .recent-talents {
@@ -8773,9 +8826,10 @@ input[type=password]
 }
 
 .all-starred {
-  font-size: 12px;
-  color: #727476;
+  font-size: 13px;
+  color: #676a6c !important;
   text-align: center;
+  font-family: 'open_sansregular';
 }
 
 .all-starred-box {
@@ -8785,7 +8839,7 @@ input[type=password]
   border: 1px solid #dedede;
   border-radius: 3px;
   padding: 10px 0px;
-  font-size: 15px;
+  font-size: 17px;
   font-family: 'OpenSans-Semibold';
   color: #000000;
 }
@@ -8827,15 +8881,18 @@ input[type=password]
   border-color: #3680ca;
   padding: 9px 16px;
   font-size: 14px;
-  font-family: 'open_sanslight';
+  font-family: 'open_sansregular';
 }
 
 .align-right span a.new-project {
   background-color: #1c84c6;
   border-color: #1c84c6;
-  padding: 10px 31px;
   font-size: 16px;
   font-family: 'OpenSans-Semibold';
+  width: 178px;
+  height: 41px;
+  float: right;
+  text-align: center;
 }
 
 .add-talent-dialog {

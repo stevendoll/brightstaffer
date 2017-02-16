@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from brightStafferapp.models import Projects,Concept
 from brightStafferapp import util
+from brightStafferapp.util import require_post_params
 from brightStaffer.settings import Alchemy_api_key
 # from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
@@ -29,6 +30,8 @@ from rest_framework import status
 # from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.views.generic import View
+from django.utils.decorators import method_decorator
 
 
 class UserData(generics.ListCreateAPIView):
@@ -208,88 +211,90 @@ class JobPosting():
             user_data = json.loads(request.body.decode("utf-8"))
         except ValueError:
             return util.returnErrorShorcut(400, 'API parameter is not valid')
-        recuriter_email = User.objects.filter(email=user_data['recruiter'])
-        if not recuriter_email:
-            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
-        values = Token.objects.filter(user=recuriter_email, key=user_data['token'])  # .select_related().exists()
-        if not values:
-            return util.returnErrorShorcut(404, 'Access Token is not valid')
-        try:
-            project_id = Projects.objects.filter(id=user_data['id'])
-            if not project_id:
-                return util.returnErrorShorcut(400, 'Project id is not valid')
-        except:
-            return util.returnErrorShorcut(400, 'Project id is not valid')
-
-        Concept.objects.filter(project=user_data['id']).update(concept=user_data['concept'])
-        param_dict['concept']=user_data['concept']
+        validate_email_and_token(user_data)
+        project_id = validate_project_by_id(user_data)
+        concept_obj, created = Concept.objects.get_or_create(project_id=project_id)
+        concept_obj.concept = user_data['concept']
+        concept_obj.save()
+        param_dict['concept'] = concept_obj.concept
         return util.returnSuccessShorcut(param_dict)
+
+
+def validate_project_by_id(request_data):
+    try:
+        project_id = Projects.objects.get(id=request_data['id'])
+        if not project_id:
+            return util.returnErrorShorcut(400, 'Project id is not valid')
+        return project_id
+    except:
+        return util.returnErrorShorcut(400, 'Project id is not valid')
+
+
+def validate_email_and_token(request_data):
+    recruiter_email = User.objects.filter(email=request_data['recruiter'])
+    if not recruiter_email:
+        return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
+    values = Token.objects.filter(user=recruiter_email, key=request_data['token'])  # .select_related().exists()
+    if not values:
+        return util.returnErrorShorcut(404, 'Access Token is not valid')
 
 
 # This Class will take a input as a job description and it will return the output as a concepts(skills)
-class Alchemy_api():
-    @csrf_exempt
-    # This API is analsys a project description and reuturn a concepts
-    def analsys(request):
-        concepts_obj=Concept()
-        param_dict = {}
+class AlchemyAPI(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(AlchemyAPI, self).dispatch(request, *args, **kwargs)
+
+    @require_post_params(params=['recruiter', 'token'])
+    def post(self, request):
+        """
+        This API analyse a project description and return a list of concepts
+        :return:
+        """
+        context = dict()
+        concept_obj = None
         try:
-            user_data=json.loads(request.body.decode("utf-8"))
+            user_data = json.loads(request.body.decode("utf-8"))
         except ValueError:
-            return util.returnErrorShorcut(400,'API parameter is not valid')
-        recuriter_email = User.objects.filter(email=user_data['recruiter'])
-        if not recuriter_email:
-            return util.returnErrorShorcut(404, 'Recruiter email id is not valid')
-        values = Token.objects.filter(user=recuriter_email, key=user_data['token'])#.select_related().exists()
-        if not values:
-            return util.returnErrorShorcut(404, 'Access Token is not valid')
-        try:
-            project_id = Projects.objects.filter(id=user_data['id'])
-            if not project_id:
-                return util.returnErrorShorcut(400, 'Project id is not valid')
-        except:
-            return util.returnErrorShorcut(400, 'Project id is not valid')
-        for project_idd in project_id:
-            concepts_obj.project=project_idd
-            param_dict['project_id'] = str(project_idd)
-        keyword_concepts=[]
-        try:
-            keyword_concepts = Alchemy_api.alchemy_api(user_data,project_id)
-        except:
-            concepts_obj.concept = keyword_concepts
-            concepts_obj.save()
-            return util.returnErrorShorcut(400,"Description text data is not valid.")
-        concepts_obj.concept = keyword_concepts
-        concept_empty=Concept.objects.filter(project=project_id).values()
-        if not concept_empty:
-            concepts_obj.save()
-            Projects.objects.filter(id=project_id).update(description=user_data['description'])
-            param_dict['concept'] = keyword_concepts
+            return util.returnErrorShorcut(400, 'API parameter is not valid')
+        validate_email_and_token(user_data)
+        project_id = validate_project_by_id(user_data)
+
+        if project_id:
+            project_id = str(project_id[0])
+            concept_obj, created = Concept.objects.get_or_create(project_id=project_id)
+            context['project_id'] = str(project_id)
+
+        # call the alchemy api and get list of concepts
+        keyword_concepts = self.alchemy_api(user_data, project_id)
+        if keyword_concepts:
+            concept_obj.concept = keyword_concepts
+            concept_obj.save()
         else:
-            try:
-                del user_data['token']
-                del user_data['recruiter']
-            except KeyError:
-                pass
-            Projects.objects.filter(id=project_id).update(**user_data)
-            Concept.objects.filter(project=project_id).update(concept=keyword_concepts)
-            param_dict['concept']=keyword_concepts
-        return util.returnSuccessShorcut(param_dict)
+            return util.returnErrorShorcut(400, "Description text data is not valid.")
+        del user_data['token']
+        del user_data['recruiter']
+        Projects.objects.filter(id=project_id).update(**user_data)
+        concept_obj.concept = keyword_concepts
+        context['concept'] = keyword_concepts
+        return util.returnSuccessShorcut(context)
 
-    def alchemy_api(user_data,project_id):
+    def alchemy_api(self, user_data, project_id):
         keyword_list = []
-        alchemy_language = AlchemyLanguageV1(api_key=Alchemy_api_key)
-        data = json.dumps(
-            alchemy_language.combined(
-                text=user_data['description'],
-                extract='entities,keywords',max_items=25))
-        d = json.loads(data)
-        Projects.objects.filter(id=project_id).update(description_analysis=d)
-        for item in chain(d["keywords"], d["entities"]):
-            if round(float(item['relevance']),2) >= concept_relevance:
-                keyword_list.append(item['text'].lower())
-        return list(set(keyword_list))[:25]
-
+        try:
+            alchemy_language = AlchemyLanguageV1(api_key=Alchemy_api_key)
+            data = json.dumps(
+                alchemy_language.combined(text=user_data['description'],
+                                          extract='entities,keywords', max_items=25))
+            d = json.loads(data)
+            Projects.objects.filter(id=project_id).update(description_analysis=d)
+            for item in chain(d["keywords"], d["entities"]):
+                if round(float(item['relevance']), 2) >= concept_relevance:
+                    keyword_list.append(item['text'].lower())
+            return list(set(keyword_list))[:25]
+        except Exception as e:
+            return keyword_list
 
 
 class LargeResultsSetPagination(PageNumberPagination):

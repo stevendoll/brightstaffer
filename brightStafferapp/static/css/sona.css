@@ -293,6 +293,9 @@ li.active a {
     position: inherit;
     margin: 0 0 0 240px;
   }
+  .wrapper-content .m-t {
+    margin-top: 10px !important;
+  }
   .navbar-static-side {
     z-index: 2001;
     position: fixed;
