@@ -1,4 +1,3 @@
-import os
 import json
 from brightStaffer.settings import concept_relevance
 from django.utils import timezone
@@ -377,28 +376,3 @@ def user_validation(data):
         return False
     else:
         return True
-
-
-class FileUpload(View):
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(FileUpload, self).dispatch(request, *args, **kwargs)
-
-    def post(self, request):
-        files = request.FILES.getlist('files')
-        print(files)
-        dest_path = settings.MEDIA_URL
-        if not os.path.exists(dest_path):
-            os.makedirs(dest_path)
-        for file in files:
-            self.handle_uploaded_file(dest_path, file)
-        context = dict()
-        return util.returnSuccessShorcut(context)
-
-    def handle_uploaded_file(self, dest_path, f):
-        file_obj = open(dest_path + f.name, 'wb+')
-        for chunk in f.chunks():
-            file_obj.write(chunk)
-            file_obj.close()
-

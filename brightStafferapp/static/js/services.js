@@ -204,8 +204,26 @@ function paginationData($http ,REQUEST_URL){
     }
  }
 
-
-
+function fileUploadApi($http,REQUEST_URL) {
+    return {
+     upload: function(formdata){
+          return $http({
+                url: REQUEST_URL+'upload/',
+                method: 'POST',
+                headers: {
+					 'Content-Type': 'undefined',
+				},
+                data: formdata,
+                processData: true,
+                contentType: false
+            }).success(function() {
+                console.log("Uploaded");
+            }).error(function() {
+                console.log("Error");
+            });
+         }
+     }
+}
 
 angular
     .module('brightStaffer')
@@ -219,4 +237,5 @@ angular
     .service('publishProject', publishProject)
     .service('getTopSixProjects', getTopSixProjects)
     .service('getAllProjects', getAllProjects)
-    .service('paginationData', paginationData);
+    .service('paginationData', paginationData)
+    .service('fileUploadApi', fileUploadApi);
