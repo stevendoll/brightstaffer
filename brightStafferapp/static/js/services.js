@@ -2,7 +2,15 @@
 var baseUrl = 'http://'+window.location.host+'/';
 angular
     .module('brightStaffer')
-    .constant('REQUEST_URL', baseUrl);
+    .constant('REQUEST_URL', baseUrl)
+
+.config(['$httpProvider', function ($httpProvider) {
+  //Reset headers to avoid OPTIONS request (aka preflight)
+  $httpProvider.defaults.headers.common = {};
+  $httpProvider.defaults.headers.post = {};
+  $httpProvider.defaults.headers.put = {};
+  $httpProvider.defaults.headers.patch = {};
+}]);
 
 function loginService($http ,REQUEST_URL){
     return {
