@@ -1,0 +1,67 @@
+<!-- Modal -->
+<div ng-controller="uploadFileCtrl as up">
+<div class="modal fade" id="add-talent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add Talent</h4>
+      </div>
+         <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>
+      <div class="modal-body">
+         <div class="talent-panel">
+          <div class="cls"></div>
+                <div class="dropzone" id="dropzone" file-dropzone="[application/vnd.openxmlformats-officedocument.wordprocessingml.document , application/msword, application/pdf]" file-name="FileName" data-max-file-size="5">
+                    <img src="static/img/pdf-upload.png" alt="">
+          </div>
+          <div class="file-upld-mini">
+              <form>
+                  <input data-my-Directive type="file" multiple="multiple" name="files">Choose File
+              </form>
+              </div>
+             <div class="cls"></div>
+          <div class="choose-file">Choose a file or drag it here.</div>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!---progress bar and name model--->
+<div class="modal fade" id="add-files" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="closePopup()" aria-label="Close"><span aria-hidden="true">x</span></button>
+        <h4 class="modal-title">Add Talent</h4>
+      </div>
+       <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>
+      <div class="modal-body">
+        <div class="talent-inner-panel">
+          <div class="progress-panel" ng-repeat="data in FilesList">
+             <div class="cls"></div>
+            <div class="progress-image"><img class="thumb-image" src="static/img/preview.png" alt=""></div>
+            <div class="progress-text">[[data.name]]</div>
+            <div class="progress-close" id="removeCard_[[$index]]"><a id="[[data.name]]" ng-click="removeFile($event)" >x</a></div>
+            <div class="cls"></div>
+              <div>
+                <span style="padding: 0 11px 0 15px;" id="file_[[$index]]"></span>
+                <span class="error exterror" ng-show="[[data.fileSizeError]] && [[!data.fileTypeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File size exceeded(max 5MB).</span>
+                <span class="error exterror" ng-show="[[data.fileTypeError]] && [[!data.fileSizeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File type error(should be docx/pdf/doc).</span>
+                <span class="error exterror" ng-show="[[data.fileSizeError]] && [[data.fileTypeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File not supported.</span>
+            </div>
+           </div>
+          <div class="progress-bttn">
+            <a href="" class="btn-lg btn-primary upload-file-bttn uploadDisable" ng-click="upload()" id="uploadFile">Upload File</a>
+            <span class="btn-lg btn-primary add-files-bttn file-upld-mini"><input data-my-Directive type="file" multiple="multiple" >Add Files</span>
+          </div>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

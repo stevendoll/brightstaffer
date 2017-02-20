@@ -242,14 +242,56 @@ function onTouch($parse, $rootScope) {
                  ontouchFn.call(scope.setActive(evt), evt.which);
                 });
             });
-            /*elm.bind('click', function(evt){
-                scope.$apply(function(){
-                 ontouchFn.call(scope.setActive(evt),evt.which);
-                });
-            });*/
         }
     };
 }
+
+
+function myDirective($rootScope) {
+    return {
+        restrict: 'A',
+        scope: true,
+        link: function (scope, element, attr) {
+            element.bind('change', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (element[0].files){
+                    if (element[0].files.length > 0) {
+                      scope.uploadFiles(element[0].files);
+                    }
+                }
+                return false;
+            });
+        }
+    };
+}
+
+
+function fileDropzone($rootScope) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+        element.on('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        element.on('dragenter', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        element.on('drop', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var file = event.dataTransfer.files[0];
+             scope.checkFileValidation(file);
+             console.log($rootScope.attachedFilesDetails);
+             $('#add-talent').modal('hide');
+             $('#add-files').modal('show');
+        });
+    }
+  };
+}
+
 /**
  *
  * Pass all functions into module
@@ -265,4 +307,6 @@ angular
     .directive('sideNavigation', sideNavigation)
     .directive('minimalizaSidebar', minimalizaSidebar)
     .directive('clickOutside', clickOutside)
-    .directive('onTouch', onTouch);
+    .directive('onTouch', onTouch)
+    .directive('myDirective', myDirective)
+    .directive('fileDropzone', fileDropzone);

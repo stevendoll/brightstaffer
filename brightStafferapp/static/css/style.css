@@ -8991,6 +8991,7 @@ input[type=password]
 .progress-panel {
   width: 100%;
   float: left;
+  padding-bottom: 12px;
 }
 
 .progress-image {
@@ -9022,7 +9023,7 @@ input[type=password]
   font-weight: normal;
   color: #a8a8a8;
   float: right;
-  width: auto;
+  width: 24px;
   line-height: 32px;
 }
 
@@ -9030,7 +9031,7 @@ input[type=password]
   color: #a8a8a8;
 }
 
-.progress-bttn a.add-files-bttn {
+.progress-bttn span.add-files-bttn {
   background-color: #1d84c6;
   border-color: #1d84c6;
   color: #FFFFFF;
@@ -9040,15 +9041,20 @@ input[type=password]
   margin-top: 40px;
 }
 
-.progress-bttn a.add-files-bttn {
-  background-color: #1d84c6;
+.progress-bttn span.add-files-bttn {
+  /*background-color: #1d84c6;
   border-color: #1d84c6;
   color: #FFFFFF;
   padding: 8px 26px;
   border-radius: 2px;
   float: right;
   margin-top: 40px;
-  margin-right: 10px;
+  margin-right: 10px;*/
+    float: right;
+    margin: 40px 5px 0 0;
+    width: 137px;
+    padding: 7px;
+    border-radius: 2px;
 }
 
 .progress-bttn a.upload-file-bttn {
@@ -9061,3 +9067,12 @@ input[type=password]
   margin-top: 40px;
 }
 /*new-css-ends*/
+
+.exterror{
+ color:red;
+}
+
+.uploadDisable{
+    pointer-events: none;
+    cursor: default;
+}
