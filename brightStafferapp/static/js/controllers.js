@@ -1155,11 +1155,38 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.countError = false;
     $scope.fileCountExceededMsg = '';
     $scope.isDisabled = true;
+    $scope.noFile = false;
+
+    var dropzoneId = "dropzone";
+
+        window.addEventListener("dragenter", function(e) {
+          if (e.target.id != dropzoneId) {
+            e.preventDefault();
+            e.dataTransfer.effectAllowed = "none";
+            e.dataTransfer.dropEffect = "none";
+          }
+        }, false);
+
+        window.addEventListener("dragover", function(e) {
+          if (e.target.id != dropzoneId) {
+            e.preventDefault();
+            e.dataTransfer.effectAllowed = "none";
+            e.dataTransfer.dropEffect = "none";
+          }
+        });
+
+        window.addEventListener("drop", function(e) {
+          if (e.target.id != dropzoneId) {
+            e.preventDefault();
+            e.dataTransfer.effectAllowed = "none";
+            e.dataTransfer.dropEffect = "none";
+          }
+        });
+
 
     $scope.uploadFiles = function(files) {
       var totalFiles = $scope.FilesList.length + files.length;
      if(totalFiles <= 8){
-        $scope.countError = false;
          for (var i = 0; i < files.length; i++) {
            $scope.checkFileValidation(files[i]);
          }
@@ -1184,14 +1211,13 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     };
 
     $scope.checkFileValidation = function(file){
+    console.log(file);
      var maxFileSize = 5;
      var fileSizeError = false;
      var fileTypeError = false;
      var checkSize, isTypeValid, validMimeTypes;
      var file, name, reader, size, type;
-        if (event != null) {
-          event.preventDefault();
-        }
+
         reader = new FileReader();
         reader.onload = function(evt) {
           if (checkSize(size) && isTypeValid(type)) {
@@ -1273,11 +1299,22 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
               $rootScope.attachedFilesDetails.splice(index,1);
               $rootScope.attachedFilesData.splice(index,1);
               $scope.FilesList.splice(index,1);
+              if(index == 0){
+                $scope.noFile = true;
+                $scope.NoFileMsg = "Please add files.";
+                $('#noFileMsg').removeClass('ng-hide');
+              }
+
            }
         }
         setTimeout(function(){
           if($scope.FilesList.length > 0){
-            var isWarnMsg = isHidden();
+            if($scope.FilesList.length <=8){
+                  $scope.countError = false;
+                  $('.msgbox').addClass('ng-hide');
+                }
+
+                var isWarnMsg = isHidden();
                 if(isWarnMsg){
                     $('#uploadFile').removeClass('uploadDisable');
                 }else{
@@ -1330,9 +1367,11 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
 
     $scope.closePopup = function(){
         $('#add-files').modal('hide');
+        $('.msgbox').addClass('ng-hide');
         $scope.FilesList =[];
         $rootScope.attachedFilesDetails=[];
         $rootScope.attachedFilesData=[];
+        $scope.countError = false;
     }
 }
 

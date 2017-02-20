@@ -8976,6 +8976,8 @@ input[type=password]
   width: 100%;
   float: left;
   padding: 0px 0px;
+  height: 250px;
+  overflow-y: scroll;
 }
 
 .talent-inner-panel .progress {
@@ -9075,4 +9077,10 @@ input[type=password]
 .uploadDisable{
     pointer-events: none;
     cursor: default;
+}
+
+
+.test:not(.nohover):hover {
+    color: #999999;
+    text-decoration: none;
 }

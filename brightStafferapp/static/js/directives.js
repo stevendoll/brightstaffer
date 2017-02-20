@@ -255,6 +255,10 @@ function myDirective($rootScope) {
             element.bind('change', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
+                scope.countError = false;
+                $('.msgbox').addClass('ng-hide');
+                scope.noFile = false;
+                $('#noFileMsg').addClass('ng-hide');
                 if (element[0].files){
                     if (element[0].files.length > 0) {
                       scope.uploadFiles(element[0].files);
@@ -271,6 +275,7 @@ function fileDropzone($rootScope) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
+
         element.on('dragover', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -282,9 +287,16 @@ function fileDropzone($rootScope) {
         element.on('drop', function(event) {
             event.preventDefault();
             event.stopPropagation();
+            if (event != null) {
+                  event.preventDefault();
+                }
+            scope.countError = false;
+            scope.noFile = false;
+            $('.msgbox').addClass('ng-hide');
+            scope.NoFileMsg ='';
+            $('#noFileMsg').addClass('ng-hide');
             var file = event.dataTransfer.files[0];
              scope.checkFileValidation(file);
-             console.log($rootScope.attachedFilesDetails);
              $('#add-talent').modal('hide');
              $('#add-files').modal('show');
         });

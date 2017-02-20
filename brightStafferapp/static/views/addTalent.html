@@ -37,9 +37,10 @@
         <button type="button" class="close" ng-click="closePopup()" aria-label="Close"><span aria-hidden="true">x</span></button>
         <h4 class="modal-title">Add Talent</h4>
       </div>
-       <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>
+      <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>
       <div class="modal-body">
         <div class="talent-inner-panel">
+          <div style="text-align: center;" ng-show="[[noFile]]" id="noFileMsg">[[NoFileMsg]]</div>
           <div class="progress-panel" ng-repeat="data in FilesList">
              <div class="cls"></div>
             <div class="progress-image"><img class="thumb-image" src="static/img/preview.png" alt=""></div>
@@ -47,17 +48,18 @@
             <div class="progress-close" id="removeCard_[[$index]]"><a id="[[data.name]]" ng-click="removeFile($event)" >x</a></div>
             <div class="cls"></div>
               <div>
-                <span style="padding: 0 11px 0 15px;" id="file_[[$index]]"></span>
+                <span style="padding: 0 11px 0 48px;color:green;" id="file_[[$index]]"></span>
                 <span class="error exterror" ng-show="[[data.fileSizeError]] && [[!data.fileTypeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File size exceeded(max 5MB).</span>
                 <span class="error exterror" ng-show="[[data.fileTypeError]] && [[!data.fileSizeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File type error(should be docx/pdf/doc).</span>
                 <span class="error exterror" ng-show="[[data.fileSizeError]] && [[data.fileTypeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File not supported.</span>
             </div>
            </div>
+        </div>
+          <div class="cls"></div>
           <div class="progress-bttn">
             <a href="" class="btn-lg btn-primary upload-file-bttn uploadDisable" ng-click="upload()" id="uploadFile">Upload File</a>
             <span class="btn-lg btn-primary add-files-bttn file-upld-mini"><input data-my-Directive type="file" multiple="multiple" >Add Files</span>
           </div>
-        </div>
         <div class="cls"></div>
       </div>
     </div>
