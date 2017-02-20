@@ -1141,6 +1141,162 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
 }
 }
 
+function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout,FileUploader,fileUploadApi){
+    $scope.currentFile="";
+    $scope.currentFileGroup="";
+    $scope.currentFileDescription="";
+    $rootScope.attachedFilesDetails=[];
+    $scope.FileMessage ='';
+    $scope.fileName = '';
+    $scope.file = '';
+    $scope.validMimeTypes=['application/vnd.openxmlformats-officedocument.wordprocessingml.document' , 'application/msword', 'application/pdf'];
+    $rootScope.attachedFilesData=[];
+    $scope.FilesList =[];
+    $scope.countError = false;
+    $scope.fileCountExceededMsg = '';
+
+    $scope.uploadFiles = function(files) {
+      var totalFiles = $scope.FilesList.length + files.length;
+     if(totalFiles <= 8){
+        $scope.countError = false;
+         for (var i = 0; i < files.length; i++) {
+           $scope.checkFileValidation(files[i]);
+         }
+         $('#add-talent').modal('hide');
+         setTimeout(function(){if($scope.FilesList.length > 0){
+                  console.log($scope.FilesList);
+                 $('#add-files').modal('show');} },200);
+         }
+         else{
+            $('.msgbox').removeClass('ng-hide');
+            $scope.countError = true;
+             $scope.$apply();
+         }
+
+    };
+
+    $scope.checkFileValidation = function(file){
+     var maxFileSize = 3;
+     var fileSizeError = false;
+     var fileTypeError = false;
+     var checkSize, isTypeValid, validMimeTypes;
+     var file, name, reader, size, type;
+        if (event != null) {
+          event.preventDefault();
+        }
+        reader = new FileReader();
+        reader.onload = function(evt) {
+          if (checkSize(size) && isTypeValid(type)) {
+            $scope.$apply(function() {
+            if(evt.target.result){
+                    var preview = evt.target.result;
+                }
+                else{
+                   fileSizeError = true;
+                }
+                var data = {};
+                data['name'] = name;
+                data['fileSizeError'] = fileSizeError;
+                data['fileTypeError'] = fileTypeError;
+                data['preview'] = preview;
+                $scope.FilesList.push(data);
+            });
+          }else{
+                fileTypeError = !isTypeValid(type);
+                var data = {};
+                data['name'] = name;
+                data['fileSizeError'] = fileSizeError;
+                data['fileTypeError'] = fileTypeError;
+                data['preview'] = '';
+                $scope.FilesList.push(data);
+                 $scope.$apply();
+            }
+        };
+
+        file = file;
+        name = file.name;
+        type = file.type;
+        size = file.size;
+        reader.readAsDataURL(file);
+       $rootScope.attachedFilesDetails.push(file);
+       $rootScope.attachedFilesData.push(reader);
+
+       validMimeTypes = $scope.validMimeTypes;
+
+      checkSize = function(size) {
+        var _ref;
+        if (((_ref = maxFileSize) === (void 0) || _ref === '') || (size / 1024) / 1024 < maxFileSize) {
+          return true;
+        } else {
+          //alert("File must be smaller than " + maxFileSize + " MB");
+          fileSizeError = true;
+          return false;
+        }
+      };
+
+      isTypeValid = function(type) {
+        if ((validMimeTypes === (void 0) || validMimeTypes === '') || validMimeTypes.indexOf(type) > -1) {
+          return true;
+        } else {
+          //alert("Invalid file type.  File must be one of following types " + validMimeTypes);
+          fileTypeError = true;
+          return false;
+        }
+      };
+    }
+
+     $scope.removeFile = function($event){
+      var fileName = $event.target.id;
+        for (var i = 0; i < $scope.FilesList.length; i++) {
+           if($scope.FilesList[i].name == fileName){
+              var index = i;
+              $rootScope.attachedFilesDetails.splice(index,1);
+              $rootScope.attachedFilesData.splice(index,1);
+              $scope.FilesList.splice(index,1);
+           }
+        }
+
+     }
+
+     $scope.upload = function () {
+       $scope.uploadSuccess = '';
+       var check = isHidden();
+        console.log(check);
+         if(check){
+            angular.forEach($rootScope.attachedFilesDetails, function(file, i) {
+              for (var i = 0; i < $scope.FilesList.length; i++) {
+                  if($scope.FilesList[i].name == file.name){
+                    if(!$scope.FilesList[i].fileSizeError && !$scope.FilesList[i].fileTypeError){
+                          var formdata = new FormData();
+                            formdata.append('files[]', file);
+                            fileUploadApi.upload(formdata).then(function(response){
+                                    console.log('Success ' + response.data.message );
+                                    $scope.uploadSuccess = 'File Uploaded Successfully.';
+                                    }, function (response) {
+                                        console.log('Error status: ' + response.status);
+                                    }, function (evt) {
+                                    console.log(evt.loaded);
+                                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                                 });
+                         }
+                    }
+                  }
+            });
+         }
+    }
+
+      var isHidden= function() {
+      var elements = document.getElementsByClassName('error');
+         for (var i = 0; i < elements.length; i++) {
+            var notVisible = elements[i].classList.contains('ng-hide');
+             if(!notVisible)
+                return false;
+        }
+        return true;
+      }
+}
+
 angular
     .module('brightStaffer')
     .controller('MainCtrl', MainCtrl)
@@ -1151,4 +1307,5 @@ angular
     .controller('topnavCtrl', topnavCtrl)
     .controller('createProjectCtrl', createProjectCtrl)
     .controller('tableCtrl', tableCtrl)
-    .controller('scoreCardCtrl', scoreCardCtrl);
+    .controller('scoreCardCtrl', scoreCardCtrl)
+    .controller('uploadFileCtrl', uploadFileCtrl);

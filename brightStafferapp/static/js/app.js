@@ -9,7 +9,8 @@
         'oc.lazyLoad',                  // ocLazyLoad
         'ui.bootstrap',                 // Ui Bootstrap
         'ngCookies',
-        'nvd3ChartDirectives'
+        'nvd3ChartDirectives',
+        'angularFileUpload'
     ])
 })();
 
