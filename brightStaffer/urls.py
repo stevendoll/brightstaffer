@@ -33,5 +33,7 @@ urlpatterns = [
     url(r'^publish_jobPost/$', views.JobPosting.publish, name='Publish Project'),
     url(r'^project_list/$', views.ProjectList.as_view()),
     url(r'^top_project_list/$', views.TopProjectList.as_view()),
+    url(r'^upload/$', views.FileUpload.as_view(), name="file-upload"),
     url(r'', views.UserData.home),
+
 ]
