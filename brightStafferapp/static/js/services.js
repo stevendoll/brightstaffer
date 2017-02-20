@@ -214,7 +214,7 @@ function fileUploadApi($http,REQUEST_URL) {
 //                headers: {
 //					 'Content-Type': 'multipart/form-data; charset=utf-8',
 //				},
-                formdata,
+                data:formdata,
                 processData: true,
                 enctype: 'multipart/form-data',
                 contentType: false
