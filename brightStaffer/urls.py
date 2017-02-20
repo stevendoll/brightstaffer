@@ -35,4 +35,5 @@ urlpatterns = [
     url(r'^top_project_list/$', views.TopProjectList.as_view()),
     url(r'^upload/$', views.FileUpload.as_view(), name="file-upload"),
     url(r'', views.UserData.home),
+
 ]
