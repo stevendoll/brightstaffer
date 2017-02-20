@@ -207,14 +207,16 @@ function paginationData($http ,REQUEST_URL){
 function fileUploadApi($http,REQUEST_URL) {
     return {
      upload: function(formdata){
+           console.log(formdata.get('files[]'));
           return $http({
                 url: REQUEST_URL+'upload/',
-                method: 'POST',
-                headers: {
-					 'Content-Type': 'undefined',
-				},
-                data: formdata,
+                method: 'post',
+//                headers: {
+//					 'Content-Type': 'multipart/form-data; charset=utf-8',
+//				},
+                formdata,
                 processData: true,
+                enctype: 'multipart/form-data',
                 contentType: false
             }).success(function() {
                 console.log("Uploaded");

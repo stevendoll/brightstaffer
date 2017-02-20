@@ -1154,6 +1154,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.FilesList =[];
     $scope.countError = false;
     $scope.fileCountExceededMsg = '';
+    $scope.isDisabled = true;
 
     $scope.uploadFiles = function(files) {
       var totalFiles = $scope.FilesList.length + files.length;
@@ -1163,9 +1164,16 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
            $scope.checkFileValidation(files[i]);
          }
          $('#add-talent').modal('hide');
-         setTimeout(function(){if($scope.FilesList.length > 0){
-                  console.log($scope.FilesList);
-                 $('#add-files').modal('show');} },200);
+         setTimeout(function(){
+         if($scope.FilesList.length > 0){
+                $('#add-files').modal('show');
+                var isWarnMsg = isHidden();
+                if(isWarnMsg){
+                    $('#uploadFile').removeClass('uploadDisable');
+                }else{
+                    $('#uploadFile').addClass('uploadDisable');
+                }
+            } },200);
          }
          else{
             $('.msgbox').removeClass('ng-hide');
@@ -1176,7 +1184,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     };
 
     $scope.checkFileValidation = function(file){
-     var maxFileSize = 3;
+     var maxFileSize = 5;
      var fileSizeError = false;
      var fileTypeError = false;
      var checkSize, isTypeValid, validMimeTypes;
@@ -1200,6 +1208,12 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
                 data['fileTypeError'] = fileTypeError;
                 data['preview'] = preview;
                 $scope.FilesList.push(data);
+                var isWarnMsg = isHidden();
+                if(isWarnMsg){
+                    $('#uploadFile').removeClass('uploadDisable');
+                }else{
+                    $('#uploadFile').addClass('uploadDisable');
+                }
             });
           }else{
                 fileTypeError = !isTypeValid(type);
@@ -1209,6 +1223,12 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
                 data['fileTypeError'] = fileTypeError;
                 data['preview'] = '';
                 $scope.FilesList.push(data);
+                var isWarnMsg = isHidden();
+                if(isWarnMsg){
+                    $('#uploadFile').removeClass('uploadDisable');
+                }else{
+                    $('#uploadFile').addClass('uploadDisable');
+                }
                  $scope.$apply();
             }
         };
@@ -1255,23 +1275,36 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
               $scope.FilesList.splice(index,1);
            }
         }
-
+        setTimeout(function(){
+          if($scope.FilesList.length > 0){
+            var isWarnMsg = isHidden();
+                if(isWarnMsg){
+                    $('#uploadFile').removeClass('uploadDisable');
+                }else{
+                    $('#uploadFile').addClass('uploadDisable');
+                }
+              }else{
+                $('#uploadFile').addClass('uploadDisable');
+              }
+            },200);
+//        if($scope.FilesList.length == 0){
+//            $('#uploadFile').addClass('uploadDisable');
+//        }
      }
 
      $scope.upload = function () {
-       $scope.uploadSuccess = '';
-       var check = isHidden();
-        console.log(check);
-         if(check){
-            angular.forEach($rootScope.attachedFilesDetails, function(file, i) {
+            angular.forEach($rootScope.attachedFilesDetails, function(file, count) {
               for (var i = 0; i < $scope.FilesList.length; i++) {
                   if($scope.FilesList[i].name == file.name){
                     if(!$scope.FilesList[i].fileSizeError && !$scope.FilesList[i].fileTypeError){
                           var formdata = new FormData();
+                          console.log(file);
                             formdata.append('files[]', file);
+                                 console.log(formdata.get('files[]'));
                             fileUploadApi.upload(formdata).then(function(response){
                                     console.log('Success ' + response.data.message );
-                                    $scope.uploadSuccess = 'File Uploaded Successfully.';
+                                   document.getElementById('file_'+count).innerHTML = 'File Uploaded Successfully.';
+                                   $('#removeCard_'+count).find('a').addClass('uploadDisable');
                                     }, function (response) {
                                         console.log('Error status: ' + response.status);
                                     }, function (evt) {
@@ -1283,7 +1316,6 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
                     }
                   }
             });
-         }
     }
 
       var isHidden= function() {
@@ -1295,6 +1327,13 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         }
         return true;
       }
+
+    $scope.closePopup = function(){
+        $('#add-files').modal('hide');
+        $scope.FilesList =[];
+        $rootScope.attachedFilesDetails=[];
+        $rootScope.attachedFilesData=[];
+    }
 }
 
 angular

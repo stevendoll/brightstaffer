@@ -9071,3 +9071,8 @@ input[type=password]
 .exterror{
  color:red;
 }
+
+.uploadDisable{
+    pointer-events: none;
+    cursor: default;
+}
