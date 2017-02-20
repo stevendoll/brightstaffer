@@ -378,7 +378,7 @@ def user_validation(data):
     else:
         return True
 
-
+from rest_framework.parsers import MultiPartParser, FormParser
 class FileUpload(View):
 
     @method_decorator(csrf_exempt)
@@ -386,6 +386,7 @@ class FileUpload(View):
         return super(FileUpload, self).dispatch(request, *args, **kwargs)
 
     def post(self, request):
+        #print (request.body.datya)
         files = request.FILES.getlist('files')
         dest_path = settings.MEDIA_URL
         if not os.path.exists(dest_path):
