@@ -10,3 +10,4 @@
 brightStaffer/settings.py
 venv/*
 *.txt
+media/*
