@@ -11,7 +11,7 @@ angular
   $httpProvider.defaults.headers.put = {};
   $httpProvider.defaults.headers.patch = {};
 }]);
->>>>>>> qa
+
 
 function loginService($http ,REQUEST_URL){
     return {
