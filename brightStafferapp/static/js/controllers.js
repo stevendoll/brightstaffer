@@ -1157,6 +1157,11 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.isDisabled = true;
     $scope.noFile = false;
 
+        $(window).on("load",function(){
+            $(".talent-inner-panel").mCustomScrollbar();
+        });
+
+
     var dropzoneId = "dropzone";
 
         window.addEventListener("dragenter", function(e) {
