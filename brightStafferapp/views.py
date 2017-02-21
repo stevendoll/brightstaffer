@@ -378,7 +378,7 @@ def user_validation(data):
     else:
         return True
 
-from rest_framework.parsers import MultiPartParser, FormParser
+
 class FileUpload(View):
 
     @method_decorator(csrf_exempt)
