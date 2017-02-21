@@ -216,7 +216,6 @@ function paginationData($http ,REQUEST_URL){
 function fileUploadApi($http,REQUEST_URL) {
     return {
      upload: function(formdata){
-           console.log(formdata.get('files[]'));
           return $http({
                 url: REQUEST_URL+'upload/',
                 method: 'post',
