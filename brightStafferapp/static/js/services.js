@@ -226,8 +226,8 @@ function fileUploadApi($http,REQUEST_URL) {
                 processData: true,
                 enctype: 'multipart/form-data',
                 contentType: false
-            }).success(function() {
-                console.log("Uploaded");
+            }).success(function(response) {
+                return response.data;
             }).error(function() {
                 console.log("Error");
             });

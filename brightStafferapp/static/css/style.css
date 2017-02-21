@@ -8976,8 +8976,9 @@ input[type=password]
   width: 100%;
   float: left;
   padding: 0px 0px;
-  height: 250px;
-  overflow: scroll;
+  max-height: 250px;
+  min-height: 100px;
+  min-height: 100px;
 }
 
 .talent-inner-panel .progress {
@@ -8993,7 +8994,12 @@ input[type=password]
 .progress-panel {
   width: 100%;
   float: left;
-  padding-bottom: 12px;
+  padding-bottom: 5px;
+}
+
+.modal-files-icon {
+  font-size: 33px;
+  color: #808080;
 }
 
 .progress-image {
@@ -9040,7 +9046,7 @@ input[type=password]
   padding: 8px 26px;
   border-radius: 2px;
   float: right;
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 .progress-bttn span.add-files-bttn {
@@ -9053,12 +9059,19 @@ input[type=password]
   margin-top: 40px;
   margin-right: 10px;*/
     float: right;
-    margin: 40px 5px 0 0;
+    margin: 10px 5px 0 0;
     width: 137px;
     padding: 7px;
     border-radius: 2px;
 }
 
+.progress-bttn div.note-text {
+  text-align: right;
+  width: 100%;
+  float: left;
+  font-size: 14px;
+  color: #808080;
+}
 .progress-bttn a.upload-file-bttn {
   background-color: #1d84c6;
   border-color: #1d84c6;
@@ -9066,7 +9079,7 @@ input[type=password]
   padding: 8px 26px;
   border-radius: 2px;
   float: right;
-  margin-top: 40px;
+  margin-top: 10px;
 }
 /*new-css-ends*/
 
