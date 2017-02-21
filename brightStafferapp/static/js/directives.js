@@ -262,6 +262,8 @@ function myDirective($rootScope) {
                 if (element[0].files){
                     if (element[0].files.length > 0) {
                       scope.uploadFiles(element[0].files);
+                      $('#filesInput1').val('');
+                      $('#filesInput2').val('');
                     }
                 }
                 return false;
