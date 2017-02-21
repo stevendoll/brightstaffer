@@ -1342,17 +1342,8 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
                             formdata.append('files[]', file);
                             fileUploadApi.upload(formdata).then(function(response){
                                    //document.getElementById('file_'+count).innerHTML = 'File Uploaded Successfully.';
-                                   if(response.data.message == "success"){
-                                       if(i == $scope.FilesList.length){
-                                           $(".loader").css('display','none');
-                                           $('#add-files').modal('hide');
-                                           $('#breakPopup').css('display','block');
-                                           $timeout( function(){
-                                                $('#breakPopup').css('display','none');
-                                            } , 2000);
-                                          }
                                        $('#removeCard_'+count).find('a').addClass('uploadDisable');
-                                        }
+
                                     }, function (response) {
                                         console.log('Error status: ' + response.status);
                                     }, function (evt) {
@@ -1362,6 +1353,18 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
                                  });
                          }
                     }
+                  }
+                  if(i == $scope.FilesList.length){
+                   $(".loader").css('display','none');
+                   $('#add-files').modal('hide');
+                        $scope.FilesList =[];
+                        $rootScope.attachedFilesDetails=[];
+                        $rootScope.attachedFilesData=[];
+                        $scope.countError = false;
+                   $('#breakPopup').css('display','block');
+                   $timeout( function(){
+                        $('#breakPopup').css('display','none');
+                    } , 2000);
                   }
             });
     }
