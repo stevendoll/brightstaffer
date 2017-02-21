@@ -1,19 +1,18 @@
 
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout) { /*global controller */
     $rootScope.topSixProjectList = [];   // top six project list array
-    $scope.allProjectList = [];          // all project array
-    $rootScope.totalProjectCount ='';
-    $rootScope.totalCount ='';
+    $rootScope.allProjectList = [];          // all project array
+    $rootScope.totalProjectCount =0;
     $rootScope.projectCountStart = 1;
-    $scope.options = [{name:'10',value:10},{name:'25',value:25},{name:'50',value:50},{name:'100',value:100}]; // select drop-down options
-    $scope.countList = $scope.options[0];
-    $scope.paginationCounter= 1;
-    $scope.tableNext = true;
-    $scope.publishMsg = '';
+    $rootScope.projectCountEnd = 0;
+    $rootScope.paginationCounter= 1;
+    $scope.stateArray = ['projects','create.step1','create.step2','create.step3','create.step4'];
+    $rootScope.isDevice = false;
+
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
-          var requestObject = {
-            'token': $rootScope.globals.currentUser.token,       // username field value
-            'recruiter': $rootScope.globals.currentUser.user_email   // password field value
+        var requestObject = {
+        'token': $rootScope.globals.currentUser.token,       // username field value
+        'recruiter': $rootScope.globals.currentUser.user_email   // password field value
          };
          getTopSixProjects.topSix(requestObject).then(function(response){
             if(response.message == "success") {
@@ -26,164 +25,59 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     this.showAllProjects = function(){
-        $scope.tableNext = true;
-        $scope.paginationCounter = 1;
+        $rootScope.paginationCounter = 1;
+        var count = 10;
+        if($rootScope.countList){
+            count=$rootScope.countList.value;
+         }
          $('html, body').animate({ scrollTop: 0 }, 'fast');
           var requestObject = {
             'token': $rootScope.globals.currentUser.token,       // username field value
-            'recruiter': $rootScope.globals.currentUser.user_email   // password filed value
+            'recruiter': $rootScope.globals.currentUser.user_email,
+            'count':count                                    // password filed value
          };
          getAllProjects.allProjects(requestObject).then(function(response){
             if(response.message == "success") {
-                     $rootScope.totalProjectCount = response.publish_project.pop();
-                     $rootScope.totalProjectCount = $rootScope.totalProjectCount.count;
-                     $scope.allProjectList = response.publish_project;
-                     $rootScope.projectCountEnd = response.publish_project.length;
-
-              }else{
+                    var nextButton = document.getElementById('Table_next');
+                    nextButton = angular.element(nextButton);
+                    var prevButton = document.getElementById('Table_previous');
+                    prevButton = angular.element(prevButton);
+                     $rootScope.totalProjectCount = response.count;
+                     $rootScope.allProjectList = response.published_projects;
+                     $rootScope.projectCountEnd = response.published_projects.length;
+                     $rootScope.projectNext = response.next;
+                     $rootScope.projectPrevious = response.previous;
+                     if($rootScope.projectNext != null){
+                          nextButton.removeClass('disabled');
+                          nextButton.parent().removeClass('disabled');
+                         }
+                     if($rootScope.projectPrevious != null){
+                        prevButton.removeClass('disabled');
+                        prevButton.parent().removeClass('disabled');
+                     }
+            }else{
                 console.log('error');
             }
-         });
-    }
-
-    this.getValue = function(countList){    //record count change functionality in all project list view
-        $(".loader").css('display','block');
-        $rootScope.projectCountEnd = countList.value;
-        var requestObject = {
-                'token': $rootScope.globals.currentUser.token,       // username field value
-                'recruiter': $rootScope.globals.currentUser.user_email,   // password filed value
-                'page':$scope.paginationCounter,
-                'count':countList.value
-             };
-             paginationData.paginationApi(requestObject).then(function(response){
-                if(response.message == "success") {
-                    if(response.Pagination.length > 0)
-                       $scope.allProjectList = response.Pagination;
-                       $rootScope.projectCountEnd = response.Pagination.length;
-                     $(".loader").css('display','none');
-                  }else{
-                    console.log('error');
-                    $(".loader").css('display','none');
-                      if(response.success == false){
-                            $scope.isSuccess = true;
-                            $scope.publishMsg = "No data available.";
-                            $('#breakPopup').css('display','block');
-                         }
-
-                }
-             });
-    }
-
-    this.changePage = function($event){                      // page counter pagination functionality
-    $(".loader").css('display','none');
-    if( !$scope.tableNext && $event.target.name == "next"){
-        return;
-    }else if($event.target.name == "prev"){
-        $scope.tableNext = true;
-    }
-     $scope.isSuccess = false;
-     $scope.publishMsg = '';
-     var nextButton = angular.element(document.querySelector('#Table_next'));
-     var prevButton = angular.element(document.querySelector('#Table_previous'));
-         if($event.target.name == "next"){
-           $scope.paginationCounter++;
-           if(prevButton.hasClass('disabled')){
-              prevButton.removeClass('disabled');
-           }
-
-         }else if($event.target.name == "prev"){
-          if(nextButton.hasClass('disabled'))
-                nextButton.removeClass('disabled');
-               if($scope.paginationCounter >1){
-                  $scope.paginationCounter--;
-                     }else{
-                        prevButton.addClass('disabled');
-                        if(nextButton.hasClass('disabled'))
-                            nextButton.removeClass('disabled');
-
-                        return;
-                     }
-         }
-
-         $(".loader").css('display','block');
-         var requestObject = {
-                'token': $rootScope.globals.currentUser.token,       // username field value
-                'recruiter': $rootScope.globals.currentUser.user_email,   // password filed value
-                'page':$scope.paginationCounter,
-                'count':$scope.countList.value
-             };
-             paginationData.paginationApi(requestObject).then(function(response){
-                if(response.message == "success") {
-                    if(response.Pagination.length > 0)
-                       $scope.allProjectList = response.Pagination;
-                       if($event.target.name == "next"){
-                       $rootScope.projectCountStart =  $rootScope.projectCountEnd;
-                       $rootScope.projectCountEnd = $rootScope.projectCountEnd + response.Pagination.length;
-                       }else if($event.target.name == "prev"){
-                       $rootScope.projectCountStart = $rootScope.projectCountStart -response.Pagination.length;
-                       if($rootScope.projectCountStart <= 0)
-                          $rootScope.projectCountStart = 1;
-                       $rootScope.projectCountEnd = $rootScope.projectCountEnd - response.Pagination.length;
-                       if($rootScope.projectCountEnd <10)
-                         $rootScope.projectCountEnd = 10 ;
-                       }
-                   $(".loader").css('display','none');
-                  }else{
-                    console.log('error');
-                    $(".loader").css('display','none');
-                    if(response.success == false){
-                        if($event.target.name == "next"){
-                           nextButton.addClass('disabled');
-                           $scope.paginationCounter--;
-                           if($scope.paginationCounter == 1){
-                            prevButton.addClass('disabled');
-                           }
-                           $scope.tableNext = false;
-                        }
-                        $scope.isSuccess = true;
-                        $scope.publishMsg = "No data available.";
-                        $('#breakPopup').css('display','block');
-
-                    }
-                }
-           });
+        });
     }
 
 
    this.removePopupBox = function(){
-       $('#breakPopup').css('display','none');
-        $scope.isSuccess = false;
+        $('#breakPopup').css('display','none');
+        $rootScope.isSuccess = false;
    }
 
-    $scope.reverse = false;
-   this.sortBy = function(propertyName) {                   // filed sorting functionality in all project view
-        $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
-        $scope.propertyName = propertyName;
-        if($scope.reverse == false){
-        if($("#headRow").find(".sorting_asc").length>0){
-           $("#headRow").find(".sorting_asc").removeClass("sorting_asc");
-         }
-         $('#'+propertyName).addClass('sorting_asc');
-      } else if($scope.reverse == true){
-         if($("#headRow").find(".sorting_desc").length>0){
-           $("#headRow").find(".sorting_desc").removeClass("sorting_desc");
-         }
-         $('#'+propertyName).addClass('sorting_desc');
-
-      }
-   }
-
-   this.detectmob = function(){
-     if( navigator.userAgent.match(/Android/i)
-     || navigator.userAgent.match(/webOS/i)
-     || navigator.userAgent.match(/iPhone/i)
-     || navigator.userAgent.match(/iPod/i)
-     || navigator.userAgent.match(/BlackBerry/i)
-     || navigator.userAgent.match(/Windows Phone/i)
+    this.detectmob = function($event){
+        if( navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)
          ){
             openSideMenu();
          }
-     }
+    }
 
 
     function openSideMenu(){
@@ -212,41 +106,49 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         }
     }
 
-   $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
-    $('.dataTables').DataTable({
-                responsive: true,
-                retrieve: true,
-                paging: false,
-                buttons: [
-                    {extend: 'copy', className: 'btn btn-default btn-sm', title: 'Copy'},
-                    {extend: 'csv', className: 'btn btn-default btn-sm', title: 'CSV'},
-                    {extend: 'excel', className: 'btn btn-default btn-sm', title: 'Excel'},
-                    {extend: 'pdf', className: 'btn btn-default btn-sm', title: 'PDF'},
-                    {extend: 'print', className: 'btn btn-default btn-sm', title: 'Print',
-                     customize: function ($window){
-                            $window.document.body.addClass('white-bg');
-                            $window.document.body.css('font-size', '15px');
+    $scope.setActive = function($event){
+        $event.stopPropagation();
+        var childEle = $('.nav-first-level').children('.ch');
+        angular.forEach(childEle, function(li) {
+          if(!li.contains($event.target))
+             angular.element(li).removeClass('highlight');
 
-                            $window.document.body.find('table')
-                                    .addClass('compact')
-                                    .css('font-size', 'inherit');
-                    	}
-                    }
-                ]
-            });
-            if(navigator.userAgent.match(/iPhone/i)){
-                 $('.buttons-excel').css('display','none');
-                }
+        });
 
-       });
-
-    this.setActive = function(){
-            if($(this).hasClass('active'))
+        if($event.type == "touchstart"){
+            if($($event.currentTarget).hasClass('active')){
+                $($event.currentTarget).removeClass('active');
+               }
+            else{
+                $($event.currentTarget).addClass('active');
+                   if($event.currentTarget.id == "project"){
+                     $('.nav-second-level').addClass('in');
+                      $('.nav-second-level').css('display','block');
+                   }
+               }
+        }else if($event.type == "click"){
+            if($(this).hasClass('active')){
                $(this).removeClass('active');
-            else
+               }
+            else{
                $(this).addClass('active');
+               }
+        }
     }
 
+    $scope.stateSelected = function(){
+        if($scope.stateArray.indexOf($state.current.name)> -1 && !$rootScope.isDevice){
+          $('#project').addClass('active');
+           $('.nav-second-level').addClass('in');
+             $('.nav-second-level').css('display','block');
+           return true;
+        }
+        if($scope.stateArray.indexOf($state.current.name)> -1 && $rootScope.isDevice){
+            $('#project').addClass('highlight');
+             return true;
+        }
+      return false;
+    }
 };
 
 function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $timeout, loginService) { /* login controller responsible for login functionality */
@@ -312,15 +214,15 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookie
     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
                                // email pattern
     $scope.user_Signup = function() { /* signup function submitting user details to API*/
-    $scope.errorMessage = '';
-    $rootScope.checkReqValidation('signupForm');
+        $scope.errorMessage = '';
+        $rootScope.checkReqValidation('signupForm');
         var requestObject = {
         'firstName':$scope.userRegistration.first_name,
         'lastName': $scope.userRegistration.last_name,
         'userEmail': $scope.userRegistration.user_email,
         'password': $scope.userRegistration.password
         };
-       if($scope.signupForm.$valid){
+        if($scope.signupForm.$valid){
             $scope.isDisabled = true;
              signupService.userSignup(requestObject).then(function(response){
              if(response.message == "success") {
@@ -339,12 +241,12 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookie
               $scope.isDisabled = false;
              }
            });
-       }
+        }
     }
 
     $scope.hideMessages = function($event){ /*Hide error messages when user interact with fieds*/
-    if($event.keyCode !== 13 ){
-           $("#signupForm input").each(function(){
+        if($event.keyCode !== 13 ){
+            $("#signupForm input").each(function(){
                 var spanClass = $(this).next('span').attr('class');
                 if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
                     $(this).next('span').removeClass('error').text("");
@@ -357,19 +259,19 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout,$cookie
 }
 
 function forgotCtrl($scope, $rootScope, $state, $http, forgotService) {
-     $scope.isDisabled = false;
-     $scope.errorMessage = '';
-     $scope.isRequired = false;
-     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
-	/**Create function for forgot password **/
+    $scope.isDisabled = false;
+    $scope.errorMessage = '';
+    $scope.isRequired = false;
+    $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;
+    /**Create function for forgot password **/
 	$scope.forgotPassword = function() {
-	   $scope.errorMessage = '';
-	   var value = document.getElementById('emailInput').value;
-	   if(!value)
-	    $scope.isRequired = true;
+        $scope.errorMessage = '';
+        var value = document.getElementById('emailInput').value;
+        if(!value)
+        $scope.isRequired = true;
 
         var requestObject = {
-        	'email': $scope.user_email
+            'email': $scope.user_email
         };
         if($scope.forgotForm.$valid){
             $scope.isRequired = false;
@@ -398,26 +300,26 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
     $scope.data = {};
     $scope.passwordStrength = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     $scope.changePassword = function(){
-         $scope.isDisabled = true;
-         var requestObject = {
-        	'token': token,
-        	'password': $scope.data.password
+        $scope.isDisabled = true;
+        var requestObject = {
+        'token': token,
+        'password': $scope.data.password
         };
-       resetPasswordService.resetPassword(requestObject).then(function(response){
-         if(response.message == "success") {
-           $scope.data = {};
-           $scope.successMsg = true;
-           $scope.success = true;
-         }else{
+        resetPasswordService.resetPassword(requestObject).then(function(response){
+            if(response.message == "success") {
+            $scope.data = {};
+            $scope.successMsg = true;
+            $scope.success = true;
+            }else{
              $scope.data = {};
              $scope.failMessage = true;
-         }
-       });
+            }
+        });
     }
 
     $scope.changePath= function () {
-     var path = 'http://'+$window.location.host + '/#/login';
-     $window.location.href = path;
+         var path = 'http://'+$window.location.host + '/#/login';
+         $window.location.href = path;
     }
 }
 
@@ -458,10 +360,9 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     $rootScope.globals.projectDetails = [];
     this.projectNamePattern =/((^[ A-Za-z0-9_@./#-]*)|(^[a-zA-Z]+[_@./#-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]+$/i;// /^[a-z0-9]+$/i;
 
-
     $scope.checkMessage = function(){ /*Hide error messages when user interact with fieds*/
-       $scope.isDescriptionRequired = false;
-       $("#createProjectForm input").each(function(){
+        $scope.isDescriptionRequired = false;
+        $("#createProjectForm input").each(function(){
             var spanClass = $(this).next('span').attr('class');
             if($(this).val().length <= 0 && ($(this).next('span').hasClass('error'))){
                 $(this).next('span').removeClass('error').text("");
@@ -510,13 +411,13 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     }
 
     $scope.takeToStepThree = function(currentState,prevTabId,currentTabId){
-    if(!$scope.projectForm.description){
+        if(!$scope.projectForm.description){
           $scope.isDescriptionRequired = true;
-
-          }else if($scope.projectForm.description){
-                 if(!$rootScope.jobDescriptionResult){
-                   $(".loader").css('display','block');
-                  }
+        }
+        else if($scope.projectForm.description){
+             if(!$rootScope.jobDescriptionResult){
+               $(".loader").css('display','block');
+              }
 
              if($("#tablist").find(".current").length>0){
                     $("#tablist").find(".current").addClass("done");
@@ -534,7 +435,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                  currentTab.addClass('current');
                  $scope.isthirdStepVisited = true;
                  $state.go('create.step3','');
-          }
+        }
     }
 
     $scope.takeToStepFour = function(currentState,prevTabId,currentTabId){
@@ -559,14 +460,13 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
             $scope.isLastStepVisited = true;
             $state.go('create.step4','');
       }else if($rootScope.jobDescriptionResult.concept.length == 0){
-            $scope.isError = true;
-            $scope.apiErrorMsg = 'There is no skills.';
+            $scope.isDescriptionError = true;
+            $scope.apiErrorMsg = 'Required.';
       }
     }
 
     this.activateTab = function($event){
         var elementId = $event.target.id;
-        console.log($event);
         var currentState = $state.current.name;
         var currentTabId;
         var prevTabId;
@@ -663,6 +563,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         }else if(currentState == "create.step4"){
               var nextButton = angular.element(document.querySelector('#next'));
               nextButton.css('display','block');
+              var mainUl = angular.element(document.querySelector('#projectBtns'));
+                if(mainUl.hasClass('twobtn')){
+                   mainUl.removeClass('twobtn');
+                }
               $state.go('create.step3','');
         }
     }
@@ -842,13 +746,12 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
              }
               else if(!validateSkillName(skill)){
                  $scope.isDescriptionError = true;
-                 $scope.apiErrorMsg ='First letter sholud be a character!' ;
+                 $scope.apiErrorMsg ='Input should contain first letter as character and allowed special characters are (. - _).';
                }else{
                    var newSkill = $event.target.value;
                         var index = $rootScope.jobDescriptionResult.concept.indexOf(newSkill);
 
                        if(index == -1){
-                       console.log($rootScope.jobDescriptionResult.concept);
                             $rootScope.jobDescriptionResult.concept.push(newSkill);
                        }else{
                             $scope.isDescriptionError = true;
@@ -929,6 +832,563 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     }
 }
 
+
+function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout) { /*global controller */
+    $scope.options = [{name:'10',value:10},{name:'25',value:25},{name:'50',value:50},{name:'100',value:100}]; // select drop-down options
+    $rootScope.countList = $scope.options[0];
+    $scope.hidenData = {};
+    $scope.popupMsg = '';
+    $scope.apiHit = false;
+
+    this.setButton = function(){
+        var nextButton = angular.element(document.querySelector('#Table_next'));
+        var prevButton = angular.element(document.querySelector('#Table_previous'));
+        if($rootScope.projectNext != null){
+          nextButton.removeClass('disabled');
+          nextButton.parent().removeClass('disabled');
+         }
+         if($rootScope.projectPrevious != null){
+            prevButton.removeClass('disabled');
+            prevButton.parent().removeClass('disabled');
+         }
+    }
+
+    this.getValue = function(countList){    //record count change functionality in all project list view
+        var nextButton = angular.element(document.querySelector('#Table_next'));
+        var prevButton = angular.element(document.querySelector('#Table_previous'));
+        $(".loader").css('display','block');
+        var requestObject = {
+                'token': $rootScope.globals.currentUser.token,       // username field value
+                'recruiter': $rootScope.globals.currentUser.user_email,   // password filed value
+                'count':countList.value
+             };
+             getAllProjects.allProjects(requestObject).then(function(response){
+                $scope.apiHit = true;
+                if(response.message == "success") {
+                    if(response.published_projects.length > 0)
+                       $rootScope.allProjectList = response.published_projects;
+
+                       $rootScope.projectCountEnd = response.published_projects.length;
+                       $rootScope.projectNext = response.next;
+                       $rootScope.projectPrevious = response.previous;
+                        if($rootScope.projectNext == null){
+                          nextButton.addClass('disabled');
+                          nextButton.parent().addClass('disabled');
+                         }else{
+                            if(nextButton.hasClass('disabled')){
+                             nextButton.removeClass('disabled');
+                             nextButton.parent().removeClass('disabled');
+                            }
+
+                         }
+                         if($rootScope.projectPrevious == null){
+                            prevButton.addClass('disabled');
+                            prevButton.parent().addClass('disabled');
+                         }
+                       $(".loader").css('display','none');
+                  }else{
+                    console.log('error');
+                    $(".loader").css('display','none');
+                      if(response.success == false){
+                            $rootScope.isSuccess = true;
+                            $scope.popupMsg = "No data available.";
+                            $('#breakPopup').css('display','block');
+                      }
+                }
+             });
+    }
+
+    this.changePage = function($event){                  // pagination with previous and next button event handler
+     $rootScope.isSuccess = false;
+     var url = '';
+     $scope.popupMsg = '';
+     var nextButton = angular.element(document.querySelector('#Table_next'));
+     var prevButton = angular.element(document.querySelector('#Table_previous'));
+         if($event.target.name == "next"){
+           $rootScope.paginationCounter++;
+           $('#countDropdown').css('display','none');
+            url = $rootScope.projectNext;
+         }else if($event.target.name == "prev"){
+               if($rootScope.paginationCounter >1){
+                    $rootScope.paginationCounter--;
+                    if($rootScope.paginationCounter ==1)
+                    {
+                      $('#countDropdown').css('display','');
+                    }
+                  }
+                url = $rootScope.projectPrevious;
+         }
+         $(".loader").css('display','block');
+         var requestObject = {
+              'url': url
+             };
+         paginationData.paginationApi(requestObject).then(function(response){
+             $scope.apiHit = true;
+                if(response.message == "success") {
+                    if(response.published_projects.length > 0)
+                       $rootScope.allProjectList = response.published_projects;
+                       $rootScope.projectNext = response.next;
+                       $rootScope.projectPrevious = response.previous;
+                       if($event.target.name == "next"){
+                       $rootScope.projectCountStart =  $rootScope.projectCountEnd +1;
+                       $rootScope.projectCountEnd = $rootScope.projectCountEnd + response.published_projects.length;
+                       }else if($event.target.name == "prev"){
+                       $rootScope.projectCountStart = $rootScope.projectCountStart -response.published_projects.length;
+                       if($rootScope.projectCountStart <= 0)
+                          $rootScope.projectCountStart = 1;
+                       $rootScope.projectCountEnd = $rootScope.projectCountStart + response.published_projects.length -1;
+                       if($rootScope.projectCountEnd <10)
+                         $rootScope.projectCountEnd = 10 ;
+                       }
+                       if($rootScope.projectNext == null){
+                          nextButton.addClass('disabled');
+                          nextButton.parent().addClass('disabled');
+                         }else{
+                            if(nextButton.hasClass('disabled')){
+                              nextButton.removeClass('disabled');
+                              nextButton.parent().removeClass('disabled');
+                            }
+                         }
+                         if($rootScope.projectPrevious == null){
+                            prevButton.addClass('disabled');
+                            prevButton.parent().addClass('disabled');
+                         }else{
+                             if(prevButton.hasClass('disabled')){
+                             prevButton.removeClass('disabled');
+                             prevButton.parent().removeClass('disabled');
+                             }
+                         }
+                   $(".loader").css('display','none');
+                  }else{
+                    $(".loader").css('display','none');
+                    if(response.success == false){
+                        if($event.target.name == "next"){
+                           nextButton.addClass('disabled');
+                           $rootScope.paginationCounter--;
+                           if($rootScope.paginationCounter == 1){
+                                 prevButton.addClass('disabled');
+                           }
+                           $scope.tableNext = false;
+                        }
+                        $rootScope.isSuccess = true;
+                        $scope.popupMsg = "No data available.";
+                        $('#breakPopup').css('display','block');
+
+                    }
+                }
+           });
+    }
+
+    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
+      $timeout(function () {
+             tableInitialise();
+          },1000);
+        if(navigator.userAgent.match(/iPhone/i)){
+             $('.buttons-excel').css('display','none');
+            }
+       });
+
+   var update_size = function() {
+        $('.dataTables').css({ width: $('.dataTables').parent().width() });
+        if($scope.apiHit){
+         tableInitialise();
+          }
+   };
+
+    $(window).resize(function() {       // on window resize table resize for responsiveness
+        clearTimeout(window.refresh_size);
+        window.refresh_size = setTimeout(function() { update_size(); }, 250);
+    });
+
+    var tableInitialise = function(){
+           $scope.hidenData = {};
+          var table = $('.dataTables').DataTable({
+                responsive: true,
+                retrieve: true,
+                paging: true,
+                autoWidth: false,
+                buttons: [
+                    {extend: 'copy', className: 'btn btn-default btn-sm', title: 'Copy'},
+                    {extend: 'csv', className: 'btn btn-default btn-sm', title: 'CSV'},
+                    {extend: 'excel', className: 'btn btn-default btn-sm', title: 'Excel'},
+                    {extend: 'pdf', className: 'btn btn-default btn-sm', title: 'PDF'},
+                    {extend: 'print', className: 'btn btn-default btn-sm', title: 'Print',
+                     customize: function ($window){
+                            $window.document.body.addClass('white-bg');
+                            $window.document.body.css('font-size', '15px');
+
+                            $window.document.body.find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                    	}
+                    }
+                ]
+            });
+          showHideColumn();
+    }
+    var showHideColumn = function(){        // on table responsiveness show and hide column value
+    var tableHead = document.getElementsByTagName('th');
+    var displayRows = $(".dataTables").find("tbody>tr");
+     angular.forEach(tableHead, function(th)
+     {
+      var columnIndex = th.cellIndex;
+        if(th.style['display'] == "none")
+        {
+         for(var currentRow =0; currentRow < displayRows.length; currentRow++)
+         {
+          if($scope.hidenData[currentRow])
+          {
+                 $scope.hidenData[currentRow] = $scope.hidenData[currentRow];
+          }else
+          {
+                $scope.hidenData[currentRow]=[];
+          }
+             var data = {};
+                 data["title"] = th.innerText;
+                 data["index"] = columnIndex;
+            if(currentRow !=0 && currentRow%2 == 0)
+            {
+               $(displayRows[currentRow]).addClass('even');
+            }else
+             {
+                $(displayRows[currentRow]).addClass('odd');
+             }
+            $(displayRows[currentRow]).find("td:eq(0)").addClass("sorting_1");
+            $(displayRows[currentRow]).find("td:eq("+columnIndex+")").css('display','none');
+            data["value"] = $(displayRows[currentRow]).find("td:eq("+columnIndex+")").text();
+            $scope.hidenData[currentRow].push(data);
+          }
+       }
+        else {
+            for(var currentRow =0; currentRow < displayRows.length; currentRow++)
+             {
+                $(displayRows[currentRow]).find("td:eq(0)").addClass("sorting_1");
+                $(displayRows[currentRow]).find("td:eq("+columnIndex+")").css('display','');
+             }
+
+        }
+     });
+   }
+
+    $scope.showChild = function($event,row){
+        if($($event.target.parentElement).hasClass('parent')){
+           $($event.target.parentElement).css("background-color",'#ffffff');
+        }else{
+           $($event.target.parentElement).css("background-color",'#f5f5f5');
+        }
+        if($scope.apiHit){
+            if($($event.target.parentElement).hasClass('parent')){
+                  $($event.target.parentElement).removeClass('parent');
+                   $($event.target.parentElement).css("background-color",'#ffffff');
+                  angular.element($('#'+row)).remove();
+            }
+            else{
+                $($event.target.parentElement).addClass('parent');
+
+                 var childEle = '<tr class="child" id="'+row+'"><td class="child" colspan="7"><ul data-dtr-index="7">';
+                  for(var i=0;i<$scope.hidenData[row].length;i++){
+                     childEle = childEle+'<li data-dtr-index="'+$scope.hidenData[row][i].index+'"><span class="dtr-title">'+$scope.hidenData[row][i].title+'</span><span class="dtr-data">'+$scope.hidenData[row][i].value+'</span></li>';
+                  }
+                childEle = childEle+'</ul></td></tr>';
+                angular.element($event.target.parentElement).after(childEle);
+                $($event.target.parentElement).css("background-color",'#f5f5f5');
+            }
+        }
+    }
+
+}
+
+function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout) {
+    this.analysedData = [
+        {   "key":"analysedData",
+            "values": [[6,5],[7,11],[8,6],[9,11],[10,30],[11,10],[12,13],[13,4],[14,3],[15,3],[16,6]]
+        }];
+
+    this.activeCardData = [
+        {   "key":"activeCardData",
+            "values": [[6,1],[7,5],[8,2],[9,3],[10,2],[11,1],[12,0],[13,2],[14,8],[15,0],[16,0]]
+        }];
+
+    this.interviewCardData = [
+        {   "key":"interviewCardData",
+            "values": [[4,1],[8,3],[12,1],[16,5],[20,2],[24,3],[28,2]]
+        }];
+
+    this.fourthCardData = [
+        {   "key":"fourthCardData",
+            "values": [[3,0],[8,1],[13,0],[18,2],[28,8],[38,0],[56,0]]
+        }];
+
+    $scope.xAxisTicksFunction = function(){
+        console.log('xAxisTicksFunction');
+        console.log(d3.svg.axis().ticks(d3.time.minutes, 5));
+        return function(d){
+            return d3.svg.axis().ticks(d3.time.minutes, 5);
+        }
+    };
+
+    $scope.xAxisTickFormatFunction = function(){
+        console.log('xAxisTicksFunction');
+        return function(d){
+            return d3.time.format('%H:%M')(moment.unix(d).toDate());
+        }
+    };
+
+    $scope.colorFunction = function() {
+	return function(d, i) {
+    	return 'rgb(255, 255, 255)'
+    };
+}
+}
+
+function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout,FileUploader,fileUploadApi){
+    $scope.currentFile="";
+    $scope.currentFileGroup="";
+    $scope.currentFileDescription="";
+    $rootScope.attachedFilesDetails=[];
+    $scope.FileMessage ='';
+    $scope.fileName = '';
+    $scope.file = '';
+    $scope.validMimeTypes=['application/vnd.openxmlformats-officedocument.wordprocessingml.document' , 'application/msword', 'application/pdf'];
+    $rootScope.attachedFilesData=[];
+    $scope.FilesList =[];
+    $scope.countError = false;
+    $scope.fileCountExceededMsg = '';
+    $scope.isDisabled = true;
+    $scope.noFile = false;
+
+    var dropzoneId = "dropzone";
+
+        window.addEventListener("dragenter", function(e) {
+          if (e.target.id != dropzoneId) {
+            e.preventDefault();
+            e.dataTransfer.effectAllowed = "none";
+            e.dataTransfer.dropEffect = "none";
+          }
+        }, false);
+
+        window.addEventListener("dragover", function(e) {
+          if (e.target.id != dropzoneId) {
+            e.preventDefault();
+            e.dataTransfer.effectAllowed = "none";
+            e.dataTransfer.dropEffect = "none";
+          }
+        });
+
+        window.addEventListener("drop", function(e) {
+          if (e.target.id != dropzoneId) {
+            e.preventDefault();
+            e.dataTransfer.effectAllowed = "none";
+            e.dataTransfer.dropEffect = "none";
+          }
+        });
+
+
+    $scope.uploadFiles = function(files) {
+      var totalFiles = $scope.FilesList.length + files.length;
+     if(totalFiles <= 8){
+         for (var i = 0; i < files.length; i++) {
+           $scope.checkFileValidation(files[i]);
+         }
+         $('#add-talent').modal('hide');
+         setTimeout(function(){
+         if($scope.FilesList.length > 0){
+                $('#add-files').modal('show');
+                $(".talent-inner-panel").mCustomScrollbar();
+                var isWarnMsg = isHidden();
+                if(isWarnMsg){
+                    $('#uploadFile').removeClass('uploadDisable');
+                }else{
+                    $('#uploadFile').addClass('uploadDisable');
+                }
+            } },200);
+         }
+         else{
+            $('.msgbox').removeClass('ng-hide');
+            $scope.countError = true;
+             $scope.$apply();
+         }
+
+    };
+
+    $scope.checkFileValidation = function(file){
+    console.log(file);
+     var maxFileSize = 5;
+     var fileSizeError = false;
+     var fileTypeError = false;
+     var checkSize, isTypeValid, validMimeTypes;
+     var file, name, reader, size, type;
+
+        reader = new FileReader();
+        reader.onload = function(evt) {
+          if (checkSize(size) && isTypeValid(type)) {
+            $scope.$apply(function() {
+            if(evt.target.result){
+                    var preview = evt.target.result;
+                }
+                else{
+                   fileSizeError = true;
+                }
+                var data = {};
+                data['name'] = name;
+                data['fileSizeError'] = fileSizeError;
+                data['fileTypeError'] = fileTypeError;
+                data['preview'] = preview;
+                data['ext'] = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
+                $scope.FilesList.push(data);
+                var isWarnMsg = isHidden();
+                if(isWarnMsg){
+                    $('#uploadFile').removeClass('uploadDisable');
+                }else{
+                    $('#uploadFile').addClass('uploadDisable');
+                }
+            });
+          }else{
+                fileTypeError = !isTypeValid(type);
+                var data = {};
+                data['name'] = name;
+                data['fileSizeError'] = fileSizeError;
+                data['fileTypeError'] = fileTypeError;
+                data['preview'] = '';
+                data['ext'] = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
+                $scope.FilesList.push(data);
+                var isWarnMsg = isHidden();
+                if(isWarnMsg){
+                    $('#uploadFile').removeClass('uploadDisable');
+                }else{
+                    $('#uploadFile').addClass('uploadDisable');
+                }
+                 $scope.$apply();
+            }
+        };
+
+        file = file;
+        name = file.name;
+        type = file.type;
+        size = file.size;
+        reader.readAsDataURL(file);
+       $rootScope.attachedFilesDetails.push(file);
+       $rootScope.attachedFilesData.push(reader);
+
+       validMimeTypes = $scope.validMimeTypes;
+
+      checkSize = function(size) {
+        var _ref;
+        if (((_ref = maxFileSize) === (void 0) || _ref === '') || (size / 1024) / 1024 < maxFileSize) {
+          return true;
+        } else {
+          //alert("File must be smaller than " + maxFileSize + " MB");
+          fileSizeError = true;
+          return false;
+        }
+      };
+
+      isTypeValid = function(type) {
+        if ((validMimeTypes === (void 0) || validMimeTypes === '') || validMimeTypes.indexOf(type) > -1) {
+          return true;
+        } else {
+          //alert("Invalid file type.  File must be one of following types " + validMimeTypes);
+          fileTypeError = true;
+          return false;
+        }
+      };
+    }
+
+     $scope.removeFile = function($event){
+      var fileName = $event.target.id;
+        for (var i = 0; i < $scope.FilesList.length; i++) {
+           if($scope.FilesList[i].name == fileName){
+              var index = i;
+              $rootScope.attachedFilesDetails.splice(index,1);
+              $rootScope.attachedFilesData.splice(index,1);
+              $scope.FilesList.splice(index,1);
+              if(index == 0){
+                $scope.noFile = true;
+                $scope.NoFileMsg = "Please add files.";
+                $('#noFileMsg').removeClass('ng-hide');
+              }
+
+           }
+        }
+        setTimeout(function(){
+          if($scope.FilesList.length > 0){
+            if($scope.FilesList.length <=8){
+                  $scope.countError = false;
+                  $('.msgbox').addClass('ng-hide');
+                }
+
+                var isWarnMsg = isHidden();
+                if(isWarnMsg){
+                    $('#uploadFile').removeClass('uploadDisable');
+                }else{
+                    $('#uploadFile').addClass('uploadDisable');
+                }
+              }else{
+                $('#uploadFile').addClass('uploadDisable');
+              }
+            },200);
+//        if($scope.FilesList.length == 0){
+//            $('#uploadFile').addClass('uploadDisable');
+//        }
+     }
+
+     $scope.upload = function () {
+      $(".loader").css('display','block');
+            angular.forEach($rootScope.attachedFilesDetails, function(file, count) {
+              for (var i = 0; i < $scope.FilesList.length; i++) {
+                  if($scope.FilesList[i].name == file.name){
+                    if(!$scope.FilesList[i].fileSizeError && !$scope.FilesList[i].fileTypeError){
+                          var formdata = new FormData();
+                            formdata.append('files[]', file);
+                            fileUploadApi.upload(formdata).then(function(response){
+                                   //document.getElementById('file_'+count).innerHTML = 'File Uploaded Successfully.';
+                                       $('#removeCard_'+count).find('a').addClass('uploadDisable');
+
+                                    }, function (response) {
+                                        console.log('Error status: ' + response.status);
+                                    }, function (evt) {
+                                    console.log(evt.loaded);
+                                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                                 });
+                         }
+                    }
+                  }
+                  if(i == $scope.FilesList.length){
+                   $(".loader").css('display','none');
+                   $('#add-files').modal('hide');
+                        $scope.FilesList =[];
+                        $rootScope.attachedFilesDetails=[];
+                        $rootScope.attachedFilesData=[];
+                        $scope.countError = false;
+                   $('#breakPopup').css('display','block');
+                   $timeout( function(){
+                        $('#breakPopup').css('display','none');
+                    } , 2000);
+                  }
+            });
+    }
+
+      var isHidden= function() {
+      var elements = document.getElementsByClassName('error');
+         for (var i = 0; i < elements.length; i++) {
+            var notVisible = elements[i].classList.contains('ng-hide');
+             if(!notVisible)
+                return false;
+        }
+        return true;
+      }
+
+    $scope.closePopup = function(){
+        $('#add-files').modal('hide');
+        $('.msgbox').addClass('ng-hide');
+        $scope.FilesList =[];
+        $rootScope.attachedFilesDetails=[];
+        $rootScope.attachedFilesData=[];
+        $scope.countError = false;
+    }
+}
+
 angular
     .module('brightStaffer')
     .controller('MainCtrl', MainCtrl)
@@ -937,4 +1397,7 @@ angular
     .controller('forgotCtrl', forgotCtrl)
     .controller('resetPwCtrl', resetPwCtrl)
     .controller('topnavCtrl', topnavCtrl)
-    .controller('createProjectCtrl', createProjectCtrl);
+    .controller('createProjectCtrl', createProjectCtrl)
+    .controller('tableCtrl', tableCtrl)
+    .controller('scoreCardCtrl', scoreCardCtrl)
+    .controller('uploadFileCtrl', uploadFileCtrl);

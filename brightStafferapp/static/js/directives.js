@@ -142,7 +142,7 @@ function sideNavigation($timeout) {
 /**
  * minimalizaSidebar - Directive for minimalize sidebar
 */
-function minimalizaSidebar($timeout) {
+function minimalizaSidebar($timeout,$state) {
     return {
         restrict: 'A',
         template: '<a class="navbar-minimalize minimalize-ui btn btn-default" href="" ng-click="minimalize()"><i class="icon icon-unread"></i></a>',
@@ -151,13 +151,20 @@ function minimalizaSidebar($timeout) {
                 $("body").toggleClass("mini-navbar");
                 if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
                     // Hide menu in order to smoothly turn on when maximize menu
+                    $('.nav-second-level').parent().removeClass('active');
+                    $('.nav-second-level').removeClass('in');
+                    $('.nav-second-level').css('height','0px');
                     $('#side-menu').hide();
                     // For smoothly turn on menu
                     setTimeout(
                         function () {
-                            $('#side-menu').fadeIn(400);
+                           if($state.current.name == "dashboard"){
+                             $('#dashboard').addClass('highlight');
+                           }
+                                 $('#side-menu').fadeIn(400);
                         }, 200);
                 } else if ($('body').hasClass('fixed-sidebar')){
+
                     $('#side-menu').hide();
                     setTimeout(
                         function () {
@@ -204,10 +211,101 @@ function clickOutside($document, $state) {
                     }
                });
            }
-        }
+        };
 
 }
 
+
+function onTouch($parse, $rootScope) {
+  return {
+        restrict: 'A',
+        link: function(scope, elm, attrs) {
+            var ontouchFn = $parse(attrs.onTouch);
+             if( navigator.userAgent.match(/Android/i)
+                 || navigator.userAgent.match(/webOS/i)
+                 || navigator.userAgent.match(/iPhone/i)
+                 || navigator.userAgent.match(/iPod/i)
+                 || navigator.userAgent.match(/BlackBerry/i)
+                 || navigator.userAgent.match(/Windows Phone/i)
+                     ){
+                     $rootScope.isDevice = true;
+                    elm.bind('touchstart', function(evt) {
+                       evt.stopPropagation();
+                    });
+                        $rootScope.eventType = 'touchend';
+                     }else{
+                        $rootScope.eventType = 'click';
+                     }
+
+            elm.bind($rootScope.eventType, function(evt) {
+                scope.$apply(function(){
+                 ontouchFn.call(scope.setActive(evt), evt.which);
+                });
+            });
+        }
+    };
+}
+
+
+function myDirective($rootScope) {
+    return {
+        restrict: 'A',
+        scope: true,
+        link: function (scope, element, attr) {
+            element.bind('change', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                scope.countError = false;
+                $('.msgbox').addClass('ng-hide');
+                scope.noFile = false;
+                $('#noFileMsg').addClass('ng-hide');
+                if (element[0].files){
+                    if (element[0].files.length > 0) {
+                      scope.uploadFiles(element[0].files);
+                      $('#filesInput1').val('');
+                      $('#filesInput2').val('');
+                    }
+                }
+                return false;
+            });
+        }
+    };
+}
+
+
+function fileDropzone($rootScope) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+
+        element.on('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        element.on('dragenter', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        element.on('drop', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (event != null) {
+                  event.preventDefault();
+                }
+            scope.countError = false;
+            scope.noFile = false;
+            $('.msgbox').addClass('ng-hide');
+            scope.NoFileMsg ='';
+            $('#noFileMsg').addClass('ng-hide');
+            var file = event.dataTransfer.files[0];
+             scope.checkFileValidation(file);
+             $('#add-talent').modal('hide');
+             $('#add-files').modal('show');
+             $(".talent-inner-panel").mCustomScrollbar();
+        });
+    }
+  };
+}
 
 /**
  *
@@ -223,4 +321,7 @@ angular
     .directive('onFinishRender', onFinishRender)
     .directive('sideNavigation', sideNavigation)
     .directive('minimalizaSidebar', minimalizaSidebar)
-    .directive('clickOutside', clickOutside);
+    .directive('clickOutside', clickOutside)
+    .directive('onTouch', onTouch)
+    .directive('myDirective', myDirective)
+    .directive('fileDropzone', fileDropzone);

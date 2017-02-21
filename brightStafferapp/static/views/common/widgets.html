@@ -1,57 +1,108 @@
- <div class="wrapper wrapper-content">
+ <div class="wrapper wrapper-content" ng-controller="scoreCardCtrl as score">
+      <div class="row">
+        <div class="heading-section">
+          <h2>My Talent</h2>
+        </div>
+        <div class="buttons-section m-t align-right">
+          <span><a href="" oncontextmenu="return false;" class="btn-lg btn-primary add-talent-bttn" data-toggle="modal" data-target="#add-talent">Add Talent</a></span>
+        </div>
+      </div>
       <div class="row">
           <div class="col-lg-3">
-              <div class="widget bg-light-blue no-padding">
-                  <div class="p-m">
-                      <h1 class="m-xs">0</h1>
-                      <h6 class="m-l-sm m-t text-light">
-                          Total Analyzed Talent
-                      </h6>
-                  </div>
-                  <div class="flot-chart">
-                      <div class="flot-chart-content" id="flot-chart1"></div>
-                  </div>
-              </div>
-          </div>
-          <div class="col-lg-3">
-              <div class="widget bg-success no-padding">
-                  <div class="p-m">
-                      <h1 class="m-xs">0</h1>
-                      <h6 class="m-l-sm m-t text-light">
+              <div class="widget bg-sky-blue no-padding">
+                  <div class="p-m15">
+                      <h1 class="align-right">0</h1>
+                      <h6 class="m-l-sm m-top15 text-light align-right">
                           Analyzed This Month
                       </h6>
                   </div>
-                  <div class="flot-chart">
-                      <div class="flot-chart-content" id="flot-chart2"></div>
-                  </div>
+                  <nvd3-line-chart
+            data="score.analysedData"
+            id="firstCard"
+            width="1000"
+            height="200"
+            showXAxis="false"
+            showYAxis="false"
+            tooltips="false"
+            interactive="true"
+            color="colorFunction()"
+            >
+        <svg></svg>
+    </nvd3-line-chart>
               </div>
           </div>
           <div class="col-lg-3">
-              <div class="widget bg-info no-padding">
-                  <div class="p-m">
-                      <h1 class="m-xs">0</h1>
-                      <h6 class="m-l-0 m-t text-light">
-                          Analyzed This Week
+              <div class="widget bg-success-green no-padding">
+                  <div class="p-m15">
+                      <h1 class="align-right">0</h1>
+                      <h6 class="m-l-sm m-top15 text-light align-right">
+                          Active
                       </h6>
                   </div>
-                  <div class="flot-chart">
-                      <div class="flot-chart-content" id="flot-chart3"></div>
-                  </div>
+                   <nvd3-line-chart
+                    data="score.activeCardData"
+                    id="secondCard"
+                    width="1000"
+                    height="200"
+                    showXAxis="false"
+                    showYAxis="false"
+                    tooltips="false"
+                    interactive="true"
+                    color="colorFunction()"
+                    >
+                <svg></svg>
+            </nvd3-line-chart>
               </div>
           </div>
           <div class="col-lg-3">
-              <div class="widget bg-fills no-padding">
-                  <div class="p-m">
-                      <h1 class="m-xs">0</h1>
-                      <h6 class="m-l-sm m-t text-light">
-                          Total Fills This Quarter
+              <div class="widget bg-info-blue no-padding">
+                  <div class="p-m15">
+                      <h1 class="align-right">0</h1>
+                      <h6 class="m-l-0 m-top15 text-light align-right">
+                          Interviewing +
                       </h6>
                   </div>
-                  <div class="flot-chart">
-                      <div class="flot-chart-content" id="flot-chart4"></div>
+                      <nvd3-line-chart
+                    data="score.interviewCardData"
+                    id="thirdCard"
+                    width="1000"
+                    height="200"
+                    showXAxis="false"
+                    showYAxis="false"
+                    tooltips="false"
+                    interactive="true"
+                    color="colorFunction()"
+                    >
+                <svg></svg>
+            </nvd3-line-chart>
+              </div>
+          </div>
+          <div class="col-lg-3">
+              <div class="widget bg-fills-orange no-padding">
+                  <div class="p-m15">
+                      <h1 class="align-right">0</h1>
+                      <h6 class="m-l-sm m-top15 text-light align-right">
+                          Fill This Month
+                      </h6>
                   </div>
+                   <nvd3-line-chart
+                    data="score.fourthCardData"
+                    id="fourthCard"
+                    width="1000"
+                    height="200"
+                    showXAxis="false"
+                    showYAxis="false"
+                    tooltips="false"
+                    interactive="true"
+                    color="colorFunction()"
+                    >
+                <svg></svg>
+            </nvd3-line-chart>
               </div>
           </div>
       </div>
       <hr>
     </div>
+
+<!-- Modal add talent popup file -->
+ <div ng-include="'static/views/addTalent.html'"></div>
