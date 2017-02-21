@@ -301,6 +301,7 @@ function fileDropzone($rootScope) {
              scope.checkFileValidation(file);
              $('#add-talent').modal('hide');
              $('#add-files').modal('show');
+             $(".talent-inner-panel").mCustomScrollbar();
         });
     }
   };
