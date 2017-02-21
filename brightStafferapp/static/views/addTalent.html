@@ -41,7 +41,7 @@
           <div style="text-align: center;" ng-show="[[noFile]]" id="noFileMsg">[[NoFileMsg]]</div>
           <div class="progress-panel" ng-repeat="data in FilesList">
              <div class="cls"></div>
-            <div class="progress-image"><img class="thumb-image" src="static/img/preview.png" alt=""></div>
+            <div class="progress-image"><i class="fa fa-file-pdf-o modal-files-icon" ng-show="[[data.ext == 'pdf']]"></i><i ng-show="[[data.ext == 'docx']] || [[data.ext == 'doc']]" class="fa fa-file-word-o modal-files-icon"></i><i ng-show="[[data.ext != 'docx']] && [[data.ext != 'doc']] && [[data.ext != 'pdf']]" class="fa fa-close modal-files-icon"></i></div>
             <div class="progress-text">[[data.name]]</div>
             <div class="progress-close" id="removeCard_[[$index]]"><a id="[[data.name]]" ng-click="removeFile($event)" >x</a></div>
             <div class="cls"></div>
@@ -55,6 +55,7 @@
         </div>
           <div class="cls"></div>
           <div class="progress-bttn">
+              <div class="note-text">NOTE:Max 8 file upload at once(doc/docx/pdf).</div>
             <a href="" class="btn-lg btn-primary upload-file-bttn uploadDisable" ng-click="upload()" id="uploadFile">Upload File</a>
             <span class="btn-lg btn-primary add-files-bttn file-upld-mini"><input data-my-Directive type="file" multiple="multiple" id="filesInput2">Add Files</span>
           </div>
@@ -63,14 +64,11 @@
     </div>
   </div>
 </div>
+</div>
 
-
-    <script>
-(function($){
-        $(window).on("load",function(){
-            $(".talent-inner-panel").mCustomScrollbar();
-        });
-    })(jQuery);
-</script>
-
+ <!--Modal window-->
+<div class="modal-outer" id="breakPopup" style="display:none">
+  <div class="modal-content">
+    <p style="margin: 23px 0 15px;">File Uploaded Successfully.</p>
+  </div>
 </div>

@@ -99,7 +99,6 @@ angular
 
     }
 
-    document.oncontextmenu = document.body.oncontextmenu = function() {return false;}
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
 		$rootScope.title = toState.data.pageTitle;

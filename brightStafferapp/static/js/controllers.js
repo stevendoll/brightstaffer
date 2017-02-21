@@ -1157,13 +1157,6 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.isDisabled = true;
     $scope.noFile = false;
 
-
-        /*$(window).on("load",function(){
-            $(".talent-inner-panel").mCustomScrollbar();
-        });*/
-
-
-
     var dropzoneId = "dropzone";
 
         window.addEventListener("dragenter", function(e) {
@@ -1241,6 +1234,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
                 data['fileSizeError'] = fileSizeError;
                 data['fileTypeError'] = fileTypeError;
                 data['preview'] = preview;
+                data['ext'] = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
                 $scope.FilesList.push(data);
                 var isWarnMsg = isHidden();
                 if(isWarnMsg){
@@ -1256,6 +1250,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
                 data['fileSizeError'] = fileSizeError;
                 data['fileTypeError'] = fileTypeError;
                 data['preview'] = '';
+                data['ext'] = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
                 $scope.FilesList.push(data);
                 var isWarnMsg = isHidden();
                 if(isWarnMsg){
@@ -1338,18 +1333,26 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
      }
 
      $scope.upload = function () {
+      $(".loader").css('display','block');
             angular.forEach($rootScope.attachedFilesDetails, function(file, count) {
               for (var i = 0; i < $scope.FilesList.length; i++) {
                   if($scope.FilesList[i].name == file.name){
                     if(!$scope.FilesList[i].fileSizeError && !$scope.FilesList[i].fileTypeError){
                           var formdata = new FormData();
-                          console.log(file);
                             formdata.append('files[]', file);
-                                 console.log(formdata.get('files[]'));
                             fileUploadApi.upload(formdata).then(function(response){
-                                    console.log('Success ' + response.data.message );
-                                   document.getElementById('file_'+count).innerHTML = 'File Uploaded Successfully.';
-                                   $('#removeCard_'+count).find('a').addClass('uploadDisable');
+                                   //document.getElementById('file_'+count).innerHTML = 'File Uploaded Successfully.';
+                                   if(response.data.message == "success"){
+                                       if(i == $scope.FilesList.length){
+                                           $(".loader").css('display','none');
+                                           $('#add-files').modal('hide');
+                                           $('#breakPopup').css('display','block');
+                                           $timeout( function(){
+                                                $('#breakPopup').css('display','none');
+                                            } , 2000);
+                                          }
+                                       $('#removeCard_'+count).find('a').addClass('uploadDisable');
+                                        }
                                     }, function (response) {
                                         console.log('Error status: ' + response.status);
                                     }, function (evt) {
