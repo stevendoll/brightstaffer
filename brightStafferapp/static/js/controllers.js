@@ -1157,9 +1157,9 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.isDisabled = true;
     $scope.noFile = false;
 
-        $(window).on("load",function(){
+        /*$(window).on("load",function(){
             $(".talent-inner-panel").mCustomScrollbar();
-        });
+        });*/
 
 
     var dropzoneId = "dropzone";
@@ -1199,6 +1199,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
          setTimeout(function(){
          if($scope.FilesList.length > 0){
                 $('#add-files').modal('show');
+                $(".talent-inner-panel").mCustomScrollbar();
                 var isWarnMsg = isHidden();
                 if(isWarnMsg){
                     $('#uploadFile').removeClass('uploadDisable');

@@ -8976,8 +8976,9 @@ input[type=password]
   width: 100%;
   float: left;
   padding: 0px 0px;
-  height: 250px;
-  overflow: scroll;
+  max-height: 250px;
+  min-height: 100px;
+  min-height: 100px;
 }
 
 .talent-inner-panel .progress {
@@ -8993,7 +8994,7 @@ input[type=password]
 .progress-panel {
   width: 100%;
   float: left;
-  padding-bottom: 12px;
+  padding-bottom: 5px;
 }
 
 .progress-image {
