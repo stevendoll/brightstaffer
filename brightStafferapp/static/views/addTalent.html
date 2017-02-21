@@ -48,14 +48,14 @@
               <div>
                 <span style="padding: 0 11px 0 48px;color:green;" id="file_[[$index]]"></span>
                 <span class="error exterror" ng-show="[[data.fileSizeError]] && [[!data.fileTypeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File size exceeded(max 5MB).</span>
-                <span class="error exterror" ng-show="[[data.fileTypeError]] && [[!data.fileSizeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File type error(should be doc/docx/pdf).</span>
+                <span class="error exterror" ng-show="[[data.fileTypeError]] && [[!data.fileSizeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File type error(only doc/docx/pdf allowed).</span>
                 <span class="error exterror" ng-show="[[data.fileSizeError]] && [[data.fileTypeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File not supported.</span>
             </div>
            </div>
         </div>
           <div class="cls"></div>
           <div class="progress-bttn">
-              <div class="note-text">NOTE:Max 8 file upload at once(doc/docx/pdf).</div>
+              <div class="note-text">NOTE: Max 8 files(doc/docx/pdf) allowed at once.</div>
             <a href="" class="btn-lg btn-primary upload-file-bttn uploadDisable" ng-click="upload()" id="uploadFile">Upload File</a>
             <span class="btn-lg btn-primary add-files-bttn file-upld-mini"><input data-my-Directive type="file" multiple="multiple" id="filesInput2">Add Files</span>
           </div>
