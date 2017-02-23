@@ -387,7 +387,7 @@ class FileUpload(View):
 
     def post(self, request):
         #print (request.body.datya)
-        files = request.FILES.getlist('files[]')
+        files = request.FILES.getlist('file')
         dest_path = settings.MEDIA_URL
         if not os.path.exists(dest_path):
             os.makedirs(dest_path)
