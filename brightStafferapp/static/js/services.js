@@ -4,13 +4,13 @@ angular
     .module('brightStaffer')
     .constant('REQUEST_URL', baseUrl)
 
-.config(['$httpProvider', function ($httpProvider) {
-  //Reset headers to avoid OPTIONS request (aka preflight)
-  $httpProvider.defaults.headers.common = {};
-  $httpProvider.defaults.headers.post = {};
-  $httpProvider.defaults.headers.put = {};
-  $httpProvider.defaults.headers.patch = {};
-}]);
+//.config(['$httpProvider', function ($httpProvider) {
+//  //Reset headers to avoid OPTIONS request (aka preflight)
+//  $httpProvider.defaults.headers.common = {};
+//  $httpProvider.defaults.headers.post = {};
+//  $httpProvider.defaults.headers.put = {};
+//  $httpProvider.defaults.headers.patch = {};
+//}]);
 
 function loginService($http ,REQUEST_URL){
     return {
@@ -212,27 +212,27 @@ function paginationData($http ,REQUEST_URL){
     }
  }
 
-function fileUploadApi($http,REQUEST_URL) {
-    return {
-     upload: function(formdata){
-          return $http({
-                url: REQUEST_URL+'upload/',
-                method: 'post',
-//                headers: {
-//					 'Content-Type': 'multipart/form-data; charset=utf-8',
-//				},
-                data:formdata,
-                processData: true,
-                enctype: 'multipart/form-data',
-                contentType: false
-            }).success(function(response) {
-                return response.data;
-            }).error(function() {
-                console.log("Error");
-            });
-         }
-     }
-}
+//function fileUploadApi($http,REQUEST_URL) {
+//    return {
+//     upload: function(formdata){
+//          return $http({
+//                url: REQUEST_URL+'upload/',
+//                method: 'post',
+////                headers: {
+////					 'Content-Type': 'multipart/form-data; charset=utf-8',
+////				},
+//                data:formdata,
+//                processData: true,
+//                enctype: 'multipart/form-data',
+//                contentType: false
+//            }).success(function(response) {
+//                return response.data;
+//            }).error(function() {
+//                console.log("Error");
+//            });
+//         }
+//     }
+//}
 
 angular
     .module('brightStaffer')
@@ -246,5 +246,5 @@ angular
     .service('publishProject', publishProject)
     .service('getTopSixProjects', getTopSixProjects)
     .service('getAllProjects', getAllProjects)
-    .service('paginationData', paginationData)
-    .service('fileUploadApi', fileUploadApi);
+    .service('paginationData', paginationData);
+   // .service('fileUploadApi', fileUploadApi);
