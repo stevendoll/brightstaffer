@@ -4,26 +4,23 @@
   <div class="modal-dialog add-talent-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <button type="button" class="close" ng-click="closePopup()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <h4 class="modal-title" id="myModalLabel">Add Talent</h4>
       </div>
          <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>
       <div class="modal-body">
          <div class="talent-panel">
           <div class="cls"></div>
-                <!--<form action="/file-upload" class="dropzone" id="my-awesome-dropzone" drop-zone><img src="static/img/pdf-upload.png" alt=""></form>-->
              <form action="/upload/" class="dropzone" drop-zone call-back="myCallBackMethod(response)" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
-                <div class="file-upld-mini">
-                <input data-my-Directive type="file" multiple="multiple" id="filesInput1">
-                 <img src="static/img/upload-files.png" alt="">
-             </div>
+                  <img src="static/img/upload-files.png" alt="" id="backgroundImg" class="dz-hidden-input" style="cursor:pointer;">
              <div class="cls"></div>
-             <div class="choose-file">Choose a file or drag it here.</div>
+             <div class="choose-file" id="textMsg">Choose a file or drag it here.</div>
           </form>
+             <input type="file" multiple="multiple" class="dz-hidden-input" id="fileUpload" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
         </div>
           <div class="progress-bttn">
             <button type="" class="btn talent-modal-done">Done</button>
-              <button type="" class="btn talent-modal-add">Add Files</button>
+            <span class="btn talent-modal-add"><input data-my-Directive type="file" multiple="multiple" id="addfiles" style="visibility: hidden;position: absolute;">Add Files</span>
           </div>
         <div class="cls"></div>
       </div>
@@ -71,9 +68,21 @@
 </div>
 </div>
 
- <!--Modal window-->
-<div class="modal-outer" id="breakPopup" style="display:none">
-  <div class="modal-content">
-    <p style="margin: 23px 0 15px;">File Uploaded Successfully.</p>
+ <!-- delete-Modal -->
+<div class="modal fade" id="delete-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+      </div>
+      <div class="modal-body">
+        <div class="confirm-text">Are you sure you want to <span>cancel</span> the progress.</div>
+        <div class="confirm-bttn-box">
+          <button type="" class="btn">Yes</button>
+          <button type="" class="btn">No</button>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
   </div>
 </div>

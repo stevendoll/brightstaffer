@@ -256,14 +256,13 @@ function myDirective($rootScope) {
                 e.preventDefault();
                 e.stopPropagation();
                 scope.countError = false;
-                $('.msgbox').addClass('ng-hide');
+                //$('.msgbox').addClass('ng-hide');
                 scope.noFile = false;
-                $('#noFileMsg').addClass('ng-hide');
+                //$('#noFileMsg').addClass('ng-hide');
                 if (element[0].files){
                     if (element[0].files.length > 0) {
                       scope.uploadFiles(element[0].files);
-                      $('#filesInput1').val('');
-                      $('#filesInput2').val('');
+                      $('#addfiles').val('');
                     }
                 }
                 return false;
@@ -318,7 +317,7 @@ function myDirective($rootScope) {
         },
         link: function (scope, element, attrs) {
             console.log("Creating dropzone");
-
+            scope.FilesList =[];
             // Autoprocess the form
             if (scope.autoProcess != null && scope.autoProcess == "false") {
                 scope.autoProcess = false;
@@ -344,12 +343,11 @@ function myDirective($rootScope) {
                 paramName: "file",
                 acceptedFiles: scope.mimetypes,
                 maxThumbnailFilesize: '5',
-                //dictDefaultMessage: scope.message,
                 autoProcessQueue: scope.autoProcess,
                 success: function (file, response) {
-//                    if (scope.callBack != null) {
-//                        scope.callBack({response: response});
-//                    }
+                    if (scope.callBack != null) {
+                        scope.callBack({response: response});
+                    }
                 }
             });
         }

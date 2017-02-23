@@ -1157,6 +1157,15 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.isDisabled = true;
     $scope.noFile = false;
 
+    $scope.countFile = function(file){
+        $scope.FilesList.push(file);
+    }
+    $scope.closePopup = function(){
+//        if($scope.FilesList.length >0){
+//            $('#delete-popup').modal('show');
+//        }
+            $('#add-talent').modal('hide');
+    }
     var dropzoneId = "dropzone";
 
         window.addEventListener("dragenter", function(e) {
@@ -1377,14 +1386,14 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         return true;
       }
 
-    $scope.closePopup = function(){
-        $('#add-files').modal('hide');
-        $('.msgbox').addClass('ng-hide');
-        $scope.FilesList =[];
-        $rootScope.attachedFilesDetails=[];
-        $rootScope.attachedFilesData=[];
-        $scope.countError = false;
-    }
+//    $scope.closePopup = function(){
+//        $('#add-files').modal('hide');
+//        $('.msgbox').addClass('ng-hide');
+//        $scope.FilesList =[];
+//        $rootScope.attachedFilesDetails=[];
+//        $rootScope.attachedFilesData=[];
+//        $scope.countError = false;
+//    }
 }
 
 angular

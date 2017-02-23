@@ -9134,3 +9134,37 @@ input[type=password]
     color: #999999;
     text-decoration: none;
 }
+
+/*talent-delete-popup*/
+
+.confirm-text {
+  width: 100%;
+  float: left;
+  font-family: 'open_sansregular';
+  font-size: 20px;
+  color: #000000;
+  margin-top: 25px;
+  margin-bottom: 40px;
+}
+
+.confirm-text span {
+  color: #fb0007;
+}
+
+.confirm-bttn-box {
+  width: 100%;
+  float: left;
+  text-align: center;
+}
+
+.confirm-bttn-box button {
+  width: 63px;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #3680ca;
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  color: #ffffff;
+  text-align: center;
+  margin: 0px 3px 40px 3px;
+}
