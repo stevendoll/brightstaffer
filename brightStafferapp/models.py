@@ -20,7 +20,7 @@ class Projects(models.Model):
     recruiter = models.ForeignKey(User, null=False, verbose_name='Recruiter ID')
     project_name = models.CharField(max_length=255, verbose_name='Job Title', null=True, blank=True)
     company_name = models.CharField(max_length=255, verbose_name='Company Name', null=True, blank=True)
-    location = models.CharField(max_length=255,verbose_name='Location', null=True, blank=True)
+    location = models.CharField(max_length=255, verbose_name='Location', null=True, blank=True)
     description = models.TextField(verbose_name='Job Description', null=True, blank=True)
     is_published = models.BooleanField(verbose_name='Published', default=False, null=False)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
@@ -54,6 +54,40 @@ class Concept(models.Model):
 
     def __str__(self):
         return str(self.concept)
+
+
+class Talent(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    recruiter = models.ForeignKey(User, null=False, verbose_name='Recruiter ID')
+    project = models.ForeignKey(Projects, null=True, verbose_name='Project Name')
+    # company = models.ForeignKey(Company)
+    current_location = models.CharField(max_length=255, verbose_name='Current Location', null=True, blank=True)
+    create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Talent'
+        verbose_name = 'Talent'
+        db_table = 'talent'
+
+    def __str__(self):
+        return str(self.id)
+
+    @property
+    def get_date(self):
+        return self.create_date.date().strftime('%d/%m/%Y')
+
+#
+# class Company(models.Model):
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     company_name = models.CharField(max_length=255, verbose_name='Company Name', null=True, blank=True)
+#
+#     class Meta:
+#         verbose_name_plural = 'Company'
+#         verbose_name = 'Company'
+#         db_table = 'company'
+#
+#     def __str__(self):
+#         return str(self.id)
 
 
 def get_upload_file_name(instance, filename):
