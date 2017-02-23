@@ -4,22 +4,26 @@
   <div class="modal-dialog add-talent-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <h4 class="modal-title" id="myModalLabel">Add Talent</h4>
       </div>
          <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>
       <div class="modal-body">
          <div class="talent-panel">
-          <div class="cls"></div>
-                <div class="dropzone" id="dropzone" file-dropzone="[application/vnd.openxmlformats-officedocument.wordprocessingml.document , application/msword, application/pdf]" file-name="FileName" data-max-file-size="5">
-                    <img src="static/img/pdf-upload.png" alt="">
-          </div>
-          <div class="file-upld-mini">
-                  <input data-my-Directive type="file" multiple="multiple" id="filesInput1">Choose File
-              </div>
+          <div class="cls"></div><div class="dropzone" id="dropzone" file-dropzone="[application/vnd.openxmlformats-officedocument.wordprocessingml.document , application/msword, application/pdf]" file-name="FileName" data-max-file-size="5">
+             <div class="file-upld-mini">
+                <input data-my-Directive type="file" multiple="multiple" id="filesInput1">
+                 <img src="static/img/upload-files.png" alt="">
+             </div>
              <div class="cls"></div>
-          <div class="choose-file">Choose a file or drag it here.</div>
+             <div class="choose-file">Choose a file or drag it here.</div>
+          </div>
+
         </div>
+          <div class="progress-bttn">
+            <button type="" class="btn talent-modal-done">Done</button>
+              <button type="" class="btn talent-modal-add">Add Files</button>
+          </div>
         <div class="cls"></div>
       </div>
     </div>
@@ -32,7 +36,7 @@
   <div class="modal-dialog add-talent-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" ng-click="closePopup()" aria-label="Close"><span aria-hidden="true">x</span></button>
+        <button type="button" class="close" ng-click="closePopup()" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <h4 class="modal-title">Add Talent</h4>
       </div>
       <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>
@@ -43,7 +47,7 @@
              <div class="cls"></div>
             <div class="progress-image"><i class="fa fa-file-pdf-o modal-files-icon" ng-show="[[data.ext == 'pdf']]"></i><i ng-show="[[data.ext == 'docx']] || [[data.ext == 'doc']]" class="fa fa-file-word-o modal-files-icon"></i><i ng-show="[[data.ext != 'docx']] && [[data.ext != 'doc']] && [[data.ext != 'pdf']]" class="fa fa-close modal-files-icon"></i></div>
             <div class="progress-text">[[data.name]]</div>
-            <div class="progress-close" id="removeCard_[[$index]]"><a id="[[data.name]]" ng-click="removeFile($event)" >x</a></div>
+            <div class="progress-close" id="removeCard_[[$index]]"><a id="[[data.name]]" ng-click="removeFile($event)" ><i class="fa fa-close"></i></a></div>
             <div class="cls"></div>
               <div>
                 <span style="padding: 0 11px 0 48px;color:green;" id="file_[[$index]]"></span>
