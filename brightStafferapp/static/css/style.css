@@ -3284,6 +3284,7 @@ body.tour-open .animated {
   border: 0px dashed #1ab394;
   background: white;
   padding: 120px 20px 160px 20px;
+  cursor: pointer;
 }
 .dropzone .dz-message {
   font-size: 16px;

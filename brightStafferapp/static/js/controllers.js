@@ -1157,243 +1157,53 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.isDisabled = true;
     $scope.noFile = false;
 
-    $scope.countFile = function(file){
-        $scope.FilesList.push(file);
-    }
     $scope.closePopup = function(){
-//        if($scope.FilesList.length >0){
-//            $('#delete-popup').modal('show');
-//        }
+        if(filesExits){
+            $('#delete-popup').modal('show');
+        }
             $('#add-talent').modal('hide');
     }
+
     var dropzoneId = "dropzone";
 
-        window.addEventListener("dragenter", function(e) {
-          if (e.target.id != dropzoneId) {
-            e.preventDefault();
-            e.dataTransfer.effectAllowed = "none";
-            e.dataTransfer.dropEffect = "none";
-          }
-        }, false);
+    window.addEventListener("dragenter", function(e) {
+      if (e.target.id != dropzoneId) {
+        e.preventDefault();
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+      }
+    }, false);
 
-        window.addEventListener("dragover", function(e) {
-          if (e.target.id != dropzoneId) {
-            e.preventDefault();
-            e.dataTransfer.effectAllowed = "none";
-            e.dataTransfer.dropEffect = "none";
-          }
-        });
+    window.addEventListener("dragover", function(e) {
+      if (e.target.id != dropzoneId) {
+        e.preventDefault();
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+      }
+    });
 
-        window.addEventListener("drop", function(e) {
-          if (e.target.id != dropzoneId) {
-            e.preventDefault();
-            e.dataTransfer.effectAllowed = "none";
-            e.dataTransfer.dropEffect = "none";
-          }
-        });
+    window.addEventListener("drop", function(e) {
+      if (e.target.id != dropzoneId) {
+        e.preventDefault();
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+      }
+    });
 
+       $scope.myCallBackMethod = function(response,file){
+            console.log('response');
+            console.log(response)
+       }
 
-    $scope.uploadFiles = function(files) {
-      var totalFiles = $scope.FilesList.length + files.length;
-     if(totalFiles <= 8){
-         for (var i = 0; i < files.length; i++) {
-           $scope.checkFileValidation(files[i]);
-         }
-         $('#add-talent').modal('hide');
-         setTimeout(function(){
-         if($scope.FilesList.length > 0){
-                $('#add-files').modal('show');
-                $(".talent-inner-panel").mCustomScrollbar();
-                var isWarnMsg = isHidden();
-                if(isWarnMsg){
-                    $('#uploadFile').removeClass('uploadDisable');
-                }else{
-                    $('#uploadFile').addClass('uploadDisable');
-                }
-            } },200);
-         }
-         else{
-            $('.msgbox').removeClass('ng-hide');
-            $scope.countError = true;
-             $scope.$apply();
-         }
-
-    };
-
-    $scope.checkFileValidation = function(file){
-     var maxFileSize = 5;
-     var fileSizeError = false;
-     var fileTypeError = false;
-     var checkSize, isTypeValid, validMimeTypes;
-     var file, name, reader, size, type;
-
-        reader = new FileReader();
-        reader.onload = function(evt) {
-          if (checkSize(size) && isTypeValid(type)) {
-            $scope.$apply(function() {
-            if(evt.target.result){
-                    var preview = evt.target.result;
-                }
-                else{
-                   fileSizeError = true;
-                }
-                var data = {};
-                data['name'] = name;
-                data['fileSizeError'] = fileSizeError;
-                data['fileTypeError'] = fileTypeError;
-                data['preview'] = preview;
-                data['ext'] = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
-                $scope.FilesList.push(data);
-                var isWarnMsg = isHidden();
-                if(isWarnMsg){
-                    $('#uploadFile').removeClass('uploadDisable');
-                }else{
-                    $('#uploadFile').addClass('uploadDisable');
-                }
-            });
-          }else{
-                fileTypeError = !isTypeValid(type);
-                var data = {};
-                data['name'] = name;
-                data['fileSizeError'] = fileSizeError;
-                data['fileTypeError'] = fileTypeError;
-                data['preview'] = '';
-                data['ext'] = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
-                $scope.FilesList.push(data);
-                var isWarnMsg = isHidden();
-                if(isWarnMsg){
-                    $('#uploadFile').removeClass('uploadDisable');
-                }else{
-                    $('#uploadFile').addClass('uploadDisable');
-                }
-                 $scope.$apply();
-            }
-        };
-
-        file = file;
-        name = file.name;
-        type = file.type;
-        size = file.size;
-        reader.readAsDataURL(file);
-       $rootScope.attachedFilesDetails.push(file);
-       $rootScope.attachedFilesData.push(reader);
-
-       validMimeTypes = $scope.validMimeTypes;
-
-      checkSize = function(size) {
-        var _ref;
-        if (((_ref = maxFileSize) === (void 0) || _ref === '') || (size / 1024) / 1024 < maxFileSize) {
-          return true;
-        } else {
-          //alert("File must be smaller than " + maxFileSize + " MB");
-          fileSizeError = true;
+      var filesExits= function() {
+      var fileContainers = document.getElementsByClassName('dz-preview');
+        if(fileContainers.length >0){
+            return true;
+        }
           return false;
-        }
-      };
-
-      isTypeValid = function(type) {
-        if ((validMimeTypes === (void 0) || validMimeTypes === '') || validMimeTypes.indexOf(type) > -1) {
-          return true;
-        } else {
-          //alert("Invalid file type.  File must be one of following types " + validMimeTypes);
-          fileTypeError = true;
-          return false;
-        }
-      };
-    }
-
-     $scope.removeFile = function($event){
-      var fileName = $event.target.id;
-        for (var i = 0; i < $scope.FilesList.length; i++) {
-           if($scope.FilesList[i].name == fileName){
-              var index = i;
-              $rootScope.attachedFilesDetails.splice(index,1);
-              $rootScope.attachedFilesData.splice(index,1);
-              $scope.FilesList.splice(index,1);
-              if(index == 0 && $scope.FilesList.length == 0){
-                $scope.noFile = true;
-                $scope.NoFileMsg = "Please add files.";
-                $('#noFileMsg').removeClass('ng-hide');
-              }
-
-           }
-        }
-        setTimeout(function(){
-          if($scope.FilesList.length > 0){
-            if($scope.FilesList.length <=8){
-                  $scope.countError = false;
-                  $('.msgbox').addClass('ng-hide');
-                }
-
-                var isWarnMsg = isHidden();
-                if(isWarnMsg){
-                    $('#uploadFile').removeClass('uploadDisable');
-                }else{
-                    $('#uploadFile').addClass('uploadDisable');
-                }
-              }else{
-                $('#uploadFile').addClass('uploadDisable');
-              }
-            },200);
-//        if($scope.FilesList.length == 0){
-//            $('#uploadFile').addClass('uploadDisable');
-//        }
-     }
-
-//     $scope.upload = function () {
-//      $(".loader").css('display','block');
-//            angular.forEach($rootScope.attachedFilesDetails, function(file, count) {
-//              for (var i = 0; i < $scope.FilesList.length; i++) {
-//                  if($scope.FilesList[i].name == file.name){
-//                    if(!$scope.FilesList[i].fileSizeError && !$scope.FilesList[i].fileTypeError){
-//                          var formdata = new FormData();
-//                            formdata.append('files[]', file);
-//                            fileUploadApi.upload(formdata).then(function(response){
-//                                   //document.getElementById('file_'+count).innerHTML = 'File Uploaded Successfully.';
-//                                        if(i == $scope.FilesList.length){
-//                                           $(".loader").css('display','none');
-//                                           $('#add-files').modal('hide');
-//                                                $scope.FilesList =[];
-//                                                $rootScope.attachedFilesDetails=[];
-//                                                $rootScope.attachedFilesData=[];
-//                                                $scope.countError = false;
-//                                           $('#breakPopup').css('display','block');
-//                                           $timeout( function(){
-//                                                $('#breakPopup').css('display','none');
-//                                            } , 2000);
-//                                          }
-//                                       $('#removeCard_'+count).find('a').addClass('uploadDisable');
-//
-//                                    }, function (response) {
-//                                        console.log('Error status: ' + response.status);
-//                                    }, function (evt) {
-//                                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-//                                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-//                                 });
-//                         }
-//                    }
-//                  }
-//            });
-//    }
-
-      var isHidden= function() {
-      var elements = document.getElementsByClassName('error');
-         for (var i = 0; i < elements.length; i++) {
-            var notVisible = elements[i].classList.contains('ng-hide');
-             if(!notVisible)
-                return false;
-        }
-        return true;
       }
 
-//    $scope.closePopup = function(){
-//        $('#add-files').modal('hide');
-//        $('.msgbox').addClass('ng-hide');
-//        $scope.FilesList =[];
-//        $rootScope.attachedFilesDetails=[];
-//        $rootScope.attachedFilesData=[];
-//        $scope.countError = false;
-//    }
+
 }
 
 angular

@@ -255,13 +255,13 @@ function myDirective($rootScope) {
             element.bind('change', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                scope.countError = false;
-                //$('.msgbox').addClass('ng-hide');
-                scope.noFile = false;
-                //$('#noFileMsg').addClass('ng-hide');
                 if (element[0].files){
                     if (element[0].files.length > 0) {
-                      scope.uploadFiles(element[0].files);
+                     console.log(element[0].files);
+                     //for(var i=0;i<element[0].files.length;i++){
+                         //Dropzone.prototype.init(element[0].files,'secondInput');
+                     //}
+
                       $('#addfiles').val('');
                     }
                 }
@@ -314,10 +314,12 @@ function myDirective($rootScope) {
             callBack: "&",
             dataMax: "=?",
             mimetypes: "=",
+            ctrlFn: "&",
+
         },
         link: function (scope, element, attrs) {
             console.log("Creating dropzone");
-            scope.FilesList =[];
+            $(".talent-panel").mCustomScrollbar();
             // Autoprocess the form
             if (scope.autoProcess != null && scope.autoProcess == "false") {
                 scope.autoProcess = false;
@@ -346,7 +348,7 @@ function myDirective($rootScope) {
                 autoProcessQueue: scope.autoProcess,
                 success: function (file, response) {
                     if (scope.callBack != null) {
-                        scope.callBack({response: response});
+                        scope.callBack({response: response,file:file});
                     }
                 }
             });
