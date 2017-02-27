@@ -367,16 +367,25 @@
       },
       processingmultiple: noop,
       uploadprogress: function(file, progress, bytesSent) {
-        var node, _i, _len, _ref, _results;
+        var node, _i, _len, _ref, _results, _remove, _success;
         if (file.previewElement) {
           _ref = file.previewElement.querySelectorAll("[data-dz-uploadprogress]");
+
+          _remove = file.previewElement.querySelectorAll(".dz-remove");
+          _success = file.previewElement.querySelectorAll(".dz-success-mark");
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             node = _ref[_i];
             if (node.nodeName === 'PROGRESS') {
               _results.push(node.value = progress);
             } else {
+               if(progress == 100){
+               _remove[0].remove();
+               _success[0].classList.add('fa');
+               _success[0].classList.add('fa-check');
+               }
               _results.push(node.style.width = "" + progress + "%");
+
             }
           }
           return _results;
@@ -1280,6 +1289,7 @@
       updateProgress = (function(_this) {
         return function(e) {
           var allFilesFinished, progress, _j, _k, _l, _len1, _len2, _len3, _results;
+           var _doneBtn = document.getElementById('done');
           if (e != null) {
             progress = 100 * e.loaded / e.total;
             for (_j = 0, _len1 = files.length; _j < _len1; _j++) {
@@ -1302,7 +1312,9 @@
               file.upload.bytesSent = file.upload.total;
             }
             if (allFilesFinished) {
-              return;
+//                _doneBtn.classList.remove('disabled');
+//                _doneBtn.style['pointer-events'] = '';
+               return;
             }
           }
           _results = [];
@@ -1415,6 +1427,7 @@
         this.emit("success", file, responseText, e);
         this.emit("complete", file);
       }
+
       if (this.options.uploadMultiple) {
         this.emit("successmultiple", files, responseText, e);
         this.emit("completemultiple", files);
@@ -1422,6 +1435,7 @@
       if (this.options.autoProcessQueue) {
         return this.processQueue();
       }
+
     };
 
     Dropzone.prototype._errorProcessing = function(files, message, xhr) {

@@ -8931,6 +8931,8 @@ input[type=password]
   float: left;
   text-align: center;
   padding: 10px 0px;
+  max-height: 450px;
+  min-height: 300px;
 }
 
 .file-upld-mini {
@@ -8993,8 +8995,10 @@ input[type=password]
     width: 120px;
     height: 35px;
     border-radius: 2px;
-    background-color: #d3d3d3;
-    color: #ffffff;
+    /*background-color: #d3d3d3;*/
+    background-color: #1d84c6;
+    border-color: #1d84c6;
+    color: #FFFFFF;
     font-size: 13px;
     float: right;
     font-family: 'open_sansregular';
@@ -9135,6 +9139,8 @@ input[type=password]
     color: #999999;
     text-decoration: none;
 }
+
+
 
 /*talent-delete-popup*/
 

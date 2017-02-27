@@ -1164,6 +1164,10 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
             $('#add-talent').modal('hide');
     }
 
+    $scope.done = function(){
+        console.log('asdasda');
+        $('#add-talent').modal('hide');
+    }
     var dropzoneId = "dropzone";
 
     window.addEventListener("dragenter", function(e) {
