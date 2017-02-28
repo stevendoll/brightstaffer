@@ -19,7 +19,7 @@
         </div>
           <div class="progress-bttn">
             <button type="" class="btn talent-modal-done disabled" ng-click="done()" id="done" style="pointer-events:none;">Done</button>
-            <span class="btn-lg btn-primary add-files-bttn file-upld-mini" id="fileUpload">Add Files</span>
+            <span class="btn talent-modal-add" id="fileUpload">Add Files</span>
           </div>
         <div class="cls"></div>
       </div>
@@ -27,45 +27,6 @@
   </div>
 </div>
 
-
-<!---progress bar and name model--->
-<!--<div class="modal fade" id="add-files" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
-  <!--<div class="modal-dialog add-talent-dialog" role="document">-->
-    <!--<div class="modal-content">-->
-      <!--<div class="modal-header">-->
-        <!--<button type="button" class="close" ng-click="closePopup()" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>-->
-        <!--<h4 class="modal-title">Add Talent</h4>-->
-      <!--</div>-->
-      <!--<span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>-->
-      <!--<div class="modal-body">-->
-        <!--<div class="talent-inner-panel">-->
-          <!--<div style="text-align: center;" ng-show="[[noFile]]" id="noFileMsg">[[NoFileMsg]]</div>-->
-          <!--<div class="progress-panel" ng-repeat="data in FilesList">-->
-             <!--<div class="cls"></div>-->
-            <!--<div class="progress-image"><i class="fa fa-file-pdf-o modal-files-icon" ng-show="[[data.ext == 'pdf']]"></i><i ng-show="[[data.ext == 'docx']] || [[data.ext == 'doc']]" class="fa fa-file-word-o modal-files-icon"></i><i ng-show="[[data.ext != 'docx']] && [[data.ext != 'doc']] && [[data.ext != 'pdf']]" class="fa fa-close modal-files-icon"></i></div>-->
-            <!--<div class="progress-text">[[data.name]]</div>-->
-            <!--<div class="progress-close" id="removeCard_[[$index]]"><a id="[[data.name]]" ng-click="removeFile($event)" ><i class="fa fa-close"></i></a></div>-->
-            <!--<div class="cls"></div>-->
-              <!--<div>-->
-                <!--<span style="padding: 0 11px 0 48px;color:green;" id="file_[[$index]]"></span>-->
-                <!--<span class="error exterror" ng-show="[[data.fileSizeError]] && [[!data.fileTypeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File size exceeded(max 5MB).</span>-->
-                <!--<span class="error exterror" ng-show="[[data.fileTypeError]] && [[!data.fileSizeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File type error(only doc/docx/pdf allowed).</span>-->
-                <!--<span class="error exterror" ng-show="[[data.fileSizeError]] && [[data.fileTypeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File not supported.</span>-->
-            <!--</div>-->
-           <!--</div>-->
-        <!--</div>-->
-          <!--<div class="cls"></div>-->
-          <!--<div class="progress-bttn">-->
-              <!--<div class="note-text">NOTE: Max 8 files(doc/docx/pdf) allowed at once.</div>-->
-            <!--<a href="" class="btn-lg btn-primary upload-file-bttn uploadDisable" ng-click="upload()" id="uploadFile">Upload File</a>-->
-            <!--<span class="btn-lg btn-primary add-files-bttn file-upld-mini"><input data-my-Directive type="file" multiple="multiple" id="filesInput2">Add Files</span>-->
-          <!--</div>-->
-        <!--<div class="cls"></div>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->
-<!--</div>-->
 
  <!-- delete-Modal -->
 <div class="modal fade" id="delete-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -77,8 +38,8 @@
       <div class="modal-body">
         <div class="confirm-text">Are you sure you want to <span>cancel</span> the progress.</div>
         <div class="confirm-bttn-box">
-          <button type="" class="btn">Yes</button>
-          <button type="" class="btn">No</button>
+          <button type="" class="btn" data-dismiss="modal">Yes</button>
+          <button type="" class="btn" ng-click="reopen()">No</button>
         </div>
         <div class="cls"></div>
       </div>
@@ -87,7 +48,7 @@
 </div>
 
 
-<div class="success-box" style="display:none;">
+<div class="success-box" id="successBox" style="display:none;">
     <span><strong>Success!</strong> Talent has been added to the system.</span>
 </div>
 

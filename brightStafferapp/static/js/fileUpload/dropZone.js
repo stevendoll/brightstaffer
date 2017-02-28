@@ -249,7 +249,6 @@
         return this.element.classList.remove("dz-started");
       },
       addedfile: function(file) {
-        console.log(file);
         var node, removeFileEvent, removeLink, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
         if (this.element === this.previewsContainer) {
           this.element.classList.add("dz-started");
@@ -282,7 +281,7 @@
           }
           if (this.options.addRemoveLinks) {
             var _ref = document.querySelector('.dz-success-mark');
-            file._removeLink = Dropzone.createElement("<a class=\"dz-remove fa fa-close\" href=\"javascript:undefined;\" data-dz-remove>" + this.options.dictRemoveFile + "</a>");
+            file._removeLink = Dropzone.createElement("<a class=\"dz-remove fa fa-close\" href=\"javascript:undefined;\" data-dz-remove style=\"width: 30px;height: 19px;float: right;text-align: right;font-size: 16px;color: #6a6a6a;margin-top: -79px;\">" + this.options.dictRemoveFile + "</a>");
             file.previewElement.appendChild(file._removeLink);
           }
           removeFileEvent = (function(_this) {
@@ -560,6 +559,7 @@
 
     Dropzone.prototype.init = function() {
       var eventName, noPropagation, setupHiddenFileInput, _i, _len, _ref, _ref1;
+      this.removeAllFiles(true);
       if ( this.element.tagName === "form") {
         this.element.setAttribute("enctype", "multipart/form-data");
       }
@@ -629,8 +629,14 @@
         };
       })(this));
       this.on("complete", (function(_this) {
+        var doneButton = document.getElementById('done');
         return function(file) {
           if (_this.getAddedFiles().length === 0 && _this.getUploadingFiles().length === 0 && _this.getQueuedFiles().length === 0) {
+              doneButton.classList.remove('disabled');
+              doneButton.classList.remove('talent-modal-done');
+              doneButton.classList.add('talent-modal-add');
+               doneButton.style['pointer-events'] = '';
+
             return setTimeout((function() {
               return _this.emit("queuecomplete");
             }), 0);
@@ -1004,7 +1010,11 @@
     };
 
     Dropzone.prototype.addFile = function(file) {
-    console.log(file);
+    var doneButton = document.getElementById('done');
+    doneButton.classList.add('disabled');
+    doneButton.classList.add('talent-modal-done');
+    doneButton.classList.remove('talent-modal-add');
+    doneButton.style['pointer-events'] = 'none';
       file.upload = {
         progress: 0,
         total: file.size,
@@ -1288,7 +1298,6 @@
       updateProgress = (function(_this) {
         return function(e) {
           var allFilesFinished, progress, _j, _k, _l, _len1, _len2, _len3, _results;
-           var _doneBtn = document.getElementById('done');
           if (e != null) {
             progress = 100 * e.loaded / e.total;
             for (_j = 0, _len1 = files.length; _j < _len1; _j++) {
@@ -1311,8 +1320,6 @@
               file.upload.bytesSent = file.upload.total;
             }
             if (allFilesFinished) {
-//                _doneBtn.classList.remove('disabled');
-//                _doneBtn.style['pointer-events'] = '';
                return;
             }
           }

@@ -1157,17 +1157,41 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.isDisabled = true;
     $scope.noFile = false;
 
+
+      $scope.filesExits= function() {
+      var fileContainers = document.getElementsByClassName('dz-preview');
+        if(fileContainers.length >0){
+            return true;
+        }
+          return false;
+      }
+
     $scope.closePopup = function(){
-        if(filesExits){
+     var file = $scope.filesExits();
+        if(file){
             $('#delete-popup').modal('show');
         }
             $('#add-talent').modal('hide');
     }
 
     $scope.done = function(){
-        console.log('asdasda');
+//        var fileContainers = document.getElementsByClassName('dz-preview');
+//         for(var i=0;i<fileContainers.length;i++){
+//            fileContainers[i].remove();
+//         }
         $('#add-talent').modal('hide');
+         $('#successBox').css('display','block');
+        setTimeout(
+        function () {
+            $('#successBox').css('display','none');;
+        }, 2000);
     }
+
+    $scope.reopen = function(){
+        $('#delete-popup').modal('hide');
+        $('#add-talent').modal('show');
+    }
+
     var dropzoneId = "dropzone";
 
     window.addEventListener("dragenter", function(e) {
@@ -1198,15 +1222,6 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
             console.log('response');
             console.log(response)
        }
-
-      var filesExits= function() {
-      var fileContainers = document.getElementsByClassName('dz-preview');
-        if(fileContainers.length >0){
-            return true;
-        }
-          return false;
-      }
-
 
 }
 
