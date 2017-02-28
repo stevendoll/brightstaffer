@@ -379,13 +379,12 @@
             if (node.nodeName === 'PROGRESS') {
               _results.push(node.value = progress);
             } else {
-               if(progress == 100){
+              _results.push(node.style.width = "" + progress + "%");
+              if(progress == 100){
                _remove[0].remove();
                _success[0].classList.add('fa');
                _success[0].classList.add('fa-check');
                }
-              _results.push(node.style.width = "" + progress + "%");
-
             }
           }
           return _results;

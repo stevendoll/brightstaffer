@@ -8995,9 +8995,9 @@ input[type=password]
     width: 120px;
     height: 35px;
     border-radius: 2px;
-    /*background-color: #d3d3d3;*/
-    background-color: #1d84c6;
-    border-color: #1d84c6;
+    background-color: #d3d3d3;
+    /*background-color: #1d84c6;
+    border-color: #1d84c6;*/
     color: #FFFFFF;
     font-size: 13px;
     float: right;
@@ -9174,4 +9174,26 @@ input[type=password]
   color: #ffffff;
   text-align: center;
   margin: 0px 3px 40px 3px;
+}
+
+.success-box {
+  height: 50px;
+  border-radius: 2px;
+    background-color: rgba(223, 240, 216, 0.9);
+    border: solid 1px #d6e9c6;
+    margin: 0 auto;
+    padding: 13px 30px;
+    min-width: 365px;
+    float: left;
+    position: absolute;
+    top: 42px;
+    right: 45%;
+    z-index: 9999;
+}
+
+.success-box span {
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  text-align: left;
+  color: #3c763d;
 }

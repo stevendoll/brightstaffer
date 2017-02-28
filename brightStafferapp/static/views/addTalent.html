@@ -12,11 +12,14 @@
          <div class="talent-panel">
           <div class="cls"></div>
              <form action="/upload/" class="dropzone" drop-zone call-back="myCallBackMethod(response,file)" ctrl-fn="ctrlFn(fileInfo)" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
-                  <img src="static/img/upload-files.png" alt="" id="backgroundImg">
+                <div class="file-upld-mini">
+                 <input type="file" multiple="multiple" class="dz-hidden-input" id="fileUpload" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+                 <img src="static/img/upload-files.png" alt="" id="backgroundImg">
+                </div>
              <div class="cls"></div>
              <div class="choose-file" id="textMsg">Choose a file or drag it here.</div>
           </form>
-             <input type="file" multiple="multiple" class="dz-hidden-input" id="fileUpload" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+            <!-- <input type="file" multiple="multiple" class="dz-hidden-input" id="fileUpload" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">-->
         </div>
           <div class="progress-bttn">
             <button type="" class="btn talent-modal-done disabled" ng-click="done()" id="done" style="pointer-events:none;">Done</button>
@@ -85,4 +88,11 @@
       </div>
     </div>
   </div>
+</div>
+
+
+<div class="success-box" style="display:none;">
+    <span><strong>Success!</strong> Talent has been added to the system.</span>
+</div>
+
 </div>

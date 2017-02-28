@@ -801,13 +801,13 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         publishProject.publish(requestObject).then(function(response){
              if(response.message == "success") {
                 $(".loader").css('display','none');
-                $scope.publishMsg = "Project created successfully.";
+               // $scope.publishMsg = "Project created successfully.";
                  $scope.isPublish = true;
-                  $('#breakPopup').css('display','block');
-                 $scope.isPublish = true;
+                 $('#publishBox').css('display','block');
+                 $state.go('dashboard','');
                 $timeout( function(){
-                $('#breakPopup').css('display','none');
-                $state.go('dashboard','');} , 2000);
+                $('#publishBox').css('display','none');
+                    } , 3000);
 
              }else{
                 $(".loader").css('display','none');

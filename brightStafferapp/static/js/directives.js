@@ -349,7 +349,10 @@ function myDirective($rootScope) {
                 success: function (file, response) {
                     if (scope.callBack != null) {
                         scope.callBack({response: response,file:file});
+                    }else{
+                        console.log('done');
                     }
+
                 }
             });
         }
