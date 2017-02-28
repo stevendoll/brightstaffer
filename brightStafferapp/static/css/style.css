@@ -3280,7 +3280,7 @@ body.tour-open .animated {
 }
 /* Dropzone */
 .dropzone {
-  min-height: 140px;
+  min-height: 423px;
   border: 0px dashed #1ab394;
   background: white;
   padding: 0px 0px 10px 0px;
@@ -9236,4 +9236,4 @@ input[type=password]
 .delete-talent-dailog {
     width: 500px !important;
 }
-
+>>>>>>> 128cd12b6838398b0c2e117f740607e219fe0cc5

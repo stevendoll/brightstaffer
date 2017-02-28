@@ -314,8 +314,6 @@ function myDirective($rootScope) {
             callBack: "&",
             dataMax: "=?",
             mimetypes: "=",
-            ctrlFn: "&",
-
         },
         link: function (scope, element, attrs) {
             console.log("Creating dropzone");
@@ -338,23 +336,23 @@ function myDirective($rootScope) {
             if (scope.message == null) {
                 scope.message = Dropzone.prototype.defaultOptions.dictDefaultMessage;
             }
-
+                $('#fileUpload').val('');
               var myDropZone = new Dropzone(element[0],{
                 url: scope.action,
                 maxFilesize: '5',
                 paramName: "file",
                 acceptedFiles: scope.mimetypes,
                 maxThumbnailFilesize: '5',
+                clickable: ["#backgroundImg","#file-dropzone","#fileUpload"],
                 autoProcessQueue: scope.autoProcess,
                 success: function (file, response) {
                     if (scope.callBack != null) {
                         scope.callBack({response: response,file:file});
-                    }else{
-                        console.log('done');
                     }
 
                 }
             });
+
         }
     }
 }

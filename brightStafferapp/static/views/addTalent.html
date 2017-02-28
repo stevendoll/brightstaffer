@@ -11,15 +11,15 @@
       <div class="modal-body">
          <div class="talent-panel">
           <div class="cls"></div>
-             <form action="/upload/" class="dropzone" drop-zone call-back="myCallBackMethod(response,file)" ctrl-fn="ctrlFn(fileInfo)" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
+             <form action="/upload/" class="dropzone" drop-zone call-back="myCallBackMethod(response,file)" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
                   <img src="static/img/pdf-upload-image.png" alt="" id="backgroundImg">
                   <div class="cls"></div>
              </form>
-             <input type="file" multiple="multiple" class="dz-hidden-input" id="fileUpload" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">
+            <!-- <input type="file" multiple="multiple" class="dz-hidden-input" id="fileUpload" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">-->
         </div>
           <div class="progress-bttn">
             <button type="" class="btn talent-modal-done disabled" ng-click="done()" id="done" style="pointer-events:none;">Done</button>
-            <!--<span class="btn-lg btn-primary add-files-bttn file-upld-mini"><input data-my-Directive class="dz-hidden-input" type="file" multiple="multiple" id="addfiles">Add Files</span>-->
+            <span class="btn-lg btn-primary add-files-bttn file-upld-mini" id="fileUpload">Add Files</span>
           </div>
         <div class="cls"></div>
       </div>
