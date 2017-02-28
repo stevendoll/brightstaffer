@@ -200,6 +200,9 @@ class AlchemyAPI(View):
     def dispatch(self, request, *args, **kwargs):
         return super(AlchemyAPI, self).dispatch(request, *args, **kwargs)
 
+    def get(self, request):
+        return HttpResponse("405 ERROR:-Method is not allowed")
+
     @require_post_params(params=['recruiter', 'token'])
     def post(self, request):
         """
