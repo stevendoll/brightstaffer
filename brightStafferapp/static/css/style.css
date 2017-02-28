@@ -9212,6 +9212,16 @@ input[type=password]
     z-index: 9999;
 }
 
+.talent-file-error {
+    text-align: left;
+    width: 100%;
+    float: left;
+    font-size: 12px;
+    font-style: italic;
+    color: #ff4b4b;
+    font-family: 'open_sansregular';
+}
+
 .success-box span {
   font-family: 'open_sansregular';
   font-size: 14px;
