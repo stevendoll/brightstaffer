@@ -1,5 +1,6 @@
 import os
 import json
+import ast
 from brightStaffer.settings import concept_relevance
 from django.utils import timezone
 from watson_developer_cloud import AlchemyLanguageV1
@@ -8,12 +9,11 @@ from django.contrib.auth import authenticate
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
-from brightStafferapp.models import Projects,Concept
+from brightStafferapp.models import Projects, Concept
 from brightStafferapp import util
 from brightStafferapp.util import require_post_params
 from brightStaffer.settings import Alchemy_api_key
-from django.shortcuts import render,HttpResponse
-import ast
+from django.shortcuts import render, HttpResponse
 from itertools import chain
 from brightStafferapp.serializers import ProjectSerializer, TopProjectSerializer, UserSerializer
 from rest_framework import generics
