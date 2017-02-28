@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from brightStafferapp import views, resetpassword
+from brightStafferapp import views, resetpassword, talent
 
 
 urlpatterns = [
@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^project_list/$', views.ProjectList.as_view()),
     url(r'^top_project_list/$', views.TopProjectList.as_view()),
     url(r'^upload/$', views.FileUpload.as_view(), name="file-upload"),
+    url(r'^talent_list/$', talent.TalentList.as_view()),
     url(r'', views.home),
 
 ]

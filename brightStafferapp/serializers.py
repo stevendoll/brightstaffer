@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from brightStafferapp.models import Projects, Concept
+from brightStafferapp.models import Projects, Concept, Talent
 from django.contrib.auth.models import User
 
 
@@ -32,3 +32,11 @@ class TopProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = ('id', 'get_date', 'location', 'concepts', 'project_name', 'company_name')
+
+
+class TalentSerializer(serializers.ModelSerializer):
+    talent_name = serializers.CharField()
+
+    class Meta:
+        model = Talent
+        fields = ('id', 'talent_name', 'company', 'recruiter', 'project', 'current_location', 'create_date')

@@ -238,7 +238,7 @@ class AlchemyAPI(View):
         context['concept'] = keyword_concepts
         return util.returnSuccessShorcut(context)
 
-    #@staticmethod
+    # @staticmethod
     def alchemy_api(self, user_data, project_id):
         keyword_list = []
         try:
@@ -254,8 +254,6 @@ class AlchemyAPI(View):
             return list(set(keyword_list))[:25]
         except Exception as e:
             return keyword_list
-
-            # This API is update a concepts
 
     @csrf_exempt
     def update_concept(self, request):
@@ -354,7 +352,7 @@ class FileUpload(View):
 
     def post(self, request):
         files = request.FILES.getlist('file')
-        dest_path = settings.MEDIA_URL
+        dest_path = os.path.join(settings.MEDIA_URL + request.POST["recruiter"])
         if not os.path.exists(dest_path):
             os.makedirs(dest_path)
         for file in files:
@@ -362,9 +360,10 @@ class FileUpload(View):
         context = dict()
         return util.returnSuccessShorcut(context)
 
-    #@staticmethod
+    # @staticmethod
     def handle_uploaded_file(self, dest_path, f):
-        file_obj = open(dest_path + f.name, 'wb+')
+        file_path = os.path.join(dest_path, f.name)
+        file_obj = open(file_path, 'wb+')
         for chunk in f.chunks():
             file_obj.write(chunk)
             file_obj.close()
