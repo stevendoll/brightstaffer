@@ -246,11 +246,6 @@ angular
     .service('publishProject', publishProject)
     .service('getTopSixProjects', getTopSixProjects)
     .service('getAllProjects', getAllProjects)
-<<<<<<< HEAD
-    .service('paginationData', paginationData)
-    .service('fileUploadApi', fileUploadApi);
-
-=======
     .service('paginationData', paginationData);
    // .service('fileUploadApi', fileUploadApi);
->>>>>>> dev
+
