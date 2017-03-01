@@ -355,11 +355,11 @@ class FileUpload(View):
         return super(FileUpload, self).dispatch(request, *args, **kwargs)
 
     def post(self, request):
-        files = request.FILES.getlist('file')
+        files = request.FILES
         dest_path = os.path.join(settings.MEDIA_URL + request.POST["recruiter"])
         if not os.path.exists(dest_path):
             os.makedirs(dest_path)
-        for file in files:
+        for key, file in files.items():
             self.handle_uploaded_file(dest_path, file)
         context = dict()
         return util.returnSuccessShorcut(context)
