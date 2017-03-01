@@ -111,7 +111,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         var childEle = $('.nav-first-level').children('.ch');
         angular.forEach(childEle, function(li) {
           if(!li.contains($event.target))
-             angular.element(li).removeClass('highlight');
+             angular.element(li).removeClass('active');
 
         });
 
@@ -1185,11 +1185,11 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
             $('#delete-popup').modal('show');
         }else{
             $('#add-talent').modal('hide');
-            $('#successBox').css('display','block');
-            setTimeout(
-                function () {
-                    $('#successBox').css('display','none');;
-                }, 2000);
+//            $('#successBox').css('display','block');
+//            setTimeout(
+//                function () {
+//                    $('#successBox').css('display','none');;
+//                }, 2000);
         }
     }
 
@@ -1235,6 +1235,28 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
 
 }
 
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout){
+      $scope.load = function(){
+           $(function () {
+          $(".select-arrow").selectbox();
+         });
+        // var oldie = $.browser.msie && $.browser.version < 9;
+         $('.easy-pie-chart').each(function(){
+             console.log(this);
+             $(this).easyPieChart({
+                 barColor: $(this).data('color'),
+                 trackColor: '#d7d7d7',
+                 scaleColor: false,
+                 lineCap: 'butt',
+                 lineWidth: 6,
+                 animate: 1000,
+                 size:60
+             }).css('color', $(this).data('color'));
+         });
+      }
+}
+
+
 angular
     .module('brightStaffer')
     .controller('MainCtrl', MainCtrl)
@@ -1246,4 +1268,5 @@ angular
     .controller('createProjectCtrl', createProjectCtrl)
     .controller('tableCtrl', tableCtrl)
     .controller('scoreCardCtrl', scoreCardCtrl)
-    .controller('uploadFileCtrl', uploadFileCtrl);
+    .controller('uploadFileCtrl', uploadFileCtrl)
+    .controller('talentCtrl', talentCtrl);
