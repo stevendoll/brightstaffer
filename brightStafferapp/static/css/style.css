@@ -3442,7 +3442,7 @@ body {
   font-size: 13px;
   color: #676a6c;
   overflow-x: hidden;
-  background-color: #2f4050 !important;
+  /*background-color: #2f4050 !important;*/
 }
 html,
 body {
@@ -8698,6 +8698,27 @@ input[type=password]
   border-radius: 2px;
 }
 
+
+.hvr-fade {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+}
+.hvr-fade:hover, .hvr-fade:focus, .hvr-fade:active {
+  background-color: #004d7e !important;
+  color: #ffffff !important;
+}
+
 .p-m15 {
   padding: 12px 15px;
 }
@@ -8889,6 +8910,7 @@ input[type=password]
   padding: 9px 16px;
   font-size: 14px;
   font-family: 'open_sansregular';
+  cursor: pointer;
 }
 
 .align-right span a.new-project {
