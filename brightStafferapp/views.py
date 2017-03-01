@@ -101,22 +101,26 @@ class JobPosting(View):
         if not check_auth:
             return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
         if user_data['id'] == '':
-            rec_name = User.objects.get(username=user_data['recruiter'])
-            project_valid = Projects.objects.filter(project_name=user_data['project_name'],
-                                                    recruiter=rec_name).exists()
-            if not project_valid:
-                projects.project_name = user_data['project_name']
-                projects.recruiter = rec_name
-                projects.is_published = user_data['is_published']
-                projects.save()
-                p_id = Projects.objects.filter(project_name=user_data['project_name'],
-                                               recruiter=rec_name).values('id')
-                for a_id in p_id:
-                    for item, values in a_id.items():
-                        param_dict['project_id'] = str(values)
-                        return util.returnSuccessShorcut(param_dict)
-            else:
-                return util.returnErrorShorcut(403, 'Project is already exist in database')
+            try:
+                rec_name = User.objects.get(username=user_data['recruiter'])
+                project_valid = Projects.objects.filter(project_name=user_data['project_name'],
+                                                        recruiter=rec_name).exists()
+                print (project_valid)
+                if not project_valid:
+                    projects.project_name = user_data['project_name']
+                    projects.recruiter = rec_name
+                    projects.is_published = user_data['is_published']
+                    projects.save()
+                    p_id = Projects.objects.filter(project_name=user_data['project_name'],
+                                                   recruiter=rec_name).values('id')
+                    for a_id in p_id:
+                        for item, values in a_id.items():
+                            param_dict['project_id'] = str(values)
+                            return util.returnSuccessShorcut(param_dict)
+                else:
+                    return util.returnErrorShorcut(403, 'Project is already exist in database')
+            except:
+                return util.returnErrorShorcut(400, 'API parameter is not valid')
         else:
             project_id = Projects.objects.filter(id=user_data['id']).exists()
             if not project_id:
