@@ -260,7 +260,7 @@ class AlchemyAPI(View):
             return keyword_list
 
     @csrf_exempt
-    def update_concept(self, request):
+    def update_concept(request):
         param_dict = {}
         try:
             user_data = json.loads(request.body.decode("utf-8"))
@@ -270,7 +270,9 @@ class AlchemyAPI(View):
         if not check_auth:
             return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
         project_id = validate_project_by_id(user_data)
-        concept_obj, created = Concept.objects.get_or_create(project_id=project_id)
+        if not project_id:
+            return util.returnErrorShorcut(400, 'Project id is not valid')
+        concept_obj, created = Concept.objects.get_or_create(project_id=user_data['id'])
         concept_obj.concept = user_data['concept']
         concept_obj.save()
         param_dict['concept'] = concept_obj.concept
