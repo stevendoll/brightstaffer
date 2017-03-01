@@ -255,15 +255,14 @@ function myDirective($rootScope) {
             element.bind('change', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                scope.countError = false;
-                $('.msgbox').addClass('ng-hide');
-                scope.noFile = false;
-                $('#noFileMsg').addClass('ng-hide');
                 if (element[0].files){
                     if (element[0].files.length > 0) {
-                      scope.uploadFiles(element[0].files);
-                      $('#filesInput1').val('');
-                      $('#filesInput2').val('');
+                     console.log(element[0].files);
+                     //for(var i=0;i<element[0].files.length;i++){
+                         //Dropzone.prototype.init(element[0].files,'secondInput');
+                     //}
+
+                      $('#addfiles').val('');
                     }
                 }
                 return false;
@@ -273,38 +272,89 @@ function myDirective($rootScope) {
 }
 
 
-function fileDropzone($rootScope) {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
+//function fileDropzone($rootScope) {
+//  return {
+//    restrict: 'A',
+//    link: function(scope, element, attrs) {
+//
+//        element.on('dragover', function(e) {
+//            e.preventDefault();
+//            e.stopPropagation();
+//        });
+//        element.on('dragenter', function(e) {
+//            e.preventDefault();
+//            e.stopPropagation();
+//        });
+//        element.on('drop', function(event) {
+//            event.preventDefault();
+//            event.stopPropagation();
+//            if (event != null) {
+//                  event.preventDefault();
+//                }
+//            scope.countError = false;
+//            scope.noFile = false;
+//            $('.msgbox').addClass('ng-hide');
+//            scope.NoFileMsg ='';
+//            $('#noFileMsg').addClass('ng-hide');
+//            var file = event.dataTransfer.files[0];
+//             scope.checkFileValidation(file);
+//             $('#add-talent').modal('hide');
+//             $('#add-files').modal('show');
+//             $(".talent-inner-panel").mCustomScrollbar();
+//        });
+//    }
+//  };
+//}
 
-        element.on('dragover', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        });
-        element.on('dragenter', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        });
-        element.on('drop', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            if (event != null) {
-                  event.preventDefault();
+ function dropZone($rootScope) {
+    return {
+        scope: {
+            action: "@",
+            autoProcess: "=",
+            callBack: "&",
+            dataMax: "=?",
+            mimetypes: "=",
+        },
+        link: function (scope, element, attrs) {
+            console.log("Creating dropzone");
+            $(".talent-panel").mCustomScrollbar();
+            // Autoprocess the form
+            if (scope.autoProcess != null && scope.autoProcess == "false") {
+                scope.autoProcess = false;
+            } else {
+                scope.autoProcess = true;
+            }
+
+            // Max file size
+            if (scope.dataMax == null) {
+                scope.dataMax = Dropzone.prototype.defaultOptions.maxFilesize;
+            } else {
+                scope.dataMax = parseInt(scope.dataMax);
+            }
+
+            // Message for the uploading
+            if (scope.message == null) {
+                scope.message = Dropzone.prototype.defaultOptions.dictDefaultMessage;
+            }
+                $('#fileUpload').val('');
+                var recruiter ={'recruiter':$rootScope.globals.currentUser.user_email};
+              var myDropZone = new Dropzone(element[0],{
+                url: scope.action,
+                maxFilesize: '5',
+                paramName: ["file",recruiter],
+                acceptedFiles: scope.mimetypes,
+                maxThumbnailFilesize: '5',
+                clickable: ["#backgroundImg","#file-dropzone","#fileUpload"],
+                autoProcessQueue: scope.autoProcess,
+                success: function (file, response) {
+                    if (scope.callBack != null) {
+                        scope.callBack({response: response,file:file});
+                    }
                 }
-            scope.countError = false;
-            scope.noFile = false;
-            $('.msgbox').addClass('ng-hide');
-            scope.NoFileMsg ='';
-            $('#noFileMsg').addClass('ng-hide');
-            var file = event.dataTransfer.files[0];
-             scope.checkFileValidation(file);
-             $('#add-talent').modal('hide');
-             $('#add-files').modal('show');
-             $(".talent-inner-panel").mCustomScrollbar();
-        });
+            });
+
+        }
     }
-  };
 }
 
 /**
@@ -324,4 +374,4 @@ angular
     .directive('clickOutside', clickOutside)
     .directive('onTouch', onTouch)
     .directive('myDirective', myDirective)
-    .directive('fileDropzone', fileDropzone);
+    .directive('dropZone', dropZone);

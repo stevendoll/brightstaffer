@@ -3280,11 +3280,18 @@ body.tour-open .animated {
 }
 /* Dropzone */
 .dropzone {
-  min-height: 140px;
-  border: 1px dashed #1ab394;
+  min-height: 423px;
+  border: 0px dashed #1ab394;
   background: white;
-  padding: 20px 20px;
+  padding: 0px 0px 10px 0px;
+  cursor: pointer;
 }
+
+.dropzone img {
+  margin-top: 135px;
+  margin-bottom: 130px;
+}
+
 .dropzone .dz-message {
   font-size: 16px;
 }
@@ -3435,7 +3442,7 @@ body {
   font-size: 13px;
   color: #676a6c;
   overflow-x: hidden;
-  background-color: #2f4050 !important;
+  /*background-color: #2f4050 !important;*/
 }
 html,
 body {
@@ -8691,6 +8698,27 @@ input[type=password]
   border-radius: 2px;
 }
 
+
+.hvr-fade {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+}
+.hvr-fade:hover, .hvr-fade:focus, .hvr-fade:active {
+  background-color: #004d7e !important;
+  color: #ffffff !important;
+}
+
 .p-m15 {
   padding: 12px 15px;
 }
@@ -8882,6 +8910,7 @@ input[type=password]
   padding: 9px 16px;
   font-size: 14px;
   font-family: 'open_sansregular';
+  cursor: pointer;
 }
 
 .align-right span a.new-project {
@@ -8896,12 +8925,13 @@ input[type=password]
 }
 
 .add-talent-dialog {
-  width: 500px;
+  width: 600px;
   margin: 30px auto;
 }
 
 .add-talent-dialog .modal-content {
   border-radius: 2px;
+  border: 1px solid #bcb5b9;
 }
 
 .add-talent-dialog .modal-header {
@@ -8909,11 +8939,13 @@ input[type=password]
 }
 
 .add-talent-dialog .modal-header button.close {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: normal;
-  color: #a8a8a8;
+  color: #6a6a6a;
   filter: alpha(opacity=100);
   opacity: 1;
+  padding-right: 15px;
+  padding-top: 5px;
 }
 
 .add-talent-dialog .modal-header h4.modal-title {
@@ -8927,14 +8959,16 @@ input[type=password]
   float: left;
   text-align: center;
   padding: 10px 0px;
+  max-height: 450px;
+  min-height: 435px;
 }
 
 .file-upld-mini {
-  width: 120px;
+  width: auto;
   text-align: center;
-  background: #1d84c6;
+  background: transparent;
   color: #ffffff;
-  border: 1px solid #1d84c6;
+  border: 1px solid transparent;
   font-size: 14px;
   float: none;
   padding: 6px 5px;
@@ -8952,7 +8986,7 @@ input[type=password]
   display: block;
   font-size: 999px;
   filter: alpha(opacity=0);
-  height: 30px;
+  height: 125px;
   width: 100%;
   opacity: 0;
   position: absolute;
@@ -8966,19 +9000,55 @@ input[type=password]
   width: 100%;
   float: left;
   text-align: center;
-  color: #808080;
+  color: #7b7b7b;
   font-weight: normal;
   font-size: 14px;
   margin-top: 3px;
+  font-family: 'open_sansregular';
+}
+
+.talent-modal-add {
+    width: 120px;
+    height: 35px;
+    border-radius: 2px;
+    background-color: #3680ca;
+    color: #ffffff;
+    font-size: 13px;
+    float: right;
+    font-family: 'open_sansregular';
+    margin-left: 10px;
+}
+
+.talent-modal-done {
+    width: 120px;
+    height: 35px;
+    border-radius: 2px;
+    background-color: #d3d3d3;
+    /*background-color: #1d84c6;
+    border-color: #1d84c6;*/
+    color: #FFFFFF;
+    font-size: 13px;
+    float: right;
+    font-family: 'open_sansregular';
+    margin-left: 10px;
+}
+
+.talent-modal-add {
+    width: 120px;
+    height: 35px;
+    border-radius: 2px;
+    background-color: #3680ca;
+    color: #ffffff;
+    font-size: 13px;
+    float: right;
+    font-family: 'open_sansregular';
 }
 
 .talent-inner-panel {
   width: 100%;
   float: left;
   padding: 0px 0px;
-  max-height: 250px;
-  min-height: 100px;
-  min-height: 100px;
+  height: 390px;
 }
 
 .talent-inner-panel .progress {
@@ -9012,10 +9082,12 @@ input[type=password]
 .progress-image img {
   width: 38px;
   height: 35px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .progress-text {
-  width: 60%;
+  width: 75%;
   float: left;
   color: #707070;
   font-size: 14px;
@@ -9023,7 +9095,18 @@ input[type=password]
   overflow: hidden;
   text-overflow: ellipsis;
   padding-left: 10px;
-  line-height: 32px;
+  line-height: 40px;
+  text-align: left;
+}
+
+.dz-success-mark {
+  width: 30px;
+  height: 19px;
+  float: right;
+  text-align: right;
+  font-size: 16px;
+  color: #48b33c;
+  margin-top: 14px;;
 }
 
 .progress-close {
@@ -9031,7 +9114,7 @@ input[type=password]
   font-weight: normal;
   color: #a8a8a8;
   float: right;
-  width: 24px;
+  width: 15px;
   line-height: 32px;
 }
 
@@ -9097,3 +9180,92 @@ input[type=password]
     color: #999999;
     text-decoration: none;
 }
+
+
+
+/*talent-delete-popup*/
+
+.confirm-text {
+  width: 100%;
+  float: left;
+  font-family: 'open_sansregular';
+  font-size: 20px;
+  color: #000000;
+  margin-top: 25px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.confirm-text span {
+  color: #fb0007;
+}
+
+.confirm-bttn-box {
+  width: 100%;
+  float: left;
+  text-align: center;
+}
+
+.confirm-bttn-box button {
+  width: 63px;
+  height: 35px;
+  border-radius: 2px;
+  background-color: #3680ca;
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  color: #ffffff;
+  text-align: center;
+  margin: 0px 3px 40px 3px;
+}
+
+
+.success-box {
+  height: 50px;
+  border-radius: 2px;
+    background-color: rgba(223, 240, 216, 0.9);
+    border: solid 1px #d6e9c6;
+    margin: 0 auto;
+    padding: 13px 30px;
+    min-width: 365px;
+    float: left;
+    position: absolute;
+    top: 42px;
+    right: 45%;
+    z-index: 9999;
+}
+
+.talent-file-error {
+    text-align: left;
+    width: 100%;
+    float: left;
+    font-size: 12px;
+    font-style: italic;
+    color: #ff4b4b;
+    font-family: 'open_sansregular';
+}
+
+.success-box span {
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  text-align: left;
+  color: #3c763d;
+}
+
+.progress {
+  height: 4px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  border-radius: 100px;
+  width: 100%;
+  float: left;
+}
+
+.progress-bar {
+  background-color: #337ab7 !important;
+}
+
+.delete-talent-dailog {
+    width: 500px !important;
+}
+>>>>>>> 128cd12b6838398b0c2e117f740607e219fe0cc5

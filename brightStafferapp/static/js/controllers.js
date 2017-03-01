@@ -1,5 +1,5 @@
 
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout,$stateParams) { /*global controller */
     $rootScope.topSixProjectList = [];   // top six project list array
     $rootScope.allProjectList = [];          // all project array
     $rootScope.totalProjectCount =0;
@@ -111,7 +111,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         var childEle = $('.nav-first-level').children('.ch');
         angular.forEach(childEle, function(li) {
           if(!li.contains($event.target))
-             angular.element(li).removeClass('highlight');
+             angular.element(li).removeClass('active');
 
         });
 
@@ -686,6 +686,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                  }else{
                          $scope.timeout = $timeout(saveUpdates(name,value), 3000);
                  }
+            },function(error){
+                 if(error){
+                     $scope.timeout = $timeout(saveUpdates(name,value), 1000);
+                 }
             });
     }
 
@@ -801,14 +805,9 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         publishProject.publish(requestObject).then(function(response){
              if(response.message == "success") {
                 $(".loader").css('display','none');
-                $scope.publishMsg = "Project created successfully.";
+               // $scope.publishMsg = "Project created successfully.";
                  $scope.isPublish = true;
-                  $('#breakPopup').css('display','block');
-                 $scope.isPublish = true;
-                $timeout( function(){
-                $('#breakPopup').css('display','none');
-                $state.go('dashboard','');} , 2000);
-
+                  $state.go('dashboard','');
              }else{
                 $(".loader").css('display','none');
                   $scope.isSuccess = true;
@@ -1135,13 +1134,23 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
     };
 
     $scope.colorFunction = function() {
-	return function(d, i) {
-    	return 'rgb(255, 255, 255)'
-    };
-}
+        return function(d, i) {
+            return 'rgb(255, 255, 255)'
+        };
+    }
+
+    $scope.resetModal = function(){
+        $('.dz-preview').remove();
+        var doneButton = document.getElementById('done');
+        doneButton.classList.add('disabled');
+        doneButton.classList.add('talent-modal-done');
+        doneButton.classList.remove('talent-modal-add');
+        doneButton.style['pointer-events'] = 'none';
+        document.getElementById('backgroundImg').style.display= '';
+    }
 }
 
-function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout,FileUploader,fileUploadApi){
+function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout){
     $scope.currentFile="";
     $scope.currentFileGroup="";
     $scope.currentFileDescription="";
@@ -1157,237 +1166,96 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.isDisabled = true;
     $scope.noFile = false;
 
-    var dropzoneId = "dropzone";
 
-        window.addEventListener("dragenter", function(e) {
-          if (e.target.id != dropzoneId) {
-            e.preventDefault();
-            e.dataTransfer.effectAllowed = "none";
-            e.dataTransfer.dropEffect = "none";
-          }
-        }, false);
-
-        window.addEventListener("dragover", function(e) {
-          if (e.target.id != dropzoneId) {
-            e.preventDefault();
-            e.dataTransfer.effectAllowed = "none";
-            e.dataTransfer.dropEffect = "none";
-          }
-        });
-
-        window.addEventListener("drop", function(e) {
-          if (e.target.id != dropzoneId) {
-            e.preventDefault();
-            e.dataTransfer.effectAllowed = "none";
-            e.dataTransfer.dropEffect = "none";
-          }
-        });
-
-
-    $scope.uploadFiles = function(files) {
-      var totalFiles = $scope.FilesList.length + files.length;
-     if(totalFiles <= 8){
-         for (var i = 0; i < files.length; i++) {
-           $scope.checkFileValidation(files[i]);
-         }
-         $('#add-talent').modal('hide');
-         setTimeout(function(){
-         if($scope.FilesList.length > 0){
-                $('#add-files').modal('show');
-                $(".talent-inner-panel").mCustomScrollbar();
-                var isWarnMsg = isHidden();
-                if(isWarnMsg){
-                    $('#uploadFile').removeClass('uploadDisable');
-                }else{
-                    $('#uploadFile').addClass('uploadDisable');
-                }
-            } },200);
-         }
-         else{
-            $('.msgbox').removeClass('ng-hide');
-            $scope.countError = true;
-             $scope.$apply();
-         }
-
-    };
-
-    $scope.checkFileValidation = function(file){
-    console.log(file);
-     var maxFileSize = 5;
-     var fileSizeError = false;
-     var fileTypeError = false;
-     var checkSize, isTypeValid, validMimeTypes;
-     var file, name, reader, size, type;
-
-        reader = new FileReader();
-        reader.onload = function(evt) {
-          if (checkSize(size) && isTypeValid(type)) {
-            $scope.$apply(function() {
-            if(evt.target.result){
-                    var preview = evt.target.result;
-                }
-                else{
-                   fileSizeError = true;
-                }
-                var data = {};
-                data['name'] = name;
-                data['fileSizeError'] = fileSizeError;
-                data['fileTypeError'] = fileTypeError;
-                data['preview'] = preview;
-                data['ext'] = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
-                $scope.FilesList.push(data);
-                var isWarnMsg = isHidden();
-                if(isWarnMsg){
-                    $('#uploadFile').removeClass('uploadDisable');
-                }else{
-                    $('#uploadFile').addClass('uploadDisable');
-                }
-            });
-          }else{
-                fileTypeError = !isTypeValid(type);
-                var data = {};
-                data['name'] = name;
-                data['fileSizeError'] = fileSizeError;
-                data['fileTypeError'] = fileTypeError;
-                data['preview'] = '';
-                data['ext'] = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
-                $scope.FilesList.push(data);
-                var isWarnMsg = isHidden();
-                if(isWarnMsg){
-                    $('#uploadFile').removeClass('uploadDisable');
-                }else{
-                    $('#uploadFile').addClass('uploadDisable');
-                }
-                 $scope.$apply();
+      $scope.filesExits= function() {
+      var fileContainers = document.getElementsByClassName('dz-preview');
+       for(var i=0;i<fileContainers.length;i++){
+            if(fileContainers[i].classList.contains('dz-error') || !fileContainers[i].classList.contains('dz-complete')){
+                return true;
             }
-        };
 
-        file = file;
-        name = file.name;
-        type = file.type;
-        size = file.size;
-        reader.readAsDataURL(file);
-       $rootScope.attachedFilesDetails.push(file);
-       $rootScope.attachedFilesData.push(reader);
-
-       validMimeTypes = $scope.validMimeTypes;
-
-      checkSize = function(size) {
-        var _ref;
-        if (((_ref = maxFileSize) === (void 0) || _ref === '') || (size / 1024) / 1024 < maxFileSize) {
-          return true;
-        } else {
-          //alert("File must be smaller than " + maxFileSize + " MB");
-          fileSizeError = true;
+        }
           return false;
-        }
-      };
-
-      isTypeValid = function(type) {
-        if ((validMimeTypes === (void 0) || validMimeTypes === '') || validMimeTypes.indexOf(type) > -1) {
-          return true;
-        } else {
-          //alert("Invalid file type.  File must be one of following types " + validMimeTypes);
-          fileTypeError = true;
-          return false;
-        }
-      };
-    }
-
-     $scope.removeFile = function($event){
-      var fileName = $event.target.id;
-        for (var i = 0; i < $scope.FilesList.length; i++) {
-           if($scope.FilesList[i].name == fileName){
-              var index = i;
-              $rootScope.attachedFilesDetails.splice(index,1);
-              $rootScope.attachedFilesData.splice(index,1);
-              $scope.FilesList.splice(index,1);
-              if(index == 0){
-                $scope.noFile = true;
-                $scope.NoFileMsg = "Please add files.";
-                $('#noFileMsg').removeClass('ng-hide');
-              }
-
-           }
-        }
-        setTimeout(function(){
-          if($scope.FilesList.length > 0){
-            if($scope.FilesList.length <=8){
-                  $scope.countError = false;
-                  $('.msgbox').addClass('ng-hide');
-                }
-
-                var isWarnMsg = isHidden();
-                if(isWarnMsg){
-                    $('#uploadFile').removeClass('uploadDisable');
-                }else{
-                    $('#uploadFile').addClass('uploadDisable');
-                }
-              }else{
-                $('#uploadFile').addClass('uploadDisable');
-              }
-            },200);
-//        if($scope.FilesList.length == 0){
-//            $('#uploadFile').addClass('uploadDisable');
-//        }
-     }
-
-     $scope.upload = function () {
-      $(".loader").css('display','block');
-            angular.forEach($rootScope.attachedFilesDetails, function(file, count) {
-              for (var i = 0; i < $scope.FilesList.length; i++) {
-                  if($scope.FilesList[i].name == file.name){
-                    if(!$scope.FilesList[i].fileSizeError && !$scope.FilesList[i].fileTypeError){
-                          var formdata = new FormData();
-                            formdata.append('files[]', file);
-                            fileUploadApi.upload(formdata).then(function(response){
-                                   //document.getElementById('file_'+count).innerHTML = 'File Uploaded Successfully.';
-                                       $('#removeCard_'+count).find('a').addClass('uploadDisable');
-
-                                    }, function (response) {
-                                        console.log('Error status: ' + response.status);
-                                    }, function (evt) {
-                                    console.log(evt.loaded);
-                                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-                                 });
-                         }
-                    }
-                  }
-                  if(i == $scope.FilesList.length){
-                   $(".loader").css('display','none');
-                   $('#add-files').modal('hide');
-                        $scope.FilesList =[];
-                        $rootScope.attachedFilesDetails=[];
-                        $rootScope.attachedFilesData=[];
-                        $scope.countError = false;
-                   $('#breakPopup').css('display','block');
-                   $timeout( function(){
-                        $('#breakPopup').css('display','none');
-                    } , 2000);
-                  }
-            });
-    }
-
-      var isHidden= function() {
-      var elements = document.getElementsByClassName('error');
-         for (var i = 0; i < elements.length; i++) {
-            var notVisible = elements[i].classList.contains('ng-hide');
-             if(!notVisible)
-                return false;
-        }
-        return true;
       }
 
     $scope.closePopup = function(){
-        $('#add-files').modal('hide');
-        $('.msgbox').addClass('ng-hide');
-        $scope.FilesList =[];
-        $rootScope.attachedFilesDetails=[];
-        $rootScope.attachedFilesData=[];
-        $scope.countError = false;
+     var file = $scope.filesExits();
+        if(file){
+            $('#add-talent').modal('hide');
+            $('#delete-popup').modal('show');
+        }else{
+            $('#add-talent').modal('hide');
+//            $('#successBox').css('display','block');
+//            setTimeout(
+//                function () {
+//                    $('#successBox').css('display','none');;
+//                }, 2000);
+        }
     }
+
+    $scope.done = function(){
+        $('#add-talent').modal('hide');
+        $('#successBox').css('display','block');
+        setTimeout(
+        function () {
+            $('#successBox').css('display','none');;
+        }, 2000);
+    }
+
+    $scope.reopen = function(){
+        $('#delete-popup').modal('hide');
+        $('#add-talent').modal('show');
+    }
+
+    var dropzoneId = "dropzone";
+
+    window.addEventListener("dragenter", function(e) {
+      if (e.target.id != dropzoneId) {
+        e.preventDefault();
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+      }
+    }, false);
+
+    window.addEventListener("dragover", function(e) {
+      if (e.target.id != dropzoneId) {
+        e.preventDefault();
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+      }
+    });
+
+    window.addEventListener("drop", function(e) {
+      if (e.target.id != dropzoneId) {
+        e.preventDefault();
+        e.dataTransfer.effectAllowed = "none";
+        e.dataTransfer.dropEffect = "none";
+      }
+    });
+
 }
+
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout){
+      $scope.load = function(){
+           $(function () {
+          $(".select-arrow").selectbox();
+         });
+        // var oldie = $.browser.msie && $.browser.version < 9;
+         $('.easy-pie-chart').each(function(){
+             console.log(this);
+             $(this).easyPieChart({
+                 barColor: $(this).data('color'),
+                 trackColor: '#d7d7d7',
+                 scaleColor: false,
+                 lineCap: 'butt',
+                 lineWidth: 6,
+                 animate: 1000,
+                 size:60
+             }).css('color', $(this).data('color'));
+         });
+      }
+}
+
 
 angular
     .module('brightStaffer')
@@ -1400,4 +1268,5 @@ angular
     .controller('createProjectCtrl', createProjectCtrl)
     .controller('tableCtrl', tableCtrl)
     .controller('scoreCardCtrl', scoreCardCtrl)
-    .controller('uploadFileCtrl', uploadFileCtrl);
+    .controller('uploadFileCtrl', uploadFileCtrl)
+    .controller('talentCtrl', talentCtrl);
