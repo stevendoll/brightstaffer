@@ -101,6 +101,12 @@ angular
 
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+      if(fromState.name == 'create.step4' && toState.name == 'dashboard'){
+              $('#publishBox').css('display','block');
+            $timeout( function(){
+                $('#publishBox').css('display','none');
+                    } , 3000);
+        }
 		$rootScope.title = toState.data.pageTitle;
 
 	});

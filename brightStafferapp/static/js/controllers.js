@@ -1,5 +1,5 @@
 
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout,$stateParams) { /*global controller */
     $rootScope.topSixProjectList = [];   // top six project list array
     $rootScope.allProjectList = [];          // all project array
     $rootScope.totalProjectCount =0;
@@ -686,6 +686,10 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                  }else{
                          $scope.timeout = $timeout(saveUpdates(name,value), 3000);
                  }
+            },function(error){
+                 if(error){
+                     $scope.timeout = $timeout(saveUpdates(name,value), 1000);
+                 }
             });
     }
 
@@ -803,12 +807,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                 $(".loader").css('display','none');
                // $scope.publishMsg = "Project created successfully.";
                  $scope.isPublish = true;
-                 $('#publishBox').css('display','block');
-                 $state.go('dashboard','');
-                $timeout( function(){
-                $('#publishBox').css('display','none');
-                    } , 3000);
-
+                  $state.go('dashboard','');
              }else{
                 $(".loader").css('display','none');
                   $scope.isSuccess = true;
@@ -1135,10 +1134,20 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
     };
 
     $scope.colorFunction = function() {
-	return function(d, i) {
-    	return 'rgb(255, 255, 255)'
-    };
-}
+        return function(d, i) {
+            return 'rgb(255, 255, 255)'
+        };
+    }
+
+    $scope.resetModal = function(){
+        $('.dz-preview').remove();
+        var doneButton = document.getElementById('done');
+        doneButton.classList.add('disabled');
+        doneButton.classList.add('talent-modal-done');
+        doneButton.classList.remove('talent-modal-add');
+        doneButton.style['pointer-events'] = 'none';
+        document.getElementById('backgroundImg').style.display= '';
+    }
 }
 
 function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout){
@@ -1160,8 +1169,11 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
 
       $scope.filesExits= function() {
       var fileContainers = document.getElementsByClassName('dz-preview');
-        if(fileContainers.length >0){
-            return true;
+       for(var i=0;i<fileContainers.length;i++){
+            if(fileContainers[i].classList.contains('dz-error') || !fileContainers[i].classList.contains('dz-complete')){
+                return true;
+            }
+
         }
           return false;
       }
@@ -1169,18 +1181,21 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.closePopup = function(){
      var file = $scope.filesExits();
         if(file){
-            $('#delete-popup').modal('show');
-        }
             $('#add-talent').modal('hide');
+            $('#delete-popup').modal('show');
+        }else{
+            $('#add-talent').modal('hide');
+            $('#successBox').css('display','block');
+            setTimeout(
+                function () {
+                    $('#successBox').css('display','none');;
+                }, 2000);
+        }
     }
 
     $scope.done = function(){
-//        var fileContainers = document.getElementsByClassName('dz-preview');
-//         for(var i=0;i<fileContainers.length;i++){
-//            fileContainers[i].remove();
-//         }
         $('#add-talent').modal('hide');
-         $('#successBox').css('display','block');
+        $('#successBox').css('display','block');
         setTimeout(
         function () {
             $('#successBox').css('display','none');;
@@ -1217,11 +1232,6 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         e.dataTransfer.dropEffect = "none";
       }
     });
-
-       $scope.myCallBackMethod = function(response,file){
-            console.log('response');
-            console.log(response)
-       }
 
 }
 
