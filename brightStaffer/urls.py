@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^top_project_list/$', views.TopProjectList.as_view()),
     url(r'^upload/$', views.FileUpload.as_view(), name="file-upload"),
     url(r'^talent_list/$', talent.TalentList.as_view()),
+    url(r'^insert_talent/$', talent.InsertTalent.as_view()),
     url(r'', views.home),
 
 ]

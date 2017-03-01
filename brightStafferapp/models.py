@@ -82,6 +82,7 @@ class Talent(models.Model):
     recruiter = models.ForeignKey(User, null=False, verbose_name='Recruiter ID')
     project = models.ForeignKey(Projects, null=True, verbose_name='Project Name')
     current_location = models.CharField(max_length=255, verbose_name='Current Location', null=True, blank=True)
+    email_id = models.EmailField(max_length=100, verbose_name="Email Id", null=True, blank=True, unique=True, default=None)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
 
     class Meta:

@@ -19,7 +19,7 @@ class ConceptsAdmin(admin.ModelAdmin):
 
 
 class TalentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'recruiter', 'project', 'current_location', 'create_date', 'talent_name')
+    list_display = ('id', 'recruiter', 'project', 'current_location', 'create_date', 'talent_name', 'email_id')
     list_filter = ('id', 'talent_name')
     filter_horizontal = ('company', )
     list_per_page = 2000

@@ -105,7 +105,6 @@ class JobPosting(View):
                 rec_name = User.objects.get(username=user_data['recruiter'])
                 project_valid = Projects.objects.filter(project_name=user_data['project_name'],
                                                         recruiter=rec_name).exists()
-                print (project_valid)
                 if not project_valid:
                     projects.project_name = user_data['project_name']
                     projects.recruiter = rec_name
@@ -251,11 +250,12 @@ class AlchemyAPI(View):
                 alchemy_language.combined(text=user_data['description'],
                                           extract='entities,keywords', max_items=25))
             d = json.loads(data)
+            print (d)
             Projects.objects.filter(id=project_id).update(description_analysis=d)
             for item in chain(d["keywords"], d["entities"]):
                 if round(float(item['relevance']), 2) >= concept_relevance:
                     keyword_list.append(item['text'].lower())
-            return list(set(keyword_list))[:25]
+            return list(set(keyword_list))#[:25]
         except Exception as e:
             return keyword_list
 
