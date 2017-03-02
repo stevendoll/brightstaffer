@@ -340,7 +340,7 @@ function myDirective($rootScope) {
                 var recruiter ={'recruiter':$rootScope.globals.currentUser.user_email};
               var myDropZone = new Dropzone(element[0],{
                 url: scope.action,
-                maxFilesize: '5',
+                maxFilesize: 5,
                 paramName: ["file",recruiter],
                 acceptedFiles: scope.mimetypes,
                 maxThumbnailFilesize: '5',

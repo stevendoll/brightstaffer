@@ -361,22 +361,28 @@ class FileUpload(View):
         return super(FileUpload, self).dispatch(request, *args, **kwargs)
 
     def post(self, request):
-        files = request.FILES
-        dest_path = os.path.join(settings.MEDIA_URL + request.POST["recruiter"])
-        if not os.path.exists(dest_path):
-            os.makedirs(dest_path)
-        for key, file in files.items():
-            self.handle_uploaded_file(dest_path, file)
-        context = dict()
-        return util.returnSuccessShorcut(context)
+        try:
+            files = request.FILES
+            dest_path = os.path.join(settings.MEDIA_URL + request.POST["recruiter"])
+            if not os.path.exists(dest_path):
+                os.makedirs(dest_path)
+            for key, file in files.items():
+                self.handle_uploaded_file(dest_path, file)
+            context = dict()
+            return util.returnSuccessShorcut(context)
+        except:
+            return util.returnErrorShorcut(400, "Error Connection Refused")
 
     # @staticmethod
     def handle_uploaded_file(self, dest_path, f):
-        file_path = os.path.join(dest_path, f.name)
-        file_obj = open(file_path, 'wb+')
-        for chunk in f.chunks():
-            file_obj.write(chunk)
+        try:
+            file_path = os.path.join(dest_path, f.name)
+            file_obj = open(file_path, 'wb+')
+            for chunk in f.chunks():
+                file_obj.write(chunk)
             file_obj.close()
+        except :
+            return util.returnErrorShorcut(400, "Error Connection Refused")
 
 
 def user_validation(data):

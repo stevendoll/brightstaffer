@@ -7,7 +7,7 @@
         <button type="button" class="close" ng-click="closePopup()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <h4 class="modal-title" id="myModalLabel">Add Talent</h4>
       </div>
-        <!-- <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>-->
+        <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 100 Files at once.</span>
       <div class="modal-body">
          <div class="talent-panel">
           <div class="cls"></div>
@@ -18,6 +18,7 @@
             <!-- <input type="file" multiple="multiple" class="dz-hidden-input" id="fileUpload" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">-->
         </div>
           <div class="progress-bttn">
+            <div class="note-text">NOTE: Max 100 files(doc/docx/pdf of 5MB) allowed at once.</div>
             <button type="" class="btn talent-modal-done disabled" ng-click="done()" id="done" style="pointer-events:none;">Done</button>
             <span class="btn talent-modal-add" id="fileUpload">Add Files</span>
           </div>

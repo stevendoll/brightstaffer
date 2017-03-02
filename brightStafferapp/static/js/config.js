@@ -75,6 +75,16 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
             templateUrl: static_url +'views/common/development.html',
             data: { pageTitle: 'Under Dev' ,specialClass: 'development-bg', requireAuthentication: true}
         })
+        .state('talent', {
+            abstract: true,
+            templateUrl: static_url +'views/mainTalent.html',
+            data: { pageTitle: 'Talent' ,specialClass: 'gray-bg', requireAuthentication: true}
+        })
+        .state('talent.talent-search', {
+            url: "/talent-search",
+            templateUrl: static_url +'views/talent-search.html',
+            data: { pageTitle: 'Talent' , requireAuthentication: true}
+        })
 
 }
 
@@ -84,6 +94,7 @@ angular
     .run(function($rootScope, $state, $location, $timeout, $cookies, $cookieStore) {
     $rootScope.isDevice = false;
     $rootScope.$state = $state;
+    $rootScope.searchPlaceholder = 'Search Sona';
     $rootScope.globals ={};
    // console.log('load');
     $rootScope.checkReqValidation = function(formName){
@@ -102,13 +113,17 @@ angular
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
       if(fromState.name == 'create.step4' && toState.name == 'dashboard'){
-              $('#publishBox').css('display','block');
+            $('#publishBox').css('display','block');
             $timeout( function(){
                 $('#publishBox').css('display','none');
                     } , 3000);
         }
+        if(toState.name == 'talent.talent-search'){
+           $rootScope.searchPlaceholder = 'Search Talent';
+        }else{
+           $rootScope.searchPlaceholder = 'Search Sona';
+        }
 		$rootScope.title = toState.data.pageTitle;
-
 	});
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var shouldLogin = toState.data.requireAuthentication !== undefined

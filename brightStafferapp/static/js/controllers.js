@@ -67,88 +67,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         $rootScope.isSuccess = false;
    }
 
-    this.detectmob = function($event){
-        if( navigator.userAgent.match(/Android/i)
-        || navigator.userAgent.match(/webOS/i)
-        || navigator.userAgent.match(/iPhone/i)
-        || navigator.userAgent.match(/iPod/i)
-        || navigator.userAgent.match(/BlackBerry/i)
-        || navigator.userAgent.match(/Windows Phone/i)
-         ){
-            openSideMenu();
-         }
-    }
-
-
-    function openSideMenu(){
-        $("body").toggleClass("mini-navbar");
-        SmoothlyMenu();
-
-        function SmoothlyMenu() {
-            if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
-                // Hide menu in order to smoothly turn on when maximize menu
-                $('#side-menu').hide();
-                // For smoothly turn on menu
-                setTimeout(
-                    function () {
-                        $('#side-menu').fadeIn(400);
-                    }, 200);
-            } else if ($('body').hasClass('fixed-sidebar')) {
-                $('#side-menu').hide();
-                setTimeout(
-                    function () {
-                        $('#side-menu').fadeIn(400);
-                    }, 100);
-            } else {
-                // Remove all inline style from jquery fadeIn function to reset menu state
-                $('#side-menu').removeAttr('style');
-            }
-        }
-    }
-
-    $scope.setActive = function($event){
-        $event.stopPropagation();
-        var childEle = $('.nav-first-level').children('.ch');
-        angular.forEach(childEle, function(li) {
-          if(!li.contains($event.target))
-             angular.element(li).removeClass('active');
-
-        });
-
-        if($event.type == "touchstart"){
-            if($($event.currentTarget).hasClass('active')){
-                $($event.currentTarget).removeClass('active');
-               }
-            else{
-                $($event.currentTarget).addClass('active');
-                   if($event.currentTarget.id == "project"){
-                     $('.nav-second-level').addClass('in');
-                      $('.nav-second-level').css('display','block');
-                   }
-               }
-        }else if($event.type == "click"){
-            if($(this).hasClass('active')){
-               $(this).removeClass('active');
-               }
-            else{
-               $(this).addClass('active');
-               }
-        }
-    }
-
-    $scope.stateSelected = function(){
-        if($scope.stateArray.indexOf($state.current.name)> -1 && !$rootScope.isDevice){
-          $('#project').addClass('active');
-           $('.nav-second-level').addClass('in');
-             $('.nav-second-level').css('display','block');
-           return true;
-        }
-        if($scope.stateArray.indexOf($state.current.name)> -1 && $rootScope.isDevice){
-            $('#project').addClass('highlight');
-             return true;
-        }
-      return false;
-    }
 };
 
 function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $timeout, loginService) { /* login controller responsible for login functionality */
@@ -1151,13 +1069,6 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
 }
 
 function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout){
-    $scope.currentFile="";
-    $scope.currentFileGroup="";
-    $scope.currentFileDescription="";
-    $rootScope.attachedFilesDetails=[];
-    $scope.FileMessage ='';
-    $scope.fileName = '';
-    $scope.file = '';
     $scope.validMimeTypes=['application/vnd.openxmlformats-officedocument.wordprocessingml.document' , 'application/msword', 'application/pdf'];
     $rootScope.attachedFilesData=[];
     $scope.FilesList =[];
@@ -1235,11 +1146,108 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout){
-      $scope.load = function(){
-           $(function () {
+
+function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout){
+     this.detectmob = function($event){
+        if( navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)
+         ){
+            openSideMenu();
+         }
+    }
+
+    function openSideMenu(){
+        $("body").toggleClass("mini-navbar");
+        SmoothlyMenu();
+
+        function SmoothlyMenu() {
+            if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+                // Hide menu in order to smoothly turn on when maximize menu
+                $('#side-menu').hide();
+                // For smoothly turn on menu
+                setTimeout(
+                    function () {
+                        $('#side-menu').fadeIn(400);
+                    }, 200);
+            } else if ($('body').hasClass('fixed-sidebar')) {
+                $('#side-menu').hide();
+                setTimeout(
+                    function () {
+                        $('#side-menu').fadeIn(400);
+                    }, 100);
+            } else {
+                // Remove all inline style from jquery fadeIn function to reset menu state
+                $('#side-menu').removeAttr('style');
+            }
+        }
+    }
+
+    $scope.setActive = function($event){
+        $event.stopPropagation();
+        var childEle = $('.nav-first-level').children('.ch');
+        angular.forEach(childEle, function(li) {
+          if(!li.contains($event.target)){
+             if($event.currentTarget.id != "project" && $('.nav-second-level').hasClass('in')){
+                 $('.nav-second-level').removeClass('in');
+                  $('.nav-second-level').css('display','');
+               }
+               angular.element(li).removeClass('active');
+             }
+        });
+
+        if($event.type == "touchstart"){
+            if($($event.currentTarget).hasClass('active')){
+                $($event.currentTarget).removeClass('active');
+               }
+            else{
+                $($event.currentTarget).addClass('active');
+                   if($event.currentTarget.id == "project"){
+                     $('.nav-second-level').addClass('in');
+                      $('.nav-second-level').css('display','block');
+                 }
+            }
+        }else if($event.type == "click"){
+            if($(this).hasClass('active')){
+                $(this).removeClass('active');
+            }
+            else{
+               $(this).addClass('active');
+               }
+        }
+    }
+
+    $scope.stateSelected = function(){
+        if($scope.stateArray.indexOf($state.current.name)> -1 && !$rootScope.isDevice){
+          $('#project').addClass('active');
+           $('.nav-second-level').addClass('in');
+             $('.nav-second-level').css('display','block');
+           return true;
+        }
+        if($scope.stateArray.indexOf($state.current.name)> -1 && $rootScope.isDevice){
+            $('#project').addClass('highlight');
+             return true;
+        }
+      return false;
+    }
+
+}
+
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, talentApi){
+         $scope.exportOptions = [{name:'Export Data',value:'Export Data'},{name:'Copy',value:'Copy'},{name:'CSV',value:'CSV'},{name:'Excel',value:'Excel'},{name:'PDF',value:'PDF'},{name:'Print',value:'Print'}]; // select drop-down options
+         $scope.exportType = $scope.exportOptions[0];
+      angular.element(document).ready(function () {
           $(".select-arrow").selectbox();
-         });
+          $('#export').change(function() {
+                var selectedValue = $('#export :selected').text();
+                $scope.exportType = selectedValue;
+                console.log($scope.exportType);
+            });
+
+            $scope.getTalents();
         // var oldie = $.browser.msie && $.browser.version < 9;
          $('.easy-pie-chart').each(function(){
              console.log(this);
@@ -1253,6 +1261,30 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                  size:60
              }).css('color', $(this).data('color'));
          });
+       });
+
+
+      $scope.getTalents = function(){             // function to fetch top 6 projects
+        var requestObject = {
+        'token': $rootScope.globals.currentUser.token,       // username field value
+        'recruiter': $rootScope.globals.currentUser.user_email   // password field value
+         };
+         talentApi.allTalents(requestObject).then(function(response){
+            if(response.message == "success") {
+               console.log(response);
+
+              }else{
+                console.log('error');
+            }
+         });
+      }
+
+      $scope.selectExportType = function(exportType){
+      console.log('asdasdasdasd');
+        console.log(exportType.value);
+
+
+
       }
 }
 
@@ -1269,4 +1301,5 @@ angular
     .controller('tableCtrl', tableCtrl)
     .controller('scoreCardCtrl', scoreCardCtrl)
     .controller('uploadFileCtrl', uploadFileCtrl)
-    .controller('talentCtrl', talentCtrl);
+    .controller('talentCtrl', talentCtrl)
+    .controller('sideNavCtrl', sideNavCtrl);
