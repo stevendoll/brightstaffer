@@ -8696,6 +8696,7 @@ input[type=password]
   float: right;
   text-align: center;
   border-radius: 2px;
+  outline: none;
 }
 
 
@@ -8922,6 +8923,7 @@ input[type=password]
   height: 41px;
   float: right;
   text-align: center;
+  outline: none;
 }
 
 .add-talent-dialog {
@@ -8946,6 +8948,7 @@ input[type=password]
   opacity: 1;
   padding-right: 15px;
   padding-top: 5px;
+  outline: none;
 }
 
 .add-talent-dialog .modal-header h4.modal-title {
