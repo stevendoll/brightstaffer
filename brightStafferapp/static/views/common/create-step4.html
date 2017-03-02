@@ -8,15 +8,15 @@
                               <div class="col-sm-8 m-t">
                                   <div class="p-b">
                                     <label>Project Name</label>
-                                    <p class="form-control text-black"># [[projectForm.project_name]]</p>
+                                    <p class="form-control text-black"># [[projectForm.project_name | capitalize]]</p>
                                   </div>
                                   <div class="p-b">
                                     <label>Company or Division</label>
-                                    <p class="form-control text-black">@ [[projectForm.company_name]]</p>
+                                    <p class="form-control text-black">@ [[projectForm.company_name | capitalize]]</p>
                                   </div>
                                <div class="p-b">
                                 <label>Location</label>
-                                <p class="form-control text-black">[[projectForm.location]]</p>
+                                <p class="form-control text-black">[[projectForm.location | capitalize]]</p>
                               </div>
                           </div>
                           </div>
@@ -27,7 +27,7 @@
 			                        <div class="col-sm-12">
 						                <label>Job Description</label>
 											<p class="publish-textarea text-black">
-                                                [[projectForm.description]]
+                                                [[projectForm.description | capitalize]]
                                             </p>
 									</div>
 								</div>
@@ -36,7 +36,7 @@
 			            <div class="col-sm-12">
 										<label>Concepts</label>
 											<div class="ibox-content p-a-0">
-                                            <span class="btn btn-default btn-lg concept-tag" ng-repeat="concepts in jobDescriptionResult.concept" id="skill_[[concepts]]">[[concepts]]</span>
+                                            <span class="btn btn-default btn-lg concept-tag" ng-repeat="concepts in jobDescriptionResult.concept" id="skill_[[concepts]]">[[concepts | capitalize]]</span>
 			                        		</div>
 								  </div>
 			                </div></fieldset>
@@ -49,3 +49,5 @@
     <a ng-if="isSuccess" ng-click="main.removePopupBox()">OK</a>
   </div>
 </div>
+
+

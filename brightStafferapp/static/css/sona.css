@@ -18,6 +18,11 @@ body {
   line-height: 1.5;
   color: #373a3c;
   background-color: #f3f3f4;
+   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0px 0px !important;
 }
 
 
@@ -43,6 +48,7 @@ h1, .h1 {
 
 h2, .h2 {
   font-size: 2rem;
+  font-family: 'open_sanslight';
 }
 
 h3, .h3 {
@@ -69,7 +75,7 @@ h6, .h6 {
 /* ----- Content ----- */
 
 .wrapper-content {
-    padding: 20px 10px 0px;
+    padding: 10px 10px 0px;
 }
 
 .b-t {
@@ -287,6 +293,9 @@ li.active a {
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 240px;
+  }
+  .wrapper-content .m-t {
+    margin-top: 10px !important;
   }
   .navbar-static-side {
     z-index: 2001;
@@ -817,6 +826,8 @@ li.active a {
 
 .concept-tag {
 	margin: 0 6px 6px 0;
+	font-size: 18px;
+    font-family: 'open_sansregular';
 }
 
 .bootstrap-tagsinput {

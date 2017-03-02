@@ -2,7 +2,15 @@
 var baseUrl = 'http://'+window.location.host+'/';
 angular
     .module('brightStaffer')
-    .constant('REQUEST_URL', baseUrl);
+    .constant('REQUEST_URL', baseUrl)
+
+.config(['$httpProvider', function ($httpProvider) {
+  //Reset headers to avoid OPTIONS request (aka preflight)
+  $httpProvider.defaults.headers.common = {};
+  $httpProvider.defaults.headers.post = {};
+  $httpProvider.defaults.headers.put = {};
+  $httpProvider.defaults.headers.patch = {};
+}]);
 
 function loginService($http ,REQUEST_URL){
     return {
@@ -204,8 +212,23 @@ function paginationData($http ,REQUEST_URL){
     }
  }
 
-
-
+function talentApi($http,REQUEST_URL) {
+   return {
+    allTalents: function(data){
+    return $http({
+        url: REQUEST_URL+'talent_list/?recruiter='+data.recruiter+'&token='+data.token+'&count=10',
+        method: "GET", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      }
+    }
+}
 
 angular
     .module('brightStaffer')
@@ -219,6 +242,6 @@ angular
     .service('publishProject', publishProject)
     .service('getTopSixProjects', getTopSixProjects)
     .service('getAllProjects', getAllProjects)
-    .service('paginationData', paginationData);
-
+    .service('paginationData', paginationData)
+    .service('talentApi', talentApi);
 

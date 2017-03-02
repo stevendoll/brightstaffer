@@ -1,0 +1,127 @@
+.sbHolder {
+    position: relative;
+    width: 100%;
+    border: 1px solid #e7eaec;
+    border-radius: 2px;
+    height: 36px;
+    padding: 6px 20px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0);
+    font-family: 'open_sansregular';
+    color: #6a6a6a;
+    font-size: 13px;
+    background-color: #ffffff;
+    padding: 6px 22px 6px 10px;
+    text-align: left;
+}
+.sbSelector {
+    display: block;
+    height: 28px;
+    left: 0;
+    line-height: 30px;
+    outline: none;
+    overflow: hidden;
+    position: absolute;
+    text-indent: 0px;
+    top: 0;
+    width: auto;
+    float: right;
+    margin-left: -3px;
+}
+.sbHolder:focus {
+    outline: 0;
+}
+.sbOptions li a:hover {
+    border-bottom: 1px solid #e7eaec;
+    display: block;
+    outline: none;
+    padding: 10px 10px !important;
+    line-height: 18px;
+    background-color: #ffffff;
+    color: #6a6a6a;
+    margin-left: 0px;
+    font-size: 14px;
+    font-family: 'open_sansregular';
+}
+.sbSelector:link,
+.sbSelector:visited,
+.sbSelector:hover {
+    color: #383f44;
+    outline: none;
+    text-decoration: none;
+    font-size: 13px;
+    margin: 2px 0 0 2px;
+    width: 100%;
+    text-align: left;
+    font-family: 'open_sansregular';
+    padding: 0px 5px 0px 10px;
+    text-align: left;
+}
+.sbToggle {
+    background: url(../img/select-arrow.png) no-repeat;
+    display: block;
+    height: 14px;
+    outline: 0px none transparent;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 14px;
+    margin: 11px 0px 0px 0px;
+    float: left;
+    margin-right: 6px;
+    border: 0px solid #ffffff;
+}
+.sbOptions {
+    background-color: #ffffff;
+    border: solid 1px #e7eaec;
+    list-style: none;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 38px !important;
+    width: 100%;
+    z-index: 5;
+    overflow: auto !important;
+    /*height: 156px !important;*/
+    opacity: 0.97;
+    padding: 0px 0px;
+}
+.sbOptions li {
+    padding: 0px;
+    width: 100%;
+    float: left;
+    text-align: left;
+}
+.sbOptions a {
+    border-bottom: 1px solid #e7eaec;
+    display: block;
+    outline: none;
+    padding: 10px 10px;
+    line-height: 18px;
+    font-size: 14px;
+    font-family: 'open_sansregular';
+}
+.sbOptions a:link,
+.sbOptions a:visited {
+    color: #AAAAAA;
+    text-decoration: none;
+    font-family: 'open_sansregular';
+}
+.sbOptions li.last a {
+    border-bottom: none;
+}
+.sbOptions .sbDisabled {
+    border-bottom: dotted 1px #515151;
+    color: #999;
+    display: block;
+    padding: 7px 0 7px 3px;
+}
+.sbOptions .sbGroup {
+    border-bottom: dotted 1px #515151;
+    color: #EBB52D;
+    display: block;
+    font-weight: bold;
+    padding: 7px 0 7px 3px;
+}
+

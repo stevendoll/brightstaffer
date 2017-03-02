@@ -1,72 +1,61 @@
-<!-- /Project Cards -->
-
 <div class="wrapper wrapper-content m-t-n-md">
-      <div class="row m-b-md">
-      	<div class="col-xs-12 col-lg-9">
-      		<h2 class="m-l">My Projects</h2>
+      <div class="row m-bttm20">
+        <div class="heading-section">
+      		<h2>My Projects</h2>
       	</div>
-      	<div class="col-xs-12 col-lg-3 m-t">
-      		<span><a ui-sref="create.step1" class="btn-lg btn-primary pull-right">Create New Project</a></span>
+      	<div class="buttons-section m-t align-right">
+      		<span><a ui-sref="create.step1" class="btn-lg btn-primary new-project hvr-fade">Create Project</a></span>
       	</div>
       </div>
       <div class="row">
-          <!--<div style="text-align:center;" ng-if="noProjectData"> No Projects Available.</div>-->
           <div  ng-repeat="projects in topSixProjectList" >
-          <div class="clearfix" ng-show="[[(($index) % 3) == 0]]"></div>
+          <!--<div class="clearfix" ng-show="[[(($index) % 3) == 0]]"></div>-->
           <div class="col-lg-4">
               <div class="ibox">
-                  <div class="ibox-title" ng-init="conceptList = [[projects.concepts]]">
-                      <span class="label label-primary pull-right" ng-if="$first">NEW</span>
+                <div class="ibox-title align-center position-rel" ng-init="conceptList = [[projects.concepts]]">
+                      <span class="label label-primary pull-right new-cards" ng-if="$first">New</span>
                       <h5 class="dash"><a ui-sref="development" class="text-project">#[[projects.project_name]]</a></h5>
+                      <div class="cls"></div>
+                      <div class="box-location"><a>@[[projects.company_name]]</a> in <span class="text-detail">[[projects.location | capitalize]]</span></div>
                   </div>
                   <div class="ibox-content">
-                      <div class="talent-members m-n">
+                      <div class="started-panel">Started <span>[[projects.get_date | dateFormat]]</span></div>
+                    <div class="started-panel">Last Active <span>[[projects.get_date | dateFormat]]</span></div>
+                      <div class="cls"></div>
+                      <div class="talent-members m-n recent-talents">
          	                <p><small class="text-muted m-b">Recent Talent</small></p>
-                          <a href=""><img alt="member" class="img-circle" src="static/img/a1.jpg"></a>
-                          <a href=""><img alt="member" class="img-circle" src="static/img/a2.jpg"></a>
-                          <a href=""><img alt="member" class="img-circle" src="static/img/a3.jpg"></a>
-                          <a href=""><img alt="member" class="img-circle" src="static/img/a5.jpg"></a>
-                          <a class="btn btn-outline btn-sm concept-tag text-muted">+4</a>
+                        <a href=""><img alt="member" class="img-circle" src="static/img/a1.jpg"></a>
+                        <a href=""><img alt="member" class="img-circle" src="static/img/a2.jpg"></a>
+                        <a href=""><img alt="member" class="img-circle" src="static/img/a3.jpg"></a>
+                        <a href=""><img alt="member" class="img-circle" src="static/img/a5.jpg"></a>
+                        <a class="btn btn-outline btn-sm concept-tag text-muted font16 disable test nohover" style="color: #999999;">+4</a>
                       </div>
-                      <div class="m-t-md">
-      		            <p class="text-muted">
-      	                    <a class="text-company">@[[projects.company_name]]</a> in <span class="text-detail">[[projects.location]]</span> started on <span class="text-detail">[[projects.get_date]]</span>, and was last active on <span class="text-detail">[[projects.get_date]]</span> at <span class="text-detail">0:00 PM</span>
-      	                </p>
-                      </div>
-
-      				<div class="row">
-      					<div class="hr-card"></div>
-      						<div class="col-md-12">
-      							<div class="row">
-      								<div class="col-xs-4 col-sm-4">
-      									<div class="m-b-xs text-muted">All</div>
-      										<a class="font-bold" href="">0</a>
-      									</div>
-      								<div class="col-xs-4 col-sm-4">
-      									<div class="m-b-xs text-muted">Starred</div>
-      										<a class="font-bold" href="">0</a>
-      								</div>
-      								<div class="col-xs-4 col-sm-4">
-      									<div class="m-b-xs text-muted">Active</div>
-      										<a class="font-bold" href="">0</a> <i class="fa fa-level-up text-navy"></i>
-      								</div>
-      							</div>
-      					</div><!-- /col-md-12 -->
-      				</div><!-- /row -->
-
-      				<div class="row">
-      					<div class="hr-card"></div>
-      						<div class="col-md-12">
-      							<p><small class="text-muted">Concepts</small></p>
-      							<a class="btn btn-default btn-sm concept-tag elepsis-100" ng-repeat="conceptname in projects.concepts|limitTo:4">[[conceptname]]</a><a class="btn btn-outline btn-sm concept-tag text-muted" ng-show="[[projects.concepts.length > 4]]">+[[projects.concepts.length-4]]</a>
-      						</div>
-      				</div><!-- /row -->
-                  </div><!-- /ibox-content -->
-              </div><!-- /ibox -->
+                       <div class="cls"></div>
+            				<div class="row">
+                        <div class="col-md-12">
+                          <div class="">
+                            <div class="col-xs-4 col-sm-4 padding3">
+                              <div class="m-b-xs text-muted all-starred">All Talent</div>
+                              <div class="all-starred-box"><a class="font-bold" href=""><i class="fa fa-users text-grey m-rg10"></i>81</a></div>
+                              </div>
+                            <div class="col-xs-4 col-sm-4 padding3">
+                              <div class="m-b-xs text-muted all-starred">Active</div>
+                              <div class="all-starred-box"><a class="font-bold" href=""><i class="fa fa-thumbs-up font18 text-grey m-rg10"></i>4</a></div>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 padding3">
+                              <div class="m-b-xs text-muted all-starred">Starred</div>
+                              <div class="all-starred-box"><a class="font-bold" href=""><i class="fa fa-star text-grey m-rg10"></i>4</a></div>
+                            </div>
+                          </div>
+                        </div><!-- /col-md-12 -->
+                      </div><!-- /row -->
+                </div><!-- /ibox-content -->
+                <div class="view-details"><a href="" class="btn-lg btn-primary view-project-bttn disable hvr-fade">View Project Details</a></div>
+                <div class="cls"></div>
+            </div><!-- /ibox -->
           </div><!-- /col-4 -->
    </div>
       </div>
 
     </div><!-- /wrapper -->
   </div>
-
