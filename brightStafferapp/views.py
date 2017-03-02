@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
-from brightStafferapp.models import Projects, Concept
+from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept
 from brightStafferapp import util
 from brightStafferapp.util import require_post_params
 from brightStaffer.settings import Alchemy_api_key
@@ -213,7 +213,6 @@ class AlchemyAPI(View):
         :return:
         """
         context = dict()
-        concept_obj = None
         user_data = json.loads(request.body.decode("utf-8"))
         check_auth = user_validation(user_data)
         if not check_auth:
@@ -221,23 +220,19 @@ class AlchemyAPI(View):
         project_id = validate_project_by_id(user_data)
         if not project_id:
             return util.returnErrorShorcut(400, 'Project id is not valid')
-        if project_id:
-            project_id = str(Projects.objects.get(id=user_data['id']))
-            concept_obj, created = Concept.objects.get_or_create(project_id=project_id)
-            Projects.objects.filter(id=project_id).update(description=user_data['description'])
-            context['project_id'] = str(project_id)
 
         # call the alchemy api and get list of concepts
-        keyword_concepts = self.alchemy_api(user_data, project_id)
+        project_obj = Projects.objects.get(id=user_data['id'])
+        keyword_concepts = self.alchemy_api(user_data, project_obj.id)
         if keyword_concepts:
-            concept_obj.concept = keyword_concepts
-            concept_obj.save()
+            for keyword in keyword_concepts:
+                concept, created = Concept.objects.get_or_create(concept=keyword)
+                ProjectConcept.objects.get_or_create(project=project_obj, concept=concept)
         else:
             return util.returnErrorShorcut(400, "Description text data is not valid.")
         del user_data['token']
         del user_data['recruiter']
-        Projects.objects.filter(id=project_id).update(**user_data)
-        concept_obj.concept = keyword_concepts
+        Projects.objects.filter(id=project_obj.id).update(**user_data)
         context['concept'] = keyword_concepts
         return util.returnSuccessShorcut(context)
 
@@ -250,17 +245,22 @@ class AlchemyAPI(View):
                 alchemy_language.combined(text=user_data['description'],
                                           extract='entities,keywords', max_items=25))
             d = json.loads(data)
-            print (d)
             Projects.objects.filter(id=project_id).update(description_analysis=d)
             for item in chain(d["keywords"], d["entities"]):
                 if round(float(item['relevance']), 2) >= concept_relevance:
                     keyword_list.append(item['text'].lower())
-            return list(set(keyword_list))#[:25]
+            return list(set(keyword_list))[:25]
         except Exception as e:
             return keyword_list
 
-    @csrf_exempt
-    def update_concept(request):
+
+class UpdateConcepts(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UpdateConcepts, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request):
         param_dict = {}
         try:
             user_data = json.loads(request.body.decode("utf-8"))
@@ -272,11 +272,22 @@ class AlchemyAPI(View):
         project_id = validate_project_by_id(user_data)
         if not project_id:
             return util.returnErrorShorcut(400, 'Project id is not valid')
-        concept_obj, created = Concept.objects.get_or_create(project_id=user_data['id'])
-        concept_obj.concept = user_data['concept']
-        concept_obj.save()
-        param_dict['concept'] = concept_obj.concept
+        project_obj = Projects.objects.get(id=user_data['id'])
+        if user_data['concept']:
+            create_update_concepts(user_data['concept'], project_obj)
         return util.returnSuccessShorcut(param_dict)
+
+
+def create_update_concepts(concepts, project_obj):
+    project_concepts = []
+    if project_obj:
+        project_concepts = list(ProjectConcept.objects.filter(project=project_obj).values_list('id', flat=True))
+    for keyword in concepts:
+        concept, created = Concept.objects.get_or_create(concept=keyword)
+        project_concept, proj_created = ProjectConcept.objects.get_or_create(project=project_obj, concept=concept)
+        if project_concept.id in project_concepts:
+            project_concepts.remove(project_concept.id)
+    ProjectConcept.objects.filter(id__in=project_concepts).delete()
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -337,13 +348,6 @@ class TopProjectList(generics.ListCreateAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super(TopProjectList, self).list(request, *args, **kwargs)
-        for result in response.data['results']:
-            if len(result['concepts'])>0:
-                result['concepts'] = result['concepts'][0]
-                concept = ast.literal_eval(result['concepts'])
-                result['concepts'] = concept
-            else:
-                result['concepts']=result['concepts']
         response.data['top_project'] = response.data['results']
         response.data['message'] = 'success'
         del (response.data['results'])
