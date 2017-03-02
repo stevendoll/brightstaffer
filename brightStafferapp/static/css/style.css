@@ -8948,6 +8948,7 @@ input[type=password]
   opacity: 1;
   padding-right: 15px;
   padding-top: 5px;
+  outline: none;
 }
 
 .add-talent-dialog .modal-header h4.modal-title {
