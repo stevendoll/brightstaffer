@@ -119,14 +119,14 @@
       withCredentials: false,
       parallelUploads: 2,
       uploadMultiple: false,
-      maxFilesize: 1,//4.76837,
+      maxFilesize: 5,//4.76837,
       paramName: "file",
       createImageThumbnails: true,
       maxThumbnailFilesize: 10,
       thumbnailWidth: 120,
       thumbnailHeight: 120,
-      filesizeBase: 1024,
-      maxFiles: null,
+      filesizeBase: 1000,
+      maxFiles: 100,
       params: {},
       clickable: true,
       ignoreHiddenFiles: true,
@@ -145,10 +145,10 @@
       dictFileTooBig: "File size exceeded.",
       dictInvalidFileType: "File type not supported.",
       dictResponseError: "Server responded with {{statusCode}} code.",
-      dictCancelUpload: "Cancel upload",
+      dictCancelUpload: '',
       dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
-      dictRemoveFile: null,
-      dictRemoveFileConfirmation: null,
+      dictRemoveFile: '',
+      dictRemoveFileConfirmation: '',
       dictMaxFilesExceeded: "You can not upload any more files.",
       accept: function(file, done) {
         return done();
@@ -378,7 +378,7 @@
             } else {
               _results.push(node.style.width = "" + progress + "%");
                   if(progress == 100){
-                   _remove[0].remove();
+                   _remove[0].parentNode.removeChild(_remove[0]);
                    _success[0].classList.add('fa');
                    _success[0].classList.add('fa-check');
                    }
@@ -414,8 +414,8 @@
       queuecomplete: noop,
       addedfiles: noop,
       //previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-image\"><img data-dz-thumbnail /></div>\n  <div class=\"dz-details\">\n    <div class=\"dz-size\"><span data-dz-size></span></div>\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n  </div>\n  <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n  <div class=\"dz-success-mark\">\n    <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n      <title>Check</title>\n      <defs></defs>\n      <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n        <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\" sketch:type=\"MSShapeGroup\"></path>\n      </g>\n    </svg>\n  </div>\n  <div class=\"dz-error-mark\">\n    <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n      <title>Error</title>\n      <defs></defs>\n      <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n        <g id=\"Check-+-Oval-2\" sketch:type=\"MSLayerGroup\" stroke=\"#747474\" stroke-opacity=\"0.198794158\" fill=\"#FFFFFF\" fill-opacity=\"0.816519475\">\n          <path d=\"M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" sketch:type=\"MSShapeGroup\"></path>\n        </g>\n      </g>\n    </svg>\n  </div>\n</div>"
-       previewTemplatePdf: "<div class=\"dz-preview dz-file-preview progress-panel\">\n  <div class=\"dz-image progress-image\"><img data-dz-thumbnail src=\"static/img/pdf.svg\"/></div>\n  <div class=\"dz-details\">\n </div>\n    <div class=\"dz-filename progress-text\"><span data-dz-name></span></div>\n  <div class=\"dz-success-mark\">\n  </div>\n  <div class=\"dz-progress progress\"><div class=\"progress-bar\" data-dz-uploadprogress></div></div>\n  <div class=\"dz-error-message\"><span class=\"glyphicon glyphicon-warning-sign\" style=\"color: red; padding: 0 11px 0 15px;visibility: hidden;\"></span><span data-dz-errormessage></span></div>\n  </div>",
-       previewTemplateWord: "<div class=\"dz-preview dz-file-preview progress-panel\">\n  <div class=\"dz-image progress-image\"><img data-dz-thumbnail src=\"static/img/doc.svg\"/></div>\n  <div class=\"dz-details\">\n </div>\n    <div class=\"dz-filename progress-text\"><span data-dz-name></span></div>\n  <div class=\"dz-success-mark\">\n  </div>\n <div class=\"dz-progress progress\"><div class=\"progress-bar\" data-dz-uploadprogress></div></div>\n  <div class=\"dz-error-message\"><span class=\"glyphicon glyphicon-warning-sign\" style=\"color: red; padding: 0 11px 0 15px;visibility: hidden;\"></span><span data-dz-errormessage></span></div>\n  </div>",
+       previewTemplatePdf: "<div class=\"dz-preview dz-file-preview progress-panel\">\n  <div class=\"dz-image progress-image\"><img data-dz-thumbnail src=\"static/img/pdf.svg\"/></div>\n  <div class=\"dz-details\">\n </div>\n    <div class=\"dz-filename progress-text\"><span data-dz-name></span></div>\n  <div class=\"dz-success-mark\">\n  </div>\n  <div class=\"dz-progress progress\"><div class=\"progress-bar\" data-dz-uploadprogress></div></div>\n  <div class=\"dz-error-message talent-file-error\"><span class=\"glyphicon glyphicon-warning-sign\" style=\"color: red; padding: 0 11px 0 15px;visibility: hidden;\"></span><span data-dz-errormessage></span></div>\n  </div>",
+       previewTemplateWord: "<div class=\"dz-preview dz-file-preview progress-panel\">\n  <div class=\"dz-image progress-image\"><img data-dz-thumbnail src=\"static/img/doc.svg\"/></div>\n  <div class=\"dz-details\">\n </div>\n    <div class=\"dz-filename progress-text\"><span data-dz-name></span></div>\n  <div class=\"dz-success-mark\">\n  </div>\n <div class=\"dz-progress progress\"><div class=\"progress-bar\" data-dz-uploadprogress></div></div>\n  <div class=\"dz-error-message talent-file-error\"><span class=\"glyphicon glyphicon-warning-sign\" style=\"color: red; padding: 0 11px 0 15px;visibility: hidden;\"></span><span data-dz-errormessage></span></div>\n  </div>",
        previewTemplateOther: "<div class=\"dz-preview dz-file-preview progress-panel\">\n  <div class=\"dz-image progress-image\"><img src=\"static/img/file error.svg\"/></div>\n  <div class=\"dz-details\">\n </div>\n    <div class=\"dz-filename progress-text\"><span data-dz-name></span></div>\n  <div class=\"dz-success-mark\">\n  </div>\n <div class=\"dz-progress progress\"><div class=\"progress-bar\" data-dz-uploadprogress></div></div>\n  <div class=\"cls\"></div> <div class=\"dz-error-message talent-file-error\"><span class=\"glyphicon glyphicon-warning-sign\" style=\"color: red; padding: 0 11px 0 15px;visibility: hidden;\"></span><span data-dz-errormessage></span></div>\n  </div>"
        };
 
@@ -994,7 +994,7 @@
     };
 
     Dropzone.prototype.accept = function(file, done) {
-      if (file.size > this.options.maxFilesize * 1024 * 1024) {
+      if (file.size > this.options.maxFilesize * 1000 * 1000) {
         //return done(this.options.dictFileTooBig.replace("{{filesize}}", Math.round(file.size / 1024 / 10.24) / 100).replace("{{maxFilesize}}", this.options.maxFilesize));
         return done(this.options.dictFileTooBig);
       } else if (!Dropzone.isValidFile(file, this.options.acceptedFiles)) {
@@ -1008,11 +1008,6 @@
     };
 
     Dropzone.prototype.addFile = function(file) {
-    var doneButton = document.getElementById('done');
-    doneButton.classList.add('disabled');
-    doneButton.classList.add('talent-modal-done');
-    doneButton.classList.remove('talent-modal-add');
-    doneButton.style['pointer-events'] = 'none';
       file.upload = {
         progress: 0,
         total: file.size,
@@ -1091,12 +1086,17 @@
     };
 
     Dropzone.prototype.removeFile = function(file) {
+       var doneButton = document.getElementById('done');
       if (file.status === Dropzone.UPLOADING) {
         this.cancelUpload(file);
       }
       this.files = without(this.files, file);
       this.emit("removedfile", file);
       if (this.files.length === 0) {
+          doneButton.classList.add('disabled');
+          doneButton.classList.add('talent-modal-done');
+          doneButton.classList.remove('talent-modal-add');
+          doneButton.style['pointer-events'] = 'none';
         return this.emit("reset");
       }
     };

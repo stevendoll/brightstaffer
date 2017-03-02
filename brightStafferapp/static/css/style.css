@@ -9154,6 +9154,7 @@ input[type=password]
   float: left;
   font-size: 14px;
   color: #808080;
+  margin-bottom: 5px;
 }
 .progress-bttn a.upload-file-bttn {
   background-color: #1d84c6;
