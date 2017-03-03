@@ -1,6 +1,6 @@
 from django.contrib import admin
 from brightStafferapp.models import Projects, Concept, Talent, Company, TalentCompany, Education, TalentEducation, \
-    TalentProject, TalentConcept, ProjectConcept
+    TalentProject, TalentConcept, ProjectConcept, FileUpload, PdfImages
 
 
 class TalentCompanyInline(admin.TabularInline):
@@ -68,5 +68,6 @@ admin.site.register(Education)
 admin.site.register(TalentEducation)
 admin.site.register(TalentProject)
 admin.site.register(ProjectConcept, ProjectConceptAdmin)
-
+admin.site.register(FileUpload)
+admin.site.register(PdfImages)
 

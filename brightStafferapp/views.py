@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
-from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept
+from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept, PdfImages, FileUpload
 from brightStafferapp import util
 from brightStafferapp.util import require_post_params
 from brightStaffer.settings import Alchemy_api_key
@@ -24,6 +24,11 @@ from rest_framework.response import Response
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from uuid import UUID
+import PyPDF2
+from PIL import Image
+import os
+import uuid
+import textract
 
 
 class UserData(View):
@@ -354,35 +359,126 @@ class TopProjectList(generics.ListCreateAPIView):
         return response
 
 
-class FileUpload(View):
+class FileUploadView(View):
+    """
+    Handles file uploading by drag and drop feature for add talent functionality.
+    """
+
+    FILTER_DICT = {'/FlateDecode': '.png',
+                   '/DCTDecode': '.jpg',
+                   '/JPXDecode': '.jp2'
+                   }
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super(FileUpload, self).dispatch(request, *args, **kwargs)
+        return super(FileUploadView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request):
+        """
+        :param request: incoming POST request with files
+        :return: success or error response
+        """
         try:
             files = request.FILES
-            dest_path = os.path.join(settings.MEDIA_URL + request.POST["recruiter"])
+            if not files:
+                return util.returnErrorShorcut(400, "No files attached with this request")
+            user_username = request.POST['recruiter']
+            user = User.objects.filter(username=user_username)
+            if user:
+                user = user[0]
+            dest_path = os.path.join(settings.MEDIA_URL, user_username)
+            # create destination path if not exists, send this to utils later, since will occur in many scenarios
             if not os.path.exists(dest_path):
                 os.makedirs(dest_path)
+
             for key, file in files.items():
-                self.handle_uploaded_file(dest_path, file)
+                file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
+                # extract text from pdf
+                self.extract_text_from_pdf(file_upload_obj)
+                # extract all images from pdf
+                self.extract_image_from_pdf(file_upload_obj, dest_path='images')
             context = dict()
             return util.returnSuccessShorcut(context)
         except:
             return util.returnErrorShorcut(400, "Error Connection Refused")
 
     # @staticmethod
-    def handle_uploaded_file(self, dest_path, f):
+    def handle_uploaded_file(self, dest_path, f, user):
+        """
+        :param dest_path: destination path for the file currently being saved
+        :param f: InMemoryUploadedFile object from request.FILES
+        :param user: user uploading the file
+        :return: <FileUpload object> or error
+        """
         try:
-            file_path = os.path.join(dest_path, f.name)
-            file_obj = open(file_path, 'wb+')
-            for chunk in f.chunks():
-                file_obj.write(chunk)
-            file_obj.close()
-        except :
+            file_name = str(uuid.uuid4())
+            file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user)
+            return file_upload_obj
+        except Exception as e:
+            print(e)
             return util.returnErrorShorcut(400, "Error Connection Refused")
+
+    def extract_image_from_pdf(self, file_upload_obj, dest_path=None):
+        """
+        :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
+        and is now sent to extract images from the pdf file
+        :param dest_path: destination path for extracted images
+        :return: None or error
+        """
+        input1 = PyPDF2.PdfFileReader(open(file_upload_obj.file.path, "rb"))
+        page0 = input1.getPage(0)
+        dest_path = os.path.join("/".join(file_upload_obj.file.path.split('/')[:-1]), dest_path)
+        if not os.path.exists(dest_path):
+            os.makedirs(dest_path)
+        # check if /XObject is present in page. This object checks if there is any image present in pdf file.
+        if '/XObject' not in page0['/Resources']:
+            return
+        xobject = page0['/Resources']['/XObject'].getObject()
+        for obj in xobject:
+            if xobject[obj]['/Subtype'] == '/Image':
+                size = (xobject[obj]['/Width'], xobject[obj]['/Height'])
+                data = xobject[obj].getData()
+                unique_name = str(uuid.uuid4())
+                img_obj = PdfImages()
+                img_obj.file = file_upload_obj
+                img_obj.name = unique_name
+                img_obj.save()
+                if xobject[obj]['/ColorSpace'] == '/DeviceRGB':
+                    mode = "RGB"
+                else:
+                    mode = "P"
+
+                img_name = os.path.join(dest_path, unique_name)
+
+                # /FlateDecode for .png
+                if xobject[obj]['/Filter'] == '/FlateDecode':
+                    img = Image.frombytes(mode, size, data)
+                    img_name += self.FILTER_DICT[xobject[obj]['/Filter']]
+                    img.save(img_name)
+                    img_obj.image = img_name
+                elif xobject[obj]['/Filter'] == '/DCTDecode':
+                    img_name += self.FILTER_DICT[xobject[obj]['/Filter']]
+                    img = open(img_name, "wb+")
+                    img.write(data)
+                    img_obj.image = img_name
+                    img.close()
+                elif xobject[obj]['/Filter'] == '/JPXDecode':
+                    img_name += self.FILTER_DICT[xobject[obj]['/Filter']]
+                    img = open(img_name, "wb")
+                    img.write(data)
+                    img_obj.image = img_name
+                    img.close()
+                img_obj.save()
+
+    def extract_text_from_pdf(self, file_upload_obj):
+        """
+        :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
+        and is now sent to extract text from the pdf file
+        :return: None or error
+        """
+        text = textract.process(file_upload_obj.file.path)
+        file_upload_obj.text = text
+        file_upload_obj.save()
 
 
 def user_validation(data):

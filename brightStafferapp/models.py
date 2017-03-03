@@ -6,6 +6,11 @@ from django.conf import settings
 from time import time
 from django.db import models
 from django.contrib.auth.models import User
+import PyPDF2
+from PIL import Image
+import os
+import uuid
+import textract
 
 
 STAGE_CHOICES = (('Contacted', 'Contacted'),
@@ -205,3 +210,38 @@ class ProjectConcept(models.Model):
     @property
     def project_name(self):
         return self.project.project_name
+
+
+def get_upload_file_dir(instance, filename):
+    return str(settings.PDF_UPLOAD_PATH + "/" + instance.user.username + "/" + filename)
+
+
+def get_image_file_dir(instance):
+    return str(settings.PDF_UPLOAD_PATH + "/" + instance.user.username + "/" + "images")
+
+
+class FileUpload(models.Model):
+    name = models.CharField(null=True, blank=True, max_length=200)
+    file = models.FileField(upload_to=get_upload_file_dir)
+    user = models.ForeignKey(User, null=True, blank=True)
+    text = models.TextField(default=None, blank=True, null=True)
+
+    def __str__(self):
+        return "{} uploaded {}".format(self.user.username, self.name)
+
+
+class PdfImages(models.Model):
+    name = models.CharField(null=True, blank=True, max_length=100)
+    file = models.ForeignKey(FileUpload)
+    image = models.ImageField(upload_to=get_image_file_dir, max_length=500)
+
+    def __str__(self):
+        return self.name
+
+#
+# @receiver(post_save, sender=FileUpload)
+# def extract_image_from_file(sender, instance=None, created=False, **kwargs):
+#     if created:
+#         obj = sender()
+#         obj.extract_text_from_pdf(instance)
+#         obj.extract_image_from_pdf(instance, instance.file.path, "/images/")
