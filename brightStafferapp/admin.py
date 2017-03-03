@@ -10,7 +10,7 @@ class TalentCompanyInline(admin.TabularInline):
 
 class TalentConceptInline(admin.TabularInline):
     model = TalentConcept
-    extra = 1
+    extra = 0
 
 
 class ProjectConceptInline(admin.TabularInline):
@@ -45,10 +45,8 @@ class TalentAdmin(admin.ModelAdmin):
     list_display = ('id', 'talent_name', 'recruiter', 'current_location', 'create_date', 'email_id')
     list_filter = ('id', 'talent_name')
     list_display_links = ('id', 'talent_name', 'recruiter')
-    # filter_horizontal = ('company', )
     list_per_page = 2000
     inlines = (TalentProjectInline, TalentEducationInline, TalentCompanyInline, TalentConceptInline, )
-    # raw_id_fields = ('company',)
 
 
 class CompanyAdmin(admin.ModelAdmin):

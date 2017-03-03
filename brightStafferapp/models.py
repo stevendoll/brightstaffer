@@ -7,6 +7,7 @@ from time import time
 from django.db import models
 from django.contrib.auth.models import User
 
+
 STAGE_CHOICES = (('Contacted', 'Contacted'),
                  ('Replied', 'Replied'),
                  ('Interested', 'Interested'),
@@ -18,6 +19,10 @@ STAGE_CHOICES = (('Contacted', 'Contacted'),
                  ('Hired', 'Hired'),
                  ('Rejected', 'Rejected')
                  )
+
+TALENT_CHOICES = (('New', 'New'),
+                  ('Active', 'Active')
+                  )
 
 
 # This code is triggered whenever a new user has been created and saved to the database
@@ -96,13 +101,19 @@ class Talent(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     talent_name = models.CharField(max_length=100, verbose_name='Talent Name', null=False, blank=False,
                                    default='')
+    designation = models.CharField(max_length=100, default='', null=True, blank=True)
+    industry_focus = models.CharField(max_length=100, default='', null=True, blank=True)
+    linkdein_url = models.URLField(null=True, blank=True, max_length=300)
     company = models.ManyToManyField(Company, through='TalentCompany')
     education = models.ManyToManyField(Education, through='TalentEducation')
     project = models.ManyToManyField(Projects, through='TalentProject')
     recruiter = models.ForeignKey(User, null=False, verbose_name='Recruiter ID')
-    concepts = models.ManyToManyField(Concept, through='TalentConcept')
+    concepts = models.ManyToManyField(Concept, through='TalentConcept', null=True, blank=True)
     current_location = models.CharField(max_length=255, verbose_name='Current Location', null=True, blank=True)
-    email_id = models.EmailField(max_length=100, verbose_name="Email Id", null=True, blank=True, unique=True, default=None)
+    email_id = models.EmailField(max_length=100, verbose_name="Email Id", null=True, blank=True, unique=True,
+                                 default='')
+    rating = models.IntegerField(default=0)
+    status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
 
     class Meta:
@@ -133,7 +144,7 @@ class TalentEducation(models.Model):
 
 
 class TalentCompany(models.Model):
-    talent = models.ForeignKey(Talent, null=False, blank=True, verbose_name='Talent')
+    talent = models.ForeignKey(Talent, null=False, blank=True, verbose_name='Talent', related_name='talent_company')
     company = models.ForeignKey(Company, null=False, blank=True)
     start_date = models.DateField(verbose_name='Start Date', null=True, blank=True)
     end_date = models.DateField(verbose_name='End Date', null=True, blank=True)
@@ -142,13 +153,17 @@ class TalentCompany(models.Model):
     class Meta:
         verbose_name_plural = "Talent Work History"
         db_table = 'talent_company_tb'
+        
+    @property
+    def years_of_experience(self):
+        return (self.end_date - self.start_date).days
 
     def __str__(self):
         return str(self.talent.talent_name + " works at " + self.company.company_name)
 
 
 class TalentProject(models.Model):
-    talent = models.ForeignKey(Talent)
+    talent = models.ForeignKey(Talent, related_name='talent_project')
     project = models.ForeignKey(Projects)
     project_match = models.CharField(max_length=20, null=True, blank=True)
     rank = models.IntegerField(null=True, blank=True)
@@ -158,14 +173,19 @@ class TalentProject(models.Model):
     class Meta:
         verbose_name_plural = "Talent Projects"
 
+    @property
+    def company_name(self):
+        return self.project.company_name
+
 
 class TalentConcept(models.Model):
-    talent = models.ForeignKey(Talent)
+    talent = models.ForeignKey(Talent, related_name='talent_concepts')
     concept = models.ForeignKey(Concept)
+    match = models.CharField(max_length=10, default=0)
     date_created = models.DateField(auto_now_add=True)
 
     class Meta:
-        verbose_name_plural = "Talent TPConcept"
+        verbose_name_plural = "Talent Concepts"
 
     def __str__(self):
         return self.concept.concept
