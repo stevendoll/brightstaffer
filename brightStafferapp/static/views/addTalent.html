@@ -11,11 +11,11 @@
       <div class="modal-body">
          <div class="talent-panel">
           <div class="cls"></div>
-             <form action="/upload/" class="dropzone" drop-zone call-back="myCallBackMethod(response,file)" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
+             <form action="/upload/" class="dropzone" drop-zone call-back="removeCompletedFiles" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
                   <img src="static/img/pdf-upload-image.png" alt="" id="backgroundImg">
                   <div class="cls"></div>
              </form>
-            <!-- <input type="file" multiple="multiple" class="dz-hidden-input" id="fileUpload" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">-->
+
         </div>
           <div class="progress-bttn">
             <div class="note-text">NOTE: Max 100 files(doc/docx/pdf of 5MB) allowed at once.</div>

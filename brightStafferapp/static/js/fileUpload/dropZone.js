@@ -313,7 +313,8 @@
         var _ref;
         if (file.previewElement) {
           if ((_ref = file.previewElement) != null) {
-            _ref.parentNode.removeChild(file.previewElement);
+             if(_ref.parentNode)
+                _ref.parentNode.removeChild(file.previewElement);
           }
         }
         return this._updateMaxFilesReachedClass();
@@ -1110,7 +1111,7 @@
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         file = _ref[_i];
         if (file.status !== Dropzone.UPLOADING || cancelIfNecessary) {
-          this.removeFile(file);
+            this.removeFile(file);
         }
       }
       return null;

@@ -1,5 +1,5 @@
 
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout,$stateParams) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout,$stateParams, $uibModal ) { /*global controller */
     $rootScope.topSixProjectList = [];   // top six project list array
     $rootScope.allProjectList = [];          // all project array
     $rootScope.totalProjectCount =0;
@@ -1015,7 +1015,7 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 }
 
-function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout) {
+function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, $uibModal) {
     this.analysedData = [
         {   "key":"analysedData",
             "values": [[6,5],[7,11],[8,6],[9,11],[10,30],[11,10],[12,13],[13,4],[14,3],[15,3],[16,6]]
@@ -1058,7 +1058,7 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
     }
 
     $scope.resetModal = function(){
-        $('.dz-preview').remove();
+        //$('.dz-preview').remove();
         var doneButton = document.getElementById('done');
         doneButton.classList.add('disabled');
         doneButton.classList.add('talent-modal-done');
@@ -1066,6 +1066,15 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
         doneButton.style['pointer-events'] = 'none';
         document.getElementById('backgroundImg').style.display= '';
     }
+
+//        $scope.loadModal = function () {
+//           // $scope.checkItem = "yes";
+//            $uibModal.open({
+//                templateUrl: static_url+'/views/addTalent.html',
+//                controller:'uploadFileCtrl',
+//                scope: $scope
+//            });
+//        };
 }
 
 function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout){
@@ -1076,7 +1085,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.fileCountExceededMsg = '';
     $scope.isDisabled = true;
     $scope.noFile = false;
-
+    $scope.completedFiles = [];
 
       $scope.filesExits= function() {
       var fileContainers = document.getElementsByClassName('dz-preview');
@@ -1096,20 +1105,17 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
             $('#delete-popup').modal('show');
         }else{
             $('#add-talent').modal('hide');
-//            $('#successBox').css('display','block');
-//            setTimeout(
-//                function () {
-//                    $('#successBox').css('display','none');;
-//                }, 2000);
+            //$location.reload();
         }
     }
 
     $scope.done = function(){
         $('#add-talent').modal('hide');
         $('#successBox').css('display','block');
+        $scope.removeCompletedFiles();
         setTimeout(
         function () {
-            $('#successBox').css('display','none');;
+            $('#successBox').css('display','none');
         }, 2000);
     }
 
@@ -1299,7 +1305,7 @@ angular
     .controller('topnavCtrl', topnavCtrl)
     .controller('createProjectCtrl', createProjectCtrl)
     .controller('tableCtrl', tableCtrl)
-    .controller('scoreCardCtrl', scoreCardCtrl)
+    .controller('scoreCardCtrl',scoreCardCtrl)
     .controller('uploadFileCtrl', uploadFileCtrl)
     .controller('talentCtrl', talentCtrl)
     .controller('sideNavCtrl', sideNavCtrl);
