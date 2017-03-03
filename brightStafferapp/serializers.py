@@ -36,7 +36,13 @@ class TopProjectSerializer(serializers.ModelSerializer):
 
 class TalentSerializer(serializers.ModelSerializer):
     talent_name = serializers.CharField()
+    concepts = serializers.StringRelatedField(many=True, )
+    education = serializers.StringRelatedField(many=True, )
+    project = serializers.StringRelatedField(many=True, )
+    company = serializers.StringRelatedField(many=True, )
+
 
     class Meta:
         model = Talent
-        fields = ('id', 'talent_name', 'company', 'recruiter', 'project', 'current_location', 'create_date', 'email_id')
+        fields = ('id', 'talent_name', 'company', 'education', 'recruiter', 'project', 'current_location',
+                  'get_date', 'email_id', 'concepts')

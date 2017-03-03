@@ -58,7 +58,7 @@ class Projects(models.Model):
         db_table = 'projects'
 
     def __str__(self):
-        return str(self.id)
+        return str(self.project_name)
 
     @property
     def get_date(self):
