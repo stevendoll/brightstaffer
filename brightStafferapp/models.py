@@ -108,7 +108,8 @@ class Talent(models.Model):
                                    default='')
     designation = models.CharField(max_length=100, default='', null=True, blank=True)
     industry_focus = models.CharField(max_length=100, default='', null=True, blank=True)
-    linkdein_url = models.URLField(null=True, blank=True, max_length=300)
+    linkedin_url = models.URLField(null=True, blank=True, max_length=300)
+    contact_number = models.CharField(blank=True, max_length=20, null=True)
     company = models.ManyToManyField(Company, through='TalentCompany')
     education = models.ManyToManyField(Education, through='TalentEducation')
     project = models.ManyToManyField(Projects, through='TalentProject')
@@ -122,7 +123,7 @@ class Talent(models.Model):
     rating = models.IntegerField(default=0)
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
-    contact_number=models.CharField(blank=True, max_length=20, null=True)
+
 
     class Meta:
         verbose_name_plural = 'Talent'
