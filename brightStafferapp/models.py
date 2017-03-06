@@ -117,9 +117,12 @@ class Talent(models.Model):
     current_location = models.CharField(max_length=255, verbose_name='Current Location', null=True, blank=True)
     email_id = models.EmailField(max_length=100, verbose_name="Email Id", null=True, blank=True, unique=True,
                                  default='')
+    alternate_email_id=models.EmailField(max_length=100, verbose_name="Alternate Email Id", null=True, blank=True, unique=True,
+                                 default='')
     rating = models.IntegerField(default=0)
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
+    contact_number=models.CharField(blank=True, max_length=20, null=True)
 
     class Meta:
         verbose_name_plural = 'Talent'
