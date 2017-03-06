@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from brightStafferapp.models import Projects, Concept, Talent, Education, Company, TalentProject, TalentConcept, \
-    TalentCompany
+    TalentCompany, TalentEducation
 from django.contrib.auth.models import User
 
 
@@ -36,11 +36,11 @@ class TopProjectSerializer(serializers.ModelSerializer):
         fields = ('id', 'get_date', 'location', 'concepts', 'project_name', 'company_name')
 
 
-class EducationSerializer(serializers.ModelSerializer):
+class TalentEducationSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Education
-        fields = '__all__'
+        model = TalentEducation
+        fields = ('talent', 'education', 'course', 'get_start_date', 'get_end_date')
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -57,7 +57,7 @@ class TalentProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalentProject
-        fields = '__all__'
+        fields = ('talent', 'project', 'project_match', 'rank', 'stage','get_date_added','company_name')
 
 
 class TalentConceptSerializer(serializers.ModelSerializer):
@@ -66,7 +66,7 @@ class TalentConceptSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalentConcept
-        fields = '__all__'
+        fields = ('talent', 'concept', 'match', 'get_date_created')
 
 
 class TalentCompanySerializer(serializers.ModelSerializer):
@@ -76,12 +76,12 @@ class TalentCompanySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalentCompany
-        fields = '__all__'
+        fields = ('talent', 'company', 'designation', 'get_start_date', 'get_end_date','is_current','years_of_experience')
 
 
 class TalentSerializer(serializers.ModelSerializer):
     talent_name = serializers.CharField()
-    education = EducationSerializer(many=True, )
+    talent_education = TalentEducationSerializer(many=True)
     recruiter = serializers.CharField()
     talent_company = TalentCompanySerializer(many=True)
     talent_project = TalentProjectSerializer(many=True)
@@ -89,6 +89,6 @@ class TalentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Talent
-        fields = ('id', 'talent_name', 'designation', 'industry_focus', 'email_id', 'linkedin_url','contact_number',
+        fields = ('id', 'talent_name', 'designation', 'industry_focus','industry_focus_percentage', 'email_id', 'linkedin_url','contact_number',
                   'recruiter', 'get_date','current_location', 'talent_company',
-                  'education', 'talent_project', 'talent_concepts',)
+                  'talent_education', 'talent_project', 'talent_concepts',)

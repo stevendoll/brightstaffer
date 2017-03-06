@@ -108,6 +108,7 @@ class Talent(models.Model):
                                    default='')
     designation = models.CharField(max_length=100, default='', null=True, blank=True)
     industry_focus = models.CharField(max_length=100, default='', null=True, blank=True)
+    industry_focus_percentage=models.CharField(max_length=30, default='', null=True, blank=True)
     linkedin_url = models.URLField(null=True, blank=True, max_length=300)
     contact_number = models.CharField(blank=True, max_length=20, null=True)
     company = models.ManyToManyField(Company, through='TalentCompany')
@@ -139,7 +140,7 @@ class Talent(models.Model):
 
 
 class TalentEducation(models.Model):
-    talent = models.ForeignKey(Talent)
+    talent = models.ForeignKey(Talent, related_name='talent_education')
     education = models.ForeignKey(Education)
     course = models.CharField(max_length=100, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
@@ -150,6 +151,14 @@ class TalentEducation(models.Model):
 
     def __str__(self):
         return self.talent.talent_name
+
+    @property
+    def get_start_date(self):
+        return self.start_date.strftime('%d/%m/%Y')
+
+    @property
+    def get_end_date(self):
+        return self.end_date.strftime('%d/%m/%Y')
 
 
 class TalentCompany(models.Model):
@@ -167,6 +176,14 @@ class TalentCompany(models.Model):
     @property
     def years_of_experience(self):
         return (self.end_date - self.start_date).days
+
+    @property
+    def get_start_date(self):
+        return self.start_date.strftime('%d/%m/%Y')
+
+    @property
+    def get_end_date(self):
+        return self.end_date.strftime('%d/%m/%Y')
 
     def __str__(self):
         return str(self.talent.talent_name + " works at " + self.company.company_name)
@@ -187,6 +204,9 @@ class TalentProject(models.Model):
     def company_name(self):
         return self.project.company_name
 
+    def get_date_added(self):
+        return self.date_added.strftime('%d/%m/%Y')
+
 
 class TalentConcept(models.Model):
     talent = models.ForeignKey(Talent, related_name='talent_concepts')
@@ -199,6 +219,9 @@ class TalentConcept(models.Model):
 
     def __str__(self):
         return self.concept.concept
+
+    def get_date_created(self):
+        return self.date_created.strftime('%d/%m/%Y')
 
 
 class ProjectConcept(models.Model):
