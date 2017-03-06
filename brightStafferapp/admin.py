@@ -6,6 +6,7 @@ from brightStafferapp.models import Projects, Concept, Talent, Company, TalentCo
 class TalentCompanyInline(admin.TabularInline):
     model = TalentCompany
     extra = 1
+    ordering = ('-start_date', )
 
 
 class TalentConceptInline(admin.TabularInline):
@@ -26,6 +27,7 @@ class TalentEducationInline(admin.TabularInline):
 class TalentProjectInline(admin.TabularInline):
     model = TalentProject
     extra = 1
+    ordering = ('-date_added',)
 
 
 class ProjectsAdmin(admin.ModelAdmin):

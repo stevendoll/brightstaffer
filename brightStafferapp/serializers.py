@@ -2,6 +2,7 @@ from rest_framework import serializers
 from brightStafferapp.models import Projects, Concept, Talent, Education, Company, TalentProject, TalentConcept, \
     TalentCompany, TalentEducation
 from django.contrib.auth.models import User
+import datetime
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -73,10 +74,20 @@ class TalentCompanySerializer(serializers.ModelSerializer):
     talent = serializers.CharField()
     company = serializers.CharField()
     years_of_experience = serializers.CharField()
+    career_gap = serializers.SerializerMethodField()
+
+    def get_career_gap(self, obj):
+        check_date = obj.start_date
+        previous_company = obj.talent.talent_company.filter(end_date__lt=check_date).order_by('start_date').last()
+        if not previous_company:
+            return 0
+        date_diff = (obj.start_date - previous_company.end_date).days/365
+        return date_diff
 
     class Meta:
         model = TalentCompany
-        fields = ('talent', 'company', 'designation', 'get_start_date', 'get_end_date','is_current','years_of_experience')
+        fields = ('talent', 'company', 'designation', 'get_start_date', 'get_end_date', 'is_current',
+                  'years_of_experience', 'career_gap')
 
 
 class TalentSerializer(serializers.ModelSerializer):
@@ -89,6 +100,6 @@ class TalentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Talent
-        fields = ('id', 'talent_name', 'designation', 'industry_focus','industry_focus_percentage', 'email_id', 'linkedin_url','contact_number',
-                  'recruiter', 'get_date','current_location', 'talent_company',
-                  'talent_education', 'talent_project', 'talent_concepts',)
+        fields = ('id', 'talent_name', 'designation', 'industry_focus', 'industry_focus_percentage', 'email_id',
+                  'linkedin_url', 'contact_number', 'recruiter', 'get_date', 'current_location', 'talent_company',
+                  'talent_education', 'talent_project', 'talent_concepts')
