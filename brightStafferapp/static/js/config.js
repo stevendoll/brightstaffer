@@ -81,8 +81,23 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
             data: { pageTitle: 'Talent' ,specialClass: 'gray-bg', requireAuthentication: true}
         })
         .state('talent.talent-search', {
-            url: "/talent-search",
+            abstract: true,
             templateUrl: static_url +'views/talent-search.html',
+            data: { pageTitle: 'Talent' , requireAuthentication: true}
+        })
+        .state('talent.talent-search.talent-search-card', {
+            url: "/talent-search",
+            templateUrl: static_url +'views/talent-search-cardView.html',
+            data: { pageTitle: 'Talent' , requireAuthentication: true}
+        })
+        .state('talent.talent-search.talent-search-list', {
+            url: "/talent-search",
+            templateUrl: static_url +'views/talent-list-view.html',
+            data: { pageTitle: 'Talent' , requireAuthentication: true}
+        })
+        .state('talent.talent-profile', {
+            url: "/talent-profile",
+            templateUrl: static_url +'views/talent-profile-analysis.html',
             data: { pageTitle: 'Talent' , requireAuthentication: true}
         })
 
@@ -112,13 +127,14 @@ angular
 
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+      var talentStates = ['talent.talent-profile','talent.talent-search.talent-search-list','talent.talent-search.talent-search-card'];
       if(fromState.name == 'create.step4' && toState.name == 'dashboard'){
             $('#publishBox').css('display','block');
             $timeout( function(){
                 $('#publishBox').css('display','none');
                     } , 3000);
         }
-        if(toState.name == 'talent.talent-search'){
+        if(talentStates.indexOf(toState.name) > -1 ){
            $rootScope.searchPlaceholder = 'Search Talent';
         }else{
            $rootScope.searchPlaceholder = 'Search Sona';

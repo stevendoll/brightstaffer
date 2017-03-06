@@ -1,0 +1,188 @@
+  <div ng-repeat="talent in talentList" on-finish-render="ngRepeatFinished">
+<div class="col-xs-12 padding-zero">
+                <div class="talent-srearch-view-panel">
+                  <div class="talentsearch-left-panel">
+                    <div class="left-div"><div class="search-image"><img src="static/img/a1.jpg" alt=""></div></div>
+                    <div class="search-result-panel right-div">
+                     <div class="search-result-name">[[talent.talent_name]] <span>[[talent.designation]]</span></div>
+                     <div class="search-result-info">[[talent.current_location]] <span></span>[[talent.industry_focus]]</div>
+                    </div>
+
+                    <div class="cls"></div>
+                    <div ng-repeat="company in talent.talent_company">
+                    <div ng-if ="company.is_current == true">
+                        <div class="col-xs-12 padding-zero" ng-init="current = company">
+                          <div class="left-div search-result-current pdg-left20">Current</div>
+                          <div class="right-div search-detail-current"><span class="bold-font">Full Stack Developer</span> - [[current.company]] - Present</div>
+                        </div>
+                    </div>
+                    <div ng-if ="company.is_current == false">
+                        <div class="col-xs-12 padding-zero" ng-init="past = company">
+                        <div class="left-div search-result-past pdg-left20">Past</div>
+                        <div class="right-div search-detail-past">
+                         Software Architech/<span class="bold-font">Full Stack Developer</span> - [[past.company]] <span class="more"><a href="" data-toggle="modal" data-target="#more-comp">More</a></span>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="col-xs-12 padding-zero" >
+                      <div class="left-div search-result-edu pdg-left20">Education</div>
+                      <div class="right-div search-detail-edu">[[talent.talent_education[0].education]] 2010-2014</div>
+                    </div>
+                  </div>
+                  <div class="talentsearch-right-panel">
+                    <div class="active-bttn">New</div>
+                    <div class="search-star-panel">
+                      <div class="schedule-stars">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                      </div>
+                      <div class="schdule-list">[[talent.talent_project[0].stage]]</div>
+                      <div class="schdule-list-date">[[talent.talent_project[0].get_date_added | dateFormat]]</div>
+                      <div class="link-schedule"><a href="">#[[talent.talent_project[0].project]]</a> <span><a href="" data-toggle="modal" data-target="#recruiter-modal">More</a></span></div>
+                    </div>
+                  </div>
+                  <div class="cls"></div>
+                  <div class="col-xs-12">
+                    <div class="top-concept-panel">
+                      <div class="top-concept-text">Top Concepts</div>
+                      <div class="talent-progress" ng-repeat="concepts in talent.talent_concepts">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="[[concepts.match]]" aria-valuemin="0" aria-valuemax="100" style="width: [[concepts.match]]%;">
+                            <span class="text">[[concepts.concept]]</span>
+                            <span class="percentage">[[concepts.match]]%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="top-concept-panel">
+                      <div class="top-concept-text">Career  History</div>
+                      <div class="talent-progress" >
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                            <span class="text">Total Experience</span>
+                            <span class="percentage" >[[calcTotal(talent.talent_company)]] years</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="talent-progress" ng-repeat="career in talent.talent_company">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[(talent.years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
+                            <span class="text">[[career.company]]</span>
+                            <span class="percentage">[[career.years_of_experience | number:2]] years</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="cls"></div>
+                      <div class="indus-focus">Industry Focus</div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[talent.industry_focus_percentage]]%;">
+                            <span class="text">[[talent.industry_focus]]</span>
+                            <span class="percentage">[[talent.industry_focus_percentage]]%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="top-concept-panel">
+                      <div class="top-concept-text">Project Matches</div>
+                      <div class="circle-bg" ng-repeat="projects in talent.talent_project">
+                        <div data-color="#7a7a7a" data-percent="[[projects.project_match]]" class="easy-pie-chart percentage easyPieChart pie-color">
+                          <span class="percent pie-txt">[[projects.project_match]]%</span>
+                          <canvas height="60" width="60"></canvas>
+                        </div>
+                        <i class="fa fa-file-text"></i>
+                        <div class="link-panel"><a href="">#[[projects.project]]</a><span><a href="">@[[projects.company_name]]</a></span></div>
+                        <div class="bar-date">[[projects.get_date_added | dateFormat]]</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cls"></div>
+                  <div class="talentsearch-foot">
+                   <button class="btn" ui-sref="talent.talent-profile" id="profile_[[talent.id]]">View Profile</button>
+                   <button type="" class="btn" id="add_[[talent.id]]">Add to Project</button>
+                   <a class="linkedin" href="[[talent.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>
+                  </div>
+                </div>
+                <div class="talent-srearch-check-panel">
+                  <div class="checkbox">
+                    <input type="checkbox" value="1" id="13" class="css-checkbox" name="">
+                    <label class="css-label" for="13"></label>
+                  </div>
+                </div>
+              </div>
+
+  <!-- more-comp-Modal-starts -->
+<div class="modal fade" id="more-comp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="past-roles">Past Roles</div>
+        <div class="past-roles-descp" ng-repeat="role in talent.talent_company">[[role.designation]] at [[role.company]] 2010-2011</div>
+        <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
+        <div class="cls"></div>
+        <div class="edu-roles">Education</div>
+        <div class="past-roles-descp" ng-repeat="edu in talent.talent_education">[[edu.education]] 2010-2011</div>
+        <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- more-comp-Modal-ends -->
+
+
+<!-- recruiter-Modal-starts -->
+<div class="modal fade" id="recruiter-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="past-roles">Information</div>
+        <div class="info-modal-div">
+          <div class="left-section">Date Added/Analysis</div>
+          <div class="right-section">[[talent.get_date | dateFormat]]</div>
+        </div>
+        <div class="info-modal-div">
+          <div class="left-section">Last Activity</div>
+          <div class="right-section">[[talent.get_date | dateFormat]]</div>
+        </div>
+        <div class="info-modal-div">
+          <div class="left-section-div">Recruiter</div>
+          <div class="right-section-div">[[recruiterName]] <span data-toggle="modal" data-target="#edit-recruiter">Edit</span></div>
+        </div>
+        <div class="info-modal-div">
+          <div class="left-section-div">Shared with</div>
+          <div class="right-section-div">[[recruiterName]], +2 <span data-toggle="modal">Add</span></div>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- recruiter-Modal-ends -->
+<!-- edit-recruiter-Modal-starts -->
+<div class="modal fade" id="edit-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="edit-modal-recruiter">
+          <span>Edit Recruiter</span>
+          <div class="form-group">
+            <input type="email" class="form-control" id="exampleInputEmail1" ng-model="recruiterName">
+          </div>
+          <div class="cls"></div>
+          <button type="" class="btn update">Update</button>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- edit-recruiter-Modal-ends -->
+</div>

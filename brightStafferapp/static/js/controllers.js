@@ -1067,14 +1067,6 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
         document.getElementById('backgroundImg').style.display= '';
     }
 
-//        $scope.loadModal = function () {
-//           // $scope.checkItem = "yes";
-//            $uibModal.open({
-//                templateUrl: static_url+'/views/addTalent.html',
-//                controller:'uploadFileCtrl',
-//                scope: $scope
-//            });
-//        };
 }
 
 function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout){
@@ -1104,6 +1096,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
             $('#add-talent').modal('hide');
             $('#delete-popup').modal('show');
         }else{
+            $scope.removeCompletedFiles();
             $('#add-talent').modal('hide');
             //$location.reload();
         }
@@ -1243,20 +1236,19 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 }
 
 function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, talentApi){
-         $scope.exportOptions = [{name:'Export Data',value:'Export Data'},{name:'Copy',value:'Copy'},{name:'CSV',value:'CSV'},{name:'Excel',value:'Excel'},{name:'PDF',value:'PDF'},{name:'Print',value:'Print'}]; // select drop-down options
-         $scope.exportType = $scope.exportOptions[0];
-      angular.element(document).ready(function () {
+     $scope.exportOptions = [{name:'Export Data',value:'Export Data'},{name:'Copy',value:'Copy'},{name:'CSV',value:'CSV'},{name:'Excel',value:'Excel'},{name:'PDF',value:'PDF'},{name:'Print',value:'Print'}]; // select drop-down options
+     $scope.exportType = $scope.exportOptions[0];
+     $scope.talentList = [];
+     $scope.recruiterName = '';
+     $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
           $(".select-arrow").selectbox();
           $('#export').change(function() {
                 var selectedValue = $('#export :selected').text();
                 $scope.exportType = selectedValue;
                 console.log($scope.exportType);
             });
-
-            $scope.getTalents();
         // var oldie = $.browser.msie && $.browser.version < 9;
          $('.easy-pie-chart').each(function(){
-             console.log(this);
              $(this).easyPieChart({
                  barColor: $(this).data('color'),
                  trackColor: '#d7d7d7',
@@ -1268,6 +1260,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              }).css('color', $(this).data('color'));
          });
        });
+      angular.element(document).ready(function () {
+            $scope.getTalents();
+       });
 
 
       $scope.getTalents = function(){             // function to fetch top 6 projects
@@ -1277,8 +1272,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };
          talentApi.allTalents(requestObject).then(function(response){
             if(response.message == "success") {
-               console.log(response);
-
+              $scope.talentList = response.talent_list;
+              $scope.recruiterName = response.recruiter_first_name +' '+response.recruiter_last_name;
               }else{
                 console.log('error');
             }
@@ -1292,6 +1287,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
 
       }
+
+      $scope.calcTotal = function(filtered){
+         var sum = 0;
+         for(var i = 0 ; i<filtered.length ; i++){
+            sum = sum + Math.round(filtered[i].years_of_experience * 100)/100;
+         }
+         return sum;
+     };
 }
 
 
