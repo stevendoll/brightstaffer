@@ -37,7 +37,7 @@ class TopProjectSerializer(serializers.ModelSerializer):
 
 
 class TalentEducationSerializer(serializers.ModelSerializer):
-
+    education = serializers.CharField()
     class Meta:
         model = TalentEducation
         fields = ('talent', 'education', 'course', 'get_start_date', 'get_end_date')
