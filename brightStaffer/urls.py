@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^update_recruiter/$', views.UpdateRecruiter.as_view()),
     url(r'^talent_list/$', talent.TalentList.as_view()),
     # url(r'^insert_talent/$', talent.InsertTalent.as_view()),
+    url(r'^talent_list/(?P<pk>[0-9a-f-]+)/$', talent.TalentDetail.as_view(), name='talent-instance'),
     url(r'^talent_contact/$', talent.ContactInfo.as_view()),
     url(r'', views.home),
 

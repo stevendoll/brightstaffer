@@ -54,25 +54,16 @@ class TalentList(generics.ListCreateAPIView):
         del (response.data['results'])
         return response
 
-#
-# class InsertTalent(generics.ListCreateAPIView):
-#     queryset = Talent.objects.all()
-#     serializer_class = TalentSerializer
-#     pagination_class = LargeResultsSetPagination
-#     http_method_names = ['post']
-#
-#     def post(self, request, *args, **kwargs):
-#         param_dict = {"abc":"xyz"}
-#         user_data = json.loads(request.body.decode("utf-8"))
-#         print (user_data)
-#         for item in user_data['company']:
-#             company_check = Company.objects.filter(company_name=item['company_name'])
-#             if not company_check:
-#                 company = Company()
-#                 print (company_check)
-#                 company.company_name = item['company_name']
-#                 company.save()
-#         return util.returnSuccessShorcut(param_dict)
+
+class TalentDetail(generics.RetrieveAPIView):
+    queryset = Talent.objects.all()
+    model = Talent
+    serializer_class = TalentSerializer
+
+    def get_queryset(self):
+        queryset = super(TalentDetail, self).get_queryset()
+        return queryset
+
 
 class ContactInfo(View):
     @method_decorator(csrf_exempt)
