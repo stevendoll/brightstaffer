@@ -1,8 +1,8 @@
 from gensim.models import Word2Vec, Doc2Vec
 from sklearn.externals import joblib
 
-from Resume.Resume import raw_resume_to_data, build_resume
-from conf.parameters import *
+from ResumeParser.Resume.Resume import raw_resume_to_data, build_resume
+from ResumeParser.conf.parameters import *
 
 def create_resume(resumetext):
     if word_model == "word2vec":

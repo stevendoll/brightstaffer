@@ -5,8 +5,8 @@ import nltk
 import numpy as np
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import sent_tokenize, word_tokenize
-from Ngram.Ngram import create_ngram
-from conf.parameters import *
+from ResumeParser.Ngram.Ngram import create_ngram
+from ResumeParser.conf.parameters import *
 
 nltk.data.path.append('/root/nltk_data')
 

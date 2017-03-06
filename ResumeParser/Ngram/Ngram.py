@@ -2,7 +2,7 @@ import gensim
 import smart_open
 import os
 
-import conf.parameters as params
+import ResumeParser.conf.parameters as params
 
 def create_ngram(sents):
     ngram = gensim.models.Phrases.load(params.ngram_model)
