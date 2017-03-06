@@ -260,7 +260,6 @@ class AlchemyAPI(View):
 
 
 class UpdateConcepts(View):
-
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(UpdateConcepts, self).dispatch(request, *args, **kwargs)
@@ -359,30 +358,6 @@ class TopProjectList(generics.ListCreateAPIView):
         return response
 
 
-class RecruiterName(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(RecruiterName, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request):
-        return HttpResponse("405 ERROR:-Method is not allowed")
-
-    def post(self, request):
-        param_dict = {}
-        user_data = json.loads(request.body.decode("utf-8"))
-        check_auth = user_validation(user_data)
-        if not check_auth:
-            return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
-
-        else:
-            user_profile=User.objects.values('first_name', 'last_name').filter(
-                username=user_data['recruiter'])
-            for user in user_profile:
-                param_dict['first_name']=user['first_name']
-                param_dict['last_name']=user['last_name']
-            return util.returnSuccessShorcut(param_dict)
-
-
 class UpdateRecruiter(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -403,9 +378,6 @@ class UpdateRecruiter(View):
             param_dict['first_name']=user_data['first_name']
             param_dict['last_name']=user_data['last_name']
             return util.returnSuccessShorcut(param_dict)
-
-
-
 
 
 class FileUploadView(View):
