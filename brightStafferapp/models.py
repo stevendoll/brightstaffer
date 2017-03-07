@@ -145,7 +145,7 @@ class TalentEmail(models.Model):
 
 class TalentContact(models.Model):
     talent = models.ForeignKey(Talent, related_name='talent_contact')
-    contact = models.IntegerField()
+    contact = models.CharField(max_length=20)
     is_primary = models.BooleanField(default=True)
 
     def __str__(self):

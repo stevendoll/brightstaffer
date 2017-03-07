@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from brightStafferapp.models import Projects, Concept, Talent, Education, Company, TalentProject, TalentConcept, \
-    TalentCompany, TalentEducation
+    TalentCompany, TalentEducation,TalentContact, TalentEmail
 from django.contrib.auth.models import User
 import datetime
 
@@ -70,6 +70,22 @@ class TalentConceptSerializer(serializers.ModelSerializer):
         fields = ('talent', 'concept', 'match', 'get_date_created')
 
 
+class TalentEmailSerializer(serializers.ModelSerializer):
+    talent = serializers.CharField()
+
+    class Meta:
+        model = TalentEmail
+        fields = ('talent', 'email')
+
+
+class TalentContactSerializer(serializers.ModelSerializer):
+    talent = serializers.CharField()
+
+    class Meta:
+        model = TalentContact
+        fields = ('talent', 'contact')
+
+
 class TalentCompanySerializer(serializers.ModelSerializer):
     talent = serializers.CharField()
     company = serializers.CharField()
@@ -97,9 +113,11 @@ class TalentSerializer(serializers.ModelSerializer):
     talent_company = TalentCompanySerializer(many=True)
     talent_project = TalentProjectSerializer(many=True)
     talent_concepts = TalentConceptSerializer(many=True)
+    talent_email = TalentEmailSerializer(many=True)
+    talent_contact = TalentContactSerializer(many=True)
 
     class Meta:
         model = Talent
-        fields = ('id', 'talent_name', 'designation', 'industry_focus', 'industry_focus_percentage', 'email_id', 'status',
-        'rating', 'linkedin_url', 'contact_number', 'recruiter', 'get_date', 'current_location',
+        fields = ('id', 'talent_name', 'designation', 'industry_focus', 'industry_focus_percentage', 'status',
+        'rating', 'talent_email', 'talent_contact', 'linkedin_url', 'recruiter', 'get_date', 'current_location',
         'talent_company', 'talent_education', 'talent_project', 'talent_concepts')
