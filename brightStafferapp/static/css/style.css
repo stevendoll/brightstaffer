@@ -1595,7 +1595,23 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .rating-star i { font-size: 20px; color:#e7eaec;}
 .rating-star .active i { color: orange;}
 
+.talent-search-delete-icon {
+  width: 50px;
+  height: 36px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #e7eaec;
+  margin-left: 5px;
+  float: left;
+  padding: 6px 0px;
+  text-align: center;
+  cursor: pointer;
+}
 
+.talent-search-delete-icon .fa-trash {
+  color: #bfbfbf;
+  font-size: 20px;
+}
 
 @media (max-width: 768px) {
   .top-navigation .navbar-header {
