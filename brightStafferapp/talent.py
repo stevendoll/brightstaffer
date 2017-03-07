@@ -36,7 +36,7 @@ class TalentList(generics.ListCreateAPIView):
         if not result:
             return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return super(TalentList, self).get(request, *args, *kwargs)
+            return super(TalentList, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
         return Talent.objects.filter(recruiter__username=self.request.query_params['recruiter']) \

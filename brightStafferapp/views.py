@@ -317,7 +317,7 @@ class ProjectList(generics.ListCreateAPIView):
         if not result:
             return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return super(ProjectList, self).get(request, *args, *kwargs)
+            return super(ProjectList, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
         count = self.request.query_params['count']
@@ -344,7 +344,7 @@ class TopProjectList(generics.ListCreateAPIView):
         if not result:
             return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return super(TopProjectList, self).get(request, *args, *kwargs)
+            return super(TopProjectList, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
         rec_name = User.objects.filter(username=self.request.query_params['recruiter'])

@@ -101,5 +101,5 @@ class TalentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Talent
         fields = ('id', 'talent_name', 'designation', 'industry_focus', 'industry_focus_percentage', 'email_id', 'status',
-                  'rating', 'linkedin_url', 'contact_number', 'recruiter', 'get_date', 'current_location',
-                  'talent_company','talent_education', 'talent_project', 'talent_concepts')
+        'rating', 'linkedin_url', 'contact_number', 'recruiter', 'get_date', 'current_location',
+        'talent_company', 'talent_education', 'talent_project', 'talent_concepts')

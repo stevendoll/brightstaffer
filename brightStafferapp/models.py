@@ -108,19 +108,14 @@ class Talent(models.Model):
                                    default='')
     designation = models.CharField(max_length=100, default='', null=True, blank=True)
     industry_focus = models.CharField(max_length=100, default='', null=True, blank=True)
-    industry_focus_percentage=models.CharField(max_length=30, default='', null=True, blank=True)
+    industry_focus_percentage = models.CharField(max_length=30, default='', null=True, blank=True)
     linkedin_url = models.URLField(null=True, blank=True, max_length=300)
-    contact_number = models.CharField(blank=True, max_length=20, null=True)
     company = models.ManyToManyField(Company, through='TalentCompany')
     education = models.ManyToManyField(Education, through='TalentEducation')
     project = models.ManyToManyField(Projects, through='TalentProject')
     recruiter = models.ForeignKey(User, null=False, verbose_name='Recruiter ID')
-    concepts = models.ManyToManyField(Concept, through='TalentConcept', null=True, blank=True)
+    concepts = models.ManyToManyField(Concept, through='TalentConcept')
     current_location = models.CharField(max_length=255, verbose_name='Current Location', null=True, blank=True)
-    email_id = models.EmailField(max_length=100, verbose_name="Email Id", null=True, blank=True, unique=True,
-                                 default='')
-    alternate_email_id=models.EmailField(max_length=100, verbose_name="Alternate Email Id", null=True, blank=True, unique=True,
-                                 default='')
     rating = models.IntegerField(default=0)
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
@@ -137,6 +132,24 @@ class Talent(models.Model):
     @property
     def get_date(self):
         return self.create_date.date().strftime('%d/%m/%Y')
+
+
+class TalentEmail(models.Model):
+    talent = models.ForeignKey(Talent, related_name='talent_email')
+    email = models.EmailField(max_length=100, blank=True, null=True)
+    is_primary = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.talent.talent_name + self.email
+
+
+class TalentContact(models.Model):
+    talent = models.ForeignKey(Talent, related_name='talent_contact')
+    contact = models.IntegerField()
+    is_primary = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.talent.talent_name + self.contact
 
 
 class TalentEducation(models.Model):
