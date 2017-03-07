@@ -10418,6 +10418,16 @@ input[type=password]
   text-align: right;
 }
 
+.schedule-stars  .fa-star-o {
+  color: #d5d5d5;
+  font-size: 20px;
+}
+
+.schedule-stars  .fa-star {
+  color: #f8ac59;
+  font-size: 20px;
+}
+
 .new-bttn {
   width: 50px;
   height: 30px;
@@ -10594,7 +10604,7 @@ input[type=password]
   border-radius: 2px;
   background-color: #ffffff;
   border: solid 1px #e7eaec;
-  margin: 0px 10px;
+  margin: 0px 5px;
   text-align: center;
   padding: 5px 0px;
 }
@@ -10621,7 +10631,7 @@ input[type=password]
   width: 40px;
   height: 36px;
   float: left;
-  margin-left: 10px;
+  margin-left: 5px;
   border-radius: 2px 0px 0px 2px;
   background-color: #ffffff;
   border-top: solid 1px #e7eaec;
@@ -10637,7 +10647,7 @@ input[type=password]
   width: 40px;
   height: 36px;
   float: left;
-  margin-right: 10px;
+  margin-right: 5px;
   border-radius: 0px 2px 2px 0px;
   background-color: #ffffff;
   border-top: solid 1px #e7eaec;
@@ -10669,15 +10679,15 @@ input[type=password]
 
 .show-entry-panel .form-group {
   float: left;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .show-entry-panel .count .sbHolder {
-  width: 70px;
+  width: 65px;
 }
 
 .show-entry-panel .export .sbHolder {
-  width: 190px;
+  width: 120px;
 }
 
 .showing-talent-search {
@@ -10858,7 +10868,7 @@ input[type=checkbox].css-checkbox:checked + label.css-label {
 }
 
 .talent-progress .progress .progress-bar {
-    background-color: #c9daf8;
+    background-color: #c9daf8 !important;
 }
 
 .talent-progress .progress .progress-bar span.percentage {
@@ -10942,9 +10952,10 @@ input[type=checkbox].css-checkbox:checked + label.css-label {
   font-size: 14px;
   color: #337ab7;
   float: left;
-  width: auto;
+  width: 25%;
   margin-left: 10px;
   margin-top: 9px;
+  word-wrap: break-word;
 }
 
 .circle-bg .link-panel span {
@@ -10957,7 +10968,7 @@ input[type=checkbox].css-checkbox:checked + label.css-label {
   font-family: 'open_sansregular';
   font-size: 13px;
   color: #6e6e6e;
-  margin-left: 20px;
+  margin-left: 5px;
   margin-top: 18px;
 }
 
@@ -11300,7 +11311,7 @@ input[type=checkbox].css-checkboxs:checked + label.css-labels {
 }
 
 .progress-bar {
-  background-color: #337ab7 !important;
+  background-color: #337ab7;
 }
 
 .delete-talent-dailog {
