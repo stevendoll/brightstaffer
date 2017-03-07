@@ -44,11 +44,10 @@ class TalentList(generics.ListCreateAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super(TalentList, self).list(request, *args, **kwargs)
-        user_profile = User.objects.values('first_name', 'last_name').filter(
-            username=self.request.query_params['recruiter'])
-        for user in user_profile:
-            response.data['recruiter_first_name'] = user['first_name']
-            response.data['recruiter_last_name'] = user['last_name']
+        user_profile = User.objects.filter(username=self.request.query_params['recruiter'])
+        if user_profile:
+            user_profile = user_profile[0]
+        response.data['display_name'] = user_profile.user_recruiter.display_name
         response.data['talent_list'] = response.data['results']
         response.data['message'] = 'success'
         del (response.data['results'])
@@ -98,7 +97,7 @@ class ProjectAdd(generics.ListCreateAPIView):
         if not result:
             return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return super(ProjectAdd, self).get(request, *args, *kwargs)
+            return super(ProjectAdd, self).get(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
         response = super(ProjectAdd, self).list(request, *args, **kwargs)

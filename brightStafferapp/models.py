@@ -37,6 +37,18 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_recruiter_object(sender, instance=None, created=False, **kwargs):
+    if created:
+        dp_name = instance.first_name + " " + instance.last_name
+        Recruiter.objects.create(user=instance, display_name=dp_name)
+
+
+class Recruiter(models.Model):
+    user = models.OneToOneField(User, related_name='user_recruiter')
+    display_name = models.CharField(max_length=100, null=True, blank=True)
+
+
 class Concept(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     concept = models.CharField(max_length=100, default='')
@@ -240,6 +252,22 @@ class TalentConcept(models.Model):
         return self.date_created.strftime('%d/%m/%Y')
 
 
+class TalentStage(models.Model):
+    talent = models.ForeignKey(Talent, related_name='talent_stages')
+    project = models.ForeignKey(Projects)
+    stage = models.CharField(max_length=20, choices=STAGE_CHOICES)
+    details = models.TextField(verbose_name='Details', null=True, blank=True)
+    notes = models.TextField(verbose_name='Notes', null=True, blank=True)
+    date_created = models.DateField(verbose_name='Create Date',auto_now_add=True)
+    date_updated = models.DateField(verbose_name='Update Date',auto_now=True)
+
+    def get_date_created(self):
+        return self.date_created.strftime('%d/%m/%Y')
+
+    def get_date_updated(self):
+        return self.date_updated.strftime('%d/%m/%Y')
+
+
 class ProjectConcept(models.Model):
     project = models.ForeignKey(Projects)
     concept = models.ForeignKey(Concept)
@@ -281,7 +309,6 @@ class PdfImages(models.Model):
 
     def __str__(self):
         return self.name
-
 #
 # @receiver(post_save, sender=FileUpload)
 # def extract_image_from_file(sender, instance=None, created=False, **kwargs):
