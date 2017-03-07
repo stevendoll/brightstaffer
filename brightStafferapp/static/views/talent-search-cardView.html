@@ -12,13 +12,13 @@
                     <div ng-repeat="company in talent.talent_company">
                     <div ng-if ="company.is_current == true">
                         <div class="col-xs-12 padding-zero" ng-init="current = company">
-                          <div class="left-div search-result-current pdg-left20">Current</div>
+                          <div class="left-div search-result-current">Current</div>
                           <div class="right-div search-detail-current"><span class="bold-font">Full Stack Developer</span> - [[current.company]] - Present</div>
                         </div>
                     </div>
                     <div ng-if ="company.is_current == false">
                         <div class="col-xs-12 padding-zero" ng-init="past = company">
-                        <div class="left-div search-result-past pdg-left20">Past</div>
+                        <div class="left-div search-result-past">Past</div>
                         <div class="right-div search-detail-past">
                          Software Architech/<span class="bold-font">Full Stack Developer</span> - [[past.company]] <span class="more"><a href="" data-toggle="modal" data-target="#more-comp">More</a></span>
                         </div>
@@ -26,7 +26,7 @@
                     </div>
                     </div>
                     <div class="col-xs-12 padding-zero" >
-                      <div class="left-div search-result-edu pdg-left20">Education</div>
+                      <div class="left-div search-result-edu">Education</div>
                       <div class="right-div search-detail-edu">[[talent.talent_education[0].education]] 2010-2014</div>
                     </div>
                   </div>
@@ -37,8 +37,8 @@
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-o"></i>
+                        <i class="fa fa-star-o"></i>
                       </div>
                       <div class="schdule-list">[[talent.talent_project[0].stage]]</div>
                       <div class="schdule-list-date">[[talent.talent_project[0].get_date_added | dateFormat]]</div>
