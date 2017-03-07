@@ -6,23 +6,23 @@
           <div class="talent-analysis-div">
             <div class="talent-analysis-image"><img src="static/img/a1.jpg" alt=""></div>
             <div class="talent-analysis-info-div">
-              <div class="talent-analysis-name">Benjamin Houston <span>Senior Developer at Pledge Platform</span></div>
-              <div class="talent-analysis-qual">Newyork, USA <span></span> Computer Software</div>
+              <div class="talent-analysis-name">[[talentDetails.talent_name]] <span>[[talentDetails.designation]] at [[talentDetails.talent_company[0].company]]</span></div>
+              <div class="talent-analysis-qual">[[talentDetails.current_location]] <span></span> [[talentDetails.industry_focus]]</div>
               <button type="" class="btn view-con-info hvr-fade">View Contact Info</button>
               <div class="linkedin-analysis"><i class="fa fa-linkedin-square"></i></div>
             </div>
             <div class="talent-analysis-activity">
               <div class="talent-activity-panel">
                 <div class="left-div">Last Activity</div>
-                <div class="right-div">Dec 22, 2016</div>
+                <div class="right-div">[[talentDetails.get_date | dateFormat]]</div>
               </div>
               <div class="talent-rec-panel">
                 <div class="left-div">Recruiter</div>
-                <div class="right-div">Clayton Medina <span data-toggle="modal" data-target="#edit-recruiter">Edit</span></div>
+                <div class="right-div">[[recruiter.recruiterName]] <span data-toggle="modal" data-target="#edit-recruiter">Edit</span></div>
               </div>
               <div class="talent-rec-panel border-bttm">
                 <div class="left-div">Shared with</div>
-                <div class="right-div">Jeffrey Lloyd <span data-toggle="modal" data-target="#add-recruiter">Add</span></div>
+                <div class="right-div">Jeffrey Lloyd <span data-toggle="modal" >Add</span></div>
               </div>
             </div>
             <div class="talent-analysis-right-panel">
@@ -35,9 +35,14 @@
                   <i class="fa fa-star"></i>
                   <i class="fa fa-star"></i>
                 </div>
-                <div class="schdule-list">Scheduled for Interview </div>
-                <div class="schdule-list-date">Dec 10, 2015</div>
-                <div class="link-schedule"><a href="">#fullstackdev</a></div>
+               <div ng-show="[[talentDetails.talent_project.length > 0]]">
+                <div class="schdule-list">[[talentDetails.talent_project[0].stage]] </div>
+                <div class="schdule-list-date">[[talentDetails.get_date | dateFormat]]</div>
+                <div class="link-schedule"><a href="">#[[talentDetails.talent_project[0].project]]</a></div>
+               </div>
+               <div ng-show="[[talentDetails.talent_project.length == 0]]">
+                 <div class="schdule-list-date">[[talentDetails.get_date | dateFormat]]</div>
+               </div>
               </div>
             </div>
           </div>
@@ -56,79 +61,46 @@
                 <button type="" class="btn add hvr-fade" data-toggle="modal" data-target="#add-stage">Add Stage</button>
               </div>
               <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Analysis</a></li>
-                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Notes</a></li>
-                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Files</a></li>
+                <li role="presentation" class="active"><a data-target="#analysis" aria-controls="home" role="tab" data-toggle="tab">Analysis</a></li>
+                <li role="presentation"><a data-target="#notes" aria-controls="profile" role="tab" data-toggle="tab">Notes</a></li>
+                <li role="presentation"><a data-target="#files" aria-controls="messages" role="tab" data-toggle="tab">Files</a></li>
               </ul>
               <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="home">
+                <div role="tabpanel" class="tab-pane active" id="analysis">
                   <div class="analysis-panel">
                     <div class="col-xs-12 padding-zero">
-                      <div class="analyzed-div">Analyzed Dec 10, 2015</div>
+                      <div class="analyzed-div">Analyzed [[talentDetails.get_date | dateFormat]]</div>
                       <div class="edit-update-link">Edit/Update</div>
                     </div>
+                   <div ng-repeat="company in talentDetails.talent_company">
+                    <div ng-if ="company.is_current == true">
                     <div class="col-xs-12 padding-zero">
                       <div class="left-div search-result-current">Current</div>
-                      <div class="right-div search-detail-current">Software Architech/<span class="bold-font">Full Stack Developer</span> - Virtual CTO for Companies at Likestyle 2013 - Present</div>
+                      <div class="right-div search-detail-current">[[company.designation]]/<span class="bold-font">Full Stack Developer</span> - [[company.designation]] at [[company.company]] 2013 - Present
+                      </div>
                     </div>
+                   </div>
+                    <div ng-if ="company.is_current == false">
                     <div class="col-xs-12 padding-zero">
                       <div class="left-div search-result-past">Past</div>
                       <div class="right-div search-detail-past">
-                       Software Architech/<span class="bold-font">Full Stack Developer</span> - Virtual CTO for Companies at Likestyle 2013 <span class="more"><a href="" data-toggle="modal" data-target="#more-comp">More</a></span>
+                       Software Architech/<span class="bold-font">Full Stack Developer</span> - [[company.designation]] at [[company.company]] 2013 <span class="more"><a href="" data-toggle="modal" data-target="#more-comp">More</a></span>
                       </div>
                     </div>
+                  </div>
+                  </div>
                     <div class="col-xs-12 padding-zero">
                       <div class="left-div search-result-edu">Education</div>
-                      <div class="right-div search-detail-edu">Software Architech/<span class="bold-font">Full Stack Developer</span> - Virtual CTO for Companies at Likestyle 2013 - Present</div>
+                      <div class="right-div search-detail-edu">[[talentDetails.talent_education[0].education]] 2010 - 2014 </div>
                     </div>
                     <div class="col-xs-12">
                       <div class="talent-analysis-concept-panel">
-                        <div class="top-concept-text">Top Concepts <span data-toggle="modal" data-target="#all-concept">All Concepts</span></div>
-                        <div class="talent-progress">
+                        <div class="top-concept-text">Top Concepts <span data-toggle="modal">All Concepts</span></div>
+                        <div class="talent-progress" ng-repeat="concepts in talentDetails.talent_concepts">
                           <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                              <span class="text">Full Stack</span>
-                              <span class="percentage">60%</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="talent-progress">
-                          <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                              <span class="text">Full Stack</span>
-                              <span class="percentage">60%</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="talent-progress">
-                          <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                              <span class="text">Full Stack</span>
-                              <span class="percentage">60%</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="talent-progress">
-                          <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                              <span class="text">Full Stack</span>
-                              <span class="percentage">60%</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="talent-progress">
-                          <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                              <span class="text">Full Stack</span>
-                              <span class="percentage">60%</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="talent-progress">
-                          <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                              <span class="text">Full Stack</span>
-                              <span class="percentage">60%</span>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[concepts.match]]%;">
+                              <span class="text">[[concepts.concept]]</span>
+                              <span class="percentage">[[concepts.match]]%</span>
                             </div>
                           </div>
                         </div>
@@ -137,25 +109,17 @@
                         <div class="top-concept-text">Career  History <span>All Metrics</span></div>
                         <div class="talent-progress">
                           <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                               <span class="text">Total Experience</span>
-                              <span class="percentage">10 Years</span>
+                              <span class="percentage">[[calcTotal(talentDetails.talent_company)]] Years</span>
                             </div>
                           </div>
                         </div>
-                        <div class="talent-progress">
+                        <div class="talent-progress" ng-repeat="career in talentDetails.talent_company">
                           <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                              <span class="text">Full Stack</span>
-                              <span class="percentage">3.5 Years</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="talent-progress">
-                          <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                              <span class="text">Full Stack</span>
-                              <span class="percentage">1.5 Years</span>
+                              <span class="text">[[career.company]]</span>
+                              <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
                             </div>
                           </div>
                         </div>
@@ -163,9 +127,9 @@
                         <div class="indus-focus">Industry Focus</div>
                         <div class="talent-progress">
                           <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                              <span class="text">Full Stack</span>
-                              <span class="percentage">1.5 Years</span>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[talentDetails.industry_focus_percentage]]%;">
+                              <span class="text">[[talentDetails.industry_focus]]</span>
+                              <span class="percentage">[[talentDetails.industry_focus_percentage]]%</span>
                             </div>
                           </div>
                         </div>
@@ -174,7 +138,7 @@
                     <div class="col-xs-12">
                       <div class="recommended-panel">
                         <ul class="nav nav-tabs" role="tablist">
-                          <li role="presentation" class="active"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Analysis</a></li>
+                          <li role="presentation" class="active"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Recent</a></li>
                           <li role="presentation"><a href="#recco" aria-controls="recco" role="tab" data-toggle="tab">Recommended</a></li>
                         </ul>
                         <div class="cls"></div>
@@ -287,7 +251,7 @@
                     </div>
                   </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="profile">
+                <div role="tabpanel" class="tab-pane" id="notes">
                   <div class="talent-notes-panel">
                     <div class="col-xs-12 padding-zero">
                       <div class="form-group">
@@ -373,7 +337,7 @@
                     </div>
                   </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="messages">
+                <div role="tabpanel" class="tab-pane" id="files">
                   <div class="talent-files-panel">
                     <div class="talent-files-headings">
                       <div class="talent-files-names">File Name</div>

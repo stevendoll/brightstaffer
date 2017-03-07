@@ -1058,7 +1058,6 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
     }
 
     $scope.resetModal = function(){
-        //$('.dz-preview').remove();
         var doneButton = document.getElementById('done');
         doneButton.classList.add('disabled');
         doneButton.classList.add('talent-modal-done');
@@ -1098,8 +1097,12 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         }else{
             $scope.removeCompletedFiles();
             $('#add-talent').modal('hide');
-            //$location.reload();
         }
+    }
+
+    $scope.closeForcefully = function(){
+        $scope.removeCompletedFiles();
+        $('#delete-popup').modal('hide');
     }
 
     $scope.done = function(){
@@ -1235,11 +1238,14 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, talentApi){
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, talentApis , $uibModal){
      $scope.exportOptions = [{name:'Export Data',value:'Export Data'},{name:'Copy',value:'Copy'},{name:'CSV',value:'CSV'},{name:'Excel',value:'Excel'},{name:'PDF',value:'PDF'},{name:'Print',value:'Print'}]; // select drop-down options
      $scope.exportType = $scope.exportOptions[0];
      $scope.talentList = [];
-     $scope.recruiterName = '';
+     $scope.recruiter ={};
+     $scope.talentDetails = {};
+     $scope.selectedCandidate = {};
+
      $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
           $(".select-arrow").selectbox();
           $('#export').change(function() {
@@ -1270,31 +1276,83 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         'token': $rootScope.globals.currentUser.token,       // username field value
         'recruiter': $rootScope.globals.currentUser.user_email   // password field value
          };
-         talentApi.allTalents(requestObject).then(function(response){
+         talentApis.getAllTalents(requestObject).then(function(response){
             if(response.message == "success") {
               $scope.talentList = response.talent_list;
-              $scope.recruiterName = response.recruiter_first_name +' '+response.recruiter_last_name;
+              $scope.recruiter.recruiterName = response.recruiter_first_name +' '+response.recruiter_last_name;
               }else{
                 console.log('error');
             }
          });
       }
 
+      $scope.updateRecruiterName = function(){             // function to fetch top 6 projects
+        console.log($scope.recruiter.recruiterName);
+        var requestObject = {
+        'token': $rootScope.globals.currentUser.token,       // username field value
+        'recruiter': $rootScope.globals.currentUser.user_email   // password field value
+         };
+//         talentApis.updateRecruiterName(requestObject).then(function(response){
+//            if(response.message == "success") {
+//              console.log(response);
+//              }else{
+//                console.log('error');
+//            }
+//         });
+      }
+
       $scope.selectExportType = function(exportType){
       console.log('asdasdasdasd');
         console.log(exportType.value);
-
-
-
       }
 
       $scope.calcTotal = function(filtered){
          var sum = 0;
          for(var i = 0 ; i<filtered.length ; i++){
             sum = sum + Math.round(filtered[i].years_of_experience * 100)/100;
+            sum = sum + Math.round(filtered[i].career_gap * 100)/100;
          }
          return sum;
      };
+
+     $scope.loadProfileData = function(id, talent){
+        $scope.talentDetails = talent;
+        var requestObject = {
+        'token': $rootScope.globals.currentUser.token,       // username field value
+        'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
+        'id': id
+         };
+         talentApis.getCandidateProfile(requestObject).then(function(response){
+              $scope.talentDetails = response;
+         });
+
+     }
+
+     $scope.showCompanyInfo = function(talent){
+      $scope.selectedCandidate = talent;
+       var modalInstance= $uibModal.open({
+                   templateUrl: static_url+'views/companyInfo.html',
+                   resolve: {
+                        user: function () {
+                            return $scope.selectedCandidate;
+                        }
+                    },
+                    controller: function($scope, user) {
+                        $scope.selectedCandidate = user;
+                    }
+            });
+ //This is how to show the modal.
+
+        modalInstance.result.then(function(selectedUser){
+            $scope.selectedCandidate = selectedUser;
+            modalInstance.show
+        });
+     };
+
+    //When u want to hide the modal use this as written below:
+    $scope.close = function() {
+        modalInstance.hide();
+    };
 }
 
 

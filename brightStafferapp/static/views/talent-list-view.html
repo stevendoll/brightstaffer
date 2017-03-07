@@ -145,7 +145,49 @@
                                  </th>
                              </thead>
                              <tbody>
-                                 <tr>
+                                 <tr ng-repeat="talent in talentList">
+                                     <td><a href="#">[[talent.talent_name]]</a></td>
+                                     <td>[[talent.talent_company[0].designation]]</td>
+                                     <td>[[talent.talent_company[0].company]]</td>
+                                     <td ng-show="[[talent.talent_project.length > 0]]">[[talent.talent_project[0].stage]] </span></td>
+                                     <td ng-show="[[talent.talent_project.length == 0]]"> NA </span></td>
+                                     <td ng-show="[[talent.talent_project.length > 0]]">
+                                        <span class="dis-blc"> <a href="">#[[talent.talent_project[0].project]]</a> </span>
+                                        <span class="dis-blc"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>
+                                      </td>
+                                     <td ng-show="[[talent.talent_project.length == 0]]">
+                                        <span class="dis-blc"> <a href=""> NA </a> </span>
+                                      </td>
+                                     <td>[[talent.talent_company[0].company]]</td>
+                                     <td>Dec 10, 2015</td>
+                                     <td>[[talent.talent_name | dateFormat]]</td>
+                                     <td>[[talent.recruiter]]</td>
+                                     <td>[[talent.talent_contact[0].contact]]</td>
+                                     <td class="likd-icn">
+                                          <i class="fa fa-linkedin-square"></i>
+                                     </td>
+                                     <td>
+                                          <div class="rating-star">
+                                            <span class="active"><i class="fa fa-star" aria-hidden="true"></i> </span>
+                                            <span class="active"><i class="fa fa-star" aria-hidden="true"></i> </span>
+                                            <span class="active"><i class="fa fa-star" aria-hidden="true"></i> </span>
+                                             <span class="active"><i class="fa fa-star" aria-hidden="true"></i> </span>
+                                            <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
+                                          </div>
+                                     </td>
+
+                                     <td>
+                                        <a href="#" class="list-act-butn">[[talent.status]]</a>
+                                        <div class="checkbox-right-fx">
+                                            <div class="checkbox">
+                                              <input type="checkbox" value="1" id="l-1" class="css-checkbox" name="">
+                                              <label class="css-label" for="l-1"></label>
+                                            </div>
+                                        </div>
+                                     </td>
+                                 </tr>
+
+                                 <!--<tr>
                                      <td><a href="#">Eugene Reese</a></td>
                                      <td>Full Stack Developer</td>
                                      <td>Pledge Platform</td>
@@ -219,45 +261,7 @@
                                             </div>
                                         </div>
                                      </td>
-                                 </tr>
-
-                                 <tr>
-                                     <td><a href="#">Eugene Reese</a></td>
-                                     <td>Full Stack Developer</td>
-                                     <td>Pledge Platform</td>
-                                     <td>Scheduled <span class="dis-blc">for interview </span></td>
-                                     <td>
-                                        <span class="dis-blc"> <a href="#">#fullstackdev </a> </span>
-                                        <span class="dis-blc"> <a href="#">@accenture </a> </span>
-                                      </td>
-                                     <td>Kiwitech Pvt. Ltd.</td>
-                                     <td>Dec 10, 2015</td>
-                                     <td>Dec 10, 2015</td>
-                                     <td>lindsey.wiegand@yahoo.com</td>
-                                     <td>862-814-9262</td>
-                                     <td class="likd-icn">
-                                          <i class="fa fa-linkedin-square"></i>
-                                     </td>
-                                     <td>
-                                          <div class="rating-star">
-                                            <span class="active"><i class="fa fa-star" aria-hidden="true"></i> </span>
-                                            <span class="active"><i class="fa fa-star" aria-hidden="true"></i> </span>
-                                            <span class="active"><i class="fa fa-star" aria-hidden="true"></i> </span>
-                                             <span class="active"><i class="fa fa-star" aria-hidden="true"></i> </span>
-                                            <span><i class="fa fa-star-o" aria-hidden="true"></i></span>
-                                          </div>
-                                     </td>
-
-                                     <td>
-                                        <a href="#" class="list-act-butn">Active </a>
-                                        <div class="checkbox-right-fx">
-                                            <div class="checkbox">
-                                              <input type="checkbox" value="1" id="l-1" class="css-checkbox" name="">
-                                              <label class="css-label" for="l-1"></label>
-                                            </div>
-                                        </div>
-                                     </td>
-                                 </tr>
+                                 </tr>-->
 
 
 

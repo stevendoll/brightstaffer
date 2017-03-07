@@ -212,9 +212,9 @@ function paginationData($http ,REQUEST_URL){
     }
  }
 
-function talentApi($http,REQUEST_URL) {
+function talentApis($http,REQUEST_URL) {
    return {
-    allTalents: function(data){
+    getAllTalents: function(data){
     return $http({
         url: REQUEST_URL+'talent_list/?recruiter='+data.recruiter+'&token='+data.token+'&count=10',
         method: "GET", // or "get"
@@ -226,7 +226,36 @@ function talentApi($http,REQUEST_URL) {
         }).then( function (response){
             return response.data;
        });
+      },
+
+     updateRecruiterName: function(data){
+        return $http({
+            url: REQUEST_URL+'update_recruiter/',
+            method: "POST", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
+     },
+
+     getCandidateProfile: function(data){
+        return $http({
+            url: REQUEST_URL+'talent_list/'+data.id+'/?recruiter='+data.recruiter+'&token='+data.token,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
       }
+
     }
 }
 
@@ -243,4 +272,4 @@ angular
     .service('getTopSixProjects', getTopSixProjects)
     .service('getAllProjects', getAllProjects)
     .service('paginationData', paginationData)
-    .service('talentApi', talentApi);
+    .service('talentApis', talentApis);

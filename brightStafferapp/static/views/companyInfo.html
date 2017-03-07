@@ -1,0 +1,19 @@
+ <!-- more-comp-Modal-starts -->
+<div class="modal fade" id="more-comp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">[[selectedCandidate.talent_name]]
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="past-roles">Past Roles</div>
+        <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company">[[role.designation]] at [[role.company]] 2010-2011</div>
+        <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
+        <div class="cls"></div>
+        <div class="edu-roles">Education</div>
+        <div class="past-roles-descp" ng-repeat="edu in talent.talent_education">[[edu.education]] 2010-2011</div>
+        <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- more-comp-Modal-ends -->
