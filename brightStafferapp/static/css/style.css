@@ -5507,9 +5507,9 @@ body.fullscreen-ibox-mode {
 .ibox.fullscreen .ibox-content {
   min-height: calc(100% - 48px);
 }
-body.modal-open {
+/*body.modal-open {
   padding-right: inherit !important;
-}
+}*/
 body.modal-open .wrapper-content.animated {
   -webkit-animation: none;
 }
@@ -10280,6 +10280,12 @@ input[type=password]
   color: #4176bb;
   display: block;
   padding-top: 5px;
+  outline: none;
+}
+
+.search-detail-past span.more a {
+  color: #4176bb;
+  outline: none;
 }
 
 .padding-zero {
@@ -10410,6 +10416,7 @@ input[type=password]
 
 .link-schedule span a {
   color: #4c80c0;
+  outline: none;
 }
 
 .schedule-stars {
@@ -11279,7 +11286,7 @@ input[type=checkbox].css-checkboxs:checked + label.css-labels {
     float: left;
     position: absolute;
     top: 42px;
-    right: 45%;
+    right: 41%;
     z-index: 9999;
 }
 
@@ -11302,7 +11309,7 @@ input[type=checkbox].css-checkboxs:checked + label.css-labels {
 
 .progress {
   height: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   overflow: hidden;
   background-color: #f5f5f5;
   border-radius: 100px;
