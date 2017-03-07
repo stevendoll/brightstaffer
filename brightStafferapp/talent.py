@@ -1,5 +1,5 @@
-from brightStafferapp.models import Talent, Token, Company, User
-from brightStafferapp.serializers import TalentSerializer
+from brightStafferapp.models import Talent, Token, Company, User, Projects,TalentProject
+from brightStafferapp.serializers import TalentSerializer, ProjectSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
@@ -82,12 +82,35 @@ class ContactInfo(View):
 
         else:
             contact_info=Talent.objects.filter(id=user_data['id']).values('email_id','contact_number')
-            print(contact_info)
             for contact in contact_info:
                 param_dict['email_id'] = contact['email_id']
                 param_dict['contact_number'] = contact['contact_number']
             return util.returnSuccessShorcut(param_dict)
 
+
+class ProjectAdd(generics.ListCreateAPIView):
+    queryset = Projects.objects.all()
+    serializer_class = ProjectSerializer
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs):
+        result = user_validation(request.query_params)
+        if not result:
+            return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return super(ProjectAdd, self).get(request, *args, *kwargs)
+
+    def list(self, request, *args, **kwargs):
+        response = super(ProjectAdd, self).list(request, *args, **kwargs)
+        project = Projects.objects.filter(id=self.request.query_params['project_id'],
+                                          recruiter__username=self.request.query_params['recruiter'])
+        talent_list = self.request.query_params.getlist('talent_id[]')
+        for talent in talent_list:
+            talent_obj = Talent.objects.get(id=talent)
+            talent_proj_obj = TalentProject.objects.create(talent=talent_obj, project=project[0])
+            response.data['message'] = 'success'
+            del (response.data['results'])
+        return response
 
 
 def talent_validation(user_data):
