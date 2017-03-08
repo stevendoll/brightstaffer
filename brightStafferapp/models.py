@@ -132,7 +132,6 @@ class Talent(models.Model):
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
 
-
     class Meta:
         verbose_name_plural = 'Talent'
         verbose_name = 'Talent'

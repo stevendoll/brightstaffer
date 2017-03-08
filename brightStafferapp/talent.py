@@ -87,29 +87,38 @@ class ContactInfo(View):
             return util.returnSuccessShorcut(param_dict)
 
 
-class ProjectAdd(generics.ListCreateAPIView):
+class ProjectAddView(View):
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
-    http_method_names = ['get']
+    http_method_names = ['post']
 
-    def get(self, request, *args, **kwargs):
-        result = user_validation(request.query_params)
-        if not result:
-            return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return super(ProjectAdd, self).get(request, *args, **kwargs)
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ProjectAddView, self).dispatch(request, *args, **kwargs)
 
-    def list(self, request, *args, **kwargs):
-        response = super(ProjectAdd, self).list(request, *args, **kwargs)
-        project = Projects.objects.filter(id=self.request.query_params['project_id'],
-                                          recruiter__username=self.request.query_params['recruiter'])
-        talent_list = self.request.query_params.getlist('talent_id[]')
-        for talent in talent_list:
-            talent_obj = Talent.objects.get(id=talent)
-            talent_proj_obj = TalentProject.objects.create(talent=talent_obj, project=project[0])
-            response.data['message'] = 'success'
-            del (response.data['results'])
-        return response
+    def post(self, request, *args, **kwargs):
+        context = dict()
+        project_id = request.POST['project_id']
+        recruiter = request.POST['recruiter']
+        # get projects instance to verify if project with project_id and recruiter exists or not
+        projects = Projects.objects.filter(id=project_id, recruiter__username=recruiter)
+        if not projects:
+            return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project_id))
+        project = projects[0]
+        # get list of talent ids from POST request
+        talent_id_list = request.POST.getlist('talent_id[]')
+        for talent_id in talent_id_list:
+            talent_objs = Talent.objects.filter(id=talent_id)
+            if not talent_objs:
+                return util.returnErrorShorcut(403, 'Talent with id {} doesn\'t exist in database.'.format(talent_id))
+            talent_obj = talent_objs[0]
+            tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
+            if created:
+                context['message'] = 'success'
+            else:
+                context['error'] = 'Talent Project object already exists.'
+                return util.returnErrorShorcut(400, context)
+        return util.returnSuccessShorcut(context)
 
 
 def talent_validation(user_data):
