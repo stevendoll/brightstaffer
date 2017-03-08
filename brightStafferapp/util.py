@@ -15,7 +15,7 @@ def returnErrorShorcut(error_code, error_Status, httpstatus=200):
     return returnresponsejson(output, httpstatus)
 
 
-def returnSuccessShorcut(param_dict=dict(), httpstatus=200):
+def returnSuccessShorcut(param_dict, httpstatus=200):
     param_dict['message'] = 'success'
     return returnresponsejson(param_dict, httpstatus)
 
@@ -30,6 +30,17 @@ def require_post_params(params):
         @wraps(func, assigned=available_attrs(func))
         def inner(request, *args, **kwargs):
             if not all(param in json.loads(request.request.body.decode('utf-8')) for param in params):
+                return HttpResponseBadRequest("Required parameters not found.")
+            return func(request, *args, **kwargs)
+        return inner
+    return decorator
+
+
+def required_post_params(params):
+    def decorator(func):
+        @wraps(func, assigned=available_attrs(func))
+        def inner(request, *args, **kwargs):
+            if not all(param in request.request.POST for param in params):
                 return HttpResponseBadRequest("Required parameters not found.")
             return func(request, *args, **kwargs)
         return inner

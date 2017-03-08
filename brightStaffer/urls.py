@@ -39,8 +39,11 @@ urlpatterns = [
     url(r'^talent_list/$', talent.TalentList.as_view()),
     # url(r'^insert_talent/$', talent.InsertTalent.as_view()),
     url(r'^talent_list/(?P<pk>[0-9a-f-]+)/$', talent.TalentDetail.as_view(), name='talent-instance'),
-    url(r'^talent_contact/$', talent.ContactInfo.as_view()),
-    url(r'^talent_project_add/$', talent.ProjectAddView.as_view()),
+    url(r'^talent_contact_email/$', talent.TalentEmailContactAPI.as_view()),
+    url(r'^talent_contact/$', talent.TalentContactAPI.as_view()),
+    url(r'^talent_email/$', talent.TalentEmailAPI.as_view()),
+    url(r'^talent_email/(?P<email>[0-9]+)/$', talent.TalentEmailAPI.as_view()),
+    url(r'^talent_project_add/$', talent.TalentProjectAddAPI.as_view()),
     url(r'', views.home),
 
 ]
