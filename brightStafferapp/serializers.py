@@ -58,7 +58,7 @@ class TalentProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalentProject
-        fields = ('talent', 'project', 'project_match', 'rank', 'stage','get_date_added','company_name')
+        fields = ('talent', 'project', 'project_match', 'rank', 'get_date_added','company_name')
 
 
 class TalentConceptSerializer(serializers.ModelSerializer):
@@ -127,6 +127,6 @@ class TalentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Talent
-        fields = ('id', 'talent_name', 'designation', 'industry_focus', 'industry_focus_percentage', 'status',
+        fields = ('id', 'talent_name', 'designation', 'industry_focus', 'industry_focus_percentage', 'status', 'inactive',
         'rating', 'talent_email', 'talent_contact', 'linkedin_url', 'recruiter', 'get_date', 'current_location',
         'talent_company', 'talent_education', 'talent_project', 'talent_concepts')

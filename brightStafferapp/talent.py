@@ -1,4 +1,4 @@
-from brightStafferapp.models import Talent, Token, Company, User, Projects, TalentProject, TalentEmail, TalentContact
+from brightStafferapp.models import Talent, Token, Company, User, Projects, TalentProject, TalentEmail, TalentContact, TalentStage
 from brightStafferapp.serializers import TalentSerializer, ProjectSerializer, TalentContactEmailSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
@@ -43,7 +43,7 @@ class TalentList(generics.ListCreateAPIView):
             return super(TalentList, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Talent.objects.filter(recruiter__username=self.request.query_params['recruiter']) \
+        return Talent.objects.filter(inactive=False, recruiter__username=self.request.query_params['recruiter']) \
             .order_by('-create_date')
 
     def list(self, request, *args, **kwargs):
@@ -229,6 +229,32 @@ class TalentProjectAddAPI(View):
             else:
                 context['error'] = 'Talent Project object already exists.'
                 return util.returnErrorShorcut(400, context)
+        return util.returnSuccessShorcut(context)
+
+
+class TalentStageAddAPI(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(TalentStageAddAPI, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request):
+        context = {}
+        talent = request.POST['talent_id']
+        project = request.POST['project_id']
+        stage = request.POST['stage']
+        details = request.POST['details']
+        notes = request.POST['notes']
+        projects = Projects.objects.filter(id=project)
+        if not projects:
+            return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project))
+        project = projects[0]
+        talent_objs = Talent.objects.filter(id=talent)
+        if not talent_objs:
+            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
+        talent_obj = talent_objs[0]
+        tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage, details=details, notes=notes)
+        if created:
+            context['message'] = 'success'
         return util.returnSuccessShorcut(context)
 
 

@@ -131,6 +131,7 @@ class Talent(models.Model):
     rating = models.IntegerField(default=0)
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
+    inactive = models.BooleanField(verbose_name='Inactive User', default=False, null=False)
 
     class Meta:
         verbose_name_plural = 'Talent'
@@ -219,7 +220,7 @@ class TalentProject(models.Model):
     project = models.ForeignKey(Projects)
     project_match = models.CharField(max_length=20, null=True, blank=True)
     rank = models.IntegerField(null=True, blank=True)
-    stage = models.CharField(max_length=50, choices=STAGE_CHOICES)
+    #stage = models.CharField(max_length=50, choices=STAGE_CHOICES)
     date_added = models.DateField(auto_now_add=True, null=True, blank=True)
     # last_update = models.DateField(auto_now=True, blank=True, null=True)
 
@@ -257,8 +258,8 @@ class TalentStage(models.Model):
     stage = models.CharField(max_length=20, choices=STAGE_CHOICES)
     details = models.TextField(verbose_name='Details', null=True, blank=True)
     notes = models.TextField(verbose_name='Notes', null=True, blank=True)
-    date_created = models.DateField(verbose_name='Create Date',auto_now_add=True)
-    date_updated = models.DateField(verbose_name='Update Date',auto_now=True)
+    date_created = models.DateField(verbose_name='Create Date', auto_now_add=True)
+    date_updated = models.DateField(verbose_name='Update Date', auto_now=True)
 
     def get_date_created(self):
         return self.date_created.strftime('%d/%m/%Y')
