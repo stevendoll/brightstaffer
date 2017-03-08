@@ -1,5 +1,5 @@
-from brightStafferapp.models import Talent, Token, Company, User, Projects,TalentProject
-from brightStafferapp.serializers import TalentSerializer, ProjectSerializer
+from brightStafferapp.models import Talent, Token, Company, User, Projects, TalentProject, TalentEmail, TalentContact
+from brightStafferapp.serializers import TalentSerializer, ProjectSerializer, TalentContactEmailSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
@@ -7,11 +7,15 @@ from rest_framework.response import Response
 from django.views.generic import View
 from rest_framework import generics
 import json
+from brightStafferapp.util import required_post_params
 from brightStafferapp.views import user_validation
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, HttpResponse
+from django.db.models import Q
+from django.http import QueryDict
+
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -64,37 +68,144 @@ class TalentDetail(generics.RetrieveAPIView):
         return queryset
 
 
-class ContactInfo(View):
+class TalentEmailContactAPI(generics.ListCreateAPIView):
+    queryset = Talent.objects.all()
+    serializer_class = TalentContactEmailSerializer
+    http_method_names = ['get', 'post', 'delete', 'put']
+
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super(ContactInfo, self).dispatch(request, *args, **kwargs)
+        return super(TalentEmailContactAPI, self).dispatch(request, *args, **kwargs)
 
-    def get(self, request):
-        return HttpResponse("405 ERROR:-Method is not allowed")
+    def get_queryset(self):
+        queryset = super(TalentEmailContactAPI, self).get_queryset()
+        talent_id = self.request.query_params.get('talent_id')
+        queryset = queryset.filter(id=talent_id)
+        return queryset
 
+
+class TalentContactAPI(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(TalentContactAPI, self).dispatch(request, *args, **kwargs)
+
+    @required_post_params(params=['recruiter', 'token', 'talent_id', 'contact'])
     def post(self, request):
-        param_dict = {}
-        user_data = json.loads(request.body.decode("utf-8"))
-        check_auth = talent_validation(user_data)
-        if not check_auth:
-            return util.returnErrorShorcut(403, 'Either Talent Name or Talent id is not valid')
+        context = {}
+        talent_id = request.POST['talent_id']
+        contact = request.POST['contact']
+        talent_objs = Talent.objects.filter(id=talent_id)
+        if not talent_objs:
+            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+        talent_obj = talent_objs[0]
 
+        if 'updated_contact' in request.POST:
+            # request to update the existing email address
+            updated_contact = request.POST['updated_contact']
+            talent_contact_obj = TalentContact.objects.filter(contact=contact)
+            if talent_contact_obj:
+                talent_contact_obj = talent_contact_obj[0]
+                talent_contact_obj.contact = updated_contact
+                talent_contact_obj.save()
+                return util.returnSuccessShorcut(context)
+
+        talent_contact_obj, created = TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
+        if created:
+            return util.returnSuccessShorcut(context)
         else:
-            contact_info=Talent.objects.filter(id=user_data['id']).values('email_id','contact_number')
-            for contact in contact_info:
-                param_dict['email_id'] = contact['email_id']
-                param_dict['contact_number'] = contact['contact_number']
-            return util.returnSuccessShorcut(param_dict)
+            context['error'] = 'Contact already added for this user'
+            return util.returnErrorShorcut(409, context)
+
+    def delete(self, request):
+        context = dict()
+        contact = request.GET['contact']
+        talent_id = request.GET['talent_id']
+        talent_objs = Talent.objects.filter(id=talent_id)
+        if not talent_objs:
+            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+        talent_obj = talent_objs[0]
+        if contact:
+            is_deleted = TalentContact.objects.filter(talent=talent_obj, contact=contact).delete()[0]
+            if not is_deleted:
+                return util.returnErrorShorcut(400, 'No entry found or already deleted')
+            return util.returnSuccessShorcut(context)
+        else:
+            return util.returnErrorShorcut(404, 'Contact not found')
 
 
-class ProjectAddView(View):
+class TalentEmailAPI(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(TalentEmailAPI, self).dispatch(request, *args, **kwargs)
+
+    @required_post_params(params=['recruiter', 'token', 'talent_id', 'email'])
+    def post(self, request):
+        context = {}
+        talent_id = request.POST['talent_id']
+        email = request.POST['email']
+        talent_objs = Talent.objects.filter(id=talent_id)
+        if not talent_objs:
+            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+        talent_obj = talent_objs[0]
+
+        if 'updated_email' in request.POST:
+            # request to update the existing email address
+            updated_email = request.POST['updated_email']
+            if_exists = self.validate_email(updated_email)
+            if if_exists:
+                return util.returnErrorShorcut(409, 'A user is already associated with this email.')
+            talent_email_obj = TalentEmail.objects.filter(email=email)
+            if talent_email_obj:
+                talent_email_obj = talent_email_obj[0]
+                talent_email_obj.email = updated_email
+                talent_email_obj.save()
+                return util.returnSuccessShorcut(context)
+
+        if_exists = self.validate_email(email)
+        if if_exists:
+            return util.returnErrorShorcut(409, 'A user is already associated with this email.')
+        talent_email_obj, created = TalentEmail.objects.get_or_create(talent=talent_obj, email=email)
+        if created:
+            return util.returnSuccessShorcut(context)
+        else:
+            context['error'] = 'Email already added for this user'
+            return util.returnErrorShorcut(409, context)
+
+    def delete(self, request):
+        context = dict()
+        talent_obj = None
+        email = request.GET['email']
+        talent_id = request.GET['talent_id']
+        talent_objs = Talent.objects.filter(id=talent_id)
+        if not talent_objs:
+            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+        talent_obj = talent_objs[0]
+        if email:
+            is_deleted = TalentEmail.objects.filter(talent=talent_obj, email=email).delete()[0]
+            if not is_deleted:
+                return util.returnErrorShorcut(400, 'No entry found or already deleted')
+            return util.returnSuccessShorcut(context)
+        else:
+            return util.returnErrorShorcut(404, 'Email not found')
+
+    def validate_email(self, email):
+        users = User.objects.filter(Q(email=email) | Q(username=email))
+        if users:
+            return True
+        else:
+            return False
+
+
+class TalentProjectAddAPI(View):
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
     http_method_names = ['post']
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super(ProjectAddView, self).dispatch(request, *args, **kwargs)
+        return super(TalentProjectAddAPI, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         context = dict()

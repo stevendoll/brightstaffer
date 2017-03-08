@@ -86,6 +86,15 @@ class TalentContactSerializer(serializers.ModelSerializer):
         fields = ('talent', 'contact')
 
 
+class TalentContactEmailSerializer(serializers.ModelSerializer):
+    talent_contact = TalentContactSerializer(many=True)
+    talent_email = TalentEmailSerializer(many=True)
+
+    class Meta:
+        model = Talent
+        fields = ('id', 'talent_name', 'talent_contact', 'talent_email', )
+
+
 class TalentCompanySerializer(serializers.ModelSerializer):
     talent = serializers.CharField()
     company = serializers.CharField()
