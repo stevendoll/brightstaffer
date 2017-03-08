@@ -1245,6 +1245,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.recruiter ={};
      $scope.talentDetails = {};
      $scope.selectedCandidate = {};
+     $scope.choosenCandidates = [];
+     $scope.projectList = [];
+     $scope.projectDD = '';
 
      $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
           $(".select-arrow").selectbox();
@@ -1268,6 +1271,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
        });
       angular.element(document).ready(function () {
             $scope.getTalents();
+
        });
 
 
@@ -1279,7 +1283,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          talentApis.getAllTalents(requestObject).then(function(response){
             if(response.message == "success") {
               $scope.talentList = response.talent_list;
-              $scope.recruiter.recruiterName = response.recruiter_first_name +' '+response.recruiter_last_name;
+              $scope.recruiter.recruiterName = response.display_name;
               }else{
                 console.log('error');
             }
@@ -1287,18 +1291,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
       }
 
       $scope.updateRecruiterName = function(){             // function to fetch top 6 projects
-        console.log($scope.recruiter.recruiterName);
+       // console.log($scope.recruiter.recruiterName);
+
         var requestObject = {
         'token': $rootScope.globals.currentUser.token,       // username field value
-        'recruiter': $rootScope.globals.currentUser.user_email   // password field value
+        'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
+        'project_id': '',
+        'talent_id': ''
          };
-//         talentApis.updateRecruiterName(requestObject).then(function(response){
-//            if(response.message == "success") {
-//              console.log(response);
-//              }else{
-//                console.log('error');
-//            }
-//         });
+         talentApis.updateRecruiterName(requestObject).then(function(response){
+            if(response.message == "success") {
+              console.log(response);
+              }else{
+                console.log('error');
+            }
+         });
       }
 
       $scope.selectExportType = function(exportType){
@@ -1328,31 +1335,88 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
      }
 
-     $scope.showCompanyInfo = function(talent){
+    $scope.showDetails = function(talent){
       $scope.selectedCandidate = talent;
-       var modalInstance= $uibModal.open({
-                   templateUrl: static_url+'views/companyInfo.html',
-                   resolve: {
-                        user: function () {
-                            return $scope.selectedCandidate;
-                        }
-                    },
-                    controller: function($scope, user) {
-                        $scope.selectedCandidate = user;
-                    }
-            });
- //This is how to show the modal.
+      $('#more-comp').modal('show');
 
-        modalInstance.result.then(function(selectedUser){
-            $scope.selectedCandidate = selectedUser;
-            modalInstance.show
-        });
-     };
+    }
 
-    //When u want to hide the modal use this as written below:
-    $scope.close = function() {
-        modalInstance.hide();
-    };
+    $scope.showRecruiterPopup = function(talent){
+      $scope.selectedCandidate = talent;
+      $('#recruiter-modal').modal('show');
+
+    }
+
+    $scope.editRecruiter = function(){
+        $('#recruiter-modal').modal('hide');
+        $('#edit-recruiter').modal('show');
+    }
+
+    $scope.addToProject = function(id,talent){
+        for(var i=0;i<$rootScope.allProjectList.length;i++){
+             var project = {name:$rootScope.allProjectList[i].project_name,
+                            value:$rootScope.allProjectList[i].project_name};
+                $scope.projectList.push(project);
+                $scope.projectDD = $scope.projectList[0];
+            }
+        $('#add-project').modal('show');
+//        var talent = [];
+//            talent.push(id);
+//            var project_id = '4f001aac-32ac-4903-a875-cf69b389b886';
+//
+//        var formData = new FormData();
+//         formData.append('token', $rootScope.globals.currentUser.token);
+//         formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+//         formData.append('project_id', project_id);
+//         formData.append('talent_id[]', talent);
+//         talentApis.addTalentsToProject(formData, requestCallback);
+//         function requestCallback(response) {
+//              response = JSON.parse(response);
+//              console.log(response);
+//            }
+    }
+
+
+    $scope.updateSelection = function(id, position, talentList) {
+
+           if ($scope.choosenCandidates.indexOf(id) == -1 )
+                $scope.choosenCandidates.push(id);
+            else
+                $scope.choosenCandidates.splice($scope.choosenCandidates.indexOf(id), 1);
+
+       if($scope.choosenCandidates.length > 0){
+            $('#assignToProject').removeClass('disabled-talent');
+            $('#assignToProject').addClass('add-talent');
+       }else{
+            $('#assignToProject').removeClass('add-talent');
+            $('#assignToProject').addClass('disabled-talent');
+       }
+                console.log($scope.choosenCandidates);
+    }
+
+    $scope.selectAll = function() {
+      var state = $('#selectall').prop('checked');
+      if(state){
+         $scope.choosenCandidates =[];
+         for(var i=0;i<$scope.talentList.length;i++){
+                  $('#check_'+$scope.talentList[i].id).prop('checked',true);
+                  $scope.choosenCandidates.push($scope.talentList[i].id);
+            }
+      }
+      else{
+         for(var i=0;i<$scope.talentList.length;i++){
+                  $('#check_'+$scope.talentList[i].id).prop('checked',false);
+                  $scope.choosenCandidates.splice($scope.choosenCandidates.indexOf($scope.talentList[i].id), 1);
+            }
+      }
+       if($scope.choosenCandidates.length > 0){
+            $('#assignToProject').removeClass('disabled-talent');
+            $('#assignToProject').addClass('add-talent');
+       }else{
+            $('#assignToProject').removeClass('add-talent');
+            $('#assignToProject').addClass('disabled-talent');
+       }
+    }
 }
 
 

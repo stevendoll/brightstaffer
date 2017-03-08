@@ -323,6 +323,23 @@ function myDirective($rootScope) {
     }
 }
 
+
+function dropDown($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+    console.log(element);
+      $timeout(function(){$(element).selectbox();
+//                $('#projectListD').change(function() {
+//                var selectedValue = $('#projectListD :selected').text();
+//                 scope.projectDD = selectedValue;
+//                console.log(scope.projectDD);
+//                 });
+            },200);
+    }
+  };
+}
+
 /**
  *
  * Pass all functions into module
@@ -340,4 +357,5 @@ angular
     .directive('clickOutside', clickOutside)
     .directive('onTouch', onTouch)
     .directive('myDirective', myDirective)
-    .directive('dropZone', dropZone);
+    .directive('dropZone', dropZone)
+    .directive('dropDown', dropDown);
