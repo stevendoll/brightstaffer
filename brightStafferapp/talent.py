@@ -85,7 +85,6 @@ class TalentEmailContactAPI(generics.ListCreateAPIView):
 
 
 class TalentContactAPI(View):
-
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(TalentContactAPI, self).dispatch(request, *args, **kwargs)
@@ -217,7 +216,7 @@ class TalentProjectAddAPI(View):
             return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project_id))
         project = projects[0]
         # get list of talent ids from POST request
-        talent_id_list = request.POST.getlist('talent_id[]')
+        talent_id_list = request.POST.getlist('talent_id[]')[0].split(',')
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
             if not talent_objs:
@@ -238,14 +237,8 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
     #pagination_class = LargeResultsSetPagination
     http_method_names = ['get','post']
 
-    # def get(self, request, *args, **kwargs):
-    #     result = user_validation(request.query_params)
-    #     if not result:
-    #         return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
-    #     else:
-    #         return super(TalentStageAddAPI, self).get(request, *args, **kwargs)
-
     def get(self,request):
+        context={}
         projects = Projects.objects.filter(id=request.GET['project_id'])
         if not projects:
             return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(
@@ -255,8 +248,11 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         if not talent_objs:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(request.GET['talent_id']))
         talent_obj = talent_objs[0]
-        list=TalentStage.objects.filter(id=request.GET['id'], project=project, talent=talent_obj).values()
-        return list
+        TalentStage.objects.filter(id=request.GET['id']).values()
+        if list:
+            context['message'] = 'success'
+            context['stage']= list
+        return util.returnSuccessShorcut(context)
 
     # def list(self, request, *args, **kwargs):
     #     response = super(TalentStageAddAPI, self).list(request, *args, **kwargs)
@@ -285,6 +281,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         if created:
             context['message'] = 'success'
         return util.returnSuccessShorcut(context)
+
 
 class TalentUpdateRank(View):
 
