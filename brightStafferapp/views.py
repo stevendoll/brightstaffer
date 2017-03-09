@@ -358,28 +358,24 @@ class TopProjectList(generics.ListCreateAPIView):
         return response
 
 
-# class UpdateRecruiter(View):
-#     @method_decorator(csrf_exempt)
-#     def dispatch(self, request, *args, **kwargs):
-#         return super(UpdateRecruiter, self).dispatch(request, *args, **kwargs)
-#
-#     def get(self, request):
-#         return HttpResponse("405 ERROR:-Method is not allowed")
-#
-#     def post(self, request):
-#         param_dict = {}
-#         talent = request.POST['talent_id']
-#         project = request.POST['project_id']
-#         stage = request.POST['stage']
-#         #user_data = json.loads(request.body.decode("utf-8"))
-#         check_auth = user_validation(user_data)
-#         if not check_auth:
-#             return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
-#
-#         else:
-#             Recruiter.objects.filter(user=user_data['recruiter']).update(display=user_data['display_name'])
-#             param_dict['display_name']=user_data['display_name']
-#             return util.returnSuccessShorcut(param_dict)
+class UpdateRecruiter(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UpdateRecruiter, self).dispatch(request, *args, **kwargs)
+
+    # def get(self, request):
+    #     return HttpResponse("405 ERROR:-Method is not allowed")
+
+    def get(self, request):
+        param_dict = {}
+        recruiter = request.GET['recruiter_name']
+        display_name = request.GET['display_name']
+        user = User.objects.filter(username=recruiter)
+        if not user:
+            return util.returnErrorShorcut(403, 'Recruiter Email is not valid')
+        Recruiter.objects.filter(user=user[0]).update(display_name=display_name)
+        param_dict['display_name'] = display_name
+        return util.returnSuccessShorcut(param_dict)
 
 
 class FileUploadView(View):
