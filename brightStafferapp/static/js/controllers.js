@@ -8,6 +8,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.paginationCounter= 1;
     $scope.stateArray = ['projects','create.step1','create.step2','create.step3','create.step4'];
     $rootScope.isDevice = false;
+    $rootScope.projectListView = [{name:'Select Project',value:'Select Project'},{name:'Search Project',value:'Search Project'}];
 
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
         var requestObject = {
@@ -44,6 +45,11 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     prevButton = angular.element(prevButton);
                      $rootScope.totalProjectCount = response.count;
                      $rootScope.allProjectList = response.published_projects;
+                     for(var i=0;i<$rootScope.allProjectList.length;i++){
+                         var project = {name:$rootScope.allProjectList[i].project_name,
+                                        value:$rootScope.allProjectList[i].id};
+                            $rootScope.projectListView.push(project);
+                         }
                      $rootScope.projectCountEnd = response.published_projects.length;
                      $rootScope.projectNext = response.next;
                      $rootScope.projectPrevious = response.previous;
@@ -1246,15 +1252,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.talentDetails = {};
      $scope.selectedCandidate = {};
      $scope.choosenCandidates = [];
-     $scope.projectList = [];
-     $scope.projectDD = '';
+     $scope.currentTalentId = '';
+     $scope.projectDD = $rootScope.projectListView[0];
 
      $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
           $(".select-arrow").selectbox();
           $('#export').change(function() {
                 var selectedValue = $('#export :selected').text();
                 $scope.exportType = selectedValue;
-                console.log($scope.exportType);
+            });
+          $('#projectListD').change(function() {
+            var selectedValue = $('#projectListD :selected').text();
+            $scope.projectDD = selectedValue;
+            console.log($scope.projectDD);
             });
         // var oldie = $.browser.msie && $.browser.version < 9;
          $('.easy-pie-chart').each(function(){
@@ -1274,6 +1284,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
        });
 
+      $scope.changeState = function(){
+       var currentState = $state.current.name;
+        if(currentState == 'talent.talent-search.talent-search-card'){
+          $('.bar-view').removeClass('active');
+          $('.table-view').addClass('active');
+          $state.go('talent.talent-search.talent-search-list','');
+        }
+
+        if(currentState == 'talent.talent-search.talent-search-list'){
+          $('.bar-view').addClass('active');
+          $('.table-view').removeClass('active');
+          $state.go('talent.talent-search.talent-search-card','');
+        }
+      }
 
       $scope.getTalents = function(){             // function to fetch top 6 projects
         var requestObject = {
@@ -1352,28 +1376,55 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#edit-recruiter').modal('show');
     }
 
-    $scope.addToProject = function(id,talent){
-        for(var i=0;i<$rootScope.allProjectList.length;i++){
-             var project = {name:$rootScope.allProjectList[i].project_name,
-                            value:$rootScope.allProjectList[i].project_name};
-                $scope.projectList.push(project);
-                $scope.projectDD = $scope.projectList[0];
-            }
+    $scope.openProjectList = function(id, callFrom){
+        if(id){
+          $scope.currentTalentId = id;
+        }
+        else{
+          $scope.currentTalentId = '';
+        }
         $('#add-project').modal('show');
-//        var talent = [];
-//            talent.push(id);
-//            var project_id = '4f001aac-32ac-4903-a875-cf69b389b886';
-//
-//        var formData = new FormData();
-//         formData.append('token', $rootScope.globals.currentUser.token);
-//         formData.append('recruiter', $rootScope.globals.currentUser.user_email);
-//         formData.append('project_id', project_id);
-//         formData.append('talent_id[]', talent);
-//         talentApis.addTalentsToProject(formData, requestCallback);
-//         function requestCallback(response) {
-//              response = JSON.parse(response);
-//              console.log(response);
-//            }
+    }
+
+    $scope.addToProject = function(projectDD){
+        var selectedProjectId ;
+        var talent = [];
+
+        if($scope.projectDD != ('Select Project' || 'Search Project')){
+              for(var i=0;i<$rootScope.allProjectList.length;i++)
+               {
+                 if($rootScope.allProjectList[i].project_name == $scope.projectDD)
+                    {
+                      selectedProjectId = $rootScope.allProjectList[i].id;
+                      break;
+                    }
+               }
+        }
+         if($scope.currentTalentId != ''){
+             talent.push($scope.currentTalentId);
+
+         }else if($scope.choosenCandidates.length > 0){
+            for(var k=0;k< $scope.choosenCandidates.length; k++)
+                {
+                    talent.push($scope.choosenCandidates[k]);
+                }
+
+         }
+
+        if(selectedProjectId && talent.length > 0){
+                    console.log(selectedProjectId);
+                    console.log(talent);
+            var formData = new FormData();
+             formData.append('token', $rootScope.globals.currentUser.token);
+             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+             formData.append('project_id', selectedProjectId);
+             formData.append('talent_id[]', talent);
+             talentApis.addTalentsToProject(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+                }
+         }
     }
 
 

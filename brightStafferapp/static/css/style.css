@@ -10999,6 +10999,7 @@ input[type=password]
   float: left;
   margin-right: 10px;
   padding: 10px 0px;
+  pointer-events:none;
 }
 
 .talent-advance-search-div {

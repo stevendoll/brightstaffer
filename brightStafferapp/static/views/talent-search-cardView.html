@@ -109,7 +109,7 @@
                   <div class="cls"></div>
                   <div class="talentsearch-foot">
                    <button class="btn" ui-sref="talent.talent-profile" id="profile_[[talent.id]]" ng-click="loadProfileData(talent.id,talent)">View Profile</button>
-                   <button type="" class="btn" id="add_[[talent.id]]" ng-click="addToProject(talent.id,talent)">Add to Project</button>
+                   <button type="" class="btn" id="add_[[talent.id]]" ng-click="openProjectList(talent.id)">Add to Project</button>
                    <a class="linkedin" href="[[talent.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>
                   </div>
                 </div>
@@ -219,11 +219,11 @@
           <span>Project</span>
           <div class="cls"></div>
           <div class="form-group export">
-            <select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="p.name for p in projectList" drop-down>
+            <select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
             </select>
           </div>
           <div class="cls"></div>
-          <button type="" class="btn add-stage">Add to Project</button>
+          <button type="" class="btn add-stage" ng-click="addToProject(projectDD)">Add to Project</button>
         </div>
         <div class="cls"></div>
       </div>

@@ -330,12 +330,7 @@ function dropDown($timeout) {
     link : function (scope, element, attrs ) {
     console.log(element);
       $timeout(function(){$(element).selectbox();
-//                $('#projectListD').change(function() {
-//                var selectedValue = $('#projectListD :selected').text();
-//                 scope.projectDD = selectedValue;
-//                console.log(scope.projectDD);
-//                 });
-            },200);
+            });
     }
   };
 }

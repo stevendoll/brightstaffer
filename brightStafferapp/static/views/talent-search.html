@@ -5,15 +5,15 @@
           <div class="talent-container">
             <div class="talent-search-bar">
               <button type="" class="btn add-talent" data-toggle="modal" data-target="#add-talent" ng-click="resetModal()">Add Talent</button>
-              <button type="" class="btn disabled-talent" id="assignToProject" ng-click="addToProject()">Send to Project</button>
+              <button type="" class="btn disabled-talent" id="assignToProject" ng-click="openProjectList()">Send to Project</button>
             </div>
             <div class="talent-advance-search-div">
               <button type="" class="btn advance-search">Advanced Search</button>
               <div class="talent-search-icon"><i class="fa fa-filter"></i></div>
               <div class="view-as-panel">
                 <span>View as</span>
-                <div class="bar-view" ui-sref="talent.talent-search.talent-search-card" ng-class="{active:[[$state.current.name == 'talent.talent-search.talent-search-card']]}"><i class="fa fa-bars"></i></div>
-                <div class="table-view" ui-sref="talent.talent-search.talent-search-list" ng-class="{active:[[$state.current.name == 'talent.talent-search.talent-search-list']]}"><i class="fa fa-table"></i></div>
+                <div class="bar-view active"  ng-click="changeState()"><i class="fa fa-bars"></i></div>
+                <div class="table-view"  ng-click="changeState()"><i class="fa fa-table"></i></div>
               </div>
               <div class="show-entry-panel">
                 <span>Show entries/page</span>
@@ -116,3 +116,7 @@
   </div>
 </div>
 <!-- add-recruiter-Modal-ends -->
+
+<div class="success-box" id="projectSuccess" style="display:none;">
+    <span><strong>Success!</strong> Talent has been added to the project.</span>
+</div>
