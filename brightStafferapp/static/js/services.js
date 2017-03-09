@@ -230,8 +230,8 @@ function talentApis($http,REQUEST_URL) {
 
      updateRecruiterName: function(data){
         return $http({
-            url: REQUEST_URL+'update_recruiter/',
-            method: "POST", // or "get"
+            url: REQUEST_URL+'update_recruiter/?recruiter='+data.recruiter+'&display_name='+data.display_name,
+            method: "GET", // or "get"
             headers: {
                         'Content-Type': 'application/json; charset=utf-8',
                     },

@@ -33,13 +33,19 @@
                   <div class="talentsearch-right-panel">
                     <div class="active-bttn">[[talent.status]]</div>
                     <div class="search-star-panel">
-                      <div class="schedule-stars">
+                      <!--<div class="schedule-stars">
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star-o"></i>
                         <i class="fa fa-star-o"></i>
-                      </div>
+                      </div>-->
+                         <!--<div star-rating ng-model="rate_[[talent.rating]]" max="5" on-rating-select="rateFunction(talent.rating)"></div>-->
+                        <div class="col-md-12" ng-init="rating = [[talent.rating]]">
+                            <!--<div ng-repeat="rating in ratings">-->
+                                <div star-rating rating-value="rating" max="5" on-rating-selected="getSelectedRating(rating)"></div>
+                            <!--</div>-->
+                        </div>
                       <div ng-show="[[talent.talent_project.length > 0]]">
                       <div class="schdule-list">[[talent.talent_project[0].stage | capitalize]]</div>
                       <div class="schdule-list-date">[[talent.talent_project[0].get_date_added | dateFormat]]</div>
@@ -169,15 +175,10 @@
         <div class="modal-recent-projects">
           <div class="modal-recent-text">Recent Projects</div>
           <div class="modal-recent-pro-table">
-            <div class="modal-recent-pro-cell">
-              <div class="modal-recent-pro-descp">#fulldev</div>
-              <div class="modal-recent-pro-descp txt-center">Interviweing</div>
-              <div class="modal-recent-pro-descp txt-right">Jan 30, 2017</div>
-            </div>
-            <div class="modal-recent-pro-cell">
-              <div class="modal-recent-pro-descp">#fulldev</div>
-              <div class="modal-recent-pro-descp txt-center">Interviweing</div>
-              <div class="modal-recent-pro-descp txt-right">Jan 30, 2017</div>
+            <div class="modal-recent-pro-cell" ng-repeat="proj in selectedCandidate.talent_project">
+              <div class="modal-recent-pro-descp">#[[proj.project | capitalize]]</div>
+              <div class="modal-recent-pro-descp txt-center">[[proj.stage | capitalize]]</div>
+              <div class="modal-recent-pro-descp txt-right">[[proj.get_date_added | dateFormat]]</div>
             </div>
           </div>
           <div class="modal-show-more-text"><a href="">Show All</a></div>
@@ -200,7 +201,7 @@
             <input class="form-control" id="name" ng-model="recruiter.recruiterName"  autocomplete="off">
           </div>
           <div class="cls"></div>
-          <button type="" class="btn update disabled">Update</button>
+          <button type="" class="btn update" ng-click="updateRecruiterName(recruiter.recruiterName)">Update</button>
         </div>
         <div class="cls"></div>
       </div>
@@ -208,8 +209,7 @@
   </div>
 </div>
 <!-- edit-recruiter-Modal-ends -->
-
-<!-- add-project-Modal-starts -->
+  <!-- add-project-Modal-starts -->
 <div class="modal fade" id="add-project" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog add-talent-dialog" role="document">
     <div class="modal-content">
@@ -223,7 +223,7 @@
             </select>
           </div>
           <div class="cls"></div>
-          <button type="" class="btn add-stage" ng-click="addToProject(projectDD)">Add to Project</button>
+          <button type="" class="btn add-stage" id="add-talent" ng-click="addToProject(projectDD)">Add to Project</button>
         </div>
         <div class="cls"></div>
       </div>
@@ -231,4 +231,9 @@
   </div>
 </div>
 <!-- add-project-Modal-ends -->
+
+</div>
+
+  <div class="success-box" id="nameSuccess" style="display:none;">
+    <span><strong>Success!</strong> Recruiter name is updated.</span>
 </div>

@@ -135,14 +135,14 @@
 
                                  </th>
 
-                                 <th>
+                                 <!--<th>
                                       <div class="checkbox-right-fx">
                                           <div class="checkbox">
                                             <input type="checkbox" value="1" id="l-all" class="css-checkbox" name="">
                                             <label class="css-label" for="l-all"></label>
                                           </div>
                                       </div>
-                                 </th>
+                                 </th>-->
                              </thead>
                              <tbody>
                                  <tr ng-repeat="talent in talentList">
@@ -150,13 +150,13 @@
                                      <td>[[talent.talent_company[0].designation | capitalize]]</td>
                                      <td>[[talent.talent_company[0].company]]</td>
                                      <td ng-show="[[talent.talent_project.length > 0]]">[[talent.talent_project[0].stage]] </span></td>
-                                     <td ng-show="[[talent.talent_project.length == 0]]"> NA </span></td>
+                                     <td ng-show="[[talent.talent_project.length == 0]]"> N/A </span></td>
                                      <td ng-show="[[talent.talent_project.length > 0]]">
                                         <span class="dis-blc"> <a href="">#[[talent.talent_project[0].project]]</a> </span>
                                         <span class="dis-blc"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>
                                       </td>
                                      <td ng-show="[[talent.talent_project.length == 0]]">
-                                        <span class="dis-blc"> <a href=""> NA </a> </span>
+                                        <span class="dis-blc"> <a href=""> N/A </a> </span>
                                       </td>
                                      <td>[[talent.talent_company[0].company]]</td>
                                      <td>Dec 10, 2015</td>
@@ -180,8 +180,8 @@
                                         <a href="#" class="list-act-butn">[[talent.status]]</a>
                                         <div class="checkbox-right-fx">
                                             <div class="checkbox">
-                                              <input type="checkbox" value="1" id="l-1" class="css-checkbox" name="">
-                                              <label class="css-label" for="l-1"></label>
+                                              <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
+                                              <label class="css-label" for="check_[[talent.id]]"></label>
                                             </div>
                                         </div>
                                      </td>
@@ -213,3 +213,26 @@
                               </div>
                   </div>
     </div>
+
+  <!-- add-project-Modal-starts -->
+<div class="modal fade" id="add-project" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="edit-modal-recruiter">
+          <span>Project</span>
+          <div class="cls"></div>
+          <div class="form-group export">
+            <select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
+            </select>
+          </div>
+          <div class="cls"></div>
+          <button type="" class="btn add-stage" id="add-talent" ng-click="addToProject(projectDD)">Add to Project</button>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- add-project-Modal-ends -->

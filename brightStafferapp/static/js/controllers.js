@@ -1260,6 +1260,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.talentCountEnd = 0;
      $scope.totalTalentCount = 0;
 
+
      $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
           $(".select-arrow").selectbox();
           $('#export').change(function() {
@@ -1294,7 +1295,22 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
        });
 
+
+     $scope.rating = 0;
+        $scope.ratings = [{
+            current: 5,
+            max: 5
+        }];
+
+    $scope.getSelectedRating = function (rating) {
+        console.log(rating);
+    }
+
       $scope.changeState = function(){
+        $scope.choosenCandidates =[];
+        $('#selectall').prop('checked',false);
+        $('#assignToProject').removeClass('add-talent');
+        $('#assignToProject').addClass('disabled-talent');
        var currentState = $state.current.name;
         if(currentState == 'talent.talent-search.talent-search-card'){
           $('.bar-view').removeClass('active');
@@ -1333,17 +1349,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
       }
 
       $scope.updateRecruiterName = function(){             // function to fetch top 6 projects
-       // console.log($scope.recruiter.recruiterName);
-
+       console.log($scope.recruiter.recruiterName);
         var requestObject = {
-        'token': $rootScope.globals.currentUser.token,       // username field value
         'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
-        'project_id': '',
-        'talent_id': ''
+        'display_name': $scope.recruiter.recruiterName
          };
          talentApis.updateRecruiterName(requestObject).then(function(response){
             if(response.message == "success") {
               console.log(response);
+             $('#edit-recruiter').modal('hide');
+             $('#nameSuccess').css('display','block');
+             setTimeout(
+                    function () {
+                        $('#nameSuccess').css('display','none');
+                    }, 20000);
               }else{
                 console.log('error');
             }
@@ -1430,8 +1449,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          }
 
         if(selectedProjectId && talent.length > 0){
-                    console.log(selectedProjectId);
-                    console.log(talent);
+            $('#add-talent').addClass('disabled');
+            $('#add-talent').css('pointer-events','none');
             var formData = new FormData();
              formData.append('token', $rootScope.globals.currentUser.token);
              formData.append('recruiter', $rootScope.globals.currentUser.user_email);
@@ -1443,6 +1462,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                   console.log(response);
                   $('#add-project').modal('hide');
                   $('#projectSuccess').css('display','block');
+                  setTimeout(function () {
+                        $('#projectSuccess').css('display','none');
+                    }, 200);
                 }
          }
     }
