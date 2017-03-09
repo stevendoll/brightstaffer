@@ -128,7 +128,7 @@
       <div class="modal-body roles-body">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <div class="past-roles">Past Roles</div>
-        <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company">[[role.designation]] at [[role.company]] 2010-2011</div>
+        <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company">[[role.designation | capitalize]] at [[role.company]] 2010-2011</div>
         <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
         <div class="cls"></div>
         <div class="edu-roles">Education</div>
@@ -159,7 +159,7 @@
         </div>
         <div class="info-modal-div">
           <div class="left-section-div">Recruiter</div>
-          <div class="right-section-div">[[recruiter.recruiterName]] <span data-toggle="modal" ng-click="editRecruiter()">Edit</span></div>
+          <div class="right-section-div">[[recruiter.recruiterName | capitalize]] <span data-toggle="modal" ng-click="editRecruiter()">Edit</span></div>
         </div>
         <div class="info-modal-div">
           <div class="left-section-div">Shared with</div>

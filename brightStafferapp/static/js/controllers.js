@@ -1246,7 +1246,9 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, talentApis , $uibModal){
      $scope.exportOptions = [{name:'Export Data',value:'Export Data'},{name:'Copy',value:'Copy'},{name:'CSV',value:'CSV'},{name:'Excel',value:'Excel'},{name:'PDF',value:'PDF'},{name:'Print',value:'Print'}]; // select drop-down options
+     $scope.recordOptions = [{name:'10',value:'10'},{name:'20',value:'20'},{name:'30',value:'30'},{name:'40',value:'40'},{name:'50',value:'50'}]// select drop-down options
      $scope.exportType = $scope.exportOptions[0];
+     $scope.recordCount = $scope.recordOptions[0];
      $scope.talentList = [];
      $scope.recruiter ={};
      $scope.talentDetails = {};
@@ -1254,12 +1256,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.choosenCandidates = [];
      $scope.currentTalentId = '';
      $scope.projectDD = $rootScope.projectListView[0];
+     $scope.talentCountStart = 1;
+     $scope.talentCountEnd = 0;
+     $scope.totalTalentCount = 0;
 
      $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
           $(".select-arrow").selectbox();
           $('#export').change(function() {
                 var selectedValue = $('#export :selected').text();
                 $scope.exportType = selectedValue;
+            });
+          $('#recordCount').change(function() {
+                var selectedValue = $('#recordCount :selected').text();
+                $scope.recordCount = selectedValue;
+                $scope.getTalents($scope.recordCount);
             });
           $('#projectListD').change(function() {
             var selectedValue = $('#projectListD :selected').text();
@@ -1299,15 +1309,23 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
       }
 
-      $scope.getTalents = function(){             // function to fetch top 6 projects
+      $scope.getTalents = function(recordCount){             // function to fetch top 6 projects
+        if(recordCount){
+          var count = recordCount;
+        }else{
+          var count = $scope.recordCount.value;
+        }
         var requestObject = {
         'token': $rootScope.globals.currentUser.token,       // username field value
-        'recruiter': $rootScope.globals.currentUser.user_email   // password field value
+        'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
+        'count': count
          };
          talentApis.getAllTalents(requestObject).then(function(response){
             if(response.message == "success") {
               $scope.talentList = response.talent_list;
               $scope.recruiter.recruiterName = response.display_name;
+              $scope.totalTalentCount = response.count;
+              $scope.talentCountEnd = response.talent_list.length;
               }else{
                 console.log('error');
             }
@@ -1418,11 +1436,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              formData.append('token', $rootScope.globals.currentUser.token);
              formData.append('recruiter', $rootScope.globals.currentUser.user_email);
              formData.append('project_id', selectedProjectId);
-             formData.append('talent_id[]', talent);
+             formData.append('talent_id[]',talent);
              talentApis.addTalentsToProject(formData, requestCallback);
              function requestCallback(response) {
                   response = JSON.parse(response);
                   console.log(response);
+                  $('#add-project').modal('hide');
+                  $('#projectSuccess').css('display','block');
                 }
          }
     }
