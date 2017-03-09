@@ -368,7 +368,7 @@ class UpdateRecruiter(View):
 
     def get(self, request):
         param_dict = {}
-        recruiter = request.GET['recruiter_name']
+        recruiter = request.GET['recruiter']
         display_name = request.GET['display_name']
         user = User.objects.filter(username=recruiter)
         if not user:

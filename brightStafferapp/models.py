@@ -220,7 +220,7 @@ class TalentProject(models.Model):
     project = models.ForeignKey(Projects)
     project_match = models.CharField(max_length=20, null=True, blank=True)
     rank = models.IntegerField(null=True, blank=True)
-    #stage = models.CharField(max_length=50, choices=STAGE_CHOICES)
+    stage = models.CharField(max_length=50, choices=STAGE_CHOICES, default='Contacted',)
     date_added = models.DateField(auto_now_add=True, null=True, blank=True)
     # last_update = models.DateField(auto_now=True, blank=True, null=True)
 

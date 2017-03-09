@@ -225,10 +225,11 @@ class TalentProjectAddAPI(View):
             talent_obj = talent_objs[0]
             tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
             if created:
+                TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match="50", rank="3")
                 context['message'] = 'success'
-            else:
-                context['error'] = 'Talent Project object already exists.'
-                return util.returnErrorShorcut(400, context)
+            #else:
+            #    context['error'] = 'Talent Project object already exists.'
+                #return util.returnErrorShorcut(400, context)
         return util.returnSuccessShorcut(context)
 
 
@@ -246,7 +247,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         return queryset
 
     def post(self, request, *args, **kwargs):
-        context={}
+        context = {}
         talent = request.POST['talent_id']
         project = request.POST['project_id']
         stage = request.POST['stage']
@@ -267,6 +268,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
 
 
 #class TalentStageEditAPI(View):
+
 
 
 class TalentUpdateRank(View):
