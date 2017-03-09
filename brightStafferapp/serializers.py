@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from brightStafferapp.models import Projects, Concept, Talent, Education, Company, TalentProject, TalentConcept, \
-    TalentCompany, TalentEducation,TalentContact, TalentEmail
+    TalentCompany, TalentEducation,TalentContact, TalentEmail, TalentStage
 from django.contrib.auth.models import User
 import datetime
 
@@ -93,6 +93,13 @@ class TalentContactEmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Talent
         fields = ('id', 'talent_name', 'talent_contact', 'talent_email', )
+
+class TalentProjectStageSerializer(serializers.ModelSerializer):
+    talent = serializers.CharField()
+    project = serializers.CharField()
+    class Meta:
+        model=TalentStage
+        fields = ('id', 'talent', 'project', 'stage','details','notes','date_created','date_updated')
 
 
 class TalentCompanySerializer(serializers.ModelSerializer):

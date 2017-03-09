@@ -1,5 +1,5 @@
 from brightStafferapp.models import Talent, Token, Company, User, Projects, TalentProject, TalentEmail, TalentContact, TalentStage
-from brightStafferapp.serializers import TalentSerializer, ProjectSerializer, TalentContactEmailSerializer
+from brightStafferapp.serializers import TalentSerializer, ProjectSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
@@ -232,13 +232,42 @@ class TalentProjectAddAPI(View):
         return util.returnSuccessShorcut(context)
 
 
-class TalentStageAddAPI(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(TalentStageAddAPI, self).dispatch(request, *args, **kwargs)
+class TalentStageAddAPI(generics.ListCreateAPIView):
+    queryset = TalentStage.objects.all()
+    serializer_class = TalentProjectStageSerializer
+    #pagination_class = LargeResultsSetPagination
+    http_method_names = ['get','post']
+
+    # def get(self, request, *args, **kwargs):
+    #     result = user_validation(request.query_params)
+    #     if not result:
+    #         return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
+    #     else:
+    #         return super(TalentStageAddAPI, self).get(request, *args, **kwargs)
+
+    def get(self,request):
+        projects = Projects.objects.filter(id=request.GET['project_id'])
+        if not projects:
+            return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(
+                request.GET['project_id']))
+        project = projects[0]
+        talent_objs = Talent.objects.filter(id=request.GET['talent_id'])
+        if not talent_objs:
+            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(request.GET['talent_id']))
+        talent_obj = talent_objs[0]
+        list=TalentStage.objects.filter(id=request.GET['id'], project=project, talent=talent_obj).values()
+        return list
+
+    # def list(self, request, *args, **kwargs):
+    #     response = super(TalentStageAddAPI, self).list(request, *args, **kwargs)
+    #     print (response.data)
+    #     #response.data['stage'] = response.data['results']
+    #     #response.data['message'] = 'success'
+    #     #del (response.data['results'])
+    #     return response
 
     def post(self, request):
-        context = {}
+        context={}
         talent = request.POST['talent_id']
         project = request.POST['project_id']
         stage = request.POST['stage']
@@ -256,6 +285,22 @@ class TalentStageAddAPI(View):
         if created:
             context['message'] = 'success'
         return util.returnSuccessShorcut(context)
+
+class TalentUpdateRank(View):
+
+    def get(self,request):
+        context={}
+        talent = request.GET['talent_id']
+        talent_objs = Talent.objects.filter(id=talent)
+        if not talent_objs:
+            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
+
+        updated=Talent.objects.filter(id=talent).update(rating=request.GET['rating'])
+        if updated:
+            context['message'] = 'success'
+        return util.returnSuccessShorcut(context)
+
+
 
 
 def talent_validation(user_data):

@@ -74,7 +74,7 @@ class TalentContactAdmin(admin.ModelAdmin):
 
 
 class TalentStageAdmin(admin.ModelAdmin):
-    list_display = ('talent', 'project', 'stage', 'details', 'notes', 'date_created')
+    list_display = ('id','talent', 'project', 'stage', 'details', 'notes', 'date_created')
     list_filter = ('talent',)
 
 admin.site.register(Projects, ProjectsAdmin)

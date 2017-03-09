@@ -4,15 +4,8 @@ from brightStafferapp.models import Talent, TalentProject
 from datetime import datetime
 from elasticsearch import Elasticsearch
 from django.core import serializers
-
-
-class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True)
-    project_match = indexes.CharField(model_attr='project_match')
-    rank = indexes.CharField(model_attr='rank')
-
-    def get_model(self):
-        return TalentProject
+import json
+import django.db.models.options as options
 
 
 class TalentIndex(indexes.SearchIndex, indexes.Indexable):
@@ -28,63 +21,94 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
     email = indexes.MultiValueField()
     company = indexes.MultiValueField()
     education = indexes.MultiValueField()
-    project = ProjectIndex()
+    project = indexes.MultiValueField()
     concepts = indexes.MultiValueField()
     current_location = indexes.CharField(model_attr='current_location')
     rating = indexes.CharField(model_attr='rating')
     status = indexes.CharField(model_attr='status')
     create_date = indexes.DateTimeField(model_attr='create_date')
-    # suggestions = indexes.FacetCharField()
+    suggestions = indexes.FacetCharField()
 
-    # def prepare(self, obj):
-    #     prepared_data = super(TalentIndex, self).prepare(obj)
-    #     prepared_data['suggestions'] = prepared_data['text']
-    #     return prepared_data
+    def prepare(self, obj):
+        prepared_data = super(TalentIndex, self).prepare(obj)
+        prepared_data['suggestions'] = prepared_data['text']
+        return prepared_data
 
     def get_model(self):
         return Talent
-    #
-    # def prepare_company(self, obj):
-    #     return [category.id for category in obj.category_set.active().order_by('-created')]
 
-    def format_company(self, company):
-        company_dict = dict()
-        company_dict['name'] = company.company.company_name
-        return company.company.company_name
-    #
+    def prepare_email(self, obj):
+        emails =[]
+        for email in obj.talent_email.all():
+            ema = dict()
+            ema['talent'] = obj.talent_name
+            ema['email'] = email.email
+            ema['is_primary'] = email.is_primary
+            emails.append(ema)
+        return json.dumps(emails)
+
+    def prepare_contact(self, obj):
+        contacts =[]
+        for contact in obj.talent_contact.all():
+            cont = dict()
+            cont['talent'] = obj.talent_name
+            cont['contact'] = contact.contact
+            cont['is_primary'] = contact.is_primary
+            contacts.append(cont)
+        return json.dumps(contacts)
+
+    def prepare_education(self, obj):
+        educations = []
+        for education in obj.talent_education.all():
+            edu = dict()
+            edu['talent'] = obj.talent_name
+            edu['education'] = education.education.name
+            edu['course'] = education.course
+            edu['start_date'] = str(education.start_date)
+            edu['end_date'] = str(education.end_date)
+            educations.append(edu)
+        return json.dumps(educations)
+
+    def prepare_company(self, obj):
+        companies = []
+        for company in obj.talent_company.all():
+            comp = dict()
+            comp['company'] = company.company.company_name
+            comp['talent'] = obj.talent_name
+            comp['start_date'] = str(company.start_date)
+            comp['end_date'] = str(company.end_date)
+            comp['designation'] = company.designation
+            comp['is_current'] = company.is_current
+            companies.append(comp)
+        return json.dumps(companies)
+
     def prepare_project(self, obj):
-        return [proj.project.project_name for proj in obj.talent_project.all()]
+        projects = []
+        for project in obj.talent_project.all():
+            proj = dict()
+            proj['project'] = project.project.project_name
+            proj['talent'] = obj.talent_name
+            proj['project_match'] = project.project_match
+            proj['rank'] = project.rank
+            #proj['stage'] = project.stage
+            proj['date_added'] = str(project.date_added)
+            projects.append(proj)
+        return json.dumps(projects)
 
     def prepare_recruiter(self, obj):
         return obj.recruiter.username
 
     def prepare_concepts(self, obj):
-        return [concept.concept for concept in obj.concepts.all()]
+        concepts = []
+        for concept in obj.talent_concepts.all():
+            con = dict()
+            con['talent'] = obj.talent_name
+            con['concept'] = concept.concept.concept
+            con['match'] = concept.match
+            con['date_created'] = str(concept.date_created)
+            concepts.append(con)
+        return json.dumps(concepts)
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
-
-
-# es = Elasticsearch()
-#
-# doc = {
-#     'author': 'kimchy',
-#     'text': 'Elasticsearch: cool. bonsai cool.',
-#     'timestamp': datetime.now(),
-# }
-# res = es.index(index="test1", doc_type='tweet', id=1, body=doc)
-# print(res['created'])
-#
-# res = es.index(index="test2", doc_type='tweet', id=1, body=doc)
-# print(res['created'])
-#
-# res = es.get(index="test-index", doc_type='tweet', id=1)
-# print(res['_source'])
-#
-# es.indices.refresh(index="test-index")
-#
-# res = es.search(index="test-index", body={"query": {"match_all": {}}})
-# print("Got %d Hits:" % res['hits']['total'])
-# for hit in res['hits']['hits']:
-#     print("%(timestamp)s %(author)s: %(text)s" % hit["_source"])
