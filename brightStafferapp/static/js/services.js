@@ -216,7 +216,7 @@ function talentApis($http,REQUEST_URL) {
    return {
     getAllTalents: function(data){
     return $http({
-        url: REQUEST_URL+'talent_list/?recruiter='+data.recruiter+'&token='+data.token+'&count=10',
+        url: REQUEST_URL+'talent_list/?recruiter='+data.recruiter+'&token='+data.token+'&count='+data.count,
         method: "GET", // or "get"
         headers: {
 					'Content-Type': 'application/json; charset=utf-8',

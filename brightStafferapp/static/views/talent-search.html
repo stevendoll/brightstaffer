@@ -18,12 +18,7 @@
               <div class="show-entry-panel">
                 <span>Show entries/page</span>
                 <div class="form-group count">
-                  <select class="form-control select-arrow">
-                    <option>10</option>
-                    <option>20</option>
-                    <option>30</option>
-                    <option>40</option>
-                    <option>50</option>
+                  <select class="form-control select-arrow" id="recordCount" ng-model="recordCount"  ng-options="option.name for option in recordOptions">
                   </select>
                 </div>
                 <div class="form-group export">
@@ -37,7 +32,7 @@
                   <input type="checkbox" value="1" id="selectall" class="css-checkbox" ng-click="selectAll()">
                   <label class="css-label" for="selectall"></label>
                 </div>
-                <span>Showing 1 – 5 entries of 5 entries</span>
+                <span>Showing [[talentCountStart]] – [[talentCountEnd]] entries of [[totalTalentCount]] entries</span>
               </div>
               <div class="cls"></div>
               <div ui-view></div>
