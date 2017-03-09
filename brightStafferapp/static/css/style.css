@@ -10568,6 +10568,73 @@ input[type=password]
   font-family: 'open_sansregular';
 }
 
+.search-name-head {
+  display: inline-block;
+  border-bottom: 1px solid #337ab7;
+  margin-bottom: 5px;
+  line-height: 23px;
+}
+
+.modal-recent-projects {
+  width: 100%;
+  float: left;
+}
+
+.modal-recent-text {
+  width: 100%;
+  float: left;
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  color: #575757;
+  margin: 15px 0px 10px 0px;
+}
+
+.modal-recent-pro-table {
+  width: 100%;
+  float: left;
+  margin-bottom: 20px;
+}
+
+.modal-recent-pro-cell {
+  width: 100%;
+  float: left;
+  padding: 12px 30px 12px 20px;
+}
+
+.modal-recent-pro-descp {
+  width: 33%;
+  float: left;
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  color: #6a6a6a;
+  word-wrap: break-word;
+}
+
+.modal-recent-pro-cell:nth-of-type(odd) {
+  background-color: #f2f2f2;
+}
+
+.modal-recent-pro-cell:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+.modal-show-more-text {
+  width: 100%;
+  float: left:
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  color: #367cb8;
+  text-align: right;
+}
+
+.txt-center {
+  text-align: center;
+}
+
+.txt-right {
+  text-align: right;
+}
+
 .search-result-info {
   width: 100%;
   float: left;
