@@ -58,6 +58,7 @@ class TalentList(generics.ListCreateAPIView):
         return response
 
 
+#Show Talent Profile API
 class TalentDetail(generics.RetrieveAPIView):
     queryset = Talent.objects.all()
     model = Talent
@@ -67,7 +68,7 @@ class TalentDetail(generics.RetrieveAPIView):
         queryset = super(TalentDetail, self).get_queryset()
         return queryset
 
-
+#Show Talent Email and Contact API
 class TalentEmailContactAPI(generics.ListCreateAPIView):
     queryset = Talent.objects.all()
     serializer_class = TalentContactEmailSerializer
@@ -84,6 +85,7 @@ class TalentEmailContactAPI(generics.ListCreateAPIView):
         return queryset
 
 
+#Show Talent Contact API
 class TalentContactAPI(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -134,7 +136,6 @@ class TalentContactAPI(View):
 
 
 class TalentEmailAPI(View):
-
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(TalentEmailAPI, self).dispatch(request, *args, **kwargs)
@@ -234,35 +235,17 @@ class TalentProjectAddAPI(View):
 class TalentStageAddAPI(generics.ListCreateAPIView):
     queryset = TalentStage.objects.all()
     serializer_class = TalentProjectStageSerializer
-    #pagination_class = LargeResultsSetPagination
     http_method_names = ['get','post']
 
-    def get(self,request):
-        context={}
-        projects = Projects.objects.filter(id=request.GET['project_id'])
-        if not projects:
-            return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(
-                request.GET['project_id']))
-        project = projects[0]
-        talent_objs = Talent.objects.filter(id=request.GET['talent_id'])
-        if not talent_objs:
-            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(request.GET['talent_id']))
-        talent_obj = talent_objs[0]
-        TalentStage.objects.filter(id=request.GET['id']).values()
-        if list:
-            context['message'] = 'success'
-            context['stage']= list
-        return util.returnSuccessShorcut(context)
+    def get_queryset(self):
+        queryset = super(TalentStageAddAPI, self).get_queryset()
+        talent_id = self.request.query_params.get('talent_id')
+        project_id = self.request.query_params.get('project_id')
+        stage_id = self.request.query_params.get('stage_id')
+        queryset = queryset.filter(id=stage_id,talent_id=talent_id,project_id=project_id)
+        return queryset
 
-    # def list(self, request, *args, **kwargs):
-    #     response = super(TalentStageAddAPI, self).list(request, *args, **kwargs)
-    #     print (response.data)
-    #     #response.data['stage'] = response.data['results']
-    #     #response.data['message'] = 'success'
-    #     #del (response.data['results'])
-    #     return response
-
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         context={}
         talent = request.POST['talent_id']
         project = request.POST['project_id']
@@ -283,8 +266,10 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         return util.returnSuccessShorcut(context)
 
 
-class TalentUpdateRank(View):
+#class TalentStageEditAPI(View):
 
+
+class TalentUpdateRank(View):
     def get(self,request):
         context={}
         talent = request.GET['talent_id']
@@ -296,8 +281,6 @@ class TalentUpdateRank(View):
         if updated:
             context['message'] = 'success'
         return util.returnSuccessShorcut(context)
-
-
 
 
 def talent_validation(user_data):
