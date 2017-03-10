@@ -17,27 +17,44 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
     industry_focus_percentage = indexes.CharField(model_attr='industry_focus_percentage')
     linkedin_url = indexes.CharField(model_attr='linkedin_url')
     recruiter = indexes.CharField(model_attr='recruiter')
-    contact = indexes.MultiValueField()
-    email = indexes.MultiValueField()
-    company = indexes.MultiValueField()
-    education = indexes.MultiValueField()
-    project = indexes.MultiValueField()
-    concepts = indexes.MultiValueField()
+    talent_contact = indexes.MultiValueField()
+    talent_email = indexes.MultiValueField()
+    talent_company = indexes.MultiValueField()
+    talent_education = indexes.MultiValueField()
+    talent_project = indexes.MultiValueField()
+    talent_concepts = indexes.MultiValueField()
+    talent_stages = indexes.MultiValueField()
     current_location = indexes.CharField(model_attr='current_location')
     rating = indexes.CharField(model_attr='rating')
     status = indexes.CharField(model_attr='status')
     create_date = indexes.DateTimeField(model_attr='create_date')
-    suggestions = indexes.FacetCharField()
+    # suggestions = indexes.FacetCharField()
 
-    def prepare(self, obj):
-        prepared_data = super(TalentIndex, self).prepare(obj)
-        prepared_data['suggestions'] = prepared_data['text']
-        return prepared_data
+    # def prepare(self, obj):
+    #     prepared_data = super(TalentIndex, self).prepare(obj)
+    #     prepared_data['suggestions'] = prepared_data['text']
+    #     return prepared_data
 
     def get_model(self):
         return Talent
 
-    def prepare_email(self, obj):
+    def prepare_create_date(self, obj):
+        return str(obj.get_date)
+
+    def prepare_talent_stages(self, obj):
+        stages = []
+        for stage in obj.talent_stages.all():
+            sta = dict()
+            sta['talent'] = obj.talent_name
+            sta['project'] = stage.project.project_name
+            sta['details'] = stage.details
+            sta['notes'] = stage.notes
+            sta['date_created'] = str(stage.get_date_created)
+            sta['date_updated'] = str(stage.get_date_updated)
+            stages.append(sta)
+        return stages
+
+    def prepare_talent_email(self, obj):
         emails =[]
         for email in obj.talent_email.all():
             ema = dict()
@@ -45,9 +62,9 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             ema['email'] = email.email
             ema['is_primary'] = email.is_primary
             emails.append(ema)
-        return json.dumps(emails)
+        return emails
 
-    def prepare_contact(self, obj):
+    def prepare_talent_contact(self, obj):
         contacts =[]
         for contact in obj.talent_contact.all():
             cont = dict()
@@ -55,34 +72,34 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             cont['contact'] = contact.contact
             cont['is_primary'] = contact.is_primary
             contacts.append(cont)
-        return json.dumps(contacts)
+        return contacts
 
-    def prepare_education(self, obj):
+    def prepare_talent_education(self, obj):
         educations = []
         for education in obj.talent_education.all():
             edu = dict()
             edu['talent'] = obj.talent_name
             edu['education'] = education.education.name
             edu['course'] = education.course
-            edu['start_date'] = str(education.start_date)
-            edu['end_date'] = str(education.end_date)
+            edu['start_date'] = str(education.get_start_date)
+            edu['end_date'] = str(education.get_end_date)
             educations.append(edu)
-        return json.dumps(educations)
+        return educations
 
-    def prepare_company(self, obj):
+    def prepare_talent_company(self, obj):
         companies = []
         for company in obj.talent_company.all():
             comp = dict()
             comp['company'] = company.company.company_name
             comp['talent'] = obj.talent_name
-            comp['start_date'] = str(company.start_date)
-            comp['end_date'] = str(company.end_date)
+            comp['start_date'] = str(company.get_start_date)
+            comp['end_date'] = str(company.get_end_date)
             comp['designation'] = company.designation
             comp['is_current'] = company.is_current
             companies.append(comp)
-        return json.dumps(companies)
+        return companies
 
-    def prepare_project(self, obj):
+    def prepare_talent_project(self, obj):
         projects = []
         for project in obj.talent_project.all():
             proj = dict()
@@ -91,23 +108,23 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             proj['project_match'] = project.project_match
             proj['rank'] = project.rank
             #proj['stage'] = project.stage
-            proj['date_added'] = str(project.date_added)
+            proj['date_added'] = str(project.get_date_added)
             projects.append(proj)
-        return json.dumps(projects)
+        return projects
 
     def prepare_recruiter(self, obj):
         return obj.recruiter.username
 
-    def prepare_concepts(self, obj):
+    def prepare_talent_concepts(self, obj):
         concepts = []
         for concept in obj.talent_concepts.all():
             con = dict()
             con['talent'] = obj.talent_name
             con['concept'] = concept.concept.concept
             con['match'] = concept.match
-            con['date_created'] = str(concept.date_created)
+            con['date_created'] = str(concept.get_date_created)
             concepts.append(con)
-        return json.dumps(concepts)
+        return concepts
 
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""

@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'^talent_delete_stage/$', talent.TalentStageDeletePI.as_view()),
     url(r'^update_rank/$', talent.TalentUpdateRank.as_view()),
     url(r'^delete_talent/$', talent.DeleteTalent.as_view()),
+    url(r'^talent_search/$', talent.TalentSearch.as_view()),
     url(r'', views.home),
 
 ]

@@ -15,7 +15,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, HttpResponse
 from django.db.models import Q
-from django.http import QueryDict
+from elasticsearch import Elasticsearch
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -352,3 +352,28 @@ def talent_validation(user_data):
         return False
     else:
         return True
+
+
+class TalentSearch(View):
+
+    def get(self, request):
+        es = Elasticsearch()
+        term = self.request.GET['term']
+        body = json.dumps({"query": {"multi_match":
+                                            {
+                                                "query": term,
+                                                "fields": ["talent_name", "email", "designation", "concepts", "company", "education",
+                                                        "current_location", "industry_focus", "stages", "project"]
+                                            }
+                                        },
+                                        "highlight": {
+                                            "fields": {
+                                                "recruiter": {}
+                                            }
+                                        }
+                              })
+        res = es.search(index="haystack", doc_type="modelresult",
+                        body=body
+                        )
+
+        return HttpResponse(json.dumps(res['hits']))
