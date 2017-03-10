@@ -1559,9 +1559,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   left: 0px !important;}
 
 .mCustomScrollbar.tabl-scrol .mCS-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar
-  {  background: #7f7f7f;}
+  {  background: rgba(0, 0, 0, 0.2);}
 
-.sor-cont { position: relative; margin-left: 15px;}
+.sor-cont { position: relative; margin-left: 6px;}
 
 .sor-cont-dubl {top: -9px;}
 
@@ -1944,6 +1944,36 @@ padding: 10px 0px;}
   float: left;
   margin-top: 0px;
   margin-left: 20px;
+}
+
+.tabl-fl-height table > thead > tr {
+  font-size: 14px;
+  color: #4f4f4f;
+  font-family: 'OpenSans-Semibold';
+}
+
+.tabl-fl-height table > tbody > tr > td {
+  font-size: 13px !important;
+  color: #4e4e4e !important;
+  font-family: 'open_sansregular';
+  padding: 9px 8px !important;
+  border-bottom: 1px solid #e7eaec !important;
+}
+
+.tabl-fl-height .table > thead > tr > th {
+    border-bottom: 2px solid #e7eaec;
+}
+
+.tbl-link-td {
+  color: #337ab7;
+  font-size: 13px;
+  font-family: 'OpenSans-Bold';
+  text-decoration: underline;
+}
+
+.tbl-linkdedin-font {
+  font-size: 35px;
+  color: #808080;
 }
 
 @media (max-width: 768px) {
@@ -10935,8 +10965,8 @@ input[type=password]
 .search-pagination {
   width: auto;
   float: right;
-  margin-bottom: 30px;
-  margin-right: 30px;
+  margin-bottom: 0px;
+  margin-right: 0px;
 }
 
 .search-pagination ul > li > a {
