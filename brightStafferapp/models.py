@@ -259,6 +259,7 @@ class TalentConcept(models.Model):
     def __str__(self):
         return self.concept.concept
 
+    @property
     def get_date_created(self):
         return self.date_created.strftime('%d/%m/%Y')
 
