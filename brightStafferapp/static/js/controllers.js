@@ -1620,6 +1620,25 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
       }
     }
 
+    $scope.reverse = false;
+   $scope.sortBy = function(propertyName) {                   // filed sorting functionality in all project view
+        $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+        $scope.propertyName = propertyName;
+        if($scope.reverse == false){
+        if($("#headRow").find(".sorting_asc").length>0){
+           $("#headRow").find(".sorting_asc").removeClass("sorting_asc");
+         }
+         $('#'+propertyName).addClass('sorting_asc');
+      } else if($scope.reverse == true){
+         if($("#headRow").find(".sorting_desc").length>0){
+           $("#headRow").find(".sorting_desc").removeClass("sorting_desc");
+         }
+         $('#'+propertyName).addClass('sorting_desc');
+
+      }
+   }
+
+
 }
 
 

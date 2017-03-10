@@ -2,33 +2,33 @@
                   <div class="col-sm-12 tabl-fl-height padding-zero">
                       <div class="mCustomScrollbar tabl-scrol" data-mcs-theme="dark" table-scroll>
                          <table class="table talent-lst">
-                             <thead>
-                                 <th>Name
-                                     <span class="sor-cont">
-                                         <a class="arw-up" href="#r">
+                             <thead id="headRow">
+                                 <th id="talent_name" tabindex="0"  ng-click="sortBy('talent_name')">Name
+                                     <span class="sor-cont" ng-init="propertyName === 'talent_name'" ng-class="{reverse: reverse}">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
                                  </th>
-                                 <th>Current Role
-                                    <span class="sor-cont">
-                                         <a class="arw-up" href="#r">
+                                 <th  id="role" tabindex="0" ng-click="sortBy('role')" >Current Role
+                                    <span class="sor-cont" ng-init="propertyName === 'role'" ng-class="{reverse: reverse}">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn">
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
                                  </th>
                                   <th> Current Company
                                     <span class="sor-cont">
-                                         <a class="arw-up" href="#r">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
@@ -36,10 +36,10 @@
 
                                  <th>Stage
                                     <span class="sor-cont">
-                                         <a class="arw-up" href="#r">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
@@ -47,10 +47,10 @@
 
                                  <th>Projects
                                     <span class="sor-cont">
-                                         <a class="arw-up" href="#r">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
@@ -58,10 +58,10 @@
 
                                  <th>Company/<span class="dis-blc">Division Name
                                       <span class="sor-cont sor-cont-dubl">
-                                         <a class="arw-up" href="#r">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
@@ -70,10 +70,10 @@
                                  <th>Last date
                                     <span class="dis-blc">contacted
                                       <span class="sor-cont sor-cont-dubl">
-                                         <a class="arw-up" href="#r">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
@@ -82,10 +82,10 @@
                                  <th>Last date
                                      <span class="dis-blc"> analyzed
                                         <span class="sor-cont sor-cont-dubl">
-                                         <a class="arw-up" href="#r">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
@@ -93,30 +93,30 @@
                                  </th>
                                   <th>Contact Email
                                     <span class="sor-cont">
-                                         <a class="arw-up" href="#r">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
                                  </th>
                                   <th>Contact phone
                                     <span class="sor-cont">
-                                         <a class="arw-up" href="#r">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
                                  </th>
                                  <th>Linkidin url
                                     <span class="sor-cont">
-                                         <a class="arw-up" href="#r">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
@@ -125,28 +125,20 @@
                                  </th>
                                   <th>Stars/rating
                                     <span class="sor-cont">
-                                         <a class="arw-up" href="#r">
+                                         <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
-                                         <a class="arw-dwn" href="#d">
+                                         <a class="arw-dwn" >
                                             <i class="fa fa-long-arrow-up"></i>
                                          </a>
                                      </span>
 
                                  </th>
 
-                                 <th>
-                                      <!--<div class="checkbox-right-fx">
-                                          <div class="checkbox">
-                                            <input type="checkbox" value="1" id="l-all" class="css-checkbox" name="">
-                                            <label class="css-label" for="l-all"></label>
-                                          </div>
-                                      </div>-->
-                                 </th>
                              </thead>
                              <tbody>
-                                 <tr ng-repeat="talent in talentList">
-                                     <td><a href="#" class="tbl-link-td">[[talent.talent_name]]</a></td>
+                                 <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse">
+                                     <td><a href="" class="tbl-link-td">[[talent.talent_name]]</a></td>
                                      <td>[[talent.talent_company[0].designation | capitalize]]</td>
                                      <td>[[talent.talent_company[0].company]]</td>
                                      <td ng-show="[[talent.talent_project.length > 0]]">[[talent.talent_project[0].stage]] </span></td>
@@ -173,7 +165,7 @@
                                      </td>
 
                                      <td>
-                                        <a href="#" class="list-act-butn">[[talent.status]]</a>
+                                        <a href="" class="list-act-butn">[[talent.status]]</a>
                                         <div class="checkbox-right-fx">
                                             <div class="checkbox">
                                               <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
@@ -191,17 +183,17 @@
                        <div class="search-pagination">
                                 <ul class="pagination">
                                   <li>
-                                    <a href="#" aria-label="Previous">
+                                    <a href="" aria-label="Previous">
                                       <span aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
                                     </a>
                                   </li>
-                                  <li><a href="#">1</a></li>
-                                  <li><a href="#">2</a></li>
-                                  <li><a href="#">3</a></li>
-                                  <li><a href="#">4</a></li>
-                                  <li><a href="#">5</a></li>
+                                  <li><a href="">1</a></li>
+                                  <li><a href="">2</a></li>
+                                  <li><a href="">3</a></li>
+                                  <li><a href="">4</a></li>
+                                  <li><a href="">5</a></li>
                                   <li>
-                                    <a href="#" aria-label="Next">
+                                    <a href="" aria-label="Next">
                                       <span aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
                                     </a>
                                   </li>

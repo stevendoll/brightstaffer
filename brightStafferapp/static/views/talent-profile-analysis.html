@@ -58,8 +58,8 @@
               </div>
               <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a data-target="#analysis" aria-controls="home" role="tab" data-toggle="tab">Analysis</a></li>
-                <li role="presentation"><a data-target="#notes" aria-controls="profile" role="tab" data-toggle="tab">Notes</a></li>
-                <li role="presentation"><a data-target="#files" aria-controls="messages" role="tab" data-toggle="tab">Files</a></li>
+                <li role="presentation"><a  aria-controls="profile" role="tab" data-toggle="tab">Notes</a></li>
+                <li role="presentation"><a  aria-controls="messages" role="tab" data-toggle="tab">Files</a></li>
               </ul>
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="analysis">
@@ -72,7 +72,7 @@
                     <div ng-if ="company.is_current == true">
                     <div class="col-xs-12 padding-zero">
                       <div class="left-div search-result-current">Current</div>
-                      <div class="right-div search-detail-current">[[company.designation]]/<span class="bold-font">Full Stack Developer</span> - [[company.designation]] at [[company.company]] 2013 - Present
+                      <div class="right-div search-detail-current"><span class="bold-font">[[company.designation | capitalize]]</span> - at [[company.company | capitalize]] 2013 - Present
                       </div>
                     </div>
                    </div>
@@ -80,7 +80,7 @@
                     <div class="col-xs-12 padding-zero">
                       <div class="left-div search-result-past">Past</div>
                       <div class="right-div search-detail-past">
-                       Software Architech/<span class="bold-font">Full Stack Developer</span> - [[company.designation]] at [[company.company]] 2013 <span class="more"><a href="" data-toggle="modal" data-target="#more-comp">More</a></span>
+                       Software Architech/<span class="bold-font"></span> - [[company.designation | capitalize]] at [[company.company | capitalize]] 2013 <span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talentDetails)">More</a></span>
                       </div>
                     </div>
                   </div>
@@ -91,7 +91,7 @@
                     </div>
                     <div class="col-xs-12">
                       <div class="talent-analysis-concept-panel">
-                        <div class="top-concept-text">Top Concepts <span data-toggle="modal">All Concepts</span></div>
+                        <div class="top-concept-text">Top Concepts <span data-toggle="modal" data-target="#all-concept">All Concepts</span></div>
                         <div class="talent-progress" ng-repeat="concepts in talentDetails.talent_concepts">
                           <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[concepts.match]]%;">
@@ -135,7 +135,7 @@
                       <div class="recommended-panel">
                         <ul class="nav nav-tabs" role="tablist">
                           <li role="presentation" class="active"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab">Recent</a></li>
-                          <li role="presentation"><a href="#recco" aria-controls="recco" role="tab" data-toggle="tab">Recommended</a></li>
+                          <li role="presentation"><a>Recommended</a></li>
                         </ul>
                         <div class="cls"></div>
                         <div class="tab-content">
@@ -152,25 +152,25 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr>
+                                  <tr ng-repeat="proj in talentDetails.talent_project">
                                     <th scope="row" class="padd-left32">
-                                      <div data-color="#7a7a7a" data-percent="70" class="easy-pie-chart percentage easyPieChart pie-color" style="width: 60px; height: 60px; line-height: 60px; color: rgb(122, 122, 122);" pie-chart>
-                                        <span class="percent pie-txt">56.2%</span>
-                                        <canvas height="60" width="60"></canvas>
-                                        <canvas width="60" height="60"></canvas>
+                                      <div data-color="#7a7a7a" data-percent="[[proj.project_match]]" class="easy-pie-chart percentage easyPieChart pie-color" style="width: 60px; height: 60px; line-height: 60px; color: rgb(122, 122, 122);" pie-chart>
+                                        <span class="percent pie-txt">[[proj.project_match]]%</span>
+                                        <canvas height="[[proj.project_match]]" width="[[proj.project_match]]"></canvas>
+                                        <canvas width="[[proj.project_match]]" height="[[proj.project_match]]"></canvas>
                                       </div>
                                     </th>
                                     <td>
                                       <div class="table-circle-bg">
                                         <i class="fa fa-file-text"></i>
-                                        <div class="link-panel"><a href="">#fullstackdev</a><span><a href="">@accenture</a></span></div>
+                                        <div class="link-panel"><a href="">#[[proj.project]]</a><span><a href="">@[[proj.company_name]]</a></span></div>
                                       </div>
                                     </td>
-                                    <td><div class="rank-circle">1</div></td>
-                                    <td><div class="table-date-div">Dec 10, 2015</div></td>
-                                    <td class="interviewing-text">Interviewing</td>
+                                    <td><div class="rank-circle">[[proj.rank]]</div></td>
+                                    <td><div class="table-date-div">[[proj.get_date_added | dateFormat]]</div></td>
+                                    <td class="interviewing-text">[[proj.stage | dateFormat]]</td>
                                   </tr>
-                                  <tr>
+                                  <!--<tr>
                                     <th scope="row" class="padd-left32">
                                       <div data-color="#7a7a7a" data-percent="70" class="easy-pie-chart percentage easyPieChart pie-color" style="width: 60px; height: 60px; line-height: 60px; color: rgb(122, 122, 122);">
                                         <span class="percent pie-txt">56.2%</span>
@@ -187,7 +187,7 @@
                                     <td><div class="rank-circle">1</div></td>
                                     <td><div class="table-date-div">Dec 10, 2015</div></td>
                                     <td class="interviewing-text">Interviewing</td>
-                                  </tr>
+                                  </tr>-->
                                 </tbody>
                               </table>
                             </div>
@@ -491,6 +491,105 @@
   </div>
 </div>
 <!-- edit-recruiter-Modal-ends -->
+ <!-- add-project-Modal-starts -->
+<div class="modal fade" id="add-project" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="edit-modal-recruiter">
+          <span>Project</span>
+          <div class="cls"></div>
+          <div class="form-group export">
+            <select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
+            </select>
+          </div>
+          <div class="cls"></div>
+          <button type="" class="btn add-stage" id="add-talent" ng-click="addToProject(projectDD)">Add to Project</button>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- add-project-Modal-ends -->
+<!-- more-comp-Modal-starts -->
+<div class="modal fade" id="more-comp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="past-roles">Past Roles</div>
+        <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company">[[role.designation | capitalize]] at [[role.company]] 2010-2011</div>
+        <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
+        <div class="cls"></div>
+        <div class="edu-roles">Education</div>
+        <div class="past-roles-descp" ng-repeat="edu in selectedCandidate.talent_education">[[edu.education]] 2010-2011</div>
+        <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- more-comp-Modal-ends -->
+
+<!-- all-concepts-Modal-starts -->
+<div class="modal fade" id="all-concept" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="edit-modal-recruiter">
+          <span>All Concepts</span>
+          <div class="cls"></div>
+          <div class="talent-progress">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                <span class="text">Full Stack</span>
+                <span class="percentage">60%</span>
+              </div>
+            </div>
+          </div>
+          <div class="talent-progress">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                <span class="text">Full Stack</span>
+                <span class="percentage">60%</span>
+              </div>
+            </div>
+          </div>
+          <div class="talent-progress">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                <span class="text">Full Stack</span>
+                <span class="percentage">60%</span>
+              </div>
+            </div>
+          </div>
+          <div class="talent-progress">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                <span class="text">Full Stack</span>
+                <span class="percentage">60%</span>
+              </div>
+            </div>
+          </div>
+          <div class="talent-progress">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                <span class="text">Full Stack</span>
+                <span class="percentage">60%</span>
+              </div>
+            </div>
+          </div>
+          <div class="cls"></div>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- all-concepts-Modal-ends -->
 
 <div class="success-box" id="nameSuccess" style="display:none;">
     <span><strong>Success!</strong> Recruiter name is updated.</span>
