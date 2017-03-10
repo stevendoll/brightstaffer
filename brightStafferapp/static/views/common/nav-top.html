@@ -6,9 +6,9 @@
 						<!--<a class="navbar-minimalize minimalize-ui btn btn-default" minimaliza-sidebar href=""><span class="icon icon-unread"></span> </a>-->
 						</div>
 
-						<form role="search" class="navbar-form-custom" ui-sref="development">
+						<form role="search" name="searchForm"  method="post" ng-submit="tn.getSearchData()" class="navbar-form-custom">
 							<div class="form-group">
-								<input type="text" ng-attr-placeholder="[[searchPlaceholder]]" class="form-control search-icon" name="top-search" id="top-search">
+								<input type="text" ng-attr-placeholder="[[searchPlaceholder]]" class="form-control search-icon" name="top-search" id="top-search" ng-model="searchKeywords">
 							</div>
 						</form>
 		        </div>

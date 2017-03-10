@@ -247,11 +247,28 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
     }
 }
 
-function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location ){
+function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location, searchApis ){
+    $scope.searchKeywords = '';
     this.logout = function(){
           $cookieStore.remove('userData');
           $rootScope.globals = {};
           $state.go('login','');
+    }
+
+    this.getSearchData = function(){
+    console.log($scope.searchKeywords);
+      if($scope.searchKeywords){
+         var requestObject = {
+            'keyword':$scope.searchKeywords
+             };
+             searchApis.talentSearch(requestObject).then(function(response){
+                if(response.message == "success") {
+                    console.log(response);
+                  }else{
+                    console.log('error');
+                }
+             });
+      }
     }
 }
 
@@ -1260,6 +1277,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.talentCountEnd = 0;
      $scope.totalTalentCount = 0;
      $scope.rating = 0;
+     $scope.isEmailEditable = false;
+     $scope.isEmailAdd = false;
+     $scope.isContactEditable = false;
+     $scope.isContactAdd = false;
+     $scope.recruiterNameInput = '';
+     $scope.isName = false;
 
      $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
           $(".select-arrow").selectbox();
@@ -1278,17 +1301,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             console.log($scope.projectDD);
             });
         // var oldie = $.browser.msie && $.browser.version < 9;
-         $('.easy-pie-chart').each(function(){
-             $(this).easyPieChart({
-                 barColor: $(this).data('color'),
-                 trackColor: '#d7d7d7',
-                 scaleColor: false,
-                 lineCap: 'butt',
-                 lineWidth: 6,
-                 animate: 1000,
-                 size:60
-             }).css('color', $(this).data('color'));
-         });
+
        });
 
       angular.element(document).ready(function () {
@@ -1355,25 +1368,33 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          });
       }
 
-      $scope.updateRecruiterName = function(){             // function to fetch top 6 projects
-       console.log($scope.recruiter.recruiterName);
-        var requestObject = {
-        'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
-        'display_name': $scope.recruiter.recruiterName
-         };
-         talentApis.updateRecruiterName(requestObject).then(function(response){
-            if(response.message == "success") {
-              console.log(response);
-             $('#edit-recruiter').modal('hide');
-             $('#nameSuccess').css('display','block');
-             setTimeout(
-                    function () {
-                        $('#nameSuccess').css('display','none');
-                    }, 2000);
-              }else{
-                console.log('error');
-            }
-         });
+      $scope.updateRecruiterName = function(name){             // function to fetch top 6 projects
+       console.log(name);
+       if(name){
+            $scope.recruiter.recruiterName = name;
+            $('#nameUpdate').addClass('disabled');
+            $('#nameUpdate').css('pointer-events','none');
+            var requestObject = {
+            'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
+            'display_name': $scope.recruiter.recruiterName
+             };
+             talentApis.updateRecruiterName(requestObject).then(function(response){
+                if(response.message == "success") {
+                  console.log(response);
+                 $('#edit-recruiter').modal('hide');
+                 $('#nameSuccess').css('display','block');
+                 setTimeout(
+                        function () {
+                            $('#nameSuccess').css('display','none');
+                        }, 2000);
+                  }else{
+                    console.log('error');
+                }
+             });
+         }else{
+            $('#name-required').removeClass('ng-hide');
+             $scope.isName = true;
+         }
       }
 
       $scope.selectExportType = function(exportType){
@@ -1391,7 +1412,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      };
 
      $scope.loadProfileData = function(id, talent){
-        $rootScope.talentDetails = talent;
+        if(Object.keys($rootScope.talentDetails).length == 0){
+             $rootScope.talentDetails = talent;
+        }
         var requestObject = {
         'token': $rootScope.globals.currentUser.token,       // username field value
         'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
@@ -1399,6 +1422,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };
          talentApis.getCandidateProfile(requestObject).then(function(response){
               $rootScope.talentDetails = response;
+
          });
 
      }
@@ -1416,6 +1440,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.editRecruiter = function(){
+        $scope.isName = false;
         $('#recruiter-modal').modal('hide');
         $('#edit-recruiter').modal('show');
     }
@@ -1559,6 +1584,41 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          }
     }
 
+    $scope.showEdit = function(){
+      $scope.isEmailAdd = false;
+      if(!$scope.isEmailEditable){
+         $scope.isEmailEditable = true;
+      }else if($scope.isEmailEditable){
+        $scope.isEmailEditable = false;
+      }
+    }
+
+    $scope.showAdd = function(){
+      $scope.isEmailEditable = false;
+      if(!$scope.isEmailAdd){
+         $scope.isEmailAdd = true;
+      }else if($scope.isEmailAdd){
+        $scope.isEmailAdd = false;
+      }
+    }
+
+    $scope.showContactEdit = function(){
+      $scope.isContactAdd = false;
+      if(!$scope.isContactEditable){
+         $scope.isContactEditable = true;
+      }else if($scope.isContactEditable){
+        $scope.isContactEditable = false;
+      }
+    }
+
+    $scope.showContactAdd = function(){
+      $scope.isContactEditable = false;
+      if(!$scope.isContactAdd){
+         $scope.isContactAdd = true;
+      }else if($scope.isContactAdd){
+        $scope.isContactAdd = false;
+      }
+    }
 
 }
 

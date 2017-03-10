@@ -312,9 +312,27 @@ function talentApis($http,REQUEST_URL) {
 
     }
 
-
-
   }
+}
+
+
+function searchApis($http,REQUEST_URL) {
+   return{
+        talentSearch: function(data){
+        return $http({
+            url: REQUEST_URL+'talent_search/?term='+data.keyword,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
+        }
+
+   }
 }
 
 angular
@@ -330,4 +348,5 @@ angular
     .service('getTopSixProjects', getTopSixProjects)
     .service('getAllProjects', getAllProjects)
     .service('paginationData', paginationData)
-    .service('talentApis', talentApis);
+    .service('talentApis', talentApis)
+    .service('searchApis', searchApis);

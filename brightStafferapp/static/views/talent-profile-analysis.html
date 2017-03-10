@@ -4,11 +4,11 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="talent-analysis-div">
-            <div class="talent-analysis-image"><img src="static/img/a1.jpg" alt=""></div>
+            <div class="talent-analysis-image"><img src="static/img/dummyProfile.png" alt=""></div>
             <div class="talent-analysis-info-div">
               <div class="talent-analysis-name">[[talentDetails.talent_name]] <span>[[talentDetails.designation]] at [[talentDetails.talent_company[0].company]]</span></div>
               <div class="talent-analysis-qual">[[talentDetails.current_location]] <span></span> [[talentDetails.industry_focus]]</div>
-              <button type="" class="btn view-con-info hvr-fade">View Contact Info</button>
+              <button type="" class="btn view-con-info hvr-fade" data-toggle="modal" data-target="#contact-info">View Contact Info</button>
               <div class="linkedin-analysis"><i class="fa fa-linkedin-square"></i></div>
             </div>
             <div class="talent-analysis-activity">
@@ -18,7 +18,7 @@
               </div>
               <div class="talent-rec-panel">
                 <div class="left-div">Recruiter</div>
-                <div class="right-div">[[recruiter.recruiterName]] <span data-toggle="modal" data-target="#edit-recruiter">Edit</span></div>
+                <div class="right-div">[[recruiter.recruiterName | capitalize]] <span data-toggle="modal" data-target="#edit-recruiter">Edit</span></div>
               </div>
               <div class="talent-rec-panel border-bttm">
                 <div class="left-div">Shared with</div>
@@ -28,15 +28,8 @@
             <div class="talent-analysis-right-panel">
               <div class="active-bttn">Active</div>
               <div class="talent-analysis-star-panel">
-                <!--<div class="schedule-stars">-->
-                  <!--<i class="fa fa-star"></i>-->
-                  <!--<i class="fa fa-star"></i>-->
-                  <!--<i class="fa fa-star"></i>-->
-                  <!--<i class="fa fa-star"></i>-->
-                  <!--<i class="fa fa-star"></i>-->
-                <!--</div>-->
-                 <div class="col-md-12" ng-init="rating = [[talentDetails.rating]]">
-                   <div star-rating2 rating-value="rating" max="5" on-rating-selected="getSelectedRating(rating)"></div>
+                 <div class="col-md-12 padding-zero" ng-init="rating = [[talentDetails.rating]]">
+                   <div star-rating2 class="star-right-side" rating-value="rating" max="5" on-rating-selected="getSelectedRating(rating)"></div>
                  </div>
                <div ng-show="[[talentDetails.talent_project.length > 0]]">
                 <div class="schdule-list">[[talentDetails.talent_project[0].stage]] </div>
@@ -161,7 +154,7 @@
                                 <tbody>
                                   <tr>
                                     <th scope="row" class="padd-left32">
-                                      <div data-color="#7a7a7a" data-percent="70" class="easy-pie-chart percentage easyPieChart pie-color" style="width: 60px; height: 60px; line-height: 60px; color: rgb(122, 122, 122);">
+                                      <div data-color="#7a7a7a" data-percent="70" class="easy-pie-chart percentage easyPieChart pie-color" style="width: 60px; height: 60px; line-height: 60px; color: rgb(122, 122, 122);" pie-chart>
                                         <span class="percent pie-txt">56.2%</span>
                                         <canvas height="60" width="60"></canvas>
                                         <canvas width="60" height="60"></canvas>
@@ -417,4 +410,88 @@
     </div>
     <!-- tabs-panel-ends -->
 
+<!-- contact-info-Modal-starts -->
+<div class="modal fade" id="contact-info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="past-roles">Contact Info</div>
+        <div class="contact-info-modal-div">
+          <div class="left-section-div">Contact Email</div>
+          <div class="right-section-div">
+            <span>[[talentDetails.talent_email[0].email]]</span>
+            <div class="contact-edit">
+              <span ng-click="showEdit()">Edit</span>
+              <span ng-click="showAdd()">Add</span>
+            </div>
+          </div>
+          <div class="cls"></div>
+          <div class="contact-edit-sec" ng-show="isEmailEditable">
+            <input type="" class="form-control" placeholder="">
+            <button type="submit" class="btn contact-remove-bttn">Remove</button>
+            <button type="submit" class="btn contact-update-bttn">Update</button>
+            <button type="submit" class="btn contact-update-bttn">Cancel</button>
+          </div>
+          <div class="cls"></div>
+          <div class="contact-edit-sec" ng-show="isEmailAdd">
+            <input type="" class="form-control"  placeholder="">
+            <button type="submit" class="btn contact-update-bttn">Add</button>
+            <button type="submit" class="btn contact-update-bttn">Cancel</button>
+          </div>
+        </div>
+        <div class="contact-info-modal-div border-bttm">
+          <div class="left-section-div">Contact Phone</div>
+          <div class="right-section-div">
+            <span>[[talentDetails.talent_contact[0].contact]]</span>
+            <div class="contact-edit">
+              <span ng-click="showContactEdit()">Edit</span>
+              <span ng-click="showContactAdd()">Add</span>
+            </div>
+          </div>
+          <div class="cls"></div>
+          <div class="contact-edit-sec" ng-show="isContactEditable">
+            <input type="" class="form-control" placeholder="">
+            <button type="submit" class="btn contact-remove-bttn">Remove</button>
+            <button type="submit" class="btn contact-update-bttn">Update</button>
+            <button type="submit" class="btn contact-update-bttn">Cancel</button>
+          </div>
+          <div class="cls"></div>
+          <div class="contact-edit-sec" ng-show="isContactAdd">
+            <input type="" class="form-control"  placeholder="">
+            <button type="submit" class="btn contact-update-bttn">Add</button>
+            <button type="submit" class="btn contact-update-bttn">Cancel</button>
+          </div>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- contact-info-modal-ends -->
 
+<!-- edit-recruiter-Modal-starts -->
+<div class="modal fade" id="edit-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" ng-init="recruiterNameInput = recruiter.recruiterName">
+  <div class="modal-dialog add-talent-dialog" role="document" ng-init="isName = false">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="edit-modal-recruiter">
+          <span>Edit Recruiter</span>
+          <div class="form-group">
+            <input class="form-control" id="name" ng-model="recruiterNameInput"  autocomplete="off">
+            <span class="error" id="name-required" style="color:red;" ng-show="[[isName]]">Required.</span>
+          </div>
+          <div class="cls"></div>
+          <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(recruiterNameInput)">Update</button>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- edit-recruiter-Modal-ends -->
+
+<div class="success-box" id="nameSuccess" style="display:none;">
+    <span><strong>Success!</strong> Recruiter name is updated.</span>
+</div>

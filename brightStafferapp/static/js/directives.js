@@ -429,6 +429,28 @@ function tableScroll($timeout) {
   };
 }
 
+function pieChart($timeout) {
+  return {
+    restrict: 'A',
+        link : function (scope, element, attrs ) {
+              $timeout(function(){
+                   $('.easy-pie-chart').each(function(){
+                     $(this).easyPieChart({
+                         barColor: $(this).data('color'),
+                         trackColor: '#d7d7d7',
+                         scaleColor: false,
+                         lineCap: 'butt',
+                         lineWidth: 6,
+                         animate: 1000,
+                         size:60
+                     }).css('color', $(this).data('color'));
+              });
+        });
+      }
+  }
+
+}
+
 /**
  *
  * Pass all functions into module
@@ -450,4 +472,5 @@ angular
     .directive('dropDown', dropDown)
     .directive('starRating',starRating)
     .directive('starRating2',starRating2)
-    .directive('tableScroll',tableScroll);
+    .directive('tableScroll',tableScroll)
+    .directive('pieChart',pieChart);
