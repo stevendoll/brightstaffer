@@ -449,5 +449,5 @@ angular
     .directive('dropZone', dropZone)
     .directive('dropDown', dropDown)
     .directive('starRating',starRating)
-    .directive('starRating2',starRating2);
+    .directive('starRating2',starRating2)
     .directive('tableScroll',tableScroll);
