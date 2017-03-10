@@ -28,13 +28,16 @@
             <div class="talent-analysis-right-panel">
               <div class="active-bttn">Active</div>
               <div class="talent-analysis-star-panel">
-                <div class="schedule-stars">
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                </div>
+                <!--<div class="schedule-stars">-->
+                  <!--<i class="fa fa-star"></i>-->
+                  <!--<i class="fa fa-star"></i>-->
+                  <!--<i class="fa fa-star"></i>-->
+                  <!--<i class="fa fa-star"></i>-->
+                  <!--<i class="fa fa-star"></i>-->
+                <!--</div>-->
+                 <div class="col-md-12" ng-init="rating = [[talentDetails.rating]]">
+                   <div star-rating2 rating-value="rating" max="5" on-rating-selected="getSelectedRating(rating)"></div>
+                 </div>
                <div ng-show="[[talentDetails.talent_project.length > 0]]">
                 <div class="schdule-list">[[talentDetails.talent_project[0].stage]] </div>
                 <div class="schdule-list-date">[[talentDetails.get_date | dateFormat]]</div>

@@ -33,18 +33,8 @@
                   <div class="talentsearch-right-panel">
                     <div class="active-bttn">[[talent.status]]</div>
                     <div class="search-star-panel">
-                      <!--<div class="schedule-stars">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star-o"></i>
-                        <i class="fa fa-star-o"></i>
-                      </div>-->
-                         <!--<div star-rating ng-model="rate_[[talent.rating]]" max="5" on-rating-select="rateFunction(talent.rating)"></div>-->
-                        <div class="col-md-12 padding-zero" ng-init="rating = [[talent.rating]]">
-                            <!--<div ng-repeat="rating in ratings">-->
-                                <div star-rating rating-value="rating" max="5" on-rating-selected="getSelectedRating(rating)" class="star-right-side"></div>
-                            <!--</div>-->
+                        <div class="col-md-12" ng-init="rating = [[talent.rating]]">
+                                <div star-rating rating-value="rating" max="5" ></div>
                         </div>
                       <div ng-show="[[talent.talent_project.length > 0]]">
                       <div class="schdule-list">[[talent.talent_project[0].stage | capitalize]]</div>

@@ -374,7 +374,60 @@ function starRating() {
     }
   }
 
+function starRating2() {
+    return {
+        restrict: 'A',
+        template: '<ul class="rating">' +
+            '<li ng-repeat="star in stars" ng-class="star" ng-click="toggle($index)">' +
+            '\u2605' +
+            '</li>' +
+            '</ul>',
+        scope: {
+            ratingValue: '=',
+            max: '=',
+            onRatingSelected: '&'
+        },
+        link: function (scope, elem, attrs) {
 
+            var updateStars = function () {
+                scope.stars = [];
+                for (var i = 0; i < scope.max; i++) {
+                    scope.stars.push({
+                        filled: i < scope.ratingValue
+                    });
+                }
+            };
+
+            scope.toggle = function (index) {
+                scope.ratingValue = index + 1;
+                scope.onRatingSelected({
+                    rating: index + 1
+                });
+            };
+
+            scope.$watch('ratingValue', function (oldVal, newVal) {
+                if (newVal) {
+                    updateStars();
+                }
+            });
+        }
+    }
+  }
+
+function tableScroll($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $(".tabl-scrol").mCustomScrollbar({
+                scrollButtons:{ enable: true },
+                axis:"x", // horizontal scrollbar
+
+            });
+      });
+    }
+  };
+}
 
 /**
  *
@@ -395,4 +448,6 @@ angular
     .directive('myDirective', myDirective)
     .directive('dropZone', dropZone)
     .directive('dropDown', dropDown)
-    .directive('starRating',starRating);
+    .directive('starRating',starRating)
+    .directive('starRating2',starRating2);
+    .directive('tableScroll',tableScroll);

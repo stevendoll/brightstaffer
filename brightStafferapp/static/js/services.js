@@ -14,20 +14,20 @@ angular
 
 function loginService($http ,REQUEST_URL){
     return {
-      userLogin: function(data){
-        return $http({
-            url: REQUEST_URL+'user_login/',
-            method: "POST", // or "get"
-            headers: {
-              'Content-Type': 'application/json; charset=utf-8',
-            },
-            data: JSON.stringify(data),
-            dataType:'json',
-            }).then( function (response){
-                return response.data;
-           });
-        }   
-    } 
+        userLogin: function(data){
+            return $http({
+                url: REQUEST_URL+'user_login/',
+                method: "POST", // or "get"
+                headers: {
+                  'Content-Type': 'application/json; charset=utf-8',
+                },
+                data: JSON.stringify(data),
+                dataType:'json',
+                }).then( function (response){
+                    return response.data;
+               });
+        }
+    }
 }
 
 function signupService($http ,REQUEST_URL){
@@ -84,39 +84,39 @@ function resetPasswordService($http ,REQUEST_URL){
     }
  }
 
- function jobPostService($http ,REQUEST_URL){
+function jobPostService($http ,REQUEST_URL){
     return {
-    jobPost: function(data){
-    return $http({
-        url: REQUEST_URL+'job_posting/',
-        method: "POST", // or "get"
-        headers: {
-					'Content-Type': 'application/json; charset=utf-8',
-				},
-        data: JSON.stringify(data),
-        dataType:'json',
-        }).then( function (response){
-            return response.data;
-       });
-      }
+        jobPost: function(data){
+            return $http({
+                url: REQUEST_URL+'job_posting/',
+                method: "POST", // or "get"
+                headers: {
+                            'Content-Type': 'application/json; charset=utf-8',
+                        },
+                data: JSON.stringify(data),
+                dataType:'json',
+                }).then( function (response){
+                    return response.data;
+               });
+        }
     }
- }
+}
 
  function alchemyAnalysis($http ,REQUEST_URL){
     return {
-    alchemyAPI: function(data){
-    return $http({
-        url: REQUEST_URL+'alchemy_analysis/',
-        method: "POST", // or "get"
-        headers: {
-					'Content-Type': 'application/json; charset=utf-8',
-				},
-        data: JSON.stringify(data),
-        dataType:'json',
-        }).then( function (response){
-            return response.data;
-       });
-      }
+        alchemyAPI: function(data){
+            return $http({
+                url: REQUEST_URL+'alchemy_analysis/',
+                method: "POST", // or "get"
+                headers: {
+                            'Content-Type': 'application/json; charset=utf-8',
+                        },
+                data: JSON.stringify(data),
+                dataType:'json',
+                }).then( function (response){
+                    return response.data;
+               });
+          }
     }
  }
 
@@ -280,10 +280,41 @@ function talentApis($http,REQUEST_URL) {
         }
         xhr.send(formData);
 
-      }
+      },
 
+    deleteTalents: function(data){
+        return $http({
+            url: REQUEST_URL+'delete_talent/?talent='+data.talent+'&recruiter='+data.recruiter+'&inactive='+data.inactive,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
+
+    },
+
+    updateRatings: function(data){
+        return $http({
+            url: REQUEST_URL+'update_rank/?talent_id='+data.id+'&rating='+data.rating,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
 
     }
+
+
+
+  }
 }
 
 angular
