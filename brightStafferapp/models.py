@@ -242,6 +242,7 @@ class TalentProject(models.Model):
     def company_name(self):
         return self.project.company_name
 
+    @property
     def get_date_added(self):
         return self.date_added.strftime('%d/%m/%Y')
 
@@ -271,9 +272,11 @@ class TalentStage(models.Model):
     date_created = models.DateField(verbose_name='Create Date', auto_now_add=True)
     date_updated = models.DateField(verbose_name='Update Date', auto_now=True)
 
+    @property
     def get_date_created(self):
         return self.date_created.strftime('%d/%m/%Y')
 
+    @property
     def get_date_updated(self):
         return self.date_updated.strftime('%d/%m/%Y')
 

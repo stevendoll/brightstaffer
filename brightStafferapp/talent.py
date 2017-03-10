@@ -15,7 +15,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, HttpResponse
 from django.db.models import Q
-from django.http import QueryDict
+from elasticsearch import Elasticsearch
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -352,3 +352,43 @@ def talent_validation(user_data):
         return False
     else:
         return True
+
+
+class TalentSearch(View):
+
+    def get(self, request):
+        es = Elasticsearch()
+        term = self.request.GET['term']
+        res = es.search(index="haystack", doc_type="modelresult",
+                        body={"query": {"multi_match":
+                                            {
+                                                "query": term,
+                                                "fields": ["talent_name", "email", "designation", "concepts", "company", "education",
+                                                        "current_location", "industry_focus", "stages", "project"]
+                                            }
+                                        },
+                                        "highlight": {
+                                            "fields": {
+                                                "recruiter": {}
+                                            }
+                                        }
+                              }
+                        )
+        for result in res['hits']['hits']:
+            emails = result['_source']['email']
+            concepts = result['_source']['concepts']
+            education = result['_source']['education']
+            project = result['_source']['project']
+            contact = result['_source']['contact']
+            company = result['_source']['company']
+            stages = result['_source']['stages']
+
+            result['_source']['email'] = json.loads(emails)
+            result['_source']['contact'] = json.loads(contact)
+            result['_source']['project'] = json.loads(project)
+            result['_source']['education'] = json.loads(education)
+            result['_source']['concepts'] = json.loads(concepts)
+            result['_source']['company'] = json.loads(company)
+            result['_source']['stages'] = json.loads(stages)
+
+        return HttpResponse(json.dumps(res))

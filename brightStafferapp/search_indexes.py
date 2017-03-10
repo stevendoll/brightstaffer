@@ -23,19 +23,33 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
     education = indexes.MultiValueField()
     project = indexes.MultiValueField()
     concepts = indexes.MultiValueField()
+    stages = indexes.MultiValueField()
     current_location = indexes.CharField(model_attr='current_location')
     rating = indexes.CharField(model_attr='rating')
     status = indexes.CharField(model_attr='status')
     create_date = indexes.DateTimeField(model_attr='create_date')
-    suggestions = indexes.FacetCharField()
+    # suggestions = indexes.FacetCharField()
 
-    def prepare(self, obj):
-        prepared_data = super(TalentIndex, self).prepare(obj)
-        prepared_data['suggestions'] = prepared_data['text']
-        return prepared_data
+    # def prepare(self, obj):
+    #     prepared_data = super(TalentIndex, self).prepare(obj)
+    #     prepared_data['suggestions'] = prepared_data['text']
+    #     return prepared_data
 
     def get_model(self):
         return Talent
+
+    def prepare_stages(self, obj):
+        stages = []
+        for stage in obj.talent_stages.all():
+            sta = dict()
+            sta['talent'] = obj.talent_name
+            sta['project'] = stage.project.project_name
+            sta['details'] = stage.details
+            sta['notes'] = stage.notes
+            sta['date_created'] = str(stage.get_date_created)
+            sta['date_updated'] = str(stage.get_date_updated)
+            stages.append(sta)
+        return json.dumps(stages)
 
     def prepare_email(self, obj):
         emails =[]
@@ -64,8 +78,8 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             edu['talent'] = obj.talent_name
             edu['education'] = education.education.name
             edu['course'] = education.course
-            edu['start_date'] = str(education.start_date)
-            edu['end_date'] = str(education.end_date)
+            edu['start_date'] = str(education.get_start_date)
+            edu['end_date'] = str(education.get_end_date)
             educations.append(edu)
         return json.dumps(educations)
 
@@ -75,8 +89,8 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             comp = dict()
             comp['company'] = company.company.company_name
             comp['talent'] = obj.talent_name
-            comp['start_date'] = str(company.start_date)
-            comp['end_date'] = str(company.end_date)
+            comp['start_date'] = str(company.get_start_date)
+            comp['end_date'] = str(company.get_end_date)
             comp['designation'] = company.designation
             comp['is_current'] = company.is_current
             companies.append(comp)
@@ -91,7 +105,7 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             proj['project_match'] = project.project_match
             proj['rank'] = project.rank
             #proj['stage'] = project.stage
-            proj['date_added'] = str(project.date_added)
+            proj['date_added'] = str(project.get_date_added)
             projects.append(proj)
         return json.dumps(projects)
 
@@ -105,7 +119,7 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             con['talent'] = obj.talent_name
             con['concept'] = concept.concept.concept
             con['match'] = concept.match
-            con['date_created'] = str(concept.date_created)
+            con['date_created'] = str(concept.get_date_created)
             concepts.append(con)
         return json.dumps(concepts)
 
