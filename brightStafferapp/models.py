@@ -147,9 +147,9 @@ class Talent(models.Model):
 
 
 class TalentRecruiter(models.Model):
-    talent = models.ForeignKey(Talent, null=False, verbose_name='Talent ID')
+    talent = models.ForeignKey(Talent, null=False, verbose_name='Talent ID', related_name="talent_active")
     recruiter = models.ForeignKey(User, null=False, verbose_name='Recruiter ID')
-    inactive = models.BooleanField(verbose_name='Inactive User', default=False, null=False)
+    is_active = models.BooleanField(default=False, null=False)
     date_updated = models.DateField(verbose_name='Update Date', auto_now=True)
 
     def get_date_updated(self):
@@ -230,7 +230,7 @@ class TalentProject(models.Model):
     project = models.ForeignKey(Projects)
     project_match = models.CharField(max_length=20, null=True, blank=True)
     rank = models.IntegerField(null=True, blank=True)
-    stage = models.CharField(max_length=50, choices=STAGE_CHOICES, default='Contacted',)
+    # stage = models.CharField(max_length=50, choices=STAGE_CHOICES, default='Contacted',)
     date_added = models.DateField(auto_now_add=True, null=True, blank=True)
     # last_update = models.DateField(auto_now=True, blank=True, null=True)
 

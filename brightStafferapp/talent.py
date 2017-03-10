@@ -44,8 +44,9 @@ class TalentList(generics.ListCreateAPIView):
             return super(TalentList, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Talent.objects.filter(recruiter__username=self.request.query_params['recruiter']) \
-            .order_by('-create_date')
+        queryset = super(TalentList, self).get_queryset()
+        queryset = queryset.filter(talent_active__is_active=True)
+        return queryset
 
     def list(self, request, *args, **kwargs):
         response = super(TalentList, self).list(request, *args, **kwargs)
@@ -318,27 +319,30 @@ class TalentUpdateRank(View):
         if not talent_objs:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
 
-        updated=Talent.objects.filter(id=talent).update(rating=request.GET['rating'])
+        updated = Talent.objects.filter(id=talent).update(rating=request.GET['rating'])
         if updated:
             context['message'] = 'success'
         return util.returnSuccessShorcut(context)
 
 
-class DeleteTalent(View):
+class DeleteTalent(generics.ListCreateAPIView):
+    queryset = TalentRecruiter.objects.all()
+    serializer_class = TalentProjectStageSerializer
+    http_method_names = ['get', 'post', 'delete']
 
-    def get(self, request):
+    def delete(self, request):
         context = {}
-        talent = request.GET['talent']
         recruiter = request.GET['recruiter']
-        print (recruiter)
-        inactive=request.GET['inactive']
-        talent_objs = Talent.objects.filter(id=talent)
-        if not talent_objs:
-            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
-
-        updated = TalentRecruiter.objects.filter(talent=talent_objs[0],recruiter__username=recruiter).update(inactive=inactive)
-        if updated:
-            context['message'] = 'success'
+        is_active = request.GET['is_active']
+        talent_id_list = request.GET.getlist('talent[]')[0].split(',')
+        for talent_id in talent_id_list:
+            talent_objs = Talent.objects.filter(id=talent_id)
+            if not talent_objs:
+                return util.returnErrorShorcut(403, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
+            updated = TalentRecruiter.objects.filter(talent=talent_objs, recruiter__username=recruiter)\
+                .update(is_active=is_active)
+            if updated:
+                context['message'] = 'success'
         return util.returnSuccessShorcut(context)
 
 

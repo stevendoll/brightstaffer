@@ -79,7 +79,7 @@ class TalentStageAdmin(admin.ModelAdmin):
 
 
 class TalentRecruiterAdmin(admin.ModelAdmin):
-    list_display = ('id','talent', 'recruiter', 'inactive')
+    list_display = ('id','talent', 'recruiter', 'is_active')
     list_filter = ('talent',)
 
 admin.site.register(Projects, ProjectsAdmin)
