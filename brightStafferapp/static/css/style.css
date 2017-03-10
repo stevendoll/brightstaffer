@@ -10585,7 +10585,7 @@ input[type=password]
   float: left;
   font-family: 'open_sansregular';
   font-size: 14px;
-  color: #575757;
+  color: #000000;
   margin: 15px 0px 10px 0px;
 }
 
@@ -10795,6 +10795,11 @@ input[type=password]
   color: #6a6a6a;
   font-family: 'open_sansregular';
   text-align: right;
+}
+
+.star-right-side {
+  width: auto;
+  float: right;
 }
 
 .schdule-list-date {
@@ -11761,7 +11766,7 @@ ul.rating {
     font-size:20px;
 }
 .rating .filled {
-    color: orangered;
+    color: #f8ac59;
 }
 .clear{
   margin-top:20px;

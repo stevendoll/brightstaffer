@@ -1292,6 +1292,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
        });
       angular.element(document).ready(function () {
             $scope.getTalents();
+            $(".tabl-scrol").mCustomScrollbar({
+                scrollButtons:{ enable: true },
+                axis:"x", // horizontal scrollbar
+
+            });
 
        });
 
