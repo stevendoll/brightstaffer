@@ -363,9 +363,6 @@ class UpdateRecruiter(View):
     def dispatch(self, request, *args, **kwargs):
         return super(UpdateRecruiter, self).dispatch(request, *args, **kwargs)
 
-    # def get(self, request):
-    #     return HttpResponse("405 ERROR:-Method is not allowed")
-
     def get(self, request):
         param_dict = {}
         recruiter = request.GET['recruiter']

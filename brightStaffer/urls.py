@@ -45,10 +45,10 @@ urlpatterns = [
     url(r'^talent_email/(?P<email>[0-9]+)/$', talent.TalentEmailAPI.as_view()),
     url(r'^talent_project_add/$', talent.TalentProjectAddAPI.as_view()),
     url(r'^talent_add_stage/$', talent.TalentStageAddAPI.as_view()),
-    #url(r'^talent_edit_stage/$', talent.TalentStageEditAPI.as_view()),
-    # url(r'^talent_delete_stage/$', talent.TalentStageDeletePI.as_view()),
+    url(r'^talent_edit_stage/$', talent.TalentStageEditAPI.as_view()),
+    url(r'^talent_delete_stage/$', talent.TalentStageDeletePI.as_view()),
     url(r'^update_rank/$', talent.TalentUpdateRank.as_view()),
-    # url(r'^delete_talent/$', talent.DeleteTalent.as_view()),
+    url(r'^delete_talent/$', talent.DeleteTalent.as_view()),
     url(r'', views.home),
 
 ]

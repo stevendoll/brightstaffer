@@ -1,7 +1,7 @@
 from django.contrib import admin
 from brightStafferapp.models import Projects, Concept, Talent, Company, TalentCompany, Education, TalentEducation, \
     TalentProject, TalentConcept, ProjectConcept, FileUpload, PdfImages, TalentEmail, TalentContact, TalentStage, \
-    Recruiter
+    Recruiter,TalentRecruiter
 
 
 class TalentCompanyInline(admin.TabularInline):
@@ -77,6 +77,11 @@ class TalentStageAdmin(admin.ModelAdmin):
     list_display = ('id','talent', 'project', 'stage', 'details', 'notes', 'date_created')
     list_filter = ('talent',)
 
+
+class TalentRecruiterAdmin(admin.ModelAdmin):
+    list_display = ('id','talent', 'recruiter', 'inactive')
+    list_filter = ('talent',)
+
 admin.site.register(Projects, ProjectsAdmin)
 admin.site.register(Concept, ConceptsAdmin)
 admin.site.register(Talent, TalentAdmin)
@@ -91,4 +96,5 @@ admin.site.register(PdfImages)
 admin.site.register(TalentEmail, TalentEmailAdmin)
 admin.site.register(TalentContact, TalentContactAdmin)
 admin.site.register(TalentStage, TalentStageAdmin)
+admin.site.register(TalentRecruiter,TalentRecruiterAdmin)
 admin.site.register(Recruiter)

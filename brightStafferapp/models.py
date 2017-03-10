@@ -131,7 +131,7 @@ class Talent(models.Model):
     rating = models.IntegerField(default=0)
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
-    inactive = models.BooleanField(verbose_name='Inactive User', default=False, null=False)
+
 
     class Meta:
         verbose_name_plural = 'Talent'
@@ -144,6 +144,16 @@ class Talent(models.Model):
     @property
     def get_date(self):
         return self.create_date.date().strftime('%d/%m/%Y')
+
+
+class TalentRecruiter(models.Model):
+    talent = models.ForeignKey(Talent, null=False, verbose_name='Talent ID')
+    recruiter = models.ForeignKey(User, null=False, verbose_name='Recruiter ID')
+    inactive = models.BooleanField(verbose_name='Inactive User', default=False, null=False)
+    date_updated = models.DateField(verbose_name='Update Date', auto_now=True)
+
+    def get_date_updated(self):
+        return self.date_updated.strftime('%d/%m/%Y')
 
 
 class TalentEmail(models.Model):
