@@ -9,7 +9,7 @@ import django.db.models.options as options
 
 
 class TalentIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True)
+    text = indexes.CharField(document=True, use_template=False)
     id = indexes.CharField(model_attr='id')
     talent_name = indexes.CharField(model_attr='talent_name')
     designation = indexes.CharField(model_attr='designation')

@@ -296,7 +296,7 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         return util.returnSuccessShorcut(context)
 
 
-class TalentStageDeletePI(generics.ListCreateAPIView):
+class TalentStageDeleteAPI(generics.ListCreateAPIView):
     queryset = TalentStage.objects.all()
     serializer_class = TalentProjectStageSerializer
     http_method_names = ['get', 'post','delete']
@@ -366,11 +366,6 @@ class TalentSearch(View):
                                                         "current_location", "industry_focus", "stages", "project"]
                                             }
                                         },
-                                        "highlight": {
-                                            "fields": {
-                                                "recruiter": {}
-                                            }
-                                        }
                               })
         res = es.search(index="haystack", doc_type="modelresult",
                         body=body
