@@ -273,6 +273,10 @@ class TalentStage(models.Model):
     date_created = models.DateField(verbose_name='Create Date', auto_now_add=True)
     date_updated = models.DateField(verbose_name='Update Date', auto_now=True)
 
+    class Meta:
+        verbose_name_plural = "Talent Stages"
+        ordering = ('-date_created',)
+
     @property
     def get_date_created(self):
         return self.date_created.strftime('%d/%m/%Y')
