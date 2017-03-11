@@ -235,6 +235,7 @@ class TalentProjectAddAPI(View):
         return util.returnSuccessShorcut(context)
 
 
+# View Talent's Current stage for a sinlge project and Add Talent's stage for a single project
 class TalentStageAddAPI(generics.ListCreateAPIView):
     queryset = TalentStage.objects.all()
     serializer_class = TalentProjectStageSerializer
@@ -268,7 +269,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['message'] = 'success'
         return util.returnSuccessShorcut(context)
 
-
+# Edit Talent's Stage
 class TalentStageEditAPI(generics.ListCreateAPIView):
     queryset = TalentStage.objects.all()
     serializer_class = TalentProjectStageSerializer
@@ -295,7 +296,7 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
             context['message'] = 'success'
         return util.returnSuccessShorcut(context)
 
-
+# Delete Talent's project Stage
 class TalentStageDeleteAPI(generics.ListCreateAPIView):
     queryset = TalentStage.objects.all()
     serializer_class = TalentProjectStageSerializer
@@ -309,6 +310,20 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
             return util.returnErrorShorcut(400, 'No entry found or already deleted')
         return util.returnSuccessShorcut(context)
 
+
+# View All Talent's project(Single) stages
+class TalentAllStageDetailsAPI(generics.ListCreateAPIView):
+    queryset = TalentStage.objects.all()
+    serializer_class = TalentProjectStageSerializer
+    http_method_names = ['get', 'post']
+
+    def get_queryset(self):
+        queryset = super(TalentAllStageDetailsAPI, self).get_queryset()
+        talent_id = self.request.query_params.get('talent_id')
+        project_id = self.request.query_params.get('project_id')
+        #stage_id = self.request.query_params.get('stage_id')
+        queryset = queryset.filter(talent_id=talent_id, project_id=project_id)
+        return queryset
 
 class TalentUpdateRank(View):
 
