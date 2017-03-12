@@ -150,6 +150,7 @@ class TalentRecruiter(models.Model):
     is_active = models.BooleanField(default=False, null=False)
     date_updated = models.DateField(verbose_name='Update Date', auto_now=True)
 
+    @property
     def get_date_updated(self):
         return self.date_updated.strftime('%d/%m/%Y')
 
