@@ -46,8 +46,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                      $rootScope.totalProjectCount = response.count;
                      $rootScope.allProjectList = response.published_projects;
                      for(var i=0;i<$rootScope.allProjectList.length;i++){
-                         var project = {name:$rootScope.allProjectList[i].project_name,
-                                        value:$rootScope.allProjectList[i].id};
+                         var project = {name:'#'+$rootScope.allProjectList[i].project_name,
+                                        value:'#'+$rootScope.allProjectList[i].id};
                             $rootScope.projectListView.push(project);
                          }
                      $rootScope.projectCountEnd = response.published_projects.length;
@@ -1283,6 +1283,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.isContactAdd = false;
      $scope.recruiterNameInput = '';
      $scope.isName = false;
+     $scope.isEmail = false;
+     $scope.isContact = false;
+     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;  //email validation pattern
+     $scope.phonePattern = /^(?!0+$)\d{8,}$/;
+//^[0-9]{10}$/;
+
+     $scope.candidateEmailUpdate;
+     $scope.candidateEmailAdd;
 
      $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
           $(".select-arrow").selectbox();
@@ -1412,6 +1420,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      };
 
      $scope.loadProfileData = function(id, talent){
+     $('html, body').animate({ scrollTop: 0 }, 'fast');
         if(Object.keys($rootScope.talentDetails).length == 0){
              $rootScope.talentDetails = talent;
         }
@@ -1452,6 +1461,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         else{
           $scope.currentTalentId = '';
         }
+        $('#add-talent-btn').removeClass('disabled');
+        $('#add-talent-btn').css('pointer-events','');
+        $('#projectListD').selectbox();
         $('#add-project').modal('show');
     }
 
@@ -1462,7 +1474,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if($scope.projectDD != ('Select Project' || 'Search Project')){
               for(var i=0;i<$rootScope.allProjectList.length;i++)
                {
-                 if($rootScope.allProjectList[i].project_name == $scope.projectDD)
+                 if($rootScope.allProjectList[i].project_name == $scope.projectDD.split('#')[1])
                     {
                       selectedProjectId = $rootScope.allProjectList[i].id;
                       break;
@@ -1481,8 +1493,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          }
 
         if(selectedProjectId && talent.length > 0){
-            $('#add-talent').addClass('disabled');
-            $('#add-talent').css('pointer-events','none');
+            $('#add-talent-btn').addClass('disabled');
+            $('#add-talent-btn').css('pointer-events','none');
             var formData = new FormData();
              formData.append('token', $rootScope.globals.currentUser.token);
              formData.append('recruiter', $rootScope.globals.currentUser.user_email);
@@ -1492,11 +1504,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              function requestCallback(response) {
                   response = JSON.parse(response);
                   console.log(response);
+
                   $('#add-project').modal('hide');
+                  $('html, body').animate({ scrollTop: 0 }, 'fast');
                   $('#projectSuccess').css('display','block');
                   setTimeout(function () {
                         $('#projectSuccess').css('display','none');
-                    }, 2000);
+                    }, 10000);
                 }
          }
     }
@@ -1572,6 +1586,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              talentApis.deleteTalents(requestObject).then(function(response){
                 if(response.message == "success") {
                  $('#delete-talent-popup').modal('hide');
+                 $('html, body').animate({ scrollTop: 0 }, 'fast');
                  $('#deleteSuccess').css('display','block');
                  setTimeout(
                         function () {
@@ -1584,9 +1599,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          }
     }
 
-    $scope.showEdit = function(){
+    $scope.showEdit = function(talentEmail){
       $scope.isEmailAdd = false;
       if(!$scope.isEmailEditable){
+        $scope.candidateEmail = talentEmail[0].email;
          $scope.isEmailEditable = true;
       }else if($scope.isEmailEditable){
         $scope.isEmailEditable = false;
@@ -1602,9 +1618,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
       }
     }
 
-    $scope.showContactEdit = function(){
+    $scope.showContactEdit = function(talentContact){
       $scope.isContactAdd = false;
       if(!$scope.isContactEditable){
+       $scope.candidateContact = talentContact[0].contact;
          $scope.isContactEditable = true;
       }else if($scope.isContactEditable){
         $scope.isContactEditable = false;
@@ -1637,6 +1654,167 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
       }
    }
+
+    $scope.allConcepts = function(talentConcepts){
+        if(talentConcepts.length > 5){
+            $scope.talentData = talentConcepts;
+            $('#all-concept').modal('show');
+        }
+    }
+
+    $scope.allMetrics = function(talentCareer){
+        if(talentCareer.length > 2){
+            $scope.talentCareer = talentCareer;
+            $('#all-metrics').modal('show');
+        }
+    }
+
+    $scope.closeCandidateInfo = function(){
+    console.log('closed')
+     $scope.isEmailEditable = false;
+     $scope.isEmailAdd = false;
+     $scope.isContactEditable = false;
+     $scope.isContactAdd = false;
+     $scope.isEmail = false;
+     $scope.isContact = false;
+     $('#update_email').removeClass('disabled');
+     $('#add_email').removeClass('disabled');
+     $('#update_contact').removeClass('disabled');
+     $('#add_contact').removeClass('disabled');
+     $('#update_contact').css('pointer-events','');
+     $('#update_email').css('pointer-events','');
+     $('#add_contact').css('pointer-events','');
+     $('#add_email').css('pointer-events','');
+
+     $('#contact-info').modal('hide');
+    }
+
+    $scope.cancelPopup = function(){
+     $scope.isEmailEditable = false;
+     $scope.isEmailAdd = false;
+     $scope.isContactEditable = false;
+     $scope.isContactAdd = false;
+     $scope.isEmail = false;
+     $scope.isContact = false;
+    }
+
+
+        $scope.updateTalentEmail = function(id , oldEmail , candidateEmail){
+        console.log(candidateEmail);
+       if(candidateEmail){
+            $('#update_email').addClass('disabled');
+            $('#update_email').css('pointer-events','none');
+            var formData = new FormData();
+             formData.append('token', $rootScope.globals.currentUser.token);
+             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+             formData.append('talent_id', id);
+             formData.append('email',oldEmail);
+             formData.append('updated_email',candidateEmail);
+             talentApis.addEmail(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+                  //candidateEmail ='';
+                  $scope.closeCandidateInfo();
+                  $('#emailUpdated').css('display','block');
+                  setTimeout(function () {
+                        $('#emailUpdated').css('display','none');
+                    }, 5000);
+                }
+       }else{
+            $scope.isEmail = true;
+       }
+    }
+
+    $scope.addEmail = function(id , oldEmail, candidateEmailAdd){
+    console.log(candidateEmailAdd);
+       if(candidateEmailAdd){
+            $('#add_email').addClass('disabled');
+            $('#add_email').css('pointer-events','none');
+            var formData = new FormData();
+             formData.append('token', $rootScope.globals.currentUser.token);
+             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+             formData.append('talent_id', id);
+             formData.append('email',candidateEmailAdd);
+             talentApis.addEmail(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+                  $scope.closeCandidateInfo();
+                  //candidateEmailAdd ='';
+                  $('#emailSuccess').css('display','block');
+                  setTimeout(function () {
+                        $('#emailSuccess').css('display','none');
+                    }, 2000);
+                }
+       }else{
+            $scope.isEmail = true;
+       }
+    }
+
+    $scope.addContact = function(id , oldContact, candidateContact){
+    console.log(candidateContact);
+       if(candidateContact){
+            $('#add_contact').addClass('disabled');
+            $('#add_contact').css('pointer-events','none');
+            var formData = new FormData();
+             formData.append('token', $rootScope.globals.currentUser.token);
+             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+             formData.append('talent_id', id);
+             formData.append('contact',candidateContact);
+             talentApis.talentContact(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+                  $scope.closeCandidateInfo();
+                 // candidateContact ='';
+                  $('#contactSuccess').css('display','block');
+                  setTimeout(function () {
+                        $('#contactSuccess').css('display','none');
+                    }, 2000);
+                }
+       }else{
+            $scope.isContact = true;
+       }
+    }
+
+    $scope.updateContact = function(id , oldContact, candidateContact){
+    console.log(candidateContact);
+       if(candidateContact){
+            $('#update_contact').addClass('disabled');
+            $('#update_contact').css('pointer-events','none');
+            var formData = new FormData();
+             formData.append('token', $rootScope.globals.currentUser.token);
+             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+             formData.append('talent_id', id);
+             formData.append('contact',oldContact);
+             formData.append('updated_contact',candidateContact);
+             talentApis.talentContact(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+                  $scope.closeCandidateInfo();
+                  //candidateContact = '';
+                  $('#contactUpdated').css('display','block');
+                  setTimeout(function () {
+                        $('#contactUpdated').css('display','none');
+                    }, 2000);
+                }
+       }else{
+            $scope.isContact = true;
+       }
+    }
+
+    $scope.resetModal = function(){
+        var doneButton = document.getElementById('done');
+        doneButton.classList.add('disabled');
+        doneButton.classList.add('talent-modal-done');
+        doneButton.classList.remove('talent-modal-add');
+        doneButton.style['pointer-events'] = 'none';
+        document.getElementById('backgroundImg').style.display= '';
+        //$('#add-talent').modal('show');
+    }
+
 
 
 }

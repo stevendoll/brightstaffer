@@ -278,7 +278,7 @@
           }
           if (this.options.addRemoveLinks) {
             var _ref = document.querySelector('.dz-success-mark');
-            file._removeLink = Dropzone.createElement("<a class=\"dz-remove fa fa-close\" href=\"javascript:undefined;\" data-dz-remove style=\"width: 30px;height: 19px;float: right;text-align: right;font-size: 16px;color: #6a6a6a;margin-top: -79px;\">" + this.options.dictRemoveFile + "</a>");
+            file._removeLink = Dropzone.createElement("<a class=\"dz-remove fa fa-close\" href=\"javascript:undefined;\" data-dz-remove style=\"width: 30px;height: 19px;float: right;text-align: right;font-size: 16px;color: #6a6a6a;margin-top: -70px;\">" + this.options.dictRemoveFile + "</a>");
             file.previewElement.appendChild(file._removeLink);
           }
           removeFileEvent = (function(_this) {

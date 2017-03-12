@@ -6,8 +6,8 @@
           <div class="talent-analysis-div">
             <div class="talent-analysis-image"><img src="static/img/dummyProfile.png" alt=""></div>
             <div class="talent-analysis-info-div">
-              <div class="talent-analysis-name">[[talentDetails.talent_name]] <span>[[talentDetails.designation]] at [[talentDetails.talent_company[0].company]]</span></div>
-              <div class="talent-analysis-qual">[[talentDetails.current_location]] <span></span> [[talentDetails.industry_focus]]</div>
+              <div class="talent-analysis-name">[[talentDetails.talent_name]] <span>[[talentDetails.designation | capitalize]] at [[talentDetails.talent_company[0].company]]</span></div>
+              <div class="talent-analysis-qual">[[talentDetails.current_location | capitalize]] <span></span> [[talentDetails.industry_focus | capitalize]]</div>
               <button type="" class="btn view-con-info hvr-fade" data-toggle="modal" data-target="#contact-info">View Contact Info</button>
               <div class="linkedin-analysis"><i class="fa fa-linkedin-square"></i></div>
             </div>
@@ -68,19 +68,19 @@
                       <div class="analyzed-div">Analyzed [[talentDetails.get_date | dateFormat]]</div>
                       <div class="edit-update-link">Edit/Update</div>
                     </div>
-                   <div ng-repeat="company in talentDetails.talent_company">
-                    <div ng-if ="company.is_current == true">
+                   <div ng-repeat="company in talentDetails.talent_company | limitTo: 2">
+                    <div ng-if ="$index == 0">
                     <div class="col-xs-12 padding-zero">
                       <div class="left-div search-result-current">Current</div>
                       <div class="right-div search-detail-current"><span class="bold-font">[[company.designation | capitalize]]</span> - at [[company.company | capitalize]] 2013 - Present
                       </div>
                     </div>
                    </div>
-                    <div ng-if ="company.is_current == false">
+                    <div ng-if ="$index == 1">
                     <div class="col-xs-12 padding-zero">
                       <div class="left-div search-result-past">Past</div>
                       <div class="right-div search-detail-past">
-                       Software Architech/<span class="bold-font"></span> - [[company.designation | capitalize]] at [[company.company | capitalize]] 2013 <span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talentDetails)">More</a></span>
+                       <span class="bold-font">[[company.designation | capitalize]]</span>- at [[company.company | capitalize]] 2013 <span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talentDetails)">More</a></span>
                       </div>
                     </div>
                   </div>
@@ -91,8 +91,8 @@
                     </div>
                     <div class="col-xs-12">
                       <div class="talent-analysis-concept-panel">
-                        <div class="top-concept-text">Top Concepts <span data-toggle="modal" data-target="#all-concept">All Concepts</span></div>
-                        <div class="talent-progress" ng-repeat="concepts in talentDetails.talent_concepts">
+                        <div class="top-concept-text">Top Concepts <span data-toggle="modal" ng-click="allConcepts(talentDetails.talent_concepts)">All Concepts</span></div>
+                        <div class="talent-progress" ng-repeat="concepts in talentDetails.talent_concepts | limitTo: 6">
                           <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[concepts.match]]%;">
                               <span class="text">[[concepts.concept]]</span>
@@ -102,7 +102,7 @@
                         </div>
                       </div>
                       <div class="talent-analysis-concept-rightpanel">
-                        <div class="top-concept-text">Career  History <span>All Metrics</span></div>
+                        <div class="top-concept-text">Career  History <span ng-click="allMetrics(talentDetails.talent_company)">All Metrics</span></div>
                         <div class="talent-progress">
                           <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
@@ -111,7 +111,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="talent-progress" ng-repeat="career in talentDetails.talent_company">
+                        <div class="talent-progress" ng-repeat="career in talentDetails.talent_company | limitTo: 3">
                           <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
                               <span class="text">[[career.company]]</span>
@@ -152,7 +152,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr ng-repeat="proj in talentDetails.talent_project">
+                                  <tr ng-repeat="proj in talentDetails.talent_project | limitTo: 3">
                                     <th scope="row" class="padd-left32">
                                       <div data-color="#7a7a7a" data-percent="[[proj.project_match]]" class="easy-pie-chart percentage easyPieChart pie-color" style="width: 60px; height: 60px; line-height: 60px; color: rgb(122, 122, 122);" pie-chart>
                                         <span class="percent pie-txt">[[proj.project_match]]%</span>
@@ -415,53 +415,61 @@
   <div class="modal-dialog add-talent-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body roles-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <button type="button" class="close" ng-click="closeCandidateInfo()" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <div class="past-roles">Contact Info</div>
         <div class="contact-info-modal-div">
           <div class="left-section-div">Contact Email</div>
           <div class="right-section-div">
             <span>[[talentDetails.talent_email[0].email]]</span>
             <div class="contact-edit">
-              <span ng-click="showEdit()">Edit</span>
+              <span ng-click="showEdit(talentDetails.talent_email)">Edit</span>
               <span ng-click="showAdd()">Add</span>
             </div>
           </div>
           <div class="cls"></div>
-          <div class="contact-edit-sec" ng-show="isEmailEditable">
-            <input type="" class="form-control" placeholder="">
+          <form name="update_email" class="contact-edit-sec" ng-show="isEmailEditable">
+            <input type="" class="form-control" placeholder="" ng-pattern="emailPattern" ng-model="candidateEmail" name="talentEmail" autocomplete="off" ng-model-options="{ updateOn: 'blur' }">
+            <span class="error" id="email-required" style="color:red;" ng-show="[[isEmail]]">Required.</span>
+            <span style="color:red" ng-show="update_email.talentEmail.$error.pattern">Please enter valid email address.</span>
             <button type="submit" class="btn contact-remove-bttn">Remove</button>
-            <button type="submit" class="btn contact-update-bttn">Update</button>
-            <button type="submit" class="btn contact-update-bttn">Cancel</button>
-          </div>
+            <button type="submit" class="btn contact-update-bttn" id="update_email" ng-click="updateTalentEmail(talentDetails.id, talentDetails.talent_email[0].email,candidateEmail)">Update</button>
+            <button type="submit" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
+          </form>
           <div class="cls"></div>
-          <div class="contact-edit-sec" ng-show="isEmailAdd">
-            <input type="" class="form-control"  placeholder="">
-            <button type="submit" class="btn contact-update-bttn">Add</button>
-            <button type="submit" class="btn contact-update-bttn">Cancel</button>
-          </div>
+          <form name= "add_email" class="contact-edit-sec" ng-show="isEmailAdd">
+            <input type="" class="form-control"  placeholder="Add Email" ng-pattern="emailPattern" autocomplete="off" ng-model="candidateEmailAdd" name="talentAddEmail" ng-model-options="{ updateOn: 'blur' }">
+            <span class="error" style="color:red;" ng-show="[[isEmail]]">Required.</span>
+            <span style="color:red" ng-show="add_email.talentAddEmail.$error.pattern">Please enter valid email address.</span>
+            <button type="submit" class="btn contact-update-bttn" id="add_email" ng-click="addEmail(talentDetails.id, talentDetails.talent_email[0].email,candidateEmailAdd)">Add</button>
+            <button type="submit" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
+          </form>
         </div>
         <div class="contact-info-modal-div border-bttm">
           <div class="left-section-div">Contact Phone</div>
           <div class="right-section-div">
             <span>[[talentDetails.talent_contact[0].contact]]</span>
             <div class="contact-edit">
-              <span ng-click="showContactEdit()">Edit</span>
+              <span ng-click="showContactEdit(talentDetails.talent_contact)">Edit</span>
               <span ng-click="showContactAdd()">Add</span>
             </div>
           </div>
           <div class="cls"></div>
-          <div class="contact-edit-sec" ng-show="isContactEditable">
-            <input type="" class="form-control" placeholder="">
+          <form name="edit_contact" class="contact-edit-sec" ng-show="isContactEditable">
+            <input type="" class="form-control" placeholder="" ng-model="candidateContact" ng-pattern="phonePattern" name="contact_update" ng-model-options="{ updateOn: 'blur' }">
+            <span class="error" id="contact-required" style="color:red;" ng-show="[[isContact]]">Required.</span>
+            <span style="color:red" ng-show="edit_contact.contact_update.$error.pattern">Please enter valid contact number.</span>
             <button type="submit" class="btn contact-remove-bttn">Remove</button>
-            <button type="submit" class="btn contact-update-bttn">Update</button>
-            <button type="submit" class="btn contact-update-bttn">Cancel</button>
-          </div>
+            <button type="submit" class="btn contact-update-bttn" id="update_contact" ng-click="updateContact(talentDetails.id, talentDetails.talent_contact[0].contact,candidateContact)">Update</button>
+            <button type="submit" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
+          </form>
           <div class="cls"></div>
-          <div class="contact-edit-sec" ng-show="isContactAdd">
-            <input type="" class="form-control"  placeholder="">
-            <button type="submit" class="btn contact-update-bttn">Add</button>
-            <button type="submit" class="btn contact-update-bttn">Cancel</button>
-          </div>
+          <form name="Contact2" class="contact-edit-sec" ng-show="isContactAdd">
+            <input type="" class="form-control"  placeholder="Add Contact" autocomplete="off" ng-model="candidateContact" ng-pattern="phonePattern" name="contact_add" ng-model-options="{ updateOn: 'blur' }">
+            <span class="error"  style="color:red;" ng-show="[[isContact]]">Required.</span>
+            <span style="color:red" ng-show="Contact2.contact_add.$error.pattern">Please enter valid contact number.</span>
+            <button type="submit" class="btn contact-update-bttn" id="add_contact" ng-click="addContact(talentDetails.id, talentDetails.talent_contact[0].contact,candidateContact)">Add</button>
+            <button type="submit" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
+          </form>
         </div>
         <div class="cls"></div>
       </div>
@@ -542,46 +550,15 @@
         <div class="edit-modal-recruiter">
           <span>All Concepts</span>
           <div class="cls"></div>
-          <div class="talent-progress">
+          <div class="talent-progress" ng-repeat="concepts in talentData" ng-if="$index > 2">
             <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                <span class="text">Full Stack</span>
-                <span class="percentage">60%</span>
+              <div class="progress-bar" role="progressbar" aria-valuenow="[[concepts.match]]" aria-valuemin="0" aria-valuemax="100" style="width:[[concepts.match]]%;">
+                <span class="text">[[concepts.concept | capitalize]]</span>
+                <span class="percentage">[[concepts.match]]</span>
               </div>
             </div>
           </div>
-          <div class="talent-progress">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                <span class="text">Full Stack</span>
-                <span class="percentage">60%</span>
-              </div>
-            </div>
-          </div>
-          <div class="talent-progress">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                <span class="text">Full Stack</span>
-                <span class="percentage">60%</span>
-              </div>
-            </div>
-          </div>
-          <div class="talent-progress">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                <span class="text">Full Stack</span>
-                <span class="percentage">60%</span>
-              </div>
-            </div>
-          </div>
-          <div class="talent-progress">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                <span class="text">Full Stack</span>
-                <span class="percentage">60%</span>
-              </div>
-            </div>
-          </div>
+
           <div class="cls"></div>
         </div>
         <div class="cls"></div>
@@ -594,3 +571,82 @@
 <div class="success-box" id="nameSuccess" style="display:none;">
     <span><strong>Success!</strong> Recruiter name is updated.</span>
 </div>
+
+
+<div class="success-box" id="emailSuccess" style="display:none;">
+    <span><strong>Success!</strong> Email has been added.</span>
+</div>
+
+<div class="success-box" id="emailUpdated" style="display:none;">
+    <span><strong>Success!</strong> Talent email is updated.</span>
+</div>
+
+<div class="success-box" id="contactSuccess" style="display:none;">
+    <span><strong>Success!</strong> Talent contact has been added.</span>
+</div>
+
+<div class="success-box" id="contactUpdated" style="display:none;">
+    <span><strong>Success!</strong> Talent contact is updated.</span>
+</div>
+
+ <div class="success-box" id="projectSuccess" style="display:none;">
+    <span><strong>Success!</strong> Talent has been added to the project.</span>
+</div>
+
+<!-- all-Matrics-Modal-starts -->
+<div class="modal fade" id="all-metrics" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="edit-modal-recruiter">
+          <span>All Metrics</span>
+          <div class="cls"></div>
+          <div class="talent-progress" ng-repeat="career in talentCareer" ng-if="$index > 2">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="[[(career.years_of_experience/calcTotal(talentCareer)) * 100]]" aria-valuemin="0" aria-valuemax="100" style="width:[[(career.years_of_experience/calcTotal(talentCareer)) * 100]]%;">
+                <span class="text">[[career.company | capitalize]]</span>
+                <span class="percentage">[[career.years_of_experience | number: 2]]</span>
+              </div>
+            </div>
+          </div>
+          <!--<div class="talent-progress">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                <span class="text">Full Stack</span>
+                <span class="percentage">60%</span>
+              </div>
+            </div>
+          </div>
+          <div class="talent-progress">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                <span class="text">Full Stack</span>
+                <span class="percentage">60%</span>
+              </div>
+            </div>
+          </div>
+          <div class="talent-progress">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                <span class="text">Full Stack</span>
+                <span class="percentage">60%</span>
+              </div>
+            </div>
+          </div>
+          <div class="talent-progress">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                <span class="text">Full Stack</span>
+                <span class="percentage">60%</span>
+              </div>
+            </div>
+          </div>-->
+          <div class="cls"></div>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- all-concepts-Modal-ends -->

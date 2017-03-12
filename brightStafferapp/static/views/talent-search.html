@@ -4,7 +4,7 @@
         <div class="col-xs-12">
           <div class="talent-container">
             <div class="talent-search-bar">
-              <button type="" class="btn add-talent" data-toggle="modal" data-target="#add-talent" ng-click="resetModal()">Add Talent</button>
+              <button type="" class="btn add-talent" data-toggle="modal" oncontextmenu="return false;" data-target="#add-talent" ng-click="resetModal()">Add Talent</button>
               <button type="" class="btn disabled-talent" id="assignToProject" ng-click="openProjectList()">Send to Project</button>
             </div>
             <div class="talent-advance-search-div">
@@ -42,6 +42,9 @@
         </div>
       </div>
     </div>
+
+<!-- Modal add talent popup file -->
+ <!--<div ng-include="'static/views/addTalent.html'"></div>-->
 
 
 <!-- add-recruiter-Modal-starts -->

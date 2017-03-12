@@ -310,9 +310,59 @@ function talentApis($http,REQUEST_URL) {
                 return response.data;
            });
 
+    },
+
+    talentContact: function(formData,callback){
+       var url = REQUEST_URL+'talent_contact/';
+       var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function()
+            {
+                if (xhr.readyState == 4 && xhr.status == 200)
+                {
+                    callback(xhr.responseText); // Another callback here
+                }
+            };
+        xhr.open('POST', url, true);
+        headers = {
+        "Accept": "application/json",
+        "Cache-Control": "no-cache",
+        "X-Requested-With": "XMLHttpRequest"
+        };
+        for (headerName in headers) {
+            headerValue = headers[headerName];
+            if (headerValue) {
+              xhr.setRequestHeader(headerName, headerValue);
+            }
+        }
+        xhr.send(formData);
+    },
+
+    addEmail: function(formData , callback){
+       var url = REQUEST_URL+'talent_email/';
+       var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function()
+            {
+                if (xhr.readyState == 4 && xhr.status == 200)
+                {
+                    callback(xhr.responseText); // Another callback here
+                }
+            };
+        xhr.open('POST', url, true);
+        headers = {
+        "Accept": "application/json",
+        "Cache-Control": "no-cache",
+        "X-Requested-With": "XMLHttpRequest"
+        };
+        for (headerName in headers) {
+            headerValue = headers[headerName];
+            if (headerValue) {
+              xhr.setRequestHeader(headerName, headerValue);
+            }
+        }
+        xhr.send(formData);
     }
 
-  }
+   }
 }
 
 
