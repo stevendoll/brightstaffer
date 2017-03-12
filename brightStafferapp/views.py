@@ -30,7 +30,6 @@ import os
 import uuid
 import textract
 
-
 class UserData(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -283,6 +282,7 @@ class UpdateConcepts(View):
 
 
 def create_update_concepts(concepts, project_obj):
+    concepts=ast.literal_eval(concepts)
     project_concepts = []
     if project_obj:
         project_concepts = list(ProjectConcept.objects.filter(project=project_obj).values_list('id', flat=True))

@@ -228,7 +228,7 @@ class TalentProjectAddAPI(View):
             tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
             if created:
                 TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match="50", rank="3")
-                context['message'] = 'success'
+                #context['message'] = 'success'
             #else:
             #    context['error'] = 'Talent Project object already exists.'
                 #return util.returnErrorShorcut(400, context)

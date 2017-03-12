@@ -12,7 +12,6 @@ import os
 import uuid
 import textract
 
-
 STAGE_CHOICES = (('Contacted', 'Contacted'),
                  ('Replied', 'Replied'),
                  ('Interested', 'Interested'),
@@ -132,7 +131,6 @@ class Talent(models.Model):
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
 
-
     class Meta:
         verbose_name_plural = 'Talent'
         verbose_name = 'Talent'
@@ -207,11 +205,11 @@ class TalentCompany(models.Model):
     class Meta:
         verbose_name_plural = "Talent Work History"
         db_table = 'talent_company_tb'
-        ordering = ('-start_date', )
-        
+        ordering = ('-start_date',)
+
     @property
     def years_of_experience(self):
-        return (self.end_date - self.start_date).days/365
+        return (self.end_date - self.start_date).days / 365
 
     @property
     def get_start_date(self):
@@ -232,6 +230,7 @@ class TalentProject(models.Model):
     rank = models.IntegerField(null=True, blank=True)
     # stage = models.CharField(max_length=50, choices=STAGE_CHOICES, default='Contacted',)
     date_added = models.DateField(auto_now_add=True, null=True, blank=True)
+
     # last_update = models.DateField(auto_now=True, blank=True, null=True)
 
     class Meta:
