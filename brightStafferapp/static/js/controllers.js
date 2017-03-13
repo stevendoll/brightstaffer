@@ -247,7 +247,7 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
     }
 }
 
-function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location, searchApis ){
+function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location, searchApis , searchData){
     $scope.searchKeywords = '';
     this.logout = function(){
           $cookieStore.remove('userData');
@@ -262,8 +262,13 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
             'keyword':$scope.searchKeywords
              };
              searchApis.talentSearch(requestObject).then(function(response){
-                if(response.message == "success") {
-                    console.log(response);
+                if(response.hits.length > 0) {
+                    console.log(response.hits);
+                    $rootScope.talentList = [];
+                    for(var i=0;i<response.hits.length;i++){
+                        $rootScope.talentList.push(response.hits[i]._source);
+                    }
+                    //searchData.addItem(response.hits)
                   }else{
                     console.log('error');
                 }
@@ -1261,12 +1266,12 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, talentApis , $uibModal){
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, talentApis , $uibModal , searchData){
      $scope.exportOptions = [{name:'Export Data',value:'Export Data'},{name:'Copy',value:'Copy'},{name:'CSV',value:'CSV'},{name:'Excel',value:'Excel'},{name:'PDF',value:'PDF'},{name:'Print',value:'Print'}]; // select drop-down options
      $scope.recordOptions = [{name:'10',value:'10'},{name:'20',value:'20'},{name:'30',value:'30'},{name:'40',value:'40'},{name:'50',value:'50'}]// select drop-down options
      $scope.exportType = $scope.exportOptions[0];
      $scope.recordCount = $scope.recordOptions[0];
-     $scope.talentList = [];
+     $rootScope.talentList = [];
      $scope.recruiter ={};
      $rootScope.talentDetails = {};
      $scope.selectedCandidate = {};
@@ -1366,7 +1371,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };
          talentApis.getAllTalents(requestObject).then(function(response){
             if(response.message == "success") {
-              $scope.talentList = response.talent_list;
+              $rootScope.talentList = response.talent_list;
               $scope.recruiter.recruiterName = response.display_name;
               $scope.totalTalentCount = response.count;
               $scope.talentCountEnd = response.talent_list.length;
@@ -1539,15 +1544,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
       var state = $('#selectall').prop('checked');
       if(state){
          $scope.choosenCandidates =[];
-         for(var i=0;i<$scope.talentList.length;i++){
-                  $('#check_'+$scope.talentList[i].id).prop('checked',true);
-                  $scope.choosenCandidates.push($scope.talentList[i].id);
+         for(var i=0;i<$rootScope.talentList.length;i++){
+                  $('#check_'+$rootScope.talentList[i].id).prop('checked',true);
+                  $scope.choosenCandidates.push($rootScope.talentList[i].id);
             }
       }
       else{
-         for(var i=0;i<$scope.talentList.length;i++){
-                  $('#check_'+$scope.talentList[i].id).prop('checked',false);
-                  $scope.choosenCandidates.splice($scope.choosenCandidates.indexOf($scope.talentList[i].id), 1);
+         for(var i=0;i<$rootScope.talentList.length;i++){
+                  $('#check_'+$rootScope.talentList[i].id).prop('checked',false);
+                  $scope.choosenCandidates.splice($scope.choosenCandidates.indexOf($rootScope.talentList[i].id), 1);
             }
       }
        if($scope.choosenCandidates.length > 0){
@@ -1815,7 +1820,43 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //$('#add-talent').modal('show');
     }
 
+    $scope.activePageNumber ;
+    $scope.initPagination = function() {
+      var pageItem = $(".pagination li").not(".prev,.next");
+      var prev = $(".pagination li.prev");
+      var next = $(".pagination li.next");
 
+      pageItem.click(function() {
+      console.log(this.id);
+        pageItem.removeClass("active");
+        $(this).not(".prev,.next").addClass("active");
+        $scope.activePageNumber = $('.pagination li.active').attr('id');
+      });
+
+      next.click(function() {
+      //console.log($('li.active').removeClass('active').next().);
+        $('li.active').removeClass('active').next().addClass('active');
+        $scope.activePageNumber = $('.pagination li.active').attr('id');
+      });
+
+      prev.click(function() {
+      //console.log($('li.active').removeClass('active').prev());
+        $('li.active').removeClass('active').prev().addClass('active');
+        $scope.activePageNumber = $('.pagination li.active').attr('id');
+      });
+            //console.log($scope.activePageNumber)
+    }
+
+    /*function getPaginationData(){
+        if($scope.activePageNumber != undefined && $scope.recordCount){
+
+
+
+        }
+
+
+    }
+*/
 
 }
 

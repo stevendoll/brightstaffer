@@ -6,8 +6,8 @@
           <div class="talent-analysis-div">
             <div class="talent-analysis-image"><img src="static/img/dummyProfile.png" alt=""></div>
             <div class="talent-analysis-info-div">
-              <div class="talent-analysis-name">[[talentDetails.talent_name]] <span>[[talentDetails.designation | capitalize]] at [[talentDetails.talent_company[0].company]]</span></div>
-              <div class="talent-analysis-qual">[[talentDetails.current_location | capitalize]] <span></span> [[talentDetails.industry_focus | capitalize]]</div>
+              <div class="talent-analysis-name">[[talentDetails.talent_name | capitalizeWord]] <span>[[talentDetails.designation | capitalizeAll]] at [[talentDetails.talent_company[0].company]]</span></div>
+              <div class="talent-analysis-qual">[[talentDetails.current_location ]] <span></span> [[talentDetails.industry_focus | capitalizeWord]]</div>
               <button type="" class="btn view-con-info hvr-fade" data-toggle="modal" data-target="#contact-info">View Contact Info</button>
               <div class="linkedin-analysis"><i class="fa fa-linkedin-square"></i></div>
             </div>
@@ -18,7 +18,7 @@
               </div>
               <div class="talent-rec-panel">
                 <div class="left-div">Recruiter</div>
-                <div class="right-div">[[recruiter.recruiterName | capitalize]] <span data-toggle="modal" data-target="#edit-recruiter">Edit</span></div>
+                <div class="right-div">[[recruiter.recruiterName | capitalizeWord]] <span data-toggle="modal" data-target="#edit-recruiter">Edit</span></div>
               </div>
               <div class="talent-rec-panel border-bttm">
                 <div class="left-div">Shared with</div>
@@ -72,7 +72,7 @@
                     <div ng-if ="$index == 0">
                     <div class="col-xs-12 padding-zero">
                       <div class="left-div search-result-current">Current</div>
-                      <div class="right-div search-detail-current"><span class="bold-font">[[company.designation | capitalize]]</span> - at [[company.company | capitalize]] 2013 - Present
+                      <div class="right-div search-detail-current"><span class="bold-font">[[company.designation | capitalizeAll]]</span> - at [[company.company | capitalize]] [[company.get_start_date | yearFormat]] - Present
                       </div>
                     </div>
                    </div>
@@ -80,14 +80,14 @@
                     <div class="col-xs-12 padding-zero">
                       <div class="left-div search-result-past">Past</div>
                       <div class="right-div search-detail-past">
-                       <span class="bold-font">[[company.designation | capitalize]]</span>- at [[company.company | capitalize]] 2013 <span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talentDetails)">More</a></span>
+                       <span class="bold-font">[[company.designation | capitalizeAll]]</span>- at [[company.company | capitalize]] [[company.get_start_date | yearFormat]] - [[company.get_end_date | yearFormat]] <span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talentDetails)">More</a></span>
                       </div>
                     </div>
                   </div>
                   </div>
                     <div class="col-xs-12 padding-zero">
                       <div class="left-div search-result-edu">Education</div>
-                      <div class="right-div search-detail-edu">[[talentDetails.talent_education[0].education]] 2010 - 2014 </div>
+                      <div class="right-div search-detail-edu">[[talentDetails.talent_education[0].education]] [[talentDetails.talent_education[0].get_start_date | yearFormat]] - [[talentDetails.talent_education[0].get_end_date | yearFormat]] </div>
                     </div>
                     <div class="col-xs-12">
                       <div class="talent-analysis-concept-panel">
@@ -376,7 +376,7 @@
                 </div>
               </div>
             </div>
-            <div class="right-section">
+            <!--<div class="right-section">
               <div class="right-sideline">
                 <div class="brief-circle"><i class="fa fa-briefcase" aria-hidden="true"></i></div>
                 <div class="files-circle"><i class="fa fa-file-text" aria-hidden="true"></i></div>
@@ -403,7 +403,7 @@
                   <span>Delete</span>
                 </div>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
       </div>
@@ -528,11 +528,11 @@
       <div class="modal-body roles-body">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <div class="past-roles">Past Roles</div>
-        <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company">[[role.designation | capitalize]] at [[role.company]] 2010-2011</div>
+        <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company">[[role.designation | capitalize]] at [[role.company]] [[role.get_start_date | yearFormat]] - [[role.get_end_date| yearFormat]]</div>
         <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
         <div class="cls"></div>
         <div class="edu-roles">Education</div>
-        <div class="past-roles-descp" ng-repeat="edu in selectedCandidate.talent_education">[[edu.education]] 2010-2011</div>
+        <div class="past-roles-descp" ng-repeat="edu in selectedCandidate.talent_education">[[edu.education]] [[edu.get_start_date | yearFormat]] - [[edu.get_end_date | yearFormat]]</div>
         <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
         <div class="cls"></div>
       </div>

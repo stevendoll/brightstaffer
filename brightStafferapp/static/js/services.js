@@ -385,6 +385,25 @@ function searchApis($http,REQUEST_URL) {
    }
 }
 
+function searchData() {
+  var talentList = [];
+
+  return {
+    addItem: addItem,
+    getList: getList
+  };
+
+  function addItem(items) {
+    for(var i=0;i<items.length;i++)
+    talentList.push(items[i]._source);
+  }
+
+  function getList() {
+    return talentList;
+  }
+}
+
+
 angular
     .module('brightStaffer')
     .service('loginService', loginService)
@@ -399,4 +418,5 @@ angular
     .service('getAllProjects', getAllProjects)
     .service('paginationData', paginationData)
     .service('talentApis', talentApis)
-    .service('searchApis', searchApis);
+    .service('searchApis', searchApis)
+    .service('searchData', searchData);
