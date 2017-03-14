@@ -418,7 +418,7 @@ angular
     .service('paginationData', paginationData)
     .service('talentApis', talentApis)
     .service('searchApis', searchApis)
-    .service('searchData', searchData);
-    .service('talentApi', talentApi);
     .service('searchData', searchData)
+    .service('talentApi', talentApi)
+    .service('searchData', searchData);
 
