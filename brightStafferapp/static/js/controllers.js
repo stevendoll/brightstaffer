@@ -259,22 +259,25 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
 
     this.getSearchData = function(){
     console.log($scope.searchKeywords);
-      if($scope.searchKeywords){
-         var requestObject = {
-            'keyword':$scope.searchKeywords
-             };
-             searchApis.talentSearch(requestObject).then(function(response){
-                if(response.hits.length > 0) {
-                    console.log(response.hits);
-                    $rootScope.talentList = [];
-                    for(var i=0;i<response.hits.length;i++){
-                        $rootScope.talentList.push(response.hits[i]._source);
+    var allowedArray = ["talent.talent-search" , "talent.talent-search.talent-search-card" , "talent.talent-search.talent-search-list"];
+    if(allowedArray.indexOf($state.current.name)> -1){
+          if($scope.searchKeywords){
+             var requestObject = {
+                'keyword':$scope.searchKeywords
+                 };
+                 searchApis.talentSearch(requestObject).then(function(response){
+                    if(response.hits.length > 0) {
+                        console.log(response.hits);
+                        $rootScope.talentList = [];
+                        for(var i=0;i<response.hits.length;i++){
+                            $rootScope.talentList.push(response.hits[i]._source);
+                        }
+                        //searchData.addItem(response.hits)
+                      }else{
+                        console.log('error');
                     }
-                    //searchData.addItem(response.hits)
-                  }else{
-                    console.log('error');
-                }
-             });
+                 });
+          }
       }
     }
 }
