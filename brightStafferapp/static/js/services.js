@@ -419,4 +419,4 @@ angular
     .service('paginationData', paginationData)
     .service('talentApis', talentApis)
     .service('searchApis', searchApis)
-    .service('searchData', searchData);
+    .service('searchData', searchData)
