@@ -39,9 +39,12 @@ class TopProjectSerializer(serializers.ModelSerializer):
 
 class TalentEducationSerializer(serializers.ModelSerializer):
     education = serializers.CharField()
+    start_date = serializers.CharField(source='get_start_date')
+    end_date = serializers.CharField(source='get_end_date')
+
     class Meta:
         model = TalentEducation
-        fields = ('talent', 'education', 'course', 'get_start_date', 'get_end_date')
+        fields = ('talent', 'education', 'course', 'start_date', 'end_date')
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -55,19 +58,28 @@ class TalentProjectSerializer(serializers.ModelSerializer):
     project = serializers.CharField()
     talent = serializers.CharField()
     company_name = serializers.CharField()
+    date_added = serializers.CharField(source='get_date_added')
+    project_stage = serializers.SerializerMethodField()
+
+    def get_project_stage(self, obj):
+        stages = obj.project.talentstage_set.filter(talent=obj.talent).order_by('-date_created')
+        if stages:
+            return stages[0].stage
+        return None
 
     class Meta:
         model = TalentProject
-        fields = ('talent', 'project','project_match', 'rank', 'get_date_added', 'company_name')
+        fields = ('talent', 'project','project_match', 'rank', 'date_added', 'company_name', 'project_stage')
 
 
 class TalentConceptSerializer(serializers.ModelSerializer):
     talent = serializers.CharField()
     concept = serializers.CharField()
+    date_created = serializers.CharField(source='get_date_created')
 
     class Meta:
         model = TalentConcept
-        fields = ('talent', 'concept', 'match', 'get_date_created')
+        fields = ('talent', 'concept', 'match', 'date_created')
 
 
 class TalentEmailSerializer(serializers.ModelSerializer):
@@ -75,7 +87,7 @@ class TalentEmailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalentEmail
-        fields = ('talent', 'email')
+        fields = ('talent', 'email', 'is_primary')
 
 
 class TalentContactSerializer(serializers.ModelSerializer):
@@ -83,7 +95,7 @@ class TalentContactSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalentContact
-        fields = ('talent', 'contact')
+        fields = ('talent', 'contact', 'is_primary')
 
 
 class TalentContactEmailSerializer(serializers.ModelSerializer):
@@ -109,6 +121,8 @@ class TalentCompanySerializer(serializers.ModelSerializer):
     company = serializers.CharField()
     years_of_experience = serializers.CharField()
     career_gap = serializers.SerializerMethodField()
+    start_date = serializers.CharField(source='get_start_date')
+    end_date = serializers.CharField(source='get_end_date')
 
     def get_career_gap(self, obj):
         check_date = obj.start_date
@@ -120,7 +134,7 @@ class TalentCompanySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalentCompany
-        fields = ('talent', 'company', 'designation', 'get_start_date', 'get_end_date', 'is_current',
+        fields = ('talent', 'company', 'designation', 'start_date', 'end_date', 'is_current',
                   'years_of_experience', 'career_gap')
 
 
@@ -128,6 +142,7 @@ class TalentSerializer(serializers.ModelSerializer):
     talent_name = serializers.CharField()
     talent_education = TalentEducationSerializer(many=True)
     recruiter = serializers.CharField()
+    create_date = serializers.CharField(source='get_date')
     talent_company = TalentCompanySerializer(many=True)
     talent_project = TalentProjectSerializer(many=True)
     talent_concepts = TalentConceptSerializer(many=True)
@@ -137,5 +152,5 @@ class TalentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Talent
         fields = ('id', 'talent_name', 'designation', 'industry_focus', 'industry_focus_percentage', 'status',
-        'rating', 'talent_email', 'talent_contact', 'linkedin_url', 'recruiter', 'get_date', 'current_location',
+        'rating', 'talent_email', 'talent_contact', 'linkedin_url', 'recruiter', 'create_date', 'current_location',
         'talent_company', 'talent_education', 'talent_project', 'talent_concepts')
