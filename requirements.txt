@@ -16,3 +16,4 @@ nltk==3.2.2
 scipy==0.18.1
 sklearn==0.0
 smart-open==1.4.0
+elasticsearch
