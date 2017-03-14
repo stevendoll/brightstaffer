@@ -349,7 +349,8 @@ class DeleteTalent(generics.ListCreateAPIView):
         context = {}
         recruiter = request.GET['recruiter']
         is_active = request.GET['is_active']
-        talent_id_list = request.GET.getlist('talent[]')[0].split(',')
+        talent_id_list = request.query_params['talent'].split(',') #('talent[]')[0].split(',')
+
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
             if not talent_objs:
