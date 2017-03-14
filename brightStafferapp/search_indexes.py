@@ -96,8 +96,18 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             comp['end_date'] = str(company.get_end_date)
             comp['designation'] = company.designation
             comp['is_current'] = company.is_current
+            comp['years_of_experience'] = company.years_of_experience
+            comp['career_gap'] = self.get_career_gap(company)
             companies.append(comp)
         return companies
+
+    def get_career_gap(self, obj):
+        check_date = obj.start_date
+        previous_company = obj.talent.talent_company.filter(end_date__lt=check_date).order_by('start_date').last()
+        if not previous_company:
+            return 0
+        date_diff = (obj.start_date - previous_company.end_date).days/365
+        return date_diff
 
     def prepare_talent_project(self, obj):
         projects = []
@@ -109,6 +119,7 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             proj['rank'] = project.rank
             #proj['stage'] = project.stage
             proj['date_added'] = str(project.get_date_added)
+            proj['company_name'] = project.company_name
             projects.append(proj)
         return projects
 
