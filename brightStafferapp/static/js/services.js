@@ -420,5 +420,5 @@ angular
     .service('searchApis', searchApis)
     .service('searchData', searchData);
     .service('talentApi', talentApi);
-
+    .service('searchData', searchData)
 
