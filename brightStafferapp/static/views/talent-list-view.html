@@ -137,7 +137,7 @@
 
                              </thead>
                              <tbody>
-                                 <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse">
+                                 <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">
                                      <td><a href="" class="tbl-link-td">[[talent.talent_name]]</a></td>
                                      <td>[[talent.talent_company[0].designation | capitalize]]</td>
                                      <td>[[talent.talent_company[0].company]]</td>
@@ -216,7 +216,7 @@
             </select>
           </div>
           <div class="cls"></div>
-          <button type="" class="btn add-stage" id="add-talent" ng-click="addToProject(projectDD)">Add to Project</button>
+          <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(projectDD)">Add to Project</button>
         </div>
         <div class="cls"></div>
       </div>
