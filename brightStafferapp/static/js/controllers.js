@@ -1470,7 +1470,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
         $('#add-talent-btn').removeClass('disabled');
         $('#add-talent-btn').css('pointer-events','');
-        $('#projectListD').selectbox();
+        $('#projectListD :selected').removeAttr('selected');
+        $('#projectListD .sbSelector').text('Select Project');
+        //$scope.projectDD = $rootScope.projectListView[0];
         $('#add-project').modal('show');
     }
 
@@ -1517,7 +1519,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                   $('#projectSuccess').css('display','block');
                   setTimeout(function () {
                         $('#projectSuccess').css('display','none');
-                    }, 10000);
+                    }, 5000);
                 }
          }
     }
