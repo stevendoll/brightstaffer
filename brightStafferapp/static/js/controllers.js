@@ -1,5 +1,5 @@
 
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout,$stateParams) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData,$window,$state,$timeout,$stateParams, $uibModal ) { /*global controller */
     $rootScope.topSixProjectList = [];   // top six project list array
     $rootScope.allProjectList = [];          // all project array
     $rootScope.totalProjectCount =0;
@@ -8,6 +8,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.paginationCounter= 1;
     $scope.stateArray = ['projects','create.step1','create.step2','create.step3','create.step4'];
     $rootScope.isDevice = false;
+    $rootScope.projectListView = [{name:'Select Project',value:'Select Project'},{name:'Search Project',value:'Search Project'}];
 
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
         var requestObject = {
@@ -44,6 +45,13 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     prevButton = angular.element(prevButton);
                      $rootScope.totalProjectCount = response.count;
                      $rootScope.allProjectList = response.published_projects;
+                      if($rootScope.projectListView.length == 2){
+                        for(var i=0;i<$rootScope.allProjectList.length;i++){
+                         var project = {name:'#'+$rootScope.allProjectList[i].project_name,
+                                        value:'#'+$rootScope.allProjectList[i].id};
+                            $rootScope.projectListView.push(project);
+                         }
+                      }
                      $rootScope.projectCountEnd = response.published_projects.length;
                      $rootScope.projectNext = response.next;
                      $rootScope.projectPrevious = response.previous;
@@ -67,88 +75,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         $rootScope.isSuccess = false;
    }
 
-    this.detectmob = function($event){
-        if( navigator.userAgent.match(/Android/i)
-        || navigator.userAgent.match(/webOS/i)
-        || navigator.userAgent.match(/iPhone/i)
-        || navigator.userAgent.match(/iPod/i)
-        || navigator.userAgent.match(/BlackBerry/i)
-        || navigator.userAgent.match(/Windows Phone/i)
-         ){
-            openSideMenu();
-         }
-    }
-
-
-    function openSideMenu(){
-        $("body").toggleClass("mini-navbar");
-        SmoothlyMenu();
-
-        function SmoothlyMenu() {
-            if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
-                // Hide menu in order to smoothly turn on when maximize menu
-                $('#side-menu').hide();
-                // For smoothly turn on menu
-                setTimeout(
-                    function () {
-                        $('#side-menu').fadeIn(400);
-                    }, 200);
-            } else if ($('body').hasClass('fixed-sidebar')) {
-                $('#side-menu').hide();
-                setTimeout(
-                    function () {
-                        $('#side-menu').fadeIn(400);
-                    }, 100);
-            } else {
-                // Remove all inline style from jquery fadeIn function to reset menu state
-                $('#side-menu').removeAttr('style');
-            }
-        }
-    }
-
-    $scope.setActive = function($event){
-        $event.stopPropagation();
-        var childEle = $('.nav-first-level').children('.ch');
-        angular.forEach(childEle, function(li) {
-          if(!li.contains($event.target))
-             angular.element(li).removeClass('active');
-
-        });
-
-        if($event.type == "touchstart"){
-            if($($event.currentTarget).hasClass('active')){
-                $($event.currentTarget).removeClass('active');
-               }
-            else{
-                $($event.currentTarget).addClass('active');
-                   if($event.currentTarget.id == "project"){
-                     $('.nav-second-level').addClass('in');
-                      $('.nav-second-level').css('display','block');
-                   }
-               }
-        }else if($event.type == "click"){
-            if($(this).hasClass('active')){
-               $(this).removeClass('active');
-               }
-            else{
-               $(this).addClass('active');
-               }
-        }
-    }
-
-    $scope.stateSelected = function(){
-        if($scope.stateArray.indexOf($state.current.name)> -1 && !$rootScope.isDevice){
-          $('#project').addClass('active');
-           $('.nav-second-level').addClass('in');
-             $('.nav-second-level').css('display','block');
-           return true;
-        }
-        if($scope.stateArray.indexOf($state.current.name)> -1 && $rootScope.isDevice){
-            $('#project').addClass('highlight');
-             return true;
-        }
-      return false;
-    }
 };
 
 function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $timeout, loginService) { /* login controller responsible for login functionality */
@@ -323,11 +249,33 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
     }
 }
 
-function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location ){
+function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location, searchApis , searchData){
+    $scope.searchKeywords = '';
     this.logout = function(){
           $cookieStore.remove('userData');
           $rootScope.globals = {};
           $state.go('login','');
+    }
+
+    this.getSearchData = function(){
+    console.log($scope.searchKeywords);
+      if($scope.searchKeywords){
+         var requestObject = {
+            'keyword':$scope.searchKeywords
+             };
+             searchApis.talentSearch(requestObject).then(function(response){
+                if(response.hits.length > 0) {
+                    console.log(response.hits);
+                    $rootScope.talentList = [];
+                    for(var i=0;i<response.hits.length;i++){
+                        $rootScope.talentList.push(response.hits[i]._source);
+                    }
+                    //searchData.addItem(response.hits)
+                  }else{
+                    console.log('error');
+                }
+             });
+      }
     }
 }
 
@@ -1097,7 +1045,7 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 }
 
-function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout) {
+function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, $uibModal) {
     this.analysedData = [
         {   "key":"analysedData",
             "values": [[6,5],[7,11],[8,6],[9,11],[10,30],[11,10],[12,13],[13,4],[14,3],[15,3],[16,6]]
@@ -1140,7 +1088,6 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
     }
 
     $scope.resetModal = function(){
-        $('.dz-preview').remove();
         var doneButton = document.getElementById('done');
         doneButton.classList.add('disabled');
         doneButton.classList.add('talent-modal-done');
@@ -1148,16 +1095,10 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
         doneButton.style['pointer-events'] = 'none';
         document.getElementById('backgroundImg').style.display= '';
     }
+
 }
 
 function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout){
-    $scope.currentFile="";
-    $scope.currentFileGroup="";
-    $scope.currentFileDescription="";
-    $rootScope.attachedFilesDetails=[];
-    $scope.FileMessage ='';
-    $scope.fileName = '';
-    $scope.file = '';
     $scope.validMimeTypes=['application/vnd.openxmlformats-officedocument.wordprocessingml.document' , 'application/msword', 'application/pdf'];
     $rootScope.attachedFilesData=[];
     $scope.FilesList =[];
@@ -1165,7 +1106,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.fileCountExceededMsg = '';
     $scope.isDisabled = true;
     $scope.noFile = false;
-
+    $scope.completedFiles = [];
 
       $scope.filesExits= function() {
       var fileContainers = document.getElementsByClassName('dz-preview');
@@ -1184,21 +1125,23 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
             $('#add-talent').modal('hide');
             $('#delete-popup').modal('show');
         }else{
+            $scope.removeCompletedFiles();
             $('#add-talent').modal('hide');
-//            $('#successBox').css('display','block');
-//            setTimeout(
-//                function () {
-//                    $('#successBox').css('display','none');;
-//                }, 2000);
         }
+    }
+
+    $scope.closeForcefully = function(){
+        $scope.removeCompletedFiles();
+        $('#delete-popup').modal('hide');
     }
 
     $scope.done = function(){
         $('#add-talent').modal('hide');
         $('#successBox').css('display','block');
+        $scope.removeCompletedFiles();
         setTimeout(
         function () {
-            $('#successBox').css('display','none');;
+            $('#successBox').css('display','none');
         }, 2000);
     }
 
@@ -1235,25 +1178,690 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout){
-      $scope.load = function(){
-           $(function () {
+
+function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout){
+     this.detectmob = function($event){
+        if( navigator.userAgent.match(/Android/i)
+        || navigator.userAgent.match(/webOS/i)
+        || navigator.userAgent.match(/iPhone/i)
+        || navigator.userAgent.match(/iPod/i)
+        || navigator.userAgent.match(/BlackBerry/i)
+        || navigator.userAgent.match(/Windows Phone/i)
+         ){
+            openSideMenu();
+         }
+    }
+
+    function openSideMenu(){
+        $("body").toggleClass("mini-navbar");
+        SmoothlyMenu();
+
+        function SmoothlyMenu() {
+            if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+                // Hide menu in order to smoothly turn on when maximize menu
+                $('#side-menu').hide();
+                // For smoothly turn on menu
+                setTimeout(
+                    function () {
+                        $('#side-menu').fadeIn(400);
+                    }, 200);
+            } else if ($('body').hasClass('fixed-sidebar')) {
+                $('#side-menu').hide();
+                setTimeout(
+                    function () {
+                        $('#side-menu').fadeIn(400);
+                    }, 100);
+            } else {
+                // Remove all inline style from jquery fadeIn function to reset menu state
+                $('#side-menu').removeAttr('style');
+            }
+        }
+    }
+
+    $scope.setActive = function($event){
+        $event.stopPropagation();
+        var childEle = $('.nav-first-level').children('.ch');
+        angular.forEach(childEle, function(li) {
+          if(!li.contains($event.target)){
+             if($event.currentTarget.id != "project" && $('.nav-second-level').hasClass('in')){
+                 $('.nav-second-level').removeClass('in');
+                  $('.nav-second-level').css('display','');
+               }
+               angular.element(li).removeClass('active');
+             }
+        });
+
+        if($event.type == "touchstart"){
+            if($($event.currentTarget).hasClass('active')){
+                $($event.currentTarget).removeClass('active');
+               }
+            else{
+                $($event.currentTarget).addClass('active');
+                   if($event.currentTarget.id == "project"){
+                     $('.nav-second-level').addClass('in');
+                      $('.nav-second-level').css('display','block');
+                 }
+            }
+        }else if($event.type == "click"){
+            if($(this).hasClass('active')){
+                $(this).removeClass('active');
+            }
+            else{
+               $(this).addClass('active');
+               }
+        }
+    }
+
+    $scope.stateSelected = function(){
+        if($scope.stateArray.indexOf($state.current.name)> -1 && !$rootScope.isDevice){
+          $('#project').addClass('active');
+           $('.nav-second-level').addClass('in');
+             $('.nav-second-level').css('display','block');
+           return true;
+        }
+        if($scope.stateArray.indexOf($state.current.name)> -1 && $rootScope.isDevice){
+            $('#project').addClass('highlight');
+             return true;
+        }
+      return false;
+    }
+
+}
+
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, talentApis , $uibModal , searchData){
+     $scope.exportOptions = [{name:'Export Data',value:'Export Data'},{name:'Copy',value:'Copy'},{name:'CSV',value:'CSV'},{name:'Excel',value:'Excel'},{name:'PDF',value:'PDF'},{name:'Print',value:'Print'}]; // select drop-down options
+     $scope.recordOptions = [{name:'10',value:'10'},{name:'20',value:'20'},{name:'30',value:'30'},{name:'40',value:'40'},{name:'50',value:'50'}]// select drop-down options
+     $scope.exportType = $scope.exportOptions[0];
+     $scope.recordCount = $scope.recordOptions[0];
+     $rootScope.talentList = [];
+     $scope.recruiter ={};
+     $rootScope.talentDetails = {};
+     $scope.selectedCandidate = {};
+     $scope.choosenCandidates = [];
+     $scope.currentTalentId = '';
+     $scope.projectDD = $rootScope.projectListView[0];
+     $scope.talentCountStart = 1;
+     $scope.talentCountEnd = 0;
+     $scope.totalTalentCount = 0;
+     $scope.rating = 0;
+     $scope.isEmailEditable = false;
+     $scope.isEmailAdd = false;
+     $scope.isContactEditable = false;
+     $scope.isContactAdd = false;
+     $scope.recruiterNameInput = '';
+     $scope.isName = false;
+     $scope.isEmail = false;
+     $scope.isContact = false;
+     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;  //email validation pattern
+     $scope.phonePattern = /^(?!0+$)\d{8,}$/;
+//^[0-9]{10}$/;
+
+     $scope.candidateEmailUpdate;
+     $scope.candidateEmailAdd;
+
+     $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
           $(".select-arrow").selectbox();
-         });
+          $('#export').change(function() {
+                var selectedValue = $('#export :selected').text();
+                $scope.exportType = selectedValue;
+            });
+          $('#recordCount').change(function() {
+                var selectedValue = $('#recordCount :selected').text();
+                $scope.recordCount = selectedValue;
+                $scope.getTalents($scope.recordCount);
+            });
+          $('#projectListD').change(function() {
+            var selectedValue = $('#projectListD :selected').text();
+            $scope.projectDD = selectedValue;
+            console.log($scope.projectDD);
+            });
         // var oldie = $.browser.msie && $.browser.version < 9;
-         $('.easy-pie-chart').each(function(){
-             console.log(this);
-             $(this).easyPieChart({
-                 barColor: $(this).data('color'),
-                 trackColor: '#d7d7d7',
-                 scaleColor: false,
-                 lineCap: 'butt',
-                 lineWidth: 6,
-                 animate: 1000,
-                 size:60
-             }).css('color', $(this).data('color'));
+
+       });
+
+      angular.element(document).ready(function () {
+            $scope.getTalents();
+       });
+
+    $scope.getSelectedRating = function (rating) {
+        console.log(rating);
+        console.log($rootScope.talentDetails.id);
+        if(rating){
+            var requestObject = {
+            'id':$rootScope.talentDetails.id,   // password field value
+            'rating': rating
+             };
+         talentApis.updateRatings(requestObject).then(function(response){
+            if(response.message == "success") {
+              console.log(response);
+              }else{
+                console.log('error');
+            }
+         });
+       }
+    }
+
+      $scope.changeState = function(){
+        $scope.choosenCandidates =[];
+        $('#selectall').prop('checked',false);
+        $('#assignToProject').removeClass('add-talent');
+        $('#assignToProject').addClass('disabled-talent');
+       var currentState = $state.current.name;
+        if(currentState == 'talent.talent-search.talent-search-card'){
+          $('.bar-view').removeClass('active');
+          $('.table-view').addClass('active');
+          $state.go('talent.talent-search.talent-search-list','');
+        }
+
+        if(currentState == 'talent.talent-search.talent-search-list'){
+          $('.bar-view').addClass('active');
+          $('.table-view').removeClass('active');
+          $state.go('talent.talent-search.talent-search-card','');
+        }
+      }
+
+      $scope.getTalents = function(recordCount){             // function to fetch top 6 projects
+        if(recordCount){
+          var count = recordCount;
+        }else{
+          var count = $scope.recordCount.value;
+        }
+        var requestObject = {
+        'token': $rootScope.globals.currentUser.token,       // username field value
+        'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
+        'count': count
+         };
+         talentApis.getAllTalents(requestObject).then(function(response){
+            if(response.message == "success") {
+              $rootScope.talentList = response.talent_list;
+              $scope.recruiter.recruiterName = response.display_name;
+              $scope.totalTalentCount = response.count;
+              $scope.talentCountEnd = response.talent_list.length;
+              }else{
+                console.log('error');
+            }
          });
       }
+
+      $scope.updateRecruiterName = function(name){             // function to fetch top 6 projects
+       console.log(name);
+       if(name){
+            $scope.recruiter.recruiterName = name;
+            $('#nameUpdate').addClass('disabled');
+            $('#nameUpdate').css('pointer-events','none');
+            var requestObject = {
+            'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
+            'display_name': $scope.recruiter.recruiterName
+             };
+             talentApis.updateRecruiterName(requestObject).then(function(response){
+                if(response.message == "success") {
+                  console.log(response);
+                 $('#edit-recruiter').modal('hide');
+                 $('#nameSuccess').css('display','block');
+                 setTimeout(
+                        function () {
+                            $('#nameSuccess').css('display','none');
+                        }, 2000);
+                  }else{
+                    console.log('error');
+                }
+             });
+         }else{
+            $('#name-required').removeClass('ng-hide');
+             $scope.isName = true;
+         }
+      }
+
+      $scope.selectExportType = function(exportType){
+      console.log('asdasdasdasd');
+        console.log(exportType.value);
+      }
+
+      $scope.calcTotal = function(filtered){
+         var sum = 0;
+         for(var i = 0 ; i<filtered.length ; i++){
+            sum = sum + Math.round(filtered[i].years_of_experience * 100)/100;
+            sum = sum + Math.round(filtered[i].career_gap * 100)/100;
+         }
+         return sum;
+     };
+
+     $scope.loadProfileData = function(id, talent){
+     $('html, body').animate({ scrollTop: 0 }, 'fast');
+        if(Object.keys($rootScope.talentDetails).length == 0){
+             $rootScope.talentDetails = talent;
+        }
+        var requestObject = {
+        'token': $rootScope.globals.currentUser.token,       // username field value
+        'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
+        'id': id
+         };
+         talentApis.getCandidateProfile(requestObject).then(function(response){
+              $rootScope.talentDetails = response;
+
+         });
+
+     }
+
+    $scope.showDetails = function(talent){
+      $scope.selectedCandidate = talent;
+      $('#more-comp').modal('show');
+
+    }
+
+    $scope.showRecruiterPopup = function(talent){
+      $scope.selectedCandidate = talent;
+      $('#recruiter-modal').modal('show');
+
+    }
+
+    $scope.editRecruiter = function(){
+        $scope.isName = false;
+        $('#recruiter-modal').modal('hide');
+        $('#edit-recruiter').modal('show');
+    }
+
+    $scope.openProjectList = function(id, callFrom){
+        if(id){
+          $scope.currentTalentId = id;
+        }
+        else{
+          $scope.currentTalentId = '';
+        }
+        $('#add-talent-btn').removeClass('disabled');
+        $('#add-talent-btn').css('pointer-events','');
+        $('#projectListD :selected').removeAttr('selected');
+        $('#projectListD .sbSelector').text('Select Project');
+        //$scope.projectDD = $rootScope.projectListView[0];
+        $('#add-project').modal('show');
+    }
+
+    $scope.addToProject = function(projectDD){
+        var selectedProjectId ;
+        var talent = [];
+
+        if($scope.projectDD != ('Select Project' || 'Search Project')){
+              for(var i=0;i<$rootScope.allProjectList.length;i++)
+               {
+                 if($rootScope.allProjectList[i].project_name == $scope.projectDD.split('#')[1])
+                    {
+                      selectedProjectId = $rootScope.allProjectList[i].id;
+                      break;
+                    }
+               }
+        }
+         if($scope.currentTalentId != ''){
+             talent.push($scope.currentTalentId);
+
+         }else if($scope.choosenCandidates.length > 0){
+            for(var k=0;k< $scope.choosenCandidates.length; k++)
+                {
+                    talent.push($scope.choosenCandidates[k]);
+                }
+
+         }
+
+        if(selectedProjectId && talent.length > 0){
+            $('#add-talent-btn').addClass('disabled');
+            $('#add-talent-btn').css('pointer-events','none');
+            var formData = new FormData();
+             formData.append('token', $rootScope.globals.currentUser.token);
+             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+             formData.append('project_id', selectedProjectId);
+             formData.append('talent_id[]',talent);
+             talentApis.addTalentsToProject(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+
+                  $('#add-project').modal('hide');
+                  $('html, body').animate({ scrollTop: 0 }, 'fast');
+                  $('#projectSuccess').css('display','block');
+                  setTimeout(function () {
+                        $('#projectSuccess').css('display','none');
+                    }, 5000);
+                }
+         }
+    }
+
+
+    $scope.updateSelection = function(id, position, talentList) {
+
+           if ($scope.choosenCandidates.indexOf(id) == -1 )
+                $scope.choosenCandidates.push(id);
+            else
+                $scope.choosenCandidates.splice($scope.choosenCandidates.indexOf(id), 1);
+
+       if($scope.choosenCandidates.length > 0){
+            $('#assignToProject').removeClass('disabled-talent');
+            $('#assignToProject').addClass('add-talent');
+            $('#talent-delete').css('pointer-events','');
+       }else{
+            $('#assignToProject').removeClass('add-talent');
+            $('#assignToProject').addClass('disabled-talent');
+            $('#talent-delete').css('pointer-events','none');
+       }
+                console.log($scope.choosenCandidates);
+    }
+
+    $scope.selectAll = function() {
+      var state = $('#selectall').prop('checked');
+      if(state){
+         $scope.choosenCandidates =[];
+         for(var i=0;i<$rootScope.talentList.length;i++){
+                  $('#check_'+$rootScope.talentList[i].id).prop('checked',true);
+                  $scope.choosenCandidates.push($rootScope.talentList[i].id);
+            }
+      }
+      else{
+         for(var i=0;i<$rootScope.talentList.length;i++){
+                  $('#check_'+$rootScope.talentList[i].id).prop('checked',false);
+                  $scope.choosenCandidates.splice($scope.choosenCandidates.indexOf($rootScope.talentList[i].id), 1);
+            }
+      }
+       if($scope.choosenCandidates.length > 0){
+            $('#assignToProject').removeClass('disabled-talent');
+            $('#assignToProject').addClass('add-talent');
+            $('#talent-delete').css('pointer-events','');
+       }else{
+            $('#assignToProject').removeClass('add-talent');
+            $('#assignToProject').addClass('disabled-talent');
+            $('#talent-delete').css('pointer-events','none');
+       }
+    }
+
+    $scope.deleteTalents = function(){
+        $('#delete-talent-popup').modal('show');
+    }
+
+    $scope.deleteTalentsConfirm = function(){
+        var talent = [];
+         if($scope.choosenCandidates.length > 0){
+            for(var k=0;k< $scope.choosenCandidates.length; k++)
+                {
+                    talent.push($scope.choosenCandidates[k]);
+                }
+
+         }
+
+        if(talent.length > 0){
+            $('#confirm').addClass('disabled');
+            $('#confirm').css('pointer-events','none');
+            var requestObject = {
+            'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
+            'talent': talent[0],
+            'is_active':'FALSE'
+             };
+             talentApis.deleteTalents(requestObject).then(function(response){
+                if(response.message == "success") {
+                 $('#delete-talent-popup').modal('hide');
+                 $('html, body').animate({ scrollTop: 0 }, 'fast');
+                 $('#deleteSuccess').css('display','block');
+                 setTimeout(
+                        function () {
+                            $('#deleteSuccess').css('display','none');
+                        }, 20000);
+                  }else{
+                    console.log('error');
+                }
+             });
+         }
+    }
+
+    $scope.showEdit = function(talentEmail){
+      $scope.isEmailAdd = false;
+      if(!$scope.isEmailEditable){
+        $scope.candidateEmail = talentEmail[0].email;
+         $scope.isEmailEditable = true;
+      }else if($scope.isEmailEditable){
+        $scope.isEmailEditable = false;
+      }
+    }
+
+    $scope.showAdd = function(){
+      $scope.isEmailEditable = false;
+      if(!$scope.isEmailAdd){
+         $scope.isEmailAdd = true;
+      }else if($scope.isEmailAdd){
+        $scope.isEmailAdd = false;
+      }
+    }
+
+    $scope.showContactEdit = function(talentContact){
+      $scope.isContactAdd = false;
+      if(!$scope.isContactEditable){
+       $scope.candidateContact = talentContact[0].contact;
+         $scope.isContactEditable = true;
+      }else if($scope.isContactEditable){
+        $scope.isContactEditable = false;
+      }
+    }
+
+    $scope.showContactAdd = function(){
+      $scope.isContactEditable = false;
+      if(!$scope.isContactAdd){
+         $scope.isContactAdd = true;
+      }else if($scope.isContactAdd){
+        $scope.isContactAdd = false;
+      }
+    }
+
+    $scope.reverse = false;
+   $scope.sortBy = function(propertyName) {                   // filed sorting functionality in all project view
+        $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+        $scope.propertyName = propertyName;
+        if($scope.reverse == false){
+        if($("#headRow").find(".sorting_asc").length>0){
+           $("#headRow").find(".sorting_asc").removeClass("sorting_asc");
+         }
+         $('#'+propertyName).addClass('sorting_asc');
+      } else if($scope.reverse == true){
+         if($("#headRow").find(".sorting_desc").length>0){
+           $("#headRow").find(".sorting_desc").removeClass("sorting_desc");
+         }
+         $('#'+propertyName).addClass('sorting_desc');
+
+      }
+   }
+
+    $scope.allConcepts = function(talentConcepts){
+        if(talentConcepts.length > 5){
+            $scope.talentData = talentConcepts;
+            $('#all-concept').modal('show');
+        }
+    }
+
+    $scope.allMetrics = function(talentCareer){
+        if(talentCareer.length > 2){
+            $scope.talentCareer = talentCareer;
+            $('#all-metrics').modal('show');
+        }
+    }
+
+    $scope.closeCandidateInfo = function(){
+    console.log('closed')
+     $scope.isEmailEditable = false;
+     $scope.isEmailAdd = false;
+     $scope.isContactEditable = false;
+     $scope.isContactAdd = false;
+     $scope.isEmail = false;
+     $scope.isContact = false;
+     $('#update_email').removeClass('disabled');
+     $('#add_email').removeClass('disabled');
+     $('#update_contact').removeClass('disabled');
+     $('#add_contact').removeClass('disabled');
+     $('#update_contact').css('pointer-events','');
+     $('#update_email').css('pointer-events','');
+     $('#add_contact').css('pointer-events','');
+     $('#add_email').css('pointer-events','');
+
+     $('#contact-info').modal('hide');
+    }
+
+    $scope.cancelPopup = function(){
+     $scope.isEmailEditable = false;
+     $scope.isEmailAdd = false;
+     $scope.isContactEditable = false;
+     $scope.isContactAdd = false;
+     $scope.isEmail = false;
+     $scope.isContact = false;
+    }
+
+
+        $scope.updateTalentEmail = function(id , oldEmail , candidateEmail){
+        console.log(candidateEmail);
+       if(candidateEmail){
+            $('#update_email').addClass('disabled');
+            $('#update_email').css('pointer-events','none');
+            var formData = new FormData();
+             formData.append('token', $rootScope.globals.currentUser.token);
+             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+             formData.append('talent_id', id);
+             formData.append('email',oldEmail);
+             formData.append('updated_email',candidateEmail);
+             talentApis.addEmail(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+                  //candidateEmail ='';
+                  $scope.closeCandidateInfo();
+                  $('#emailUpdated').css('display','block');
+                  setTimeout(function () {
+                        $('#emailUpdated').css('display','none');
+                    }, 5000);
+                }
+       }else{
+            $scope.isEmail = true;
+       }
+    }
+
+    $scope.addEmail = function(id , oldEmail, candidateEmailAdd){
+    console.log(candidateEmailAdd);
+       if(candidateEmailAdd){
+            $('#add_email').addClass('disabled');
+            $('#add_email').css('pointer-events','none');
+            var formData = new FormData();
+             formData.append('token', $rootScope.globals.currentUser.token);
+             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+             formData.append('talent_id', id);
+             formData.append('email',candidateEmailAdd);
+             talentApis.addEmail(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+                  $scope.closeCandidateInfo();
+                  //candidateEmailAdd ='';
+                  $('#emailSuccess').css('display','block');
+                  setTimeout(function () {
+                        $('#emailSuccess').css('display','none');
+                    }, 2000);
+                }
+       }else{
+            $scope.isEmail = true;
+       }
+    }
+
+    $scope.addContact = function(id , oldContact, candidateContact){
+    console.log(candidateContact);
+       if(candidateContact){
+            $('#add_contact').addClass('disabled');
+            $('#add_contact').css('pointer-events','none');
+            var formData = new FormData();
+             formData.append('token', $rootScope.globals.currentUser.token);
+             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+             formData.append('talent_id', id);
+             formData.append('contact',candidateContact);
+             talentApis.talentContact(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+                  $scope.closeCandidateInfo();
+                 // candidateContact ='';
+                  $('#contactSuccess').css('display','block');
+                  setTimeout(function () {
+                        $('#contactSuccess').css('display','none');
+                    }, 2000);
+                }
+       }else{
+            $scope.isContact = true;
+       }
+    }
+
+    $scope.updateContact = function(id , oldContact, candidateContact){
+    console.log(candidateContact);
+       if(candidateContact){
+            $('#update_contact').addClass('disabled');
+            $('#update_contact').css('pointer-events','none');
+            var formData = new FormData();
+             formData.append('token', $rootScope.globals.currentUser.token);
+             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
+             formData.append('talent_id', id);
+             formData.append('contact',oldContact);
+             formData.append('updated_contact',candidateContact);
+             talentApis.talentContact(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+                  $scope.closeCandidateInfo();
+                  //candidateContact = '';
+                  $('#contactUpdated').css('display','block');
+                  setTimeout(function () {
+                        $('#contactUpdated').css('display','none');
+                    }, 2000);
+                }
+       }else{
+            $scope.isContact = true;
+       }
+    }
+
+    $scope.resetModal = function(){
+        var doneButton = document.getElementById('done');
+        doneButton.classList.add('disabled');
+        doneButton.classList.add('talent-modal-done');
+        doneButton.classList.remove('talent-modal-add');
+        doneButton.style['pointer-events'] = 'none';
+        document.getElementById('backgroundImg').style.display= '';
+        //$('#add-talent').modal('show');
+    }
+
+    $scope.activePageNumber ;
+    $scope.initPagination = function() {
+      var pageItem = $(".pagination li").not(".prev,.next");
+      var prev = $(".pagination li.prev");
+      var next = $(".pagination li.next");
+
+      pageItem.click(function() {
+      console.log(this.id);
+        pageItem.removeClass("active");
+        $(this).not(".prev,.next").addClass("active");
+        $scope.activePageNumber = $('.pagination li.active').attr('id');
+      });
+
+      next.click(function() {
+      //console.log($('li.active').removeClass('active').next().);
+        $('li.active').removeClass('active').next().addClass('active');
+        $scope.activePageNumber = $('.pagination li.active').attr('id');
+      });
+
+      prev.click(function() {
+      //console.log($('li.active').removeClass('active').prev());
+        $('li.active').removeClass('active').prev().addClass('active');
+        $scope.activePageNumber = $('.pagination li.active').attr('id');
+      });
+            //console.log($scope.activePageNumber)
+    }
+
+    /*function getPaginationData(){
+        if($scope.activePageNumber != undefined && $scope.recordCount){
+
+
+
+        }
+
+
+    }
+*/
+
 }
 
 
@@ -1267,6 +1875,7 @@ angular
     .controller('topnavCtrl', topnavCtrl)
     .controller('createProjectCtrl', createProjectCtrl)
     .controller('tableCtrl', tableCtrl)
-    .controller('scoreCardCtrl', scoreCardCtrl)
+    .controller('scoreCardCtrl',scoreCardCtrl)
     .controller('uploadFileCtrl', uploadFileCtrl)
-    .controller('talentCtrl', talentCtrl);
+    .controller('talentCtrl', talentCtrl)
+    .controller('sideNavCtrl', sideNavCtrl);

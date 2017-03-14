@@ -257,11 +257,6 @@ function myDirective($rootScope) {
                 e.stopPropagation();
                 if (element[0].files){
                     if (element[0].files.length > 0) {
-                     console.log(element[0].files);
-                     //for(var i=0;i<element[0].files.length;i++){
-                         //Dropzone.prototype.init(element[0].files,'secondInput');
-                     //}
-
                       $('#addfiles').val('');
                     }
                 }
@@ -272,50 +267,17 @@ function myDirective($rootScope) {
 }
 
 
-//function fileDropzone($rootScope) {
-//  return {
-//    restrict: 'A',
-//    link: function(scope, element, attrs) {
-//
-//        element.on('dragover', function(e) {
-//            e.preventDefault();
-//            e.stopPropagation();
-//        });
-//        element.on('dragenter', function(e) {
-//            e.preventDefault();
-//            e.stopPropagation();
-//        });
-//        element.on('drop', function(event) {
-//            event.preventDefault();
-//            event.stopPropagation();
-//            if (event != null) {
-//                  event.preventDefault();
-//                }
-//            scope.countError = false;
-//            scope.noFile = false;
-//            $('.msgbox').addClass('ng-hide');
-//            scope.NoFileMsg ='';
-//            $('#noFileMsg').addClass('ng-hide');
-//            var file = event.dataTransfer.files[0];
-//             scope.checkFileValidation(file);
-//             $('#add-talent').modal('hide');
-//             $('#add-files').modal('show');
-//             $(".talent-inner-panel").mCustomScrollbar();
-//        });
-//    }
-//  };
-//}
-
  function dropZone($rootScope) {
     return {
         scope: {
             action: "@",
             autoProcess: "=",
-            callBack: "&",
+            callBack: "=",
             dataMax: "=?",
-            mimetypes: "=",
+            mimetypes: "="
         },
         link: function (scope, element, attrs) {
+            scope.completedFiles = [];
             console.log("Creating dropzone");
             $(".talent-panel").mCustomScrollbar();
             // Autoprocess the form
@@ -337,24 +299,156 @@ function myDirective($rootScope) {
                 scope.message = Dropzone.prototype.defaultOptions.dictDefaultMessage;
             }
                 $('#fileUpload').val('');
-                var recruiter ={'recruiter':$rootScope.globals.currentUser.user_email};
+              var recruiter ={'recruiter':$rootScope.globals.currentUser.user_email};
               var myDropZone = new Dropzone(element[0],{
                 url: scope.action,
-                maxFilesize: '5',
+                maxFilesize: 5,
                 paramName: ["file",recruiter],
                 acceptedFiles: scope.mimetypes,
                 maxThumbnailFilesize: '5',
                 clickable: ["#backgroundImg","#file-dropzone","#fileUpload"],
                 autoProcessQueue: scope.autoProcess,
-                success: function (file, response) {
-                    if (scope.callBack != null) {
-                        scope.callBack({response: response,file:file});
-                    }
+                complete: function(r){
+                    scope.completedFiles.push(r);
                 }
             });
 
+            scope.callBack = function () {
+               for (var i=0;i<scope.completedFiles.length;i++ ) {
+                      myDropZone.removeFile(scope.completedFiles[i]);
+                    }
+            }
+
         }
     }
+}
+
+
+function dropDown($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){$(element).selectbox();
+            });
+    }
+  };
+}
+
+function starRating() {
+    return {
+        restrict: 'A',
+        template: '<ul class="rating">' +
+            '<li ng-repeat="star in stars" ng-class="star" >' +
+            '\u2605' +
+            '</li>' +
+            '</ul>',
+        scope: {
+            ratingValue: '=',
+            max: '=',
+            onRatingSelected: '&'
+        },
+        link: function (scope, elem, attrs) {
+
+            var updateStars = function () {
+                scope.stars = [];
+                for (var i = 0; i < scope.max; i++) {
+                    scope.stars.push({
+                        filled: i < scope.ratingValue
+                    });
+                }
+            };
+
+            scope.toggle = function (index) {
+                scope.ratingValue = index + 1;
+                scope.onRatingSelected({
+                    rating: index + 1
+                });
+            };
+
+            scope.$watch('ratingValue', function (oldVal, newVal) {
+                if (newVal) {
+                    updateStars();
+                }
+            });
+        }
+    }
+  }
+
+function starRating2() {
+    return {
+        restrict: 'A',
+        template: '<ul class="rating">' +
+            '<li ng-repeat="star in stars" ng-class="star" ng-click="toggle($index)">' +
+            '\u2605' +
+            '</li>' +
+            '</ul>',
+        scope: {
+            ratingValue: '=',
+            max: '=',
+            onRatingSelected: '&'
+        },
+        link: function (scope, elem, attrs) {
+
+            var updateStars = function () {
+                scope.stars = [];
+                for (var i = 0; i < scope.max; i++) {
+                    scope.stars.push({
+                        filled: i < scope.ratingValue
+                    });
+                }
+            };
+
+            scope.toggle = function (index) {
+                scope.ratingValue = index + 1;
+                scope.onRatingSelected({
+                    rating: index + 1
+                });
+            };
+
+            scope.$watch('ratingValue', function (oldVal, newVal) {
+                if (newVal) {
+                    updateStars();
+                }
+            });
+        }
+    }
+  }
+
+function tableScroll($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $(".tabl-scrol").mCustomScrollbar({
+                scrollButtons:{ enable: true },
+                axis:"x", // horizontal scrollbar
+
+            });
+      });
+    }
+  };
+}
+
+function pieChart($timeout) {
+  return {
+    restrict: 'A',
+        link : function (scope, element, attrs ) {
+              $timeout(function(){
+                   $('.easy-pie-chart').each(function(){
+                     $(this).easyPieChart({
+                         barColor: $(this).data('color'),
+                         trackColor: '#d7d7d7',
+                         scaleColor: false,
+                         lineCap: 'butt',
+                         lineWidth: 6,
+                         animate: 1000,
+                         size:60
+                     }).css('color', $(this).data('color'));
+              });
+        });
+      }
+  }
+
 }
 
 /**
@@ -374,4 +468,9 @@ angular
     .directive('clickOutside', clickOutside)
     .directive('onTouch', onTouch)
     .directive('myDirective', myDirective)
-    .directive('dropZone', dropZone);
+    .directive('dropZone', dropZone)
+    .directive('dropDown', dropDown)
+    .directive('starRating',starRating)
+    .directive('starRating2',starRating2)
+    .directive('tableScroll',tableScroll)
+    .directive('pieChart',pieChart);

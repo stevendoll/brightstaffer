@@ -1,0 +1,145 @@
+  <!-- Widgets Talent Card-->
+    <div class="wrapper wrapper-content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="talent-container">
+            <div class="talent-search-bar">
+              <button type="" class="btn add-talent" data-toggle="modal" oncontextmenu="return false;" data-target="#add-talent" ng-click="resetModal()">Add Talent</button>
+              <button type="" class="btn disabled-talent" id="assignToProject" ng-click="openProjectList()">Send to Project</button>
+            </div>
+            <div class="talent-advance-search-div">
+              <button type="" class="btn advance-search">Advanced Search</button>
+              <div class="talent-search-icon"><i class="fa fa-filter"></i></div>
+              <div class="view-as-panel">
+                <span>View as</span>
+                <div class="bar-view active"  ng-click="changeState()"><i class="fa fa-bars"></i></div>
+                <div class="table-view"  ng-click="changeState()"><i class="fa fa-table"></i></div>
+              </div>
+              <div class="show-entry-panel">
+                <span>Show entries/page</span>
+                <div class="form-group count">
+                  <select class="form-control select-arrow" id="recordCount" ng-model="recordCount"  ng-options="option.name for option in recordOptions">
+                  </select>
+                </div>
+                <div class="form-group export">
+                  <select class="form-control select-arrow" ng-model="exportType" id="export" ng-options="option.name for option in exportOptions">
+                  </select>
+                </div>
+                <div class="talent-search-delete-icon" id="talent-delete" style="pointer-events:none;" ng-click="deleteTalents()"><i class="fa fa-trash"></i></div>
+              </div>
+              <div class="showing-talent-search">
+                <div class="checkbox">
+                  <input type="checkbox" value="1" id="selectall" class="css-checkbox" ng-click="selectAll()">
+                  <label class="css-label" for="selectall"></label>
+                </div>
+                <span>Showing [[talentCountStart]] – [[talentCountEnd]] entries of [[totalTalentCount]] entries</span>
+              </div>
+              <div class="cls"></div>
+              <div ui-view></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- Modal add talent popup file -->
+ <!--<div ng-include="'static/views/addTalent.html'"></div>-->
+
+
+<!-- add-recruiter-Modal-starts -->
+<div class="modal fade" id="add-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="edit-modal-recruiter">
+          <span>Add Recruiter</span>
+          <div class="form-group">
+            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Add Email">
+          </div>
+          <div class="modal-check-section">
+            <div class="checkbox">
+              <input type="checkbox" value="1" id="1" class="css-checkboxs" name="">
+              <label class="css-labels" for="1"></label>
+            </div>
+            <div class="modal-check-text">Profile + Analysis (View Only)</div>
+          </div>
+          <div class="modal-check-section">
+            <div class="checkbox">
+              <input type="checkbox" value="1" id="2" class="css-checkboxs" name="">
+              <label class="css-labels" for="2"></label>
+            </div>
+            <div class="modal-check-text">Profile + Analysis + Notes (View Only)</div>
+          </div>
+          <div class="modal-check-section">
+            <div class="checkbox">
+              <input type="checkbox" value="1" id="3" class="css-checkboxs" name="">
+              <label class="css-labels" for="3"></label>
+            </div>
+            <div class="modal-check-text">Full Access</div>
+          </div>
+          <div class="cls"></div>
+          <button type="" class="btn add">Add</button>
+          <div class="cls"></div>
+          <div class="already-shared">Already Shared</div>
+          <div class="shared-modal-div">
+            <div class="shared-name">Duane Colane</div>
+            <button type="" class="btn cancel-invite-bttn">Cancel Invite</button>
+            <div class="form-group excess">
+              <select class="form-control select-arrow">
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+              </select>
+            </div>
+          </div>
+          <div class="shared-modal-div">
+            <div class="shared-name">Duane Colane</div>
+            <button type="" class="btn cancel-invite-bttn">Cancel Invite</button>
+            <div class="form-group excess">
+              <select class="form-control select-arrow">
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- add-recruiter-Modal-ends -->
+
+
+<div class="success-box" id="projectSuccess" style="display:none;">
+    <span><strong>Success!</strong> Talent has been added to the project.</span>
+</div>
+
+ <div class="success-box" id="deleteSuccess" style="display:none;">
+    <span><strong>Success!</strong> Talent has been deleted.</span>
+</div>
+
+ <!-- delete-Modal -->
+<div class="modal fade" id="delete-talent-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog delete-talent-dailog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+      </div>
+      <div class="modal-body">
+        <div class="confirm-text">Are you sure you want to <span>delete</span> this Talent.</div>
+        <div class="confirm-bttn-box">
+          <button type="" class="btn" id="confirm" ng-click="deleteTalentsConfirm()">Yes</button>
+          <button type="" class="btn" data-dismiss="modal" aria-label="Close">No</button>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+

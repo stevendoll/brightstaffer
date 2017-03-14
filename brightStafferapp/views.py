@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
-from brightStafferapp.models import Projects, Concept
+from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept, PdfImages, FileUpload, Recruiter
 from brightStafferapp import util
 from brightStafferapp.util import require_post_params
 from brightStaffer.settings import Alchemy_api_key
@@ -24,7 +24,11 @@ from rest_framework.response import Response
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from uuid import UUID
-
+import PyPDF2
+from PIL import Image
+import os
+import uuid
+import textract
 
 class UserData(View):
     @method_decorator(csrf_exempt)
@@ -213,7 +217,6 @@ class AlchemyAPI(View):
         :return:
         """
         context = dict()
-        concept_obj = None
         user_data = json.loads(request.body.decode("utf-8"))
         check_auth = user_validation(user_data)
         if not check_auth:
@@ -221,23 +224,19 @@ class AlchemyAPI(View):
         project_id = validate_project_by_id(user_data)
         if not project_id:
             return util.returnErrorShorcut(400, 'Project id is not valid')
-        if project_id:
-            project_id = str(Projects.objects.get(id=user_data['id']))
-            concept_obj, created = Concept.objects.get_or_create(project_id=project_id)
-            Projects.objects.filter(id=project_id).update(description=user_data['description'])
-            context['project_id'] = str(project_id)
 
         # call the alchemy api and get list of concepts
-        keyword_concepts = self.alchemy_api(user_data, project_id)
+        project_obj = Projects.objects.get(id=user_data['id'])
+        keyword_concepts = self.alchemy_api(user_data, project_obj.id)
         if keyword_concepts:
-            concept_obj.concept = keyword_concepts
-            concept_obj.save()
+            for keyword in keyword_concepts:
+                concept, created = Concept.objects.get_or_create(concept=keyword)
+                ProjectConcept.objects.get_or_create(project=project_obj, concept=concept)
         else:
             return util.returnErrorShorcut(400, "Description text data is not valid.")
         del user_data['token']
         del user_data['recruiter']
-        Projects.objects.filter(id=project_id).update(**user_data)
-        concept_obj.concept = keyword_concepts
+        Projects.objects.filter(id=project_obj.id).update(**user_data)
         context['concept'] = keyword_concepts
         return util.returnSuccessShorcut(context)
 
@@ -250,17 +249,21 @@ class AlchemyAPI(View):
                 alchemy_language.combined(text=user_data['description'],
                                           extract='entities,keywords', max_items=25))
             d = json.loads(data)
-            print (d)
             Projects.objects.filter(id=project_id).update(description_analysis=d)
             for item in chain(d["keywords"], d["entities"]):
                 if round(float(item['relevance']), 2) >= concept_relevance:
                     keyword_list.append(item['text'].lower())
-            return list(set(keyword_list))#[:25]
+            return list(set(keyword_list))[:25]
         except Exception as e:
             return keyword_list
 
-    @csrf_exempt
-    def update_concept(request):
+
+class UpdateConcepts(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UpdateConcepts, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request):
         param_dict = {}
         try:
             user_data = json.loads(request.body.decode("utf-8"))
@@ -272,11 +275,22 @@ class AlchemyAPI(View):
         project_id = validate_project_by_id(user_data)
         if not project_id:
             return util.returnErrorShorcut(400, 'Project id is not valid')
-        concept_obj, created = Concept.objects.get_or_create(project_id=user_data['id'])
-        concept_obj.concept = user_data['concept']
-        concept_obj.save()
-        param_dict['concept'] = concept_obj.concept
+        project_obj = Projects.objects.get(id=user_data['id'])
+        if user_data['concept']:
+            create_update_concepts(user_data['concept'], project_obj)
         return util.returnSuccessShorcut(param_dict)
+
+
+def create_update_concepts(concepts, project_obj):
+    project_concepts = []
+    if project_obj:
+        project_concepts = list(ProjectConcept.objects.filter(project=project_obj).values_list('id', flat=True))
+    for keyword in concepts:
+        concept, created = Concept.objects.get_or_create(concept=keyword)
+        project_concept, proj_created = ProjectConcept.objects.get_or_create(project=project_obj, concept=concept)
+        if project_concept.id in project_concepts:
+            project_concepts.remove(project_concept.id)
+    ProjectConcept.objects.filter(id__in=project_concepts).delete()
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -302,7 +316,7 @@ class ProjectList(generics.ListCreateAPIView):
         if not result:
             return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return super(ProjectList, self).get(request, *args, *kwargs)
+            return super(ProjectList, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
         count = self.request.query_params['count']
@@ -329,7 +343,7 @@ class TopProjectList(generics.ListCreateAPIView):
         if not result:
             return Response({"status": "Fail"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return super(TopProjectList, self).get(request, *args, *kwargs)
+            return super(TopProjectList, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
         rec_name = User.objects.filter(username=self.request.query_params['recruiter'])
@@ -337,42 +351,149 @@ class TopProjectList(generics.ListCreateAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super(TopProjectList, self).list(request, *args, **kwargs)
-        for result in response.data['results']:
-            if len(result['concepts'])>0:
-                result['concepts'] = result['concepts'][0]
-                concept = ast.literal_eval(result['concepts'])
-                result['concepts'] = concept
-            else:
-                result['concepts']=result['concepts']
         response.data['top_project'] = response.data['results']
         response.data['message'] = 'success'
         del (response.data['results'])
         return response
 
 
-class FileUpload(View):
+class UpdateRecruiter(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UpdateRecruiter, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        param_dict = {}
+        recruiter = request.GET['recruiter']
+        display_name = request.GET['display_name']
+        user = User.objects.filter(username=recruiter)
+        if not user:
+            return util.returnErrorShorcut(403, 'Recruiter Email is not valid')
+        Recruiter.objects.filter(user=user[0]).update(display_name=display_name)
+        param_dict['display_name'] = display_name
+        return util.returnSuccessShorcut(param_dict)
+
+
+class FileUploadView(View):
+    """
+    Handles file uploading by drag and drop feature for add talent functionality.
+    """
+
+    FILTER_DICT = {'/FlateDecode': '.png',
+                   '/DCTDecode': '.jpg',
+                   '/JPXDecode': '.jp2'
+                   }
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
-        return super(FileUpload, self).dispatch(request, *args, **kwargs)
+        return super(FileUploadView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request):
-        files = request.FILES
-        dest_path = os.path.join(settings.MEDIA_URL + request.POST["recruiter"])
-        if not os.path.exists(dest_path):
-            os.makedirs(dest_path)
-        for key, file in files.items():
-            self.handle_uploaded_file(dest_path, file)
-        context = dict()
-        return util.returnSuccessShorcut(context)
+        """
+        :param request: incoming POST request with files
+        :return: success or error response
+        """
+        try:
+            files = request.FILES
+            if not files:
+                return util.returnErrorShorcut(400, "No files attached with this request")
+            user_username = request.POST['recruiter']
+            user = User.objects.filter(username=user_username)
+            if user:
+                user = user[0]
+            dest_path = os.path.join(settings.MEDIA_URL, user_username)
+            # create destination path if not exists, send this to utils later, since will occur in many scenarios
+            if not os.path.exists(dest_path):
+                os.makedirs(dest_path)
+
+            for key, file in files.items():
+                file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
+                # extract text from pdf
+                self.extract_text_from_pdf(file_upload_obj)
+                # extract all images from pdf
+                self.extract_image_from_pdf(file_upload_obj, dest_path='images')
+            context = dict()
+            return util.returnSuccessShorcut(context)
+        except:
+            return util.returnErrorShorcut(400, "Error Connection Refused")
 
     # @staticmethod
-    def handle_uploaded_file(self, dest_path, f):
-        file_path = os.path.join(dest_path, f.name)
-        file_obj = open(file_path, 'wb+')
-        for chunk in f.chunks():
-            file_obj.write(chunk)
-            file_obj.close()
+    def handle_uploaded_file(self, dest_path, f, user):
+        """
+        :param dest_path: destination path for the file currently being saved
+        :param f: InMemoryUploadedFile object from request.FILES
+        :param user: user uploading the file
+        :return: <FileUpload object> or error
+        """
+        try:
+            file_name = str(uuid.uuid4())
+            file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user)
+            return file_upload_obj
+        except Exception as e:
+            print(e)
+            return util.returnErrorShorcut(400, "Error Connection Refused")
+
+    def extract_image_from_pdf(self, file_upload_obj, dest_path=None):
+        """
+        :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
+        and is now sent to extract images from the pdf file
+        :param dest_path: destination path for extracted images
+        :return: None or error
+        """
+        input1 = PyPDF2.PdfFileReader(open(file_upload_obj.file.path, "rb"))
+        page0 = input1.getPage(0)
+        dest_path = os.path.join("/".join(file_upload_obj.file.path.split('/')[:-1]), dest_path)
+        if not os.path.exists(dest_path):
+            os.makedirs(dest_path)
+        # check if /XObject is present in page. This object checks if there is any image present in pdf file.
+        if '/XObject' not in page0['/Resources']:
+            return
+        xobject = page0['/Resources']['/XObject'].getObject()
+        for obj in xobject:
+            if xobject[obj]['/Subtype'] == '/Image':
+                size = (xobject[obj]['/Width'], xobject[obj]['/Height'])
+                data = xobject[obj].getData()
+                unique_name = str(uuid.uuid4())
+                img_obj = PdfImages()
+                img_obj.file = file_upload_obj
+                img_obj.name = unique_name
+                img_obj.save()
+                if xobject[obj]['/ColorSpace'] == '/DeviceRGB':
+                    mode = "RGB"
+                else:
+                    mode = "P"
+
+                img_name = os.path.join(dest_path, unique_name)
+
+                # /FlateDecode for .png
+                if xobject[obj]['/Filter'] == '/FlateDecode':
+                    img = Image.frombytes(mode, size, data)
+                    img_name += self.FILTER_DICT[xobject[obj]['/Filter']]
+                    img.save(img_name)
+                    img_obj.image = img_name
+                elif xobject[obj]['/Filter'] == '/DCTDecode':
+                    img_name += self.FILTER_DICT[xobject[obj]['/Filter']]
+                    img = open(img_name, "wb+")
+                    img.write(data)
+                    img_obj.image = img_name
+                    img.close()
+                elif xobject[obj]['/Filter'] == '/JPXDecode':
+                    img_name += self.FILTER_DICT[xobject[obj]['/Filter']]
+                    img = open(img_name, "wb")
+                    img.write(data)
+                    img_obj.image = img_name
+                    img.close()
+                img_obj.save()
+
+    def extract_text_from_pdf(self, file_upload_obj):
+        """
+        :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
+        and is now sent to extract text from the pdf file
+        :return: None or error
+        """
+        text = textract.process(file_upload_obj.file.path)
+        file_upload_obj.text = text
+        file_upload_obj.save()
 
 
 def user_validation(data):
@@ -398,3 +519,4 @@ def validate_project_by_id(request_data):
     else:
         # Return True if the project id is valid
         return True
+

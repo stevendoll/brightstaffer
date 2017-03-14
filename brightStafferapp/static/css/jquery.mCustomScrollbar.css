@@ -31,7 +31,7 @@ CONTENTS:
 		position: relative;
 		overflow: hidden;
 		height: 100%;
-		max-width: 100%;
+		max-width: 98%;
 		outline: none;
 		direction: ltr;
 	}
@@ -147,7 +147,7 @@ x-axis
 
 	.mCSB_horizontal.mCSB_inside > .mCSB_container{
 		margin-right: 0;
-		margin-bottom: 30px;
+		margin-bottom: 12px;
 	}
 
 	.mCSB_horizontal.mCSB_outside > .mCSB_container{ min-height: 100%; }
@@ -166,7 +166,7 @@ x-axis
 	.mCustomScrollBox + .mCSB_scrollTools.mCSB_scrollTools_horizontal,
 	.mCustomScrollBox + .mCSB_scrollTools + .mCSB_scrollTools.mCSB_scrollTools_horizontal{ bottom: -26px; } /* scrollbar position: outside */
 
-	.mCSB_scrollTools.mCSB_scrollTools_horizontal a + .mCSB_draggerContainer{ margin: 0 20px; }
+	.mCSB_scrollTools.mCSB_scrollTools_horizontal a + .mCSB_draggerContainer{ margin: 0 0px; }
 
 	.mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_draggerRail{
 		width: 100%;

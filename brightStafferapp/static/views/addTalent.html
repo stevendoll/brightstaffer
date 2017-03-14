@@ -7,17 +7,18 @@
         <button type="button" class="close" ng-click="closePopup()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <h4 class="modal-title" id="myModalLabel">Add Talent</h4>
       </div>
-        <!-- <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>-->
+        <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 100 Files at once.</span>
       <div class="modal-body">
          <div class="talent-panel">
           <div class="cls"></div>
-             <form action="/upload/" class="dropzone" drop-zone call-back="myCallBackMethod(response,file)" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
+             <form action="/upload/" class="dropzone" drop-zone call-back="removeCompletedFiles" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
                   <img src="static/img/pdf-upload-image.png" alt="" id="backgroundImg">
                   <div class="cls"></div>
              </form>
-            <!-- <input type="file" multiple="multiple" class="dz-hidden-input" id="fileUpload" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;">-->
+
         </div>
           <div class="progress-bttn">
+            <div class="note-text">NOTE: Max 100 files(doc/docx/pdf of 5MB) allowed at once.</div>
             <button type="" class="btn talent-modal-done disabled" ng-click="done()" id="done" style="pointer-events:none;">Done</button>
             <span class="btn talent-modal-add" id="fileUpload">Add Files</span>
           </div>
@@ -38,7 +39,7 @@
       <div class="modal-body">
         <div class="confirm-text">Are you sure you want to <span>cancel</span> the progress.</div>
         <div class="confirm-bttn-box">
-          <button type="" class="btn" data-dismiss="modal">Yes</button>
+          <button type="" class="btn" ng-click="closeForcefully()">Yes</button>
           <button type="" class="btn" ng-click="reopen()">No</button>
         </div>
         <div class="cls"></div>
