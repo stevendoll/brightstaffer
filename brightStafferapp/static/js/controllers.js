@@ -1312,6 +1312,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             });
           $('#projectListD').change(function() {
             var selectedValue = $('#projectListD :selected').text();
+             console.log(selectedValue);
             $scope.projectDD = selectedValue;
             console.log($scope.projectDD);
             });
@@ -1470,9 +1471,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
         $('#add-talent-btn').removeClass('disabled');
         $('#add-talent-btn').css('pointer-events','');
-        $('#projectListD :selected').removeAttr('selected');
-        $('#projectListD .sbSelector').text('Select Project');
-        //$scope.projectDD = $rootScope.projectListView[0];
+        //$('#projectListD :selected').removeAttr('selected');
+       var sbId =  $('#projectListD').attr('sb');
+        $('#sbSelector_'+sbId).text('Select Project');
         $('#add-project').modal('show');
     }
 
@@ -1589,8 +1590,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#confirm').css('pointer-events','none');
             var requestObject = {
             'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
-            'talent': talent[0],
-            'is_active':'FALSE'
+            'talent': talent,
+            'is_active':'False'
              };
              talentApis.deleteTalents(requestObject).then(function(response){
                 if(response.message == "success") {
@@ -1708,7 +1709,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
 
-        $scope.updateTalentEmail = function(id , oldEmail , candidateEmail){
+      $scope.updateTalentEmail = function(id , oldEmail , candidateEmail){
         console.log(candidateEmail);
        if(candidateEmail){
             $('#update_email').addClass('disabled');
@@ -1724,7 +1725,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                   response = JSON.parse(response);
                   console.log(response);
                   //candidateEmail ='';
-                  $scope.closeCandidateInfo();
                   $('#emailUpdated').css('display','block');
                   setTimeout(function () {
                         $('#emailUpdated').css('display','none');
@@ -1749,6 +1749,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              function requestCallback(response) {
                   response = JSON.parse(response);
                   console.log(response);
+                  $scope.candidateEmailAdd = '';
                   $scope.closeCandidateInfo();
                   //candidateEmailAdd ='';
                   $('#emailSuccess').css('display','block');
