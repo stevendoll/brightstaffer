@@ -45,11 +45,13 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     prevButton = angular.element(prevButton);
                      $rootScope.totalProjectCount = response.count;
                      $rootScope.allProjectList = response.published_projects;
-                     for(var i=0;i<$rootScope.allProjectList.length;i++){
+                      if($rootScope.projectListView.length == 2){
+                        for(var i=0;i<$rootScope.allProjectList.length;i++){
                          var project = {name:'#'+$rootScope.allProjectList[i].project_name,
                                         value:'#'+$rootScope.allProjectList[i].id};
                             $rootScope.projectListView.push(project);
                          }
+                      }
                      $rootScope.projectCountEnd = response.published_projects.length;
                      $rootScope.projectNext = response.next;
                      $rootScope.projectPrevious = response.previous;
@@ -1586,7 +1588,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             var requestObject = {
             'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
             'talent': talent[0],
-            'inactive':'True'
+            'is_active':'FALSE'
              };
              talentApis.deleteTalents(requestObject).then(function(response){
                 if(response.message == "success") {

@@ -284,8 +284,8 @@ function talentApis($http,REQUEST_URL) {
 
     deleteTalents: function(data){
         return $http({
-            url: REQUEST_URL+'delete_talent/?talent='+data.talent+'&recruiter='+data.recruiter+'&inactive='+data.inactive,
-            method: "GET", // or "get"
+            url: REQUEST_URL+'delete_talent/?talent='+data.talent+'&recruiter='+data.recruiter+'&is_active='+data.is_active,
+            method: "DELETE", // or "get"
             headers: {
                         'Content-Type': 'application/json; charset=utf-8',
                     },
