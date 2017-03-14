@@ -1590,8 +1590,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#confirm').css('pointer-events','none');
             var requestObject = {
             'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
-            'talent': talent[0],
-            'is_active':'FALSE'
+            'talent': talent,
+            'is_active':'False'
              };
              talentApis.deleteTalents(requestObject).then(function(response){
                 if(response.message == "success") {
