@@ -255,6 +255,7 @@ class TalentConcept(models.Model):
 
     class Meta:
         verbose_name_plural = "Talent Concepts"
+        ordering = ('-match',)
 
     def __str__(self):
         return self.concept.concept
