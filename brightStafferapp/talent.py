@@ -266,8 +266,16 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         talent_obj = talent_objs[0]
         tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage, details=details, notes=notes)
         if created:
-            context['message'] = 'success'
-        return util.returnSuccessShorcut(context)
+            context['talent_id']=tp_obj.talent.talent_name
+            context['stage_id']=tp_obj.id
+            context['project']=tp_obj.project.project_name
+            context['stage']=tp_obj.stage
+            context['details'] = tp_obj.details
+            context['notes'] = tp_obj.notes
+            return util.returnSuccessShorcut(context)
+        else:
+            return util.returnErrorShorcut(403, 'Talent stage and info is exist in database,Please create different stage' )
+
 
 # Edit Talent's Stage
 class TalentStageEditAPI(generics.ListCreateAPIView):
@@ -291,9 +299,15 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         if not talent_objs:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
         talent_obj = talent_objs[0]
-        updated=TalentStage.objects.filter(id=str(stage_id)).update(stage=stage,details=details,notes=notes)
-        if updated:
-            context['message'] = 'success'
+        created = TalentStage.objects.filter(talent=talent_obj, project=project, stage=stage, details=details,
+                                                    notes=notes).exists()
+        if created:
+            return util.returnErrorShorcut(403,
+                                           'Talent stage and info is exist in database,Please update the stage')
+        else:
+            updated=TalentStage.objects.filter(id=str(stage_id)).update(stage=stage,details=details,notes=notes)
+            if updated:
+                context['message'] = 'success'
         return util.returnSuccessShorcut(context)
 
 # Delete Talent's project Stage
@@ -305,9 +319,10 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
     def delete(self, request, *args, **kwargs):
         context = dict()
         id = request.GET['stage_id']
+        talent_id = TalentStage.objects.filter(id=id)
+        if not talent_id:
+            return util.returnErrorShorcut(403,'Stage id is not exist in the system')
         is_deleted = TalentStage.objects.filter(id=id).delete()[0]
-        if not is_deleted:
-            return util.returnErrorShorcut(400, 'No entry found or already deleted')
         return util.returnSuccessShorcut(context)
 
 
@@ -321,12 +336,10 @@ class TalentAllStageDetailsAPI(generics.ListCreateAPIView):
         queryset = super(TalentAllStageDetailsAPI, self).get_queryset()
         talent_id = self.request.query_params.get('talent_id')
         project_id = self.request.query_params.get('project_id')
-        #stage_id = self.request.query_params.get('stage_id')
         queryset = queryset.filter(talent_id=talent_id, project_id=project_id)
         return queryset
 
 class TalentUpdateRank(View):
-
     def get(self,request):
         context={}
         talent = request.GET['talent_id']
@@ -375,7 +388,7 @@ class TalentSearch(View):
     def get(self, request):
         es = Elasticsearch()
         term = self.request.GET['term']
-        body = json.dumps({"query": {
+        query = {"query": {
             "bool": {
                 "should": [
                     {
@@ -402,7 +415,8 @@ class TalentSearch(View):
                                     "fields": [
                                         "talent_project.project",
                                         "talent_project.talent",
-                                        "talent_project.project_match"
+                                        "talent_project.project_match",
+                                        "talent_project.project_stage"
                                     ]
                                 }
                             }
@@ -486,10 +500,56 @@ class TalentSearch(View):
                 ]
             }
         }
-        })
+        }
+        print(query['query']['bool']['should'])
+        body = json.dumps(query)
         res = es.search(index="haystack", doc_type="modelresult",
                         body=body
                         )
+        return HttpResponse(json.dumps(res['hits']))
 
 
+class TalentSearchFilter(View):
+
+    def get(self, request):
+        es = Elasticsearch()
+        project_match = self.request.GET['project_match']
+        rating = self.request.GET['rating']
+        create_date = self.request.GET['create_date']
+        query = {
+                "query": {
+                    "nested" : {
+                        "path" : "talent_project",
+                        "query" : {
+                            "bool" : {
+                                "should" : [
+                                    {
+                                        "range" :{
+                                             "talent_project.project_match" : {"gte" : project_match}
+                                        },
+                                            "range": {
+                                                "rating": {
+                                                    "gte": rating
+                                                }
+                                            }
+                                    },
+                                ],
+                                "filter": [
+                                        {
+                                            "range": {
+                                                "rating":{
+                                                    "gte": rating
+                                                }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+        }
+        body = json.dumps(query)
+        res = es.search(index="haystack", doc_type="modelresult",
+                        body=body
+                        )
         return HttpResponse(json.dumps(res['hits']))
