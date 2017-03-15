@@ -4,7 +4,7 @@
                   <div class="talentsearch-left-panel">
                     <div class="left-div"><div class="search-image"><img src="static/img/dummyProfile.png" alt=""></div></div>
                     <div class="search-result-panel right-div">
-                      <div class="search-result-name"><div class="search-name-head" ui-sref="talent.talent-profile" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeAll]]</span></div>
+                      <div class="search-result-name"><div class="search-name-head"  ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeAll]]</span></div>
                      <div class="search-result-info">[[talent.current_location ]] <span></span> [[talent.industry_focus | capitalizeWord]]</div>
                     </div>
 
@@ -104,7 +104,7 @@
                   </div>
                   <div class="cls"></div>
                   <div class="talentsearch-foot">
-                   <button class="btn" ui-sref="talent.talent-profile" id="profile_[[talent.id]]" ng-click="loadProfileData(talent.id,talent)">View Profile</button>
+                   <button class="btn"  id="profile_[[talent.id]]" ng-click="loadProfileData(talent.id,talent)">View Profile</button>
                    <button type="" class="btn" id="add_[[talent.id]]" ng-click="openProjectList(talent.id)">Add to Project</button>
                    <a class="linkedin" href="[[talent.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>
                   </div>

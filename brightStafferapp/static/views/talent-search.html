@@ -8,8 +8,8 @@
               <button type="" class="btn disabled-talent" id="assignToProject" ng-click="openProjectList()">Send to Project</button>
             </div>
             <div class="talent-advance-search-div">
-              <button type="" class="btn advance-search">Advanced Search</button>
-              <div class="talent-search-icon"><i class="fa fa-filter"></i></div>
+              <button type="" class="btn advance-search" ng-click="advanceSearchOpen()">Advanced Search</button>
+              <div class="talent-search-icon" ng-click="filterOpen()"><i class="fa fa-filter"></i></div>
               <div class="view-as-panel">
                 <span>View as</span>
                 <div class="bar-view active"  ng-click="changeState()"><i class="fa fa-bars"></i></div>
@@ -35,9 +35,232 @@
                 <span>Showing [[talentCountStart]] – [[talentCountEnd]] entries of [[totalTalentCount]] entries</span>
               </div>
               <div class="cls"></div>
-              <div ui-view></div>
+              <div class="col-xs-12 padding-zero" ng-show="isFilterChecked">
+                <div class="filter-search-panel">
+                  <form>
+                    <div class="filter-stage-box">
+                      <div class="form-group">
+                        <label for="" class="filter-label-text">Stage</label>
+                        <select class="form-control select-arrow">
+                          <option>Select Stage</option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>23</option>
+                          <option>3</option>
+                          <option>4</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="filter-stage-box">
+                      <div class="form-group">
+                        <label for="" class="filter-label-text">Project Name</label>
+                        <select class="form-control select-arrow">
+                          <option>Select Project</option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>23</option>
+                          <option>3</option>
+                          <option>4</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="range-picker-div">
+                      <div class="form-group">
+                        <label for="" class="filter-label-text">Project Match Percentage</label>
+                        <div class="cls"></div>
+                        <input type="email" class="form-control percentage-input-box" id="" placeholder="">
+                        <div class="range-slider-div">
+                          <span>0%</span>
+                          <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                          <span>100%</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="filter-stage-box">
+                      <div class="form-group">
+                        <label for="" class="filter-label-text">Company/Divison Name</label>
+                        <input type="email" class="form-control filter-input-box" id="" placeholder="Enter Company Name">
+                      </div>
+                    </div>
+                    <div class="filter-stage-box">
+                      <div class="form-group">
+                        <label for="" class="filter-label-text">Date Added/Analyzed</label>
+                        <input type="email" class="form-control filter-input-date" id="" placeholder="Select Date">
+                      </div>
+                    </div>
+                    <div class="filter-stage-box">
+                      <div class="form-group">
+                        <label for="" class="filter-label-text">Last contacted</label>
+                        <input type="email" class="form-control filter-input-date" id="" placeholder="Select Date">
+                      </div>
+                    </div>
+                    <div class="filter-stage-box">
+                      <div class="form-group">
+                        <label for="" class="filter-label-text">Concept</label>
+                        <input type="email" class="form-control filter-input-box" id="" placeholder="Enter Concept">
+                      </div>
+                    </div>
+                    <div class="filter-stage-box">
+                      <div class="form-group">
+                        <label for="" class="filter-label-text">Rating</label>
+                        <div class="filter-rating">
+                          <i class="fa fa-star-o"></i>
+                          <i class="fa fa-star-o"></i>
+                          <i class="fa fa-star-o"></i>
+                          <i class="fa fa-star-o"></i>
+                          <i class="fa fa-star-o"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="filter-bttn-box">
+                      <button type="submit" class="btn reset-bttn">Reset</button>
+                      <button type="submit" class="btn filter-bttn">Filter</button>
+                    </div>
+                  </form>
+                </div>
               </div>
+              </div>
+              <div class="col-xs-12 padding-zero " ng-show="isAdvanceSearch">
+              <div class="col-sm-2 adv-srh-reslt-l adv-srh-bor">
+                 <p class="shw-srh-fr">Showing Result for:</p>
+                 <div class="col-md-12 padding-zero job-tit-cont">
+                  <p class="ad-j-tit">Job Titles</p>
+                  <p class="j-tit-bolen">+ Job Titles or Boolean</p>
+                  <p class="sr-devlp">
+                    <a href="#">+ Sr. Developer,</a> <a href="#">+ Lead Developer</a>
+                  </p>
+                </div>
+                <div class="col-md-12 padding-zero job-tit-cont">
+                  <p class="ad-j-tit">Location
+                  <span class="pull-right">
+                      <div class="location-slider-div">
+                        <span>Within</span>
+                        <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                        <span>50 Miles</span>
+                      </div>
+                      <div class="cls"></div>
+                  </span>
+                  </p>
+                  <p class="loc-btn clearfix">
+                    <button class="btn pro-details">Washington</button>
+                    <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
+                  </p>
+                </div>
+                <div class="col-md-12 padding-zero job-tit-cont">
+                  <p class="ad-j-tit">Skills</p>
+                  <p class="loc-btn clearfix">
+                    <button class="btn pro-details">Developer</button>
+                    <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
+                  </p>
+                </div>
+
+                <div class="col-md-12 padding-zero job-tit-cont">
+                  <p class="ad-j-tit">Job Titles</p>
+                  <p class="j-tit-bolen">+ Add Company</p>
+                  <p class="sr-devlp">
+                    <a href="#">+ Apple,</a> <a href="#">+ Google,</a> <a href="#">+ Wipro</a>
+                  </p>
+                  <div class="showing-talent-search chk-lft chk-wd-long">
+                    <div class="checkbox">
+                      <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
+                      <label class="css-label" for="apl"></label>
+                    </div>
+                    <span>Current or Past</span>
+                  </div>
+                  <div class="showing-talent-search chk-lft">
+                    <div class="checkbox">
+                      <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
+                      <label class="css-label" for="apl"></label>
+                    </div>
+                    <span>Current </span>
+                  </div>
+                  <div class="showing-talent-search chk-lft chk-wd-long">
+                    <div class="checkbox">
+                      <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
+                      <label class="css-label" for="apl"></label>
+                    </div>
+                    <span>Past Not Current</span>
+                  </div>
+                  <div class="showing-talent-search chk-lft">
+                    <div class="checkbox">
+                      <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
+                      <label class="css-label" for="apl"></label>
+                    </div>
+                    <span>Current </span>
+                  </div>
+                </div>
+
+                <div class="col-md-12 padding-zero job-tit-cont">
+                  <p class="ad-j-tit">Schools</p>
+                  <p class="j-tit-bolen">+ Schools Attended</p>
+                  <p class="sr-devlp">
+                    <a href="#">+ Universitry of Pheonix (41),</a>
+                  </p>
+                </div>
+
+                <div class="col-md-12 padding-zero job-tit-cont">
+                  <p class="ad-j-tit">Industries</p>
+                  <p class="j-tit-bolen">+ Candidate Industries</p>
+                  <p class="sr-devlp">
+                    <a href="#">+ Information Technology,</a>
+                  </p>
+                </div>
+
+                <div class="col-md-12 padding-zero job-tit-cont">
+                  <p class="ad-j-tit">Keywords</p>
+                  <p class="loc-btn clearfix">
+                    <button class="btn pro-details">Full Stack Developer</button>
+                    <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
+                  </p>
+                </div>
+
+                <div class="col-md-12 padding-zero job-tit-cont">
+                  <p class="ad-j-tit">Years of Experience
+                    <span class="pull-right">
+                      <div class="location-slider-div">
+                        <span>0</span>
+                        <input id="ex2" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                        <span>50</span>
+                      </div>
+                    </span>
+                  </p>
+                  <p class="loc-btn clearfix">
+                    <button class="btn pro-details">6 to 10 Years</button>
+                    <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
+                  </p>
+                   <p class="sr-devlp">
+                    <a href="#">+ Less than 1 year (2),</a>
+                  </p>
+                </div>
+
+                 <div class="col-sm-12 padding-zero text-right job-tit-cont adv-srh-sub-btn">
+                  <button type="submit" class="btn rset">Reset</button>
+                  <button type="submit" class="btn adv-srh">Search</button>
+                  <p class="ss-searh"><a href="#">Save this Search</a></p>
+                </div>
+
+                 <div class="col-md-12 padding-zero job-tit-cont">
+                     <p class="shw-srh-fr l-sv-srh">Last saved search</p>
+                      <ul class="seh-fil-seltd-contnr">
+                      <li class="btn btn-default btn-sm seh-fil-seltd">ui
+                      <span class="canc-tag">X</span>
+                      </li>
+                       <li class="btn btn-default btn-sm seh-fil-seltd">full stack developer
+                      <span class="canc-tag">X</span>
+                      </li>
+
+                      <li class="btn btn-default btn-sm seh-fil-seltd">full stack developer
+                      <span class="canc-tag">X</span>
+                      </li>
+                        <li class="btn btn-default btn-sm seh-fil-seltd">ui
+                      <span class="canc-tag">X</span>
+                      </li>
+                      </ul>
+                 </div>
+              </div>
+
             </div>
+            <div ui-view></div>
           </div>
         </div>
       </div>

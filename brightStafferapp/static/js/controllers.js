@@ -1278,9 +1278,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.recordCount = $scope.recordOptions[0];
      $rootScope.talentList = [];
      $scope.recruiter ={};
-     $rootScope.talentDetails = {};
+     //$rootScope.talentDetails = ;
      $scope.selectedCandidate = {};
-     $rootScope.globals.selectedCandidateId = '';
+     $rootScope.selectedCandidateProfile = '';
      $scope.choosenCandidates = [];
      $scope.currentTalentId = '';
      $scope.projectDD = $rootScope.projectListView[0];
@@ -1316,7 +1316,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             });
           $('#projectListD').change(function() {
             var selectedValue = $('#projectListD :selected').text();
-             console.log(selectedValue);
             $scope.projectDD = selectedValue;
             console.log($scope.projectDD);
             });
@@ -1326,6 +1325,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
       angular.element(document).ready(function () {
             $scope.getTalents();
+            //if($state.current.name == 'talent.talent-profile'){
+            //$scope.loadProfileData();
+            //}
+
        });
 
     $scope.getSelectedRating = function (rating) {
@@ -1435,9 +1438,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.loadProfileData = function(id, talent){
         if(talent && id){
              $rootScope.talentDetails = talent;
-             $rootScope.globals.selectedCandidateId = id;
+             //$rootScope.selectedCandidateProfile = id;
         }else{
-            id = $cookieStore.get('selectedCandidateId');
+          var id = $cookieStore.get('selectedCandidateProfile');
         }
         $('html, body').animate({ scrollTop: 0 }, 'fast');
         var requestObject = {
@@ -1446,8 +1449,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         'id': id
          };
          talentApis.getCandidateProfile(requestObject).then(function(response){
+              $state.go('talent.talent-profile','');
               $rootScope.talentDetails = response;
-              $cookieStore.put('selectedCandidateId', $rootScope.globals.selectedCandidateId)
+              $cookieStore.put('selectedCandidateProfile', $rootScope.talentDetails.id);
+              console.log($cookieStore.get('selectedCandidateProfile'));
          });
 
      }
@@ -1879,7 +1884,60 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     }
 */
+    $scope.stage = {
+     stage: 'Select Stage',
+     project: $rootScope.projectListView[0]};
 
+    $scope.openAddStagePopup = function(){
+        $('.select-date').datepicker();
+        $('#projectListD2').change(function() {
+            var selectedValue = $('#projectListD2 :selected').text();
+            $scope.stage.project = selectedValue;
+            console.log($scope.stage.project);
+            });
+        $('#stages').val($scope.stage.stage);
+        $('#add-stage').modal('show');
+    }
+    $scope.addProjectStage = function(stage , date){
+    console.log($scope.stage);
+    console.log($('.select-date').val());
+        var formData = new FormData();
+             formData.append('project_id', '947a3ed2-0f5c-4bd4-b655-4067806ca7dc');
+             formData.append('talent_id', '46d63bd1-3863-47f9-9676-e9975a5029ce');
+             formData.append('stage', 'Interested');
+             formData.append('details','');
+             formData.append('notes','');
+             talentApis.addTalentStages(formData, requestCallback);
+             function requestCallback(response) {
+                  response = JSON.parse(response);
+                  console.log(response);
+
+             }
+
+        }
+
+    $scope.filterOpen = function(){
+        if(!$scope.isFilterChecked){
+            $scope.isFilterChecked = true;
+            $('.talent-search-icon').addClass('active');
+        }
+        else if($scope.isFilterChecked){
+            $scope.isFilterChecked = false;
+            $('.talent-search-icon').removeClass('active');
+        }
+     }
+
+    $scope.advanceSearchOpen = function(){
+        if(!$scope.isAdvanceSearch){
+            $('.advance-search').addClass('active');
+            $scope.isAdvanceSearch = true;
+        }
+        else if($scope.isAdvanceSearch){
+            $('.advance-search').removeClass('active');
+            $scope.isAdvanceSearch = false;
+        }
+
+    }
 }
 
 

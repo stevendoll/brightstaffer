@@ -144,13 +144,15 @@ angular
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var shouldLogin = toState.data.requireAuthentication !== undefined
             && toState.data.requireAuthentication;
+        $rootScope.talentDetails = '';
          if($cookieStore.get('userData'))
             {
              $rootScope.globals.currentUser = $cookieStore.get('userData');
             }else if($rootScope.globals.currentUser){
               $cookieStore.put('userData', $rootScope.globals.currentUser);
             }
-        // NOT authenticated - wants any private stuff
+            //sessionStorage.talentDetails = angular.fromJson(sessionStorage.talentDetails);
+                 // NOT authenticated - wants any private stuff
         if(shouldLogin || fromState.name === "") {
             var token =  $rootScope.globals.currentUser == null ? null : $rootScope.globals.currentUser;
             if (token == null) {
