@@ -148,7 +148,7 @@ angular
             {
              $rootScope.globals.currentUser = $cookieStore.get('userData');
             }else if($rootScope.globals.currentUser){
-              $cookieStore.put('userData', $rootScope.globals.currentUser)
+              $cookieStore.put('userData', $rootScope.globals.currentUser);
             }
         // NOT authenticated - wants any private stuff
         if(shouldLogin || fromState.name === "") {

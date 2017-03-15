@@ -1271,7 +1271,7 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, talentApis , $uibModal , searchData){
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,$window,$state,$timeout, talentApis , $uibModal , searchData , $cookieStore){
      $scope.exportOptions = [{name:'Export Data',value:'Export Data'},{name:'Copy',value:'Copy'},{name:'CSV',value:'CSV'},{name:'Excel',value:'Excel'},{name:'PDF',value:'PDF'},{name:'Print',value:'Print'}]; // select drop-down options
      $scope.recordOptions = [{name:'10',value:'10'},{name:'20',value:'20'},{name:'30',value:'30'},{name:'40',value:'40'},{name:'50',value:'50'}]// select drop-down options
      $scope.exportType = $scope.exportOptions[0];
@@ -1280,6 +1280,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.recruiter ={};
      $rootScope.talentDetails = {};
      $scope.selectedCandidate = {};
+     $rootScope.globals.selectedCandidateId = '';
      $scope.choosenCandidates = [];
      $scope.currentTalentId = '';
      $scope.projectDD = $rootScope.projectListView[0];
@@ -1291,7 +1292,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.isEmailAdd = false;
      $scope.isContactEditable = false;
      $scope.isContactAdd = false;
-     $scope.recruiterNameInput = '';
+     $scope.data = {};
      $scope.isName = false;
      $scope.isEmail = false;
      $scope.isContact = false;
@@ -1400,6 +1401,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              talentApis.updateRecruiterName(requestObject).then(function(response){
                 if(response.message == "success") {
                   console.log(response);
+                  $('html, body').animate({ scrollTop: 0 }, 'fast');
                  $('#edit-recruiter').modal('hide');
                  $('#nameSuccess').css('display','block');
                  setTimeout(
@@ -1431,10 +1433,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      };
 
      $scope.loadProfileData = function(id, talent){
-     $('html, body').animate({ scrollTop: 0 }, 'fast');
-        if(Object.keys($rootScope.talentDetails).length == 0){
+        if(talent && id){
              $rootScope.talentDetails = talent;
+             $rootScope.globals.selectedCandidateId = id;
+        }else{
+            id = $cookieStore.get('selectedCandidateId');
         }
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
         var requestObject = {
         'token': $rootScope.globals.currentUser.token,       // username field value
         'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
@@ -1442,7 +1447,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };
          talentApis.getCandidateProfile(requestObject).then(function(response){
               $rootScope.talentDetails = response;
-
+              $cookieStore.put('selectedCandidateId', $rootScope.globals.selectedCandidateId)
          });
 
      }
@@ -1461,8 +1466,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.editRecruiter = function(){
         $scope.isName = false;
+        $scope.data.recruiterNameInput = $scope.recruiter.recruiterName;
+        $('#nameUpdate').removeClass('disabled');
+        $('#nameUpdate').css('pointer-events','');
         $('#recruiter-modal').modal('hide');
         $('#edit-recruiter').modal('show');
+    }
+
+    $scope.closeUpdateRecruiter = function(){
+        //$scope.data.recruiterNameInput = '';
+       $('#edit-recruiter').modal('hide');
+
     }
 
     $scope.openProjectList = function(id, callFrom){
@@ -1676,7 +1690,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.allMetrics = function(talentCareer){
-        if(talentCareer.length > 2){
+        if(talentCareer.length > 0){
             $scope.talentCareer = talentCareer;
             $('#all-metrics').modal('show');
         }

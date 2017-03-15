@@ -4,7 +4,7 @@
                   <div class="talentsearch-left-panel">
                     <div class="left-div"><div class="search-image"><img src="static/img/dummyProfile.png" alt=""></div></div>
                     <div class="search-result-panel right-div">
-                      <div class="search-result-name"><div class="search-name-head">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeAll]]</span></div>
+                      <div class="search-result-name"><div class="search-name-head" ui-sref="talent.talent-profile" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeAll]]</span></div>
                      <div class="search-result-info">[[talent.current_location ]] <span></span> [[talent.industry_focus | capitalizeWord]]</div>
                     </div>
 
@@ -159,7 +159,7 @@
         </div>
         <div class="info-modal-div">
           <div class="left-section-div">Shared with</div>
-          <div class="right-section-div">Jeffrey Lloyd, +2 <span data-toggle="modal">Add</span></div>
+          <div class="right-section-div">Jeffrey Lloyd, +2 <span data-toggle="modal" style="cursor:default;">Add</span></div>
         </div>
         <div class="cls"></div>
         <div class="modal-recent-projects">
@@ -171,7 +171,7 @@
               <div class="modal-recent-pro-descp txt-right">[[proj.date_added | dateFormat]]</div>
             </div>
           </div>
-          <div class="modal-show-more-text"><a href="">Show All</a></div>
+          <div class="modal-show-more-text"><a href="" style="cursor:default;">Show All</a></div>
         </div>
         <div class="cls"></div>
       </div>
@@ -180,19 +180,19 @@
 </div>
 <!-- recruiter-Modal-ends -->
 <!-- edit-recruiter-Modal-starts -->
-<div class="modal fade" id="edit-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" ng-init="recruiterNameInput = recruiter.recruiterName">
+<div class="modal fade" id="edit-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog add-talent-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body roles-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <button type="button" class="close" data-dismiss="modal" ng-click="closeUpdateRecruiter()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <div class="edit-modal-recruiter">
           <span>Edit Recruiter</span>
           <div class="form-group">
-            <input class="form-control" id="name" ng-model="recruiterNameInput"  autocomplete="off">
+            <input class="form-control" id="name" ng-model="data.recruiterNameInput" autocomplete="off">
              <span class="error" id="name-required" style="color:red" ng-show="[[isName]]">Required.</span>
           </div>
           <div class="cls"></div>
-          <button type="" class="btn update" ng-click="updateRecruiterName(recruiterNameInput)">Update</button>
+          <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(data.recruiterNameInput)">Update</button>
         </div>
         <div class="cls"></div>
       </div>
