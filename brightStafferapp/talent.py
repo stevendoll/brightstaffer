@@ -387,7 +387,7 @@ class TalentSearch(View):
 
     def get(self, request):
         es = Elasticsearch()
-        term = self.request.GET['term']
+        term = request.GET['term']
         query = {"query": {
             "bool": {
                 "should": [
@@ -511,43 +511,149 @@ class TalentSearch(View):
 
 class TalentSearchFilter(View):
 
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(TalentSearchFilter, self).dispatch(request, *args, **kwargs)
+
     def get(self, request):
         es = Elasticsearch()
-        project_match = self.request.GET['project_match']
-        rating = self.request.GET['rating']
-        create_date = self.request.GET['create_date']
+        rating = request.GET.get('rating', '')
+        talent_company = request.GET.get('talent_company', '')
+        project_match = request.GET.get('project_match', '')
+        recruiter = request.GET.get('recruiter', '')
+        concepts = request.GET.get('concepts', '')
+        projects = request.GET.get('projects', '')
+        stages = request.GET.get('stages', '')
+        last_contacted = request.GET.get('last_contacted', '')
+        date_added = request.GET.get('date_added', '')
+
         query = {
-                "query": {
-                    "nested" : {
-                        "path" : "talent_project",
-                        "query" : {
-                            "bool" : {
-                                "should" : [
-                                    {
-                                        "range" :{
-                                             "talent_project.project_match" : {"gte" : project_match}
-                                        },
-                                            "range": {
-                                                "rating": {
-                                                    "gte": rating
-                                                }
-                                            }
-                                    },
-                                ],
-                                "filter": [
-                                        {
-                                            "range": {
-                                                "rating":{
-                                                    "gte": rating
-                                                }
-                                        }
-                                    }
+                  "query": {
+                    "bool": {
+                      "must": [
+                      ]
+                    }
+                  }
+                }
+        if date_added:
+            date_added_query = {
+                "match": {
+                    "create_date": date_added
+                }
+            }
+            query['query']['bool']['must'].append(date_added_query)
+
+        if last_contacted:
+            last_contacted_query = {
+                "nested": {
+                    "path": "talent_stages",
+                    "query": {
+                        "match": {
+                            "talent_stages.date_updated": last_contacted
+                        }
+                    },
+                }
+            }
+            query['query']['bool']['must'].append(last_contacted_query)
+        if stages:
+            for stage in stages.split(','):
+                stage_query = {
+                    "nested": {
+                        "path": "talent_stages",
+                        "query": {
+                            "multi_match": {
+                                "query": stage,
+                                "fields": [
+                                    "talent_stages.stage"
                                 ]
                             }
                         }
                     }
                 }
-        }
+                query['query']['bool']['must'].append(stage_query)
+
+        if projects:
+            for project in projects.split(','):
+                project_query = {
+                    "nested": {
+                        "path": "talent_project",
+                        "query": {
+                            "multi_match": {
+                                "query": project,
+                                "fields": [
+                                    "talent_project.project"
+                                ]
+                            }
+                        }
+                    }
+                }
+                query['query']['bool']['must'].append(project_query)
+        if concepts:
+            for concept in concepts.split(','):
+                concepts_query = {
+                    "nested": {
+                        "path": "talent_concepts",
+                        "query": {
+                            "multi_match": {
+                                "query": concept,
+                                "fields": [
+                                    "talent_concepts.concept"
+                                ]
+                            }
+                        }
+                    }
+                }
+                query['query']['bool']['must'].append(concepts_query)
+        if recruiter:
+            recruiter_query = {
+                "match": {
+                    "recruiter": "chandanvarma2@gmail.com"
+                }
+            }
+            query['query']['bool']['must'].append(recruiter_query)
+        if project_match:
+            project_match_query = {
+                "nested": {
+                    "query": {
+                        "range": {
+                            "talent_project.project_match": {
+                                "gte": project_match
+                            }
+                        }
+                    },
+                    "path": "talent_project"
+                }
+            }
+            query['query']['bool']['must'].append(project_match_query)
+
+        if talent_company:
+            talent_company_query = {
+                "nested": {
+                    "path": "talent_company",
+                    "query": {
+                        "multi_match": {
+                            "query": talent_company,
+                            "fields": [
+                                "talent_company.company",
+                                "talent_company.talent",
+                                "talent_company.designation"
+                            ]
+                        }
+                    }
+                }
+            }
+            query['query']['bool']['must'].append(talent_company_query)
+
+        if rating:
+            rating_query = {
+                "range": {
+                    "rating": {
+                        "gte": rating
+                    }
+                }
+            }
+            query['query']['bool']['must'].append(rating_query)
+        print(query)
         body = json.dumps(query)
         res = es.search(index="haystack", doc_type="modelresult",
                         body=body

@@ -49,6 +49,7 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             sta['project'] = stage.project.project_name
             sta['details'] = stage.details
             sta['notes'] = stage.notes
+            sta['stage'] = stage.stage
             sta['date_created'] = str(stage.get_date_created)
             sta['date_updated'] = str(stage.get_date_updated)
             stages.append(sta)
