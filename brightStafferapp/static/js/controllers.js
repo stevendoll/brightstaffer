@@ -1962,6 +1962,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                             $('#add-stage').modal('hide');
                             console.log($scope.stage.stagesCard);
                             $scope.stage.stagesCard.push(response);
+                            $scope.$apply();
                             console.log($scope.stage.stagesCard);
                             sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
 
