@@ -271,8 +271,8 @@ class TalentStage(models.Model):
     stage = models.CharField(max_length=20, choices=STAGE_CHOICES)
     details = models.TextField(verbose_name='Details', null=True, blank=True)
     notes = models.TextField(verbose_name='Notes', null=True, blank=True)
-    date_created = models.DateField(verbose_name='Create Date', auto_now_add=True)
-    date_updated = models.DateField(verbose_name='Update Date', auto_now=True)
+    date_created = models.DateField(verbose_name='Create Date',null=True, blank=True)
+    date_updated = models.DateField(verbose_name='Update Date',null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Talent Stages"

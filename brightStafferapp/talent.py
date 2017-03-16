@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, HttpResponse
 from django.db.models import Q
 from elasticsearch import Elasticsearch
-
+from datetime import date,datetime
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -249,6 +249,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         queryset = queryset.filter(id=stage_id,talent_id=talent_id,project_id=project_id)
         return queryset
 
+
     def post(self, request, *args, **kwargs):
         context = {}
         talent = request.POST['talent_id']
@@ -256,6 +257,8 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         stage = request.POST['stage']
         details = request.POST['details']
         notes = request.POST['notes']
+        date = request.POST['date']
+        date=datetime.strptime(date,"%d/%m/%Y")
         projects = Projects.objects.filter(id=project)
         if not projects:
             return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project))
@@ -264,7 +267,8 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         if not talent_objs:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
         talent_obj = talent_objs[0]
-        tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage, details=details, notes=notes)
+        tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage,
+                                                            details=details, notes=notes,date_created=date)
         if created:
             context['talent_id']=tp_obj.talent.talent_name
             context['stage_id']=tp_obj.id
@@ -272,6 +276,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['stage']=tp_obj.stage
             context['details'] = tp_obj.details
             context['notes'] = tp_obj.notes
+            context['create_date'] = tp_obj.talent.get_date
             return util.returnSuccessShorcut(context)
         else:
             return util.returnErrorShorcut(403, 'Talent stage and info is exist in database,Please create different stage' )
@@ -291,6 +296,8 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         details = request.POST['details']
         notes = request.POST['notes']
         stage_id=request.POST['id']
+        date=request.POST['date']
+        date = datetime.strptime(date, "%d/%m/%Y")
         projects = Projects.objects.filter(id=project)
         if not projects:
             return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project))
@@ -299,13 +306,16 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         if not talent_objs:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
         talent_obj = talent_objs[0]
+        stageid=TalentStage.objects.filter(id=stage_id)
+        if not stageid:
+            return util.returnErrorShorcut(404, 'Stage id {} is not exist in database'.format(stage_id))
         created = TalentStage.objects.filter(talent=talent_obj, project=project, stage=stage, details=details,
-                                                    notes=notes).exists()
+                                                    notes=notes,date_created=date).exists()
         if created:
             return util.returnErrorShorcut(403,
                                            'Talent stage and info is exist in database,Please update the stage')
         else:
-            updated=TalentStage.objects.filter(id=str(stage_id)).update(stage=stage,details=details,notes=notes)
+            updated=TalentStage.objects.filter(id=str(stage_id)).update(stage=stage,details=details,notes=notes,date_created=date)
             if updated:
                 context['message'] = 'success'
         return util.returnSuccessShorcut(context)
@@ -335,8 +345,7 @@ class TalentAllStageDetailsAPI(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = super(TalentAllStageDetailsAPI, self).get_queryset()
         talent_id = self.request.query_params.get('talent_id')
-        project_id = self.request.query_params.get('project_id')
-        queryset = queryset.filter(talent_id=talent_id, project_id=project_id)
+        queryset = queryset.filter(talent_id=talent_id)
         return queryset
 
 class TalentUpdateRank(View):
