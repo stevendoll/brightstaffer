@@ -1984,6 +1984,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if(!$scope.isFilterChecked){
             $scope.isFilterChecked = true;
             $('.talent-search-icon').addClass('active');
+
+            $('.selectpicker').selectpicker();
+
         }
         else if($scope.isFilterChecked){
             $scope.isFilterChecked = false;

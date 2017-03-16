@@ -1,0 +1,119 @@
+.multiselect-container {
+    position: absolute;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width:100%;
+}
+.multiselect-container .input-group {
+    margin: 5px;
+}
+.multiselect-container>li {
+    padding: 0;
+}
+.multiselect-container>li>a.multiselect-all label {
+    font-weight: 700;
+}
+.multiselect-container>li.multiselect-group label {
+    margin: 0;
+    padding: 3px 20px 3px 20px;
+    height: 100%;
+    font-weight: 400;
+    color:#000;
+    font-family: 'Roboto-Regular';
+}
+.multiselect-container>li.multiselect-group-clickable label {
+    cursor: pointer;
+}
+.multiselect-container>li>a {
+    padding: 0;
+}
+.multiselect-container>li>a>label{
+    margin: 0;
+    height: 100%;
+    cursor: pointer;
+    font-weight: 400;
+    padding: 0 0 0 21px;
+    width: 25px;
+    height: 30px;
+    background: url(../images/checkbox-sprite_new.png) 0px 5px no-repeat;
+}
+.multiselect-container>li>a>label.radio,
+.multiselect-container>li>a>label.checkbox {
+    margin: 0px 0 0 10px;
+    color: #585858;
+    font-family: 'Roboto-Regular';
+    font-size: 14px;
+}
+.multiselect-container>li>a>label:hover.radio,
+.multiselect-container>li>a>label:hover.checkbox {
+    color: #262626;
+}
+.multiselect-container>li>a>label>input[type=checkbox] {
+    margin-bottom: 5px;
+    display: none;
+}
+.btn-group>.btn-group:nth-child(2)>.multiselect.btn {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px
+}
+.form-inline .multiselect-container label.checkbox,
+.form-inline .multiselect-container label.radio {
+    padding: 3px 20px 3px 40px;
+}
+.form-inline .multiselect-container li a label.checkbox input[type=checkbox],
+.form-inline .multiselect-container li a label.radio input[type=radio] {
+    margin-left: -20px;
+    margin-right: 0;
+}
+.multiselect-container li.active a label.checkbox{
+    background-position: 1px -43px;
+}
+.select-panel .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover {
+    color: #262626;
+    text-decoration: none;
+    background-color: #fff;
+}
+
+
+/*---new code---*/
+.select-panel .btn-group .btn b.caret {
+    width: 20px;
+    height: 20px;
+    margin-left: 0;
+    border-top: 0px dashed;
+    float: right;
+    position: absolute;
+    right: 3px;
+    top: 24px;
+    background: url(../images/down_arrow_black.png) no-repeat;
+    border-right: 0px solid transparent;
+    border-left: 0px solid transparent;
+}
+.select-panel .btn-group .btn-default {
+    width: 600px;
+    text-align: left;
+    height: 50px;
+    color: #919191;
+    background-color: #f5f5f5;
+    border: 1px solid #f8f8f8;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 15px;
+    text-align: left;
+    padding: 13px 21px;
+    font-family: 'Roboto-Regular';
+}
+.select-panel .btn-default:active, .select-panel .btn-default:hover, .select-panel .btn-default:focus {
+    color: #919191;
+    border: 1px solid #f8f8f8 !important;
+    background-color: #f5f5f5 !important;
+    box-shadow: inset 0 0px 0px rgba(0, 0, 0, .125);
+
+}
+.select-panel .btn-group ul.dropdown-menu > .active > a, .select-panel .btn-group ul.dropdown-menu > .active > a:hover, .select-panel .btn-group ul.dropdown-menu > .active > a:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: transparent;
+    outline: 0;
+}

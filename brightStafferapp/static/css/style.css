@@ -713,6 +713,10 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   margin-top: 15px;
 }
 
+.view-con-info:focus, .view-con-info.focus {
+  color: #ffffff;
+}
+
 .linkedin-analysis {
   width: 35px;
   height: 35px;
@@ -899,6 +903,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   font-size: 14px;
   font-family: 'open_sansregular';
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .analyzed-div {
@@ -993,9 +998,10 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   font-size: 14px;
   color: #337ab7;
   float: left;
-  width: auto;
+  width: 76%;
   margin-left: 10px;
   margin-top: 9px;
+  word-wrap: break-word;
 }
 
 .table-circle-bg .link-panel span {
@@ -10603,6 +10609,7 @@ input[type=password]
   border-bottom: 1px solid #337ab7;
   margin-bottom: 5px;
   line-height: 23px;
+  cursor: pointer;
 }
 
 .modal-recent-projects {
@@ -11338,6 +11345,7 @@ input[type=checkbox].css-checkbox:checked + label.css-label {
   position: absolute;
   right: 10px;
   top: 2px;
+  width: auto;
 }
 
 .talent-progress .progress .progress-bar span.text {
@@ -11347,6 +11355,7 @@ input[type=checkbox].css-checkbox:checked + label.css-label {
   position: absolute;
   left: 10px;
   top: 2px;
+  width: auto;
 }
 
 .indus-focus {
@@ -11412,7 +11421,7 @@ input[type=checkbox].css-checkbox:checked + label.css-label {
   font-size: 14px;
   color: #337ab7;
   float: left;
-  width: 25%;
+  width: 29%;
   margin-left: 10px;
   margin-top: 9px;
   word-wrap: break-word;
