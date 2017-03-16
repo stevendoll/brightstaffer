@@ -46,16 +46,21 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     prevButton = angular.element(prevButton);
                      $rootScope.totalProjectCount = response.count;
                      $rootScope.allProjectList = response.published_projects;
-                      if($rootScope.projectListView.length == 0){
+                     $rootScope.projectListView = [];
+                     $rootScope.StagesProjectList = [{name:'Select Project', value:'Select Project'}];
                         for(var i=0;i<$rootScope.allProjectList.length;i++){
                          var project = {name:'#'+$rootScope.allProjectList[i].project_name,
                                         value:'#'+$rootScope.allProjectList[i].id};
                             $rootScope.projectListView.push(project);
-                            $rootScope.StagesProjectList
+                            $rootScope.StagesProjectList.push(project);
                          }
+                          $rootScope.projectListView =  _.uniq($rootScope.projectListView, 'name');
+                          $rootScope.StagesProjectList = _.uniq($rootScope.StagesProjectList, 'name');
+                          console.log($rootScope.projectListView);
                          sessionStorage.projectList = JSON.stringify($rootScope.projectListView);
+                         sessionStorage.stageProjectList = JSON.stringify($rootScope.StagesProjectList);
 
-                      }
+                      //}
                      $rootScope.projectCountEnd = response.published_projects.length;
                      $rootScope.projectNext = response.next;
                      $rootScope.projectPrevious = response.previous;
@@ -1282,6 +1287,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.recordCount = $scope.recordOptions[0];
      $rootScope.talentList = [];
      $scope.recruiter ={};
+     $scope.stagesName = {'Replied':'fa-mail-reply','Contacted':'fa-phone','Under Review':'fa-file-text','Interested':'fa-thumbs-up','Not Interested':'fa-thumbs-down','Scheduled for Interview':'fa-briefcase','Offer':'fa-file-text-o','Interviewing':'fa-group','Hired':'fa-check','Rejected':'fa-user-times'};
      //$rootScope.talentDetails = ;
      $scope.selectedCandidate = {};
      $rootScope.selectedCandidateProfile = '';
@@ -1302,6 +1308,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.isContact = false;
      $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;  //email validation pattern
      $scope.phonePattern = /^(?!0+$)\d{8,}$/;
+     $scope.stage = {
+                     stage: 'Select Stage',
+                     project: $rootScope.StagesProjectList[0],
+                     isStage:false,
+                     stagesCard:$rootScope.talentAllStages
+                     };
+
 //^[0-9]{10}$/;
 
      $scope.candidateEmailUpdate;
@@ -1319,7 +1332,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 $scope.getTalents($scope.recordCount);
             });
           $('#projectListD').change(function() {
-            var selectedValue = $('#projectListD :selected').text();
+            var selectedValue = $('#projectListD').val();
             $scope.projectDD = selectedValue;
             console.log($scope.projectDD);
             });
@@ -1440,7 +1453,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.loadProfileData = function(id, talent){
         if(talent && id){
              $rootScope.talentDetails = talent;
-             //$rootScope.selectedCandidateProfile = id;
         }
         var requestObject = {
         'token': $rootScope.globals.currentUser.token,       // username field value
@@ -1448,13 +1460,33 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         'id': id
          };
          talentApis.getCandidateProfile(requestObject).then(function(response){
-              $state.go('talent.talent-profile','');
-              $('html, body').animate({ scrollTop: 0 }, 'fast');
+              //$state.go('talent.talent-profile','');
+              //$('html, body').animate({ scrollTop: 0 }, 'fast');
               $rootScope.talentDetails = response;
               sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
+               getTalentStages(id);
          });
 
      }
+
+     function getTalentStages(id){
+        var requestObject = {
+        'token': $rootScope.globals.currentUser.token,       // username field value
+        'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
+        'talent_id': id
+         };
+         talentApis.getTalentAllStages(requestObject).then(function(response){
+              $rootScope.talentAllStages = response.result;
+              console.log(response.result);
+              $scope.stage.stagesCard = response.result;
+              $state.go('talent.talent-profile','');
+              $('html, body').animate({ scrollTop: 0 }, 'fast');
+              console.log(response);
+              sessionStorage.talentAllStages = JSON.stringify($rootScope.talentAllStages);
+         });
+
+     }
+
 
     $scope.showDetails = function(talent){
       $scope.selectedCandidate = talent;
@@ -1883,22 +1915,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     }
 */
-    $scope.stage = {
-     stage: 'Select Stage',
-     project: $rootScope.projectListView[0],
-     isStage:false};
 
     $scope.openAddStagePopup = function(id){
         $('.select-date').datepicker();
         $('#projectListD2').change(function() {
-            var selectedValue = $('#projectListD2 :selected').text();
+            var sbId =  $('#projectListD2').attr('sb');
+            var selectedValue = $('#sbSelector_'+sbId).text();
             $scope.stage.project = selectedValue;
             console.log($scope.stage.project);
             });
         $('#stages').val($scope.stage.stage);
         $('#add-stage').modal('show');
     }
-    $scope.stage.stagesArray = [];
+    //$scope.stage.stagesArray = [];
     function convertDate(inputFormat) {
           function pad(s) { return (s < 10) ? '0' + s : s; }
           var d = new Date(inputFormat);
@@ -1931,12 +1960,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                           console.log(response);
                         if(response.message == "success"){
                             $('#add-stage').modal('hide');
+                            console.log($scope.stage.stagesCard);
+                            $scope.stage.stagesCard.push(response);
+                            console.log($scope.stage.stagesCard);
+                            sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
 
-                            $scope.stage.stagesArray.push(response);
-                            console.log($scope.stage.stagesArray.length);
-                            if($scope.stage.stagesArray.length > 0){
-                                $scope.stage.isStage = true;
-                            }
 
                          }
                      }
@@ -1966,17 +1994,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.filterData = function(){
-        /*var requestObject = {
-            'company': ,   // password field value
-            'rating': ,
-            'project_match':
-            'recruiter':
-            'concepts':
-            'projects':
-            'stages':
-            'contacted':
-            'date':
-             };*/
+    console.log('filter');
+        var requestObject = {
+            'company': 'kiwitech',   // password field value
+            'rating': '4',
+            'project_match':'80',
+            'recruiter':'asha.singh@kiwitech.com',
+            'concepts':'',
+            'projects':'',
+            'stages':'',
+            'contacted':'',
+            'date':''
+             };
+             console.log(requestObject);
              talentApis.filterTalentData(requestObject).then(function(response){
                 if(response.message == "success") {
                   console.log(response);

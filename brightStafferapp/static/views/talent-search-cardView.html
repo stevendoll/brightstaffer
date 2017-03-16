@@ -210,9 +210,12 @@
           <span>Project</span>
           <div class="cls"></div>
           <div class="form-group export">
-            <select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
-            </select>
-
+            <!--<select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
+            </select>-->
+            <input id="projectListD" list="addProjectList" placeholder="Select Project" class="form-control select-arrow">
+                <datalist id="addProjectList">
+                    <option ng-repeat="option in projectListView" value="[[option.name]]"></option>
+                </datalist>
           </div>
           <div class="cls"></div>
           <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(projectDD)">Add to Project</button>

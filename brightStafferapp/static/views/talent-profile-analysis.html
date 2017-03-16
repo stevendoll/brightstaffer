@@ -376,32 +376,32 @@
                 </div>
               </div>
             </div>
-            <div class="right-section" ng-show="stage.isStage">
-              <div ng-repeat ="st in stage.stagesArray">
-              <div class="right-sideline">
-                <div class="brief-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-phone"  aria-hidden="true"></i></div>
-                <div class="files-circle" ng-show="[[st.stage == 'Under Review']]"><i class="fa fa-file-text" aria-hidden="true"></i></div>
-                <div class="brief-circle" ng-show="[[st.stage == 'Replied']]"><i class="fa fa-mail-reply" aria-hidden="true"></i></div>
-                <div class="files-circle" ng-show="[[st.stage == 'Interested']]"><i class="fa fa-thumbs-up" aria-hidden="true"></i></div>
-                <div class="files-circle" ng-show="[[st.stage == 'not Interested']]"><i class="fa fa-thumbs-down" aria-hidden="true"></i></div>
-                <div class="files-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-briefcase" aria-hidden="true"></i></div>
-                <div class="files-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
-                <div class="files-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-group" aria-hidden="true"></i></div>
-                <div class="files-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-check" aria-hidden="true"></i></div>
-                <div class="files-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-user-times" aria-hidden="true"></i></div>
-              </div>
-              <div class="right-info-comm-box" >
-                <em></em>
-                <h1>[[st.stage]]</h1>
-                <div class="info-box-panels">Date: <span>[[st.create_date | dateFormat]]</span></div>
-                <div class="info-box-panels">Project: <span>#[[st.project]]</span></div>
-                <div class="info-box-panels">Details: <span>[[st.details]]</span></div>
-                <div class="info-box-panels">Notes: <span>[[st.notes]]</span></div>
-                <div class="info-box-bottom-links">
-                  <span data-toggle="modal" >Edit</span>
-                  <span>Delete</span>
+            <div class="right-section" >
+              <div ng-repeat ="st in stage.stagesCard">
+                <div class="right-sideline">
+                  <!--<div class="brief-circle" ng-if=""><i class="fa" aria-hidden="true"></i></div>-->
+                 <div class="files-circle" ><i class="fa" ng-class="stagesName[st.stage]" aria-hidden="true"></i></div>
+                 <!-- <div class="brief-circle" ng-show="[[st.stage == 'Replied']]"><i class="fa fa-mail-reply" aria-hidden="true"></i></div>
+                  <div class="files-circle" ng-show="[[st.stage == 'Interested']]"><i class="fa fa-thumbs-up" aria-hidden="true"></i></div>
+                  <div class="files-circle" ng-show="[[st.stage == 'not Interested']]"><i class="fa fa-thumbs-down" aria-hidden="true"></i></div>
+                  <div class="files-circle" ng-show="[[st.stage == 'Scheduled for Interview']]"><i class="fa fa-briefcase" aria-hidden="true"></i></div>
+                  <div class="files-circle" ng-show="[[st.stage == 'Offer']]"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+                  <div class="files-circle" ng-show="[[st.stage == 'Interviewing']]"><i class="fa fa-group" aria-hidden="true"></i></div>
+                  <div class="files-circle" ng-show="[[st.stage == 'Hired']]"><i class="fa fa-check" aria-hidden="true"></i></div>
+                  <div class="files-circle" ng-show="[[st.stage == 'Rejected']]"><i class="fa fa-user-times" aria-hidden="true"></i></div>-->
                 </div>
-              </div>
+                <div class="right-info-comm-box" >
+                  <em></em>
+                  <h1>[[st.stage]]</h1>
+                  <div class="info-box-panels">Date: <span>[[st.create_date | dateFormat]]</span></div>
+                  <div class="info-box-panels">Project: <span>#[[st.project]]</span></div>
+                  <div class="info-box-panels">Details: <span>[[st.details]]</span></div>
+                  <div class="info-box-panels">Notes: <span>[[st.notes]]</span></div>
+                  <div class="info-box-bottom-links">
+                    <span data-toggle="modal" >Edit</span>
+                    <span>Delete</span>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -510,6 +510,7 @@
           <span>Project</span>
           <div class="cls"></div>
           <div class="form-group export">
+
             <select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
             </select>
           </div>
@@ -677,7 +678,7 @@
             </select>
           </div>
           <div class="form-group export">
-            <select class="form-control select-arrow" ng-model="stage.project" id="projectListD2" ng-options="option.name for option in projectListView" drop-down>
+            <select class="form-control select-arrow" ng-model="stage.project" id="projectListD2" ng-options="option.name for option in StagesProjectList" drop-down>
             </select>
           </div>
           <div class="form-group" data-provide="datepicker">
