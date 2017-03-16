@@ -276,7 +276,8 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['stage']=tp_obj.stage
             context['details'] = tp_obj.details
             context['notes'] = tp_obj.notes
-            context['create_date'] = tp_obj.talent.get_date
+            context['create_date'] = tp_obj.get_date_created
+            print (context)
             return util.returnSuccessShorcut(context)
         else:
             return util.returnErrorShorcut(403, 'Talent stage and info is exist in database,Please create different stage' )
@@ -336,17 +337,26 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
         return util.returnSuccessShorcut(context)
 
 
-# View All Talent's project(Single) stages
-class TalentAllStageDetailsAPI(generics.ListCreateAPIView):
-    queryset = TalentStage.objects.all()
-    serializer_class = TalentProjectStageSerializer
-    http_method_names = ['get', 'post']
+# View All Talent's stages
+class TalentAllStageDetailsAPI(View):
 
-    def get_queryset(self):
-        queryset = super(TalentAllStageDetailsAPI, self).get_queryset()
-        talent_id = self.request.query_params.get('talent_id')
-        queryset = queryset.filter(talent_id=talent_id)
-        return queryset
+    def get(self,request):
+        response = {}
+        talent_id = self.request.GET['talent_id']
+        talent_obj=Talent.objects.filter(id=talent_id)
+        if not talent_obj:
+            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+        queryset = TalentStage.objects.filter(talent=talent_obj)
+        for obj in queryset:
+            response['talent_id'] = obj.talent.talent_name
+            response['stage_id'] = obj.id
+            response['project'] = obj.project.project_name
+            response['stage'] = obj.stage
+            response['details'] = obj.details
+            response['notes'] = obj.notes
+            response['create_date'] = obj.get_date_created
+            return util.returnSuccessShorcut(response)
+
 
 class TalentUpdateRank(View):
     def get(self,request):
