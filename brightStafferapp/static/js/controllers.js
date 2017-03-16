@@ -1687,7 +1687,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
    }
 
     $scope.allConcepts = function(talentConcepts){
-        if(talentConcepts.length > 5){
+        if(talentConcepts.length > 0){
             $scope.talentData = talentConcepts;
             $('#all-concept').modal('show');
         }

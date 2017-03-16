@@ -551,7 +551,7 @@
         <div class="edit-modal-recruiter">
           <span>All Concepts</span>
           <div class="cls"></div>
-          <div class="talent-progress" ng-repeat="concepts in talentData" ng-if="$index > 2">
+          <div class="talent-progress" ng-repeat="concepts in talentData">
             <div class="progress">
               <div class="progress-bar" role="progressbar" aria-valuenow="[[concepts.match]]" aria-valuemin="0" aria-valuemax="100" style="width:[[concepts.match]]%;">
                 <span class="text">[[concepts.concept | capitalize]]</span>
