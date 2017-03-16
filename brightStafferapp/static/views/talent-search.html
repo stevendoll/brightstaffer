@@ -70,10 +70,14 @@
                               <ul id="projectDrop"></ul>
                           </div>
                         </div>-->
-                        <input id="something" list="projectList" placeholder="Select Project">
+                        <!--<input id="something" list="projectList" placeholder="Select Project">
                             <datalist id="projectList">
                                 <option ng-repeat="option in projectListView" value="[[option.name]]"></option>
-                            </datalist>
+                            </datalist>-->
+                          <select class="selectpicker" data-live-search="true">
+                            <option ng-repeat="option in projectListView" data-tokens="[[option.value]]">[[option.name]]</option>
+                          </select>
+
                       </div>
                     </div>
                     <div class="range-picker-div">
@@ -81,9 +85,9 @@
                         <label for="" class="filter-label-text">Project Match Percentage</label>
                         <div class="cls"></div>
                         <input type="email" class="form-control percentage-input-box" id="" placeholder="">
-                        <div class="range-slider-div" slider-init>
+                        <div class="range-slider-div" >
                           <span>0%</span>
-                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" slider-init/>
                           <span>100%</span>
                         </div>
                       </div>

@@ -57,6 +57,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                           $rootScope.projectListView =  _.uniq($rootScope.projectListView, 'name');
                           $rootScope.StagesProjectList = _.uniq($rootScope.StagesProjectList, 'name');
                           console.log($rootScope.projectListView);
+                          sessionStorage.removeItem('projectList');
+
                          sessionStorage.projectList = JSON.stringify($rootScope.projectListView);
                          sessionStorage.stageProjectList = JSON.stringify($rootScope.StagesProjectList);
 
@@ -1482,7 +1484,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
               $state.go('talent.talent-profile','');
               $('html, body').animate({ scrollTop: 0 }, 'fast');
               console.log(response);
+              sessionStorage.removeItem('talentAllStages');
               sessionStorage.talentAllStages = JSON.stringify($rootScope.talentAllStages);
+              console.log(sessionStorage.talentAllStages);
          });
 
      }
@@ -1957,16 +1961,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                      talentApis.addTalentStages(formData, requestCallback);
                      function requestCallback(response) {
                           response = JSON.parse(response);
-                          console.log(response);
                         if(response.message == "success"){
                             $('#add-stage').modal('hide');
-                            console.log($scope.stage.stagesCard);
                             $scope.stage.stagesCard.push(response);
                             $scope.$apply();
-                            console.log($scope.stage.stagesCard);
+                            $scope.stage = {
+                                     stage: 'Select Stage',
+                                     project: $rootScope.StagesProjectList[0],
+                                     details:'',
+                                     notes:'',
+                                     date:'',
+                                     isStage:false,
+                                     stagesCard:$rootScope.talentAllStages
+                                     };
                             sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
-
-
                          }
                      }
               }

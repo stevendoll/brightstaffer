@@ -506,10 +506,16 @@ function sliderInit($timeout) {
     link : function (scope, element, attrs ) {
       $timeout(function(){
             $('#ex3').slider({
-                /*formatter: function(value) {
+                formatter: function(value) {
                     return 'Current value: ' + value;
-                }*/
+                }
             });
+            var slider = new Slider('#ex3', {
+                formatter: function(value) {
+                    return 'Current value: ' + value;
+                }
+            });
+
       });
     }
   };
