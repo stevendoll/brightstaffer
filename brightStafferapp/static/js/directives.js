@@ -451,6 +451,70 @@ function pieChart($timeout) {
 
 }
 
+function searchDropDown($timeout,$rootScope) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $(element)
+	.on('click', '.dropdown-button', function() {
+    	$('.dropdown-list').toggle();
+	})
+	.on('input', '.dropdown-search', function() {
+    	var target = $(this);
+    	var search = target.val().toLowerCase();
+
+    	if (!search) {
+            $('li').show();
+            return false;
+        }
+
+    	$('#projectDrop li').each(function() {
+        	var text = $(this).text().toLowerCase();
+            var match = text.indexOf(search) > -1;
+            $(this).toggle(match);
+        });
+	})
+	.on('change', '[type="checkbox"]', function() {
+    	var numChecked = $('[type="checkbox"]:checked').length;
+    	$('.quantity').text(numChecked || 'Any');
+	});
+
+// JSON of States for demo purposes
+ var usStates =  JSON.parse(sessionStorage.projectList);
+
+// <li> template
+var stateTemplate = _.template(
+    '<li>' +
+    	'<label for="<%= name %>"><%= name %></label>' +
+    '</li>'
+);
+
+// Populate list with states
+_.each(usStates, function(s) {
+    s.capName = _.startCase(s.name.toLowerCase());
+    $('#projectDrop').append(stateTemplate(s));
+});
+      });
+    }
+  };
+}
+
+function sliderInit($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $('#ex3').slider({
+                /*formatter: function(value) {
+                    return 'Current value: ' + value;
+                }*/
+            });
+      });
+    }
+  };
+}
+
 /**
  *
  * Pass all functions into module
@@ -473,4 +537,6 @@ angular
     .directive('starRating',starRating)
     .directive('starRating2',starRating2)
     .directive('tableScroll',tableScroll)
-    .directive('pieChart',pieChart);
+    .directive('pieChart',pieChart)
+    .directive('searchDropDown',searchDropDown)
+    .directive('sliderInit',sliderInit);

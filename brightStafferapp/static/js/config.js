@@ -144,7 +144,8 @@ angular
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var shouldLogin = toState.data.requireAuthentication !== undefined
             && toState.data.requireAuthentication;
-        $rootScope.talentDetails = '';
+            if(sessionStorage.talentDetails)
+                $rootScope.talentDetails = JSON.parse(sessionStorage.talentDetails);
          if($cookieStore.get('userData'))
             {
              $rootScope.globals.currentUser = $cookieStore.get('userData');

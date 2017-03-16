@@ -54,7 +54,7 @@
             <div class="left-section">
               <div class="view-add-pro-panel">
                 <button type="" class="btn add hvr-fade" id="add_[[talent.id]]" ng-click="openProjectList(talentDetails.id)" data-toggle="modal">Add to Project</button>
-                <button type="" class="btn add hvr-fade" data-toggle="modal" ng-click="openAddStagePopup()">Add Stage</button>
+                <button type="" class="btn add hvr-fade" data-toggle="modal" ng-click="openAddStagePopup(talentDetails.id)">Add Stage</button>
               </div>
               <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a data-target="#analysis" aria-controls="home" role="tab" data-toggle="tab">Analysis</a></li>
@@ -376,34 +376,35 @@
                 </div>
               </div>
             </div>
-            <!--<div class="right-section">
+            <div class="right-section" ng-show="stage.isStage">
+              <div ng-repeat ="st in stage.stagesArray">
               <div class="right-sideline">
-                <div class="brief-circle"><i class="fa fa-briefcase" aria-hidden="true"></i></div>
-                <div class="files-circle"><i class="fa fa-file-text" aria-hidden="true"></i></div>
+                <div class="brief-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-phone"  aria-hidden="true"></i></div>
+                <div class="files-circle" ng-show="[[st.stage == 'Under Review']]"><i class="fa fa-file-text" aria-hidden="true"></i></div>
+                <div class="brief-circle" ng-show="[[st.stage == 'Replied']]"><i class="fa fa-mail-reply" aria-hidden="true"></i></div>
+                <div class="files-circle" ng-show="[[st.stage == 'Interested']]"><i class="fa fa-thumbs-up" aria-hidden="true"></i></div>
+                <div class="files-circle" ng-show="[[st.stage == 'not Interested']]"><i class="fa fa-thumbs-down" aria-hidden="true"></i></div>
+                <div class="files-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-briefcase" aria-hidden="true"></i></div>
+                <div class="files-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-file-text-o" aria-hidden="true"></i></div>
+                <div class="files-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-group" aria-hidden="true"></i></div>
+                <div class="files-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-check" aria-hidden="true"></i></div>
+                <div class="files-circle" ng-show="[[st.stage == 'contacted']]"><i class="fa fa-user-times" aria-hidden="true"></i></div>
               </div>
-              <div class="right-info-comm-box">
+              <div class="right-info-comm-box" >
                 <em></em>
-                <h1>Scheduled for Interview</h1>
-                <div class="info-box-panels">Date: <span>Jan 30, 2017</span></div>
-                <div class="info-box-panels">Details: <span>Lorem Ipsum is simply dummy text of…</span></div>
-                <div class="info-box-panels">Notes: <span>Lorem Ipsum is simply dummy text of Lorem Ipsum is simply dummy text of november...</span></div>
+                <h1>[[st.stage]]</h1>
+                <div class="info-box-panels">Date: <span>[[st.create_date | dateFormat]]</span></div>
+                <div class="info-box-panels">Project: <span>#[[st.project]]</span></div>
+                <div class="info-box-panels">Details: <span>[[st.details]]</span></div>
+                <div class="info-box-panels">Notes: <span>[[st.notes]]</span></div>
                 <div class="info-box-bottom-links">
-                  <span data-toggle="modal" data-target="#edit-stage">Edit</span>
+                  <span data-toggle="modal" >Edit</span>
                   <span>Delete</span>
                 </div>
               </div>
-              <div class="right-info-comm-box">
-                <em></em>
-                <h1>Scheduled for Interview</h1>
-                <div class="info-box-panels">Date: <span>Jan 30, 2017</span></div>
-                <div class="info-box-panels">Details: <span>Lorem Ipsum is simply dummy text of…</span></div>
-                <div class="info-box-panels">Notes: <span>Lorem Ipsum is simply dummy text of Lorem Ipsum is simply dummy text of november...</span></div>
-                <div class="info-box-bottom-links">
-                  <span data-toggle="modal" data-target="#edit-stage">Edit</span>
-                  <span>Delete</span>
-                </div>
               </div>
-            </div>-->
+
+            </div>
           </div>
         </div>
       </div>
@@ -689,7 +690,7 @@
             <textarea rows="2" class="form-control details" ng-model="stage.notes" placeholder="Enter Notes"></textarea>
           </div>
           <div class="cls"></div>
-          <button type="" class="btn add-stage" ng-click="addProjectStage(stage, stage_date)">Add Stage</button>
+          <button type="" class="btn add-stage" ng-click="addProjectStage(stage)">Add Stage</button>
         </div>
         <div class="cls"></div>
       </div>
@@ -708,23 +709,32 @@
           <span>Edit</span>
           <div class="cls"></div>
           <div class="form-group export">
-            <select class="form-control select-arrow">
-              <option>Select Stage</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>3</option>
-              <option>4</option>
+            <select class="form-control select-arrow" ng-model="stage.stage">
+              <option value="Select Stage">Select Stage</option>
+              <option>Contacted</option>
+              <option>Replied</option>
+              <option>Interested</option>
+              <option>Not Interested</option>
+              <option>Under Review</option>
+              <option>Scheduled for Interview</option>
+              <option>Interviewing</option>
+              <option>Offer</option>
+              <option>Hired</option>
+              <option>Rejected</option>
             </select>
           </div>
-          <div class="form-group">
-            <input type="" class="form-control select-date" id="" placeholder="Select Date">
+          <div class="form-group export">
+            <select class="form-control select-arrow" ng-model="stage.project" id="projectListD3" ng-options="option.name for option in projectListView" drop-down>
+            </select>
+          </div>
+          <div class="form-group" data-provide="datepicker">
+            <input type="text" class="form-control select-date" ng-model="stage.date" placeholder="Select Date">
           </div>
           <div class="form-group">
-            <textarea rows="2" class="form-control details" id="" placeholder="Enter Details"></textarea>
+            <textarea rows="2" class="form-control details" ng-model="stage.detail" placeholder="Enter Details"></textarea>
           </div>
           <div class="form-group">
-            <textarea rows="2" class="form-control details" id="" placeholder="Enter Notes"></textarea>
+            <textarea rows="2" class="form-control details" ng-model="stage.notes" placeholder="Enter Notes"></textarea>
           </div>
           <div class="cls"></div>
           <button type="" class="btn update">Update</button>

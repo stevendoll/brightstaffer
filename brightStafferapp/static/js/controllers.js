@@ -8,7 +8,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.paginationCounter= 1;
     $scope.stateArray = ['projects','create.step1','create.step2','create.step3','create.step4'];
     $rootScope.isDevice = false;
-    $rootScope.projectListView = [{name:'Select Project',value:'Select Project'},{name:'Search Project',value:'Search Project'}];
+    $rootScope.projectListView = [];
+    $rootScope.StagesProjectList = [{name:'Select Project', value:'Select Project'}];
 
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
         var requestObject = {
@@ -45,12 +46,15 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                     prevButton = angular.element(prevButton);
                      $rootScope.totalProjectCount = response.count;
                      $rootScope.allProjectList = response.published_projects;
-                      if($rootScope.projectListView.length == 2){
+                      if($rootScope.projectListView.length == 0){
                         for(var i=0;i<$rootScope.allProjectList.length;i++){
                          var project = {name:'#'+$rootScope.allProjectList[i].project_name,
                                         value:'#'+$rootScope.allProjectList[i].id};
                             $rootScope.projectListView.push(project);
+                            $rootScope.StagesProjectList
                          }
+                         sessionStorage.projectList = JSON.stringify($rootScope.projectListView);
+
                       }
                      $rootScope.projectCountEnd = response.published_projects.length;
                      $rootScope.projectNext = response.next;
@@ -1325,11 +1329,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
       angular.element(document).ready(function () {
             $scope.getTalents();
-            //if($state.current.name == 'talent.talent-profile'){
-            //$scope.loadProfileData();
-            //}
-
        });
+
+
 
     $scope.getSelectedRating = function (rating) {
         console.log(rating);
@@ -1439,10 +1441,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if(talent && id){
              $rootScope.talentDetails = talent;
              //$rootScope.selectedCandidateProfile = id;
-        }else{
-          var id = $cookieStore.get('selectedCandidateProfile');
         }
-        $('html, body').animate({ scrollTop: 0 }, 'fast');
         var requestObject = {
         'token': $rootScope.globals.currentUser.token,       // username field value
         'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
@@ -1450,9 +1449,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };
          talentApis.getCandidateProfile(requestObject).then(function(response){
               $state.go('talent.talent-profile','');
+              $('html, body').animate({ scrollTop: 0 }, 'fast');
               $rootScope.talentDetails = response;
-              $cookieStore.put('selectedCandidateProfile', $rootScope.talentDetails.id);
-              console.log($cookieStore.get('selectedCandidateProfile'));
+              sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
          });
 
      }
@@ -1886,9 +1885,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 */
     $scope.stage = {
      stage: 'Select Stage',
-     project: $rootScope.projectListView[0]};
+     project: $rootScope.projectListView[0],
+     isStage:false};
 
-    $scope.openAddStagePopup = function(){
+    $scope.openAddStagePopup = function(id){
         $('.select-date').datepicker();
         $('#projectListD2').change(function() {
             var selectedValue = $('#projectListD2 :selected').text();
@@ -1898,22 +1898,49 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#stages').val($scope.stage.stage);
         $('#add-stage').modal('show');
     }
-    $scope.addProjectStage = function(stage , date){
+    $scope.stage.stagesArray = [];
+    function convertDate(inputFormat) {
+          function pad(s) { return (s < 10) ? '0' + s : s; }
+          var d = new Date(inputFormat);
+          return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/');
+        }
+    $scope.addProjectStage = function(stage ){
+     var selectedProjectId;
+    var date = convertDate($('.select-date').val());
+    $scope.stage.date = date;
     console.log($scope.stage);
-    console.log($('.select-date').val());
-        var formData = new FormData();
-             formData.append('project_id', '947a3ed2-0f5c-4bd4-b655-4067806ca7dc');
-             formData.append('talent_id', '46d63bd1-3863-47f9-9676-e9975a5029ce');
-             formData.append('stage', 'Interested');
-             formData.append('details','');
-             formData.append('notes','');
-             talentApis.addTalentStages(formData, requestCallback);
-             function requestCallback(response) {
-                  response = JSON.parse(response);
-                  console.log(response);
+        for(var i=0;i<$rootScope.allProjectList.length;i++)
+               {
+                 if($rootScope.allProjectList[i].project_name == $scope.stage.project.split('#')[1])
+                    {
+                       selectedProjectId = $rootScope.allProjectList[i].id;
+                      break;
+                    }
+               }
+         if(selectedProjectId) {
+                var formData = new FormData();
+                     formData.append('project_id', selectedProjectId);
+                     formData.append('talent_id', $rootScope.talentDetails.id);
+                     formData.append('stage', $scope.stage.stage);
+                     formData.append('details',$scope.stage.detail);
+                     formData.append('date',$scope.stage.date);
+                     formData.append('notes',$scope.stage.notes);
+                     talentApis.addTalentStages(formData, requestCallback);
+                     function requestCallback(response) {
+                          response = JSON.parse(response);
+                          console.log(response);
+                        if(response.message == "success"){
+                            $('#add-stage').modal('hide');
 
-             }
+                            $scope.stage.stagesArray.push(response);
+                            console.log($scope.stage.stagesArray.length);
+                            if($scope.stage.stagesArray.length > 0){
+                                $scope.stage.isStage = true;
+                            }
 
+                         }
+                     }
+              }
         }
 
     $scope.filterOpen = function(){
@@ -1936,8 +1963,29 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('.advance-search').removeClass('active');
             $scope.isAdvanceSearch = false;
         }
-
     }
+
+    $scope.filterData = function(){
+        /*var requestObject = {
+            'company': ,   // password field value
+            'rating': ,
+            'project_match':
+            'recruiter':
+            'concepts':
+            'projects':
+            'stages':
+            'contacted':
+            'date':
+             };*/
+             talentApis.filterTalentData(requestObject).then(function(response){
+                if(response.message == "success") {
+                  console.log(response);
+                  }
+             });
+    }
+
+
+
 }
 
 

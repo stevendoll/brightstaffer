@@ -42,26 +42,38 @@
                       <div class="form-group">
                         <label for="" class="filter-label-text">Stage</label>
                         <select class="form-control select-arrow">
-                          <option>Select Stage</option>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>23</option>
-                          <option>3</option>
-                          <option>4</option>
+                          <option value="Select Stage">Select Stage</option>
+                          <option>Contacted</option>
+                          <option>Replied</option>
+                          <option>Interested</option>
+                          <option>Not Interested</option>
+                          <option>Under Review</option>
+                          <option>Scheduled for Interview</option>
+                          <option>Interviewing</option>
+                          <option>Offer</option>
+                          <option>Hired</option>
+                          <option>Rejected</option>
                         </select>
                       </div>
                     </div>
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Project Name</label>
-                        <select class="form-control select-arrow">
-                          <option>Select Project</option>
-                          <option>1</option>
-                          <option>2</option>
-                          <option>23</option>
-                          <option>3</option>
-                          <option>4</option>
-                        </select>
+                        <!--<div class="dropdown-container" search-drop-down>
+                          <div class="dropdown-button noselect">
+                              <div class="dropdown-label">Select Project</div>
+                              <div class="dropdown-quantity"></div>
+                              <i class="fa fa-filter"></i>
+                          </div>
+                          <div class="dropdown-list" style="display: none;">
+                              <input type="search" placeholder="Search Project" class="dropdown-search"/>
+                              <ul id="projectDrop"></ul>
+                          </div>
+                        </div>-->
+                        <input id="something" list="projectList" placeholder="Select Project">
+                            <datalist id="projectList">
+                                <option ng-repeat="option in projectListView" value="[[option.name]]"></option>
+                            </datalist>
                       </div>
                     </div>
                     <div class="range-picker-div">
@@ -69,9 +81,9 @@
                         <label for="" class="filter-label-text">Project Match Percentage</label>
                         <div class="cls"></div>
                         <input type="email" class="form-control percentage-input-box" id="" placeholder="">
-                        <div class="range-slider-div">
+                        <div class="range-slider-div" slider-init>
                           <span>0%</span>
-                          <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
                           <span>100%</span>
                         </div>
                       </div>
