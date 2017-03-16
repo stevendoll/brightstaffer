@@ -277,7 +277,6 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['details'] = tp_obj.details
             context['notes'] = tp_obj.notes
             context['create_date'] = tp_obj.get_date_created
-            print (context)
             return util.returnSuccessShorcut(context)
         else:
             return util.returnErrorShorcut(403, 'Talent stage and info is exist in database,Please create different stage' )
@@ -341,13 +340,15 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
 class TalentAllStageDetailsAPI(View):
 
     def get(self,request):
-        response = {}
+
         talent_id = self.request.GET['talent_id']
         talent_obj=Talent.objects.filter(id=talent_id)
         if not talent_obj:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
         queryset = TalentStage.objects.filter(talent=talent_obj)
+        talent_stage =[ ]
         for obj in queryset:
+            response = {}
             response['talent_id'] = obj.talent.talent_name
             response['stage_id'] = obj.id
             response['project'] = obj.project.project_name
@@ -355,7 +356,10 @@ class TalentAllStageDetailsAPI(View):
             response['details'] = obj.details
             response['notes'] = obj.notes
             response['create_date'] = obj.get_date_created
-            return util.returnSuccessShorcut(response)
+            talent_stage.append(response)
+        talent_stage_all={}
+        talent_stage_all['result']=talent_stage
+        return util.returnSuccessShorcut(talent_stage_all)
 
 
 class TalentUpdateRank(View):
