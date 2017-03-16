@@ -524,7 +524,6 @@ class TalentSearch(View):
             }
         }
         }
-        print(query['query']['bool']['should'])
         body = json.dumps(query)
         res = es.search(index="haystack", doc_type="modelresult",
                         body=body
@@ -549,6 +548,7 @@ class TalentSearchFilter(View):
         stages = request.GET.get('stages', '')
         last_contacted = request.GET.get('last_contacted', '')
         date_added = request.GET.get('date_added', '')
+        term = request.GET.get('term', '')
 
         query = {
                   "query": {
@@ -669,16 +669,136 @@ class TalentSearchFilter(View):
 
         if rating:
             rating_query = {
-                "range": {
-                    "rating": {
-                        "gte": rating
-                    }
+                "match": {
+                    "rating": rating
                 }
             }
             query['query']['bool']['must'].append(rating_query)
-        print(query)
+
+        if term:
+            term_query = [
+                    {
+                        "nested": {
+                            "path": "talent_company",
+                            "query": {
+                                "multi_match": {
+                                    "query": term,
+                                    "fields": [
+                                        "talent_company.company",
+                                        "talent_company.talent",
+                                        "talent_company.designation"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "nested": {
+                            "path": "talent_project",
+                            "query": {
+                                "multi_match": {
+                                    "query": term,
+                                    "fields": [
+                                        "talent_project.project",
+                                        "talent_project.talent",
+                                        "talent_project.project_match",
+                                        "talent_project.project_stage"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "nested": {
+                            "path": "talent_concepts",
+                            "query": {
+                                "multi_match": {
+                                    "query": term,
+                                    "fields": [
+                                        "talent_concepts.concept",
+                                        "talent_concepts.match"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "nested": {
+                            "path": "talent_education",
+                            "query": {
+                                "multi_match": {
+                                    "query": term,
+                                    "fields": [
+                                        "talent_education.education",
+                                        "talent_education.course"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "nested": {
+                            "path": "talent_stages",
+                            "query": {
+                                "multi_match": {
+                                    "query": term,
+                                    "fields": [
+                                        "talent_stages.notes",
+                                        "talent_stages.details",
+                                        "talent_stages.project"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "nested": {
+                            "path": "talent_email",
+                            "query": {
+                                "match": {
+                                    "talent_email.email": term
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "nested": {
+                            "path": "talent_contact",
+                            "query": {
+                                "match": {
+                                    "talent_contact.contact": term
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "multi_match": {
+                            "query": term,
+                            "fields": [
+                                "talent_name",
+                                "designation",
+                                "company",
+                                "current_location",
+                                "industry_focus"
+                            ]
+                        }
+                    }
+                ]
+            filtered_query = dict()
+            filtered_query['filter'] = dict()
+            filtered_query['filter']['bool'] = dict()
+            filtered_query['filter']['bool']['should'] = term_query
+            filtered_query['filter']['bool']['must'] = query['query']['bool']['must']
+            query = {
+                      "query": {
+                        "bool": {
+                          "must": {
+                            "match_all": {}
+                          }
+                        }
+                      }
+                    }
+            query['query']['bool'].update(filtered_query)
         body = json.dumps(query)
-        res = es.search(index="haystack", doc_type="modelresult",
-                        body=body
-                        )
+        res = es.search(index="haystack", doc_type="modelresult", body=body)
         return HttpResponse(json.dumps(res['hits']))
