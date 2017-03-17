@@ -138,10 +138,10 @@
                              </thead>
                              <tbody>
                                  <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">
-                                     <td><a href="" class="tbl-link-td">[[talent.talent_name]]</a></td>
+                                     <td><a href="" class="tbl-link-td">[[talent.talent_name | capitalizeWord]]</a></td>
                                      <td>[[talent.talent_company[0].designation | capitalize]]</td>
                                      <td>[[talent.talent_company[0].company]]</td>
-                                     <td ng-show="[[talent.talent_project.length > 0]]">[[talent.talent_project[0].stage]] </span></td>
+                                     <td ng-show="[[talent.talent_project.length > 0]]">[[talent.talent_project[0].project_stage]] </span></td>
                                      <td ng-show="[[talent.talent_project.length == 0]]"> N/A </span></td>
                                      <td ng-show="[[talent.talent_project.length > 0]]">
                                         <span class="dis-blc"> <a href="">#[[talent.talent_project[0].project]]</a> </span>
@@ -151,15 +151,15 @@
                                         <span class="dis-blc"> <a href=""> N/A </a> </span>
                                       </td>
                                      <td>[[talent.talent_company[0].company]]</td>
-                                     <td>[[talent.talent_project[0].get_date_added | dateFormat]]</td>
-                                     <td>[[talent.talent_project[0].get_date_added | dateFormat]]</td>
+                                     <td>[[talent.talent_project[0].date_added | dateFormat]]</td>
+                                     <td>[[talent.talent_project[0].date_added | dateFormat]]</td>
                                      <td>[[talent.recruiter]]</td>
                                      <td>[[talent.talent_contact[0].contact]]</td>
                                      <td class="likd-icn">
                                           <i class="fa fa-linkedin-square tbl-linkdedin-font"></i>
                                      </td>
                                      <td>
-                                          <div class="col-md-12" ng-init="rating = [[talent.rating]]">
+                                          <div class="col-md-12 padding-zero" ng-init="rating = [[talent.rating]]">
                                                 <div star-rating rating-value="rating" max="5" ></div>
                                         </div>
                                      </td>

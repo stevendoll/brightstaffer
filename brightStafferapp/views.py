@@ -519,4 +519,3 @@ def validate_project_by_id(request_data):
     else:
         # Return True if the project id is valid
         return True
-

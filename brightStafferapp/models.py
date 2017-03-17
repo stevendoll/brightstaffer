@@ -24,8 +24,13 @@ STAGE_CHOICES = (('Contacted', 'Contacted'),
                  ('Rejected', 'Rejected')
                  )
 
+# TODO:- Profile can be marked as: None, New, Active and Inactive. If you’re New in system you remain New till 10 days.
+#  After that you become Active when a Status is updated on the candidate profile.
+# If both of these don’t happen profile displays None. When profile remains in same state for 30 days becomes Inactive.
 TALENT_CHOICES = (('New', 'New'),
-                  ('Active', 'Active')
+                  ('Active', 'Active'),
+                  ('InActive', 'InActive'),
+                  ('None','None')
                   )
 
 
@@ -130,6 +135,7 @@ class Talent(models.Model):
     rating = models.IntegerField(default=0)
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
+    activation_date = models.DateTimeField(verbose_name='Activation Date', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Talent'
@@ -143,6 +149,13 @@ class Talent(models.Model):
     def get_date(self):
         return self.create_date.date().strftime('%d/%m/%Y')
 
+    @property
+    def get_activation_date(self):
+        if self.activation_date:
+            return self.activation_date.date().strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
+
 
 class TalentRecruiter(models.Model):
     talent = models.ForeignKey(Talent, null=False, verbose_name='Talent ID', related_name="talent_active")
@@ -152,7 +165,10 @@ class TalentRecruiter(models.Model):
 
     @property
     def get_date_updated(self):
-        return self.date_updated.strftime('%d/%m/%Y')
+        if self.date_updated:
+            return self.date_updated.date().strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class TalentEmail(models.Model):
@@ -188,11 +204,16 @@ class TalentEducation(models.Model):
 
     @property
     def get_start_date(self):
-        return self.start_date.strftime('%d/%m/%Y')
-
+        if self.start_date:
+            return self.start_date.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
     @property
     def get_end_date(self):
-        return self.end_date.strftime('%d/%m/%Y')
+        if self.end_date:
+            return self.end_date.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class TalentCompany(models.Model):
@@ -214,11 +235,18 @@ class TalentCompany(models.Model):
 
     @property
     def get_start_date(self):
-        return self.start_date.strftime('%d/%m/%Y')
+        if self.start_date:
+            return self.start_date.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
     @property
     def get_end_date(self):
-        return self.end_date.strftime('%d/%m/%Y')
+        if self.end_date:
+            return self.end_date.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
+
 
     def __str__(self):
         return str(self.talent.talent_name + " works at " + self.company.company_name)
@@ -244,7 +272,10 @@ class TalentProject(models.Model):
 
     @property
     def get_date_added(self):
-        return self.date_added.strftime('%d/%m/%Y')
+        if self.date_added:
+            return self.date_added.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class TalentConcept(models.Model):
@@ -255,13 +286,17 @@ class TalentConcept(models.Model):
 
     class Meta:
         verbose_name_plural = "Talent Concepts"
+        ordering = ('-match',)
 
     def __str__(self):
         return self.concept.concept
 
     @property
     def get_date_created(self):
-        return self.date_created.strftime('%d/%m/%Y')
+        if self.date_created:
+            return self.date_created.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class TalentStage(models.Model):
@@ -270,8 +305,8 @@ class TalentStage(models.Model):
     stage = models.CharField(max_length=20, choices=STAGE_CHOICES)
     details = models.TextField(verbose_name='Details', null=True, blank=True)
     notes = models.TextField(verbose_name='Notes', null=True, blank=True)
-    date_created = models.DateField(verbose_name='Create Date', auto_now_add=True)
-    date_updated = models.DateField(verbose_name='Update Date', auto_now=True)
+    date_created = models.DateField(verbose_name='Create Date',null=True, blank=True)
+    date_updated = models.DateField(verbose_name='Update Date',null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Talent Stages"
@@ -279,11 +314,17 @@ class TalentStage(models.Model):
 
     @property
     def get_date_created(self):
-        return self.date_created.strftime('%d/%m/%Y')
+        if self.date_created:
+            return self.date_created.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
     @property
     def get_date_updated(self):
-        return self.date_updated.strftime('%d/%m/%Y')
+        if self.date_updated:
+            return self.date_updated.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class ProjectConcept(models.Model):

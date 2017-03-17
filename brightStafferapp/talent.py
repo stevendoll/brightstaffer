@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.views.generic import View
 from rest_framework import generics
-import json
+import json, re
 from brightStafferapp.util import required_post_params
 from brightStafferapp.views import user_validation
 from django.views.generic import View
@@ -16,7 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, HttpResponse
 from django.db.models import Q
 from elasticsearch import Elasticsearch
-
+from datetime import date,datetime
+from .search import TERM_QUERY
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -200,39 +201,31 @@ class TalentEmailAPI(View):
             return False
 
 
-class TalentProjectAddAPI(View):
-    queryset = Projects.objects.all()
-    serializer_class = ProjectSerializer
-    http_method_names = ['post']
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(TalentProjectAddAPI, self).dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        context = dict()
-        project_id = request.POST['project_id']
-        recruiter = request.POST['recruiter']
+class TalentProjectAddAPI(generics.ListCreateAPIView):
+    queryset = Talent.objects.all()
+    serializer_class = TalentSerializer
+    http_method_names = ['get']
+    def get_queryset(self):
+        queryset = super(TalentProjectAddAPI, self).get_queryset()
+        project_id = self.request.query_params.get('project_id')
+        recruiter = self.request.query_params.get('recruiter')
         # get projects instance to verify if project with project_id and recruiter exists or not
         projects = Projects.objects.filter(id=project_id, recruiter__username=recruiter)
         if not projects:
             return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project_id))
         project = projects[0]
         # get list of talent ids from POST request
-        talent_id_list = request.POST.getlist('talent_id[]')[0].split(',')
+        talent_id_list = self.request.query_params.get('talent_id').split(',')
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
             if not talent_objs:
                 return util.returnErrorShorcut(403, 'Talent with id {} doesn\'t exist in database.'.format(talent_id))
             talent_obj = talent_objs[0]
             tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
-            if created:
-                TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match="50", rank="3")
-                #context['message'] = 'success'
-            #else:
-            #    context['error'] = 'Talent Project object already exists.'
-                #return util.returnErrorShorcut(400, context)
-        return util.returnSuccessShorcut(context)
+            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match="50", rank="3")
+            talent_result = queryset.filter(talent_active__is_active=True)
+        return talent_result
+
 
 
 # View Talent's Current stage for a sinlge project and Add Talent's stage for a single project
@@ -249,6 +242,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         queryset = queryset.filter(id=stage_id,talent_id=talent_id,project_id=project_id)
         return queryset
 
+
     def post(self, request, *args, **kwargs):
         context = {}
         talent = request.POST['talent_id']
@@ -256,6 +250,8 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         stage = request.POST['stage']
         details = request.POST['details']
         notes = request.POST['notes']
+        date = request.POST['date']
+        date=datetime.strptime(date,"%d/%m/%Y")
         projects = Projects.objects.filter(id=project)
         if not projects:
             return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project))
@@ -264,10 +260,20 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         if not talent_objs:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
         talent_obj = talent_objs[0]
-        tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage, details=details, notes=notes)
+        tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage,
+                                                            details=details, notes=notes,date_created=date)
         if created:
-            context['message'] = 'success'
-        return util.returnSuccessShorcut(context)
+            context['talent_id']=tp_obj.talent.talent_name
+            context['stage_id']=tp_obj.id
+            context['project']=tp_obj.project.project_name
+            context['stage']=tp_obj.stage
+            context['details'] = tp_obj.details
+            context['notes'] = tp_obj.notes
+            context['create_date'] = tp_obj.get_date_created
+            return util.returnSuccessShorcut(context)
+        else:
+            return util.returnErrorShorcut(403, 'Talent stage and info is exist in database,Please create different stage' )
+
 
 # Edit Talent's Stage
 class TalentStageEditAPI(generics.ListCreateAPIView):
@@ -283,6 +289,8 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         details = request.POST['details']
         notes = request.POST['notes']
         stage_id=request.POST['id']
+        date=request.POST['date']
+        date = datetime.strptime(date, "%d/%m/%Y")
         projects = Projects.objects.filter(id=project)
         if not projects:
             return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project))
@@ -291,9 +299,18 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         if not talent_objs:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
         talent_obj = talent_objs[0]
-        updated=TalentStage.objects.filter(id=str(stage_id)).update(stage=stage,details=details,notes=notes)
-        if updated:
-            context['message'] = 'success'
+        stageid=TalentStage.objects.filter(id=stage_id)
+        if not stageid:
+            return util.returnErrorShorcut(404, 'Stage id {} is not exist in database'.format(stage_id))
+        created = TalentStage.objects.filter(talent=talent_obj, project=project, stage=stage, details=details,
+                                                    notes=notes,date_created=date).exists()
+        if created:
+            return util.returnErrorShorcut(403,
+                                           'Talent stage and info is exist in database,Please update the stage')
+        else:
+            updated=TalentStage.objects.filter(id=str(stage_id)).update(stage=stage,details=details,notes=notes,date_created=date)
+            if updated:
+                context['message'] = 'success'
         return util.returnSuccessShorcut(context)
 
 # Delete Talent's project Stage
@@ -305,28 +322,40 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
     def delete(self, request, *args, **kwargs):
         context = dict()
         id = request.GET['stage_id']
+        talent_id = TalentStage.objects.filter(id=id)
+        if not talent_id:
+            return util.returnErrorShorcut(403,'Stage id is not exist in the system')
         is_deleted = TalentStage.objects.filter(id=id).delete()[0]
-        if not is_deleted:
-            return util.returnErrorShorcut(400, 'No entry found or already deleted')
         return util.returnSuccessShorcut(context)
 
 
-# View All Talent's project(Single) stages
-class TalentAllStageDetailsAPI(generics.ListCreateAPIView):
-    queryset = TalentStage.objects.all()
-    serializer_class = TalentProjectStageSerializer
-    http_method_names = ['get', 'post']
+# View All Talent's stages
+class TalentAllStageDetailsAPI(View):
 
-    def get_queryset(self):
-        queryset = super(TalentAllStageDetailsAPI, self).get_queryset()
-        talent_id = self.request.query_params.get('talent_id')
-        project_id = self.request.query_params.get('project_id')
-        #stage_id = self.request.query_params.get('stage_id')
-        queryset = queryset.filter(talent_id=talent_id, project_id=project_id)
-        return queryset
+    def get(self,request):
+
+        talent_id = self.request.GET['talent_id']
+        talent_obj=Talent.objects.filter(id=talent_id)
+        if not talent_obj:
+            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+        queryset = TalentStage.objects.filter(talent=talent_obj)
+        talent_stage =[ ]
+        for obj in queryset:
+            response = {}
+            response['talent_id'] = obj.talent.talent_name
+            response['stage_id'] = obj.id
+            response['project'] = obj.project.project_name
+            response['stage'] = obj.stage
+            response['details'] = obj.details
+            response['notes'] = obj.notes
+            response['create_date'] = obj.get_date_created
+            talent_stage.append(response)
+        talent_stage_all={}
+        talent_stage_all['result']=talent_stage
+        return util.returnSuccessShorcut(talent_stage_all)
+
 
 class TalentUpdateRank(View):
-
     def get(self,request):
         context={}
         talent = request.GET['talent_id']
@@ -341,15 +370,15 @@ class TalentUpdateRank(View):
 
 
 class DeleteTalent(generics.ListCreateAPIView):
-    queryset = TalentRecruiter.objects.all()
-    serializer_class = TalentProjectStageSerializer
-    http_method_names = ['get', 'post', 'delete']
+    queryset = Talent.objects.all()
+    serializer_class = TalentSerializer
+    http_method_names = ['get']
 
-    def delete(self, request):
-        context = {}
-        recruiter = request.GET['recruiter']
-        is_active = request.GET['is_active']
-        talent_id_list = request.query_params['talent'].split(',') #('talent[]')[0].split(',')
+    def get_queryset(self):
+        queryset = super(DeleteTalent, self).get_queryset()
+        recruiter = self.request.query_params.get('recruiter')
+        is_active = self.request.query_params.get('is_active')
+        talent_id_list = self.request.query_params.get('talent').split(',') #('talent[]')[0].split(',')
 
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
@@ -358,8 +387,8 @@ class DeleteTalent(generics.ListCreateAPIView):
             updated = TalentRecruiter.objects.filter(talent=talent_objs, recruiter__username=recruiter)\
                 .update(is_active=is_active)
             if updated:
-                context['message'] = 'success'
-        return util.returnSuccessShorcut(context)
+                talent_result = queryset.filter(talent_active__is_active=True)
+        return talent_result
 
 
 def talent_validation(user_data):
@@ -374,122 +403,233 @@ class TalentSearch(View):
 
     def get(self, request):
         es = Elasticsearch()
-        term = self.request.GET['term']
-        body = json.dumps({"query": {
-            "bool": {
-                "should": [
-                    {
-                        "nested": {
-                            "path": "talent_company",
-                            "query": {
-                                "multi_match": {
-                                    "query": term,
-                                    "fields": [
-                                        "talent_company.company",
-                                        "talent_company.talent",
-                                        "talent_company.designation"
-                                    ]
-                                }
+        term = request.GET['term']
+        query = TERM_QUERY
+        if term:
+            term_query = json.dumps(query)
+            term_query = re.sub(r"\bsearch_term\b", term, term_query)
+            term_query = json.loads(term_query)
+            body = json.dumps(term_query)
+            res = es.search(index="haystack", doc_type="modelresult",
+                            body=body
+                            )
+            return HttpResponse(json.dumps(res['hits']))
+
+
+class TalentSearchFilter(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(TalentSearchFilter, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        es = Elasticsearch()
+        rating = request.GET.get('rating', '')
+        talent_company = request.GET.get('talent_company', '')
+        project_match = request.GET.get('project_match', '')
+        recruiter = request.GET.get('recruiter', '')
+        concepts = request.GET.get('concepts', '')
+        projects = request.GET.get('projects', '')
+        stages = request.GET.get('stages', '')
+        last_contacted = request.GET.get('last_contacted', '')
+        date_added = request.GET.get('date_added', '')
+        term = request.GET.get('term', '')
+        ordering = request.GET.get('ordering', '')
+        is_active = request.GET.get('is_active', '')
+
+        query = {
+                  "query": {
+                    "bool": {
+                      "must": [
+                      ]
+                    }
+                  }
+                }
+        if date_added:
+            date_added_query = {
+                "match": {
+                    "create_date": date_added
+                }
+            }
+            query['query']['bool']['must'].append(date_added_query)
+
+        if last_contacted:
+            last_contacted_query = {
+                "nested": {
+                    "path": "talent_stages",
+                    "query": {
+                        "match": {
+                            "talent_stages.date_updated": last_contacted
+                        }
+                    },
+                }
+            }
+            query['query']['bool']['must'].append(last_contacted_query)
+        if stages:
+            for stage in stages.split(','):
+                stage_query = {
+                    "nested": {
+                        "path": "talent_stages",
+                        "query": {
+                            "multi_match": {
+                                "query": stage,
+                                "fields": [
+                                    "talent_stages.stage"
+                                ]
+                            }
+                        }
+                    }
+                }
+                query['query']['bool']['must'].append(stage_query)
+
+        if projects:
+            for project in projects.split(','):
+                project_query = {
+                    "nested": {
+                        "path": "talent_project",
+                        "query": {
+                            "multi_match": {
+                                "query": project,
+                                "fields": [
+                                    "talent_project.project"
+                                ]
+                            }
+                        }
+                    }
+                }
+                query['query']['bool']['must'].append(project_query)
+        if concepts:
+            for concept in concepts.split(','):
+                concepts_query = {
+                    "nested": {
+                        "path": "talent_concepts",
+                        "query": {
+                            "multi_match": {
+                                "query": concept,
+                                "fields": [
+                                    "talent_concepts.concept"
+                                ]
+                            }
+                        }
+                    }
+                }
+                query['query']['bool']['must'].append(concepts_query)
+        if recruiter:
+            recruiter_query = {
+                "match": {
+                    "recruiter": "chandanvarma2@gmail.com"
+                }
+            }
+            query['query']['bool']['must'].append(recruiter_query)
+        if project_match:
+            project_match_query = {
+                "nested": {
+                    "query": {
+                        "range": {
+                            "talent_project.project_match": {
+                                "gte": project_match
                             }
                         }
                     },
-                    {
-                        "nested": {
-                            "path": "talent_project",
-                            "query": {
-                                "multi_match": {
-                                    "query": term,
-                                    "fields": [
-                                        "talent_project.project",
-                                        "talent_project.talent",
-                                        "talent_project.project_match"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_concepts",
-                            "query": {
-                                "multi_match": {
-                                    "query": term,
-                                    "fields": [
-                                        "talent_concepts.concept",
-                                        "talent_concepts.match"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_education",
-                            "query": {
-                                "multi_match": {
-                                    "query": term,
-                                    "fields": [
-                                        "talent_education.education",
-                                        "talent_education.course"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_stages",
-                            "query": {
-                                "multi_match": {
-                                    "query": term,
-                                    "fields": [
-                                        "talent_stages.notes",
-                                        "talent_stages.details",
-                                        "talent_stages.project"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_email",
-                            "query": {
-                                "match": {
-                                    "talent_email.email": term
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_contact",
-                            "query": {
-                                "match": {
-                                    "talent_contact.contact": term
-                                }
-                            }
-                        }
-                    },
-                    {
+                    "path": "talent_project"
+                }
+            }
+            query['query']['bool']['must'].append(project_match_query)
+
+        if talent_company:
+            talent_company_query = {
+                "nested": {
+                    "path": "talent_company",
+                    "query": {
                         "multi_match": {
-                            "query": term,
+                            "query": talent_company,
                             "fields": [
-                                "talent_name",
-                                "designation",
-                                "company",
-                                "current_location",
-                                "industry_focus"
+                                "talent_company.company",
+                                "talent_company.talent",
+                                "talent_company.designation"
                             ]
                         }
                     }
-                ]
+                }
             }
-        }
-        })
-        res = es.search(index="haystack", doc_type="modelresult",
-                        body=body
-                        )
+            query['query']['bool']['must'].append(talent_company_query)
 
+        if rating:
+            rating_query = {
+                "match": {
+                    "rating": rating
+                }
+            }
+            query['query']['bool']['must'].append(rating_query)
+        if ordering:
+            query['sort'] = [
+                                {
+                                    "create_date": {
+                                        "order": ordering
+                                    }
+                                }
+                            ]
+        if is_active and is_active == 'true':
+            query['sort'] = [
+                {
+                    "activation_date": {
+                        "order": "desc"
+                    }
+                }
+            ]
+            is_active_query = {
+                "match": {
+                    "status": "Active"
+                }
+            }
+            query['query']['bool']['must'].append(is_active_query)
 
+        if is_active:
+                if is_active == 'false':
+                    is_active_query = {
+                        "match": {
+                            "status": 'InActive'
+                        }
+                    }
+                    query['query']['bool']['must'].append(is_active_query)
+
+        if term:
+            term_query = TERM_QUERY
+            term_query = json.dumps(term_query)
+            term_query = re.sub(r"\bsearch_term\b", term, term_query)
+            term_query = json.loads(term_query)
+            term_query = term_query['query']['bool']['should']
+            filtered_query = dict()
+            filtered_query['filter'] = dict()
+            filtered_query['filter']['bool'] = dict()
+            filtered_query['filter']['bool']['should'] = term_query
+            filtered_query['filter']['bool']['must'] = query['query']['bool']['must']
+            query = {
+                      "query": {
+                        "bool": {
+                          "must": {
+                            "match_all": {}
+                          }
+                        }
+                      }
+                    }
+            if ordering:
+                query['sort'] = [
+                    {
+                        "create_date": {
+                            "order": ordering
+                        }
+                    }
+                ]
+            if is_active and is_active == 'true':
+                query['sort'] = [
+                    {
+                        "activation_date": {
+                            "order": "desc"
+                        }
+                    }
+                ]
+            query['query']['bool'].update(filtered_query)
+        body = json.dumps(query)
+        res = es.search(index="haystack", doc_type="modelresult", body=body)
         return HttpResponse(json.dumps(res['hits']))

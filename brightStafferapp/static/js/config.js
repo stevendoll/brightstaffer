@@ -144,13 +144,23 @@ angular
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var shouldLogin = toState.data.requireAuthentication !== undefined
             && toState.data.requireAuthentication;
+            $rootScope.talentAllStages ;
+            if(sessionStorage.talentDetails)
+                $rootScope.talentDetails = JSON.parse(sessionStorage.talentDetails);
+            if(sessionStorage.stageProjectList)
+                $rootScope.StagesProjectList = JSON.parse(sessionStorage.stageProjectList);
+            if(sessionStorage.projectList)
+                $rootScope.projectListView = JSON.parse(sessionStorage.projectList);
+            if(sessionStorage.talentAllStages)
+              $rootScope.talentAllStages = JSON.parse(sessionStorage.talentAllStages)
          if($cookieStore.get('userData'))
             {
              $rootScope.globals.currentUser = $cookieStore.get('userData');
             }else if($rootScope.globals.currentUser){
-              $cookieStore.put('userData', $rootScope.globals.currentUser)
+              $cookieStore.put('userData', $rootScope.globals.currentUser);
             }
-        // NOT authenticated - wants any private stuff
+            //sessionStorage.talentDetails = angular.fromJson(sessionStorage.talentDetails);
+                 // NOT authenticated - wants any private stuff
         if(shouldLogin || fromState.name === "") {
             var token =  $rootScope.globals.currentUser == null ? null : $rootScope.globals.currentUser;
             if (token == null) {

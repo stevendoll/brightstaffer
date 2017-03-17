@@ -227,6 +227,20 @@ function talentApis($http,REQUEST_URL) {
        });
       },
 
+    getTalentAllStages: function(data){
+    return $http({
+        url: REQUEST_URL+'talent_view_allstages/?talent_id='+data.talent_id,
+        method: "GET", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      },
+
      updateRecruiterName: function(data){
         return $http({
             url: REQUEST_URL+'update_recruiter/?recruiter='+data.recruiter+'&display_name='+data.display_name,
@@ -359,7 +373,49 @@ function talentApis($http,REQUEST_URL) {
             }
         }
         xhr.send(formData);
+    },
+
+    addTalentStages: function(formData , callback){
+       var url = REQUEST_URL+'talent_add_stage/';
+       var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function()
+            {
+                if (xhr.readyState == 4 && xhr.status == 200)
+                {
+                    callback(xhr.responseText); // Another callback here
+                }
+            };
+        xhr.open('POST', url, true);
+        headers = {
+        "Accept": "application/json",
+        "Cache-Control": "no-cache",
+        "X-Requested-With": "XMLHttpRequest"
+        };
+        for (headerName in headers) {
+            headerValue = headers[headerName];
+            if (headerValue) {
+              xhr.setRequestHeader(headerName, headerValue);
+            }
+        }
+        xhr.send(formData);
+    },
+
+    filterTalentData: function(data){
+       return $http({
+            url: REQUEST_URL+'talent_search_filter/?talent_company='+data.company+'&rating='+data.rating+'&project_match='+data.project_match+'&recruiter='+data.recruiter+'&concepts='+data.concepts+'&projects='+data.projects+'&stages='+data.stages+'&last_contacted='+data.contacted+'&date_added='+data.date+'&term='+data.term,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
     }
+
+
+
 
    }
 }

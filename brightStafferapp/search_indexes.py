@@ -28,6 +28,7 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
     rating = indexes.CharField(model_attr='rating')
     status = indexes.CharField(model_attr='status')
     create_date = indexes.DateTimeField(model_attr='create_date')
+    activation_date = indexes.DateTimeField(model_attr='activation_date', null=True)
     # suggestions = indexes.FacetCharField()
 
     # def prepare(self, obj):
@@ -37,6 +38,9 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return Talent
+
+    def prepare_activation_date(self, obj):
+        return str(obj.get_activation_date)
 
     def prepare_create_date(self, obj):
         return str(obj.get_date)
@@ -49,13 +53,14 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             sta['project'] = stage.project.project_name
             sta['details'] = stage.details
             sta['notes'] = stage.notes
+            sta['stage'] = stage.stage
             sta['date_created'] = str(stage.get_date_created)
             sta['date_updated'] = str(stage.get_date_updated)
             stages.append(sta)
         return stages
 
     def prepare_talent_email(self, obj):
-        emails =[]
+        emails = []
         for email in obj.talent_email.all():
             ema = dict()
             ema['talent'] = obj.talent_name
@@ -65,7 +70,7 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
         return emails
 
     def prepare_talent_contact(self, obj):
-        contacts =[]
+        contacts = []
         for contact in obj.talent_contact.all():
             cont = dict()
             cont['talent'] = obj.talent_name

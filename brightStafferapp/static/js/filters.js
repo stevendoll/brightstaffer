@@ -41,6 +41,7 @@ function capitalizeAll() {
 
 function capitalizeWord() {
   return function(input){
+    if(input){
     if(input.indexOf(' ') !== -1){
       var inputPieces,
           i;
@@ -58,7 +59,7 @@ function capitalizeWord() {
       input = input.toLowerCase();
       return capitalizeString(input);
     }
-
+    }
     function capitalizeString(inputString){
       return inputString.substring(0,1).toUpperCase() + inputString.substring(1);
     }

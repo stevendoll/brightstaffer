@@ -4,8 +4,8 @@
                   <div class="talentsearch-left-panel">
                     <div class="left-div"><div class="search-image"><img src="static/img/dummyProfile.png" alt=""></div></div>
                     <div class="search-result-panel right-div">
-                      <div class="search-result-name"><div class="search-name-head">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeAll]]</span></div>
-                     <div class="search-result-info">[[talent.current_location ]] <span></span> [[talent.industry_focus | capitalizeWord]]</div>
+                      <div class="search-result-name"><div class="search-name-head"  ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeWord]]</span></div>
+                     <div class="search-result-info">[[talent.current_location | capitalizeWord]] <span></span> [[talent.industry_focus | capitalizeWord]]</div>
                     </div>
 
                     <div class="cls"></div>
@@ -13,14 +13,14 @@
                     <div ng-if ="$index == 0">
                         <div class="col-xs-12 padding-zero" ng-init="current = company">
                           <div class="left-div search-result-current">Current</div>
-                          <div class="right-div search-detail-current"><span class="bold-font">[[current.designation | capitalizeAll]]</span> - [[current.company | capitalize]] [[current.start_date | yearFormat]]- Present</div>
+                          <div class="right-div search-detail-current"><span class="bold-font">[[current.designation | capitalizeWord]]</span> - [[current.company | capitalizeWord]] [[current.start_date | yearFormat]]- Present</div>
                         </div>
                     </div>
                     <div ng-if ="$index != 0">
                         <div class="col-xs-12 padding-zero" ng-init="past = company">
                         <div class="left-div search-result-past">Past</div>
                         <div class="right-div search-detail-past">
-                         <span class="bold-font">[[past.designation | capitalizeAll]]</span> - [[past.company ]] [[past.start_date | yearFormat]]- [[past.end_date | yearFormat]]<span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talent)">More</a></span>
+                         <span class="bold-font">[[past.designation | capitalizeWord]]</span> - [[past.company | capitalizeWord ]] [[past.start_date | yearFormat]]- [[past.end_date | yearFormat]]<span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talent)">More</a></span>
                         </div>
                       </div>
                     </div>
@@ -39,7 +39,7 @@
                       <div ng-show="[[talent.talent_project.length > 0]]">
                       <div class="schdule-list">[[talent.talent_project[0].project_stage | capitalize]]</div>
                       <div class="schdule-list-date">[[talent.talent_project[0].date_added | dateFormat]]</div>
-                      <div class="link-schedule"><a href="">#[[talent.talent_project[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
+                      <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_project[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
                       </div>
                       <div ng-show="[[talent.talent_project.length == 0]]">
                       <div class="schdule-list-date">[[talent.create_date | dateFormat]]</div>
@@ -66,7 +66,7 @@
                         <div class="progress">
                           <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                             <span class="text">Total Experience</span>
-                            <span class="percentage" >[[calcTotal(talent.talent_company)]] Years</span>
+                            <span class="percentage" >[[calcTotal(talent.talent_company) | number: 2]] Years</span>
                           </div>
                         </div>
                       </div>
@@ -97,14 +97,14 @@
                           <canvas height="60" width="60"></canvas>
                         </div>
                         <i class="fa fa-file-text"></i>
-                        <div class="link-panel"><a href="">#[[projects.project]]</a><span><a href="">@[[projects.company_name]]</a></span></div>
+                        <div class="link-panel"><a href="" style="cursor:default;">#[[projects.project ]]</a><span><a href="" style="cursor:default;">@[[projects.company_name ]]</a></span></div>
                         <div class="bar-date">[[projects.date_added | dateFormat]]</div>
                       </div>
                     </div>
                   </div>
                   <div class="cls"></div>
                   <div class="talentsearch-foot">
-                   <button class="btn" ui-sref="talent.talent-profile" id="profile_[[talent.id]]" ng-click="loadProfileData(talent.id,talent)">View Profile</button>
+                   <button class="btn"  id="profile_[[talent.id]]" ng-click="loadProfileData(talent.id,talent)">View Profile</button>
                    <button type="" class="btn" id="add_[[talent.id]]" ng-click="openProjectList(talent.id)">Add to Project</button>
                    <a class="linkedin" href="[[talent.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>
                   </div>
@@ -124,11 +124,11 @@
       <div class="modal-body roles-body">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <div class="past-roles">Past Roles</div>
-        <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company | limitTo: 2">[[role.designation | capitalize]] at [[role.company]] [[role.start_date | yearFormat]]- [[role.end_date | yearFormat]]</div>
+        <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company | limitTo: 2">[[role.designation | capitalizeWord]] at [[role.company | capitalizeWord]] [[role.start_date | yearFormat]]- [[role.end_date | yearFormat]]</div>
         <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
         <div class="cls"></div>
         <div class="edu-roles">Education</div>
-        <div class="past-roles-descp" ng-repeat="edu in selectedCandidate.talent_education | limitTo: 2">[[edu.education]] [[edu.start_date | yearFormat]] - [[edu.end_date | yearFormat]]</div>
+        <div class="past-roles-descp" ng-repeat="edu in selectedCandidate.talent_education | limitTo: 2">[[edu.education ]] [[edu.start_date | yearFormat]] - [[edu.end_date | yearFormat]]</div>
         <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
         <div class="cls"></div>
       </div>
@@ -159,19 +159,19 @@
         </div>
         <div class="info-modal-div">
           <div class="left-section-div">Shared with</div>
-          <div class="right-section-div">Jeffrey Lloyd, +2 <span data-toggle="modal">Add</span></div>
+          <div class="right-section-div">Jeffrey Lloyd, +2 <span data-toggle="modal" style="cursor:default;">Add</span></div>
         </div>
         <div class="cls"></div>
         <div class="modal-recent-projects">
           <div class="modal-recent-text">Recent Projects</div>
           <div class="modal-recent-pro-table">
             <div class="modal-recent-pro-cell" ng-repeat="proj in selectedCandidate.talent_project | limitTo: 5">
-              <div class="modal-recent-pro-descp">#[[proj.project | capitalizeWord]]</div>
+              <div class="modal-recent-pro-descp" style="cursor:default;">#[[proj.project | capitalizeWord]]</div>
               <div class="modal-recent-pro-descp txt-center">[[proj.project_stage | capitalize]]</div>
               <div class="modal-recent-pro-descp txt-right">[[proj.date_added | dateFormat]]</div>
             </div>
           </div>
-          <div class="modal-show-more-text"><a href="">Show All</a></div>
+          <div class="modal-show-more-text"><a href="" style="cursor:default;">Show All</a></div>
         </div>
         <div class="cls"></div>
       </div>
@@ -180,19 +180,19 @@
 </div>
 <!-- recruiter-Modal-ends -->
 <!-- edit-recruiter-Modal-starts -->
-<div class="modal fade" id="edit-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" ng-init="recruiterNameInput = recruiter.recruiterName">
+<div class="modal fade" id="edit-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog add-talent-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body roles-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <button type="button" class="close" data-dismiss="modal" ng-click="closeUpdateRecruiter()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <div class="edit-modal-recruiter">
           <span>Edit Recruiter</span>
           <div class="form-group">
-            <input class="form-control" id="name" ng-model="recruiterNameInput"  autocomplete="off">
+            <input class="form-control" id="name" ng-model="data.recruiterNameInput" autocomplete="off">
              <span class="error" id="name-required" style="color:red" ng-show="[[isName]]">Required.</span>
           </div>
           <div class="cls"></div>
-          <button type="" class="btn update" ng-click="updateRecruiterName(recruiterNameInput)">Update</button>
+          <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(data.recruiterNameInput)">Update</button>
         </div>
         <div class="cls"></div>
       </div>
@@ -210,9 +210,12 @@
           <span>Project</span>
           <div class="cls"></div>
           <div class="form-group export">
-            <select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
-            </select>
-
+            <!--<select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
+            </select>-->
+            <input id="projectListD" list="addProjectList" placeholder="Select Project" class="form-control select-arrow">
+                <datalist id="addProjectList">
+                    <option ng-repeat="option in projectListView" value="[[option.name]]"></option>
+                </datalist>
           </div>
           <div class="cls"></div>
           <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(projectDD)">Add to Project</button>
