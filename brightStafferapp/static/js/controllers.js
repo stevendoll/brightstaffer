@@ -1929,7 +1929,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 */
 
     $scope.openAddStagePopup = function(id){
-        $('.select-date').datepicker();
+        //$('.select-date').datepicker();
+$('#datepicker').datepicker({
+    });
         $('#projectListD2').change(function() {
             var sbId =  $('#projectListD2').attr('sb');
             var selectedValue = $('#sbSelector_'+sbId).text();
