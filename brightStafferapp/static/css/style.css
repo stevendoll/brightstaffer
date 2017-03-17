@@ -1005,6 +1005,10 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   word-wrap: break-word;
 }
 
+.datepicker.dropdown-menu {
+  width: 220px;
+}
+
 .table-circle-bg .link-panel span {
   display: block;
 }
