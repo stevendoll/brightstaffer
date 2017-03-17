@@ -377,15 +377,15 @@ class TalentUpdateRank(View):
 
 
 class DeleteTalent(generics.ListCreateAPIView):
-    queryset = TalentRecruiter.objects.all()
-    serializer_class = TalentProjectStageSerializer
-    http_method_names = ['get', 'post', 'delete']
+    queryset = Talent.objects.all()
+    serializer_class = TalentSerializer
+    http_method_names = ['get']
 
-    def delete(self, request):
-        context = {}
-        recruiter = request.GET['recruiter']
-        is_active = request.GET['is_active']
-        talent_id_list = request.query_params['talent'].split(',') #('talent[]')[0].split(',')
+    def get_queryset(self):
+        queryset = super(DeleteTalent, self).get_queryset()
+        recruiter = self.request.query_params.get('recruiter')
+        is_active = self.request.query_params.get('is_active')
+        talent_id_list = self.request.query_params.get('talent').split(',') #('talent[]')[0].split(',')
 
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
@@ -394,8 +394,8 @@ class DeleteTalent(generics.ListCreateAPIView):
             updated = TalentRecruiter.objects.filter(talent=talent_objs, recruiter__username=recruiter)\
                 .update(is_active=is_active)
             if updated:
-                context['message'] = 'success'
-        return util.returnSuccessShorcut(context)
+                talent_result = queryset.filter(talent_active__is_active=True)
+        return talent_result
 
 
 def talent_validation(user_data):
