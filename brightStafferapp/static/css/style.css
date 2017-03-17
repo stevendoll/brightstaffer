@@ -820,9 +820,14 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .talents-tabs-panel .right-section {
-  width: 30%;
+  width: 32%;
   float: right;
   margin-top: 40px;
+}
+
+.custom-scroll-rightbar {
+  height: 751px;
+  overflow-y: scroll;
 }
 
 .talents-tabs-panel .left-section .nav-tabs > li > a {
@@ -1105,6 +1110,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .stages-right-div {
   width: 100%;
   float: left;
+  padding-left: 18px;
 }
 
 .right-info-comm-box {
