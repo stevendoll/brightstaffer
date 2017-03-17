@@ -542,6 +542,7 @@ class TalentSearchFilter(View):
         date_added = request.GET.get('date_added', '')
         term = request.GET.get('term', '')
         ordering = request.GET.get('ordering', '')
+        is_active = request.GET.get('is_active', '')
 
         query = {
                   "query": {
@@ -667,7 +668,6 @@ class TalentSearchFilter(View):
                 }
             }
             query['query']['bool']['must'].append(rating_query)
-
         if ordering:
             query['sort'] = [
                                 {
@@ -676,6 +676,14 @@ class TalentSearchFilter(View):
                                     }
                                 }
                             ]
+        if is_active:
+                if is_active == 'false':
+                    is_active_query = {
+                        "match": {
+                            "status": 'InActive'
+                        }
+                    }
+                    query['query']['bool']['must'].append(is_active_query)
 
         if term:
             term_query = [
@@ -800,7 +808,24 @@ class TalentSearchFilter(View):
                         }
                       }
                     }
+            if ordering:
+                query['sort'] = [
+                    {
+                        "create_date": {
+                            "order": ordering
+                        }
+                    }
+                ]
+            if is_active and is_active == 'true':
+                query['sort'] = [
+                    {
+                        "activation_date": {
+                            "order": "desc"
+                        }
+                    }
+                ]
             query['query']['bool'].update(filtered_query)
+
         body = json.dumps(query)
         res = es.search(index="haystack", doc_type="modelresult", body=body)
         return HttpResponse(json.dumps(res['hits']))

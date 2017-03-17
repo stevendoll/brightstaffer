@@ -24,7 +24,9 @@ STAGE_CHOICES = (('Contacted', 'Contacted'),
                  ('Rejected', 'Rejected')
                  )
 
-# TODO:- Profile can be marked as: None, New, Active and Inactive. If you’re New in system you remain New till 10 days. After that you become Active when a Status is updated on the candidate profile. If both of these don’t happen profile displays None. When profile remains in same state for 30 days becomes Inactive.
+# TODO:- Profile can be marked as: None, New, Active and Inactive. If you’re New in system you remain New till 10 days.
+#  After that you become Active when a Status is updated on the candidate profile.
+# If both of these don’t happen profile displays None. When profile remains in same state for 30 days becomes Inactive.
 TALENT_CHOICES = (('New', 'New'),
                   ('Active', 'Active'),
                   ('InActive', 'InActive'),
@@ -146,6 +148,13 @@ class Talent(models.Model):
     @property
     def get_date(self):
         return self.create_date.date().strftime('%d/%m/%Y')
+
+    @property
+    def get_activation_date(self):
+        if self.activation_date:
+            return self.activation_date.date().strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class TalentRecruiter(models.Model):

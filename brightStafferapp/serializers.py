@@ -148,9 +148,10 @@ class TalentSerializer(serializers.ModelSerializer):
     talent_concepts = TalentConceptSerializer(many=True)
     talent_email = TalentEmailSerializer(many=True)
     talent_contact = TalentContactSerializer(many=True)
+    activation_date = serializers.CharField(source='get_activation_date')
 
     class Meta:
         model = Talent
-        fields = ('id', 'talent_name', 'designation', 'industry_focus', 'industry_focus_percentage', 'status',
+        fields = ('id', 'talent_name', 'designation', 'industry_focus', 'activation_date', 'industry_focus_percentage', 'status',
         'rating', 'talent_email', 'talent_contact', 'linkedin_url', 'recruiter', 'create_date', 'current_location',
         'talent_company', 'talent_education', 'talent_project', 'talent_concepts')
