@@ -1317,14 +1317,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                      };
      $scope.filterValue = {
                         stage:'Select Stage',
-                        project: 'Nothing Selected',
+                        project:$rootScope.StagesProjectList[0],
                         match:'',
                         rating:'',
                         lastContacted:'',
                         analysed:'',
                         company:'',
                         match:'',
-                        concepts:''
+                        concepts:'',
+                        recruiter_name:''
                         };
 //^[0-9]{10}$/;
 
@@ -1935,7 +1936,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.stage.project = selectedValue;
             console.log($scope.stage.project);
             });
-        $('#stages').val($scope.stage.stage);
         $('#add-stage').modal('show');
     }
     //$scope.stage.stagesArray = [];
@@ -2003,14 +2003,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('.talent-search-icon').removeClass('active');
             $scope.filterValue = {
                         stage:'Select Stage',
-                        project: 'Nothing Selected',
+                        project: $rootScope.StagesProjectList[0],
                         match:'',
                         rating:'1',
                         lastContacted:'',
                         analysed:'',
                         company:'',
                         match:'',
-                        concepts:''
+                        concepts:'',
+                        recruiter_name:''
                         };
             $('.selectpicker').selectpicker();
             $('#filterStage').change(function(){
@@ -2059,7 +2060,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             'company': $scope.filterValue.company,
             'rating': $scope.filterValue.rating,
             'project_match': $scope.filterValue.match,
-            'recruiter':'asha.singh@kiwitech.com',
+            'recruiter':$scope.filterValue.recruiter_name,
             'concepts':$scope.filterValue.concepts,
             'projects':selectedProjectId,
             'stages':$scope.filterValue.stage,

@@ -378,7 +378,7 @@
             </div>
             <div class="right-section" >
               <div ng-repeat ="st in stage.stagesCard">
-                <div  ng-class="{'right-sideline':[[$index != 0]]}">
+                <div  class="right-sideline">
 
                  <div class="files-circle" ><i class="fa" ng-class="stagesName[st.stage]" aria-hidden="true"></i></div>
                 </div>
@@ -655,7 +655,7 @@
           <span>Add Stage</span>
           <div class="cls"></div>
           <div class="form-group export">
-            <select class="form-control select-arrow" id="stages" ng-model="stage.stage">
+            <select class="form-control select-arrow" name="add_stages" ng-model="stage.stage">
               <option value="Select Stage">Select Stage</option>
               <option>Contacted</option>
               <option>Replied</option>

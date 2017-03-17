@@ -75,7 +75,7 @@
                                 <option ng-repeat="option in projectListView" value="[[option.name]]"></option>
                             </datalist>-->
                           <select class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project">
-                            <option ng-repeat="option in projectListView" data-tokens="[[option.value]]">[[option.name]]</option>
+                            <option ng-repeat="option in StagesProjectList" data-tokens="[[option.value]]">[[option.name]]</option>
                           </select>
 
                       </div>
@@ -134,7 +134,7 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Recruiter</label>
-                        <input type="email" class="form-control filter-input-box" id="" placeholder="Enter Name">
+                        <input type="email" class="form-control filter-input-box" name="recruiter_name"  placeholder="Enter Name" ng-model="filterValue.recruiter_name">
                       </div>
                     </div>
                     <div class="filter-bttn-box">
