@@ -165,7 +165,10 @@ class TalentRecruiter(models.Model):
 
     @property
     def get_date_updated(self):
-        return self.date_updated.strftime('%d/%m/%Y')
+        if self.date_updated:
+            return self.date_updated.date().strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class TalentEmail(models.Model):
@@ -201,11 +204,16 @@ class TalentEducation(models.Model):
 
     @property
     def get_start_date(self):
-        return self.start_date.strftime('%d/%m/%Y')
-
+        if self.start_date:
+            return self.start_date.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
     @property
     def get_end_date(self):
-        return self.end_date.strftime('%d/%m/%Y')
+        if self.end_date:
+            return self.end_date.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class TalentCompany(models.Model):
@@ -227,11 +235,18 @@ class TalentCompany(models.Model):
 
     @property
     def get_start_date(self):
-        return self.start_date.strftime('%d/%m/%Y')
+        if self.start_date:
+            return self.start_date.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
     @property
     def get_end_date(self):
-        return self.end_date.strftime('%d/%m/%Y')
+        if self.end_date:
+            return self.end_date.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
+
 
     def __str__(self):
         return str(self.talent.talent_name + " works at " + self.company.company_name)
@@ -257,7 +272,10 @@ class TalentProject(models.Model):
 
     @property
     def get_date_added(self):
-        return self.date_added.strftime('%d/%m/%Y')
+        if self.date_added:
+            return self.date_added.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class TalentConcept(models.Model):
@@ -275,7 +293,10 @@ class TalentConcept(models.Model):
 
     @property
     def get_date_created(self):
-        return self.date_created.strftime('%d/%m/%Y')
+        if self.date_created:
+            return self.date_created.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class TalentStage(models.Model):
@@ -293,11 +314,17 @@ class TalentStage(models.Model):
 
     @property
     def get_date_created(self):
-        return self.date_created.strftime('%d/%m/%Y')
+        if self.date_created:
+            return self.date_created.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
     @property
     def get_date_updated(self):
-        return self.date_updated.strftime('%d/%m/%Y')
+        if self.date_updated:
+            return self.date_updated.strftime('%d/%m/%Y')
+        else:
+            return "01/01/1900"
 
 
 class ProjectConcept(models.Model):
