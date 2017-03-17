@@ -50,7 +50,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                      $rootScope.StagesProjectList = [{name:'Select Project', value:'Select Project'}];
                         for(var i=0;i<$rootScope.allProjectList.length;i++){
                          var project = {name:'#'+$rootScope.allProjectList[i].project_name,
-                                        value:'#'+$rootScope.allProjectList[i].id};
+                                        value:$rootScope.allProjectList[i].id};
                             $rootScope.projectListView.push(project);
                             $rootScope.StagesProjectList.push(project);
                          }
@@ -261,7 +261,7 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
 }
 
 function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location, searchApis , searchData){
-    $scope.searchKeywords = '';
+    $rootScope.searchKeywords = '';
     this.logout = function(){
           $cookieStore.remove('userData');
           $rootScope.globals = {};
@@ -269,12 +269,12 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     }
 
     this.getSearchData = function(){
-    console.log($scope.searchKeywords);
+    console.log($rootScope.searchKeywords);
     var allowedArray = ["talent.talent-search" , "talent.talent-search.talent-search-card" , "talent.talent-search.talent-search-list"];
     if(allowedArray.indexOf($state.current.name)> -1){
-          if($scope.searchKeywords){
+          if($rootScope.searchKeywords){
              var requestObject = {
-                'keyword':$scope.searchKeywords
+                'keyword':$rootScope.searchKeywords
                  };
                  searchApis.talentSearch(requestObject).then(function(response){
                     if(response.hits.length > 0) {
@@ -283,7 +283,6 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                         for(var i=0;i<response.hits.length;i++){
                             $rootScope.talentList.push(response.hits[i]._source);
                         }
-                        //searchData.addItem(response.hits)
                       }else{
                         console.log('error');
                     }
@@ -1316,7 +1315,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                      isStage:false,
                      stagesCard:$rootScope.talentAllStages
                      };
-
+     $scope.filterValue = {
+                        stage:'Select Stage',
+                        project: 'Nothing Selected',
+                        match:'',
+                        rating:'',
+                        lastContacted:'',
+                        analysed:'',
+                        company:'',
+                        match:'',
+                        concepts:''
+                        };
 //^[0-9]{10}$/;
 
      $scope.candidateEmailUpdate;
@@ -1483,10 +1492,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
               $scope.stage.stagesCard = response.result;
               $state.go('talent.talent-profile','');
               $('html, body').animate({ scrollTop: 0 }, 'fast');
-              console.log(response);
               sessionStorage.removeItem('talentAllStages');
               sessionStorage.talentAllStages = JSON.stringify($rootScope.talentAllStages);
-              console.log(sessionStorage.talentAllStages);
          });
 
      }
@@ -1984,14 +1991,33 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if(!$scope.isFilterChecked){
             $scope.isFilterChecked = true;
             $('.talent-search-icon').addClass('active');
-
             $('.selectpicker').selectpicker();
-
+            $('#filterStage').change(function(){
+            var selectedValue = $('#filterStage :selected').text();
+            $scope.filterValue.stage = selectedValue;
+            console.log($scope.filterValue.stage);
+            });
         }
         else if($scope.isFilterChecked){
             $scope.isFilterChecked = false;
             $('.talent-search-icon').removeClass('active');
-        }
+            $scope.filterValue = {
+                        stage:'Select Stage',
+                        project: 'Nothing Selected',
+                        match:'',
+                        rating:'1',
+                        lastContacted:'',
+                        analysed:'',
+                        company:'',
+                        match:'',
+                        concepts:''
+                        };
+            $('.selectpicker').selectpicker();
+            $('#filterStage').change(function(){
+            var selectedValue = $('#filterStage :selected').text();
+            $scope.filterValue.stage = selectedValue;
+            console.log($scope.filterValue.stage);
+            });        }
      }
 
     $scope.advanceSearchOpen = function(){
@@ -2005,26 +2031,55 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
     }
 
+    $scope.getfilterRating = function(rating){
+        $scope.filterValue.rating = rating;
+           console.log($scope.filterValue);
+    }
+
     $scope.filterData = function(){
     console.log('filter');
+    console.log($scope.filterValue);
+    var selectedProjectId = '';
+    if($scope.filterValue.analysed)
+    $scope.filterValue.analysed = convertDate($scope.filterValue.analysed);
+    if($scope.filterValue.lastContacted)
+    $scope.filterValue.lastContacted = convertDate($scope.filterValue.lastContacted);
+
+    console.log(typeof($scope.filterValue.project))
+     if(typeof($scope.filterValue.project) != 'object')
+        for(var i=0;i<$rootScope.allProjectList.length;i++)
+               {
+                 if($rootScope.allProjectList[i].project_name == $scope.filterValue.project.split('#')[1])
+                    {
+                       selectedProjectId = $rootScope.allProjectList[i].id;
+                      break;
+                    }
+               }
         var requestObject = {
-            'company': 'kiwitech',   // password field value
-            'rating': '4',
-            'project_match':'80',
+            'company': $scope.filterValue.company,
+            'rating': $scope.filterValue.rating,
+            'project_match': $scope.filterValue.match,
             'recruiter':'asha.singh@kiwitech.com',
-            'concepts':'',
-            'projects':'',
-            'stages':'',
-            'contacted':'',
-            'date':''
+            'concepts':$scope.filterValue.concepts,
+            'projects':selectedProjectId,
+            'stages':$scope.filterValue.stage,
+            'contacted':$scope.filterValue.lastContacted,
+            'date':$scope.filterValue.analysed,
+            'term':$rootScope.searchKeywords
              };
              console.log(requestObject);
              talentApis.filterTalentData(requestObject).then(function(response){
                 if(response.message == "success") {
-                  console.log(response);
+                    if(response.hits.length > 0) {
+                        console.log(response.hits);
+                        $rootScope.talentList = [];
+                        for(var i=0;i<response.hits.length;i++){
+                            $rootScope.talentList.push(response.hits[i]._source);
+                        }
+                    }
                   }
              });
-    }
+     }
 
 
 

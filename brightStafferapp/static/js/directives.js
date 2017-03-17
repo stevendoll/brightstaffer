@@ -505,13 +505,16 @@ function sliderInit($timeout) {
     restrict: 'A',
     link : function (scope, element, attrs ) {
       $timeout(function(){
-            $('#ex3').slider({
+            /*$('#ex3').slider({
                 formatter: function(value) {
+                scope.filterValue.match = value + '%';
                     return 'Current value: ' + value;
                 }
             });
-            var slider = new Slider('#ex3', {
+*/            var slider = new Slider('#ex3', {
                 formatter: function(value) {
+                scope.filterValue.match = value + '%';
+                scope.$apply();
                     return 'Current value: ' + value;
                 }
             });
