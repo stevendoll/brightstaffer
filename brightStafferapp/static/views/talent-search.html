@@ -8,7 +8,7 @@
               <button type="" class="btn disabled-talent" id="assignToProject" ng-click="openProjectList()">Send to Project</button>
             </div>
             <div class="talent-advance-search-div">
-              <button type="" class="btn advance-search" ng-click="advanceSearchOpen()">Advanced Search</button>
+              <button type="" class="btn advance-search">Advanced Search</button>
               <div class="talent-search-icon" ng-click="filterOpen()"><i class="fa fa-filter"></i></div>
               <div class="view-as-panel">
                 <span>View as</span>
@@ -37,11 +37,11 @@
               <div class="cls"></div>
               <div class="col-xs-12 padding-zero" ng-show="isFilterChecked">
                 <div class="filter-search-panel">
-                  <form>
+                  <form name="filter_form" autocomplete="off">
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Stage</label>
-                        <select class="form-control select-arrow">
+                        <select class="form-control select-arrow" id="filterStage" name="stage" ng-model="filterValue.stage">
                           <option value="Select Stage">Select Stage</option>
                           <option>Contacted</option>
                           <option>Replied</option>
@@ -74,7 +74,7 @@
                             <datalist id="projectList">
                                 <option ng-repeat="option in projectListView" value="[[option.name]]"></option>
                             </datalist>-->
-                          <select class="selectpicker" data-live-search="true">
+                          <select class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project">
                             <option ng-repeat="option in projectListView" data-tokens="[[option.value]]">[[option.name]]</option>
                           </select>
 
@@ -84,10 +84,10 @@
                       <div class="form-group">
                         <label for="" class="filter-label-text">Project Match Percentage</label>
                         <div class="cls"></div>
-                        <input type="email" class="form-control percentage-input-box" id="" placeholder="">
+                        <input type="text" class="form-control percentage-input-box" name="match" ng-model="filterValue.match">
                         <div class="range-slider-div" >
                           <span>0%</span>
-                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" slider-init/>
+                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="20"  slider-init/>
                           <span>100%</span>
                         </div>
                       </div>
@@ -95,37 +95,40 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Company/Divison Name</label>
-                        <input type="email" class="form-control filter-input-box" id="" placeholder="Enter Company Name">
+                        <input type="text" class="form-control filter-input-box" name="company" ng-model="filterValue.company" placeholder="Enter Company Name">
                       </div>
                     </div>
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Date Added/Analyzed</label>
-                        <input type="email" class="form-control filter-input-date" id="" placeholder="Select Date">
+                        <input type="text" class="form-control filter-input-date" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date">
                       </div>
                     </div>
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Last contacted</label>
-                        <input type="email" class="form-control filter-input-date" id="" placeholder="Select Date">
+                        <input type="text" class="form-control filter-input-date" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date">
                       </div>
                     </div>
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Concept</label>
-                        <input type="email" class="form-control filter-input-box" id="" placeholder="Enter Concept">
+                        <input type="text" class="form-control filter-input-box" name="concepts" ng-model="filterValue.concepts" placeholder="Enter Concept">
                       </div>
                     </div>
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Rating</label>
+                       <!-- <div class="filter-rating">
+                          <i class="fa fa-star-o"></i>
+                          <i class="fa fa-star-o"></i>
+                          <i class="fa fa-star-o"></i>
+                          <i class="fa fa-star-o"></i>
+                          <i class="fa fa-star-o"></i>
+                        </div>-->
                         <div class="filter-rating">
-                          <i class="fa fa-star-o"></i>
-                          <i class="fa fa-star-o"></i>
-                          <i class="fa fa-star-o"></i>
-                          <i class="fa fa-star-o"></i>
-                          <i class="fa fa-star-o"></i>
-                        </div>
+                           <div id="rate_filter" star-rating2  rating-value="1" max="5" name="rate" on-rating-selected="getfilterRating(rating)"></div>
+                         </div>
                       </div>
                     </div>
                     <div class="filter-bttn-box">
