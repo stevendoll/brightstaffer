@@ -200,39 +200,31 @@ class TalentEmailAPI(View):
             return False
 
 
-class TalentProjectAddAPI(View):
-    queryset = Projects.objects.all()
-    serializer_class = ProjectSerializer
-    http_method_names = ['post']
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(TalentProjectAddAPI, self).dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        context = dict()
-        project_id = request.POST['project_id']
-        recruiter = request.POST['recruiter']
+class TalentProjectAddAPI(generics.ListCreateAPIView):
+    queryset = Talent.objects.all()
+    serializer_class = TalentSerializer
+    http_method_names = ['get']
+    def get_queryset(self):
+        queryset = super(TalentProjectAddAPI, self).get_queryset()
+        project_id = self.request.query_params.get('project_id')
+        recruiter = self.request.query_params.get('recruiter')
         # get projects instance to verify if project with project_id and recruiter exists or not
         projects = Projects.objects.filter(id=project_id, recruiter__username=recruiter)
         if not projects:
             return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project_id))
         project = projects[0]
         # get list of talent ids from POST request
-        talent_id_list = request.POST.getlist('talent_id[]')[0].split(',')
+        talent_id_list = self.request.query_params.get('talent_id[]').split(',')
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
             if not talent_objs:
                 return util.returnErrorShorcut(403, 'Talent with id {} doesn\'t exist in database.'.format(talent_id))
             talent_obj = talent_objs[0]
             tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
-            if created:
-                TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match="50", rank="3")
-                #context['message'] = 'success'
-            #else:
-            #    context['error'] = 'Talent Project object already exists.'
-                #return util.returnErrorShorcut(400, context)
-        return util.returnSuccessShorcut(context)
+            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match="50", rank="3")
+            talent_result = queryset.filter(talent_active__is_active=True)
+        return talent_result
+
 
 
 # View Talent's Current stage for a sinlge project and Add Talent's stage for a single project
@@ -385,7 +377,7 @@ class DeleteTalent(generics.ListCreateAPIView):
         queryset = super(DeleteTalent, self).get_queryset()
         recruiter = self.request.query_params.get('recruiter')
         is_active = self.request.query_params.get('is_active')
-        talent_id_list = self.request.query_params.get('talent').split(',') #('talent[]')[0].split(',')
+        talent_id_list = self.request.query_params.get('talent[]').split(',') #('talent[]')[0].split(',')
 
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
