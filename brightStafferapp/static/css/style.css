@@ -822,6 +822,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .talents-tabs-panel .right-section {
   width: 30%;
   float: right;
+  margin-top: 40px;
 }
 
 .talents-tabs-panel .left-section .nav-tabs > li > a {
@@ -998,7 +999,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   font-size: 14px;
   color: #337ab7;
   float: left;
-  width: 76%;
+  width: 74%;
   margin-left: 10px;
   margin-top: 9px;
   word-wrap: break-word;
@@ -1049,8 +1050,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   float: left;
   border-right: 1px solid #979797;
   position: relative;
-  min-height: 524px;
-  margin-top: 40px;
+  height: 250px
 }
 
 .brief-circle {
@@ -1072,17 +1072,35 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .files-circle {
   width: 37px;
   height: 37px;
-  background-color: #3680ca;
   border-radius: 50%;
   position: absolute;
-  top: 60%;
+  top: 0;
   left: -15px;
+}
+
+.stages-right-div:nth-of-type(odd) .files-circle {
+  background-color: #1ab394;
+}
+
+.stages-right-div:nth-of-type(even) .files-circle {
+  background-color: #3680ca;
+}
+
+.files-circle .fa {
+    font-size: 20px;
+    margin: 9px 10px;
+    color: #ffffff;
 }
 
 .files-circle .fa-file-text {
   font-size: 20px;
   margin: 9px 10px;
   color: #ffffff;
+}
+
+.stages-right-div {
+  width: 100%;
+  float: left;
 }
 
 .right-info-comm-box {
@@ -1092,7 +1110,6 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   border: solid 1px #e7eaec;
   position: relative;
   padding: 7px 12px 7px 15px;
-  margin-top: 40px;
 }
 
 .right-info-comm-box em {
@@ -1106,10 +1123,15 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 
 .right-info-comm-box h1 {
   font-family: 'OpenSans-Semibold';
-  font-size: 18px;
-  color: #6a6a6a;
-  padding: 0px 0px;
-  margin: 0px 0px 15px 0px;
+    font-size: 18px;
+    color: #1d84c6;
+    padding: 0px 0px;
+    text-decoration: underline;
+    margin: 10px 0px 13px 0px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .info-box-panels {
@@ -1119,6 +1141,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   font-size: 14px;
   color: #6a6a6a;
   margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .info-box-panels span {
