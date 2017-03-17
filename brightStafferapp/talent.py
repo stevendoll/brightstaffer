@@ -214,7 +214,7 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
             return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project_id))
         project = projects[0]
         # get list of talent ids from POST request
-        talent_id_list = self.request.query_params.get('talent_id[]').split(',')
+        talent_id_list = self.request.query_params.get('talent_id').split(',')
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
             if not talent_objs:
@@ -377,7 +377,7 @@ class DeleteTalent(generics.ListCreateAPIView):
         queryset = super(DeleteTalent, self).get_queryset()
         recruiter = self.request.query_params.get('recruiter')
         is_active = self.request.query_params.get('is_active')
-        talent_id_list = self.request.query_params.get('talent[]').split(',') #('talent[]')[0].split(',')
+        talent_id_list = self.request.query_params.get('talent').split(',') #('talent[]')[0].split(',')
 
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
