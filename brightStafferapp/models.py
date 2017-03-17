@@ -24,8 +24,11 @@ STAGE_CHOICES = (('Contacted', 'Contacted'),
                  ('Rejected', 'Rejected')
                  )
 
+# TODO:- Profile can be marked as: None, New, Active and Inactive. If you’re New in system you remain New till 10 days. After that you become Active when a Status is updated on the candidate profile. If both of these don’t happen profile displays None. When profile remains in same state for 30 days becomes Inactive.
 TALENT_CHOICES = (('New', 'New'),
-                  ('Active', 'Active')
+                  ('Active', 'Active'),
+                  ('InActive', 'InActive'),
+                  ('None','None')
                   )
 
 
@@ -130,6 +133,7 @@ class Talent(models.Model):
     rating = models.IntegerField(default=0)
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
+    activation_date = models.DateTimeField(verbose_name='Activation Date', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Talent'
