@@ -541,6 +541,7 @@ class TalentSearchFilter(View):
         last_contacted = request.GET.get('last_contacted', '')
         date_added = request.GET.get('date_added', '')
         term = request.GET.get('term', '')
+        ordering = request.GET.get('ordering', '')
 
         query = {
                   "query": {
@@ -666,6 +667,15 @@ class TalentSearchFilter(View):
                 }
             }
             query['query']['bool']['must'].append(rating_query)
+
+        if ordering:
+            query['sort'] = [
+                                {
+                                    "create_date": {
+                                        "order": ordering
+                                    }
+                                }
+                            ]
 
         if term:
             term_query = [
