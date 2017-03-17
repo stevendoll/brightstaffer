@@ -376,7 +376,7 @@
                 </div>
               </div>
             </div>
-            <div class="right-section custom-scroll-rightbar" >
+            <div class="right-section custom-scroll-rightbar" stage-scroll>
               <div ng-repeat ="st in stage.stagesCard" class="stages-right-div">
                 <div  class="right-sideline">
 
@@ -424,7 +424,7 @@
             <input type="" class="form-control" placeholder="" ng-pattern="emailPattern" ng-model="candidateEmail" name="talentEmail" autocomplete="off" ng-model-options="{ updateOn: 'blur' }">
             <span class="error" id="email-required" style="color:red;" ng-show="[[isEmail]]">Required.</span>
             <span style="color:red" ng-show="update_email.talentEmail.$error.pattern">Please enter valid email address.</span>
-            <button type="submit" class="btn contact-remove-bttn">Remove</button>
+            <!--<button type="submit" class="btn contact-remove-bttn">Remove</button>-->
             <button type="submit" class="btn contact-update-bttn" id="update_email" ng-click="updateTalentEmail(talentDetails.id, talentDetails.talent_email[0].email,candidateEmail)">Update</button>
             <button type="submit" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
           </form>
@@ -448,10 +448,10 @@
           </div>
           <div class="cls"></div>
           <form name="edit_contact" class="contact-edit-sec" ng-show="isContactEditable">
-            <input type="" class="form-control" placeholder="" ng-model="candidateContact" ng-pattern="phonePattern" name="contact_update" ng-model-options="{ updateOn: 'blur' }">
+            <input type="" class="form-control" placeholder="" ng-model="candidateContact" ng-pattern="phonePattern" name="contact_update">
             <span class="error" id="contact-required" style="color:red;" ng-show="[[isContact]]">Required.</span>
             <span style="color:red" ng-show="edit_contact.contact_update.$error.pattern">Please enter valid contact number.</span>
-            <button type="submit" class="btn contact-remove-bttn">Remove</button>
+            <!--<button type="submit" class="btn contact-remove-bttn">Remove</button>-->
             <button type="submit" class="btn contact-update-bttn" id="update_contact" ng-click="updateContact(talentDetails.id, talentDetails.talent_contact[0].contact,candidateContact)">Update</button>
             <button type="submit" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
           </form>
@@ -479,10 +479,12 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <div class="edit-modal-recruiter">
           <span>Edit Recruiter</span>
-          <div class="form-group">
-            <input class="form-control" id="name" ng-model="data.recruiterNameInput"  autocomplete="off">
-            <span class="error" id="name-required" style="color:red;" ng-show="[[isName]]">Required.</span>
-          </div>
+          <form class="form-group" name="name_edit" id="name_edit" ng-keyup="hideMessages('name_edit')">
+            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" ng-maxlength="20">
+             <span class="error" id="name-required" style="color:red" ng-show="[[isName]]">Required.</span>
+            <span class="error" style="color:red" ng-show="name_edit.username.$error.pattern">Please enter character only.</span>
+            <span style='color:red' ng-show="name_edit.username.$error.maxlength">Your input is too long!</span>
+          </form>
           <div class="cls"></div>
           <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(data.recruiterNameInput)">Update</button>
         </div>
@@ -503,11 +505,13 @@
           <div class="cls"></div>
           <div class="form-group export">
 
-            <select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
+            <select id="projectListD4" class="selectpicker" data-live-search="true" name="project" select-project ng-model="projectName">
+                <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
             </select>
+
           </div>
           <div class="cls"></div>
-          <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(projectDD)">Add to Project</button>
+          <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(projectName)">Add to Project</button>
         </div>
         <div class="cls"></div>
       </div>
@@ -651,7 +655,7 @@
     <div class="modal-content">
       <div class="modal-body roles-body">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-        <div class="edit-modal-recruiter">
+        <from class="edit-modal-recruiter" name="stageForm" id="stageForm" ng-keyup="hideMessages('stageForm')">
           <span>Add Stage</span>
           <div class="cls"></div>
           <div class="form-group export">
@@ -677,14 +681,18 @@
             <input type="text" class="form-control select-date " ng-model="stage.date" placeholder="Select Date" id="datepicker">
           </div>
           <div class="form-group">
-            <textarea rows="2" class="form-control details" ng-model="stage.detail" placeholder="Enter Details"></textarea>
+            <textarea rows="2" class="form-control details" ng-model="stage.detail" name="details" placeholder="Enter Details" ng-maxlength="50" required></textarea>
+            <span class="error"  style="color:red" ng-show="[[isDetailRequired]]">Required.</span>
+            <span class="error" style='color:red' ng-show="stageForm.details.$error.maxlength">Your input is too long!</span>
           </div>
           <div class="form-group">
-            <textarea rows="2" class="form-control details" ng-model="stage.notes" placeholder="Enter Notes"></textarea>
+            <textarea rows="2" class="form-control details" ng-model="stage.notes" placeholder="Enter Notes" required="" ng-maxlength="50"></textarea>
+            <span class="error"  style="color:red" ng-show="[[isNotesRequired]]">Required.</span>
+            <span class="error" style='color:red' ng-show="stageForm.details.$error.maxlength">Your input is too long!</span>
           </div>
           <div class="cls"></div>
           <button type="" class="btn add-stage" ng-click="addProjectStage(stage)">Add Stage</button>
-        </div>
+        </from>
         <div class="cls"></div>
       </div>
     </div>
