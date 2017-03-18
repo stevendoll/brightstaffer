@@ -527,7 +527,7 @@ class TalentSearchFilter(View):
                     "query": {
                         "range": {
                             "talent_project.project_match": {
-                                "gte": project_match
+                                "gte": int(project_match),
                             }
                         }
                     },
