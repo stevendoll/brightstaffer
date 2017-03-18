@@ -2096,7 +2096,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
               }
 
              }
-        }
 
      function openDatePicker($event){
      var element = $event.target;
