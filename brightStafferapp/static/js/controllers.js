@@ -1312,6 +1312,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.phonePattern = /^(?!0+$)\d{8,}$/;
      $scope.candidateInfo= {};
      $scope.projectName = $rootScope.projectListView[0].name;
+     $scope.filterStage;
      $scope.stage = {
                      stage: 'Select Stage',
                      project: $rootScope.StagesProjectList[0],
@@ -1319,7 +1320,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                      stagesCard:$rootScope.talentAllStages
                      };
      $scope.filterValue = {
-                        stage:'Select Stage',
+                        //stage:'Select Stage',
                         project:'',
                         match:'',
                         rating:'',
@@ -1594,7 +1595,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             'talent':talent
              };
              talentApis.addTalentsToProject(requestObject).then(function(response){
-                response = JSON.parse(response);
                   console.log(response);
                   $rootScope.talentList = response;
                   $('#add-project').modal('hide');
@@ -2092,21 +2092,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         else if($scope.isFilterChecked){
             $scope.isFilterChecked = false;
             $('.talent-search-icon').removeClass('active');
-            $scope.filterValue = {
-                        stage:'Select Stage',
-                        project: '',
-                        match:'',
-                        rating:'1',
-                        lastContacted:'',
-                        analysed:'',
-                        company:'',
-                        match:'',
-                        concepts:'',
-                        recruiter_name:'',
-                        ordering:'',
-                        active:''
-                        };
-            $('.selectpicker').selectpicker();
             }
      }
 
@@ -2187,6 +2172,24 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              });
      }
 
+    $scope.filterReset = function(){
+        $scope.filterValue = {
+
+                        project: '',
+                        match:'',
+                        rating:'1',
+                        lastContacted:'',
+                        analysed:'',
+                        company:'',
+                        match:'',
+                        concepts:'',
+                        recruiter_name:'',
+                        ordering:'',
+                        active:''
+                        };
+             delete $scope.filterStage;
+            $('.selectpicker').selectpicker();
+    }
 
 
 }

@@ -41,8 +41,8 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Stage</label>
-                        <select class="form-control select-arrow" id="filterStage" name="stage" ng-model="filterValue.stage" drop-down>
-                          <option value="Select Stage">Select Stage</option>
+                        <select class="form-control select-arrow" id="filterStage" name="stage" data-ng-model="filterStage" drop-down>
+                          <option value="" style="display: none;">Select Stage</option>
                           <option>Contacted</option>
                           <option>Replied</option>
                           <option>Interested</option>
@@ -135,7 +135,7 @@
                    </div>
                    </div>
                     <div class="filter-bttn-box">
-                      <button type="submit" class="btn reset-bttn">Reset</button>
+                      <button type="submit" class="btn reset-bttn" ng-click="filterReset()">Reset</button>
                       <button type="submit" class="btn filter-bttn" ng-click="filterData()">Filter</button>
                     </div>
                   </form>
