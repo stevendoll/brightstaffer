@@ -1587,7 +1587,26 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if(selectedProjectId && talent.length > 0){
             $('#add-talent-btn').addClass('disabled');
             $('#add-talent-btn').css('pointer-events','none');
-            var formData = new FormData();
+            var requestObject = {
+            'recruiter': $rootScope.globals.currentUser.user_email,   // password field value
+            'token': $rootScope.globals.currentUser.token,
+            'project_id':selectedProjectId,
+            'talent':talent
+             };
+             talentApis.addTalentsToProject(requestObject).then(function(response){
+                response = JSON.parse(response);
+                  console.log(response);
+                  $rootScope.talentList = response;
+                  $('#add-project').modal('hide');
+                  $('html, body').animate({ scrollTop: 0 }, 'fast');
+                  $('#projectSuccess').css('display','block');
+                  setTimeout(function () {
+                        $('#projectSuccess').css('display','none');
+                    }, 2000);
+
+             });
+
+            /*var formData = new FormData();
              formData.append('token', $rootScope.globals.currentUser.token);
              formData.append('recruiter', $rootScope.globals.currentUser.user_email);
              formData.append('project_id', selectedProjectId);
@@ -1603,7 +1622,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                   setTimeout(function () {
                         $('#projectSuccess').css('display','none');
                     }, 5000);
-                }
+                }*/
          }
     }
 
