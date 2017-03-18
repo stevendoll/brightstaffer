@@ -1310,6 +1310,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.isContact = false;
      $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;  //email validation pattern
      $scope.phonePattern = /^(?!0+$)\d{8,}$/;
+     $scope.candidateInfo= {};
+     $scope.projectName = $rootScope.projectListView[0].name;
      $scope.stage = {
                      stage: 'Select Stage',
                      project: $rootScope.StagesProjectList[0],
@@ -1330,10 +1332,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         ordering:'',
                         active:''
                         };
-//^[0-9]{10}$/;
 
-     $scope.candidateEmailUpdate;
-     $scope.candidateEmailAdd;
+//
+
      $scope.hideMessages = function(formName){ /*Hide error messages when user interact with fieds*/
      console.log(formName);
      $('#name-required').addClass('ng-hide');
@@ -1609,11 +1610,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.updateSelection = function(id, position, talentList) {
 
-           if ($scope.choosenCandidates.indexOf(id) == -1 )
-                $scope.choosenCandidates.push(id);
-            else
+           if ($scope.choosenCandidates.indexOf(id) == -1 ){
+                 $scope.choosenCandidates.push(id);
+                 if($scope.choosenCandidates.length == $rootScope.talentList.length)
+                             $('#selectall').prop('checked',true);
+           }
+            else{
+                $('#selectall').prop('checked',false);
                 $scope.choosenCandidates.splice($scope.choosenCandidates.indexOf(id), 1);
-
+                }
        if($scope.choosenCandidates.length > 0){
             $('#assignToProject').removeClass('disabled-talent');
             $('#assignToProject').addClass('add-talent');
@@ -1766,8 +1771,32 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
     }
 
+    $scope.openContactInfo = function(){
+        /*$scope.candidateEmail = '';
+        $scope.candidateEmailAdd = '';
+        $scope.candidateContact = '';
+        $scope.candidateContactAdd = '';*/
+      $scope.candidateInfo= {};
+      $scope.isEmailEditable = false;
+     $scope.isEmailAdd = false;
+     $scope.isContactEditable = false;
+     $scope.isContactAdd = false;
+     $scope.isEmail = false;
+     $scope.isContact = false;
+     $('#update_email').removeClass('disabled');
+     $('#add_email').removeClass('disabled');
+     $('#update_contact').removeClass('disabled');
+     $('#add_contact').removeClass('disabled');
+     $('#update_contact').css('pointer-events','');
+     $('#update_email').css('pointer-events','');
+     $('#add_contact').css('pointer-events','');
+     $('#add_email').css('pointer-events','');
+
+     $('#contact-info').modal('show');
+
+    }
+
     $scope.closeCandidateInfo = function(){
-    console.log('closed')
      $scope.isEmailEditable = false;
      $scope.isEmailAdd = false;
      $scope.isContactEditable = false;
@@ -1875,9 +1904,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
        }
     }
 
-    $scope.updateContact = function(id , oldContact, candidateContact){
-    console.log(candidateContact);
-       if(candidateContact){
+    $scope.updateContact = function(id , oldContact, candidateContactAdd){
+    console.log(candidateContactAdd);
+       if(candidateContactAdd){
             $('#update_contact').addClass('disabled');
             $('#update_contact').css('pointer-events','none');
             var formData = new FormData();
@@ -1885,7 +1914,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              formData.append('recruiter', $rootScope.globals.currentUser.user_email);
              formData.append('talent_id', id);
              formData.append('contact',oldContact);
-             formData.append('updated_contact',candidateContact);
+             formData.append('updated_contact',candidateContactAdd);
              talentApis.talentContact(formData, requestCallback);
              function requestCallback(response) {
                   response = JSON.parse(response);
