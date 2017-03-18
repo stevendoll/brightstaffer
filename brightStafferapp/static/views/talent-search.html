@@ -18,7 +18,7 @@
               <div class="show-entry-panel">
                 <span>Show entries/page</span>
                 <div class="form-group count">
-                  <select class="form-control select-arrow" id="recordCount" ng-model="recordCount"  ng-options="option.name for option in recordOptions">
+                  <select class="form-control select-arrow" id="recordCount" ng-model="recordCount"  ng-options="option.name for option in recordOptions" select-record>
                   </select>
                 </div>
                 <div class="form-group export">
@@ -37,11 +37,11 @@
               <div class="cls"></div>
               <div class="col-xs-12 padding-zero" ng-show="isFilterChecked">
                 <div class="filter-search-panel">
-                  <form name="filter_form" autocomplete="off">
+                  <form name="filter_form" id="filter_form" autocomplete="off">
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Stage</label>
-                        <select class="form-control select-arrow" id="filterStage" name="stage" ng-model="filterValue.stage">
+                        <select class="form-control select-arrow" id="filterStage" name="stage" ng-model="filterValue.stage" drop-down>
                           <option value="Select Stage">Select Stage</option>
                           <option>Contacted</option>
                           <option>Replied</option>
@@ -59,23 +59,9 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Project Name</label>
-                        <!--<div class="dropdown-container" search-drop-down>
-                          <div class="dropdown-button noselect">
-                              <div class="dropdown-label">Select Project</div>
-                              <div class="dropdown-quantity"></div>
-                              <i class="fa fa-filter"></i>
-                          </div>
-                          <div class="dropdown-list" style="display: none;">
-                              <input type="search" placeholder="Search Project" class="dropdown-search"/>
-                              <ul id="projectDrop"></ul>
-                          </div>
-                        </div>-->
-                        <!--<input id="something" list="projectList" placeholder="Select Project">
-                            <datalist id="projectList">
-                                <option ng-repeat="option in projectListView" value="[[option.name]]"></option>
-                            </datalist>-->
-                          <select class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project">
-                            <option ng-repeat="option in StagesProjectList" data-tokens="[[option.value]]">[[option.name]]</option>
+
+                          <select class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project" >
+                            <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
                           </select>
 
                       </div>
@@ -87,7 +73,7 @@
                         <input type="text" class="form-control percentage-input-box" name="match" ng-model="filterValue.match">
                         <div class="range-slider-div" >
                           <span>0%</span>
-                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="20"  slider-init/>
+                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"  slider-init/>
                           <span>100%</span>
                         </div>
                       </div>
@@ -101,13 +87,13 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Date Added/Analyzed</label>
-                        <input type="text" class="form-control filter-input-date" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date">
+                        <input type="text" class="form-control filter-input-date datepicker" id="analysed" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date" date-picker>
                       </div>
                     </div>
                     <div class="filter-stage-box">
                       <div class="form-group">
-                        <label for="" class="filter-label-text">Last contacted</label>
-                        <input type="text" class="form-control filter-input-date" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date">
+                        <label for="" class="filter-label-text" >Last contacted</label>
+                        <input type="text" class="form-control filter-input-date datepicker" id="lastContacted" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date">
                       </div>
                     </div>
                     <div class="filter-stage-box">
@@ -119,14 +105,7 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Rating</label>
-                       <!-- <div class="filter-rating">
-                          <i class="fa fa-star-o"></i>
-                          <i class="fa fa-star-o"></i>
-                          <i class="fa fa-star-o"></i>
-                          <i class="fa fa-star-o"></i>
-                          <i class="fa fa-star-o"></i>
-                        </div>-->
-                        <div class="filter-rating">
+                          <div class="filter-rating">
                            <div id="rate_filter" star-rating2  rating-value="1" max="5" name="rate" on-rating-selected="getfilterRating(rating)"></div>
                          </div>
                       </div>
@@ -134,27 +113,27 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Recruiter</label>
-                        <input type="email" class="form-control filter-input-box" name="recruiter_name"  placeholder="Enter Name" ng-model="filterValue.recruiter_name">
+                        <input type="email" class="form-control filter-input-box" name="recruiter_name"  placeholder="Enter Email" ng-model="filterValue.recruiter_name">
                       </div>
                     </div>
                     <div class="filter-stage-radiobox">
                       <div class="form-group">
-                        <input class="radio-none" type="radio" id="a1" name="cc">
-                        <label for="a1" class="radio-black"></label> <span>Newest</span>
+                      <input class="radio-none order" type="radio" id="radio1" ng-value="true" name="ordering">
+                      <label for="radio1" class="radio-black"></label> <span>Newest</span>
                       </div>
                       <div class="form-group">
-                        <input class="radio-none" type="radio" id="1" name="cc">
-                        <label for="1" class="radio-black"></label> <span>Recently Active</span>
-                      </div>
+                      <input class="radio-none act" type="radio" id="radio2" ng-value="true" name="active">
+                       <label for="radio2" class="radio-black"></label> <span>Recently Active</span>
+                     </div>
+                   <div class="form-group">
+                        <input class="radio-none order" type="radio" id="radio3" ng-value="false" name="ordering">
+                       <label for="radio3" class="radio-black"></label> <span>Oldest</span>
+                  </div>
                       <div class="form-group">
-                        <input class="radio-none" type="radio" id="2" name="cc">
-                        <label for="2" class="radio-black"></label> <span>Oldest</span>
-                      </div>
-                      <div class="form-group">
-                        <input class="radio-none" type="radio" id="3" name="cc">
-                        <label for="3" class="radio-black"></label> <span>Inactive</span>
-                      </div>
-                    </div>
+                        <input class="radio-none act" type="radio" id="radio4" ng-value="false" name="active">
+                        <label for="radio4" class="radio-black"></label> <span>Inactive</span>
+                   </div>
+                   </div>
                     <div class="filter-bttn-box">
                       <button type="submit" class="btn reset-bttn">Reset</button>
                       <button type="submit" class="btn filter-bttn" ng-click="filterData()">Filter</button>

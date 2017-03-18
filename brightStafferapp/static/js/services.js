@@ -279,7 +279,7 @@ function talentApis($http,REQUEST_URL) {
                     callback(xhr.responseText); // Another callback here
                 }
             };
-        xhr.open('POST', url, true);
+        xhr.open('GET', url, true);
         headers = {
         "Accept": "application/json",
         "Cache-Control": "no-cache",
@@ -298,7 +298,7 @@ function talentApis($http,REQUEST_URL) {
     deleteTalents: function(data){
         return $http({
             url: REQUEST_URL+'delete_talent/?talent='+data.talent+'&recruiter='+data.recruiter+'&is_active='+data.is_active,
-            method: "DELETE", // or "get"
+            method: "GET", // or "get"
             headers: {
                         'Content-Type': 'application/json; charset=utf-8',
                     },

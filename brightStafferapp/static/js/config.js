@@ -152,7 +152,7 @@ angular
             if(sessionStorage.projectList)
                 $rootScope.projectListView = JSON.parse(sessionStorage.projectList);
             if(sessionStorage.talentAllStages)
-              $rootScope.talentAllStages = JSON.parse(sessionStorage.talentAllStages)
+                $rootScope.talentAllStages = JSON.parse(sessionStorage.talentAllStages)
          if($cookieStore.get('userData'))
             {
              $rootScope.globals.currentUser = $cookieStore.get('userData');

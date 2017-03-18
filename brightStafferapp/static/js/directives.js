@@ -524,6 +524,115 @@ function sliderInit($timeout) {
   };
 }
 
+function selectRecord($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $(element).on('change',function() {
+                var selectedValue = $('#recordCount :selected').text();
+                scope.recordCount = selectedValue;
+                console.log(scope.recordCount);
+                scope.getTalents(scope.recordCount);
+            });
+      });
+    }
+  };
+}
+
+function selectProject($timeout){
+    return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            //$(element).selectbox();
+            $('#projectListD3').change(function() {
+            var selectedValue = $('#projectListD3 :selected').text();
+            scope.projectDD = selectedValue;
+            console.log(scope.projectDD);
+            });
+      });
+    }
+  };
+}
+function stageScroll($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $(".custom-scroll-rightbar").mCustomScrollbar({
+                scrollButtons:{ enable: true },
+                axis:"y", // horizontal scrollbar
+
+            });
+      });
+    }
+  };
+}
+
+function datePicker($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+      /*$('#analysed').datepicker({format: "dd/mm/yyyy",
+              autoclose:true
+            }).on('changeDate', function(){
+                $(this).datepicker('hide');
+            });
+            $('#analysed').datepicker({
+              format: "dd/mm/yyyy",
+              autoclose:true,
+            }).on('changeDate', function(){
+                $('.datepicker').hide();
+            });
+          $('#analysed').mousedown(function() {
+                $('.datepicker').show();
+            });*//*
+          $('#analysed').focusout(function() {
+                $('.datepicker').hide();
+            });*/
+            $(document).on('focus', '.datepicker',function(){
+            $(this).datepicker({
+                todayHighlight:true,
+                format:'yyyy-mm-dd',
+                autoclose:true
+            }).mousedown(function() {
+                $('.datepicker').show();
+            });
+        });
+     });
+    }
+  };
+}
+
+function datePicker2($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+        var isVisisble = $("#analysed").datepicker( "widget" ).is(":visible");
+               console.log(isVisisble);
+            $('#lastContacted').datepicker({
+              format: "dd/mm/yyyy",
+              autoclose:true
+            }).on('changeDate', function(){
+                $(this).datepicker('hide');
+            });
+            /*.on('change', function(){
+                $('.datepicker').hide();
+            })*/
+          /*$('#lastContacted').mousedown(function() {
+                $('.datepicker').toggle();
+            });*/
+          /*$('#lastContacted').focusout(function() {
+                $('.datepicker').remove();
+            });*/
+      });
+    }
+  };
+}
+
 /**
  *
  * Pass all functions into module
@@ -548,4 +657,9 @@ angular
     .directive('tableScroll',tableScroll)
     .directive('pieChart',pieChart)
     .directive('searchDropDown',searchDropDown)
-    .directive('sliderInit',sliderInit);
+    .directive('sliderInit',sliderInit)
+    .directive('selectRecord',selectRecord)
+    .directive('stageScroll',stageScroll)
+    .directive('selectProject',selectProject)
+    .directive('datePicker',datePicker)
+    .directive('datePicker2',datePicker2);
