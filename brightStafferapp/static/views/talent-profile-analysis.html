@@ -505,7 +505,8 @@
           <div class="cls"></div>
           <div class="form-group export">
 
-            <select id="projectListD4" class="selectpicker" data-live-search="true" name="project" select-project ng-model="projectName">
+            <select id="projectListD" class="selectpicker" data-live-search="true" name="project" ng-model="projectName">
+                <option value="" data-tokens="" style="display: none;">Select Project</option>
                 <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
             </select>
 
