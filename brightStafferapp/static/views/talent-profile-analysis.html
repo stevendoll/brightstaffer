@@ -58,8 +58,8 @@
               </div>
               <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a data-target="#analysis" aria-controls="home" role="tab" data-toggle="tab">Analysis</a></li>
-                <li role="presentation"><a  aria-controls="profile" role="tab" data-toggle="tab" style="cursor:default;">Notes</a></li>
-                <li role="presentation"><a  aria-controls="messages" role="tab" data-toggle="tab" style="cursor:default;">Files</a></li>
+                <li role="presentation"><a  aria-controls="profile" style="cursor:default;">Notes</a></li>
+                <li role="presentation"><a  aria-controls="messages" style="cursor:default;">Files</a></li>
               </ul>
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="analysis">
@@ -135,7 +135,7 @@
                       <div class="recommended-panel">
                         <ul class="nav nav-tabs" role="tablist">
                           <li role="presentation" class="active"><a href="" aria-controls="recent" role="tab" data-toggle="tab">Recent</a></li>
-                          <li role="presentation"><a>Recommended</a></li>
+                          <li role="presentation"><a style="cursor:default;">Recommended</a></li>
                         </ul>
                         <div class="cls"></div>
                         <div class="tab-content">
@@ -168,7 +168,7 @@
                                     </td>
                                     <td><div class="rank-circle">[[proj.rank]]</div></td>
                                     <td><div class="table-date-div">[[proj.date_added | dateFormat]]</div></td>
-                                    <td class="interviewing-text">[[proj.project_stage | dateFormat]]</td>
+                                    <td class="interviewing-text">[[proj.project_stage ]]</td>
                                   </tr>
                                   <!--<tr>
                                     <th scope="row" class="padd-left32">
@@ -505,14 +505,14 @@
           <div class="cls"></div>
           <div class="form-group export">
 
-            <select id="projectListD" class="selectpicker" data-live-search="true" name="project" ng-model="projectName">
+            <select id="projectListD" class="selectpicker" data-live-search="true" name="project" ng-model="projectSelect">
                 <option value="" data-tokens="" style="display: none;">Select Project</option>
                 <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
             </select>
-
+            <span id="proj_required" class="error msg-error"  ng-show="[[projectRequired]]">Required.</span>
           </div>
           <div class="cls"></div>
-          <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(projectName)">Add to Project</button>
+          <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(projectSelect,'profile')">Add to Project</button>
         </div>
         <div class="cls"></div>
       </div>
@@ -656,12 +656,12 @@
     <div class="modal-content">
       <div class="modal-body roles-body">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-        <from class="edit-modal-recruiter" name="stageForm" id="stageForm" ng-keyup="hideMessages('stageForm')">
+        <from class="edit-modal-recruiter" name="stageForm" id="stageForm" ng-keyup="hideMessages('stageForm')" novildate>
           <span>Add Stage</span>
           <div class="cls"></div>
           <div class="form-group export">
             <select class="form-control select-arrow" name="add_stages" ng-model="stage.stage" drop-down>
-              <option value="Select Stage">Select Stage</option>
+              <option value="" style="display: none;">Select Stage</option>
               <option>Contacted</option>
               <option>Replied</option>
               <option>Interested</option>
@@ -673,23 +673,29 @@
               <option>Hired</option>
               <option>Rejected</option>
             </select>
+            <span class="error msg-error" style="color:red;" ng-show="isStage"></span>
           </div>
           <div class="form-group export">
             <select class="form-control select-arrow" ng-model="stage.project" id="projectListD2" ng-options="option.name for option in StagesProjectList" drop-down>
+              <option value="" style="display: none;">Select Project</option>
             </select>
+            <span class="error msg-error" style="color:red;" ng-show="isProject"></span>
           </div>
           <div class="form-group" >
-            <input type="text" class="form-control select-date " ng-model="stage.date" placeholder="Select Date" id="datepicker">
+            <input type="text" class="form-control select-date" ng-model="stage.date" placeholder="Select Date" id="datepicker">
+            <span class="error msg-error" style="color:red;" ng-show="isDate"></span>
           </div>
           <div class="form-group">
             <textarea rows="2" class="form-control details" ng-model="stage.detail" name="details" placeholder="Enter Details" ng-maxlength="50" required></textarea>
-            <span class="error"  style="color:red" ng-show="[[isDetailRequired]]">Required.</span>
-            <span class="error" style='color:red' ng-show="stageForm.details.$error.maxlength">Your input is too long!</span>
+            <span class="error msg-error" style="color:red;" ng-show="[[isDetail]]"></span>
+            <!--<span class="error"  style="color:red" ng-show="[[isDetailRequired]]">Required.</span>-->
+            <span class="error msg-error" style='color:red' ng-show="stageForm.details.$error.maxlength">Your input is too long!</span>
           </div>
           <div class="form-group">
             <textarea rows="2" class="form-control details" ng-model="stage.notes" placeholder="Enter Notes" required="" ng-maxlength="50"></textarea>
-            <span class="error"  style="color:red" ng-show="[[isNotesRequired]]">Required.</span>
-            <span class="error" style='color:red' ng-show="stageForm.details.$error.maxlength">Your input is too long!</span>
+            <span class="error msg-error" style="color:red;" ng-show="[[isNotes]]"></span>
+            <!--<span class="error"  style="color:red" ng-show="[[isNotesRequired]]">Required.</span>-->
+            <span class="error msg-error" style='color:red' ng-show="stageForm.details.$error.maxlength">Your input is too long!</span>
           </div>
           <div class="cls"></div>
           <button type="" class="btn add-stage" ng-click="addProjectStage(stage)">Add Stage</button>

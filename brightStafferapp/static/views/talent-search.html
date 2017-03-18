@@ -60,7 +60,7 @@
                       <div class="form-group">
                         <label for="" class="filter-label-text">Project Name</label>
 
-                          <select class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project" >
+                          <select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project" >
                             <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
                           </select>
 

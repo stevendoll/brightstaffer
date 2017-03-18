@@ -9,7 +9,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $scope.stateArray = ['projects','create.step1','create.step2','create.step3','create.step4'];
     $rootScope.isDevice = false;
     $rootScope.projectListView = [];
-    $rootScope.StagesProjectList = [{name:'Select Project', value:'Select Project'}];
+    $rootScope.StagesProjectList = [];
 
     this.getTopSixProjects = function(){             // function to fetch top 6 projects
         var requestObject = {
@@ -47,7 +47,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                      $rootScope.totalProjectCount = response.count;
                      $rootScope.allProjectList = response.published_projects;
                      $rootScope.projectListView = [];
-                     $rootScope.StagesProjectList = [{name:'Select Project', value:'Select Project'}];
+                     $rootScope.StagesProjectList = [];
                         for(var i=0;i<$rootScope.allProjectList.length;i++){
                          var project = {name:'#'+$rootScope.allProjectList[i].project_name,
                                         value:$rootScope.allProjectList[i].id};
@@ -1313,10 +1313,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.phonePattern = /^(?!0+$)\d{8,}$/;
      $scope.candidateInfo= {};
      $scope.projectName ;
+     $scope.projectSelect ;
      $scope.filterStage;
      $scope.stage = {
-                     stage: 'Select Stage',
-                     project: $rootScope.StagesProjectList[0],
+                     stage: '',
+                     project: '',
+                     date:'',
+                     detail:'',
+                     notes:'',
                      isStage:false,
                      stagesCard:$rootScope.talentAllStages
                      };
@@ -1564,7 +1568,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#add-project').modal('show');
     }
 
-    $scope.addToProject = function(projectDD){
+    $scope.addToProject = function(projectDD , callFrom){
         var selectedProjectId ;
         var talent = [];
         console.log(projectDD)
@@ -1605,6 +1609,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              };
              talentApis.addTalentsToProject(requestObject).then(function(response){
                   console.log(response);
+                  if(!callFrom){
                   $rootScope.talentList = response;
                   $scope.choosenCandidates == [];
                    $('#selectall').prop('checked',false);
@@ -1618,7 +1623,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                   setTimeout(function () {
                         $('#projectSuccess').css('display','none');
                     }, 2000);
-
+                  }
              });
 
 
@@ -1640,11 +1645,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
        if($scope.choosenCandidates.length > 0){
             $('#assignToProject').removeClass('disabled-talent');
             $('#assignToProject').addClass('add-talent');
+            $('#assignToProject').css('pointer-events','');
             $('#talent-delete').css('pointer-events','');
        }else{
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events','none');
+            $('#assignToProject').css('pointer-events','none');
        }
                 console.log($scope.choosenCandidates);
     }
@@ -1667,11 +1674,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
        if($scope.choosenCandidates.length > 0){
             $('#assignToProject').removeClass('disabled-talent');
             $('#assignToProject').addClass('add-talent');
+            $('#assignToProject').css('pointer-events','');
             $('#talent-delete').css('pointer-events','');
        }else{
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events','none');
+            $('#assignToProject').css('pointer-events','none');
        }
     }
 
@@ -2022,10 +2031,32 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
           var d = new Date(inputFormat);
           return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/');
         }
+
+    function checkReqValidationForStage(form){
+        console.log($scope.stage);
+      if($scope.stage.stage == '')
+           $scope.isStage = true;
+      if($scope.stage.project == '')
+          $scope.isProject = true;
+      if($scope.stage.date == '')
+          $scope.isDate = true;
+      if($scope.stage.detail)
+          $scope.isDetail = true;
+       if($scope.stage.notes)
+          $scope.isNotes = true;
+    }
+
+
     $scope.addProjectStage = function(stage ){
      var selectedProjectId;
-    var date = convertDate($('.select-date').val());
+     //if(checkReqValidationForStage('stageForm')){
+     var date = '';
+
+    if($('.select-date').val())
+        var date = convertDate($('.select-date').val());
+
     $scope.stage.date = date;
+
     console.log($scope.stage);
         for(var i=0;i<$rootScope.allProjectList.length;i++)
                {
@@ -2063,7 +2094,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                          }
                      }
               }
-        }
+
+             }
 
      function openDatePicker($event){
      var element = $event.target;
@@ -2173,6 +2205,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.filterReset = function(){
         $scope.filterValue = {
+                        stage:'',
                         project: '',
                         match:'',
                         rating:'1',
@@ -2185,8 +2218,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         ordering:'',
                         active:''
                         };
-             delete $scope.filterStage;
-            $('.selectpicker').selectpicker();
+             /*$('#projectSelect').selectpicker('val','');
+             $('#projectSelect').selectpicker('render');
+             $('#projectSelect').selectpicker('refresh');*/
+             $('#filterStage').val('').prop('selectedIndex',0);
+             var selectedValue = $('#filterStage :selected').text(); 
+             var selectorId = $("#filterStage").attr('sb');
+             $('#sbSelector_'+selectorId).text(selectedValue);
+
+
     }
 
 
