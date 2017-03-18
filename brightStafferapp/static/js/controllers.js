@@ -1144,6 +1144,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     }
 
     $scope.closeForcefully = function(){
+        $state.go('dashboard','');
         $scope.removeCompletedFiles();
         $('#delete-popup').modal('hide');
     }
@@ -1295,7 +1296,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $rootScope.selectedCandidateProfile = '';
      $scope.choosenCandidates = [];
      $scope.currentTalentId = '';
-     $scope.projectDD = $rootScope.projectListView[0];
+     //$scope.projectDD = $rootScope.projectListView[0];
      $scope.talentCountStart = 1;
      $scope.talentCountEnd = 0;
      $scope.totalTalentCount = 0;
@@ -1311,7 +1312,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;  //email validation pattern
      $scope.phonePattern = /^(?!0+$)\d{8,}$/;
      $scope.candidateInfo= {};
-     $scope.projectName = $rootScope.projectListView[0].name;
+     $scope.projectName ;
+     $scope.filterStage;
      $scope.stage = {
                      stage: 'Select Stage',
                      project: $rootScope.StagesProjectList[0],
@@ -1319,7 +1321,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                      stagesCard:$rootScope.talentAllStages
                      };
      $scope.filterValue = {
-                        stage:'Select Stage',
+                        //stage:'Select Stage',
                         project:'',
                         match:'',
                         rating:'',
@@ -1360,9 +1362,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                $scope.filterValue.active = $('input[name=active]:checked', '#filter_form').val();
             });
             $('#projectListD').change(function() {
-            var selectedValue = $('#projectListD').val();
+            /*var selectedValue = $('#projectListD').val();
             $scope.projectDD = selectedValue;
-            console.log($scope.projectDD);
+            console.log($scope.projectDD);*/
+            $scope.projectRequired = false;
+            $('#proj_required').addClass('ng-hide');
             });
         // var oldie = $.browser.msie && $.browser.version < 9;
 
@@ -1555,6 +1559,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#add-talent-btn').css('pointer-events','');
         $('.selectpicker').selectpicker();
         //$('#projectListD :selected').text('');
+        $scope.projectRequired = false;
+        $('#proj_required').addClass('ng-hide');
         $('#add-project').modal('show');
     }
 
@@ -1562,11 +1568,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var selectedProjectId ;
         var talent = [];
         console.log(projectDD)
-                console.log($scope.projectDD);
-        if(typeof($scope.projectDD) != 'object'){
+        if(projectDD == undefined){
+         $scope.projectRequired = true;
+         $('#proj_required').removeClass('ng-hide');
+         return;
+        }
+        if(typeof(projectDD) != 'object' && projectDD != undefined){
               for(var i=0;i<$rootScope.allProjectList.length;i++)
                {
-                 if($rootScope.allProjectList[i].project_name == $scope.projectDD.split('#')[1])
+                 if($rootScope.allProjectList[i].project_name == projectDD.split('#')[1])
                     {
                       selectedProjectId = $rootScope.allProjectList[i].id;
                       break;
@@ -1594,9 +1604,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             'talent':talent
              };
              talentApis.addTalentsToProject(requestObject).then(function(response){
-                response = JSON.parse(response);
                   console.log(response);
                   $rootScope.talentList = response;
+                  $scope.choosenCandidates == [];
+                   $('#selectall').prop('checked',false);
+                   $('#assignToProject').removeClass('add-talent');
+                   $('#assignToProject').addClass('disabled-talent');
+                   $('#assignToProject').css('pointer-events','none');
+                   $('#talent-delete').css('pointer-events','none');
                   $('#add-project').modal('hide');
                   $('html, body').animate({ scrollTop: 0 }, 'fast');
                   $('#projectSuccess').css('display','block');
@@ -1606,23 +1621,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
              });
 
-            /*var formData = new FormData();
-             formData.append('token', $rootScope.globals.currentUser.token);
-             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
-             formData.append('project_id', selectedProjectId);
-             formData.append('talent_id[]',talent);
-             talentApis.addTalentsToProject(formData, requestCallback);
-             function requestCallback(response) {
-                  response = JSON.parse(response);
-                  console.log(response);
-                  $rootScope.talentList = response;
-                  $('#add-project').modal('hide');
-                  $('html, body').animate({ scrollTop: 0 }, 'fast');
-                  $('#projectSuccess').css('display','block');
-                  setTimeout(function () {
-                        $('#projectSuccess').css('display','none');
-                    }, 5000);
-                }*/
+
          }
     }
 
@@ -2092,21 +2091,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         else if($scope.isFilterChecked){
             $scope.isFilterChecked = false;
             $('.talent-search-icon').removeClass('active');
-            $scope.filterValue = {
-                        stage:'Select Stage',
-                        project: '',
-                        match:'',
-                        rating:'1',
-                        lastContacted:'',
-                        analysed:'',
-                        company:'',
-                        match:'',
-                        concepts:'',
-                        recruiter_name:'',
-                        ordering:'',
-                        active:''
-                        };
-            $('.selectpicker').selectpicker();
             }
      }
 
@@ -2187,6 +2171,23 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              });
      }
 
+    $scope.filterReset = function(){
+        $scope.filterValue = {
+                        project: '',
+                        match:'',
+                        rating:'1',
+                        lastContacted:'',
+                        analysed:'',
+                        company:'',
+                        match:'',
+                        concepts:'',
+                        recruiter_name:'',
+                        ordering:'',
+                        active:''
+                        };
+             delete $scope.filterStage;
+            $('.selectpicker').selectpicker();
+    }
 
 
 }
