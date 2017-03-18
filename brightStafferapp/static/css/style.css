@@ -145,6 +145,16 @@ h5 {
   text-align: left;
   font-weight: normal;
 }
+
+.dropdown-menu > li > a span {
+      font-size: 14px;
+    color: #888888 !important;
+    padding: 6px 15px;
+    font-family: 'open_sansregular';
+    width: auto;
+    float: none;
+    margin-bottom: 0px;
+}
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:focus,
 .dropdown-menu > .active > a:hover {
@@ -2044,21 +2054,37 @@ padding: 10px 0px;}
     padding: 4px 4px !important;
 }
 
+.main-success-box {
+    height: 50px;
+    border-radius: 2px;
+    background-color: rgba(223, 240, 216, 0.9);
+    border: solid 1px #d6e9c6;
+    margin: 0 auto;
+    padding: 13px 30px;
+    width: auto;
+    float: left;
+    position: absolute;
+    top: -31px;
+    right: 41%;
+    z-index: 9999;
+}
+
 .bs-searchbox .form-control {
     height: 40px;
     border-radius: 2px;
     background: url(../img/multisearch-icon.png) #ffffff no-repeat 7px 10px;
-    border: solid 1px #e7eaec;
-    padding: 6px 5px 6px 30px;
-     font-size: 16px;
-  color: #a2acbd;
-  font-family: 'open_sansregular';
+    border: solid 1px #e7eaec !important;
+    padding: 6px 5px 6px 30px !important;
+     font-size: 16px !important;
+  color: #a2acbd !important;
+  font-family: 'open_sansregular' !important;
 }
 
 .btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default {
     color: #a2acbd !important;
     background-color: #ffffff !important;
     border-color: #e7eaec !important;
+    line-height: 28px;
 }
 
 .dropdown-menu {
@@ -2076,11 +2102,23 @@ padding: 10px 0px;}
     margin: 0px;
     text-align: left;
     font-weight: normal;
-    border-bottom: 1px solid #e7eaec;
+    border-bottom: 1px solid #e7eaec !important;
     font-size: 14px;
-    color: #888888;
-    padding: 6px 15px;
+    color: #888888 !important;
+    padding: 0px 0px;
   font-family: 'open_sansregular';
+}
+
+.msg-error {
+  width: 100%;
+  float: left;
+  font-size: 13px;
+  color: red !important;
+  font-family: 'open_sansregular';
+}
+
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover {
+  border-radius: 0px !important;
 }
 
 .dropdown-menu > li > a:last-child {
@@ -2119,6 +2157,7 @@ padding: 10px 0px;}
  font-size: 14px;
  color: #888888;
  font-family: 'open_sansregular';
+ line-height: 30px;
 }
 
 
@@ -11945,6 +11984,13 @@ input[type=checkbox].css-checkboxs:checked + label.css-labels {
 }
 
 .success-box span {
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  text-align: left;
+  color: #3c763d;
+}
+
+.main-success-box span {
   font-family: 'open_sansregular';
   font-size: 14px;
   text-align: left;

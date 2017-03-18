@@ -219,8 +219,10 @@
                     <option ng-repeat="option in projectListView" value="[[option.name]]"></option>
                 </datalist>-->
             <select id="projectListD" class="selectpicker" data-live-search="true" name="project" ng-model="projectName">
+                <option value="" data-tokens="" style="display: none;">Select Project</option>
                 <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
             </select>
+            <span id="proj_required" class="error msg-error"  ng-show="[[projectRequired]]">Required.</span>
           </div>
           <div class="cls"></div>
           <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(projectName)">Add to Project</button>
@@ -234,10 +236,10 @@
 
 </div>
 
-  <div class="success-box" id="nameSuccess" style="display:none;">
+  <div class="main-success-box" id="nameSuccess" style="display:none;">
     <span><strong>Success!</strong> Recruiter name is updated.</span>
 </div>
 
-  <div class="success-box" id="projectSuccess" style="display:none;">
+  <div class="main-success-box" id="projectSuccess" style="display:none;">
     <span><strong>Success!</strong> Talent has been added to the project.</span>
 </div>

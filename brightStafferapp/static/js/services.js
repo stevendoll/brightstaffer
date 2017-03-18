@@ -269,8 +269,8 @@ function talentApis($http,REQUEST_URL) {
            });
       },
 
-      addTalentsToProject: function(formData, callback){
-       var url = REQUEST_URL+'talent_project_add/';
+      addTalentsToProject: function(data){
+       /*var url = REQUEST_URL+'talent_project_add/';
        var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function()
             {
@@ -292,6 +292,18 @@ function talentApis($http,REQUEST_URL) {
             }
         }
         xhr.send(formData);
+*/
+        return $http({
+            url: REQUEST_URL+'talent_project_add/?talent_id[]='+data.talent+'&recruiter='+data.recruiter+'&token='+data.token+'&project_id='+data.project_id,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
 
       },
 
