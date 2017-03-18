@@ -2174,7 +2174,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.filterReset = function(){
         $scope.filterValue = {
-
+                        stage:'',
                         project: '',
                         match:'',
                         rating:'1',
@@ -2187,8 +2187,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         ordering:'',
                         active:''
                         };
-             delete $scope.filterStage;
-            $('.selectpicker').selectpicker();
+             /*$('#projectSelect').selectpicker('val','');
+             $('#projectSelect').selectpicker('render');
+             $('#projectSelect').selectpicker('refresh');*/
+             $('#filterStage').val('').prop('selectedIndex',0);
+             var selectedValue = $('#filterStage :selected').text(); 
+             var selectorId = $("#filterStage").attr('sb');
+             $('#sbSelector_'+selectorId).text(selectedValue);
+
+
     }
 
 
