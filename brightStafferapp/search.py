@@ -26,7 +26,6 @@ TERM_QUERY = {"query": {
                                     "fields": [
                                         "talent_project.project",
                                         "talent_project.talent",
-                                        "talent_project.project_match",
                                         "talent_project.project_stage"
                                     ]
                                 }
