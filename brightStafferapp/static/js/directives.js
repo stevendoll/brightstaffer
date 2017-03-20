@@ -512,6 +512,7 @@ function sliderInit($timeout) {
                 }
             });
 */            var slider = new Slider('#ex3', {
+                min: 1, max: 100, step: 1, values: [1, 100],
                 formatter: function(value) {
                 scope.filterValue.match = value + '%';
                 scope.$apply();
@@ -575,32 +576,26 @@ function datePicker($timeout) {
     restrict: 'A',
     link : function (scope, element, attrs ) {
       $timeout(function(){
-      /*$('#analysed').datepicker({format: "dd/mm/yyyy",
-              autoclose:true
-            }).on('changeDate', function(){
-                $(this).datepicker('hide');
-            });
-            $('#analysed').datepicker({
+            $('.datepicker').remove();
+            $(element).datepicker({
               format: "dd/mm/yyyy",
-              autoclose:true,
-            }).on('changeDate', function(){
+              //todayHighlight:true,
+              autoclose:true
+            }).on('change', function(){
                 $('.datepicker').hide();
+            }).on('click', function(){
+                $('.datepicker').toggle();
             });
-          $('#analysed').mousedown(function() {
-                $('.datepicker').show();
-            });*//*
-          $('#analysed').focusout(function() {
-                $('.datepicker').hide();
-            });*/
-            //$(document).on('focus', '.datepicker',function(){
-            $(this).datepicker({
+
+            /*$(document).on('focus', '.datepicker',function(){
+            $(element).datepicker({
                 todayHighlight:true,
-                format:'yyyy-mm-dd',
+                format:'dd/mm/yyyy',
                 autoclose:true
             }).mousedown(function() {
                 $('.datepicker').show();
             });
-        //});
+            });*/
      });
     }
   };
@@ -611,13 +606,15 @@ function datePicker2($timeout) {
     restrict: 'A',
     link : function (scope, element, attrs ) {
       $timeout(function(){
-        var isVisisble = $("#analysed").datepicker( "widget" ).is(":visible");
-               console.log(isVisisble);
-            $('#lastContacted').datepicker({
+            $('.datepicker').remove();
+            $(element).datepicker({
               format: "dd/mm/yyyy",
+              todayHighlight:true,
               autoclose:true
-            }).on('changeDate', function(){
-                $(this).datepicker('hide');
+            }).on('change', function(){
+                $('.datepicker').hide();
+            }).on('click', function(){
+                $('.datepicker').toggle();
             });
             /*.on('change', function(){
                 $('.datepicker').hide();

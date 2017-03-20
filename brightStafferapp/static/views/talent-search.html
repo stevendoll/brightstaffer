@@ -61,6 +61,7 @@
                         <label for="" class="filter-label-text">Project Name</label>
 
                           <select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project" >
+                            <option value="" data-tokens="" style="display: none;">Select Project</option>
                             <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
                           </select>
 
@@ -73,7 +74,7 @@
                         <input type="text" class="form-control percentage-input-box" name="match" ng-model="filterValue.match">
                         <div class="range-slider-div" >
                           <span>0%</span>
-                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"  slider-init/>
+                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"  data-slider-tooltip="hide" slider-init/>
                           <span>100%</span>
                         </div>
                       </div>
@@ -87,13 +88,13 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Date Added/Analyzed</label>
-                        <input type="text" class="form-control filter-input-date datepicker" id="analysed" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date" date-picker>
+                        <input type="text" class="form-control filter-input-date " id="analysed" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date" date-picker>
                       </div>
                     </div>
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text" >Last contacted</label>
-                        <input type="text" class="form-control filter-input-date datepicker" id="lastContacted" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date">
+                        <input type="text" class="form-control filter-input-date " id="lastContacted" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date" date-picker2>
                       </div>
                     </div>
                     <div class="filter-stage-box">
