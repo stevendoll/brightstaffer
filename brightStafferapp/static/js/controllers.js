@@ -262,7 +262,7 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
 
 function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location, searchApis , searchData){
     $rootScope.search = {};
-
+    $rootScope.topSearch = false;
     this.logout = function(){
           $cookieStore.remove('userData');
           $rootScope.globals = {};
@@ -278,7 +278,8 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                 'keyword':$rootScope.search.searchKeywords
                  };
                  searchApis.talentSearch(requestObject).then(function(response){
-
+                        $rootScope.Filter = false;
+                        $rootScope.topSearch = true;
                         $rootScope.talentList = [];
                      if(response.hits.length > 0) {
                         for(var i=0;i<response.hits.length;i++){
@@ -1312,6 +1313,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.projectName ;
      //$scope.projectSelect ;
      $scope.filterStage;
+     var stagesTemp = [];
      $scope.stage = {
                      stage: '',
                      project: '',
@@ -1319,7 +1321,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                      detail:'',
                      notes:'',
                      isStage:false,
-                     stagesCard:$rootScope.talentAllStages? $rootScope.talentAllStages : ''
+                     stagesCard:$rootScope.talentAllStages ? $rootScope.talentAllStages : stagesTemp
                      };
      $scope.isStage = false;
      $scope.isProject = false;
@@ -1340,7 +1342,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         ordering:'',
                         active:''
                         };
-
+     $rootScope.Filter = false;
 
 
      $scope.hideMessages = function(formName){ /*Hide error messages when user interact with fieds*/
@@ -1516,7 +1518,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };
          talentApis.getTalentAllStages(requestObject).then(function(response){
               $rootScope.talentAllStages = response.result;
-              //console.log(response.result);
+              $scope.stage.stagesCard = '';
               $scope.stage.stagesCard = response.result;
               $state.go('talent.talent-profile','');
               $('html, body').animate({ scrollTop: 0 }, 'fast');
@@ -2138,19 +2140,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.addProjectStage = function(stage ){
      var selectedProjectId;
-         if(typeof($scope.stage.project) == 'object' ){
-       $scope.stage.project = '';
-    }
+     console.log($scope.stage);
+     if(typeof($scope.stage.project) == 'object' || $scope.stage.project == 'Select Project'){
+            $scope.stage.project = '';
+     }
 
-    if(typeof($scope.stage.stage) == 'object'){
-       $scope.stage.stage = '';
-    }
-     var date = $('.select-date').val();
+     if(typeof($scope.stage.stage) == 'object' || $scope.stage.stage == 'Select Stage'){
+            $scope.stage.stage = '';
+     }
+    var date = $('.select-date').val();
 
         if(date)
             $scope.stage.date = date;
 
-
+         console.log($scope.stage);
      checkReqValidationForStage('stageForm');
      if(!$scope.isStage && !$scope.isProject && !$scope.isDate && !$scope.isDetail && !$scope.isNotes){
 
@@ -2162,7 +2165,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                       break;
                     }
                }
-         if(selectedProjectId) {
+         if(selectedProjectId && !$scope.noteMax && !$scope.detailMax) {
+
                 var formData = new FormData();
                      formData.append('project_id', selectedProjectId);
                      formData.append('talent_id', $rootScope.talentDetails.id);
@@ -2175,17 +2179,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                           response = JSON.parse(response);
                         if(response.message == "success"){
                             $('#add-stage').modal('hide');
+
+                            $scope.stage.stage = '';
+
+                                     $scope.stage.project= '';
+                                     $scope.stage.detail = '';
+                                     $scope.stage.notes='';
+                                     $scope.stage.date ='';
+                                     $scope.stage.isStage= false;
+
                             $scope.stage.stagesCard.push(response);
                             $scope.$apply();
-                            $scope.stage = {
-                                     stage: '',
-                                     project: '',
-                                     details:'',
-                                     notes:'',
-                                     date:'',
-                                     isStage:false,
-                                     stagesCard:$rootScope.talentAllStages
-                                     };
                             var sbId =  $('#stageSelect').attr('sb');
                             var selectedValue = $('#sbSelector_'+sbId).text('Select Project');
                               $scope.stage.stage = selectedValue;
@@ -2196,7 +2200,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                                  $('.select-date').datepicker({ dateFormat: "dd/mm/yyyy", changeMonth: true,
                                         changeYear: true
                                     }).val('');
-                            sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+                            sessionStorage.talentAllStages = $scope.stage.stagesCard;
                          }
                      }
               }
@@ -2267,6 +2271,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      else{
         $scope.filterValue.match = $scope.filterValue.match.split('%')[0];
      }
+     if($scope.filterValue.project == 'Select Project' || $scope.filterValue.project == undefined)
+        $scope.filterValue.project = '';
+
     if($scope.filterValue.ordering == 'true'){
         $scope.filterValue.ordering = 'desc';
     }else if($scope.filterValue.ordering == 'false'){
@@ -2286,13 +2293,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                       break;
                     }
                }
+
         var requestObject = {
             'company': $scope.filterValue.company,
             'rating': $scope.filterValue.rating,
             'project_match': $scope.filterValue.match,
             'recruiter':$scope.filterValue.recruiter_name,
             'concepts':$scope.filterValue.concepts,
-            'project_name':selectedProjectId,
+            'projects':selectedProjectId,
             'stages':$scope.filterValue.stage,
             'contacted':$scope.filterValue.lastContacted,
             'date':$scope.filterValue.analysed,
@@ -2303,6 +2311,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              console.log(requestObject);
              talentApis.filterTalentData(requestObject).then(function(response){
                     if(response.hits.length > 0) {
+                        $rootScope.Filter = false;
                         console.log(response.hits);
                         $rootScope.talentList = [];
                         for(var i=0;i<response.hits.length;i++){
@@ -2311,6 +2320,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         var count = $rootScope.talentList.length
                         $scope.totalTalentCount = count;
                         $scope.talentCountEnd = count;
+                    }else if(response.hits.length == 0){
+                        $rootScope.talentList = [];
+                        $rootScope.Filter = true;
                     }
              });
      }

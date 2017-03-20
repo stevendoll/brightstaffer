@@ -391,7 +391,7 @@
                   <div class="info-box-panels">Notes: <span>[[st.notes]]</span></div>
                   <div class="info-box-bottom-links" style="cursor:default;">
                     <span data-toggle="modal" style="cursor:default;">Edit</span>
-                    <span>Delete</span>
+                    <span style="cursor:default;">Delete</span>
                   </div>
                 </div>
               </div>
@@ -654,7 +654,7 @@
     <div class="modal-content">
       <div class="modal-body roles-body">
         <button type="button" class="close" ng-click="closeStageModal()" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-        <from class="edit-modal-recruiter" name="stageForm" id="stageForm">
+        <from class="edit-modal-recruiter" name="stageForm" id="stageForm" novalidate>
           <span>Add Stage</span>
           <div class="cls"></div>
           <div class="form-group export">
@@ -696,7 +696,7 @@
             <span class="msg-error" style='color:red' ng-show="noteMax">Your input is too long!</span>
           </div>
           <div class="cls"></div>
-          <button type="" class="btn add-stage" ng-click="addProjectStage(stage)">Add Stage</button>
+          <button type="" class="btn add-stage" ng-click="addProjectStage(stage)" >Add Stage</button>
         </from>
         <div class="cls"></div>
       </div>

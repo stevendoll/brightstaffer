@@ -11644,11 +11644,16 @@ input[type="radio"] + label.radio-black {
   width: 25%;
   margin-left: 10px;
   margin-top: 9px;
-  word-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .circle-bg .link-panel span {
   display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .circle-bg .bar-date {
