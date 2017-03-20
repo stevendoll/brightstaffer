@@ -4,22 +4,24 @@
   <div class="modal-dialog add-talent-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+        <button type="button" class="close" ng-click="closePopup()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <h4 class="modal-title" id="myModalLabel">Add Talent</h4>
       </div>
-         <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>
+        <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 100 Files at once.</span>
       <div class="modal-body">
          <div class="talent-panel">
           <div class="cls"></div>
-                <div class="dropzone" id="dropzone" file-dropzone="[application/vnd.openxmlformats-officedocument.wordprocessingml.document , application/msword, application/pdf]" file-name="FileName" data-max-file-size="5">
-                    <img src="static/img/pdf-upload.png" alt="">
-          </div>
-          <div class="file-upld-mini">
-                  <input data-my-Directive type="file" multiple="multiple" id="filesInput1">Choose File
-              </div>
-             <div class="cls"></div>
-          <div class="choose-file">Choose a file or drag it here.</div>
+             <form action="/upload/" class="dropzone" drop-zone call-back="removeCompletedFiles" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
+                  <img src="static/img/pdf-upload-image.png" alt="" id="backgroundImg">
+                  <div class="cls"></div>
+             </form>
+
         </div>
+          <div class="progress-bttn">
+            <div class="note-text">NOTE: Max 100 files(doc/docx/pdf of 5MB) allowed at once.</div>
+            <button type="" class="btn talent-modal-done disabled" ng-click="done()" id="done" style="pointer-events:none;">Done</button>
+            <span class="btn talent-modal-add" id="fileUpload">Add Files</span>
+          </div>
         <div class="cls"></div>
       </div>
     </div>
@@ -27,48 +29,28 @@
 </div>
 
 
-<!---progress bar and name model--->
-<div class="modal fade" id="add-files" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog add-talent-dialog" role="document">
+ <!-- delete-Modal -->
+<div class="modal fade" id="delete-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog delete-talent-dailog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" ng-click="closePopup()" aria-label="Close"><span aria-hidden="true">x</span></button>
-        <h4 class="modal-title">Add Talent</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="closeForcefully()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
       </div>
-      <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 8 Files at once.</span>
       <div class="modal-body">
-        <div class="talent-inner-panel">
-          <div style="text-align: center;" ng-show="[[noFile]]" id="noFileMsg">[[NoFileMsg]]</div>
-          <div class="progress-panel" ng-repeat="data in FilesList">
-             <div class="cls"></div>
-            <div class="progress-image"><i class="fa fa-file-pdf-o modal-files-icon" ng-show="[[data.ext == 'pdf']]"></i><i ng-show="[[data.ext == 'docx']] || [[data.ext == 'doc']]" class="fa fa-file-word-o modal-files-icon"></i><i ng-show="[[data.ext != 'docx']] && [[data.ext != 'doc']] && [[data.ext != 'pdf']]" class="fa fa-close modal-files-icon"></i></div>
-            <div class="progress-text">[[data.name]]</div>
-            <div class="progress-close" id="removeCard_[[$index]]"><a id="[[data.name]]" ng-click="removeFile($event)" >x</a></div>
-            <div class="cls"></div>
-              <div>
-                <span style="padding: 0 11px 0 48px;color:green;" id="file_[[$index]]"></span>
-                <span class="error exterror" ng-show="[[data.fileSizeError]] && [[!data.fileTypeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File size exceeded(max 5MB).</span>
-                <span class="error exterror" ng-show="[[data.fileTypeError]] && [[!data.fileSizeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File type error(only doc/docx/pdf allowed).</span>
-                <span class="error exterror" ng-show="[[data.fileSizeError]] && [[data.fileTypeError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>File not supported.</span>
-            </div>
-           </div>
+        <div class="confirm-text">Are you sure you want to <span>cancel</span> the progress.</div>
+        <div class="confirm-bttn-box">
+          <button type="" class="btn" ng-click="closeForcefully()">Yes</button>
+          <button type="" class="btn" ng-click="reopen()">No</button>
         </div>
-          <div class="cls"></div>
-          <div class="progress-bttn">
-              <div class="note-text">NOTE: Max 8 files(doc/docx/pdf) allowed at once.</div>
-            <a href="" class="btn-lg btn-primary upload-file-bttn uploadDisable" ng-click="upload()" id="uploadFile">Upload File</a>
-            <span class="btn-lg btn-primary add-files-bttn file-upld-mini"><input data-my-Directive type="file" multiple="multiple" id="filesInput2">Add Files</span>
-          </div>
         <div class="cls"></div>
       </div>
     </div>
   </div>
 </div>
+
+
+<div class="success-box" id="successBox" style="display:none;">
+    <span><strong>Success!</strong> Talent has been added to the system.</span>
 </div>
 
- <!--Modal window-->
-<div class="modal-outer" id="breakPopup" style="display:none">
-  <div class="modal-content">
-    <p style="margin: 23px 0 15px;">File Uploaded Successfully.</p>
-  </div>
 </div>

@@ -4,19 +4,19 @@
       		<h2>My Projects</h2>
       	</div>
       	<div class="buttons-section m-t align-right">
-      		<span><a ui-sref="create.step1" class="btn-lg btn-primary new-project">Create Project</a></span>
+      		<span><a ui-sref="create.step1" class="btn-lg btn-primary new-project hvr-fade">Create Project</a></span>
       	</div>
       </div>
       <div class="row">
           <div  ng-repeat="projects in topSixProjectList" >
-          <div class="clearfix" ng-show="[[(($index) % 3) == 0]]"></div>
+          <!--<div class="clearfix" ng-show="[[(($index) % 3) == 0]]"></div>-->
           <div class="col-lg-4">
               <div class="ibox">
                 <div class="ibox-title align-center position-rel" ng-init="conceptList = [[projects.concepts]]">
                       <span class="label label-primary pull-right new-cards" ng-if="$first">New</span>
-                      <h5 class="dash"><a ui-sref="development" class="text-project">#[[projects.project_name]]</a></h5>
+                      <h5 class="dash"><a class="text-project" style="cursor:default;">#[[projects.project_name]]</a></h5>
                       <div class="cls"></div>
-                      <div class="box-location"><a>@[[projects.company_name]]</a> in <span class="text-detail">[[projects.location | capitalize]]</span></div>
+                      <div class="box-location"><a style="cursor:default;">@[[projects.company_name | capitalize]]</a> in <span class="text-detail">[[projects.location | capitalize]]</span></div>
                   </div>
                   <div class="ibox-content">
                       <div class="started-panel">Started <span>[[projects.get_date | dateFormat]]</span></div>
@@ -50,7 +50,7 @@
                         </div><!-- /col-md-12 -->
                       </div><!-- /row -->
                 </div><!-- /ibox-content -->
-                <div class="view-details"><a href="" class="btn-lg btn-primary view-project-bttn disable">View Project Details</a></div>
+                <div class="view-details"><a href="" class="btn-lg btn-primary view-project-bttn disable hvr-fade" style="pointer-events:none;">View Project Details</a></div>
                 <div class="cls"></div>
             </div><!-- /ibox -->
           </div><!-- /col-4 -->

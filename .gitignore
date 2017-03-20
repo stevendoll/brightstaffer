@@ -8,6 +8,8 @@
 .DS_Store
 .idea
 brightStaffer/settings.py
+brightStaffer/settings_dev.py
 venv/*
 *.txt
 media/*
+brightStafferapp/migrations/*

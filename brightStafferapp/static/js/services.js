@@ -1,4 +1,3 @@
-
 var baseUrl = 'http://'+window.location.host+'/';
 angular
     .module('brightStaffer')
@@ -15,18 +14,18 @@ angular
 
 function loginService($http ,REQUEST_URL){
     return {
-      userLogin: function(data){
-        return $http({
-            url: REQUEST_URL+'user_login/',
-            method: "POST", // or "get"
-            headers: {
-              'Content-Type': 'application/json; charset=utf-8',
-            },
-            data: JSON.stringify(data),
-            dataType:'json',
-            }).then( function (response){
-                return response.data;
-           });
+        userLogin: function(data){
+            return $http({
+                url: REQUEST_URL+'user_login/',
+                method: "POST", // or "get"
+                headers: {
+                  'Content-Type': 'application/json; charset=utf-8',
+                },
+                data: JSON.stringify(data),
+                dataType:'json',
+                }).then( function (response){
+                    return response.data;
+               });
         }
     }
 }
@@ -85,39 +84,39 @@ function resetPasswordService($http ,REQUEST_URL){
     }
  }
 
- function jobPostService($http ,REQUEST_URL){
+function jobPostService($http ,REQUEST_URL){
     return {
-    jobPost: function(data){
-    return $http({
-        url: REQUEST_URL+'job_posting/',
-        method: "POST", // or "get"
-        headers: {
-					'Content-Type': 'application/json; charset=utf-8',
-				},
-        data: JSON.stringify(data),
-        dataType:'json',
-        }).then( function (response){
-            return response.data;
-       });
-      }
+        jobPost: function(data){
+            return $http({
+                url: REQUEST_URL+'job_posting/',
+                method: "POST", // or "get"
+                headers: {
+                            'Content-Type': 'application/json; charset=utf-8',
+                        },
+                data: JSON.stringify(data),
+                dataType:'json',
+                }).then( function (response){
+                    return response.data;
+               });
+        }
     }
- }
+}
 
  function alchemyAnalysis($http ,REQUEST_URL){
     return {
-    alchemyAPI: function(data){
-    return $http({
-        url: REQUEST_URL+'alchemy_analysis/',
-        method: "POST", // or "get"
-        headers: {
-					'Content-Type': 'application/json; charset=utf-8',
-				},
-        data: JSON.stringify(data),
-        dataType:'json',
-        }).then( function (response){
-            return response.data;
-       });
-      }
+        alchemyAPI: function(data){
+            return $http({
+                url: REQUEST_URL+'alchemy_analysis/',
+                method: "POST", // or "get"
+                headers: {
+                            'Content-Type': 'application/json; charset=utf-8',
+                        },
+                data: JSON.stringify(data),
+                dataType:'json',
+                }).then( function (response){
+                    return response.data;
+               });
+          }
     }
  }
 
@@ -213,27 +212,265 @@ function paginationData($http ,REQUEST_URL){
     }
  }
 
-function fileUploadApi($http,REQUEST_URL) {
-    return {
-     upload: function(formdata){
-          return $http({
-                url: REQUEST_URL+'upload/',
-                method: 'post',
-//                headers: {
-//					 'Content-Type': 'multipart/form-data; charset=utf-8',
-//				},
-                data:formdata,
-                processData: true,
-                enctype: 'multipart/form-data',
-                contentType: false
-            }).success(function(response) {
+function talentApis($http,REQUEST_URL) {
+   return {
+    getAllTalents: function(data){
+    return $http({
+        url: REQUEST_URL+'talent_list/?recruiter='+data.recruiter+'&token='+data.token+'&count='+data.count,
+        method: "GET", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      },
+
+    getTalentAllStages: function(data){
+    return $http({
+        url: REQUEST_URL+'talent_view_allstages/?talent_id='+data.talent_id,
+        method: "GET", // or "get"
+        headers: {
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+        data: JSON.stringify(data),
+        dataType:'json',
+        }).then( function (response){
+            return response.data;
+       });
+      },
+
+     updateRecruiterName: function(data){
+        return $http({
+            url: REQUEST_URL+'update_recruiter/?recruiter='+data.recruiter+'&display_name='+data.display_name,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
                 return response.data;
-            }).error(function() {
-                console.log("Error");
-            });
-         }
-     }
+           });
+     },
+
+     getCandidateProfile: function(data){
+        return $http({
+            url: REQUEST_URL+'talent_list/'+data.id+'/?recruiter='+data.recruiter+'&token='+data.token,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
+      },
+
+      addTalentsToProject: function(data){
+       /*var url = REQUEST_URL+'talent_project_add/';
+       var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function()
+            {
+                if (xhr.readyState == 4 && xhr.status == 200)
+                {
+                    callback(xhr.responseText); // Another callback here
+                }
+            };
+        xhr.open('GET', url, true);
+        headers = {
+        "Accept": "application/json",
+        "Cache-Control": "no-cache",
+        "X-Requested-With": "XMLHttpRequest"
+        };
+        for (headerName in headers) {
+            headerValue = headers[headerName];
+            if (headerValue) {
+              xhr.setRequestHeader(headerName, headerValue);
+            }
+        }
+        xhr.send(formData);
+*/
+        return $http({
+            url: REQUEST_URL+'talent_project_add/?talent_id[]='+data.talent+'&recruiter='+data.recruiter+'&token='+data.token+'&project_id='+data.project_id,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
+
+      },
+
+    deleteTalents: function(data){
+        return $http({
+            url: REQUEST_URL+'delete_talent/?talent='+data.talent+'&recruiter='+data.recruiter+'&is_active='+data.is_active,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
+
+    },
+
+    updateRatings: function(data){
+        return $http({
+            url: REQUEST_URL+'update_rank/?talent_id='+data.id+'&rating='+data.rating,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
+
+    },
+
+    talentContact: function(formData,callback){
+       var url = REQUEST_URL+'talent_contact/';
+       var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function()
+            {
+                if (xhr.readyState == 4 && xhr.status == 200)
+                {
+                    callback(xhr.responseText); // Another callback here
+                }
+            };
+        xhr.open('POST', url, true);
+        headers = {
+        "Accept": "application/json",
+        "Cache-Control": "no-cache",
+        "X-Requested-With": "XMLHttpRequest"
+        };
+        for (headerName in headers) {
+            headerValue = headers[headerName];
+            if (headerValue) {
+              xhr.setRequestHeader(headerName, headerValue);
+            }
+        }
+        xhr.send(formData);
+    },
+
+    addEmail: function(formData , callback){
+       var url = REQUEST_URL+'talent_email/';
+       var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function()
+            {
+                if (xhr.readyState == 4 && xhr.status == 200)
+                {
+                    callback(xhr.responseText); // Another callback here
+                }
+            };
+        xhr.open('POST', url, true);
+        headers = {
+        "Accept": "application/json",
+        "Cache-Control": "no-cache",
+        "X-Requested-With": "XMLHttpRequest"
+        };
+        for (headerName in headers) {
+            headerValue = headers[headerName];
+            if (headerValue) {
+              xhr.setRequestHeader(headerName, headerValue);
+            }
+        }
+        xhr.send(formData);
+    },
+
+    addTalentStages: function(formData , callback){
+       var url = REQUEST_URL+'talent_add_stage/';
+       var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function()
+            {
+                if (xhr.readyState == 4 && xhr.status == 200)
+                {
+                    callback(xhr.responseText); // Another callback here
+                }
+            };
+        xhr.open('POST', url, true);
+        headers = {
+        "Accept": "application/json",
+        "Cache-Control": "no-cache",
+        "X-Requested-With": "XMLHttpRequest"
+        };
+        for (headerName in headers) {
+            headerValue = headers[headerName];
+            if (headerValue) {
+              xhr.setRequestHeader(headerName, headerValue);
+            }
+        }
+        xhr.send(formData);
+    },
+
+    filterTalentData: function(data){
+       return $http({
+            url: REQUEST_URL+'talent_search_filter/?talent_company='+data.company+'&rating='+data.rating+'&project_match='+data.project_match+'&recruiter='+data.recruiter+'&concepts='+data.concepts+'&project_name='+data.project_name+'&stages='+data.stages+'&last_contacted='+data.contacted+'&date_added='+data.date+'&term='+data.term,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
+    }
+
+
+
+
+   }
 }
+
+
+function searchApis($http,REQUEST_URL) {
+   return{
+        talentSearch: function(data){
+        return $http({
+            url: REQUEST_URL+'talent_search/?term='+data.keyword,
+            method: "GET", // or "get"
+            headers: {
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+            data: JSON.stringify(data),
+            dataType:'json',
+            }).then( function (response){
+                return response.data;
+           });
+        }
+
+   }
+}
+
+function searchData() {
+  var talentList = [];
+
+  return {
+    addItem: addItem,
+    getList: getList
+  };
+
+  function addItem(items) {
+    for(var i=0;i<items.length;i++)
+    talentList.push(items[i]._source);
+  }
+
+  function getList() {
+    return talentList;
+  }
+}
+
 
 angular
     .module('brightStaffer')
@@ -248,5 +485,7 @@ angular
     .service('getTopSixProjects', getTopSixProjects)
     .service('getAllProjects', getAllProjects)
     .service('paginationData', paginationData)
-    .service('fileUploadApi', fileUploadApi);
+    .service('talentApis', talentApis)
+    .service('searchApis', searchApis)
+    .service('searchData', searchData);
 

@@ -255,15 +255,9 @@ function myDirective($rootScope) {
             element.bind('change', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                scope.countError = false;
-                $('.msgbox').addClass('ng-hide');
-                scope.noFile = false;
-                $('#noFileMsg').addClass('ng-hide');
                 if (element[0].files){
                     if (element[0].files.length > 0) {
-                      scope.uploadFiles(element[0].files);
-                      $('#filesInput1').val('');
-                      $('#filesInput2').val('');
+                      $('#addfiles').val('');
                     }
                 }
                 return false;
@@ -273,40 +267,390 @@ function myDirective($rootScope) {
 }
 
 
-function fileDropzone($rootScope) {
+ function dropZone($rootScope) {
+    return {
+        scope: {
+            action: "@",
+            autoProcess: "=",
+            callBack: "=",
+            dataMax: "=?",
+            mimetypes: "="
+        },
+        link: function (scope, element, attrs) {
+            scope.completedFiles = [];
+            console.log("Creating dropzone");
+            $(".talent-panel").mCustomScrollbar();
+            // Autoprocess the form
+            if (scope.autoProcess != null && scope.autoProcess == "false") {
+                scope.autoProcess = false;
+            } else {
+                scope.autoProcess = true;
+            }
+
+            // Max file size
+            if (scope.dataMax == null) {
+                scope.dataMax = Dropzone.prototype.defaultOptions.maxFilesize;
+            } else {
+                scope.dataMax = parseInt(scope.dataMax);
+            }
+
+            // Message for the uploading
+            if (scope.message == null) {
+                scope.message = Dropzone.prototype.defaultOptions.dictDefaultMessage;
+            }
+                $('#fileUpload').val('');
+              var recruiter ={'recruiter':$rootScope.globals.currentUser.user_email};
+              var myDropZone = new Dropzone(element[0],{
+                url: scope.action,
+                maxFilesize: 5,
+                paramName: ["file",recruiter],
+                acceptedFiles: scope.mimetypes,
+                maxThumbnailFilesize: '5',
+                clickable: ["#backgroundImg","#file-dropzone","#fileUpload"],
+                autoProcessQueue: scope.autoProcess,
+                complete: function(r){
+                    scope.completedFiles.push(r);
+                }
+            });
+
+            scope.callBack = function () {
+               for (var i=0;i<scope.completedFiles.length;i++ ) {
+                      myDropZone.removeFile(scope.completedFiles[i]);
+                    }
+            }
+
+        }
+    }
+}
+
+
+function dropDown($timeout) {
   return {
     restrict: 'A',
-    link: function(scope, element, attrs) {
-
-        element.on('dragover', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        });
-        element.on('dragenter', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        });
-        element.on('drop', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            if (event != null) {
-                  event.preventDefault();
-                }
-            scope.countError = false;
-            scope.noFile = false;
-            $('.msgbox').addClass('ng-hide');
-            scope.NoFileMsg ='';
-            $('#noFileMsg').addClass('ng-hide');
-            var file = event.dataTransfer.files[0];
-             scope.checkFileValidation(file);
-             $('#add-talent').modal('hide');
-             $('#add-files').modal('show');
-             $(".talent-inner-panel").mCustomScrollbar();
-        });
+    link : function (scope, element, attrs ) {
+      $timeout(function(){$(element).selectbox();
+            });
     }
   };
 }
 
+function starRating() {
+    return {
+        restrict: 'A',
+        template: '<ul class="rating">' +
+            '<li ng-repeat="star in stars" ng-class="star" >' +
+            '\u2605' +
+            '</li>' +
+            '</ul>',
+        scope: {
+            ratingValue: '=',
+            max: '=',
+            onRatingSelected: '&'
+        },
+        link: function (scope, elem, attrs) {
+
+            var updateStars = function () {
+                scope.stars = [];
+                for (var i = 0; i < scope.max; i++) {
+                    scope.stars.push({
+                        filled: i < scope.ratingValue
+                    });
+                }
+            };
+
+            scope.toggle = function (index) {
+                scope.ratingValue = index + 1;
+                scope.onRatingSelected({
+                    rating: index + 1
+                });
+            };
+
+            scope.$watch('ratingValue', function (oldVal, newVal) {
+                if (newVal) {
+                    updateStars();
+                }
+            });
+        }
+    }
+  }
+
+function starRating2() {
+    return {
+        restrict: 'A',
+        template: '<ul class="rating">' +
+            '<li ng-repeat="star in stars" ng-class="star" ng-click="toggle($index)">' +
+            '\u2605' +
+            '</li>' +
+            '</ul>',
+        scope: {
+            ratingValue: '=',
+            max: '=',
+            onRatingSelected: '&'
+        },
+        link: function (scope, elem, attrs) {
+
+            var updateStars = function () {
+                scope.stars = [];
+                for (var i = 0; i < scope.max; i++) {
+                    scope.stars.push({
+                        filled: i < scope.ratingValue
+                    });
+                }
+            };
+
+            scope.toggle = function (index) {
+                scope.ratingValue = index + 1;
+                scope.onRatingSelected({
+                    rating: index + 1
+                });
+            };
+
+            scope.$watch('ratingValue', function (oldVal, newVal) {
+                if (newVal) {
+                    updateStars();
+                }
+            });
+        }
+    }
+  }
+
+function tableScroll($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $(".tabl-scrol").mCustomScrollbar({
+                scrollButtons:{ enable: true },
+                axis:"x", // horizontal scrollbar
+
+            });
+      });
+    }
+  };
+}
+
+function pieChart($timeout) {
+  return {
+    restrict: 'A',
+        link : function (scope, element, attrs ) {
+              $timeout(function(){
+                   $('.easy-pie-chart').each(function(){
+                     $(this).easyPieChart({
+                         barColor: $(this).data('color'),
+                         trackColor: '#d7d7d7',
+                         scaleColor: false,
+                         lineCap: 'butt',
+                         lineWidth: 6,
+                         animate: 1000,
+                         size:60
+                     }).css('color', $(this).data('color'));
+              });
+        });
+      }
+  }
+
+}
+
+function searchDropDown($timeout,$rootScope) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $(element)
+	.on('click', '.dropdown-button', function() {
+    	$('.dropdown-list').toggle();
+	})
+	.on('input', '.dropdown-search', function() {
+    	var target = $(this);
+    	var search = target.val().toLowerCase();
+
+    	if (!search) {
+            $('li').show();
+            return false;
+        }
+
+    	$('#projectDrop li').each(function() {
+        	var text = $(this).text().toLowerCase();
+            var match = text.indexOf(search) > -1;
+            $(this).toggle(match);
+        });
+	})
+	.on('change', '[type="checkbox"]', function() {
+    	var numChecked = $('[type="checkbox"]:checked').length;
+    	$('.quantity').text(numChecked || 'Any');
+	});
+
+// JSON of States for demo purposes
+ var usStates =  JSON.parse(sessionStorage.projectList);
+
+// <li> template
+var stateTemplate = _.template(
+    '<li>' +
+    	'<label for="<%= name %>"><%= name %></label>' +
+    '</li>'
+);
+
+// Populate list with states
+_.each(usStates, function(s) {
+    s.capName = _.startCase(s.name.toLowerCase());
+    $('#projectDrop').append(stateTemplate(s));
+});
+      });
+    }
+  };
+}
+
+function sliderInit($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            /*$('#ex3').slider({
+                formatter: function(value) {
+                scope.filterValue.match = value + '%';
+                    return 'Current value: ' + value;
+                }
+            });
+*/            var slider = new Slider('#ex3', {
+                min: 1, max: 100, step: 1, values: [1, 100],
+                formatter: function(value) {
+                scope.filterValue.match = value + '%';
+                scope.$apply();
+                    return 'Current value: ' + value;
+                }
+            });
+
+      });
+    }
+  };
+}
+
+function selectRecord($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $(element).on('change',function() {
+                var selectedValue = $('#recordCount :selected').text();
+                scope.recordCount = selectedValue;
+                console.log(scope.recordCount);
+                scope.getTalents(scope.recordCount);
+            });
+      });
+    }
+  };
+}
+
+function selectProject($timeout){
+    return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            //$(element).selectbox();
+            $('#projectListD3').change(function() {
+            var selectedValue = $('#projectListD3 :selected').text();
+            scope.projectDD = selectedValue;
+            console.log(scope.projectDD);
+            });
+      });
+    }
+  };
+}
+function stageScroll($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $(".custom-scroll-rightbar").mCustomScrollbar({
+                scrollButtons:{ enable: true },
+                axis:"y", // horizontal scrollbar
+
+            });
+      });
+    }
+  };
+}
+
+function datePicker($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $('.datepicker').remove();
+            $(element).datepicker({
+              format: "dd/mm/yyyy",
+              //todayHighlight:true,
+              autoclose:true
+            }).on('change', function(){
+                $('.datepicker').hide();
+            }).on('click', function(){
+                $('.datepicker').toggle();
+            });
+
+            /*$(document).on('focus', '.datepicker',function(){
+            $(element).datepicker({
+                todayHighlight:true,
+                format:'dd/mm/yyyy',
+                autoclose:true
+            }).mousedown(function() {
+                $('.datepicker').show();
+            });
+            });*/
+     });
+    }
+  };
+}
+
+function datePicker2($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $('.datepicker').remove();
+            $(element).datepicker({
+              format: "dd/mm/yyyy",
+              todayHighlight:true,
+              autoclose:true
+            }).on('change', function(){
+                $('.datepicker').hide();
+            }).on('click', function(){
+                $('.datepicker').toggle();
+            });
+            /*.on('change', function(){
+                $('.datepicker').hide();
+            })*/
+          /*$('#lastContacted').mousedown(function() {
+                $('.datepicker').toggle();
+            });*/
+          /*$('#lastContacted').focusout(function() {
+                $('.datepicker').remove();
+            });*/
+      });
+    }
+  };
+}
+
+
+function datePickerStage($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $('.datepicker').remove();
+            $(element).datepicker({
+              format: "dd/mm/yyyy",
+              //todayHighlight:true,
+              autoclose:true
+            }).on('change', function(){
+                $('.datepicker').hide();
+            }).on('click', function(){
+                scope.hideValidation();
+                $('.datepicker').toggle();
+            });
+      });
+    }
+  };
+}
 /**
  *
  * Pass all functions into module
@@ -324,4 +668,17 @@ angular
     .directive('clickOutside', clickOutside)
     .directive('onTouch', onTouch)
     .directive('myDirective', myDirective)
-    .directive('fileDropzone', fileDropzone);
+    .directive('dropZone', dropZone)
+    .directive('dropDown', dropDown)
+    .directive('starRating',starRating)
+    .directive('starRating2',starRating2)
+    .directive('tableScroll',tableScroll)
+    .directive('pieChart',pieChart)
+    .directive('searchDropDown',searchDropDown)
+    .directive('sliderInit',sliderInit)
+    .directive('selectRecord',selectRecord)
+    .directive('stageScroll',stageScroll)
+    .directive('selectProject',selectProject)
+    .directive('datePicker',datePicker)
+    .directive('datePicker2',datePicker2)
+        .directive('datePickerStage',datePickerStage);
