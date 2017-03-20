@@ -1307,7 +1307,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.isEmail = false;
      $scope.isContact = false;
      $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/;  //email validation pattern
-     $scope.phonePattern = /^(?!0+$)\d{8,}$/;
+     $scope.phonePattern = /^(?!0+$)\d{10,}$/;
      $scope.candidateInfo= {};
      $scope.projectName ;
      //$scope.projectSelect ;
@@ -1895,8 +1895,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              function requestCallback(response) {
                   response = JSON.parse(response);
                   //console.log(response);
+
                   $scope.closeCandidateInfo();
                   //candidateEmail ='';
+                  $rootScope.talentDetails.talent_email[0].email = candidateEmail;
+                  sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                   $('#emailUpdated').css('display','block');
                   setTimeout(function () {
                         $('#emailUpdated').css('display','none');
@@ -1976,6 +1979,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                   response = JSON.parse(response);
                  // console.log(response);
                   $scope.closeCandidateInfo();
+                  $rootScope.talentDetails.talent_contact[0].contact = candidateContactAdd;
+                  sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                   //candidateContact = '';
                   $('#contactUpdated').css('display','block');
                   setTimeout(function () {
@@ -2140,7 +2145,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      if(typeof($scope.stage.stage) == 'object' || $scope.stage.stage == 'Select Stage'){
             $scope.stage.stage = '';
      }
-     var date = $('.select-date').val();
+    var date = $('.select-date').val();
 
         if(date)
             $scope.stage.date = date;
@@ -2256,7 +2261,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.filterValue.analysed = analysedDate;
     if(lastContacted)
         $scope.filterValue.lastContacted = lastContacted;
-    if($scope.filterValue.stage == 'Select Stage')
+    if($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined)
         $scope.filterValue.stage = '';
     if($scope.filterValue.match.split('%')[0] == '0' )
         $scope.filterValue.match = '';

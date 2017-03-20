@@ -421,16 +421,16 @@
           </div>
           <div class="cls"></div>
           <form name="update_email" id="update_email_form" class="contact-edit-sec" ng-show="isEmailEditable" ng-keyup="hideMessages('update_email_form')">
-            <input type="" class="form-control" placeholder="" ng-pattern="emailPattern" ng-model="candidateInfo.candidateEmail" name="talentEmail" autocomplete="off">
-            <span class="error" id="email-required" style="color:red;" ng-show="[[isEmail]]">Required.</span>
+            <input type="" class="form-control" placeholder="" ng-pattern="emailPattern" ng-model="candidateInfo.candidateEmail" name="talentEmail" autocomplete="off" required>
+            <span class="error" id="email-required" style="color:red;" ng-show="update_email.talentEmail.$error.required">Required.</span>
             <span style="color:red" ng-show="update_email.talentEmail.$error.pattern">Please enter valid email address.</span>
             <button type="submit" class="btn contact-update-bttn" id="update_email" ng-click="updateTalentEmail(talentDetails.id, talentDetails.talent_email[0].email,candidateInfo.candidateEmail)">Update</button>
             <button type="submit" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
           </form>
           <div class="cls"></div>
           <form name="add_email" id="add_email_form" class="contact-edit-sec" ng-show="isEmailAdd" >
-            <input type="" class="form-control"  placeholder="Add Email" ng-pattern="emailPattern" autocomplete="off" ng-model="candidateInfo.candidateEmailAdd" name="talentAddEmail">
-            <span class="error" style="color:red;" ng-show="[[isEmail]]">Required.</span>
+            <input type="" class="form-control"  placeholder="Add Email" ng-pattern="emailPattern" autocomplete="off" ng-model="candidateInfo.candidateEmailAdd" name="talentAddEmail" required>
+            <span class="error" style="color:red;" ng-show="add_email.talentAddEmail.$error.required">Required.</span>
             <span style="color:red" ng-show="add_email.talentAddEmail.$error.pattern">Please enter valid email address.</span>
             <button type="submit" class="btn contact-update-bttn" id="add_email" ng-click="addEmail(talentDetails.id, talentDetails.talent_email[0].email,candidateInfo.candidateEmailAdd)">Add</button>
             <button type="submit" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
@@ -447,16 +447,16 @@
           </div>
           <div class="cls"></div>
           <form name="edit_contact" class="contact-edit-sec" ng-show="isContactEditable">
-            <input type="" class="form-control" placeholder="" ng-model="candidateInfo.candidateContact" ng-pattern="phonePattern" name="contact_update">
-            <span class="error" id="contact-required" style="color:red;" ng-show="[[isContact]]">Required.</span>
+            <input type="" class="form-control" placeholder="" maxlength="15" onkeypress="return event.charCode >= 48 && event.charCode <= 57" ng-model="candidateInfo.candidateContact" ng-pattern="phonePattern" name="contact_update" required>
+            <span class="error" id="contact-required" style="color:red;" ng-show="edit_contact.contact_update.$error.required">Required.</span>
             <span style="color:red" ng-show="edit_contact.contact_update.$error.pattern">Please enter valid contact number.</span>
             <button type="submit" class="btn contact-update-bttn" id="update_contact" ng-click="updateContact(talentDetails.id, talentDetails.talent_contact[0].contact,candidateInfo.candidateContact)">Update</button>
             <button type="submit" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
           </form>
           <div class="cls"></div>
           <form name="Contact2" class="contact-edit-sec" ng-show="isContactAdd">
-            <input type="" class="form-control"  placeholder="Add Contact" autocomplete="off" ng-model="candidateInfo.candidateContactAdd" ng-pattern="phonePattern" name="contact_add" ng-model-options="{ updateOn: 'blur' }">
-            <span class="error"  style="color:red;" ng-show="[[isContact]]">Required.</span>
+            <input type="" class="form-control"  placeholder="Add Contact" autocomplete="off" ng-model="candidateInfo.candidateContactAdd" ng-pattern="phonePattern" name="contact_add"  required>
+            <span class="error"  style="color:red;" ng-show="Contact2.contact_add.$error.pattern">Required.</span>
             <span style="color:red" ng-show="Contact2.contact_add.$error.pattern">Please enter valid contact number.</span>
             <button type="submit" class="btn contact-update-bttn" id="add_contact" ng-click="addContact(talentDetails.id, talentDetails.talent_contact[0].contact,candidateInfo.candidateContactAdd)">Add</button>
             <button type="submit" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
