@@ -1,4 +1,8 @@
-  <div ng-repeat="talent in talentList" on-finish-render="ngRepeatFinished">
+<div class="col-xs-12 padding-zero" style="text-align:center;" ng-show="talentList.length == 0 && search.searchKeywords">
+  <div class="talent-srearch-view-panel" style="height:400px;padding:101px;">
+    <h2>No Result for this search</h2>
+</div></div>
+<div ng-repeat="talent in talentList" on-finish-render="ngRepeatFinished">
 <div class="col-xs-12 padding-zero">
                 <div class="talent-srearch-view-panel">
                   <div class="talentsearch-left-panel">
