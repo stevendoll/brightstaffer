@@ -1319,7 +1319,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                      detail:'',
                      notes:'',
                      isStage:false,
-                     stagesCard:$rootScope.talentAllStages
+                     stagesCard:$rootScope.talentAllStages ? $rootScope.talentAllStages : []
                      };
      $scope.isStage = false;
      $scope.isProject = false;
@@ -1516,7 +1516,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };
          talentApis.getTalentAllStages(requestObject).then(function(response){
               $rootScope.talentAllStages = response.result;
-              //console.log(response.result);
               $scope.stage.stagesCard = response.result;
               $state.go('talent.talent-profile','');
               $('html, body').animate({ scrollTop: 0 }, 'fast');
@@ -2133,6 +2132,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.addProjectStage = function(stage ){
      var selectedProjectId;
+     console.log($scope.stage);
+     if(typeof($scope.stage.project) == 'object' || $scope.stage.project == 'Select Project'){
+            $scope.stage.project = '';
+     }
+
+     if(typeof($scope.stage.stage) == 'object' || $scope.stage.stage == 'Select Stage'){
+            $scope.stage.stage = '';
+     }
      var date = $('.select-date').val();
 
         if(date)
@@ -2151,6 +2158,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     }
                }
          if(selectedProjectId) {
+
                 var formData = new FormData();
                      formData.append('project_id', selectedProjectId);
                      formData.append('talent_id', $rootScope.talentDetails.id);
@@ -2168,7 +2176,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                             $scope.stage = {
                                      stage: '',
                                      project: '',
-                                     details:'',
+                                     detail:'',
                                      notes:'',
                                      date:'',
                                      isStage:false,
@@ -2270,7 +2278,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                {
                  if($rootScope.allProjectList[i].project_name == $scope.filterValue.project.split('#')[1])
                     {
-                       selectedProjectId = $rootScope.allProjectList[i].id;
+                       selectedProjectId = $rootScope.allProjectList[i].project_name;
                       break;
                     }
                }
@@ -2280,7 +2288,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             'project_match': $scope.filterValue.match,
             'recruiter':$scope.filterValue.recruiter_name,
             'concepts':$scope.filterValue.concepts,
-            'projects':selectedProjectId,
+            'project_name':selectedProjectId,
             'stages':$scope.filterValue.stage,
             'contacted':$scope.filterValue.lastContacted,
             'date':$scope.filterValue.analysed,
