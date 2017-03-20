@@ -592,7 +592,7 @@ function datePicker($timeout) {
           $('#analysed').focusout(function() {
                 $('.datepicker').hide();
             });*/
-            $(document).on('focus', '.datepicker',function(){
+            //$(document).on('focus', '.datepicker',function(){
             $(this).datepicker({
                 todayHighlight:true,
                 format:'yyyy-mm-dd',
@@ -600,7 +600,7 @@ function datePicker($timeout) {
             }).mousedown(function() {
                 $('.datepicker').show();
             });
-        });
+        //});
      });
     }
   };
@@ -633,6 +633,27 @@ function datePicker2($timeout) {
   };
 }
 
+
+function datePickerStage($timeout) {
+  return {
+    restrict: 'A',
+    link : function (scope, element, attrs ) {
+      $timeout(function(){
+            $('.datepicker').remove();
+            $(element).datepicker({
+              format: "dd/mm/yyyy",
+              //todayHighlight:true,
+              autoclose:true
+            }).on('change', function(){
+                $('.datepicker').hide();
+            }).on('click', function(){
+                scope.hideValidation();
+                $('.datepicker').toggle();
+            });
+      });
+    }
+  };
+}
 /**
  *
  * Pass all functions into module
@@ -662,4 +683,5 @@ angular
     .directive('stageScroll',stageScroll)
     .directive('selectProject',selectProject)
     .directive('datePicker',datePicker)
-    .directive('datePicker2',datePicker2);
+    .directive('datePicker2',datePicker2)
+        .directive('datePickerStage',datePickerStage);
