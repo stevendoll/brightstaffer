@@ -405,18 +405,31 @@ class TalentSearch(View):
 
     def get(self, request):
         es = Elasticsearch()
-        term = request.GET['term']
+        term = request.GET.get('term', '')
         term = term.strip('"')
         query = TERM_QUERY
-        if term:
-            term_query = json.dumps(query)
-            term_query = re.sub(r"\bsearch_term\b", term, term_query)
-            term_query = json.loads(term_query)
-            body = json.dumps(term_query)
-            res = es.search(index="haystack", doc_type="modelresult",
-                            body=body
-                            )
-            return HttpResponse(json.dumps(res['hits']))
+        res = {
+            "hits": [],
+            "max_score": "null",
+            "total": 0
+        }
+        try:
+            if term:
+                term_query = json.dumps(query)
+                term_query = re.sub(r"\bsearch_term\b", term, term_query)
+                term_query = json.loads(term_query)
+                body = json.dumps(term_query)
+                res = es.search(index="haystack", doc_type="modelresult",
+                                body=body
+                                )
+                return HttpResponse(json.dumps(res['hits']))
+            else:
+                res = es.search(index="haystack", doc_type="modelresult",
+                                body=query
+                                )
+                return HttpResponse(json.dumps(res['hits']))
+        except:
+            return HttpResponse(json.dumps(res))
 
 
 class TalentSearchFilter(View):
