@@ -46,7 +46,9 @@ class TalentList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = super(TalentList, self).get_queryset()
-        queryset = queryset.filter(talent_active__is_active=True)
+        count = self.request.query_params['count']
+        self.pagination_class.page_size = count
+        queryset = queryset.filter(talent_active__is_active=True)[:int(count)]
         return queryset
 
     def list(self, request, *args, **kwargs):
