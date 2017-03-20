@@ -404,6 +404,7 @@ class TalentSearch(View):
     def get(self, request):
         es = Elasticsearch()
         term = request.GET['term']
+        term = term.strip('"')
         query = TERM_QUERY
         if term:
             term_query = json.dumps(query)
