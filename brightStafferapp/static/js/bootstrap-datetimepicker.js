@@ -553,9 +553,10 @@
 			var offset = this.component ? this.component.parent().offset() : this.element.offset();
 			var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(false);
 			var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
+			if(offset){
 			var left = offset.left,
 				top = offset.top;
-
+                }
 			this.picker.removeClass(
 				'datepicker-orient-top datepicker-orient-bottom '+
 				'datepicker-orient-right datepicker-orient-left'
@@ -571,9 +572,9 @@
 			else {
 				// Default to left
 				this.picker.addClass('datepicker-orient-left');
-				if (offset.left < 0)
+				if (offset && offset.left < 0)
 					left -= offset.left - visualPadding;
-				else if (offset.left + calendarWidth > windowWidth)
+				else if (offset && offset.left + calendarWidth > windowWidth)
 					left = windowWidth - calendarWidth - visualPadding;
 			}
 
@@ -581,7 +582,7 @@
 			// decision based on which shows more of the calendar
 			var yorient = this.o.orientation.y,
 				top_overflow, bottom_overflow;
-			if (yorient === 'auto'){
+			if (yorient === 'auto' && offset){
 				top_overflow = -scrollTop + offset.top - calendarHeight;
 				bottom_overflow = scrollTop + windowHeight - (offset.top + height + calendarHeight);
 				if (Math.max(top_overflow, bottom_overflow) === bottom_overflow)

@@ -1313,7 +1313,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $scope.phonePattern = /^(?!0+$)\d{8,}$/;
      $scope.candidateInfo= {};
      $scope.projectName ;
-     $scope.projectSelect ;
+     //$scope.projectSelect ;
      $scope.filterStage;
      $scope.stage = {
                      stage: '',
@@ -1324,6 +1324,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                      isStage:false,
                      stagesCard:$rootScope.talentAllStages
                      };
+     $scope.isStage = false;
+     $scope.isProject = false;
+     $scope.isDate = false;
+     $scope.isDetail = false;
+     $scope.isNotes = false;
      $scope.filterValue = {
                         //stage:'Select Stage',
                         project:'',
@@ -1339,10 +1344,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         active:''
                         };
 
-//
+
 
      $scope.hideMessages = function(formName){ /*Hide error messages when user interact with fieds*/
-     console.log(formName);
      $('#name-required').addClass('ng-hide');
      $scope.isName = false;
            $('#'+formName+ 'input').each(function(){
@@ -1354,6 +1358,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 }
                });
     }
+
      $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {    // table responsiveness initialization after data render
           $(".select-arrow").selectbox();
           $('#export').change(function() {
@@ -1562,7 +1567,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#add-talent-btn').removeClass('disabled');
         $('#add-talent-btn').css('pointer-events','');
         $('.selectpicker').selectpicker();
-        //$('#projectListD :selected').text('');
+        if(callFrom == 'profile'){
+            //$('.dropdown-toggle').attr('title','Select Project');
+            //$('.filter-option').text('Select Project');
+            //$('.inner').find('li').removeAttr('class');
+           // $('.dropdown-menu').val('');
+           $("#projectListD").val('').selectpicker('refresh');
+            }
         $scope.projectRequired = false;
         $('#proj_required').addClass('ng-hide');
         $('#add-project').modal('show');
@@ -1571,7 +1582,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.addToProject = function(projectDD , callFrom){
         var selectedProjectId ;
         var talent = [];
-        console.log(projectDD)
         if(projectDD == undefined){
          $scope.projectRequired = true;
          $('#proj_required').removeClass('ng-hide');
@@ -1623,6 +1633,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                   setTimeout(function () {
                         $('#projectSuccess').css('display','none');
                     }, 2000);
+                  }else if(callFrom == 'profile'){
+                      $('#add-project').modal('hide');
+                      $('html, body').animate({ scrollTop: 0 }, 'fast');
+                      $('#projectSuccess').css('display','block');
+                      setTimeout(function () {
+                            $('#projectSuccess').css('display','none');
+                        }, 2000);
+                        for(var i =0;i<response.length;i++){
+                            if(response[i].id == $scope.currentTalentId){
+                                $rootScope.talentDetails = response[i];
+                                sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
+                            }
+                        }
+                        $('.selectpicker').selectpicker();
+
                   }
              });
 
@@ -1730,8 +1755,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.showEdit = function(talentEmail){
       $scope.isEmailAdd = false;
+      $scope.isContactEditable = false;
+      $scope.isContactAdd = false;
       if(!$scope.isEmailEditable){
-        $scope.candidateEmail = talentEmail[0].email;
+        $scope.candidateInfo.candidateEmail = talentEmail[0].email;
          $scope.isEmailEditable = true;
       }else if($scope.isEmailEditable){
         $scope.isEmailEditable = false;
@@ -1740,6 +1767,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.showAdd = function(){
       $scope.isEmailEditable = false;
+      $scope.isContactEditable = false;
+      $scope.isContactAdd = false;
       if(!$scope.isEmailAdd){
          $scope.isEmailAdd = true;
       }else if($scope.isEmailAdd){
@@ -1749,8 +1778,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.showContactEdit = function(talentContact){
       $scope.isContactAdd = false;
+      $scope.isEmailEditable = false;
+      $scope.isEmailAdd = false;
       if(!$scope.isContactEditable){
-       $scope.candidateContact = talentContact[0].contact;
+       $scope.candidateInfo.candidateContact = talentContact[0].contact;
          $scope.isContactEditable = true;
       }else if($scope.isContactEditable){
         $scope.isContactEditable = false;
@@ -1759,6 +1790,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.showContactAdd = function(){
       $scope.isContactEditable = false;
+      $scope.isEmailEditable = false;
+      $scope.isEmailAdd = false;
       if(!$scope.isContactAdd){
          $scope.isContactAdd = true;
       }else if($scope.isContactAdd){
@@ -1767,7 +1800,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.reverse = false;
-   $scope.sortBy = function(propertyName) {                   // filed sorting functionality in all project view
+    $scope.sortBy = function(propertyName) {                   // filed sorting functionality in all project view
         $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
         $scope.propertyName = propertyName;
         if($scope.reverse == false){
@@ -1803,7 +1836,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.candidateEmailAdd = '';
         $scope.candidateContact = '';
         $scope.candidateContactAdd = '';*/
-      $scope.candidateInfo= {};
       $scope.isEmailEditable = false;
      $scope.isEmailAdd = false;
      $scope.isContactEditable = false;
@@ -1824,6 +1856,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.closeCandidateInfo = function(){
+     $scope.candidateInfo = {};
      $scope.isEmailEditable = false;
      $scope.isEmailAdd = false;
      $scope.isContactEditable = false;
@@ -1838,7 +1871,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
      $('#update_email').css('pointer-events','');
      $('#add_contact').css('pointer-events','');
      $('#add_email').css('pointer-events','');
-
      $('#contact-info').modal('hide');
     }
 
@@ -1852,7 +1884,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
 
-      $scope.updateTalentEmail = function(id , oldEmail , candidateEmail){
+    $scope.updateTalentEmail = function(id , oldEmail , candidateEmail){
         console.log(candidateEmail);
        if(candidateEmail){
             $('#update_email').addClass('disabled');
@@ -1867,6 +1899,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              function requestCallback(response) {
                   response = JSON.parse(response);
                   console.log(response);
+                  $scope.closeCandidateInfo();
                   //candidateEmail ='';
                   $('#emailUpdated').css('display','block');
                   setTimeout(function () {
@@ -1905,16 +1938,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
        }
     }
 
-    $scope.addContact = function(id , oldContact, candidateContact){
-    console.log(candidateContact);
-       if(candidateContact){
+    $scope.addContact = function(id , oldContact, candidateContactAdd){
+    console.log(candidateContactAdd);
+       if(candidateContactAdd){
             $('#add_contact').addClass('disabled');
             $('#add_contact').css('pointer-events','none');
             var formData = new FormData();
              formData.append('token', $rootScope.globals.currentUser.token);
              formData.append('recruiter', $rootScope.globals.currentUser.user_email);
              formData.append('talent_id', id);
-             formData.append('contact',candidateContact);
+             formData.append('contact',candidateContactAdd);
              talentApis.talentContact(formData, requestCallback);
              function requestCallback(response) {
                   response = JSON.parse(response);
@@ -1995,33 +2028,31 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             //console.log($scope.activePageNumber)
     }
 
-    /*function getPaginationData(){
-        if($scope.activePageNumber != undefined && $scope.recordCount){
-
-
-
-        }
-
-
-    }
-*/
 
     $scope.openAddStagePopup = function(id){
 
         //$('#datepicker').datepicker({});
-        $('#datepicker').datepicker({
-              format: "dd/mm/yyyy",
-            }).on('change', function(){
-                $('.datepicker').hide();
-            }).on('click', function(){
-
-            });
+        $scope.isStage = false;
+          $scope.isProject = false;
+          $scope.isDate = false;
+          $scope.isDetail = false;
+          $scope.isNotes = false;
 
         $('#projectListD2').change(function() {
+            $scope.hideValidation();
             var sbId =  $('#projectListD2').attr('sb');
             var selectedValue = $('#sbSelector_'+sbId).text();
-            $scope.stage.project = selectedValue;
+            if(selectedValue != 'Select Project')
+                $scope.stage.project = selectedValue;
             console.log($scope.stage.project);
+            });
+        $('#stageSelect').change(function() {
+            $scope.hideValidation();
+            var sbId =  $('#stageSelect').attr('sb');
+            var selectedValue = $('#sbSelector_'+sbId).text();
+            if(selectedValue != 'Select Stage')
+                $scope.stage.stage = selectedValue;
+            console.log($scope.stage.stage);
             });
         $('#add-stage').modal('show');
     }
@@ -2033,31 +2064,87 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
 
     function checkReqValidationForStage(form){
-        console.log($scope.stage);
-      if($scope.stage.stage == '')
-           $scope.isStage = true;
-      if($scope.stage.project == '')
-          $scope.isProject = true;
-      if($scope.stage.date == '')
-          $scope.isDate = true;
-      if($scope.stage.detail)
-          $scope.isDetail = true;
-       if($scope.stage.notes)
-          $scope.isNotes = true;
+       /*Show error on blank field when user submit*/
+            for(var key in $scope.stage){
+                if($scope.stage[key] == ''){
+                    if(key == 'stage')
+                      $scope.isStage = true;
+                    if(key == 'project')
+                      $scope.isProject = true;
+                    if(key == 'date')
+                      $scope.isDate = true;
+                    if(key == 'detail')
+                      $scope.isDetail = true;
+                    if(key == 'notes')
+                      $scope.isNotes = true;
+                }else if($scope.stage[key] != ''){
+                    if(key == 'stage')
+                      $scope.isStage = false;
+                    if(key == 'project')
+                      $scope.isProject = false;
+                    if(key == 'date')
+                      $scope.isDate = false;
+                    if(key == 'detail')
+                      $scope.isDetail = false;
+                    if(key == 'notes')
+                      $scope.isNotes = false;
+                }
+            }
     }
 
+    $scope.hideValidation = function($event){
+      var max = 50;
+      if($event){
+        if(($event.target.value.length > max) && ($event.target.name == "details"))
+                    $scope.detailMax = true;
+         else if(($event.target.value.length < max) && ($event.target.name == "details"))
+                    $scope.detailMax = false;
+        if(($event.target.value.length > max) && ($event.target.name == "notes"))
+                    $scope.noteMax = true;
+        else if(($event.target.value.length < max) && ($event.target.name == "notes"))
+                     $scope.noteMax = false;
+
+          $scope.isStage = false;
+          $scope.isProject = false;
+          $scope.isDate = false;
+          $scope.isDetail = false;
+          $scope.isNotes = false;
+
+      }else{
+        $scope.isStage = false;
+          $scope.isProject = false;
+          $scope.isDate = false;
+          $scope.isDetail = false;
+          $scope.isNotes = false;
+            $scope.$apply();
+      }
+    }
+
+    $scope.closeStageModal = function(){
+      var sbId =  $('#stageSelect').attr('sb');
+    var selectedValue = $('#sbSelector_'+sbId).text('Select Project');
+      $scope.stage.stage = selectedValue;
+    var sbId =  $('#projectListD2').attr('sb');
+    var selectedValue = $('#sbSelector_'+sbId).text('Select Project');
+         $scope.stage.project = selectedValue;
+      $('.select-date').datepicker({ dateFormat: "dd/mm/yyyy", changeMonth: true,
+            changeYear: true
+        }).val('');
+        $('#add-stage').modal('hide');
+                                    //$.datepicker._clearDate(this);
+    }
 
     $scope.addProjectStage = function(stage ){
      var selectedProjectId;
-     //if(checkReqValidationForStage('stageForm')){
-     var date = '';
+     var date = $('.select-date').val();
 
-    if($('.select-date').val())
-        var date = convertDate($('.select-date').val());
+        if(date)
+            $scope.stage.date = date;
 
-    $scope.stage.date = date;
 
-    console.log($scope.stage);
+     checkReqValidationForStage('stageForm');
+     if(!$scope.isStage && !$scope.isProject && !$scope.isDate && !$scope.isDetail && !$scope.isNotes){
+
         for(var i=0;i<$rootScope.allProjectList.length;i++)
                {
                  if($rootScope.allProjectList[i].project_name == $scope.stage.project.split('#')[1])
@@ -2082,21 +2169,30 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                             $scope.stage.stagesCard.push(response);
                             $scope.$apply();
                             $scope.stage = {
-                                     stage: 'Select Stage',
-                                     project: $rootScope.StagesProjectList[0],
+                                     stage: '',
+                                     project: '',
                                      details:'',
                                      notes:'',
                                      date:'',
                                      isStage:false,
                                      stagesCard:$rootScope.talentAllStages
                                      };
+                            var sbId =  $('#stageSelect').attr('sb');
+                            var selectedValue = $('#sbSelector_'+sbId).text('Select Project');
+                              $scope.stage.stage = selectedValue;
+                            var sbId =  $('#projectListD2').attr('sb');
+                            var selectedValue = $('#sbSelector_'+sbId).text('Select Project');
+                                 $scope.stage.project = selectedValue;
+
+                                 $('.select-date').datepicker({ dateFormat: "dd/mm/yyyy", changeMonth: true,
+                                        changeYear: true
+                                    }).val('');
                             sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                          }
                      }
               }
-
-             }
-        }
+          }
+      }
 
      function openDatePicker($event){
      var element = $event.target;
@@ -2226,8 +2322,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              var selectedValue = $('#filterStage :selected').text(); 
              var selectorId = $("#filterStage").attr('sb');
              $('#sbSelector_'+selectorId).text(selectedValue);
-
-
     }
 
 
