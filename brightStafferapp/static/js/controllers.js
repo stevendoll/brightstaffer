@@ -56,7 +56,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                          }
                           $rootScope.projectListView =  _.uniq($rootScope.projectListView, 'name');
                           $rootScope.StagesProjectList = _.uniq($rootScope.StagesProjectList, 'name');
-                          console.log($rootScope.projectListView);
+                         // console.log($rootScope.projectListView);
                           sessionStorage.removeItem('projectList');
 
                          sessionStorage.projectList = JSON.stringify($rootScope.projectListView);
@@ -278,14 +278,13 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                 'keyword':$rootScope.search.searchKeywords
                  };
                  searchApis.talentSearch(requestObject).then(function(response){
-                    if(response.hits.length > 0) {
+
                         $rootScope.talentList = [];
+                     if(response.hits.length > 0) {
                         for(var i=0;i<response.hits.length;i++){
                             $rootScope.talentList.push(response.hits[i]._source);
                         }
-                      }else{
-                        console.log('error');
-                    }
+                      }
                  });
           }
       }
@@ -1080,15 +1079,13 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
         }];
 
     $scope.xAxisTicksFunction = function(){
-        console.log('xAxisTicksFunction');
-        console.log(d3.svg.axis().ticks(d3.time.minutes, 5));
+
         return function(d){
             return d3.svg.axis().ticks(d3.time.minutes, 5);
         }
     };
 
     $scope.xAxisTickFormatFunction = function(){
-        console.log('xAxisTicksFunction');
         return function(d){
             return d3.time.format('%H:%M')(moment.unix(d).toDate());
         }
@@ -1388,8 +1385,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
 
     $scope.getSelectedRating = function (rating) {
-        console.log(rating);
-        console.log($rootScope.talentDetails.id);
+        //console.log(rating);
+       // console.log($rootScope.talentDetails.id);
         if(rating){
             var requestObject = {
             'id':$rootScope.talentDetails.id,   // password field value
@@ -1397,7 +1394,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              };
          talentApis.updateRatings(requestObject).then(function(response){
             if(response.message == "success") {
-              console.log(response);
+              console.log('success');
               }else{
                 console.log('error');
             }
@@ -1449,7 +1446,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
       }
 
       $scope.updateRecruiterName = function(name){             // function to fetch top 6 projects
-       console.log(name);
+       //console.log(name);
        if(name){
             $scope.recruiter.recruiterName = name;
             $('#nameUpdate').addClass('disabled');
@@ -1460,7 +1457,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              };
              talentApis.updateRecruiterName(requestObject).then(function(response){
                 if(response.message == "success") {
-                  console.log(response);
+                  //console.log(response);
                   $('html, body').animate({ scrollTop: 0 }, 'fast');
                  $('#edit-recruiter').modal('hide');
                  $('#nameSuccess').css('display','block');
@@ -1479,7 +1476,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
       }
 
       $scope.selectExportType = function(exportType){
-      console.log('asdasdasdasd');
+      //console.log('asdasdasdasd');
         console.log(exportType.value);
       }
 
@@ -1519,7 +1516,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };
          talentApis.getTalentAllStages(requestObject).then(function(response){
               $rootScope.talentAllStages = response.result;
-              console.log(response.result);
+              //console.log(response.result);
               $scope.stage.stagesCard = response.result;
               $state.go('talent.talent-profile','');
               $('html, body').animate({ scrollTop: 0 }, 'fast');
@@ -1618,7 +1615,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             'talent':talent
              };
              talentApis.addTalentsToProject(requestObject).then(function(response){
-                  console.log(response);
+                  //console.log(response);
                   if(!callFrom){
                   $rootScope.talentList = response;
                   $scope.choosenCandidates == [];
@@ -1678,7 +1675,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#talent-delete').css('pointer-events','none');
             $('#assignToProject').css('pointer-events','none');
        }
-                console.log($scope.choosenCandidates);
+                //console.log($scope.choosenCandidates);
     }
 
     $scope.selectAll = function() {
@@ -1885,7 +1882,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
 
     $scope.updateTalentEmail = function(id , oldEmail , candidateEmail){
-        console.log(candidateEmail);
+       // console.log(candidateEmail);
        if(candidateEmail){
             $('#update_email').addClass('disabled');
             $('#update_email').css('pointer-events','none');
@@ -1898,7 +1895,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              talentApis.addEmail(formData, requestCallback);
              function requestCallback(response) {
                   response = JSON.parse(response);
-                  console.log(response);
+                  //console.log(response);
                   $scope.closeCandidateInfo();
                   //candidateEmail ='';
                   $('#emailUpdated').css('display','block');
@@ -1912,7 +1909,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.addEmail = function(id , oldEmail, candidateEmailAdd){
-    console.log(candidateEmailAdd);
+    //console.log(candidateEmailAdd);
        if(candidateEmailAdd){
             $('#add_email').addClass('disabled');
             $('#add_email').css('pointer-events','none');
@@ -1924,7 +1921,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              talentApis.addEmail(formData, requestCallback);
              function requestCallback(response) {
                   response = JSON.parse(response);
-                  console.log(response);
+                 // console.log(response);
                   $scope.candidateEmailAdd = '';
                   $scope.closeCandidateInfo();
                   //candidateEmailAdd ='';
@@ -1939,7 +1936,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.addContact = function(id , oldContact, candidateContactAdd){
-    console.log(candidateContactAdd);
+    //console.log(candidateContactAdd);
        if(candidateContactAdd){
             $('#add_contact').addClass('disabled');
             $('#add_contact').css('pointer-events','none');
@@ -1951,7 +1948,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              talentApis.talentContact(formData, requestCallback);
              function requestCallback(response) {
                   response = JSON.parse(response);
-                  console.log(response);
+                  //console.log(response);
                   $scope.closeCandidateInfo();
                  // candidateContact ='';
                   $('#contactSuccess').css('display','block');
@@ -1965,7 +1962,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.updateContact = function(id , oldContact, candidateContactAdd){
-    console.log(candidateContactAdd);
+    //console.log(candidateContactAdd);
        if(candidateContactAdd){
             $('#update_contact').addClass('disabled');
             $('#update_contact').css('pointer-events','none');
@@ -1978,7 +1975,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
              talentApis.talentContact(formData, requestCallback);
              function requestCallback(response) {
                   response = JSON.parse(response);
-                  console.log(response);
+                 // console.log(response);
                   $scope.closeCandidateInfo();
                   //candidateContact = '';
                   $('#contactUpdated').css('display','block');
@@ -2008,7 +2005,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
       var next = $(".pagination li.next");
 
       pageItem.click(function() {
-      console.log(this.id);
+      //console.log(this.id);
         pageItem.removeClass("active");
         $(this).not(".prev,.next").addClass("active");
         $scope.activePageNumber = $('.pagination li.active').attr('id');
@@ -2044,7 +2041,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             var selectedValue = $('#sbSelector_'+sbId).text();
             if(selectedValue != 'Select Project')
                 $scope.stage.project = selectedValue;
-            console.log($scope.stage.project);
+           // console.log($scope.stage.project);
             });
         $('#stageSelect').change(function() {
             $scope.hideValidation();
@@ -2052,7 +2049,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             var selectedValue = $('#sbSelector_'+sbId).text();
             if(selectedValue != 'Select Stage')
                 $scope.stage.stage = selectedValue;
-            console.log($scope.stage.stage);
+           // console.log($scope.stage.stage);
             });
         $('#add-stage').modal('show');
     }
@@ -2211,10 +2208,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.isFilterChecked = true;
             $('.talent-search-icon').addClass('active');
             $('.selectpicker').selectpicker();
+            $(".rating li.filled").removeClass('filled');
             $('#filterStage').change(function(){
             var selectedValue = $('#filterStage :selected').text();
-            $scope.filterValue.stage = selectedValue;
-            console.log($scope.filterValue.stage);
+            if(selectedValue != 'Select Stage')
+                 $scope.filterValue.stage = selectedValue;
+           // console.log($scope.filterValue.stage);
             });
         }
         else if($scope.isFilterChecked){
@@ -2236,22 +2235,26 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.getfilterRating = function(rating){
         $scope.filterValue.rating = rating;
-           console.log($scope.filterValue);
+           //console.log($scope.filterValue);
     }
 
     $scope.filterData = function(){
-    console.log('filter');
-    console.log($scope.filterValue);
+    var  analysedDate = $('#analysed').val();
+    var lastContacted = $('#lastContacted').val();
+
 
     var selectedProjectId = '';
-    if($scope.filterValue.analysed)
-        $scope.filterValue.analysed = convertDate($scope.filterValue.analysed);
-    if($scope.filterValue.lastContacted)
-        $scope.filterValue.lastContacted = convertDate($scope.filterValue.lastContacted);
+    if(analysedDate)
+        $scope.filterValue.analysed = analysedDate;
+    if(lastContacted)
+        $scope.filterValue.lastContacted = lastContacted;
     if($scope.filterValue.stage == 'Select Stage')
         $scope.filterValue.stage = '';
     if($scope.filterValue.match.split('%')[0] == '0' )
         $scope.filterValue.match = '';
+     else{
+        $scope.filterValue.match = $scope.filterValue.match.split('%')[0];
+     }
     if($scope.filterValue.ordering == 'true'){
         $scope.filterValue.ordering = 'desc';
     }else if($scope.filterValue.ordering == 'false'){
@@ -2305,7 +2308,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         stage:'',
                         project: '',
                         match:'',
-                        rating:'1',
+                        rating:'',
                         lastContacted:'',
                         analysed:'',
                         company:'',
@@ -2315,13 +2318,18 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         ordering:'',
                         active:''
                         };
-             /*$('#projectSelect').selectpicker('val','');
-             $('#projectSelect').selectpicker('render');
-             $('#projectSelect').selectpicker('refresh');*/
              $('#filterStage').val('').prop('selectedIndex',0);
              var selectedValue = $('#filterStage :selected').text(); 
              var selectorId = $("#filterStage").attr('sb');
              $('#sbSelector_'+selectorId).text(selectedValue);
+             $("#projectSelect").val('').selectpicker('refresh');
+            // $("#ex3").slider("value", $("#ex3").slider("option", "min") );
+             $('.filter-input-date').datepicker({ dateFormat: "dd/mm/yyyy", changeMonth: true,
+                                        changeYear: true
+                                    }).val('');
+             $(".rating li.filled").removeClass('filled');
+             $('.radio-none').attr('checked',false);
+
     }
 
 
