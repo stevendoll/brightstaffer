@@ -11,6 +11,7 @@ from PIL import Image
 import os
 import uuid
 import textract
+from datetime import *
 
 STAGE_CHOICES = (('Contacted', 'Contacted'),
                  ('Replied', 'Replied'),
@@ -231,7 +232,11 @@ class TalentCompany(models.Model):
 
     @property
     def years_of_experience(self):
-        return (self.end_date - self.start_date).days / 365
+        if self.end_date and self.start_date:
+            return (self.end_date - self.start_date).days / 365
+        if self.start_date and not self.end_date:
+            return (datetime.now().date() - self.start_date).days / 365
+
 
     @property
     def get_start_date(self):
@@ -246,7 +251,6 @@ class TalentCompany(models.Model):
             return self.end_date.strftime('%d/%m/%Y')
         else:
             return "01/01/1900"
-
 
     def __str__(self):
         return str(self.talent.talent_name + " works at " + self.company.company_name)

@@ -1,4 +1,262 @@
+from django.conf import settings
+import requests
+import os
+from django.core.management import call_command
+
 term = "search_term"
+false = 'false'
+INDEX_NAME = 'haystack'
+BASE_URL = settings.HAYSTACK_CONNECTIONS['default']['URL']
+DELETE_QUERY = 'DELETE haystack'
+MAPPING_QUERY = {
+    "settings": {
+        "index": {
+            "number_of_shards": 4,
+            "number_of_replicas": 2
+        }
+    }
+}
+INDEX_MAPPING = {
+   "properties": {
+      "activation_date": {
+         "type": "date",
+         "format": "dd/mm/yyyy"
+      },
+      "create_date": {
+         "type": "date",
+         "format": "dd/mm/yyyy"
+      },
+      "current_location": {
+         "type": "text"
+      },
+      "designation": {
+         "type": "text"
+      },
+      "django_ct": {
+         "type": "keyword",
+         "include_in_all": false
+      },
+      "django_id": {
+         "type": "keyword",
+         "include_in_all": false
+      },
+      "id": {
+         "type": "text"
+      },
+      "industry_focus": {
+         "type": "text"
+      },
+      "industry_focus_percentage": {
+         "type": "text"
+      },
+      "linkedin_url": {
+         "type": "text"
+      },
+      "rating": {
+         "type": "text"
+      },
+      "recruiter": {
+         "type": "text"
+      },
+      "status": {
+         "type": "text"
+      },
+      "talent_company": {
+         "type": "nested",
+         "properties": {
+            "career_gap": {
+               "type": "long"
+            },
+            "company": {
+               "type": "text"
+            },
+            "designation": {
+               "type": "text"
+            },
+            "end_date": {
+               "type": "text"
+            },
+            "is_current": {
+               "type": "boolean"
+            },
+            "start_date": {
+               "type": "text"
+            },
+            "talent": {
+               "type": "text"
+            },
+            "years_of_experience": {
+               "type": "float"
+            }
+         }
+      },
+      "talent_concepts": {
+         "type": "nested",
+         "properties": {
+            "concept": {
+               "type": "text"
+            },
+            "date_created": {
+               "type": "text"
+            },
+            "match": {
+               "type": "text"
+            },
+            "talent": {
+               "type": "text"
+            }
+         }
+      },
+      "talent_contact": {
+         "type": "nested",
+         "properties": {
+            "contact": {
+               "type": "text"
+            },
+            "is_primary": {
+               "type": "boolean"
+            },
+            "talent": {
+               "type": "text"
+            }
+         }
+      },
+      "talent_education": {
+         "type": "nested",
+         "properties": {
+            "course": {
+               "type": "text"
+            },
+            "education": {
+               "type": "text"
+            },
+            "end_date": {
+               "type": "text"
+            },
+            "start_date": {
+               "type": "text"
+            },
+            "talent": {
+               "type": "text"
+            }
+         }
+      },
+      "talent_email": {
+         "type": "nested",
+         "properties": {
+            "email": {
+               "type": "text"
+            },
+            "is_primary": {
+               "type": "boolean"
+            },
+            "talent": {
+               "type": "text"
+            }
+         }
+      },
+      "talent_name": {
+         "type": "text"
+      },
+      "talent_project": {
+         "type": "nested",
+         "properties": {
+            "company_name": {
+               "type": "text"
+            },
+            "date_added": {
+               "type": "text"
+            },
+            "project": {
+               "type": "text"
+            },
+            "project_match": {
+               "type": "text"
+            },
+            "project_stage": {
+               "type": "text"
+            },
+            "rank": {
+               "type": "long"
+            },
+            "talent": {
+               "type": "text"
+            }
+         }
+      },
+      "talent_stages": {
+         "type": "nested",
+         "properties": {
+            "date_created": {
+               "type": "date",
+               "format": "dd/mm/yyyy"
+            },
+            "date_updated": {
+               "type": "date",
+               "format": "dd/mm/yyyy"
+            },
+            "details": {
+               "type": "text"
+            },
+            "notes": {
+               "type": "text"
+            },
+            "project": {
+               "type": "text"
+            },
+            "stage": {
+               "type": "text",
+               "analyzer": "keyword"
+            },
+            "talent": {
+               "type": "text"
+            }
+         }
+      },
+      "text": {
+         "type": "text"
+      }
+   }
+}
+
+
+def delete_index():
+    response = requests.delete(os.path.join(BASE_URL + INDEX_NAME))
+    if response.status_code == 200:
+        print("Index deleted with status code 200.")
+    else:
+        print("Error deleting index. Please check if index exists or not.")
+
+
+def create_index():
+    payload = MAPPING_QUERY
+    response = requests.put(os.path.join(BASE_URL, INDEX_NAME), json=payload)
+    if response.status_code == 200:
+        print("Index created with status code 200.")
+    else:
+        print("Error creating index. Please check if index exists or not.")
+
+
+def put_mapping():
+    payload = INDEX_MAPPING
+    response = requests.put(os.path.join(BASE_URL, INDEX_NAME, 'modelresult/_mapping'), json=payload)
+
+    if response.status_code == 200:
+        print("Index mapping updated with status code 200.")
+    else:
+        print("Error creating mapping. Please check if index exists or not.")
+
+
+def rebuild_search():
+    try:
+        delete_index()
+        create_index()
+        put_mapping()
+        call_command('update_index')
+    except Exception as e:
+        print("Process failed with following exception {}".format(e))
+
+
 TERM_QUERY = {"query": {
             "bool": {
                 "should": [
@@ -110,4 +368,4 @@ TERM_QUERY = {"query": {
                 ]
             }
         }
-        }
+}
