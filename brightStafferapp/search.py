@@ -171,7 +171,7 @@ INDEX_MAPPING = {
                "type": "text"
             },
             "project_match": {
-               "type": "text"
+               "type": "float"
             },
             "project_stage": {
                "type": "text"

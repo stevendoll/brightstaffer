@@ -86,6 +86,7 @@
     /*height: 156px !important;*/
     opacity: 0.97;
     padding: 0px 0px;
+    max-height: 300px;
 }
 .sbOptions li {
     padding: 0px;
