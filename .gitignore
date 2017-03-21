@@ -7,8 +7,7 @@
 *.csv
 .DS_Store
 .idea
-brightStaffer/settings.py
-brightStaffer/settings_dev.py
+brightStaffer/brightstaffer.ini
 venv/*
 *.txt
 media/*
