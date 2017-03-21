@@ -18,6 +18,8 @@ from django.db.models import Q
 from elasticsearch import Elasticsearch
 from datetime import date,datetime
 from .search import TERM_QUERY
+from django.conf import settings
+
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -404,7 +406,7 @@ def talent_validation(user_data):
 class TalentSearch(View):
 
     def get(self, request):
-        es = Elasticsearch()
+        es = Elasticsearch(hosts=[settings.HAYSTACK_CONNECTIONS['default']['URL']])
         term = request.GET.get('term', '')
         term = term.strip('"')
         query = TERM_QUERY
@@ -439,7 +441,7 @@ class TalentSearchFilter(View):
         return super(TalentSearchFilter, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        es = Elasticsearch()
+        es = Elasticsearch(hosts=[settings.HAYSTACK_CONNECTIONS['default']['URL']])
         rating = request.GET.get('rating', '')
         talent_company = request.GET.get('talent_company', '')
         project_match = request.GET.get('project_match', '')

@@ -9,6 +9,9 @@
 .idea
 brightStaffer/settings.py
 brightStaffer/settings_dev.py
+brightStaffer/settings_qa.py
+brightStaffer/settings_local.py
+brightStaffer/settings_staging.py
 venv/*
 *.txt
 media/*
