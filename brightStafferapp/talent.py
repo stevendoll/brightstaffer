@@ -1,22 +1,22 @@
-from brightStafferapp.models import Talent, Token, Company, User, Projects, TalentProject, TalentEmail, TalentContact, \
+from brightStafferapp.models import Talent, User, Projects, TalentProject, TalentEmail, TalentContact, \
     TalentStage, TalentRecruiter
-from brightStafferapp.serializers import TalentSerializer, ProjectSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer
+from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 from rest_framework.response import Response
-from django.views.generic import View
 from rest_framework import generics
-import json, re
+import json
+import re
 from brightStafferapp.util import required_post_params
 from brightStafferapp.views import user_validation
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import HttpResponse
 from django.db.models import Q
 from elasticsearch import Elasticsearch
-from datetime import date,datetime
+from datetime import datetime
 from .search import TERM_QUERY
 from django.conf import settings
 
@@ -65,7 +65,7 @@ class TalentList(generics.ListCreateAPIView):
         return response
 
 
-#Show Talent Profile API
+# Show Talent Profile API
 class TalentDetail(generics.RetrieveAPIView):
     queryset = Talent.objects.all()
     model = Talent
@@ -75,7 +75,8 @@ class TalentDetail(generics.RetrieveAPIView):
         queryset = super(TalentDetail, self).get_queryset()
         return queryset
 
-#Show Talent Email and Contact API
+
+# Show Talent Email and Contact API
 class TalentEmailContactAPI(generics.ListCreateAPIView):
     queryset = Talent.objects.all()
     serializer_class = TalentContactEmailSerializer
@@ -92,7 +93,7 @@ class TalentEmailContactAPI(generics.ListCreateAPIView):
         return queryset
 
 
-#Show Talent Contact API
+# Show Talent Contact API
 class TalentContactAPI(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -182,7 +183,6 @@ class TalentEmailAPI(View):
 
     def delete(self, request):
         context = dict()
-        talent_obj = None
         email = request.GET['email']
         talent_id = request.GET['talent_id']
         talent_objs = Talent.objects.filter(id=talent_id)
@@ -209,8 +209,10 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
     queryset = Talent.objects.all()
     serializer_class = TalentSerializer
     http_method_names = ['get']
+
     def get_queryset(self):
         queryset = super(TalentProjectAddAPI, self).get_queryset()
+        talent_result = None
         project_id = self.request.query_params.get('project_id')
         recruiter = self.request.query_params.get('recruiter')
         # get projects instance to verify if project with project_id and recruiter exists or not
@@ -231,21 +233,19 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
         return talent_result
 
 
-
-# View Talent's Current stage for a sinlge project and Add Talent's stage for a single project
+# View Talent's Current stage for a single project and Add Talent's stage for a single project
 class TalentStageAddAPI(generics.ListCreateAPIView):
     queryset = TalentStage.objects.all()
     serializer_class = TalentProjectStageSerializer
-    http_method_names = ['get','post']
+    http_method_names = ['get', 'post']
 
     def get_queryset(self):
         queryset = super(TalentStageAddAPI, self).get_queryset()
         talent_id = self.request.query_params.get('talent_id')
         project_id = self.request.query_params.get('project_id')
         stage_id = self.request.query_params.get('stage_id')
-        queryset = queryset.filter(id=stage_id,talent_id=talent_id,project_id=project_id)
+        queryset = queryset.filter(id=stage_id, talent_id=talent_id, project_id=project_id)
         return queryset
-
 
     def post(self, request, *args, **kwargs):
         context = {}
@@ -255,7 +255,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         details = request.POST['details']
         notes = request.POST['notes']
         date = request.POST['date']
-        date=datetime.strptime(date,"%d/%m/%Y")
+        date = datetime.strptime(date, "%d/%m/%Y")
         projects = Projects.objects.filter(id=project)
         if not projects:
             return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project))
@@ -265,7 +265,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
         talent_obj = talent_objs[0]
         tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage,
-                                                            details=details, notes=notes,date_created=date)
+                                                            details=details, notes=notes, date_created=date)
         if created:
             context['talent_id']=tp_obj.talent.talent_name
             context['stage_id']=tp_obj.id
@@ -276,7 +276,8 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['create_date'] = tp_obj.get_date_created
             return util.returnSuccessShorcut(context)
         else:
-            return util.returnErrorShorcut(403, 'Talent stage and info is exist in database,Please create different stage' )
+            return util.returnErrorShorcut(403, 'Talent stage and info is exist in database, '
+                                                'Please create different stage')
 
 
 # Edit Talent's Stage
@@ -292,8 +293,8 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         stage = request.POST['stage']
         details = request.POST['details']
         notes = request.POST['notes']
-        stage_id=request.POST['id']
-        date=request.POST['date']
+        stage_id = request.POST['id']
+        date = request.POST['date']
         date = datetime.strptime(date, "%d/%m/%Y")
         projects = Projects.objects.filter(id=project)
         if not projects:
@@ -303,19 +304,21 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         if not talent_objs:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
         talent_obj = talent_objs[0]
-        stageid=TalentStage.objects.filter(id=stage_id)
+        stageid = TalentStage.objects.filter(id=stage_id)
         if not stageid:
             return util.returnErrorShorcut(404, 'Stage id {} is not exist in database'.format(stage_id))
         created = TalentStage.objects.filter(talent=talent_obj, project=project, stage=stage, details=details,
-                                                    notes=notes,date_created=date).exists()
+                                             notes=notes,date_created=date).exists()
         if created:
             return util.returnErrorShorcut(403,
                                            'Talent stage and info is exist in database,Please update the stage')
         else:
-            updated=TalentStage.objects.filter(id=str(stage_id)).update(stage=stage,details=details,notes=notes,date_created=date)
+            updated = TalentStage.objects.filter(id=str(stage_id)).update(stage=stage, details=details,
+                                                                          notes=notes, date_created=date)
             if updated:
                 context['message'] = 'success'
         return util.returnSuccessShorcut(context)
+
 
 # Delete Talent's project Stage
 class TalentStageDeleteAPI(generics.ListCreateAPIView):
@@ -328,24 +331,24 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
         id = request.GET['stage_id']
         talent_id = TalentStage.objects.filter(id=id)
         if not talent_id:
-            return util.returnErrorShorcut(403,'Stage id is not exist in the system')
-        is_deleted = TalentStage.objects.filter(id=id).delete()[0]
+            return util.returnErrorShorcut(403, 'Stage id is not exist in the system')
+        TalentStage.objects.filter(id=id).delete()
         return util.returnSuccessShorcut(context)
 
 
 # View All Talent's stages
 class TalentAllStageDetailsAPI(View):
 
-    def get(self,request):
+    def get(self, request):
 
-        talent_id = self.request.GET['talent_id']
-        talent_obj=Talent.objects.filter(id=talent_id)
+        talent_id = request.GET['talent_id']
+        talent_obj = Talent.objects.filter(id=talent_id)
         if not talent_obj:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
         queryset = TalentStage.objects.filter(talent=talent_obj)
-        talent_stage =[ ]
+        talent_stage = []
         for obj in queryset:
-            response = {}
+            response = dict()
             response['talent_id'] = obj.talent.talent_name
             response['stage_id'] = obj.id
             response['project'] = obj.project.project_name
@@ -354,14 +357,15 @@ class TalentAllStageDetailsAPI(View):
             response['notes'] = obj.notes
             response['create_date'] = obj.get_date_created
             talent_stage.append(response)
-        talent_stage_all={}
-        talent_stage_all['result']=talent_stage
+        talent_stage_all = dict()
+        talent_stage_all['result'] = talent_stage
         return util.returnSuccessShorcut(talent_stage_all)
 
 
 class TalentUpdateRank(View):
-    def get(self,request):
-        context={}
+
+    def get(self, request):
+        context = dict()
         talent = request.GET['talent_id']
         talent_objs = Talent.objects.filter(id=talent)
         if not talent_objs:
@@ -380,9 +384,10 @@ class DeleteTalent(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = super(DeleteTalent, self).get_queryset()
+        talent_result = None
         recruiter = self.request.query_params.get('recruiter')
         is_active = self.request.query_params.get('is_active')
-        talent_id_list = self.request.query_params.get('talent').split(',') #('talent[]')[0].split(',')
+        talent_id_list = self.request.query_params.get('talent').split(',')  # ('talent[]')[0].split(',')
 
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
@@ -426,6 +431,15 @@ class TalentSearch(View):
                                 )
                 return HttpResponse(json.dumps(res['hits']))
             else:
+                query = {
+                    "query": {
+                        "bool": {
+                            "should": {
+                                "match_all": {}
+                            }
+                        }
+                    }
+                }
                 res = es.search(index="haystack", doc_type="modelresult",
                                 body=query
                                 )
