@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import generics
 import json
 import re
-from brightStafferapp.util import required_post_params
+from brightStafferapp.util import required_post_params, require_get_params
 from brightStafferapp.views import user_validation
 from django.views.generic import View
 from django.utils.decorators import method_decorator
@@ -23,13 +23,13 @@ from django.conf import settings
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
-    page_size_query_param = 'page_size'
+    page_size_query_param = 'count'
     max_page_size = 10
 
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 100
-    page_size_query_param = 'page_size'
+    page_size_query_param = 'count'
     max_page_size = 1000
 
 
@@ -39,6 +39,7 @@ class TalentList(generics.ListCreateAPIView):
     pagination_class = LargeResultsSetPagination
     http_method_names = ['get']
 
+    @require_get_params(params=['recruiter', 'token', 'count'])
     def get(self, request, *args, **kwargs):
         result = user_validation(request.query_params)
         if not result:
@@ -48,9 +49,11 @@ class TalentList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = super(TalentList, self).get_queryset()
-        count = self.request.query_params['count']
-        self.pagination_class.page_size = count
-        queryset = queryset.filter(talent_active__is_active=True).order_by('-create_date')[:int(count)]
+        context = super(TalentList, self).get_serializer_context()
+        recruiter = context['request'].GET.get('recruiter', '')
+        if recruiter:
+            queryset = queryset.filter(Q(recruiter__username=recruiter) &
+                                       Q(talent_active__is_active=True)).order_by('-create_date')
         return queryset
 
     def list(self, request, *args, **kwargs):
