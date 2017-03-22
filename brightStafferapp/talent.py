@@ -431,6 +431,15 @@ class TalentSearch(View):
                                 )
                 return HttpResponse(json.dumps(res['hits']))
             else:
+                query = {
+                    "query": {
+                        "bool": {
+                            "should": {
+                                "match_all": {}
+                            }
+                        }
+                    }
+                }
                 res = es.search(index="haystack", doc_type="modelresult",
                                 body=query
                                 )
