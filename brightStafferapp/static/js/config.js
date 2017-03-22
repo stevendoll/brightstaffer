@@ -144,15 +144,15 @@ angular
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         var shouldLogin = toState.data.requireAuthentication !== undefined
             && toState.data.requireAuthentication;
-            $rootScope.talentAllStages ;
+           ///sessionStorage.removeItem('talentAllStages');
             if(sessionStorage.talentDetails)
                 $rootScope.talentDetails = JSON.parse(sessionStorage.talentDetails);
             if(sessionStorage.stageProjectList)
                 $rootScope.StagesProjectList = JSON.parse(sessionStorage.stageProjectList);
             if(sessionStorage.projectList)
                 $rootScope.projectListView = JSON.parse(sessionStorage.projectList);
-            if(sessionStorage.talentAllStages)
-                $rootScope.talentAllStages = JSON.parse(sessionStorage.talentAllStages)
+            if(sessionStorage.talentAllStages && sessionStorage.talentAllStages != "undefined")
+              $rootScope.talentAllStages = sessionStorage.talentAllStages;
          if($cookieStore.get('userData'))
             {
              $rootScope.globals.currentUser = $cookieStore.get('userData');

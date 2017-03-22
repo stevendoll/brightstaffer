@@ -18,6 +18,8 @@ from django.db.models import Q
 from elasticsearch import Elasticsearch
 from datetime import date,datetime
 from .search import TERM_QUERY
+from django.conf import settings
+
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -46,7 +48,9 @@ class TalentList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = super(TalentList, self).get_queryset()
-        queryset = queryset.filter(talent_active__is_active=True)
+        count = self.request.query_params['count']
+        self.pagination_class.page_size = count
+        queryset = queryset.filter(talent_active__is_active=True).order_by('-create_date')[:int(count)]
         return queryset
 
     def list(self, request, *args, **kwargs):
@@ -402,18 +406,32 @@ def talent_validation(user_data):
 class TalentSearch(View):
 
     def get(self, request):
-        es = Elasticsearch()
-        term = request.GET['term']
+        es = Elasticsearch(hosts=[settings.HAYSTACK_CONNECTIONS['default']['URL']])
+        term = request.GET.get('term', '')
+        term = term.strip('"')
         query = TERM_QUERY
-        if term:
-            term_query = json.dumps(query)
-            term_query = re.sub(r"\bsearch_term\b", term, term_query)
-            term_query = json.loads(term_query)
-            body = json.dumps(term_query)
-            res = es.search(index="haystack", doc_type="modelresult",
-                            body=body
-                            )
-            return HttpResponse(json.dumps(res['hits']))
+        res = {
+            "hits": [],
+            "max_score": "null",
+            "total": 0
+        }
+        try:
+            if term:
+                term_query = json.dumps(query)
+                term_query = re.sub(r"\bsearch_term\b", term, term_query)
+                term_query = json.loads(term_query)
+                body = json.dumps(term_query)
+                res = es.search(index="haystack", doc_type="modelresult",
+                                body=body
+                                )
+                return HttpResponse(json.dumps(res['hits']))
+            else:
+                res = es.search(index="haystack", doc_type="modelresult",
+                                body=query
+                                )
+                return HttpResponse(json.dumps(res['hits']))
+        except:
+            return HttpResponse(json.dumps(res))
 
 
 class TalentSearchFilter(View):
@@ -423,7 +441,7 @@ class TalentSearchFilter(View):
         return super(TalentSearchFilter, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        es = Elasticsearch()
+        es = Elasticsearch(hosts=[settings.HAYSTACK_CONNECTIONS['default']['URL']])
         rating = request.GET.get('rating', '')
         talent_company = request.GET.get('talent_company', '')
         project_match = request.GET.get('project_match', '')
