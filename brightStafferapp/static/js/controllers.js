@@ -260,7 +260,7 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
     }
 }
 
-function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location, searchApis , searchData){
+function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location, searchApis , talentApis, searchData){
     $rootScope.search = {};
     $rootScope.topSearch = false;
     this.logout = function(){
@@ -287,6 +287,18 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                         }
                       }
                  });
+          }else{
+              var data = {
+                token: $rootScope.globals.currentUser.token,       // username field value
+                recruiter: $rootScope.globals.currentUser.user_email,   // password field value
+                count: 10
+              }
+              talentApis.getAllTalents(data).then(function(response){
+                  $rootScope.talentList = response.talent_list;
+                  $scope.recruiter.recruiterName = response.display_name;
+                  $scope.totalTalentCount = response.count;
+                  $scope.talentCountEnd = response.talent_list.length;
+              });
           }
       }
     }
@@ -2188,7 +2200,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                                      $scope.stage.date ='';
                                      $scope.stage.isStage= false;
 
-                            $scope.stage.stagesCard.push(response);
+//                            $scope.stage.stagesCard.push(response);
+                            $scope.stage.stagesCard.unshift(response);
                             $scope.$apply();
                             var sbId =  $('#stageSelect').attr('sb');
                             var selectedValue = $('#sbSelector_'+sbId).text('Select Project');
