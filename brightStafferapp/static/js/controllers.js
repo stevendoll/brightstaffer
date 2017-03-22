@@ -293,7 +293,6 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                         $rootScope.talentList.push(response.hits[i]._source);
                     }
                 }
-
                 $rootScope.totalTalentCount = response.total;
                 $rootScope.talentCountEnd = $rootScope.talentList.length;
             });
@@ -1376,7 +1375,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.choosenCandidates = [];
     $scope.currentTalentId = '';
     //$scope.projectDD = $rootScope.projectListView[0];
-    $scope.talentCountStart = 1;
+    $rootScope.talentCountStart = 1;
     $rootScope.talentCountEnd = 0;
     $rootScope.totalTalentCount = 0;
     $scope.rating = 0;
@@ -2373,8 +2372,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         } else {
             $scope.filterValue.ordering = '';
         }
-        if ($scope.filterValue.active == undefined)
+        if (!$scope.filterValue.active){
             $scope.filterValue.active = '';
+        }else{
+            $scope.filterValue.active = JSON.parse($scope.filterValue.active);
+        }
 
         if (typeof ($scope.filterValue.project) != 'object')
             for (var i = 0; i < $rootScope.allProjectList.length; i++) {
@@ -2447,7 +2449,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('.radio-none').attr('checked', false);
 
     }
-
+    $scope.init = function(){
+        
+        $("#proj-stage-date-text").datepicker({
+            dateFormat: 'M d, yy'
+            , changeYear: true
+            , yearRange: '1900:' + new Date().getFullYear()
+            , yearRange: '1900:' + new Date().getFullYear()
+            , maxDate: new Date()
+            , beforeShow: function () {
+                $('.dob-box').append($('#ui-datepicker-div'));
+            }
+        });
+    }
+    
+    $scope.init();
 
 }
 
