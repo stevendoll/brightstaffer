@@ -9,12 +9,24 @@ INDEX_NAME = 'haystack'
 BASE_URL = settings.HAYSTACK_CONNECTIONS['default']['URL']
 DELETE_QUERY = 'DELETE haystack'
 MAPPING_QUERY = {
-    "settings": {
-        "index": {
-            "number_of_shards": 4,
-            "number_of_replicas": 2
-        }
-    }
+   "settings": {
+      "index": {
+         "number_of_shards": 4,
+         "number_of_replicas": 2
+      },
+      "analysis": {
+         "analyzer": {
+            "email_analyzer": {
+               "tokenizer": "my_tokenizer"
+            }
+         },
+         "tokenizer": {
+            "my_tokenizer": {
+               "type": "uax_url_email"
+            }
+         }
+      }
+   }
 }
 INDEX_MAPPING = {
    "properties": {
@@ -56,8 +68,9 @@ INDEX_MAPPING = {
          "type": "text"
       },
       "recruiter": {
-         "type": "text"
-      },
+          "type": "string",
+          "analyzer": "email_analyzer"
+        },
       "status": {
          "type": "text"
       },
@@ -256,116 +269,157 @@ def rebuild_search():
     except Exception as e:
         print("Process failed with following exception {}".format(e))
 
+EMPTY_QUERY = {
+            "hits": [],
+            "max_score": "null",
+            "total": 0
+        }
 
-TERM_QUERY = {"query": {
-            "bool": {
-                "should": [
-                    {
-                        "nested": {
-                            "path": "talent_company",
-                            "query": {
-                                "multi_match": {
-                                    "query": term,
-                                    "fields": [
-                                        "talent_company.company",
-                                        "talent_company.talent",
-                                        "talent_company.designation"
-                                    ]
-                                }
+BASE_QUERY = {
+    "query": {
+        "bool": {
+            "must": {
+                "match_all": {}
+            },
+            "filter": {
+                "bool": {
+                    "should": [],
+                    "must": [
+                        {
+                            "match": {
+                                "recruiter": "recruiter_term"
                             }
                         }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_project",
-                            "query": {
-                                "multi_match": {
-                                    "query": term,
-                                    "fields": [
-                                        "talent_project.project",
-                                        "talent_project.talent",
-                                        "talent_project.project_stage"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_concepts",
-                            "query": {
-                                "multi_match": {
-                                    "query": term,
-                                    "fields": [
-                                        "talent_concepts.concept",
-                                        "talent_concepts.match"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_education",
-                            "query": {
-                                "multi_match": {
-                                    "query": term,
-                                    "fields": [
-                                        "talent_education.education",
-                                        "talent_education.course"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_stages",
-                            "query": {
-                                "multi_match": {
-                                    "query": term,
-                                    "fields": [
-                                        "talent_stages.notes",
-                                        "talent_stages.details",
-                                        "talent_stages.project"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_email",
-                            "query": {
-                                "match": {
-                                    "talent_email.email": term
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "nested": {
-                            "path": "talent_contact",
-                            "query": {
-                                "match": {
-                                    "talent_contact.contact": term
-                                }
-                            }
-                        }
-                    },
-                    {
-                        "multi_match": {
-                            "query": term,
-                            "fields": [
-                                "talent_name",
-                                "designation",
-                                "company",
-                                "current_location",
-                                "industry_focus"
-                            ]
-                        }
-                    }
-                ]
+                    ]
+                }
             }
         }
+    }
+                }
+TERM_QUERY = {
+   "query": {
+      "bool": {
+         "must": {
+            "match_all": {}
+         },
+         "filter": {
+            "bool": {
+               "should": [
+                  {
+                     "nested": {
+                        "path": "talent_company",
+                        "query": {
+                           "multi_match": {
+                              "query": "search_term",
+                              "fields": [
+                                 "talent_company.company",
+                                 "talent_company.talent",
+                                 "talent_company.designation"
+                              ]
+                           }
+                        }
+                     }
+                  },
+                  {
+                     "nested": {
+                        "path": "talent_project",
+                        "query": {
+                           "multi_match": {
+                              "query": "search_term",
+                              "fields": [
+                                 "talent_project.project",
+                                 "talent_project.talent",
+                                 "talent_project.project_stage"
+                              ]
+                           }
+                        }
+                     }
+                  },
+                  {
+                     "nested": {
+                        "path": "talent_concepts",
+                        "query": {
+                           "multi_match": {
+                              "query": "search_term",
+                              "fields": [
+                                 "talent_concepts.concept",
+                                 "talent_concepts.match"
+                              ]
+                           }
+                        }
+                     }
+                  },
+                  {
+                     "nested": {
+                        "path": "talent_education",
+                        "query": {
+                           "multi_match": {
+                              "query": "search_term",
+                              "fields": [
+                                 "talent_education.education",
+                                 "talent_education.course"
+                              ]
+                           }
+                        }
+                     }
+                  },
+                  {
+                     "nested": {
+                        "path": "talent_stages",
+                        "query": {
+                           "multi_match": {
+                              "query": "search_term",
+                              "fields": [
+                                 "talent_stages.notes",
+                                 "talent_stages.details",
+                                 "talent_stages.project"
+                              ]
+                           }
+                        }
+                     }
+                  },
+                  {
+                     "nested": {
+                        "path": "talent_email",
+                        "query": {
+                           "match": {
+                              "talent_email.email": "search_term"
+                           }
+                        }
+                     }
+                  },
+                  {
+                     "nested": {
+                        "path": "talent_contact",
+                        "query": {
+                           "match": {
+                              "talent_contact.contact": "search_term"
+                           }
+                        }
+                     }
+                  },
+                  {
+                     "multi_match": {
+                        "query": "search_term",
+                        "fields": [
+                           "talent_name",
+                           "designation",
+                           "company",
+                           "current_location",
+                           "industry_focus"
+                        ]
+                     }
+                  }
+               ],
+               "must": [
+                  {
+                     "match": {
+                        "recruiter": "recruiter_term"
+                     }
+                  }
+               ]
+            }
+         }
+      }
+   }
 }

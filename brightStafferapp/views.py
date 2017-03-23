@@ -24,6 +24,7 @@ from rest_framework.response import Response
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from uuid import UUID
+from ResumeParser.main import create_resume
 import PyPDF2
 from PIL import Image
 import os
@@ -247,13 +248,14 @@ class AlchemyAPI(View):
             alchemy_language = AlchemyLanguageV1(api_key=Alchemy_api_key)
             data = json.dumps(
                 alchemy_language.combined(text=user_data['description'],
-                                          extract='entities,keywords', max_items=25))
+                                          extract='entities,keywords', max_items=40))
             d = json.loads(data)
+            print (d)
             Projects.objects.filter(id=project_id).update(description_analysis=d)
             for item in chain(d["keywords"], d["entities"]):
-                if round(float(item['relevance']), 2) >= concept_relevance:
+                if round(float(item['relevance']), 2) >= float(concept_relevance):
                     keyword_list.append(item['text'].lower())
-            return list(set(keyword_list))[:25]
+            return list(set(keyword_list))[:40]
         except Exception as e:
             return keyword_list
 

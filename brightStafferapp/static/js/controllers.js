@@ -618,7 +618,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     $scope.validateLocation = function (value) {
         $scope.patternError = false;
         var zip = /^(?!0{5})\d{5}$/;
-        var city = /((^[ A-Za-z-]*)|(^[a-zA-Z]+[-]*)|(^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+[0-9a-z]$/i;
+        var city = /^[ A-Za-z0-9-,]*$/;
         if (!isNaN(value) && value) {
             if (!zip.test(value)) {
                 $scope.patternError = true;
@@ -1394,7 +1394,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/; //email validation pattern
     $scope.phonePattern = /^(?!0+$)\d{10,}$/;
     $scope.candidateInfo = {};
-    $scope.projectName;
+    $scope.data={};
     //$scope.projectSelect ;
     $scope.filterStage;
     var stagesTemp = [];
@@ -1666,6 +1666,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.addToProject = function (projectDD, callFrom) {
         var selectedProjectId;
+        console.log($scope.data.projectName);
         var talent = [];
         if (projectDD == undefined) {
             $scope.projectRequired = true;
@@ -1757,10 +1758,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
+            $('#talent-delete').css('border-color', '#3680ca');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
+            $('#talent-delete').css('border-color', '');
             $('#assignToProject').css('pointer-events', 'none');
         }
         //console.log($scope.choosenCandidates);
@@ -1785,11 +1788,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
+            $('#talent-delete').css('border-color', '#3680ca');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
             $('#assignToProject').css('pointer-events', 'none');
+            $('#talent-delete').css('border-color', '');
         }
     }
 
@@ -2009,7 +2014,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.addEmail = function (id, oldEmail, candidateEmailAdd) {
-        //console.log(candidateEmailAdd);
         if (candidateEmailAdd) {
             $('#add_email').addClass('disabled');
             $('#add_email').css('pointer-events', 'none');
@@ -2358,8 +2362,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.filterData = function () {
-
-        console.log($scope.filterForm);
         var analysedDate = $('#analysed').val();
         var lastContacted = $('#lastContacted').val();
 
@@ -2417,7 +2419,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , 'ordering': $scope.filterValue.ordering
             , 'term': $rootScope.search.searchKeywords ? $rootScope.search.searchKeywords : ''
         };
-
         requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
         requestObject.project_match = parseInt(requestObject.project_match.split('')[0]) || '';
 
