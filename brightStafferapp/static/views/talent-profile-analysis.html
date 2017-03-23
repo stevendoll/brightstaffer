@@ -685,16 +685,16 @@
             <span class="msg-error" style="color:red;" ng-show="isDate">Required.</span>
           </div>
           <div class="form-group">
-            <textarea rows="2" class="form-control details" ng-model="stage.detail" name="details" placeholder="Enter Details" ng-maxlength="50" ng-keyup="hideValidation($event)"></textarea>
+            <textarea rows="2" class="form-control details" ng-model="stage.detail" name="details" placeholder="Enter Details" ng-keyup="hideValidation($event)"></textarea>
             <span class="msg-error" style="color:red;" ng-show="isDetail">Required.</span>
             <!--<span class="error"  style="color:red" ng-show="[[isDetailRequired]]">Required.</span>-->
-            <span class="msg-error" style='color:red' ng-show="detailMax">Your input is too long!</span>
+            <!--<span class="msg-error" style='color:red' ng-show="detailMax">Your input is too long!</span>-->
           </div>
           <div class="form-group">
-            <textarea rows="2" class="form-control details" ng-model="stage.notes"  name="notes" placeholder="Enter Notes" ng-maxlength="50" ng-keyup="hideValidation($event)"></textarea>
+            <textarea rows="2" class="form-control details" ng-model="stage.notes"  name="notes" placeholder="Enter Notes"  ng-keyup="hideValidation($event)"></textarea>
             <span class="msg-error" style="color:red;" ng-show="isNotes">Required.</span>
             <!--<span class="error"  style="color:red" ng-show="[[isNotesRequired]]">Required.</span>-->
-            <span class="msg-error" style='color:red' ng-show="noteMax">Your input is too long!</span>
+            <!--<span class="msg-error" style='color:red' ng-show="noteMax">Your input is too long!</span>-->
           </div>
           <div class="cls"></div>
           <button type="" class="btn add-stage" ng-click="addProjectStage(stage)" >Add Stage</button>
