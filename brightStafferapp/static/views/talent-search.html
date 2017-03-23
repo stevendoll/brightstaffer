@@ -72,7 +72,6 @@
                       <div class="form-group">
                         <label for="" class="filter-label-text">Project Match Percentage</label>
                         <div class="cls"></div>
-                          [[parseInt(filterValue.match.split('')[0])]]
                         <input type="text" class="form-control percentage-input-box" name="match" ng-model="filterValue.match" readonly>
                         <div class="range-slider-div" >
                           <span>0%</span>
@@ -116,7 +115,8 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Recruiter</label>
-                        <input type="email" class="form-control filter-input-box" name="recruiter_name"  placeholder="Enter Email" ng-model="filterValue.recruiter_name">
+                        <input type="email" class="form-control filter-input-box" name="recruiter_name"  placeholder="Enter Email" ng-model="filterValue.recruiter_name" ng-pattern="emailPattern">
+                        <span class="msg-error" style="color:red" ng-show="filterForm.recruiter_name.$error.pattern">Enter valid email!</span>
                       </div>
                     </div>
                     <div class="filter-stage-radiobox">

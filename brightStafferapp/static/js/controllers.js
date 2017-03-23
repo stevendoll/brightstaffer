@@ -2345,8 +2345,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.filterData = function () {
-        
-        console.log($scope.filterForm);
+
         var analysedDate = $('#analysed').val();
         var lastContacted = $('#lastContacted').val();
 
@@ -2406,7 +2405,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         };
         
         requestObject.active = requestObject.active == 'active' ? true : false;
-        requestObject.project_match = parseInt(requestObject.project_match.split('')[0]);
+        requestObject.project_match = parseInt(requestObject.project_match.split('%')[0]);
         
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
