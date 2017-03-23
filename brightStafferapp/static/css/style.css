@@ -247,7 +247,7 @@ h5 {
   float: left;
   height: 50px;
   padding: 0;
-  width: 200px;
+  width: 400px;
   display: block;
 }
 .navbar-form-custom .form-group {
@@ -1787,7 +1787,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   border: solid 1px #e7eaec;
   color: #000000;
   font-size: 13px;
-  padding: 8px 5px;
+  padding: 8px 4px;
   font-family: 'open_sansregular';
   text-align: center;
   float: left;
@@ -6743,6 +6743,9 @@ dd.project-people {
 .align-center h5 a.text-project {
   font-size: 18px;
   font-family: 'OpenSans-Bold';
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 @media (max-width: 992px) {
   .chat-users,
@@ -11445,6 +11448,7 @@ input[type="radio"] + label.radio-black {
   border: solid 1px #e7eaec;
   margin-top: 5px;
   position: relative;
+  margin-bottom: 15px;
 }
 
 .talent-srearch-check-panel {
@@ -11569,13 +11573,17 @@ input[type="radio"] + label.radio-black {
 }
 
 .talent-progress .progress .progress-bar span.text {
-  color: #252525;
-  font-size: 13px;
-  font-family: 'open_sansregular';
-  position: absolute;
-  left: 10px;
-  top: 2px;
-  width: auto;
+    color: #252525;
+    font-size: 13px;
+    font-family: 'open_sansregular';
+    position: absolute;
+    left: 10px;
+    top: 2px;
+    width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
 }
 
 .indus-focus {
