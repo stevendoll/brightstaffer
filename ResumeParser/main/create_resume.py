@@ -15,5 +15,8 @@ def create_resume(resumetext):
     data, original = raw_resume_to_data(resumetext)
     resume = build_resume(data, original, model, classifier_model, word_model)
     formated_resume = resume.get_templatized_resume()
+    #print (formated_resume['skills'])
     # print json.dumps(resume.get_templatized_resume())
-    return formated_resume
+    return formated_resume['skills']
+
+#print (create_resume(open(resume_file).read()))
