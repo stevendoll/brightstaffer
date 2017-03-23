@@ -1000,24 +1000,28 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                     , className: 'btn btn-default btn-sm'
                     , title: 'Copy'
                 }
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
                 
                 , {
                     extend: 'excel'
                     , className: 'btn btn-default btn-sm'
                     , title: 'Excel'
                 }
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
                 
                 , {
                     extend: 'print'
@@ -1847,6 +1851,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.showAdd = function () {
+        console.log($scope.addEmailForm);
         $scope.isEmailEditable = false;
         $scope.isContactEditable = false;
         $scope.isContactAdd = false;
@@ -1917,6 +1922,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.candidateEmailAdd = '';
         $scope.candidateContact = '';
         $scope.candidateContactAdd = '';*/
+
+        // form valid true
+        if ($scope.add_email) {
+            $scope.add_email.talentAddEmail.blur = false;
+        }
+        // form valid end
+
         $scope.isEmailEditable = false;
         $scope.isEmailAdd = false;
         $scope.isContactEditable = false;
@@ -2120,8 +2132,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
 
     $scope.openAddStagePopup = function (id) {
-        $scope.stage = {};
-        $('.select-date').val('');
+            $scope.stage = {};
+            $('.select-date').val('');
             //$('#datepicker').datepicker({});
             $scope.isStage = false;
             $scope.isProject = false;
@@ -2346,7 +2358,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.filterData = function () {
-        
+
         console.log($scope.filterForm);
         var analysedDate = $('#analysed').val();
         var lastContacted = $('#lastContacted').val();
@@ -2367,19 +2379,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if ($scope.filterValue.project == 'Select Project' || $scope.filterValue.project == undefined)
             $scope.filterValue.project = '';
 
-//        if ($scope.filterValue.ordering == 'true') {
-//            $scope.filterValue.ordering = 'desc';
-//        } else if ($scope.filterValue.ordering == 'false') {
-//            $scope.filterValue.ordering = 'asc';
-//        } else {
-//            $scope.filterValue.ordering = '';
-//        }
-        
-        if(!$scope.filterValue.ordering){
+        //        if ($scope.filterValue.ordering == 'true') {
+        //            $scope.filterValue.ordering = 'desc';
+        //        } else if ($scope.filterValue.ordering == 'false') {
+        //            $scope.filterValue.ordering = 'asc';
+        //        } else {
+        //            $scope.filterValue.ordering = '';
+        //        }
+
+        if (!$scope.filterValue.ordering) {
             $scope.filterValue.ordering = '';
         }
-        
-        if (!$scope.filterValue.active){
+
+        if (!$scope.filterValue.active) {
             $scope.filterValue.active = '';
         }
 
@@ -2405,10 +2417,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , 'ordering': $scope.filterValue.ordering
             , 'term': $rootScope.search.searchKeywords ? $rootScope.search.searchKeywords : ''
         };
-        
+
         requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
         requestObject.project_match = parseInt(requestObject.project_match.split('')[0]) || '';
-        
+
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
             if (response.hits.length > 0) {
@@ -2457,20 +2469,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('.radio-none').attr('checked', false);
 
     }
-    $scope.init = function(){
-        
-//        $("#proj-stage-date-text").datepicker({
-//            dateFormat: 'M d, yy'
-//            , changeYear: true
-//            , yearRange: '1900:' + new Date().getFullYear()
-//            , yearRange: '1900:' + new Date().getFullYear()
-//            , maxDate: new Date()
-//            , beforeShow: function () {
-//                $('.dob-box').append($('#ui-datepicker-div'));
-//            }
-//        });
+    $scope.init = function () {
+
+        //        $("#proj-stage-date-text").datepicker({
+        //            dateFormat: 'M d, yy'
+        //            , changeYear: true
+        //            , yearRange: '1900:' + new Date().getFullYear()
+        //            , yearRange: '1900:' + new Date().getFullYear()
+        //            , maxDate: new Date()
+        //            , beforeShow: function () {
+        //                $('.dob-box').append($('#ui-datepicker-div'));
+        //            }
+        //        });
     }
-    
+
     $scope.init();
 
 }
