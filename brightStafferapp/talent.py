@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import generics
 import json
 import re
-from brightStafferapp.util import required_post_params, require_get_params
+from brightStafferapp.util import required_post_params, required_get_params, required_headers
 from brightStafferapp.views import user_validation
 from django.views.generic import View
 from django.utils.decorators import method_decorator
@@ -17,8 +17,9 @@ from django.shortcuts import HttpResponse
 from django.db.models import Q
 from elasticsearch import Elasticsearch
 from datetime import datetime
-from .search import TERM_QUERY
+from .search import TERM_QUERY, BASE_QUERY, EMPTY_QUERY
 from django.conf import settings
+import copy
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -39,7 +40,7 @@ class TalentList(generics.ListCreateAPIView):
     pagination_class = LargeResultsSetPagination
     http_method_names = ['get']
 
-    @require_get_params(params=['recruiter', 'token', 'count'])
+    @required_get_params(params=['recruiter', 'token', 'count'])
     def get(self, request, *args, **kwargs):
         result = user_validation(request.query_params)
         if not result:
@@ -411,58 +412,62 @@ def talent_validation(user_data):
         return True
 
 
-class TalentSearch(View):
+class TalentSearch(generics.ListCreateAPIView):
+    serializer_class = TalentSerializer
 
-    def get(self, request):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(TalentSearch, self).dispatch(request, *args, **kwargs)
+
+    @required_headers(params=['HTTP_TOKEN', 'HTTP_RECRUITER'])
+    def get(self, request, *args, **kwargs):
         es = Elasticsearch(hosts=[settings.HAYSTACK_CONNECTIONS['default']['URL']])
         term = request.GET.get('term', '')
+        recruiter = request.META.get('HTTP_RECRUITER' '')
+        token = request.META.get('HTTP_TOKEN', '')
+        is_valid = user_validation(data={'recruiter': recruiter,
+                                         'token': token})
+        if not is_valid:
+            return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
         term = term.strip('"')
-        query = TERM_QUERY
-        res = {
-            "hits": [],
-            "max_score": "null",
-            "total": 0
-        }
         try:
             if term:
-                term_query = json.dumps(query)
-                term_query = re.sub(r"\bsearch_term\b", term, term_query)
-                term_query = json.loads(term_query)
-                body = json.dumps(term_query)
+                body = json.loads(re.sub(r"\brecruiter_term\b", recruiter,
+                                         re.sub(r"\bsearch_term\b", term, json.dumps(TERM_QUERY))))
                 res = es.search(index="haystack", doc_type="modelresult",
                                 body=body
                                 )
                 return HttpResponse(json.dumps(res['hits']))
             else:
-                query = {
-                    "query": {
-                        "bool": {
-                            "should": {
-                                "match_all": {}
-                            }
-                        }
-                    }
-                }
+                base_query = json.loads(re.sub(r"\brecruiter_term\b", recruiter, json.dumps(BASE_QUERY)))
                 res = es.search(index="haystack", doc_type="modelresult",
-                                body=query
+                                body=base_query
                                 )
                 return HttpResponse(json.dumps(res['hits']))
         except:
-            return HttpResponse(json.dumps(res))
+            return HttpResponse(json.dumps(EMPTY_QUERY))
 
 
-class TalentSearchFilter(View):
+class TalentSearchFilter(generics.ListCreateAPIView):
+    serializer_class = TalentSerializer
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(TalentSearchFilter, self).dispatch(request, *args, **kwargs)
 
-    def get(self, request):
+    @required_headers(params=['HTTP_TOKEN', 'HTTP_RECRUITER'])
+    def get(self, request, *args, **kwargs):
         es = Elasticsearch(hosts=[settings.HAYSTACK_CONNECTIONS['default']['URL']])
+        recruiter = request.META.get('HTTP_RECRUITER' '')
+        token = request.META.get('HTTP_TOKEN', '')
+        is_valid = user_validation(data={'recruiter': recruiter,
+                                         'token': token})
+        if not is_valid:
+            return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
+
         rating = request.GET.get('rating', '')
         talent_company = request.GET.get('talent_company', '')
         project_match = request.GET.get('project_match', '')
-        recruiter = request.GET.get('recruiter', '')
         concepts = request.GET.get('concepts', '')
         projects = request.GET.get('projects', '')
         stages = request.GET.get('stages', '')
@@ -472,21 +477,14 @@ class TalentSearchFilter(View):
         ordering = request.GET.get('ordering', '')
         is_active = request.GET.get('is_active', '')
 
-        query = {
-                  "query": {
-                    "bool": {
-                      "must": [
-                      ]
-                    }
-                  }
-                }
+        query = copy.deepcopy(BASE_QUERY)
         if date_added:
             date_added_query = {
                 "match": {
                     "create_date": date_added
                 }
             }
-            query['query']['bool']['must'].append(date_added_query)
+            query['query']['bool']['filter']['bool']['must'].append(date_added_query)
 
         if last_contacted:
             last_contacted_query = {
@@ -499,7 +497,7 @@ class TalentSearchFilter(View):
                     },
                 }
             }
-            query['query']['bool']['must'].append(last_contacted_query)
+            query['query']['bool']['filter']['bool']['must'].append(last_contacted_query)
         if stages:
             for stage in stages.split(','):
                 stage_query = {
@@ -515,7 +513,7 @@ class TalentSearchFilter(View):
                         }
                     }
                 }
-                query['query']['bool']['must'].append(stage_query)
+                query['query']['bool']['filter']['bool']['must'].append(stage_query)
 
         if projects:
             for project in projects.split(','):
@@ -532,7 +530,7 @@ class TalentSearchFilter(View):
                         }
                     }
                 }
-                query['query']['bool']['must'].append(project_query)
+                query['query']['bool']['filter']['bool']['must'].append(project_query)
         if concepts:
             for concept in concepts.split(','):
                 concepts_query = {
@@ -548,14 +546,14 @@ class TalentSearchFilter(View):
                         }
                     }
                 }
-                query['query']['bool']['must'].append(concepts_query)
+                query['query']['bool']['filter']['bool']['must'].append(concepts_query)
         if recruiter:
             recruiter_query = {
                 "match": {
-                    "recruiter": "chandanvarma2@gmail.com"
+                    "recruiter": recruiter
                 }
             }
-            query['query']['bool']['must'].append(recruiter_query)
+            query['query']['bool']['filter']['bool']['must'].append(recruiter_query)
         if project_match:
             project_match_query = {
                 "nested": {
@@ -569,7 +567,7 @@ class TalentSearchFilter(View):
                     "path": "talent_project"
                 }
             }
-            query['query']['bool']['must'].append(project_match_query)
+            query['query']['bool']['filter']['bool']['must'].append(project_match_query)
 
         if talent_company:
             talent_company_query = {
@@ -587,7 +585,7 @@ class TalentSearchFilter(View):
                     }
                 }
             }
-            query['query']['bool']['must'].append(talent_company_query)
+            query['query']['bool']['filter']['bool']['must'].append(talent_company_query)
 
         if rating:
             rating_query = {
@@ -595,7 +593,7 @@ class TalentSearchFilter(View):
                     "rating": rating
                 }
             }
-            query['query']['bool']['must'].append(rating_query)
+            query['query']['bool']['filter']['bool']['must'].append(rating_query)
         if ordering:
             query['sort'] = [
                                 {
@@ -617,7 +615,7 @@ class TalentSearchFilter(View):
                     "status": "Active"
                 }
             }
-            query['query']['bool']['must'].append(is_active_query)
+            query['query']['bool']['filter']['bool']['must'].append(is_active_query)
 
         if is_active:
                 if is_active == 'false':
@@ -626,45 +624,21 @@ class TalentSearchFilter(View):
                             "status": 'InActive'
                         }
                     }
-                    query['query']['bool']['must'].append(is_active_query)
+                    query['query']['bool']['filter']['bool']['must'].append(is_active_query)
 
         if term:
-            term_query = TERM_QUERY
-            term_query = json.dumps(term_query)
-            term_query = re.sub(r"\bsearch_term\b", term, term_query)
-            term_query = json.loads(term_query)
-            term_query = term_query['query']['bool']['should']
-            filtered_query = dict()
-            filtered_query['filter'] = dict()
-            filtered_query['filter']['bool'] = dict()
-            filtered_query['filter']['bool']['should'] = term_query
-            filtered_query['filter']['bool']['must'] = query['query']['bool']['must']
-            query = {
-                      "query": {
-                        "bool": {
-                          "must": {
-                            "match_all": {}
-                          }
-                        }
-                      }
-                    }
-            if ordering:
-                query['sort'] = [
-                    {
-                        "create_date": {
-                            "order": ordering
-                        }
-                    }
-                ]
-            if is_active and is_active == 'true':
-                query['sort'] = [
-                    {
-                        "activation_date": {
-                            "order": "desc"
-                        }
-                    }
-                ]
-            query['query']['bool'].update(filtered_query)
-        body = json.dumps(query)
-        res = es.search(index="haystack", doc_type="modelresult", body=body)
+            term_query = copy.deepcopy(TERM_QUERY)
+            term_query = json.loads(re.sub(r"\brecruiter_term\b", recruiter,
+                                           re.sub(r"\bsearch_term\b", term, json.dumps(term_query))))
+            query = json.loads(re.sub(r"\brecruiter_term\b", recruiter,
+                                      re.sub(r"\bsearch_term\b", term, json.dumps(query))))
+
+            term_query_should = term_query['query']['bool']['filter']['bool']['should']
+            term_query_must = term_query['query']['bool']['filter']['bool']['must']
+            term_query_must = json.loads(re.sub(r"\brecruiter_term\b", recruiter,  json.dumps(term_query_must)))
+            query['query']['bool']['filter']['bool']['must'].extend(term_query_must)
+            query['query']['bool']['filter']['bool']['should'].extend(term_query_should)
+        else:
+            query = json.loads(re.sub(r"\brecruiter_term\b", recruiter, json.dumps(query)))
+        res = es.search(index="haystack", doc_type="modelresult", body=query)
         return HttpResponse(json.dumps(res['hits']))
