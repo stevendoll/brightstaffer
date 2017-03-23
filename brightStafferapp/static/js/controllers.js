@@ -293,7 +293,6 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                         $rootScope.talentList.push(response.hits[i]._source);
                     }
                 }
-
                 $rootScope.totalTalentCount = response.total;
                 $rootScope.talentCountEnd = $rootScope.talentList.length;
             });
@@ -1001,24 +1000,28 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                     , className: 'btn btn-default btn-sm'
                     , title: 'Copy'
                 }
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
                 
                 , {
                     extend: 'excel'
                     , className: 'btn btn-default btn-sm'
                     , title: 'Excel'
                 }
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
                 
                 , {
                     extend: 'print'
@@ -1376,7 +1379,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.choosenCandidates = [];
     $scope.currentTalentId = '';
     //$scope.projectDD = $rootScope.projectListView[0];
-    $scope.talentCountStart = 1;
+    $rootScope.talentCountStart = 1;
     $rootScope.talentCountEnd = 0;
     $rootScope.totalTalentCount = 0;
     $scope.rating = 0;
@@ -1412,12 +1415,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.filterValue = {
         //stage:'Select Stage',
         project: ''
-        , match: ''
+        , match: '0%'
         , rating: ''
         , lastContacted: ''
         , analysed: ''
         , company: ''
-        , match: ''
         , concepts: ''
         , recruiter_name: ''
         , ordering: ''
@@ -1849,6 +1851,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.showAdd = function () {
+        console.log($scope.addEmailForm);
         $scope.isEmailEditable = false;
         $scope.isContactEditable = false;
         $scope.isContactAdd = false;
@@ -1919,6 +1922,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.candidateEmailAdd = '';
         $scope.candidateContact = '';
         $scope.candidateContactAdd = '';*/
+
+        // form valid true
+        if ($scope.add_email) {
+            $scope.add_email.talentAddEmail.blur = false;
+        }
+        // form valid end
+
         $scope.isEmailEditable = false;
         $scope.isEmailAdd = false;
         $scope.isContactEditable = false;
@@ -2122,7 +2132,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
 
     $scope.openAddStagePopup = function (id) {
-
+            $scope.stage = {};
+            $('.select-date').val('');
             //$('#datepicker').datepicker({});
             $scope.isStage = false;
             $scope.isProject = false;
@@ -2347,6 +2358,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.filterData = function () {
+
+        console.log($scope.filterForm);
         var analysedDate = $('#analysed').val();
         var lastContacted = $('#lastContacted').val();
 
@@ -2359,22 +2372,28 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined)
             $scope.filterValue.stage = '';
         if ($scope.filterValue.match.split('%')[0] == '0')
-            $scope.filterValue.match = '';
+            $scope.filterValue.match = '0%';
         else {
-            $scope.filterValue.match = $scope.filterValue.match.split('%')[0];
+            $scope.filterValue.match = $scope.filterValue.match.split('%')[0] || '0%';
         }
         if ($scope.filterValue.project == 'Select Project' || $scope.filterValue.project == undefined)
             $scope.filterValue.project = '';
 
-        if ($scope.filterValue.ordering == 'true') {
-            $scope.filterValue.ordering = 'desc';
-        } else if ($scope.filterValue.ordering == 'false') {
-            $scope.filterValue.ordering = 'asc';
-        } else {
+        //        if ($scope.filterValue.ordering == 'true') {
+        //            $scope.filterValue.ordering = 'desc';
+        //        } else if ($scope.filterValue.ordering == 'false') {
+        //            $scope.filterValue.ordering = 'asc';
+        //        } else {
+        //            $scope.filterValue.ordering = '';
+        //        }
+
+        if (!$scope.filterValue.ordering) {
             $scope.filterValue.ordering = '';
         }
-        if ($scope.filterValue.active == undefined)
+
+        if (!$scope.filterValue.active) {
             $scope.filterValue.active = '';
+        }
 
         if (typeof ($scope.filterValue.project) != 'object')
             for (var i = 0; i < $rootScope.allProjectList.length; i++) {
@@ -2398,6 +2417,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , 'ordering': $scope.filterValue.ordering
             , 'term': $rootScope.search.searchKeywords ? $rootScope.search.searchKeywords : ''
         };
+
+        requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
+        requestObject.project_match = parseInt(requestObject.project_match.split('')[0]) || '';
+
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
             if (response.hits.length > 0) {
@@ -2421,12 +2444,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.filterValue = {
             stage: ''
             , project: ''
-            , match: ''
+            , match: '0%'
             , rating: ''
             , lastContacted: ''
             , analysed: ''
             , company: ''
-            , match: ''
             , concepts: ''
             , recruiter_name: ''
             , ordering: ''
@@ -2447,7 +2469,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('.radio-none').attr('checked', false);
 
     }
+    $scope.init = function () {
 
+        //        $("#proj-stage-date-text").datepicker({
+        //            dateFormat: 'M d, yy'
+        //            , changeYear: true
+        //            , yearRange: '1900:' + new Date().getFullYear()
+        //            , yearRange: '1900:' + new Date().getFullYear()
+        //            , maxDate: new Date()
+        //            , beforeShow: function () {
+        //                $('.dob-box').append($('#ui-datepicker-div'));
+        //            }
+        //        });
+    }
+
+    $scope.init();
 
 }
 
