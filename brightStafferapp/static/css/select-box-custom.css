@@ -82,7 +82,7 @@
     top: 45px !important;
     width: 100%;
     z-index: 5;
-    overflow: auto !important;
+    /*overflow: auto !important;*/
     /*height: 156px !important;*/
     opacity: 0.97;
     padding: 0px 0px;

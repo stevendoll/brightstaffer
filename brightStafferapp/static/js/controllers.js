@@ -2120,7 +2120,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
 
     $scope.openAddStagePopup = function (id) {
-
+        $scope.stage = {};
+        $('.select-date').val('');
             //$('#datepicker').datepicker({});
             $scope.isStage = false;
             $scope.isProject = false;
@@ -2403,9 +2404,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , 'ordering': $scope.filterValue.ordering
             , 'term': $rootScope.search.searchKeywords ? $rootScope.search.searchKeywords : ''
         };
-        
-        requestObject.active = requestObject.active == 'active' ? true : false;
-        requestObject.project_match = parseInt(requestObject.project_match.split('%')[0]);
+        requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
+        requestObject.project_match = parseInt(requestObject.project_match.split('')[0]) || '';
         
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
@@ -2457,16 +2457,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.init = function(){
         
-        $("#proj-stage-date-text").datepicker({
-            dateFormat: 'M d, yy'
-            , changeYear: true
-            , yearRange: '1900:' + new Date().getFullYear()
-            , yearRange: '1900:' + new Date().getFullYear()
-            , maxDate: new Date()
-            , beforeShow: function () {
-                $('.dob-box').append($('#ui-datepicker-div'));
-            }
-        });
+//        $("#proj-stage-date-text").datepicker({
+//            dateFormat: 'M d, yy'
+//            , changeYear: true
+//            , yearRange: '1900:' + new Date().getFullYear()
+//            , yearRange: '1900:' + new Date().getFullYear()
+//            , maxDate: new Date()
+//            , beforeShow: function () {
+//                $('.dob-box').append($('#ui-datepicker-div'));
+//            }
+//        });
     }
     
     $scope.init();
