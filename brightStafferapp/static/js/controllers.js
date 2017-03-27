@@ -2426,7 +2426,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , 'term': $rootScope.search.searchKeywords ? $rootScope.search.searchKeywords : ''
         };
         requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
-        requestObject.project_match = parseInt(requestObject.project_match.split('')[0]) || '';
+        requestObject.project_match = parseInt(requestObject.project_match.split('%')[0]) || '';
 
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
