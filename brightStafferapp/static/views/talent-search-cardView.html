@@ -8,7 +8,7 @@
                   <div class="talentsearch-left-panel">
                     <div class="left-div"><div class="search-image"><img src="static/img/user-placeholder.png" alt=""></div></div>
                     <div class="search-result-panel right-div">
-                      <div class="search-result-name"><div class="search-name-head"  ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalize]]</span></div>
+                      <div class="search-result-name"><div class="search-name-head"  ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeAll]]</span></div>
                      <div class="search-result-info">[[talent.current_location | capitalizeWord]] <span></span> [[talent.industry_focus | capitalize]]</div>
                     </div>
 
@@ -76,26 +76,50 @@
                       </div>
                       <div class="talent-progress" ng-repeat="career in talent.talent_company | limitTo: 3">
                         <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[(career.years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
-                            <span class="text">[[career.company | capitalize]]</span>
-                            <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
-                          </div>
+                          <!--
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[(career.years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
+                                <span class="text">[[career.company | capitalize]]</span>
+                                <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
+                            </div>
+-->
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[(talent.talent_company[$index - 1].years_of_experience/calcTotal(talent.talent_company)) * 100]]%; background-color: #e4e4e4 !important;">
+                            </div>
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talent.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
+                            </div>
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[(career. years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
+                                <span class="text">[[career.company | capitalize]]</span>
+                                <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
+                            </div>
+
+
+
+
+<!--
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-if="$index - 1 >= 0" style="width:[[(talent.talent_company[$index - 1].years_of_experience/calcTotal(talent.talent_company)) * 100]]%; background-color: #e4e4e4 !important;">
+                            </div>
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-if="career.career_gap" style="width:[[(career.career_gap/calcTotal(talent.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
+                            </div>
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[(career. years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
+                                <span class="text">[[career.company | capitalize]]</span>
+                                <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
+                            </div>
+-->
+
+
                         </div>
                       </div>
                       <div class="cls"></div>
                       <div class="indus-focus">Industry Focus</div>
                       <div class="talent-progress">
                         <div class="progress">
-                          <!--<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[talent.industry_focus_percentage]]%;">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[talent.industry_focus_percentage]]%;">
                             <span class="text">[[talent.industry_focus | capitalize]]</span>
                             <span class="percentage">[[talent.industry_focus_percentage]]%</span>
-                          </div>-->
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-if="$index - 1 >= 0" style="width:[[(career[$index - 1].years_of_experience/calcTotal(talent.talent_company)) * 100]]%; background-color: #e4e4e4 !important;">   </div> 
-                          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-if="career.career_gap" style="width:[[(career.career_gap/calcTotal(talent.talent_company)) * 100]]%;background-color: #f9cb9c !important;">   </div> 
-                          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[(career. years_of_experience/calcTotal(talent.talent_company)) * 100]]%;"> 
-                            <span class="text">[[career.company | capitalize]]</span>     <span class="percentage">[[career.years_of_experience | number:2]] Years</span>  </div> 
+                          </div>
                         </div>
-                      </div>
                     </div>
                     <div class="top-concept-panel">
                       <div class="top-concept-text">Project Matches</div>

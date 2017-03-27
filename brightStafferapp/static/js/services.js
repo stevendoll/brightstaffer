@@ -460,15 +460,17 @@ function searchApis($rootScope, $http, REQUEST_URL) {
     return {
         talentSearch: function (data) {
             $rootScope.showLoader(true);
+            data.term = data.keyword;
+            delete data.keyword;
             return $http({
-                url: REQUEST_URL + 'talent_search/?term=' + data.keyword
+                url: REQUEST_URL + 'talent_search/'
                 , method: "GET", // or "get"
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                     'token': $rootScope.globals.currentUser.token,
                     'recruiter': $rootScope.globals.currentUser.user_email
                 }
-                , data: JSON.stringify(data)
+                , params: data
                 , dataType: 'json'
             , }).then(function (response) {
                 $rootScope.showLoader(false);
