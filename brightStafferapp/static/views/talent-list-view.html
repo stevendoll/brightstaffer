@@ -185,6 +185,9 @@
                          </table>
 
                       </div>
+<!--<pagination total-items="179" ng-model="currentPage" max-size="10" class="pagination-sm" boundary-links="true" rotate="false" num-pages="1" items-per-page="10"></pagination>-->
+    
+
                        <div class="search-pagination">
                                 <ul class="pagination">
                                   <li id="prev" class="prev">
@@ -192,7 +195,7 @@
                                       <span aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
                                     </a>
                                   </li>
-                                  <li id="1"><a href="">1</a></li>
+                                  <li id="1" ng-click="candidatePagination.page = 1;getcandidateData();"><a href="">1</a></li>
                                   <li id="2"><a href="">2</a></li>
                                   <li id="3"><a href="">3</a></li>
                                   <li id="4"><a href="">4</a></li>

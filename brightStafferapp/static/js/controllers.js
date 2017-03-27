@@ -277,12 +277,14 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         $state.go('login', '');
     }
 
-    this.getSearchData = function () {
+    $scope.getSearchData = function () {
         var currentState = $state.current.name;
         var allowedArray = ["talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
         if (allowedArray.indexOf(currentState) > -1) {
             var requestObject = {
-                'keyword': $rootScope.search.searchKeywords || ''
+                'keyword': $rootScope.search.searchKeywords || '',
+                page: $rootScope.candidatePagination.page,
+                count: $rootScope.candidatePagination.count
             };
             searchApis.talentSearch(requestObject).then(function (response) {
                 $rootScope.Filter = false;
@@ -297,6 +299,10 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                 $rootScope.talentCountEnd = $rootScope.talentList.length;
             });
         }
+    }
+
+    $rootScope.getCandidateData = function () {
+        $scope.getSearchData();
     }
 }
 
@@ -1001,12 +1007,16 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                     , title: 'Copy'
                 }
 
+
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
+
 
                 
                 , {
@@ -1015,12 +1025,16 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                     , title: 'Excel'
                 }
 
+
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
+
 
                 
                 , {
@@ -1394,7 +1408,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/; //email validation pattern
     $scope.phonePattern = /^(?!0+$)\d{10,}$/;
     $scope.candidateInfo = {};
-    $scope.data={};
+    $scope.data = {};
     //$scope.projectSelect ;
     $scope.filterStage;
     var stagesTemp = [];
@@ -1487,7 +1501,18 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
     }
 
+    $rootScope.candidatePagination = {
+        page: 1
+        , count: 10
+    }
+    $scope.getcandidateData = function () {
+        $rootScope.getCandidateData();
+    }
     $scope.changeState = function () {
+
+        $scope.candidatePagination.page = 1;
+        $scope.candidatePagination.count = 10;
+
         $scope.choosenCandidates = [];
         $scope.isFilterChecked = false;
         $('#selectall').prop('checked', false);
@@ -1655,10 +1680,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#add-talent-btn').css('pointer-events', '');
         $('.selectpicker').selectpicker();
         //if (callFrom == 'profile') {
-            //$('.dropdown-toggle').attr('title','Select Project');
-            //$('.filter-option').text('Select Project');
-            //$('.inner').find('li').removeAttr('class');
-            // $('.dropdown-menu').val('');
+        //$('.dropdown-toggle').attr('title','Select Project');
+        //$('.filter-option').text('Select Project');
+        //$('.inner').find('li').removeAttr('class');
+        // $('.dropdown-menu').val('');
 
         //}
         $("#projectListD").val('').selectpicker('refresh');
@@ -1668,7 +1693,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.addToProject = function (projectDD, callFrom) {
-        if(!projectDD){
+        if (!projectDD) {
             $scope.data.projectRequired = true;
             return;
         }
