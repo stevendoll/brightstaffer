@@ -11572,6 +11572,27 @@ input[type="radio"] + label.radio-black {
   width: auto;
 }
 
+table.dataTables > thead > tr > th:last-child {
+    border-bottom: 0px solid #ddd;
+}
+
+.mtop8 {
+  margin-top: 8px;
+}
+
+table.dataTable thead .sorting:last-child:after {
+    content: initial;
+}
+
+table.dataTables > tbody > tr > td {
+    border-top: 0px solid #e7eaec;
+    border-bottom: 1px solid #e7eaec;
+}
+
+table.dataTables > tbody > tr > td:last-child {
+    border-bottom: 0px solid #e7eaec;
+}
+
 .talent-progress .progress .progress-bar span.text {
     color: #252525;
     font-size: 13px;
