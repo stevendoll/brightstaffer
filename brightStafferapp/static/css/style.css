@@ -11562,6 +11562,13 @@ input[type="radio"] + label.radio-black {
     border-radius: 100px 100px 100px 100px;
 }
 
+.project-checkbox {
+  width: auto;
+  float: right;
+  margin-top: 10px;
+  margin-left: 5px;
+}
+
 .talent-progress .progress .progress-bar span.percentage {
   color: #3a3a3a;
   font-size: 13px;

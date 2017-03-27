@@ -1655,6 +1655,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.editRecruiter = function () {
         $scope.isName = false;
+        $('#name-required').addClass('ng-hide');
         $scope.data.recruiterNameInput = $scope.recruiter.recruiterName;
         $('#nameUpdate').removeClass('disabled');
         $('#nameUpdate').css('pointer-events', '');
@@ -2366,7 +2367,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.isFilterChecked = true;
             $('.talent-search-icon').addClass('active');
             $('.selectpicker').selectpicker();
-            $(".rating li.filled").removeClass('filled');
+            $("#rate_filter .rating li.filled").removeClass('filled');
             $('#filterStage').change(function () {
                 var selectedValue = $('#filterStage :selected').text();
                 if (selectedValue != 'Select Stage')
