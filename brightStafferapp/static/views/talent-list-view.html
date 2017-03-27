@@ -144,9 +144,10 @@
                              <tbody>
                                  <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">
                                      <td><a href="" class="tbl-link-td" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</a></td>
-                                     <td>[[talent.talent_company[0].designation | capitalize]]</td>
-                                     <td>[[talent.talent_company[0].company | capitalize]]</td>
+                                     <td>[[talent.talent_company[0].designation | capitalizeAll]]</td>
+                                     <td>[[talent.talent_company[0].company | capitalizeAll]]</td>
                                      <td ng-show="[[talent.talent_project.length > 0]]">[[talent.talent_project[0].project_stage]] </span></td>
+                                     <td ng-show="!talent.talent_project[0].project_stage">-</td>
                                      <td ng-show="[[talent.talent_project.length == 0]]"> N/A </span></td>
                                      <td ng-show="[[talent.talent_project.length > 0]]">
                                         <span class="dis-blc"> <a href="">#[[talent.talent_project[0].project]]</a> </span>
@@ -155,7 +156,7 @@
                                      <td ng-show="[[talent.talent_project.length == 0]]">
                                         <span class="dis-blc"> <a href=""> N/A </a> </span>
                                       </td>
-                                     <td>[[talent.talent_company[0].company | capitalize]]</td>
+                                     <td>[[talent.talent_company[0].company | capitalizeAll]]</td>
                                      <td>[[talent.talent_project[0].date_added | dateFormat]]</td>
                                      <td>[[talent.talent_project[0].date_added | dateFormat]]</td>
                                      <td>[[talent.recruiter]]</td>
