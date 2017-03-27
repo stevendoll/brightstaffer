@@ -437,8 +437,10 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                 url: REQUEST_URL + 'talent_search_filter/?talent_company=' + data.company + '&rating=' + data.rating + '&project_match=' + data.project_match + '&recruiter=' + data.recruiter + '&concepts=' + data.concepts + '&projects=' + data.projects + '&stages=' + data.stages + '&last_contacted=' + data.contacted + '&date_added=' + data.date + '&term=' + data.term + '&ordering='+ data.ordering + '&is_active=' + data.active
                 , method: "GET", // or "get"
                 headers: {
-                    'Content-Type': 'application/json; charset=utf-8'
-                , }
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'token': $rootScope.globals.currentUser.token,
+                    'recruiter': $rootScope.globals.currentUser.user_email
+                 }
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
@@ -465,7 +467,7 @@ function searchApis($rootScope, $http, REQUEST_URL) {
                     'Content-Type': 'application/json; charset=utf-8',
                     'token': $rootScope.globals.currentUser.token,
                     'recruiter': $rootScope.globals.currentUser.user_email
-                , }
+                }
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
