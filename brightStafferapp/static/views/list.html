@@ -36,13 +36,12 @@
                     <div class="col-sm-6 col-md-4 p-a-0 m-t input-group-sm small">
                         <div id="DataTables_Table_0_filter" class="dataTables_filter">
                             <label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="DataTables_Table_0"></label>
-
-                        <div class="checkbox-right-fx project-checkbox">
+                        </div>
+                        <div class="checkbox-right-fx mtop8">
                             <div class="checkbox">
-                              <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="" style="display:none;">
+                              <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
                               <label class="css-label" for="check_[[talent.id]]"></label>
                             </div>
-                        </div>
                         </div>
                     </div>
                          <div class="clear"></div>
@@ -67,7 +66,7 @@
                         <td>-</td>
                         <td>@[[globals.currentUser.first_name]].[[globals.currentUser.last_name]]</td>
                         <td>-</td>
-                        <td>[[projects.get_date | dateFormat]]</td>
+                        <td>[[projects.get_date]]</td>
                         <td>
                             <div class="checkbox-right-fx mtop8">
                                 <div class="checkbox">
