@@ -505,7 +505,7 @@
                 <option value="" data-tokens="" style="display: none;">Select Project</option>
                 <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
             </select>
-            <span id="proj_required" class="error msg-error"  ng-show="[[projectRequired]]">Required.</span>
+            <span id="proj_required" class="error msg-error"  ng-show="data.projectRequired && !data.projectName">Required.</span>
           </div>
           <div class="cls"></div>
           <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(data.projectName,'profile')">Add to Project</button>
