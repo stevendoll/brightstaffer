@@ -86,10 +86,14 @@
                       <div class="indus-focus">Industry Focus</div>
                       <div class="talent-progress">
                         <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[talent.industry_focus_percentage]]%;">
+                          <!--<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[talent.industry_focus_percentage]]%;">
                             <span class="text">[[talent.industry_focus | capitalize]]</span>
                             <span class="percentage">[[talent.industry_focus_percentage]]%</span>
-                          </div>
+                          </div>-->
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-if="$index - 1 >= 0" style="width:[[(career[$index - 1].years_of_experience/calcTotal(talent.talent_company)) * 100]]%; background-color: #e4e4e4 !important;">   </div> 
+                          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-if="career.career_gap" style="width:[[(career.career_gap/calcTotal(talent.talent_company)) * 100]]%;background-color: #f9cb9c !important;">   </div> 
+                          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[(career. years_of_experience/calcTotal(talent.talent_company)) * 100]]%;"> 
+                            <span class="text">[[career.company | capitalize]]</span>     <span class="percentage">[[career.years_of_experience | number:2]] Years</span>  </div> 
                         </div>
                       </div>
                     </div>
@@ -235,7 +239,7 @@
                 <option value="" data-tokens="" style="display: none;">Select Project</option>
                 <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
             </select>
-            <span id="proj_required" class="error msg-error"  ng-show="[[projectRequired]]">Required.</span>
+            <span id="proj_required" class="error msg-error"  ng-show="data.projectRequired && !data.projectName">Required.</span>
           </div>
           <div class="cls"></div>
           <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(data.projectName)">Add to Project</button>
