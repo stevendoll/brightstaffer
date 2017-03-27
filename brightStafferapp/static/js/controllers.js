@@ -1644,6 +1644,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.openProjectList = function (id, callFrom) {
+        $scope.data.projectName = '';
+        $scope.projectRequired = false;
         if (id) {
             $scope.currentTalentId = id;
         } else {
@@ -1659,12 +1661,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             // $('.dropdown-menu').val('');
             $("#projectListD").val('').selectpicker('refresh');
         }
-        $scope.projectRequired = false;
+        $scope.data.projectRequired = false;
         $('#proj_required').addClass('ng-hide');
         $('#add-project').modal('show');
     }
 
     $scope.addToProject = function (projectDD, callFrom) {
+        if(!projectDD){
+            $scope.data.projectRequired = true;
+            return;
+        }
         var selectedProjectId;
         console.log($scope.data.projectName);
         var talent = [];
