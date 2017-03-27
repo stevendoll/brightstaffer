@@ -315,7 +315,8 @@ function talentApis($rootScope, $http, REQUEST_URL) {
             }
         }
         xhr.send(formData);
-*/
+*/          
+            $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'talent_project_add/?talent_id[]=' + data.talent + '&recruiter=' + data.recruiter + '&token=' + data.token + '&project_id=' + data.project_id
                 , method: "GET", // or "get"
@@ -325,6 +326,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
+                $rootScope.showLoader(false);
                 return response.data;
             });
 
