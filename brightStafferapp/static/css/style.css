@@ -11559,7 +11559,7 @@ input[type="radio"] + label.radio-black {
 
 .talent-progress .progress .progress-bar {
     background-color: #c9daf8 !important;
-    border-radius: 0px 100px 100px 0px;
+    border-radius: 100px 100px 100px 100px;
 }
 
 .talent-progress .progress .progress-bar span.percentage {

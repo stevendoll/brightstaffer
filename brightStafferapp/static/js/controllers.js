@@ -1654,13 +1654,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#add-talent-btn').removeClass('disabled');
         $('#add-talent-btn').css('pointer-events', '');
         $('.selectpicker').selectpicker();
-        if (callFrom == 'profile') {
+        //if (callFrom == 'profile') {
             //$('.dropdown-toggle').attr('title','Select Project');
             //$('.filter-option').text('Select Project');
             //$('.inner').find('li').removeAttr('class');
             // $('.dropdown-menu').val('');
-            $("#projectListD").val('').selectpicker('refresh');
-        }
+
+        //}
+        $("#projectListD").val('').selectpicker('refresh');
         $scope.data.projectRequired = false;
         $('#proj_required').addClass('ng-hide');
         $('#add-project').modal('show');
@@ -1716,6 +1717,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $('#assignToProject').addClass('disabled-talent');
                     $('#assignToProject').css('pointer-events', 'none');
                     $('#talent-delete').css('pointer-events', 'none');
+                    $('#talent-delete').css('border-color', '');
                     $('#add-project').modal('hide');
                     $('html, body').animate({
                         scrollTop: 0
