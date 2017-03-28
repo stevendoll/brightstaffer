@@ -2448,7 +2448,7 @@ checkReqValidationForStage();
                             , changeMonth: true
                             , changeYear: true
                         }).val('');
-                        sessionStorage.talentAllStages = $scope.stage.stagesCard;
+                        sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                     }
                 }
             }
