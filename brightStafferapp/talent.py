@@ -232,9 +232,13 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
                 return util.returnErrorShorcut(403, 'Talent with id {} doesn\'t exist in database.'.format(talent_id))
             talent_obj = talent_objs[0]
             tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
+            talent_project_match(talent_obj)
             TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match="50", rank="3")
             talent_result = queryset.filter(talent_active__is_active=True)
         return talent_result
+
+def talent_project_match(talent_obj):
+    print ("hello")
 
 
 # View Talent's Current stage for a single project and Add Talent's stage for a single project
