@@ -24,7 +24,7 @@ from rest_framework.response import Response
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from uuid import UUID
-# from ResumeParser.core import create_resume
+from ResumeParser.core import create_resume
 import PyPDF2
 from PIL import Image
 import os
@@ -519,7 +519,7 @@ class FileUploadView(View):
         text = textract.process(file_upload_obj.file.path)
         file_upload_obj.text = text
         file_upload_obj.save()
-        skills=create_resume.create_resume(text)
+        skills=create_resume.create_resume(str(text))
         print (skills)
 
 def user_validation(data):
