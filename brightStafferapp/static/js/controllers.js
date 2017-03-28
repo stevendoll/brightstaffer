@@ -2,6 +2,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.topSixProjectList = []; // top six project list array
     $rootScope.allProjectList = []; // all project array
     $rootScope.totalProjectCount = 0;
+    $rootScope.recruiter = {};
     $rootScope.projectCountStart = 1;
     $rootScope.projectCountEnd = 0;
     $rootScope.paginationCounter = 1;
@@ -119,6 +120,7 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
                     var userData = {};
                     userData.first_name = response.first_name;
                     userData.last_name = response.last_name;
+                    //$rootScope.recruiter.recruiterName = response.first_name+ ' '+response.last_name;
                     userData.token = response.user_token;
                     userData.user_email = response.user_name;
                     $rootScope.globals.currentUser = userData; // storing the logged in user data for further communication on site
@@ -1429,7 +1431,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.recordCount = $scope.recordOptions[0];
     $scope.namePattern = /^[a-zA-Z\s]*$/;
     $rootScope.talentList = [];
-    $scope.recruiter = {};
+
     $scope.stagesName = {
         'Replied': 'fa-mail-reply'
         , 'Contacted': 'fa-phone'
@@ -1457,6 +1459,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.isContactEditable = false;
     $scope.isContactAdd = false;
     $scope.data = {};
+    $rootScope.recruiter.recruiterName = $rootScope.globals.currentUser.first_name + ' ' + $rootScope.globals.currentUser.last_name;
     $scope.isName = false;
     $scope.isEmail = false;
     $scope.isContact = false;
@@ -1618,12 +1621,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.updateRecruiterName = function (name) { // function to fetch top 6 projects
         //console.log(name);
         if (name) {
-            $scope.recruiter.recruiterName = name;
+            $rootScope.recruiter.recruiterName = name;
             $('#nameUpdate').addClass('disabled');
             $('#nameUpdate').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
-                'display_name': $scope.recruiter.recruiterName
+                'display_name': $rootScope.recruiter.recruiterName
             };
             talentApis.updateRecruiterName(requestObject).then(function (response) {
                 if (response.message == "success") {
@@ -1715,7 +1718,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.editRecruiter = function () {
         $scope.isName = false;
-        $scope.data.recruiterNameInput = $scope.recruiter.recruiterName;
+        $scope.data.recruiterNameInput = $rootScope.recruiter.recruiterName;
         $('#nameUpdate').removeClass('disabled');
         $('#nameUpdate').css('pointer-events', '');
         $('#recruiter-modal').modal('hide');
@@ -2617,7 +2620,9 @@ checkReqValidationForStage();
             , changeMonth: true
             , changeYear: true
         }).val('');
-        $(".rating li.filled").removeClass('filled');
+        //$("#ex3").slider('values', 0, 100);
+
+        $("#rate_filter li.filled").removeClass('filled');
         $('.radio-none').attr('checked', false);
 
     }
