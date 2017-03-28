@@ -1,7 +1,32 @@
-# Resume Creator
+import os
+
+dir_path = os.path.dirname(os.path.abspath(__file__))
+previous_path = os.path.split(dir_path)[0]
+
+
+# basepath = os.path.basename()
+# Keras training parameters
+keras_model_file = 'models/keras_lstm_trisent_3class_classifier.h5'
+keras_model_file = os.path.join(previous_path, keras_model_file)
+
+
+# Resume Creator parameters
+nltk_data_path = 'nltk_data'
+nltk_data_path = os.path.join(previous_path, nltk_data_path)
 word_model = "word2vec"
-model_file = "/Users/jademaddy/Desktop/brightstaffer/ResumeParser/models/resumevectors_4_0"
-classifier_model_file = "/Users/jademaddy/Desktop/brightstaffer/ResumeParser/models/resume_classifer-3-class_5_0.pkl"
-resume_file = '/Users/jademaddy/Desktop/brightstaffer/ResumeParser/resumes/resume-1.txt'
-skill_repo = '/Users/jademaddy/Desktop/brightstaffer/ResumeParser/skilldir/skill_token_updated_1.txt'
-ngram_model = '/Users/jademaddy/Desktop/brightstaffer/ResumeParser/models/ngram_3_0'
+model_file = "models/resumevectors_5_0"
+model_file = os.path.join(previous_path, model_file)
+classifier_model_file = "models/classifer-3-class_trisent_2_0.pkl"
+classifier_model_file = os.path.join(previous_path, classifier_model_file)
+skill_model_file = 'models/skill.pkl'
+skill_model_file = os.path.join(previous_path, skill_model_file)
+
+#N Gram model parameters
+ngram_model = 'models/ngram_3_0'
+ngram_model = os.path.join(previous_path, ngram_model)
+
+#Ner Tagger
+tagger_model_file = 'models/english.muc.7class.distsim.crf.ser.gz'
+tagger_model_file = os.path.join(previous_path, tagger_model_file)
+stanford_tagger_jar = 'models/stanford-ner.jar'
+stanford_tagger_jar = os.path.join(previous_path, stanford_tagger_jar)

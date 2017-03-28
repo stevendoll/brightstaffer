@@ -7,6 +7,8 @@ djangorestframework
 django-widget-tweaks
 elasticsearch==5.2.0
 gensim==1.0.0
+h5py
+keras
 Markdown==2.6.8
 nltk==3.2.2
 pillow==4.0.0
@@ -17,6 +19,7 @@ scipy==0.18.1
 simplejson
 sklearn==0.0
 smart-open==1.4.0
+tensorflow
 textract==1.5.0
 uuid==1.30
 watson-developer-cloud==0.22.0
