@@ -434,10 +434,11 @@ class TalentSearch(generics.ListCreateAPIView):
         if not is_valid:
             return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
         term = term.strip('"')
+        term_query = copy.deepcopy(TERM_QUERY)
         try:
             if term:
                 body = json.loads(re.sub(r"\brecruiter_term\b", recruiter,
-                                         re.sub(r"\bsearch_term\b", term, json.dumps(TERM_QUERY))))
+                                         re.sub(r"\bsearch_term\b", term, json.dumps(term_query))))
                 res = es.search(index="haystack", doc_type="modelresult",
                                 body=body
                                 )
