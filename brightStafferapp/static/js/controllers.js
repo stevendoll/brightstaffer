@@ -298,7 +298,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                 $rootScope.totalTalentCount = response.total;
                 $rootScope.talentCountEnd = $rootScope.talentList.length;
                 $rootScope.candidatePages = [];
-                for(var i=0;i<Math.ceil($rootScope.totalTalentCount/10);i++){
+                for(var i=0;i<Math.ceil($rootScope.totalTalentCount/$rootScope.candidatePagination.count);i++){
                     $rootScope.candidatePages.push({i: true});
                 }
             });
@@ -1508,15 +1508,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $rootScope.candidatePagination = {
         page: 1
-        , count: 10
+        , count: $scope.recordCount.value
     }
     $scope.getcandidateData = function () {
         $rootScope.getCandidateData();
     }
     $scope.changeState = function () {
 
-        $scope.candidatePagination.page = 1;
-        $scope.candidatePagination.count = 10;
+        $rootScope.candidatePagination.page = 1;
 
         $scope.choosenCandidates = [];
         $scope.isFilterChecked = false;
@@ -1538,26 +1537,31 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.getTalents = function (recordCount) { // function to fetch top 6 projects
-        if (recordCount) {
-            var count = recordCount;
-        } else {
-            var count = $scope.recordCount.value;
-        }
-        var requestObject = {
-            'token': $rootScope.globals.currentUser.token, // username field value
-            'recruiter': $rootScope.globals.currentUser.user_email, // password field value
-            'count': count
-        };
-        talentApis.getAllTalents(requestObject).then(function (response) {
-            if (response.message == "success") {
-                $rootScope.talentList = response.talent_list;
-                $scope.recruiter.recruiterName = response.display_name;
-                $rootScope.totalTalentCount = response.count;
-                $rootScope.talentCountEnd = response.talent_list.length;
-            } else {
-                console.log('error');
-            }
-        });
+        
+        $rootScope.candidatePagination.page = 1;
+        $rootScope.candidatePagination.count = parseInt(recordCount);
+        $scope.getcandidateData();
+        
+//        if (recordCount) {
+//            var count = recordCount;
+//        } else {
+//            var count = $scope.recordCount.value;
+//        }
+//        var requestObject = {
+//            'token': $rootScope.globals.currentUser.token, // username field value
+//            'recruiter': $rootScope.globals.currentUser.user_email, // password field value
+//            'count': count
+//        };
+//        talentApis.getAllTalents(requestObject).then(function (response) {
+//            if (response.message == "success") {
+//                $rootScope.talentList = response.talent_list;
+//                $scope.recruiter.recruiterName = response.display_name;
+//                $rootScope.totalTalentCount = response.count;
+//                $rootScope.talentCountEnd = response.talent_list.length;
+//            } else {
+//                console.log('error');
+//            }
+//        });
     }
 
     $scope.updateRecruiterName = function (name) { // function to fetch top 6 projects
@@ -2474,7 +2478,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 $rootScope.talentCountEnd = count;
                 
                 $rootScope.candidatePages = [];
-                for(var i=0;i<Math.ceil($rootScope.totalTalentCount/10);i++){
+                for(var i=0;i<Math.ceil($rootScope.totalTalentCount/$rootScope.candidatePagination.count);i++){
                     $rootScope.candidatePages.push({i: true});
                 }
                 
