@@ -28,6 +28,7 @@
                               <a class="btn btn-default buttons-print btn-sm" tabindex="0" aria-controls="DataTables_Table_0">
                                   <span>Print</span>
                               </a>
+                              <button ng-click="deleteProjects()">Delete Projects</button>
                           </div>
                       </div>
                     <div class="col-sm-6 col-md-4 p-a-0 m-t small text-muted text-center">
@@ -39,8 +40,8 @@
                         </div>
                         <div class="checkbox-right-fx mtop8">
                             <div class="checkbox">
-                              <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
-                              <label class="css-label" for="check_[[talent.id]]"></label>
+                              <input type="checkbox" id="projectCheckAll" ng-click="projectCheckAll()" class="css-checkbox" name="">
+                              <label class="css-label" for="projectCheckAll"></label>
                             </div>
                         </div>
                     </div>
@@ -70,8 +71,8 @@
                         <td>
                             <div class="checkbox-right-fx mtop8">
                                 <div class="checkbox">
-                                  <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
-                                  <label class="css-label" for="check_[[talent.id]]"></label>
+                                  <input type="checkbox" id="check_[[projects.id]]" ng-click="updateSelection(projects.id)" class="css-checkbox proj-checkbox" value="[[projects.id]]" name="">
+                                  <label class="css-label" for="check_[[projects.id]]"></label>
                                 </div>
                             </div>
                         </td>

@@ -146,16 +146,19 @@
                                      <td><a href="" class="tbl-link-td" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</a></td>
                                      <td>[[talent.talent_company[0].designation | capitalizeAll]]</td>
                                      <td>[[talent.talent_company[0].company | capitalizeAll]]</td>
-                                     <td ng-show="[[talent.talent_project.length > 0]]">[[talent.talent_project[0].project_stage]] </span></td>
-                                     <td ng-show="[[talent.talent_project.length == 0]]"> N/A </span></td>
+                                     <td><span ng-show="talent.talent_project.length && talent.talent_project[0].project_stage">[[talent.talent_project[0].project_stage]]</span>
+                                         <span ng-show="!talent.talent_project.length || !talent.talent_project[0].project_stage">   N/A   </span></td>
+                                     <!--<td ng-show="[[talent.talent_project.length > 0]] && !talent.talent_project[0].project_stage">-</span></td>-->
                                      <td ng-show="[[talent.talent_project.length > 0]]">
-                                        <span class="dis-blc"> <a href="">#[[talent.talent_project[0].project]]</a> </span>
-                                        <span class="dis-blc"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>
+                                        <span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].project"> <a href="">#[[talent.talent_project[0].project]]</a> </span>
+                                        <span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>
+                                         <span class="dis-blc" ng-show="!talent.talent_project.length || !talent.talent_project[0].project">  N/A  </span>
                                       </td>
-                                     <td ng-show="[[talent.talent_project.length == 0]]">
+                                     <!--<td ng-show="[[talent.talent_project.length == 0]]">
                                         <span class="dis-blc"> <a href=""> N/A </a> </span>
-                                      </td>
+                                      </td>-->
                                      <td>[[talent.talent_company[0].company | capitalizeAll]]</td>
+
                                      <td>[[talent.talent_project[0].date_added | dateFormat]]</td>
                                      <td>[[talent.talent_project[0].date_added | dateFormat]]</td>
                                      <td>[[talent.recruiter]]</td>
@@ -188,7 +191,7 @@
 <!--<pagination total-items="179" ng-model="currentPage" max-size="10" class="pagination-sm" boundary-links="true" rotate="false" num-pages="1" items-per-page="10"></pagination>-->
     
 
-                       <div class="search-pagination">
+                       <!--<div class="search-pagination">
                                 <ul class="pagination">
                                   <li id="prev" class="prev">
                                     <a href="" aria-label="Previous">
@@ -202,7 +205,7 @@
                                     </a>
                                   </li>
                                 </ul>
-                              </div>
+                              </div>-->
                   </div>
     </div>
 

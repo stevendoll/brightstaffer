@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept, PdfImages, FileUpload, Recruiter
 from brightStafferapp import util
-from brightStafferapp.util import require_post_params
+from brightStafferapp.util import require_post_params, required_headers
 from brightStaffer.settings import Alchemy_api_key
 from django.shortcuts import render, HttpResponse
 from itertools import chain
@@ -24,7 +24,7 @@ from rest_framework.response import Response
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from uuid import UUID
-from ResumeParser.main import create_resume
+# from ResumeParser.core import create_resume
 import PyPDF2
 from PIL import Image
 import os
@@ -358,23 +358,28 @@ class TopProjectList(generics.ListCreateAPIView):
         del (response.data['results'])
         return response
 
+
 class ProjectDelete(generics.ListCreateAPIView):
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
     http_method_names = ['get']
 
-    def get_queryset(self):
+    @required_headers(params=['HTTP_TOKEN', 'HTTP_RECRUITER'])
+    def get(self,request, *args, **kwargs):
+        param_dict = {}
         queryset = super(ProjectDelete, self).get_queryset()
-        recruiter = self.request.query_params.get('recruiter')
-        token = self.request.query_params.get('token')
-        project_id_list = self.request.query_params.get('project').split(',')  # ('talent[]')[0].split(',')
-
+        recruiter = request.META.get('HTTP_RECRUITER', '')
+        token = request.META.get('HTTP_TOKEN','')
+        values = Token.objects.filter(user__username=recruiter, key=token)
+        if not values:
+            return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
+        project_id_list = self.request.query_params.get('project').split(',')
         for project_id in project_id_list:
             talent_objs = Projects.objects.filter(id=project_id)
             if not talent_objs:
                 return util.returnErrorShorcut(403, 'Project with id {} dosen\'t exist in database.'.format(project_id))
             deleted = Projects.objects.filter(id=project_id).delete()
-        return queryset
+        return util.returnSuccessShorcut(param_dict)
 
 
 class UpdateRecruiter(View):

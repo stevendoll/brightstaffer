@@ -191,9 +191,10 @@ function getTopSixProjects($http, REQUEST_URL) {
     }
 }
 
-function getAllProjects($http, REQUEST_URL) {
+function getAllProjects($http, $rootScope, REQUEST_URL) {
     return {
         allProjects: function (data) {
+            $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'project_list/?recruiter=' + data.recruiter + '&token=' + data.token + '&count=' + data.count
                 , method: "GET", // or "get"
@@ -203,6 +204,7 @@ function getAllProjects($http, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
+                $rootScope.showLoader(false);
                 return response.data;
             });
         }
@@ -480,6 +482,25 @@ function searchApis($rootScope, $http, REQUEST_URL) {
     }
 }
 
+function tableService($rootScope, $http, REQUEST_URL, appService) {
+    return {
+        deleteProjects: function (data, callback) {
+            var param = {
+                url: REQUEST_URL + 'delete_projects/'
+                , method: "GET", 
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                    , 'token': $rootScope.globals.currentUser.token
+                    , 'recruiter': $rootScope.globals.currentUser.user_email
+                }
+                , params: data
+                , dataType: 'json'
+            }
+            appService.httpRequest(param, callback);
+        }
+    }
+}
+
 function searchData() {
     var talentList = [];
 
@@ -515,4 +536,5 @@ angular
     .service('paginationData', paginationData)
     .service('talentApis', talentApis)
     .service('searchApis', searchApis)
+    .service('tableService', tableService)
     .service('searchData', searchData);
