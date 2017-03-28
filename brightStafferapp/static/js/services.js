@@ -191,9 +191,10 @@ function getTopSixProjects($http, REQUEST_URL) {
     }
 }
 
-function getAllProjects($http, REQUEST_URL) {
+function getAllProjects($http, $rootScope, REQUEST_URL) {
     return {
         allProjects: function (data) {
+            $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'project_list/?recruiter=' + data.recruiter + '&token=' + data.token + '&count=' + data.count
                 , method: "GET", // or "get"
@@ -203,6 +204,7 @@ function getAllProjects($http, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
+                $rootScope.showLoader(false);
                 return response.data;
             });
         }
