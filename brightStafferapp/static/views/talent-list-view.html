@@ -147,6 +147,7 @@
                                      <td>[[talent.talent_company[0].designation | capitalizeAll]]</td>
                                      <td>[[talent.talent_company[0].company | capitalizeAll]]</td>
                                      <td ng-show="[[talent.talent_project.length > 0]]">[[talent.talent_project[0].project_stage]] </span></td>
+                                     <td ng-show="[[talent.talent_project.length > 0]] && !talent.talent_project[0].project_stage">-</span></td>
                                      <td ng-show="[[talent.talent_project.length == 0]]"> N/A </span></td>
                                      <td ng-show="[[talent.talent_project.length > 0]]">
                                         <span class="dis-blc"> <a href="">#[[talent.talent_project[0].project]]</a> </span>

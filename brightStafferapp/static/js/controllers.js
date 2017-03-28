@@ -2371,7 +2371,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.isFilterChecked = true;
             $('.talent-search-icon').addClass('active');
             $('.selectpicker').selectpicker();
-            $(".rating li.filled").removeClass('filled');
+            $("#rate_filter li.filled").removeClass('filled');
             $('#filterStage').change(function () {
                 var selectedValue = $('#filterStage :selected').text();
                 if (selectedValue != 'Select Stage')
