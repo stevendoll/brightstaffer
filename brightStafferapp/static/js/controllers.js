@@ -31,7 +31,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         });
     }
 
-    this.showAllProjects = function () {
+    $rootScope.showAllProjects = function () {
         $rootScope.paginationCounter = 1;
         var count = 10;
         if ($rootScope.countList) {
@@ -88,7 +88,6 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
             }
         });
     }
-
 
     this.removePopupBox = function () {
         $('#breakPopup').css('display', 'none');
@@ -914,8 +913,8 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
             project: ids
         };
         tableService.deleteProjects(data, function (response) {
-            console.log(response);
-        })
+            $rootScope.showAllProjects();
+        });
     }
 
     this.changePage = function ($event) { // pagination with previous and next button event handler
