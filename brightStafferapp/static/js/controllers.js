@@ -283,6 +283,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         var currentState = $state.current.name;
         var allowedArray = ["talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
         if (allowedArray.indexOf(currentState) > -1) {
+        $rootScope.filterReset();
             var requestObject = {
                 'keyword': $rootScope.search.searchKeywords || ''
                 , page: $rootScope.candidatePagination.page
@@ -2504,19 +2505,19 @@ checkReqValidationForStage();
     }
 
     $scope.filterData = function () {
-        var analysedDate = $('#analysed').val();
-        var lastContacted = $('#lastContacted').val();
+//        var analysedDate = $('#analysed').val();
+//        var lastContacted = $('#lastContacted').val();
 
 
         var selectedProjectId = '';
-        if (analysedDate){
+
 //            $scope.filterValue.analysed = analysedDate;
-            $scope.filterValue.analysed = $rootScope.formatDate(analysedDate);
-        }
-        if (lastContacted){
+            $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate(analysedDate) : '';
+
+
 //            $scope.filterValue.lastContacted = lastContacted;
-            $scope.filterValue.lastContacted = $rootScope.formatDate(lastContacted);
-        }
+            $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate(lastContacted) : '';
+
         if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined)
             $scope.filterValue.stage = '';
         if ($scope.filterValue.match.split('%')[0] == '0')
@@ -2595,7 +2596,7 @@ checkReqValidationForStage();
         });
     }
 
-    $scope.filterReset = function () {
+    $rootScope.filterReset = function () {
         $scope.filterValue = {
             stage: ''
             , project: ''
