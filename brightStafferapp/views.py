@@ -358,6 +358,24 @@ class TopProjectList(generics.ListCreateAPIView):
         del (response.data['results'])
         return response
 
+class ProjectDelete(generics.ListCreateAPIView):
+    queryset = Projects.objects.all()
+    serializer_class = ProjectSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        queryset = super(ProjectDelete, self).get_queryset()
+        recruiter = self.request.query_params.get('recruiter')
+        token = self.request.query_params.get('token')
+        project_id_list = self.request.query_params.get('project').split(',')  # ('talent[]')[0].split(',')
+
+        for project_id in project_id_list:
+            talent_objs = Projects.objects.filter(id=project_id)
+            if not talent_objs:
+                return util.returnErrorShorcut(403, 'Project with id {} dosen\'t exist in database.'.format(project_id))
+            deleted = Projects.objects.filter(id=project_id).delete()
+        return queryset
+
 
 class UpdateRecruiter(View):
     @method_decorator(csrf_exempt)
@@ -496,7 +514,8 @@ class FileUploadView(View):
         text = textract.process(file_upload_obj.file.path)
         file_upload_obj.text = text
         file_upload_obj.save()
-
+        skills=create_resume.create_resume(text)
+        print (skills)
 
 def user_validation(data):
     values = Token.objects.filter(user__username=data['recruiter'], key=data['token'])

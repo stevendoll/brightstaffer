@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^backbuttoninfo/$', views.BackButtonInfo.as_view(), name='Back Button Info'),
     url(r'^publish_jobPost/$', views.Publish.as_view(), name='Publish Project'),
     url(r'^project_list/$', views.ProjectList.as_view()),
+    url(r'^delete_projects/$', views.ProjectDelete.as_view()),
     url(r'^top_project_list/$', views.TopProjectList.as_view()),
     url(r'^upload/$', views.FileUploadView.as_view(), name="file-upload"),
     url(r'^update_recruiter/$', views.UpdateRecruiter.as_view()),
