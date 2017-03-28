@@ -99,6 +99,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
 function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $timeout, loginService) { /* login controller responsible for login functionality */
     $scope.showErr = false;
     $scope.isDisabled = false;
+    $rootScope.recruiter = {};
     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/; //email validation pattern
     $scope.data = {
         user_name: 'asha.singh@kiwitech.com'
@@ -119,6 +120,7 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
                     var userData = {};
                     userData.first_name = response.first_name;
                     userData.last_name = response.last_name;
+                    $rootScope.recruiter.recruiterName = response.first_name+ ' '+response.last_name;
                     userData.token = response.user_token;
                     userData.user_email = response.user_name;
                     $rootScope.globals.currentUser = userData; // storing the logged in user data for further communication on site
@@ -1378,7 +1380,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.recordCount = $scope.recordOptions[0];
     $scope.namePattern = /^[a-zA-Z\s]*$/;
     $rootScope.talentList = [];
-    $scope.recruiter = {};
+
     $scope.stagesName = {
         'Replied': 'fa-mail-reply'
         , 'Contacted': 'fa-phone'
@@ -1567,12 +1569,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.updateRecruiterName = function (name) { // function to fetch top 6 projects
         //console.log(name);
         if (name) {
-            $scope.recruiter.recruiterName = name;
+            $rootScope.recruiter.recruiterName = name;
             $('#nameUpdate').addClass('disabled');
             $('#nameUpdate').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
-                'display_name': $scope.recruiter.recruiterName
+                'display_name': $rootScope.recruiter.recruiterName
             };
             talentApis.updateRecruiterName(requestObject).then(function (response) {
                 if (response.message == "success") {
@@ -1664,7 +1666,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.editRecruiter = function () {
         $scope.isName = false;
-        $scope.data.recruiterNameInput = $scope.recruiter.recruiterName;
+        $scope.data.recruiterNameInput = $rootScope.recruiter.recruiterName;
         $('#nameUpdate').removeClass('disabled');
         $('#nameUpdate').css('pointer-events', '');
         $('#recruiter-modal').modal('hide');
@@ -2514,7 +2516,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , changeMonth: true
             , changeYear: true
         }).val('');
-        $(".rating li.filled").removeClass('filled');
+        //$("#ex3").slider('values', 0, 100);
+
+        $("#rate_filter li.filled").removeClass('filled');
         $('.radio-none').attr('checked', false);
 
     }
