@@ -276,7 +276,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         $rootScope.globals = {};
         $state.go('login', '');
     }
-
+    $rootScope.candidatePages = [];
     $scope.getSearchData = function () {
         var currentState = $state.current.name;
         var allowedArray = ["talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
@@ -297,6 +297,10 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                 }
                 $rootScope.totalTalentCount = response.total;
                 $rootScope.talentCountEnd = $rootScope.talentList.length;
+                $rootScope.candidatePages = [];
+                for(var i=0;i<Math.ceil($rootScope.totalTalentCount/10);i++){
+                    $rootScope.candidatePages.push({i: true});
+                }
             });
         }
     }
@@ -1478,7 +1482,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     });
 
     angular.element(document).ready(function () {
-        $scope.getTalents();
+//        $scope.getTalents();
+        $rootScope.getCandidateData();
     });
 
 
@@ -2467,6 +2472,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 var count = $rootScope.talentList.length
                 $rootScope.totalTalentCount = count;
                 $rootScope.talentCountEnd = count;
+                
+                $rootScope.candidatePages = [];
+                for(var i=0;i<Math.ceil($rootScope.totalTalentCount/10);i++){
+                    $rootScope.candidatePages.push({i: true});
+                }
+                
             } else if (response.hits.length == 0) {
                 $rootScope.talentList = [];
                 $rootScope.Filter = true;
