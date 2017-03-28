@@ -2348,7 +2348,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //$.datepicker._clearDate(this);
     }
 
-    $scope.formatDate = function (date) {
+    $rootScope.formatDate = function (date) {
         if (!date) {
             return date;
         }
@@ -2397,7 +2397,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        var date = $('#add-stage-date').val();
         //
         //        if (date)
-        $scope.stage.date = $scope.formatDate($scope.stage.date);
+        $scope.stage.date = $rootScope.formatDate($scope.stage.date);
 
 //        $scope.addProjectCheckValidation($scope.stage);
 checkReqValidationForStage();
@@ -2506,10 +2506,14 @@ checkReqValidationForStage();
 
 
         var selectedProjectId = '';
-        if (analysedDate)
-            $scope.filterValue.analysed = analysedDate;
-        if (lastContacted)
-            $scope.filterValue.lastContacted = lastContacted;
+        if (analysedDate){
+//            $scope.filterValue.analysed = analysedDate;
+            $scope.filterValue.analysed = $rootScope.formatDate(analysedDate);
+        }
+        if (lastContacted){
+//            $scope.filterValue.lastContacted = lastContacted;
+            $scope.filterValue.lastContacted = $rootScope.formatDate(lastContacted);
+        }
         if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined)
             $scope.filterValue.stage = '';
         if ($scope.filterValue.match.split('%')[0] == '0')
