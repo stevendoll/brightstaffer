@@ -1394,9 +1394,11 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore) {
     
     $scope.priceSlider = {
-        floor: 0,
-        ceil: 100,
-        value: 100
+        value: 0,
+        options: {
+            floor: 0,
+            ceil: 100
+        }
     }
     
     $scope.exportOptions = [{
