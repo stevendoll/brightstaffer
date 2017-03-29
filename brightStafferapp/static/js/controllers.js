@@ -1394,9 +1394,11 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore) {
     
     $scope.priceSlider = {
-        floor: 0,
-        ceil: 100,
-        value: 100
+        value: 0,
+        options: {
+            floor: 0,
+            ceil: 100
+        }
     }
     
     $scope.exportOptions = [{
@@ -1572,7 +1574,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $rootScope.candidatePagination = {
         page: 1
-        , count: $scope.recordCount.value
+        , count: parseInt($scope.recordCount.value)
     }
     $scope.getcandidateData = function () {
         $rootScope.getCandidateData();
@@ -2521,11 +2523,11 @@ checkReqValidationForStage();
         var selectedProjectId = '';
 
 //            $scope.filterValue.analysed = analysedDate;
-            $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate(analysedDate) : '';
+            $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
 
 
 //            $scope.filterValue.lastContacted = lastContacted;
-            $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate(lastContacted) : '';
+            $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
 
         if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined)
             $scope.filterValue.stage = '';
@@ -2577,7 +2579,10 @@ checkReqValidationForStage();
         };
         requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
         requestObject.project_match = parseInt(requestObject.project_match.split('%')[0]) || '';
-
+        
+        requestObject.page = $rootScope.candidatePagination.page;
+        requestObject.count = $rootScope.candidatePagination.count;
+        
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
             if (response.hits.length > 0) {
@@ -2606,6 +2611,7 @@ checkReqValidationForStage();
     }
 
     $rootScope.filterReset = function () {
+        $scope.priceSlider.value = 0;
         $scope.filterValue = {
             stage: ''
             , project: ''
@@ -2625,11 +2631,11 @@ checkReqValidationForStage();
         $('#sbSelector_' + selectorId).text(selectedValue);
         $("#projectSelect").val('').selectpicker('refresh');
         // $("#ex3").slider("value", $("#ex3").slider("option", "min") );
-        $('.filter-input-date').datepicker({
-            dateFormat: "dd/mm/yyyy"
-            , changeMonth: true
-            , changeYear: true
-        }).val('');
+//        $('.filter-input-date').datepicker({
+//            dateFormat: "dd/mm/yyyy"
+//            , changeMonth: true
+//            , changeYear: true
+//        }).val('');
         //$("#ex3").slider('values', 0, 100);
 
         $("#rate_filter li.filled").removeClass('filled');

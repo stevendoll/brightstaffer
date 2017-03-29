@@ -443,12 +443,16 @@ class TalentSearch(generics.ListCreateAPIView):
         term = request.GET.get('term', '')
         recruiter = request.META.get('HTTP_RECRUITER' '')
         token = request.META.get('HTTP_TOKEN', '')
+        count = request.GET.get('count', '')
+        page = request.GET.get('page', '')
         is_valid = user_validation(data={'recruiter': recruiter,
                                          'token': token})
         if not is_valid:
             return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
         term = term.strip('"')
         term_query = copy.deepcopy(TERM_QUERY)
+        term_query['from'] = 0 if int(page) == 1 else int(page) - 2 + ((int(page) - 1) * 10)
+        term_query['size'] = count
         try:
             if term:
                 body = json.loads(re.sub(r"\brecruiter_term\b", recruiter,
@@ -458,7 +462,10 @@ class TalentSearch(generics.ListCreateAPIView):
                                 )
                 return HttpResponse(json.dumps(res['hits']))
             else:
-                base_query = json.loads(re.sub(r"\brecruiter_term\b", recruiter, json.dumps(BASE_QUERY)))
+                base_query = copy.deepcopy(BASE_QUERY)
+                base_query['from'] = 0 if int(page) == 1 else int(page) - 2 + ((int(page) - 1) * 10)
+                base_query['size'] = count
+                base_query = json.loads(re.sub(r"\brecruiter_term\b", recruiter, json.dumps(base_query)))
                 res = es.search(index="haystack", doc_type="modelresult",
                                 body=base_query
                                 )
@@ -495,6 +502,8 @@ class TalentSearchFilter(generics.ListCreateAPIView):
         term = request.GET.get('term', '')
         ordering = request.GET.get('ordering', '')
         is_active = request.GET.get('is_active', '')
+        count = request.GET.get('count', '')
+        page = request.GET.get('page', '')
 
         query = copy.deepcopy(BASE_QUERY)
         if date_added:
@@ -659,5 +668,7 @@ class TalentSearchFilter(generics.ListCreateAPIView):
             query['query']['bool']['filter']['bool']['should'].extend(term_query_should)
         else:
             query = json.loads(re.sub(r"\brecruiter_term\b", recruiter, json.dumps(query)))
+        query['from'] = 0 if int(page) == 1 else int(page) - 2 + ((int(page) - 1) * 10)
+        query['size'] = count
         res = es.search(index="haystack", doc_type="modelresult", body=query)
         return HttpResponse(json.dumps(res['hits']))
