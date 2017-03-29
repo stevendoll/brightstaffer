@@ -502,8 +502,8 @@ class TalentSearchFilter(generics.ListCreateAPIView):
         term = request.GET.get('term', '')
         ordering = request.GET.get('ordering', '')
         is_active = request.GET.get('is_active', '')
-        count = request.GET.get('count', '10')
-        page = request.GET.get('page', '1')
+        count = request.GET.get('count', '')
+        page = request.GET.get('page', '')
 
         query = copy.deepcopy(BASE_QUERY)
         if date_added:
