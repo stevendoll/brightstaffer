@@ -9,6 +9,7 @@
         'oc.lazyLoad',                  // ocLazyLoad
         'ui.bootstrap',                 // Ui Bootstrap
         'ngCookies',
+        'rzModule',
         'nvd3ChartDirectives'
     ])
 })();

@@ -101,8 +101,8 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
     $scope.isDisabled = false;
     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/; //email validation pattern
     $scope.data = {
-        user_name: 'asha.singh@kiwitech.com'
-        , user_password: 'asha@123'
+        user_name: 'pooja@yopmail.com'
+        , user_password: 'qwerty1!'
     };
     /**Create function for user login **/
     this.userLogin = function () {
@@ -1392,6 +1392,13 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 }
 
 function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore) {
+    
+    $scope.priceSlider = {
+        floor: 0,
+        ceil: 100,
+        value: 100
+    }
+    
     $scope.exportOptions = [{
         name: 'Export Data'
         , value: 'Export Data'
@@ -1487,7 +1494,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.filterValue = {
         //stage:'Select Stage',
         project: ''
-        , match: '0%'
+        , match: $scope.priceSlider.value+'%'
         , rating: ''
         , lastContacted: ''
         , analysed: ''
@@ -1499,6 +1506,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
     $rootScope.Filter = false;
 
+    $scope.$watch('priceSlider.value', function(n, o){
+        $scope.filterValue.match = n+'%';
+    })
 
     $scope.hideMessages = function (formName) { /*Hide error messages when user interact with fieds*/
         $('#name-required').addClass('ng-hide');
@@ -2520,9 +2530,9 @@ checkReqValidationForStage();
         if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined)
             $scope.filterValue.stage = '';
         if ($scope.filterValue.match.split('%')[0] == '0')
-            $scope.filterValue.match = '0%';
+            $scope.filterValue.match = $scope.priceSlider.value+'%';
         else {
-            $scope.filterValue.match = $scope.filterValue.match.split('%')[0] || '0%';
+            $scope.filterValue.match = $scope.filterValue.match.split('%')[0] || $scope.priceSlider.value+'%';
         }
         if ($scope.filterValue.project == 'Select Project' || $scope.filterValue.project == undefined)
             $scope.filterValue.project = '';
@@ -2599,7 +2609,7 @@ checkReqValidationForStage();
         $scope.filterValue = {
             stage: ''
             , project: ''
-            , match: '0%'
+            , match: $scope.priceSlider.value+'%'
             , rating: ''
             , lastContacted: ''
             , analysed: ''
