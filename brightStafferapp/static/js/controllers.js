@@ -632,7 +632,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     $scope.validateLocation = function (value) {
         $scope.patternError = false;
         var zip = /^(?!0{5})\d{5}$/;
-        var city = /^[ A-Za-z0-9-,]*$/;
+        var city = /^[ A-Za-z-,]*$/;
         if (!isNaN(value) && value) {
             if (!zip.test(value)) {
                 $scope.patternError = true;
