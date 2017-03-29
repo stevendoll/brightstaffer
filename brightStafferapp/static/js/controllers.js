@@ -91,8 +91,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     angular.element(document).ready(function () {
-            $rootScope.showAllProjects();
-            $scope.getTopSixProjects();
+        $rootScope.showAllProjects();
+        $scope.getTopSixProjects();
     });
 
     this.removePopupBox = function () {
@@ -288,7 +288,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         var currentState = $state.current.name;
         var allowedArray = ["talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
         if (allowedArray.indexOf(currentState) > -1) {
-        $rootScope.filterReset();
+            $rootScope.filterReset();
             var requestObject = {
                 'keyword': $rootScope.search.searchKeywords || ''
                 , page: $rootScope.candidatePagination.page
@@ -316,8 +316,11 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     }
 
     $rootScope.getCandidateData = function () {
+        console.log('fetching candidate data')
         $scope.getSearchData();
     }
+
+    $rootScope.$on('fetchCandidateData', $rootScope.getCandidateData)
 }
 
 
@@ -1051,12 +1054,18 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
+
+
 
 
 
@@ -1083,12 +1092,18 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
+
+
 
 
 
@@ -1398,15 +1413,15 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 }
 
 function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore) {
-    
+
     $scope.priceSlider = {
-        value: 0,
-        options: {
-            floor: 0,
-            ceil: 100
+        value: 0
+        , options: {
+            floor: 0
+            , ceil: 100
         }
     }
-    
+
     $scope.exportOptions = [{
         name: 'Export Data'
         , value: 'Export Data'
@@ -1502,7 +1517,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.filterValue = {
         //stage:'Select Stage',
         project: ''
-        , match: $scope.priceSlider.value+'%'
+        , match: $scope.priceSlider.value + '%'
         , rating: ''
         , lastContacted: ''
         , analysed: ''
@@ -1514,8 +1529,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
     $rootScope.Filter = false;
 
-    $scope.$watch('priceSlider.value', function(n, o){
-        $scope.filterValue.match = n+'%';
+    $scope.$watch('priceSlider.value', function (n, o) {
+        $scope.filterValue.match = n + '%';
     })
 
     $scope.hideMessages = function (formName) { /*Hide error messages when user interact with fieds*/
@@ -1555,7 +1570,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     angular.element(document).ready(function () {
         //        $scope.getTalents();
-        $rootScope.getCandidateData();
+        //        if ($rootScope.getCandidateData) {
+        //            $rootScope.getCandidateData();
+        //        }else{
+        //            console.log("FAILED to fetch candidate data");
+        //        }
+
+        $rootScope.$emit('fetchCandidateData');
+
     });
 
 
@@ -1583,7 +1605,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , count: parseInt($scope.recordCount.value)
     }
     $scope.getcandidateData = function () {
-        $rootScope.getCandidateData();
+        //        $rootScope.getCandidateData();
+        $rootScope.$emit('fetchCandidateData');
     }
     $scope.changeState = function () {
 
@@ -1640,8 +1663,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log(name);
         if (name) {
             $rootScope.recruiter.recruiterName = name;
-            $('#nameUpdate').addClass('disabled');
-            $('#nameUpdate').css('pointer-events', 'none');
+            //            $('#nameUpdate').addClass('disabled');
+            //            $('#nameUpdate').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
                 'display_name': $rootScope.recruiter.recruiterName
@@ -1733,12 +1756,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#recruiter-modal').modal('show');
 
     }
-
+    $scope.isName = false;
     $scope.editRecruiter = function () {
         $scope.isName = false;
         $scope.data.recruiterNameInput = $rootScope.recruiter.recruiterName;
-        $('#nameUpdate').removeClass('disabled');
-        $('#nameUpdate').css('pointer-events', '');
+        //        $('#nameUpdate').removeClass('disabled');
+        //        $('#nameUpdate').css('pointer-events', '');
         $('#recruiter-modal').modal('hide');
         $('#edit-recruiter').modal('show');
     }
@@ -2047,7 +2070,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.add_email.talentAddEmail.blur = false;
         }
         // form valid end
-
         $scope.isEmailEditable = false;
         $scope.isEmailAdd = false;
         $scope.isContactEditable = false;
@@ -2420,8 +2442,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        if (date)
         $scope.stage.date = $rootScope.formatDate($scope.stage.date);
 
-//        $scope.addProjectCheckValidation($scope.stage);
-checkReqValidationForStage();
+        //        $scope.addProjectCheckValidation($scope.stage);
+        checkReqValidationForStage();
         if (!$scope.isStage && !$scope.isProject && !$scope.isDate && !$scope.isDetail && !$scope.isNotes) {
 
             for (var i = 0; i < $rootScope.allProjectList.length; i++) {
@@ -2522,25 +2544,25 @@ checkReqValidationForStage();
     }
 
     $scope.filterData = function () {
-//        var analysedDate = $('#analysed').val();
-//        var lastContacted = $('#lastContacted').val();
+        //        var analysedDate = $('#analysed').val();
+        //        var lastContacted = $('#lastContacted').val();
 
 
         var selectedProjectId = '';
 
-//            $scope.filterValue.analysed = analysedDate;
-            $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
+        //            $scope.filterValue.analysed = analysedDate;
+        $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
 
 
-//            $scope.filterValue.lastContacted = lastContacted;
-            $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
+        //            $scope.filterValue.lastContacted = lastContacted;
+        $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
 
         if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined)
             $scope.filterValue.stage = '';
         if ($scope.filterValue.match.split('%')[0] == '0')
-            $scope.filterValue.match = $scope.priceSlider.value+'%';
+            $scope.filterValue.match = $scope.priceSlider.value + '%';
         else {
-            $scope.filterValue.match = $scope.filterValue.match.split('%')[0] || $scope.priceSlider.value+'%';
+            $scope.filterValue.match = $scope.filterValue.match.split('%')[0] || $scope.priceSlider.value + '%';
         }
         if ($scope.filterValue.project == 'Select Project' || $scope.filterValue.project == undefined)
             $scope.filterValue.project = '';
@@ -2585,10 +2607,10 @@ checkReqValidationForStage();
         };
         requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
         requestObject.project_match = parseInt(requestObject.project_match.split('%')[0]) || '';
-        
+
         requestObject.page = $rootScope.candidatePagination.page;
         requestObject.count = $rootScope.candidatePagination.count;
-        
+
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
             if (response.hits.length > 0) {
@@ -2621,7 +2643,7 @@ checkReqValidationForStage();
         $scope.filterValue = {
             stage: ''
             , project: ''
-            , match: $scope.priceSlider.value+'%'
+            , match: $scope.priceSlider.value + '%'
             , rating: ''
             , lastContacted: ''
             , analysed: ''
@@ -2637,11 +2659,11 @@ checkReqValidationForStage();
         $('#sbSelector_' + selectorId).text(selectedValue);
         $("#projectSelect").val('').selectpicker('refresh');
         // $("#ex3").slider("value", $("#ex3").slider("option", "min") );
-//        $('.filter-input-date').datepicker({
-//            dateFormat: "dd/mm/yyyy"
-//            , changeMonth: true
-//            , changeYear: true
-//        }).val('');
+        //        $('.filter-input-date').datepicker({
+        //            dateFormat: "dd/mm/yyyy"
+        //            , changeMonth: true
+        //            , changeYear: true
+        //        }).val('');
         //$("#ex3").slider('values', 0, 100);
 
         $("#rate_filter li.filled").removeClass('filled');
@@ -2670,14 +2692,14 @@ checkReqValidationForStage();
 angular
     .module('brightStaffer')
     .controller('MainCtrl', MainCtrl)
+    .controller('talentCtrl', talentCtrl)
     .controller('loginCtrl', loginCtrl)
     .controller('signupCtrl', signupCtrl)
     .controller('forgotCtrl', forgotCtrl)
     .controller('resetPwCtrl', resetPwCtrl)
-    .controller('topnavCtrl', topnavCtrl)
     .controller('createProjectCtrl', createProjectCtrl)
     .controller('tableCtrl', tableCtrl)
     .controller('scoreCardCtrl', scoreCardCtrl)
     .controller('uploadFileCtrl', uploadFileCtrl)
-    .controller('talentCtrl', talentCtrl)
-    .controller('sideNavCtrl', sideNavCtrl);
+    .controller('sideNavCtrl', sideNavCtrl)
+    .controller('topnavCtrl', topnavCtrl);

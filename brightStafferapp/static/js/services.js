@@ -267,6 +267,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
         },
 
         updateRecruiterName: function (data) {
+            $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'update_recruiter/?recruiter=' + data.recruiter + '&display_name=' + data.display_name
                 , method: "GET", // or "get"
@@ -276,6 +277,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
+                $rootScope.showLoader(false);
                 return response.data;
             });
         },
@@ -371,6 +373,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
+                    $rootScope.showLoader(false);
                     callback(xhr.responseText); // Another callback here
                 }
             };
@@ -386,6 +389,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                     xhr.setRequestHeader(headerName, headerValue);
                 }
             }
+            $rootScope.showLoader(true);
             xhr.send(formData);
         },
 
