@@ -16,7 +16,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         $scope.showLoader = show;
     }
 
-    this.getTopSixProjects = function () { // function to fetch top 6 projects
+    $scope.getTopSixProjects = function () { // function to fetch top 6 projects
         var requestObject = {
             'token': $rootScope.globals.currentUser.token, // username field value
             'recruiter': $rootScope.globals.currentUser.user_email // password field value
@@ -88,6 +88,11 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
             }
         });
     }
+
+    angular.element(document).ready(function () {
+            $rootScope.showAllProjects();
+            $scope.getTopSixProjects();
+    });
 
     this.removePopupBox = function () {
         $('#breakPopup').css('display', 'none');

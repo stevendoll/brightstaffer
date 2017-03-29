@@ -75,7 +75,7 @@
   z-index: 1;
   width: 100%;
   height: 4px;
-  background: #d8e0f3;
+  background: #3680ca;
   border-radius: 2px;
 }
 
@@ -86,24 +86,17 @@
 }
 
 .rzslider .rz-pointer {
-  top: -14px;
+  top: -8px;
   z-index: 3;
-  width: 32px;
-  height: 32px;
+  width: 18px;
+  height: 18px;
   cursor: pointer;
-  background-color: #0db9f0;
+  background-color: #3680ca;
   border-radius: 16px;
 }
 
 .rzslider .rz-pointer:after {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  width: 8px;
-  height: 8px;
-  background: #ffffff;
-  border-radius: 4px;
-  content: '';
+
 }
 
 .rzslider .rz-pointer:hover:after {
