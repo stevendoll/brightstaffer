@@ -1574,7 +1574,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $rootScope.candidatePagination = {
         page: 1
-        , count: $scope.recordCount.value
+        , count: parseInt($scope.recordCount.value)
     }
     $scope.getcandidateData = function () {
         $rootScope.getCandidateData();
@@ -2579,7 +2579,10 @@ checkReqValidationForStage();
         };
         requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
         requestObject.project_match = parseInt(requestObject.project_match.split('%')[0]) || '';
-
+        
+        requestObject.page = $rootScope.candidatePagination.page;
+        requestObject.count = $rootScope.candidatePagination.count;
+        
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
             if (response.hits.length > 0) {
