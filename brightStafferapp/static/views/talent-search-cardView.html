@@ -93,7 +93,7 @@
                             <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talent.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
                             </div>
 
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[(career. years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[(career.years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
                                 <span class="text">[[career.company | capitalize]]</span>
                                 <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
                             </div>
@@ -156,6 +156,21 @@
             </div>
         </div>
     </div>
+    <!--<div class="search-pagination">
+            <ul class="pagination">
+              <li id="prev" class="prev">
+                <a href="" aria-label="Previous">
+                  <span aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
+                </a>
+              </li>
+                <li ng-repeat="i in candidatePages" id="[[$index]]" ng-click="candidatePagination.page = ($index+1);getcandidateData();"><a href="">[[$index+1]]</a></li>
+              <li id="next" class="next">
+                <a href="" aria-label="Next">
+                  <span aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+                </a>
+              </li>
+            </ul>
+          </div>-->
     <!-- more-comp-Modal-starts -->
     <div class="modal fade" id="more-comp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog add-talent-dialog" role="document">
