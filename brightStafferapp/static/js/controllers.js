@@ -2185,6 +2185,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
             formData.append('talent_id', id);
             formData.append('contact', candidateContactAdd);
+//            $rootScope.showLoader(true);
             talentApis.talentContact(formData, requestCallback);
 
             function requestCallback(response) {
@@ -2196,6 +2197,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 setTimeout(function () {
                     $('#contactSuccess').css('display', 'none');
                 }, 2000);
+                $rootScope.showLoader(false);
             }
         } else {
             $scope.isContact = true;
@@ -2451,7 +2453,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     break;
                 }
             }
-            if (selectedProjectId && !$scope.noteMax && !$scope.detailMax) {
+            if (selectedProjectId) {
 
                 var formData = new FormData();
                 formData.append('project_id', selectedProjectId);
