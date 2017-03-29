@@ -373,7 +373,6 @@ function talentApis($rootScope, $http, REQUEST_URL) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    $rootScope.showLoader(false);
                     callback(xhr.responseText); // Another callback here
                 }
             };
@@ -389,7 +388,6 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                     xhr.setRequestHeader(headerName, headerValue);
                 }
             }
-            $rootScope.showLoader(true);
             xhr.send(formData);
         },
 
@@ -413,6 +411,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                     xhr.setRequestHeader(headerName, headerValue);
                 }
             }
+            
             xhr.send(formData);
         },
 
@@ -421,6 +420,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
+                    $rootScope.showLoader(false);
                     callback(xhr.responseText); // Another callback here
                 }
             };
@@ -436,6 +436,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                     xhr.setRequestHeader(headerName, headerValue);
                 }
             }
+            $rootScope.showLoader(true);
             xhr.send(formData);
         },
 
