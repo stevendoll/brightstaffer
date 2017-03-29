@@ -1,249 +1,308 @@
 <div class="col-xs-12 padding-zero" style="text-align:center;" ng-show="(talentList.length == 0 && topSearch) || Filter">
-  <div class="talent-srearch-view-panel" style="height:400px;padding:101px;">
-    <h2>No Result for this search.</h2>
-</div></div>
+    <div class="talent-srearch-view-panel" style="height:400px;padding:101px;">
+        <h2>No Result for this search.</h2>
+    </div>
+</div>
 <div ng-repeat="talent in talentList" on-finish-render="ngRepeatFinished">
-<div class="col-xs-12 padding-zero">
-                <div class="talent-srearch-view-panel">
-                  <div class="talentsearch-left-panel">
-                    <div class="left-div"><div class="search-image"><img src="static/img/dummyProfile.png" alt=""></div></div>
-                    <div class="search-result-panel right-div">
-                      <div class="search-result-name"><div class="search-name-head"  ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeWord]]</span></div>
-                     <div class="search-result-info">[[talent.current_location | capitalizeWord]] <span></span> [[talent.industry_focus | capitalizeWord]]</div>
-                    </div>
+    <div class="col-xs-12 padding-zero">
+        <div class="talent-srearch-view-panel">
+            <div class="talentsearch-left-panel">
+                <div class="left-div">
+                    <div class="search-image"><img src="static/img/user-placeholder.png" alt=""></div>
+                </div>
+                <div class="search-result-panel right-div">
+                    <div class="search-result-name">
+                        <div class="search-name-head" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeAll]]</span></div>
+                    <div class="search-result-info">[[talent.current_location | capitalizeWord]] <span></span> [[talent.industry_focus | capitalizeAll]]</div>
+                </div>
 
-                    <div class="cls"></div>
-                    <div ng-repeat="company in talent.talent_company | limitTo: 2">
-                    <div ng-if ="$index == 0">
+                <div class="cls"></div>
+                <div ng-repeat="company in talent.talent_company | limitTo: 2">
+                    <div ng-if="$index == 0">
                         <div class="col-xs-12 padding-zero" ng-init="current = company">
-                          <div class="left-div search-result-current">Current</div>
-                          <div class="right-div search-detail-current"><span class="bold-font">[[current.designation | capitalizeWord]]</span> - [[current.company | capitalizeWord]] [[current.start_date | yearFormat]]- Present</div>
+                            <div class="left-div search-result-current">Current</div>
+                            <div class="right-div search-detail-current"><span class="bold-font">[[current.designation | capitalizeAll]]</span> - [[current.company | capitalizeAll]] [[current.start_date | yearFormat]]- Present</div>
                         </div>
                     </div>
-                    <div ng-if ="$index != 0">
+                    <div ng-if="$index != 0">
                         <div class="col-xs-12 padding-zero" ng-init="past = company">
-                        <div class="left-div search-result-past">Past</div>
-                        <div class="right-div search-detail-past">
-                         <span class="bold-font">[[past.designation | capitalizeWord]]</span> - [[past.company | capitalizeWord ]] [[past.start_date | yearFormat]]- [[past.end_date | yearFormat]]<span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talent)">More</a></span>
+                            <div class="left-div search-result-past">Past</div>
+                            <div class="right-div search-detail-past">
+                                <span class="bold-font">[[past.designation | capitalizeAll]]</span> - [[past.company | capitalizeAll ]] [[past.start_date | yearFormat]]- [[past.end_date | yearFormat]]<span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talent)">More</a></span>
+                            </div>
                         </div>
-                      </div>
                     </div>
+                </div>
+                <div class="col-xs-12 padding-zero">
+                    <div class="left-div search-result-edu">Education</div>
+                    <div class="right-div search-detail-edu">[[talent.talent_education[0].education | capitalizeAll]] [[talent.talent_education[0].start_date | yearFormat]]- [[talent.talent_education[0].end_date | yearFormat]]</div>
+                </div>
+            </div>
+            <div class="talentsearch-right-panel">
+                <div class="active-bttn">[[talent.status]]</div>
+                <div class="search-star-panel">
+                    <div class="col-md-12 padding-zero" ng-init="rating = [[talent.rating]]">
+                        <div star-rating class="star-right-side" rating-value="rating" max="5"></div>
                     </div>
-                    <div class="col-xs-12 padding-zero" >
-                      <div class="left-div search-result-edu">Education</div>
-                      <div class="right-div search-detail-edu">[[talent.talent_education[0].education ]] [[talent.talent_education[0].start_date | yearFormat]]- [[talent.talent_education[0].end_date | yearFormat]]</div>
+                    <div ng-show="[[talent.talent_project.length > 0]]">
+                        <div class="schdule-list">[[talent.talent_project[0].project_stage | capitalize]]</div>
+                        <div class="schdule-list-date">[[talent.talent_project[0].date_added | dateFormat]]</div>
+                        <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_project[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
                     </div>
-                  </div>
-                  <div class="talentsearch-right-panel">
-                    <div class="active-bttn">[[talent.status]]</div>
-                    <div class="search-star-panel">
-                        <div class="col-md-12 padding-zero" ng-init="rating = [[talent.rating]]">
-                                <div star-rating class="star-right-side" rating-value="rating" max="5" ></div>
-                        </div>
-                      <div ng-show="[[talent.talent_project.length > 0]]">
-                      <div class="schdule-list">[[talent.talent_project[0].project_stage | capitalize]]</div>
-                      <div class="schdule-list-date">[[talent.talent_project[0].date_added | dateFormat]]</div>
-                      <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_project[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
-                      </div>
-                      <div ng-show="[[talent.talent_project.length == 0]]">
-                      <div class="schdule-list-date">[[talent.create_date | dateFormat]]</div>
-                      <div class="link-schedule"><span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
-                      </div>
-                      </div>
-                  </div>
-                  <div class="cls"></div>
-                  <div class="col-xs-12">
-                    <div class="top-concept-panel">
-                      <div class="top-concept-text">Top Concepts</div>
-                      <div class="talent-progress" ng-repeat="concepts in talent.talent_concepts | limitTo: 6">
+                    <div ng-show="[[talent.talent_project.length == 0]]">
+                        <div class="schdule-list-date">[[talent.create_date | dateFormat]]</div>
+                        <div class="link-schedule"><span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="cls"></div>
+            <div class="col-xs-12">
+                <div class="top-concept-panel">
+                    <div class="top-concept-text">Top Concepts</div>
+                    <div class="talent-progress" ng-repeat="concepts in talent.talent_concepts | limitTo: 6">
                         <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="[[concepts.match]]" aria-valuemin="0" aria-valuemax="100" style="width: [[concepts.match]]%;">
-                            <span class="text">[[concepts.concept | capitalize]]</span>
-                            <span class="percentage">[[concepts.match]]%</span>
-                          </div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="[[concepts.match]]" aria-valuemin="0" aria-valuemax="100" style="width: [[concepts.match]]%;">
+                                <span class="text">[[concepts.concept | capitalize]]</span>
+                                <span class="percentage">[[concepts.match]]%</span>
+                            </div>
                         </div>
-                      </div>
                     </div>
-                    <div class="top-concept-panel">
-                      <div class="top-concept-text">Career  History</div>
-                      <div class="talent-progress" >
+                </div>
+                <div class="top-concept-panel">
+                    <div class="top-concept-text">Career History</div>
+                    <div class="talent-progress">
                         <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                            <span class="text">Total Experience</span>
-                            <span class="percentage" >[[calcTotal(talent.talent_company) | number: 2]] Years</span>
-                          </div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                <span class="text">Total Experience</span>
+                                <span class="percentage">[[calcTotal(talent.talent_company) | number: 2]] Years</span>
+                            </div>
                         </div>
-                      </div>
-                      <div class="talent-progress" ng-repeat="career in talent.talent_company | limitTo: 3">
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[(career.years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
-                            <span class="text">[[career.company]]</span>
-                            <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="cls"></div>
-                      <div class="indus-focus">Industry Focus</div>
-                      <div class="talent-progress">
-                        <div class="progress">
-                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[talent.industry_focus_percentage]]%;">
-                            <span class="text">[[talent.industry_focus]]</span>
-                            <span class="percentage">[[talent.industry_focus_percentage]]%</span>
-                          </div>
-                        </div>
-                      </div>
                     </div>
-                    <div class="top-concept-panel">
-                      <div class="top-concept-text">Project Matches</div>
-                      <div class="circle-bg" ng-repeat="projects in talent.talent_project | limitTo: 3">
+                    <div class="talent-progress" ng-repeat="career in talent.talent_company | limitTo: 3">
+                        <div class="progress">
+<!--
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[(career.years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
+                                <span class="text">[[career.company | capitalize]]</span>
+                                <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
+                            </div>
+-->
+                            
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((talent.talent_company[$index - 1].years_of_experience.toFixed(2)/calcTotal(talent.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
+                            </div>
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talent.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
+                            </div>
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[((career.years_of_experience.toFixed(2)/calcTotal(talent.talent_company)) * 100).toFixed(2)]]%;">
+                                <span class="text">[[career.company | capitalize]]</span>
+                                <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
+                            </div>
+                            
+                            
+                            
+                            
+<!--
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-if="$index - 1 >= 0" style="width:[[(talent.talent_company[$index - 1].years_of_experience/calcTotal(talent.talent_company)) * 100]]%; background-color: #e4e4e4 !important;">
+                            </div>
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-if="career.career_gap" style="width:[[(career.career_gap/calcTotal(talent.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
+                            </div>
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[(career. years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
+
+                                <span class="text">[[career.company | capitalize]]</span>
+                                <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
+                            </div>
+-->
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="cls"></div>
+                    <div class="indus-focus">Industry Focus</div>
+                    <div class="talent-progress">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[talent.industry_focus_percentage]]%;">
+                                <span class="text">[[talent.industry_focus | capitalize]]</span>
+                                <span class="percentage">[[talent.industry_focus_percentage]]%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="top-concept-panel">
+                    <div class="top-concept-text">Project Matches</div>
+                    <div class="circle-bg" ng-repeat="projects in talent.talent_project | limitTo: 3">
                         <div data-color="#7a7a7a" data-percent="[[projects.project_match]]" class="easy-pie-chart percentage easyPieChart pie-color" pie-chart>
-                          <span class="percent pie-txt">[[projects.project_match]]%</span>
-                          <canvas height="60" width="60"></canvas>
+                            <span class="percent pie-txt">[[projects.project_match]]%</span>
+                            <canvas height="60" width="60"></canvas>
                         </div>
                         <i class="fa fa-file-text"></i>
                         <div class="link-panel"><a href="" style="cursor:default;">#[[projects.project ]]</a><span><a href="" style="cursor:default;">@[[projects.company_name ]]</a></span></div>
                         <div class="bar-date">[[projects.date_added | dateFormat]]</div>
-                      </div>
                     </div>
-                  </div>
-                  <div class="cls"></div>
-                  <div class="talentsearch-foot">
-                   <button class="btn"  id="profile_[[talent.id]]" ng-click="loadProfileData(talent.id,talent)">View Profile</button>
-                   <button type="" class="btn" id="add_[[talent.id]]" ng-click="openProjectList(talent.id)">Add to Project</button>
-                   <a class="linkedin" href="[[talent.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>
-                  </div>
                 </div>
-                <div class="talent-srearch-check-panel">
-                  <div class="checkbox">
-                    <input type="checkbox" value="1" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" ng-model="$index_checked" class="css-checkbox" name="">
-                    <label class="css-label" for="check_[[talent.id]]"></label>
-                  </div>
-                </div>
-              </div>
-
-  <!-- more-comp-Modal-starts -->
-<div class="modal fade" id="more-comp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
-  <div class="modal-dialog add-talent-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body roles-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-        <div class="past-roles">Past Roles</div>
-        <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company | limitTo: 2">[[role.designation | capitalizeWord]] at [[role.company | capitalizeWord]] [[role.start_date | yearFormat]]- [[role.end_date | yearFormat]]</div>
-        <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
-        <div class="cls"></div>
-        <div class="edu-roles">Education</div>
-        <div class="past-roles-descp" ng-repeat="edu in selectedCandidate.talent_education | limitTo: 2">[[edu.education ]] [[edu.start_date | yearFormat]] - [[edu.end_date | yearFormat]]</div>
-        <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
-        <div class="cls"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- more-comp-Modal-ends -->
-
-
-<!-- recruiter-Modal-starts -->
-<div class="modal fade" id="recruiter-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog add-talent-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body roles-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-        <div class="past-roles">Information</div>
-        <div class="info-modal-div">
-          <div class="left-section">Date Added/Analysis</div>
-          <div class="right-section">[[selectedCandidate.create_date | dateFormat]]</div>
-        </div>
-        <div class="info-modal-div">
-          <div class="left-section">Last Activity</div>
-          <div class="right-section">[[selectedCandidate.create_date | dateFormat]]</div>
-        </div>
-        <div class="info-modal-div">
-          <div class="left-section-div">Recruiter</div>
-          <div class="right-section-div">[[recruiter.recruiterName | capitalizeWord]] <span data-toggle="modal" ng-click="editRecruiter()">Edit</span></div>
-        </div>
-        <div class="info-modal-div">
-          <div class="left-section-div">Shared with</div>
-          <div class="right-section-div">Jeffrey Lloyd, +2 <span data-toggle="modal" style="cursor:default;">Add</span></div>
-        </div>
-        <div class="cls"></div>
-        <div class="modal-recent-projects">
-          <div class="modal-recent-text">Recent Projects</div>
-          <div class="modal-recent-pro-table">
-            <div class="modal-recent-pro-cell" ng-repeat="proj in selectedCandidate.talent_project | limitTo: 5">
-              <div class="modal-recent-pro-descp" style="cursor:default;">#[[proj.project | capitalizeWord]]</div>
-              <div class="modal-recent-pro-descp txt-center">[[proj.project_stage | capitalize]]</div>
-              <div class="modal-recent-pro-descp txt-right">[[proj.date_added | dateFormat]]</div>
             </div>
-          </div>
-          <div class="modal-show-more-text"><a href="" style="cursor:default;">Show All</a></div>
+            <div class="cls"></div>
+            <div class="talentsearch-foot">
+                <button class="btn" id="profile_[[talent.id]]" ng-click="loadProfileData(talent.id,talent)">View Profile</button>
+                <button type="" class="btn" id="add_[[talent.id]]" ng-click="openProjectList(talent.id)">Add to Project</button>
+                <a class="linkedin" href="[[talent.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>
+            </div>
         </div>
-        <div class="cls"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- recruiter-Modal-ends -->
-<!-- edit-recruiter-Modal-starts -->
-<div class="modal fade" id="edit-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog add-talent-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body roles-body">
-        <button type="button" class="close" data-dismiss="modal" ng-click="closeUpdateRecruiter()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-        <div class="edit-modal-recruiter">
-          <span>Edit Recruiter</span>
-          <form class="form-group" name="name_edit" id="name_edit" ng-keyup="hideMessages('name_edit')">
-            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" ng-maxlength="20">
-             <span class="error" id="name-required" style="color:red" ng-show="[[isName]]">Required.</span>
-            <span class="error" style="color:red" ng-show="name_edit.username.$error.pattern">Please enter character only.</span>
-            <span style='color:red' ng-show="name_edit.username.$error.maxlength">Your input is too long!</span>
-          </form>
-          <div class="cls"></div>
-          <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(data.recruiterNameInput)">Update</button>
+        <div class="talent-srearch-check-panel">
+            <div class="checkbox">
+                <input type="checkbox" value="1" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" ng-model="$index_checked" class="css-checkbox" name="">
+                <label class="css-label" for="check_[[talent.id]]"></label>
+            </div>
         </div>
-        <div class="cls"></div>
-      </div>
     </div>
-  </div>
-</div>
-<!-- edit-recruiter-Modal-ends -->
-  <!-- add-project-Modal-starts -->
-<div class="modal fade" id="add-project" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog add-talent-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body roles-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-        <div class="edit-modal-recruiter">
-          <span>Project</span>
-          <div class="cls"></div>
-          <div class="form-group export">
-            <!--<select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
+    <!--<div class="search-pagination">
+            <ul class="pagination">
+              <li id="prev" class="prev">
+                <a href="" aria-label="Previous">
+                  <span aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
+                </a>
+              </li>
+                <li ng-repeat="i in candidatePages" id="[[$index]]" ng-click="candidatePagination.page = ($index+1);getcandidateData();"><a href="">[[$index+1]]</a></li>
+              <li id="next" class="next">
+                <a href="" aria-label="Next">
+                  <span aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+                </a>
+              </li>
+            </ul>
+          </div>-->
+    <!-- more-comp-Modal-starts -->
+    <div class="modal fade" id="more-comp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog add-talent-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body roles-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                    <div class="past-roles">Past Roles</div>
+                    <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company | limitTo: 2">[[role.designation | capitalizeAll]] at [[role.company | capitalizeAll]] [[role.start_date | yearFormat]]- [[role.end_date | yearFormat]]</div>
+                    <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
+                    <div class="cls"></div>
+                    <div class="edu-roles">Education</div>
+                    <div class="past-roles-descp" ng-repeat="edu in selectedCandidate.talent_education | limitTo: 2">[[edu.education | capitalizeAll]] [[edu.start_date | yearFormat]] - [[edu.end_date | yearFormat]]</div>
+                    <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
+                    <div class="cls"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- more-comp-Modal-ends -->
+
+
+    <!-- recruiter-Modal-starts -->
+    <div class="modal fade" id="recruiter-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog add-talent-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body roles-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                    <div class="past-roles">Information</div>
+                    <div class="info-modal-div">
+                        <div class="left-section">Date Added/Analysis</div>
+                        <div class="right-section">[[selectedCandidate.create_date | dateFormat]]</div>
+                    </div>
+                    <div class="info-modal-div">
+                        <div class="left-section">Last Activity</div>
+                        <div class="right-section">[[selectedCandidate.create_date | dateFormat]]</div>
+                    </div>
+                    <div class="info-modal-div">
+                        <div class="left-section-div">Recruiter</div>
+                        <div class="right-section-div">[[recruiter.recruiterName | capitalizeWord]] <span data-toggle="modal" ng-click="editRecruiter()">Edit</span></div>
+                    </div>
+                    <div class="info-modal-div">
+                        <div class="left-section-div">Shared with</div>
+                        <div class="right-section-div">Jeffrey Lloyd, +2 <span data-toggle="modal" style="cursor:default;">Add</span></div>
+                    </div>
+                    <div class="cls"></div>
+                    <div class="modal-recent-projects">
+                        <div class="modal-recent-text">Recent Projects</div>
+                        <div class="modal-recent-pro-table">
+                            <div class="modal-recent-pro-cell" ng-repeat="proj in selectedCandidate.talent_project | limitTo: 5">
+                                <div class="modal-recent-pro-descp" style="cursor:default;">
+                                    <span ng-show="proj.project">#[[proj.project | capitalizeWord]]</span>
+                                    <span ng-show="!proj.project">-</span>
+                                </div>
+                                <div class="modal-recent-pro-descp txt-center">
+                                    <span ng-show="proj.project_stage">[[proj.project_stage | capitalize]]</span>
+                                    <span ng-show="!proj.project_stage">-</span>
+                                </div>
+                                <div class="modal-recent-pro-descp txt-right">
+                                    <span ng-show="proj.date_added">[[proj.date_added | dateFormat]]</span>
+                                    <span ng-show="!proj.date_added">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-show-more-text"><a href="" style="cursor:default;">Show All</a></div>
+                    </div>
+                    <div class="cls"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- recruiter-Modal-ends -->
+    <!-- edit-recruiter-Modal-starts -->
+    <div class="modal fade" id="edit-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog add-talent-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body roles-body">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="closeUpdateRecruiter()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                    <div class="edit-modal-recruiter">
+                        <span>Edit Recruiter</span>
+                        <form class="form-group" name="name_edit" id="name_edit" ng-keyup="hideMessages('name_edit')">
+                            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" ng-maxlength="20">
+                            <span class="error" id="name-required" style="color:red" ng-show="[[isName]]">Required.</span>
+                            <span class="error" style="color:red" ng-show="name_edit.username.$error.pattern">Please enter character only.</span>
+                            <span style='color:red' ng-show="!name_edit.username.$error.pattern && name_edit.username.$error.maxlength">Your input is too long!</span>
+                        </form>
+                        <div class="cls"></div>
+                        <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(data.recruiterNameInput)">Update</button>
+                    </div>
+                    <div class="cls"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- edit-recruiter-Modal-ends -->
+    <!-- add-project-Modal-starts -->
+    <div class="modal fade" id="add-project" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog add-talent-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body roles-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                    <div class="edit-modal-recruiter">
+                        <span>Project</span>
+                        <div class="cls"></div>
+                        <div class="form-group export">
+                            <!--<select class="form-control select-arrow" ng-model="projectDD" id="projectListD" ng-options="option.name for option in projectListView" drop-down>
             </select>-->
-            <!--<input id="projectListD" list="addProjectList" placeholder="Select Project" class="form-control">
+                            <!--<input id="projectListD" list="addProjectList" placeholder="Select Project" class="form-control">
                 <datalist id="addProjectList">
                     <option ng-repeat="option in projectListView" value="[[option.name]]"></option>
                 </datalist>-->
-            <select id="projectListD" class="selectpicker" data-live-search="true" name="project" ng-model="projectName">
-                <option value="" data-tokens="" style="display: none;">Select Project</option>
-                <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
-            </select>
-            <span id="proj_required" class="error msg-error"  ng-show="[[projectRequired]]">Required.</span>
-          </div>
-          <div class="cls"></div>
-          <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(projectName)">Add to Project</button>
+                            <select id="projectListD" class="selectpicker" data-live-search="true" name="project" ng-model="data.projectName">
+                                <option value="" data-tokens="" style="display: none;">Select Project</option>
+                                <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
+                            </select>
+                            <span id="proj_required" class="error msg-error" ng-show="data.projectRequired && !data.projectName">Required.</span>
+                        </div>
+                        <div class="cls"></div>
+                        <button type="" class="btn add-stage" id="add-talent-btn" ng-click="addToProject(data.projectName)">Add to Project</button>
+                    </div>
+                    <div class="cls"></div>
+                </div>
+            </div>
         </div>
-        <div class="cls"></div>
-      </div>
     </div>
-  </div>
-</div>
-<!-- add-project-Modal-ends -->
+    <!-- add-project-Modal-ends -->
 
 </div>
 
-  <div class="main-success-box" id="nameSuccess" style="display:none;">
+<div class="main-success-box" id="nameSuccess" style="display:none;">
     <span><strong>Success!</strong> Recruiter name is updated.</span>
 </div>
 
-  <div class="main-success-box" id="projectSuccess" style="display:none;">
+<div class="main-success-box" id="projectSuccess" style="display:none;">
     <span><strong>Success!</strong> Talent has been added to the project.</span>
 </div>

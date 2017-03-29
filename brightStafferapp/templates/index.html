@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-{% load staticfiles %}
+<!DOCTYPE html> {% load staticfiles %}
 <html ng-app="brightStaffer">
 
 <head>
@@ -10,7 +9,7 @@
 
     <!-- Page title set in pageTitle directive -->
     <title page-title></title>
-        <!-- Bootstrap and Fonts -->
+    <!-- Bootstrap and Fonts -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Font awesome -->
     <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet">
@@ -31,63 +30,82 @@
     <link href="{% static 'css/bootstrap-select.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
     <link href="{% static 'css/select-box-custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/rzslider.css' %}" rel="stylesheet">
+    
+    
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
     <!--<link href="{% static 'css/acute.select/acute.select.css' %}" rel="stylesheet" />-->
 </head>
 
 <!-- ControllerAs syntax -->
 <!-- Main controller with serveral data used in Inspinia theme on diferent view -->
 
-<body ng-controller="MainCtrl as main" class="[[$state.current.data.specialClass]]" >
+<body ng-controller="MainCtrl as main" class="[[$state.current.data.specialClass]]">
 
-<!-- Main view  -->
-<div ui-view></div>
-<!--<div ui-view="modal" autoscroll="false"></div>-->
-<!-- jQuery and Bootstrap -->
-<div class="success-box" id="publishBox" style="display:none;">
-    <span><strong>Success!</strong> Project created successfully.</span>
-</div>
-<script type="text/javascript">
-    var static_url = '{{ STATIC_URL}}';
-</script>
-<!--<script src="{% static 'js/plugins/iCheck/icheck.min.js' %}"></script>-->
-<script src="{% static 'js/angular/angular.min.js' %}"></script>
-<script src="{% static 'js/angular/angular-cookies.min.js' %}"></script>
-<script src="{% static 'js/jquery/jquery-2.1.1.js' %}"></script>
-<script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+    <div class="loader" ng-show="showLoader">
+        <div id="startup">
+            <svg class="spinner-container" width="65px" height="65px" viewBox="0 0 52 52">
+                <circle class="path" cx="26px" cy="26px" r="20px" />
+            </svg>
+        </div>
+    </div>
 
-<script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
-<script src="{% static 'js/jquery/jquery.easy-pie-chart.min.js' %}"></script>
-<script src="{% static 'js/jquery/jquery.selectbox-0.2.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/acute.select.js' %}"></script>
-<script src="{% static 'js/plugins/bootstrap-select.min.js' %}"></script>
-<script src="{% static 'js/plugins/jquery.mCustomScrollbar.concat.min.js' %}"></script>
-
+    <!-- Main view  -->
+    <div ui-view></div>
+    <!--<div ui-view="modal" autoscroll="false"></div>-->
+    <!-- jQuery and Bootstrap -->
+    <div class="success-box" id="publishBox" style="display:none;">
+        <span><strong>Success!</strong> Project created successfully.</span>
+    </div>
+    <script type="text/javascript">
+        var static_url = '{{ STATIC_URL}}';
+    </script>
+    <!--<script src="{% static 'js/plugins/iCheck/icheck.min.js' %}"></script>-->
+    <script src="{% static 'js/angular/angular.min.js' %}"></script>
+    <script src="{% static 'js/angular/angular-cookies.min.js' %}"></script>
+    <script src="{% static 'js/jquery/jquery-2.1.1.js' %}"></script>
+    <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+    
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
+    <script src="{% static 'js/jquery/jquery.easy-pie-chart.min.js' %}"></script>
+    <script src="{% static 'js/jquery/jquery.selectbox-0.2.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/acute.select.js' %}"></script>
+    <script src="{% static 'js/plugins/bootstrap-select.min.js' %}"></script>
+    <script src="{% static 'js/plugins/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+    
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+    
     <!-- MetsiMenu -->
-<script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
-<!-- SlimScroll -->
-<script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
-<script src="{% static 'js/plugins/dataTables/datatables.min.js' %}"></script>
-<script src="{% static 'js/plugins/dataTables/dataTables.select.min.js' %}"></script>
-<!-- Custom and plugin javascript -->
-<!--<script src="{% static 'js/inspinia.js' %}"></script>-->
-<script src="{% static 'js/dist/d3.js' %}"></script>
-<script src="{% static 'js/dist/nv.d3.js' %}"></script>
-<script src="{% static 'js/dist/moment.js' %}"></script>
-<script src="{% static 'js/dist/angularjs-nvd3-directives.js' %}"></script>
-<script src="{% static 'js/fileUpload/dropZone.js' %}"></script>
+    <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <script src="{% static 'js/plugins/dataTables/datatables.min.js' %}"></script>
+    <script src="{% static 'js/plugins/dataTables/dataTables.select.min.js' %}"></script>
+    <!-- Custom and plugin javascript -->
+    <!--<script src="{% static 'js/inspinia.js' %}"></script>-->
+    <script src="{% static 'js/dist/d3.js' %}"></script>
+    <script src="{% static 'js/dist/nv.d3.js' %}"></script>
+    <script src="{% static 'js/dist/moment.js' %}"></script>
+    <script src="{% static 'js/dist/angularjs-nvd3-directives.js' %}"></script>
+    <script src="{% static 'js/fileUpload/dropZone.js' %}"></script>
 
-<script src="{% static 'js/plugins/oclazyload/dist/ocLazyLoad.min.js' %}"></script>
-<script src="{% static 'js/ui-router/angular-ui-router.min.js' %}"></script>
-<script src="{% static 'js/bootstrap/ui-bootstrap-tpls-1.1.2.min.js' %}"></script>
-<!-- Tags Input -->
-<!--<script src="{% static 'js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js' %}"></script>-->
-<!-- Anglar App Script -->
-<script src="{% static 'js/app.js' %}"></script>
-<script src="{% static 'js/services.js' %}"></script>
-<script src="{% static 'js/config.js' %}"></script>
-<script src="{% static 'js/directives.js' %}"></script>
-<script src="{% static 'js/filters.js' %}"></script>
-<script src="{% static 'js/controllers.js' %}"></script>
+    <script src="{% static 'js/plugins/oclazyload/dist/ocLazyLoad.min.js' %}"></script>
+    <script src="{% static 'js/ui-router/angular-ui-router.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap/ui-bootstrap-tpls-1.1.2.min.js' %}"></script>
+    <script src="{% static 'js/angular/rzslider.js' %}"></script>
+    <!-- Tags Input -->
+    <!--<script src="{% static 'js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js' %}"></script>-->
+    <!-- Anglar App Script -->
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/services.js' %}"></script>
+    <script src="{% static 'js/config.js' %}"></script>
+    <script src="{% static 'js/directives.js' %}"></script>
+    <script src="{% static 'js/filters.js' %}"></script>
+    <script src="{% static 'js/controllers.js' %}"></script>
 </body>
+
 </html>

@@ -8,7 +8,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from ResumeParser.Ngram.Ngram import create_ngram
 from ResumeParser.conf.parameters import *
 
-nltk.data.path.append('/root/nltk_data')
+nltk.data.path.append('/Users/jademaddy/Desktop/brightstaffer/ResumeParser/nltk_data')
 
 
 class Resume:
@@ -49,12 +49,12 @@ def raw_resume_to_data(resumetext):
     raw_text = sent_tokenize(raw.decode('utf-8'))
     sents = sent_tokenize(text)
     # raw_text = raw.split('\n')
-    # sents = text.split('\n')
+    # sents = text.split('\
     for sent in sents:
         sent = re.compile('[^a-zA-Z\s]').sub('', sent)
         all_sents.append(
             word_tokenize(
-                sent.encode('utf-8').translate(None, string.punctuation)))
+                sent.translate(string.punctuation)))
     return all_sents, raw_text
 
 
@@ -71,8 +71,8 @@ def get_word2vec_vector(sent, model, model_type):
     stop = set(nltk.corpus.stopwords.words('english'))
     sent_vector = []
     for j, word in enumerate(sent):
-        word = WordNetLemmatizer().lemmatize(word.decode('utf-8'))
-        if word in model.vocab and word not in stop:
+        word = WordNetLemmatizer().lemmatize(word)
+        if word in model.wv.vocab and word not in stop:
             if len(sent_vector) == 0:
                 sent_vector = np.array(model[word])
             else:
@@ -97,7 +97,8 @@ def build_resume(all_sents, original, word2vec_model, classifier_model, model_ty
             if predicted_class[0][0] == 1:
                 resume.education.append(original[i])
             elif predicted_class[0][1] == 1:
-                resume.skills.append(original[i])
+                #resume.skills.append(original[i].trim())
+                pass
             elif predicted_class[0][2] == 1:
                 resume.work.append(original[i])
             elif predicted_class[0][3] == 1:

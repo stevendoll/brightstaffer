@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept, PdfImages, FileUpload, Recruiter
 from brightStafferapp import util
-from brightStafferapp.util import require_post_params
+from brightStafferapp.util import require_post_params, required_headers
 from brightStaffer.settings import Alchemy_api_key
 from django.shortcuts import render, HttpResponse
 from itertools import chain
@@ -24,6 +24,7 @@ from rest_framework.response import Response
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from uuid import UUID
+from ResumeParser.core import create_resume
 import PyPDF2
 from PIL import Image
 import os
@@ -247,13 +248,14 @@ class AlchemyAPI(View):
             alchemy_language = AlchemyLanguageV1(api_key=Alchemy_api_key)
             data = json.dumps(
                 alchemy_language.combined(text=user_data['description'],
-                                          extract='entities,keywords', max_items=25))
+                                          extract='entities,keywords', max_items=40))
             d = json.loads(data)
+            print (d)
             Projects.objects.filter(id=project_id).update(description_analysis=d)
             for item in chain(d["keywords"], d["entities"]):
-                if round(float(item['relevance']), 2) >= concept_relevance:
+                if round(float(item['relevance']), 2) >= float(concept_relevance):
                     keyword_list.append(item['text'].lower())
-            return list(set(keyword_list))[:25]
+            return list(set(keyword_list))[:40]
         except Exception as e:
             return keyword_list
 
@@ -355,6 +357,29 @@ class TopProjectList(generics.ListCreateAPIView):
         response.data['message'] = 'success'
         del (response.data['results'])
         return response
+
+
+class ProjectDelete(generics.ListCreateAPIView):
+    queryset = Projects.objects.all()
+    serializer_class = ProjectSerializer
+    http_method_names = ['get']
+
+    @required_headers(params=['HTTP_TOKEN', 'HTTP_RECRUITER'])
+    def get(self,request, *args, **kwargs):
+        param_dict = {}
+        queryset = super(ProjectDelete, self).get_queryset()
+        recruiter = request.META.get('HTTP_RECRUITER', '')
+        token = request.META.get('HTTP_TOKEN','')
+        values = Token.objects.filter(user__username=recruiter, key=token)
+        if not values:
+            return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
+        project_id_list = self.request.query_params.get('project').split(',')
+        for project_id in project_id_list:
+            talent_objs = Projects.objects.filter(id=project_id)
+            if not talent_objs:
+                return util.returnErrorShorcut(403, 'Project with id {} dosen\'t exist in database.'.format(project_id))
+            deleted = Projects.objects.filter(id=project_id).delete()
+        return util.returnSuccessShorcut(param_dict)
 
 
 class UpdateRecruiter(View):
@@ -491,10 +516,11 @@ class FileUploadView(View):
         and is now sent to extract text from the pdf file
         :return: None or error
         """
-        text = textract.process(file_upload_obj.file.path)
+        text = textract.process(file_upload_obj.file.path).decode('utf-8')
         file_upload_obj.text = text
         file_upload_obj.save()
-
+        skills=create_resume.create_resume(text)
+        print (skills)
 
 def user_validation(data):
     values = Token.objects.filter(user__username=data['recruiter'], key=data['token'])

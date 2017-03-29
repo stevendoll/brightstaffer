@@ -127,6 +127,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = "media/"
 MEDIA_URL = os.path.join(BASE_DIR, MEDIA_ROOT)
+PDF_UPLOAD_PATH = os.path.join(BASE_DIR,MEDIA_ROOT)
 #print(MEDIA_URL)
 # Add static folder to Static dic
 # STATICFILES_DIRS = [
