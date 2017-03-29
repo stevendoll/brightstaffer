@@ -251,10 +251,10 @@
                     <div class="edit-modal-recruiter">
                         <span>Edit Recruiter</span>
                         <form class="form-group" name="name_edit" id="name_edit" ng-keyup="hideMessages('name_edit')">
-                            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" ng-maxlength="20">
-                            <span class="error" id="name-required" style="color:red" ng-show="[[isName]]">Required.</span>
+                            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" maxlength="20">
+                            <span class="error" id="name-required" style="color:red" ng-show="isName">Required.</span>
                             <span class="error" style="color:red" ng-show="name_edit.username.$error.pattern">Please enter character only.</span>
-                            <span style='color:red' ng-show="!name_edit.username.$error.pattern && name_edit.username.$error.maxlength">Your input is too long!</span>
+<!--                            <span style='color:red' ng-show="!name_edit.username.$error.pattern && name_edit.username.$error.maxlength">Your input is too long!</span>-->
                         </form>
                         <div class="cls"></div>
                         <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(data.recruiterNameInput)">Update</button>
