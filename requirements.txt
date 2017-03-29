@@ -7,6 +7,7 @@ djangorestframework
 django-widget-tweaks
 elasticsearch==5.2.0
 gensim==1.0.0
+fuzzywuzzy==0.15.0
 h5py
 keras
 Markdown==2.6.8
