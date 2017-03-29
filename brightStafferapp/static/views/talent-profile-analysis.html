@@ -431,7 +431,7 @@
             <input type="email" class="form-control"  placeholder="Add Email" ng-pattern="emailPattern" autocomplete="off" ng-model="candidateInfo.candidateEmailAdd" name="talentAddEmail" ng-focus="add_email.talentAddEmail.blur = false;" ng-blur="add_email.talentAddEmail.blur = true;" required>
             <span style="color:red" ng-show="add_email.talentAddEmail.$error.pattern">Please enter valid email address.</span>
             <button type="submit" class="btn contact-update-bttn" id="add_email">Add</button>
-            <button type="button" class="btn contact-update-bttn" ng-click="cancelPopup()">Cancel</button>
+            <button type="button" class="btn contact-update-bttn" ng-click="candidateInfo.candidateEmailAdd='';cancelPopup()">Cancel</button>
           </form>
         </div>
         <div class="contact-info-modal-div border-bttm">
