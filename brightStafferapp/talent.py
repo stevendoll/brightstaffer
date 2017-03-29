@@ -237,7 +237,7 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
 
             #TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match="50", rank="3")
             talent_result = queryset.filter(talent_active__is_active=True)
-        talent_project_match(talent_obj,project)
+            talent_project_match(talent_obj,project)
         return talent_result
 
 def talent_project_match(talent_obj,project):
