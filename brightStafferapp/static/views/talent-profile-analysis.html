@@ -453,7 +453,7 @@
           </form>
           <div class="cls"></div>
           <form name="Contact2" class="contact-edit-sec" ng-show="isContactAdd" ng-submit="Contact2.$valid && addContact(talentDetails.id, talentDetails.talent_contact[0].contact,candidateInfo.candidateContactAdd)">
-            <input type="" class="form-control"  placeholder="Add Contact" autocomplete="off" ng-model="candidateInfo.candidateContactAdd" ng-pattern="phonePattern" name="contact_add" ng-focus="Contact2.contact_add.focus = true;" ng-blur="Contact2.contact_add.focus = false;"  required>
+            <input type="" maxlength="10" class="form-control"  placeholder="Add Contact" autocomplete="off" ng-model="candidateInfo.candidateContactAdd" ng-pattern="phonePattern" name="contact_add" ng-focus="Contact2.contact_add.focus = true;" ng-blur="Contact2.contact_add.focus = false;"  required>
 <!--            <span class="error"  style="color:red;" ng-show="!Contact2.contact_add.focus && Contact2.contact_add.$error.required">Required.</span>-->
             <span style="color:red" ng-show="Contact2.contact_add.$error.pattern">Please enter valid contact number.</span>
             <button type="submit" class="btn contact-update-bttn" id="add_contact">Add</button>
@@ -476,10 +476,9 @@
         <div class="edit-modal-recruiter">
           <span>Edit Recruiter</span>
           <form class="form-group" name="name_edit" id="name_edit" ng-keyup="hideMessages('name_edit')">
-            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" ng-maxlength="20">
+            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" maxlength="20">
              <span class="error" id="name-required" style="color:red" ng-show="isName">Required.</span>
             <span class="error" style="color:red" ng-show="name_edit.username.$error.pattern">Please enter character only.</span>
-            <span style='color:red' ng-show="!name_edit.username.$error.pattern && name_edit.username.$error.maxlength">Your input is too long!</span>
           </form>
           <div class="cls"></div>
           <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(data.recruiterNameInput)">Update</button>
