@@ -516,10 +516,10 @@ class FileUploadView(View):
         and is now sent to extract text from the pdf file
         :return: None or error
         """
-        text = textract.process(file_upload_obj.file.path)
+        text = textract.process(file_upload_obj.file.path).decode('utf-8')
         file_upload_obj.text = text
         file_upload_obj.save()
-        skills=create_resume.create_resume(str(text))
+        skills=create_resume.create_resume(text)
         print (skills)
 
 def user_validation(data):

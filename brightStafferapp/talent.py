@@ -20,7 +20,9 @@ from datetime import datetime
 from .search import TERM_QUERY, BASE_QUERY, EMPTY_QUERY
 from django.conf import settings
 import copy
-
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
+import math
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -235,17 +237,23 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
 
             #TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match="50", rank="3")
             talent_result = queryset.filter(talent_active__is_active=True)
-        talent_project_match(talent_objs,project)
+        talent_project_match(talent_obj,project)
         return talent_result
 
-
-def talent_project_match(talent_objs,project):
-    talent_concept_list=TalentConcept.objects.filter(talent_id=talent_objs).values_list('concept__concept',flat=True)
+def talent_project_match(talent_obj,project):
+    talent_concept_list=TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',flat=True)
+    talent_concept_count=TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',flat=True).count()
     project_concept_list=ProjectConcept.objects.filter(project=project).values_list('concept__concept',flat=True)
-    common_result = set(talent_concept_list).intersection(project_concept_list)
-    print (common_result)
-    print (talent_concept_list)
-    print (project_concept_list)
+    project_concept_count=ProjectConcept.objects.filter(project=project).values_list('concept__concept',flat=True).count()
+    total_concept=talent_concept_count+project_concept_count
+    count = 0
+    for t_concept in talent_concept_list:
+        for p_conecpt in project_concept_list:
+            ratio=fuzz.partial_ratio(t_concept,p_conecpt)
+            if ratio >= 50:
+                count = count+1
+    match = math.ceil(round((count/total_concept)*100,2))
+    TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match, rank="3")
 
 # View Talent's Current stage for a single project and Add Talent's stage for a single project
 class TalentStageAddAPI(generics.ListCreateAPIView):
