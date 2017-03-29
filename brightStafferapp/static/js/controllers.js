@@ -1055,12 +1055,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
 
 
 
@@ -1091,12 +1093,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
 
 
 
@@ -1658,8 +1662,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log(name);
         if (name) {
             $rootScope.recruiter.recruiterName = name;
-//            $('#nameUpdate').addClass('disabled');
-//            $('#nameUpdate').css('pointer-events', 'none');
+            //            $('#nameUpdate').addClass('disabled');
+            //            $('#nameUpdate').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
                 'display_name': $rootScope.recruiter.recruiterName
@@ -1755,8 +1759,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.editRecruiter = function () {
         $scope.isName = false;
         $scope.data.recruiterNameInput = $rootScope.recruiter.recruiterName;
-//        $('#nameUpdate').removeClass('disabled');
-//        $('#nameUpdate').css('pointer-events', '');
+        //        $('#nameUpdate').removeClass('disabled');
+        //        $('#nameUpdate').css('pointer-events', '');
         $('#recruiter-modal').modal('hide');
         $('#edit-recruiter').modal('show');
     }
@@ -2687,14 +2691,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 angular
     .module('brightStaffer')
     .controller('MainCtrl', MainCtrl)
+    .controller('talentCtrl', talentCtrl)
     .controller('loginCtrl', loginCtrl)
     .controller('signupCtrl', signupCtrl)
     .controller('forgotCtrl', forgotCtrl)
     .controller('resetPwCtrl', resetPwCtrl)
-    .controller('topnavCtrl', topnavCtrl)
     .controller('createProjectCtrl', createProjectCtrl)
     .controller('tableCtrl', tableCtrl)
     .controller('scoreCardCtrl', scoreCardCtrl)
     .controller('uploadFileCtrl', uploadFileCtrl)
-    .controller('talentCtrl', talentCtrl)
-    .controller('sideNavCtrl', sideNavCtrl);
+    .controller('sideNavCtrl', sideNavCtrl)
+    .controller('topnavCtrl', topnavCtrl);
