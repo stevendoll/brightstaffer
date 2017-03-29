@@ -276,7 +276,9 @@ EMPTY_QUERY = {
         }
 
 BASE_QUERY = {
-    "query": {
+   "from": 0,
+   "size": 10,
+   "query": {
         "bool": {
             "must": {
                 "match_all": {}
@@ -285,11 +287,8 @@ BASE_QUERY = {
                 "bool": {
                     "should": [],
                     "must": [
-                        {
-                            "match": {
-                                "recruiter": "recruiter_term"
-                            }
-                        }
+                       {"match": {"recruiter": "recruiter_term"}},
+                       {"terms": {"status": ["active", "new"]}}
                     ]
                 }
             }
@@ -297,6 +296,8 @@ BASE_QUERY = {
     }
                 }
 TERM_QUERY = {
+   "from": 0,
+   "size": 10,
    "query": {
       "bool": {
          "must": {
@@ -412,11 +413,8 @@ TERM_QUERY = {
                   }
                ],
                "must": [
-                  {
-                     "match": {
-                        "recruiter": "recruiter_term"
-                     }
-                  }
+                  {"match": {"recruiter": "recruiter_term"}},
+                  {"terms": {"status": ["active", "new"]}}
                ]
             }
          }
