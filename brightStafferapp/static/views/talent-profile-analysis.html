@@ -166,9 +166,11 @@
                                         <div class="link-panel" style="cursor:default;"><a href="">#[[proj.project]]</a><span><a href="">@[[proj.company_name | capitalizeWord]]</a></span></div>
                                       </div>
                                     </td>
-                                    <td><div class="rank-circle">[[proj.rank]]</div></td>
+                                    <td><div class="rank-circle">[[$index+1]]</div></td>
                                     <td><div class="table-date-div">[[proj.date_added | dateFormat]]</div></td>
-                                    <td class="interviewing-text">[[proj.project_stage ]]</td>
+                                    <td class="interviewing-text"><span ng-show="proj.project_stage">[[proj.project_stage ]]</span>
+                                      <span ng-show="!proj.project_stage"> - </span>
+                                    </td>
                                   </tr>
                                   <!--<tr>
                                     <th scope="row" class="padd-left32">

@@ -12,6 +12,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.StagesProjectList = [];
     $scope.showLoader = false;
 
+
     $rootScope.showLoader = function (show) {
         $scope.showLoader = show;
     }
