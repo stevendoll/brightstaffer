@@ -2611,6 +2611,7 @@ checkReqValidationForStage();
     }
 
     $rootScope.filterReset = function () {
+        $scope.priceSlider.value = 0;
         $scope.filterValue = {
             stage: ''
             , project: ''
