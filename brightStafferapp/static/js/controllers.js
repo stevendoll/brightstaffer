@@ -2523,11 +2523,11 @@ checkReqValidationForStage();
         var selectedProjectId = '';
 
 //            $scope.filterValue.analysed = analysedDate;
-            $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate(analysedDate) : '';
+            $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
 
 
 //            $scope.filterValue.lastContacted = lastContacted;
-            $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate(lastContacted) : '';
+            $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
 
         if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined)
             $scope.filterValue.stage = '';
@@ -2631,11 +2631,11 @@ checkReqValidationForStage();
         $('#sbSelector_' + selectorId).text(selectedValue);
         $("#projectSelect").val('').selectpicker('refresh');
         // $("#ex3").slider("value", $("#ex3").slider("option", "min") );
-        $('.filter-input-date').datepicker({
-            dateFormat: "dd/mm/yyyy"
-            , changeMonth: true
-            , changeYear: true
-        }).val('');
+//        $('.filter-input-date').datepicker({
+//            dateFormat: "dd/mm/yyyy"
+//            , changeMonth: true
+//            , changeYear: true
+//        }).val('');
         //$("#ex3").slider('values', 0, 100);
 
         $("#rate_filter li.filled").removeClass('filled');
