@@ -50,3 +50,6 @@ CELERYBEAT_SCHEDULE = {
                 "args": (16, 16)
             },
 }
+
+STATIC_ROOT = '/home/ubuntu/brightstaffer/brightStafferapp/static/'
+STATIC_URL = '/static/'
