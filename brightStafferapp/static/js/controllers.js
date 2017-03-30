@@ -313,13 +313,15 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
             });
         }
     }
-
+    
+    $scope.getSearchData();
+    
     $rootScope.getCandidateData = function () {
         console.log('fetching candidate data')
         $scope.getSearchData();
     }
 
-    $rootScope.$on('fetchCandidateData', $rootScope.getCandidateData)
+    $rootScope.$on('fetchCandidateData', $rootScope.getCandidateData);
 }
 
 
@@ -1575,7 +1577,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //            console.log("FAILED to fetch candidate data");
         //        }
 
-        $rootScope.$emit('fetchCandidateData');
+//        $rootScope.$emit('fetchCandidateData');
 
     });
 
