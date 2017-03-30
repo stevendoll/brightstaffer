@@ -95,12 +95,12 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         $rootScope.isSuccess = false;
     }
 
-    /*$scope.init = function(){
+    $scope.fetchProjects = function(){
         $scope.getTopSixProjects();
         $rootScope.showAllProjects();
     }
 
-    $scope.init();*/
+//    $scope.init();
 
 };
 
