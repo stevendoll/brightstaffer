@@ -1,4 +1,5 @@
-import string
+import os
+import sys
 
 import nltk
 import numpy as np
@@ -52,31 +53,32 @@ class Resume:
     def __get_education__(self):
         index = 0
         self.education = [x for x in self.education if x]
-        for i,line in enumerate(self.education):
+        for i, line in enumerate(self.education):
             if line.startswith('Education'):
                 index = i
-                break;
-        if index+1 <= len(self.education)-1:
-            return self.education[index+1:]
+                break
+        if index + 1 <= len(self.education) - 1:
+            return self.education[index + 1:]
         else:
             return []
 
     def __get_skills__(self):
-        """string.punctuation = '!"#$%&()*/:;<=>?[\]^_`{|}~'
-        skills = ','.join(self.skills).\
-            translate(string.punctuation).\
-            replace('years', '').\
-            split(',')
-        self.skills = skills
-        del skills"""
-        no_of_skills = len(self.skills)
-        self.skills = [{'name':skill[0],'score':(skill[1]/no_of_skills)} for skill in self.skills]
-        return self.skills
+        no_of_skills = sum([skill[1] for skill in self.skills])
+        self.skills = [{'name': skill[0], 'score': (skill[1] / no_of_skills) * 100} for skill in self.skills]
+        self.skills.sort(key=lambda x: x['score'], reverse=True)
+        if len(self.skills) <= max_skill_count:
+            return self.skills
+        else:
+            return self.skills[:max_skill_count]
 
     def __get_work__(self):
         self.work = []
-        tmp_dict = {}
         for career in self.career_history:
+            tmp_dict = {'JobTitle': '',
+                        'Company': '',
+                        'Duration': '',
+                        'type': ''
+                        }
             for entity in career:
                 if entity[1] == 'JobTitle':
                     tmp_dict['JobTitle'] = entity[0]
@@ -89,20 +91,19 @@ class Resume:
                     else:
                         tmp_dict['type'] = 'Past'
             self.work.append(tmp_dict)
-            tmp_dict = {}
         return self.work
 
     def __get_other__(self):
         return self.additional
 
     def get_name(self):
-     try:
-        rel_list = [ entity['relevance'] for entity in self.names ]
-        max_rel_index = rel_list.index(max(rel_list))
-        return self.names[max_rel_index]['text']
-     except Exception as exp:
-         print(exp)
-         return ''
+        try:
+            rel_list = [entity['relevance'] for entity in self.names]
+            max_rel_index = rel_list.index(max(rel_list))
+            return self.names[max_rel_index]['text']
+        except Exception as exp:
+            print(exp)
+            return ''
 
     def get_templatized_resume(self):
         resume = dict()
@@ -135,7 +136,7 @@ def get_word2vec_vector(sent, model, model_type):
 
     stop = set(nltk.corpus.stopwords.words('english'))
     sent_vector = []
-    sent = sent[0]+sent[1]+sent[2]
+    sent = sent[0] + sent[1] + sent[2]
     for j, word in enumerate(sent):
         word = WordNetLemmatizer().lemmatize(word)
         if word in model.wv.vocab and word not in stop:
@@ -172,10 +173,11 @@ def extract_information_from_resume(all_sents, original, word2vec_model,
                     predicted_class_treebased = mlmodel_treebased.predict(sent_vector)
                 except Exception as exp:
                     print(exp)
-                    print(sent_vector)
                 if predicted_class_lstm == 0 or predicted_class_treebased == 0:
                     resume.education.append(original[i])
                 elif predicted_class_lstm == 1 or predicted_class_treebased == 1:
+                    # Currently classified skills with ML is disabled because it's
+                    # required to be processed before it could be used.
                     # resume.skills.append(original[i])
                     pass
                 elif predicted_class_lstm == 2 or predicted_class_treebased == 2:
@@ -194,23 +196,30 @@ def extract_information_from_resume(all_sents, original, word2vec_model,
         resume.skills = list(set(resume.skills))
         temp_entity = entities[:]
         entities = []
-        entity_flag = {}
+        entity_flag = dict()
         for index, entity in enumerate(temp_entity):
             if entity_flag.get(entity['text'], 0) == 0:
                 entity_flag[entity['text']] = 1
                 entities.append(entity)
         del temp_entity
+
+        single_job_title = dict()
         for index, sent in enumerate(resume.work):
             for entity in entities:
                 if (entity['type'] in ('JobTitle', 'Company')) and entity['text'] in sent:
-                    resume.career_history.append((entity['text'], entity['type'], index))
+                    if entity['type'] == 'JobTitle' and \
+                                    str(index) not in single_job_title:
+                        resume.career_history.append((entity['text'], entity['type'], index))
+                        single_job_title[str(index)] = 1
+                    elif entity['type'] != 'JobTitle':
+                        resume.career_history.append((entity['text'], entity['type'], index))
                 elif (entity['type'] in 'DATE') and \
                         (len(entity['text'].split()) >= 2 or entity['text'] == 'Present') and \
                                 entity['text'] in sent:
                     resume.career_history.append((entity['text'], entity['type'], index))
                 elif entity['type'] == 'Person':
                     resume.names.append(entity)
-
+        del single_job_title
         temp_career_history = resume.career_history[:]
         resume.career_history = []
         if len(temp_career_history) >= 1:
@@ -231,5 +240,8 @@ def extract_information_from_resume(all_sents, original, word2vec_model,
         convert_date_to_duration(resume)
     except Exception as exp:
         print(exp)
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
     finally:
         return resume

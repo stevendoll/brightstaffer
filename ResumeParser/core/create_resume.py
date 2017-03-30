@@ -28,7 +28,7 @@ def create_resume(talent_data):
                                                  entities)
 
     except Exception as exp:
-        print(exp)
+        print (exp)
         resume = Resume(word_model='word2vec')
     finally:
         formated_resume = resume.get_templatized_resume()
