@@ -12173,3 +12173,19 @@ input[type=date]::-webkit-inner-spin-button {
     display: none;
 
 }
+
+.count .normal-select {
+  border: 1px solid #e7eaec;
+    height: 36px;
+    border-radius: 2px;
+    font-size: 13px;
+    font-family: 'open_sansregular';
+    color: #383f44;
+    padding: 8px 10px;
+    width: 50px;
+    background: url(../img/select-arrow.png) no-repeat;
+    background-position: 30px 10px;
+    -webkit-appearance: none;
+   -moz-appearance:    none;
+   appearance:         none;
+}

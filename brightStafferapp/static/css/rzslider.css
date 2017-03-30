@@ -5,9 +5,10 @@
 .rzslider {
   position: relative;
   display: inline-block;
-  width: 100%;
+  width: 58%;
   height: 4px;
-  margin: 35px 0 15px 0;
+  float: left;
+  margin: 7px 5px 15px 5px;
   vertical-align: middle;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -93,6 +94,7 @@
   cursor: pointer;
   background-color: #3680ca;
   border-radius: 16px;
+  outline: 0;
 }
 
 .rzslider .rz-pointer:after {
@@ -116,6 +118,7 @@
   padding: 1px 3px;
   color: #55637d;
   cursor: default;
+  display: none;
 }
 
 .rzslider .rz-bubble.rz-limit {

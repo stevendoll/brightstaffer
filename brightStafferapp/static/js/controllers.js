@@ -1639,6 +1639,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         $scope.choosenCandidates = [];
         $scope.isFilterChecked = false;
+        $('.talent-search-icon').removeClass('active');
         $('#selectall').prop('checked', false);
         $('#assignToProject').removeClass('add-talent');
         $('#assignToProject').addClass('disabled-talent');
