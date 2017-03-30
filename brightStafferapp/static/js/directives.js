@@ -570,6 +570,7 @@ function stageScroll($timeout) {
                         enable: true
                     }
                     , axis: "y", // horizontal scrollbar
+                    scrollInertia: 60,
 
                 });
             });

@@ -291,10 +291,15 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         $state.go('login', '');
     }
     $rootScope.candidatePages = [];
-    $scope.getSearchData = function () {
+    $scope.getSearchData = function (onReload) {
         var currentState = $state.current.name;
-        var allowedArray = ["talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
+        var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
         if (allowedArray.indexOf(currentState) > -1) {
+            
+            if(!onReload && currentState == "talent.talent-profile"){
+                $state.go('talent.talent-search.talent-search-card');
+            }
+            
             $rootScope.filterReset();
             var requestObject = {
                 'keyword': $rootScope.search.searchKeywords || ''
@@ -322,7 +327,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         }
     }
 
-    $scope.getSearchData();
+    $scope.getSearchData(true);
 
     $rootScope.getCandidateData = function () {
         console.log('fetching candidate data')
@@ -414,9 +419,9 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         if (!$scope.projectForm.description) {
             $scope.isDescriptionRequired = true;
         } else if ($scope.projectForm.description) {
-            if (!$rootScope.jobDescriptionResult) {
+            /*if (!$rootScope.jobDescriptionResult) {
                 $(".loader").css('display', 'block');
-            }
+            }*/
 
             if ($("#tablist").find(".current").length > 0) {
                 $("#tablist").find(".current").addClass("done");
@@ -526,6 +531,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
             $scope.takeNext(currentState, prevTabId, currentTabId);
             break;
         case 'create.step2':
+            $scope.updateJobDescription($scope.projectForm.description);
             prevTabId = '#form-t-1';
             currentTabId = '#form-t-2';
             $scope.takeToStepThree(currentState, prevTabId, currentTabId);
@@ -696,8 +702,8 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         });
     }
 
-    $scope.updateJobDescription = function ($event) {
-        if ($event.target.value) {
+    $scope.updateJobDescription = function (value) {
+        if (value) {
             $rootScope.jobDescriptionResult = '';
             $scope.isDescriptionError = false;
             $scope.apiErrorMsg = '';
@@ -706,7 +712,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
             var recruiter = $rootScope.globals.currentUser.user_email;
             var requestObject = {};
             requestObject["id"] = $rootScope.globals.currentProject_id;
-            requestObject[$event.target.name] = $event.target.value;
+            requestObject['description'] = value;
             requestObject["token"] = token;
             requestObject["recruiter"] = recruiter;
             requestObject["is_published"] = is_published;
@@ -718,7 +724,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                         $scope.apiErrorMsg = "There is no relevant keywords in your description.";
                     }
 
-                    $(".loader").css('display', 'none');
+                    //$(".loader").css('display', 'none');
 
                 } else {
                     if (response.errorstring) {
@@ -729,7 +735,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                         $scope.isDescriptionError = true;
                         $scope.apiErrorMsg = "Description text data is not valid.";
                     }
-                    $(".loader").css('display', 'none');
+                    //$(".loader").css('display', 'none');
                     console.log('error');
                 }
             });

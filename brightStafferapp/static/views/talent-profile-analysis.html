@@ -114,11 +114,25 @@
                           </div>
                         </div>
                         <div class="talent-progress" ng-repeat="career in talentDetails.talent_company | limitTo: 3">
+
+
                           <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[career.years_of_experience | number:2]]%;">
+                            <!--<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[career.years_of_experience | number:2]]%;">
                               <span class="text">[[career.company | capitalize]]</span>
                               <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
+                            </div>-->
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((talentDetails.talent_company[$index - 1].years_of_experience.toFixed(2)/calcTotal(talentDetails.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
                             </div>
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talentDetails.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
+                            </div>
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[((career.years_of_experience.toFixed(2)/calcTotal(talentDetails.talent_company)) * 100).toFixed(2)]]%;">
+                                <span class="text">[[career.company | capitalize]]</span>
+                                <span class="percentage">[[career.years_of_experience | number:1]] Years</span>
+                            </div>
+
                           </div>
                         </div>
                         <div class="cls"></div>
@@ -420,7 +434,7 @@
             <span>[[talentDetails.talent_email[0].email]]</span>
             <div class="contact-edit">
               <span ng-click="showEdit(talentDetails.talent_email)">Edit</span>
-              <span ng-click="showAdd();">Add</span>
+              <span ng-click="showAdd();candidateInfo.candidateEmailAdd='';">Add</span>
             </div>
           </div>
           <div class="cls"></div>
@@ -444,7 +458,7 @@
             <span>[[talentDetails.talent_contact[0].contact]]</span>
             <div class="contact-edit">
               <span ng-click="showContactEdit(talentDetails.talent_contact)">Edit</span>
-              <span ng-click="Contact2.contact_add.focus = true;showContactAdd()">Add</span>
+              <span ng-click="Contact2.contact_add.focus = true;candidateInfo.candidateContactAdd = '';showContactAdd()">Add</span>
             </div>
           </div>
           <div class="cls"></div>
@@ -479,13 +493,13 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <div class="edit-modal-recruiter">
           <span>Edit Recruiter</span>
-          <form class="form-group" name="name_edit" id="name_edit" ng-keyup="hideMessages('name_edit')">
-            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" maxlength="20">
-             <span class="error" id="name-required" style="color:red" ng-show="isName">Required.</span>
+          <form class="form-group" name="name_edit" id="name_edit" ng-keyup="hideMessages('name_edit')" ng-submit="name_edit.$valid && updateRecruiterName(data.recruiterNameInput);">
+            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" maxlength="20" required>
             <span class="error" style="color:red" ng-show="name_edit.username.$error.pattern">Please enter character only.</span>
+              <div class="cls"></div>
+              <button type="submit" class="btn update" id="nameUpdate">Update</button>
           </form>
-          <div class="cls"></div>
-          <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(data.recruiterNameInput)">Update</button>
+          
         </div>
         <div class="cls"></div>
       </div>
@@ -601,11 +615,25 @@
           <span>All Metrics</span>
           <div class="cls"></div>
           <div class="talent-progress" ng-repeat="career in talentCareer">
+
+
+
             <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="[[(career.years_of_experience/calcTotal(talentCareer)) * 100]]" aria-valuemin="0" aria-valuemax="100" style="width:[[(career.years_of_experience/calcTotal(talentCareer)) * 100]]%;">
+              <!--<div class="progress-bar" role="progressbar" aria-valuenow="[[(career.years_of_experience/calcTotal(talentCareer)) * 100]]" aria-valuemin="0" aria-valuemax="100" style="width:[[(career.years_of_experience/calcTotal(talentCareer)) * 100]]%;">
                 <span class="text">[[career.company | capitalize]]</span>
                 <span class="percentage">[[career.years_of_experience | number: 1]] Years</span>
-              </div>
+              </div>-->
+              <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((talentCareer[$index - 1].years_of_experience.toFixed(2)/calcTotal(talentCareer)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
+                            </div>
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talentCareer)) * 100]]%;background-color: #f9cb9c !important;">
+                            </div>
+
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[((career.years_of_experience.toFixed(2)/calcTotal(talentCareer)) * 100).toFixed(2)]]%;">
+                                <span class="text">[[career.company | capitalize]]</span>
+                                <span class="percentage">[[career.years_of_experience | number:1]] Years</span>
+                            </div>
+
             </div>
           </div>
           <!--<div class="talent-progress">

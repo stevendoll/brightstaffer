@@ -87,7 +87,7 @@
                             </div>
 -->
                             
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((talent.talent_company[$index - 1].years_of_experience.toFixed(2)/calcTotal(talent.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((talent.talent_company[$index - 1].years_of_experience/calcTotal(talent.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
                             </div>
 
                             <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talent.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
