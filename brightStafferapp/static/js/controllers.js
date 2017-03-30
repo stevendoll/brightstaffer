@@ -96,9 +96,11 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     }
 
     $scope.fetchProjects = function () {
-        $rootScope.globals.currentUser = $cookieStore.get ('userData');
-        $scope.getTopSixProjects();
-        $rootScope.showAllProjects();
+        $rootScope.globals.currentUser = $cookieStore.get('userData');
+        if ($rootScope.globals.currentUser && $rootScope.globals.currentUser.token && $rootScope.globals.currentUser.user_email) {
+            $scope.getTopSixProjects();
+            $rootScope.showAllProjects();
+        }
     }
     $scope.fetchProjects();
     //    $scope.init();
@@ -1066,12 +1068,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
 
 
 
@@ -1108,12 +1112,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
 
 
 
@@ -1594,7 +1600,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if ($scope.candidatePagination.page == 1) return;
             $scope.candidatePagination.page -= 1;
         }
-//        $rootScope.$emit('fetchCandidateData');
+        //        $rootScope.$emit('fetchCandidateData');
         $rootScope.getCandidateData()
     }
 
@@ -1637,7 +1643,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.getcandidateData = function () {
         //        $rootScope.getCandidateData();
-//        $rootScope.$emit('fetchCandidateData');
+        //        $rootScope.$emit('fetchCandidateData');
         $rootScope.getCandidateData()
     }
     $scope.changeState = function () {
@@ -1872,7 +1878,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             talentApis.addTalentsToProject(requestObject).then(function (response) {
                 //console.log(response);
                 if (!callFrom) {
-//                    $rootScope.$emit('fetchCandidateData');
+                    //                    $rootScope.$emit('fetchCandidateData');
                     $rootScope.getCandidateData();
                     //                    $rootScope.talentList = response;
                     $scope.choosenCandidates == [];
