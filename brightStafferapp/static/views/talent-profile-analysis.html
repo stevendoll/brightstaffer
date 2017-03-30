@@ -493,13 +493,13 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
         <div class="edit-modal-recruiter">
           <span>Edit Recruiter</span>
-          <form class="form-group" name="name_edit" id="name_edit" ng-keyup="hideMessages('name_edit')">
-            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" maxlength="20">
-             <span class="error" id="name-required" style="color:red" ng-show="isName">Required.</span>
+          <form class="form-group" name="name_edit" id="name_edit" ng-keyup="hideMessages('name_edit')" ng-submit="name_edit.$valid && updateRecruiterName(data.recruiterNameInput);">
+            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" maxlength="20" required>
             <span class="error" style="color:red" ng-show="name_edit.username.$error.pattern">Please enter character only.</span>
+              <div class="cls"></div>
+              <button type="submit" class="btn update" id="nameUpdate">Update</button>
           </form>
-          <div class="cls"></div>
-          <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(data.recruiterNameInput)">Update</button>
+          
         </div>
         <div class="cls"></div>
       </div>
