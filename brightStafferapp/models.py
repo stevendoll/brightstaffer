@@ -12,6 +12,8 @@ import os
 import uuid
 import textract
 from datetime import *
+from django.core.management import call_command
+
 
 STAGE_CHOICES = (('Contacted', 'Contacted'),
                  ('Replied', 'Replied'),
@@ -372,10 +374,38 @@ class PdfImages(models.Model):
 
     def __str__(self):
         return self.name
-#
-# @receiver(post_save, sender=FileUpload)
-# def extract_image_from_file(sender, instance=None, created=False, **kwargs):
-#     if created:
-#         obj = sender()
-#         obj.extract_text_from_pdf(instance)
-#         obj.extract_image_from_pdf(instance, instance.file.path, "/images/")
+
+
+@receiver(post_save, sender=TalentProject)
+def extract_image_from_file(sender, instance=None, created=False, **kwargs):
+    call_command('update_index')
+
+
+@receiver(post_save, sender=TalentCompany)
+def extract_image_from_file(sender, instance=None, created=False, **kwargs):
+    call_command('update_index')
+
+
+@receiver(post_save, sender=TalentConcept)
+def extract_image_from_file(sender, instance=None, created=False, **kwargs):
+    call_command('update_index')
+
+
+@receiver(post_save, sender=TalentContact)
+def extract_image_from_file(sender, instance=None, created=False, **kwargs):
+    call_command('update_index')
+
+
+@receiver(post_save, sender=TalentEmail)
+def extract_image_from_file(sender, instance=None, created=False, **kwargs):
+    call_command('update_index')
+
+
+@receiver(post_save, sender=TalentStage)
+def extract_image_from_file(sender, instance=None, created=False, **kwargs):
+    call_command('update_index')
+
+
+@receiver(post_save, sender=TalentEducation)
+def extract_image_from_file(sender, instance=None, created=False, **kwargs):
+    call_command('update_index')
