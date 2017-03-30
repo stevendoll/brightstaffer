@@ -295,11 +295,11 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         var currentState = $state.current.name;
         var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
         if (allowedArray.indexOf(currentState) > -1) {
-            
-            if(!onReload && currentState == "talent.talent-profile"){
+
+            if (!onReload && currentState == "talent.talent-profile") {
                 $state.go('talent.talent-search.talent-search-card');
             }
-            
+
             $rootScope.filterReset();
             var requestObject = {
                 'keyword': $rootScope.search.searchKeywords || ''
@@ -1075,12 +1075,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
 
 
 
@@ -1119,12 +1121,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
 
 
 
@@ -1264,8 +1268,14 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
             return 'rgb(255, 255, 255)'
         };
     }
+    
+    $rootScope.dirOptions = {};
+    $scope.callDirFunc = function () {
+        $scope.dirOptions.clearFiles();
+    };
 
     $scope.resetModal = function () {
+        $scope.dirOptions.clearFiles();
         var doneButton = document.getElementById('done');
         doneButton.classList.add('disabled');
         doneButton.classList.add('talent-modal-done');
@@ -1296,7 +1306,10 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         }
         return false;
     }
-
+//    $rootScope.dirOptions = {};
+//    $scope.callDirFunc = function () {
+//        $scope.dirOptions.clearFiles();
+//    };
     $scope.closePopup = function () {
         var file = $scope.filesExits();
         if (file) {
