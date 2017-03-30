@@ -293,8 +293,13 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     $rootScope.candidatePages = [];
     $scope.getSearchData = function () {
         var currentState = $state.current.name;
-        var allowedArray = ["talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
+        var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
         if (allowedArray.indexOf(currentState) > -1) {
+            
+            if(currentState == "talent.talent-profile"){
+                $state.go('talent.talent-search.talent-search-card');
+            }
+            
             $rootScope.filterReset();
             var requestObject = {
                 'keyword': $rootScope.search.searchKeywords || ''

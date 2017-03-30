@@ -12189,3 +12189,6 @@ input[type=date]::-webkit-inner-spin-button {
    -moz-appearance:    none;
    appearance:         none;
 }
+
+.chk-bx-rt { width: 28px; float: right; right: -5px; margin-top: 15px; position: absolute;}
+.checkbox-right-fx { width: 28px; float: left; margin-bottom: 32px;}
