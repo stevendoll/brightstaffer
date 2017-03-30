@@ -17,7 +17,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         $scope.showLoader = show;
     }
 
-    $scope.getTopSixProjects = function () { // function to fetch top 6 projects
+    $rootScope.getTopSixProjects = function () { // function to fetch top 6 projects
         var requestObject = {
             'token': $rootScope.globals.currentUser.token, // username field value
             'recruiter': $rootScope.globals.currentUser.user_email // password field value
@@ -95,12 +95,12 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         $rootScope.isSuccess = false;
     }
 
-    $scope.init = function(){
+    /*$scope.init = function(){
         $scope.getTopSixProjects();
         $rootScope.showAllProjects();
     }
 
-    $scope.init();
+    $scope.init();*/
 
 };
 
@@ -131,6 +131,8 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
                     userData.token = response.user_token;
                     userData.user_email = response.user_name;
                     $rootScope.globals.currentUser = userData; // storing the logged in user data for further communication on site
+                     $rootScope.getTopSixProjects();
+                     $rootScope.showAllProjects();
                     $cookieStore.put('userData', userData);
                     $state.go('dashboard', ""); // after successful log in redirection to dashboard view
                 } else {
@@ -1848,7 +1850,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $('#assignToProject').addClass('disabled-talent');
                     $('#assignToProject').css('pointer-events', 'none');
                     $('#talent-delete').css('pointer-events', 'none');
-                    $('#talent-delete').removeClass('active');
+                    $('#talent-delete').css('border-color','');
                     $('#add-project').modal('hide');
                     $('html, body').animate({
                         scrollTop: 0
@@ -1897,12 +1899,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
-            $('#talent-delete').addClass('active');
+            $('#talent-delete').css('border-color','#c60202');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
-            $('#talent-delete').removeClass('active');
+            $('#talent-delete').css('boeder-color','');
             $('#assignToProject').css('pointer-events', 'none');
         }
         //console.log($scope.choosenCandidates);
@@ -1927,13 +1929,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
-            $('#talent-delete').addClass('active');
+            $('#talent-delete').css('border-color','#c60202');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
             $('#assignToProject').css('pointer-events', 'none');
-            $('#talent-delete').removeClass('active');
+            $('#talent-delete').css('border-color','');
         }
     }
 
