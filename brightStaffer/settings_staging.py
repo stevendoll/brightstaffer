@@ -34,19 +34,19 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 BROKER_URL = Config.get('REDIS CONNECTIONS', 'BROKER_URL')
 CELERY_RESULT_BACKEND = Config.get('REDIS CONNECTIONS', 'CELERY_RESULT_BACKEND')
-CELERY_ACCEPT_CONTENT = Config.get('REDIS CONNECTIONS', 'CELERY_ACCEPT_CONTENT')
+CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = Config.get('REDIS CONNECTIONS', 'CELERY_TASK_SERIALIZER')
 CELERY_RESULT_SERIALIZER = Config.get('REDIS CONNECTIONS', 'CELERY_RESULT_SERIALIZER')
 CELERY_TIMEZONE = Config.get('REDIS CONNECTIONS', 'CELERY_TIMEZONE')
 
 CELERYBEAT_SCHEDULE = {
-    "run-every-30-minutes": {
+    "run-every-10-minutes": {
             "task": "brightStafferapp.tasks.update_indexes",
-            "schedule": timedelta(minutes=1),
+            "schedule": timedelta(minutes=10),
         },
     "run-every-1-minutes": {
                 "task": "brightStafferapp.tasks.add",
-                "schedule": timedelta(seconds=10),
+                "schedule": timedelta(minuetes=1),
                 "args": (16, 16)
             },
 }
