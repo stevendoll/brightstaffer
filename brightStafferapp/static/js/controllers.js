@@ -95,12 +95,15 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         $rootScope.isSuccess = false;
     }
 
-    $scope.fetchProjects = function(){
-        $scope.getTopSixProjects();
-        $rootScope.showAllProjects();
+    $scope.fetchProjects = function () {
+        $rootScope.globals.currentUser = $cookieStore.get('userData');
+        if ($rootScope.globals.currentUser && $rootScope.globals.currentUser.token && $rootScope.globals.currentUser.user_email) {
+            $scope.getTopSixProjects();
+            $rootScope.showAllProjects();
+        }
     }
-
-//    $scope.init();
+    $scope.fetchProjects();
+    //    $scope.init();
 
 };
 
@@ -290,8 +293,13 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     $rootScope.candidatePages = [];
     $scope.getSearchData = function () {
         var currentState = $state.current.name;
-        var allowedArray = ["talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
+        var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
         if (allowedArray.indexOf(currentState) > -1) {
+            
+            if(currentState == "talent.talent-profile"){
+                $state.go('talent.talent-search.talent-search-card');
+            }
+            
             $rootScope.filterReset();
             var requestObject = {
                 'keyword': $rootScope.search.searchKeywords || ''
@@ -1064,12 +1072,16 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
+
 
 
 
@@ -1104,12 +1116,16 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
+
 
 
 
@@ -1468,7 +1484,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , value: '50'
         }] // select drop-down options
     $scope.exportType = $scope.exportOptions[0];
-//    $scope.recordCount = $scope.recordOptions[0];
+    //    $scope.recordCount = $scope.recordOptions[0];
     $scope.recordCount = "10";
     $scope.namePattern = /^[a-zA-Z\s]*$/;
     $rootScope.talentList = [];
@@ -1589,7 +1605,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if ($scope.candidatePagination.page == 1) return;
             $scope.candidatePagination.page -= 1;
         }
-        $rootScope.$emit('fetchCandidateData');
+        //        $rootScope.$emit('fetchCandidateData');
+        $rootScope.getCandidateData()
     }
 
 
@@ -1631,7 +1648,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.getcandidateData = function () {
         //        $rootScope.getCandidateData();
-        $rootScope.$emit('fetchCandidateData');
+        //        $rootScope.$emit('fetchCandidateData');
+        $rootScope.getCandidateData()
     }
     $scope.changeState = function () {
 
@@ -1865,7 +1883,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             talentApis.addTalentsToProject(requestObject).then(function (response) {
                 //console.log(response);
                 if (!callFrom) {
-                    $rootScope.talentList = response;
+                    //                    $rootScope.$emit('fetchCandidateData');
+                    $rootScope.getCandidateData();
+                    //                    $rootScope.talentList = response;
                     $scope.choosenCandidates == [];
                     $('#selectall').prop('checked', false);
                     $('#assignToProject').removeClass('add-talent');
@@ -1873,7 +1893,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $('#assignToProject').css('pointer-events', 'none');
                     $('#talent-delete').css('pointer-events', 'none');
 
-                    $('#talent-delete').css('background-color','');
+                    $('#talent-delete').css('background-color', '');
                     $('#add-project').modal('hide');
                     $('html, body').animate({
                         scrollTop: 0
@@ -1923,13 +1943,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
 
-            $('#talent-delete').css('background-color','#e7eaec');
+            $('#talent-delete').css('background-color', '#e7eaec');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
 
-            $('#talent-delete').css('background-color','');
+            $('#talent-delete').css('background-color', '');
             $('#assignToProject').css('pointer-events', 'none');
         }
         //console.log($scope.choosenCandidates);
@@ -1955,14 +1975,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
 
-            $('#talent-delete').css('background-color','#e7eaec');
+            $('#talent-delete').css('background-color', '#e7eaec');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
             $('#assignToProject').css('pointer-events', 'none');
 
-            $('#talent-delete').css('background-color','');
+            $('#talent-delete').css('background-color', '');
         }
     }
 
