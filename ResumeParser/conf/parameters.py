@@ -30,3 +30,6 @@ tagger_model_file = 'models/english.muc.7class.distsim.crf.ser.gz'
 tagger_model_file = os.path.join(previous_path, tagger_model_file)
 stanford_tagger_jar = 'models/stanford-ner.jar'
 stanford_tagger_jar = os.path.join(previous_path, stanford_tagger_jar)
+
+Alchemy_api_key = "770b5c0b1a4b6f1c8140e1b2b4b912d1fd392d8f"
+alchemy_max_entities = 100
