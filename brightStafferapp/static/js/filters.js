@@ -91,6 +91,17 @@ function dateDiff() {
   };
 }
 
+function contactFormat(){
+
+    return function(input){
+        if(!input) return input;
+        input = input.toString();
+        input = input.substr(0, 3) + '-' + input.substr(3);
+        input = input.substr(0, 7) + '-' + input.substr(7);
+        return input;
+    }
+
+}
 
 angular
     .module('brightStaffer')
@@ -99,4 +110,5 @@ angular
     .filter('sumOfValue', sumOfValue)
     .filter('yearFormat', yearFormat)
     .filter('capitalizeAll', capitalizeAll)
-    .filter('capitalizeWord', capitalizeWord);
+    .filter('capitalizeWord', capitalizeWord)
+    .filter('contactFormat', contactFormat);
