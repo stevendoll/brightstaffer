@@ -411,7 +411,6 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                     xhr.setRequestHeader(headerName, headerValue);
                 }
             }
-            
             xhr.send(formData);
         },
 
