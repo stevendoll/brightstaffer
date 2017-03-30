@@ -20,6 +20,7 @@ classifier_model_file = "models/classifer-3-class_trisent_2_0.pkl"
 classifier_model_file = os.path.join(previous_path, classifier_model_file)
 skill_model_file = 'models/skill.pkl'
 skill_model_file = os.path.join(previous_path, skill_model_file)
+max_skill_count = 25
 
 #N Gram model parameters
 ngram_model = 'models/ngram_3_0'
