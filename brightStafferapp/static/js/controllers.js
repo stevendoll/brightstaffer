@@ -89,15 +89,17 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         });
     }
 
-    angular.element(document).ready(function () {
-        $rootScope.showAllProjects();
-        $scope.getTopSixProjects();
-    });
-
     this.removePopupBox = function () {
         $('#breakPopup').css('display', 'none');
         $rootScope.isSuccess = false;
     }
+
+    $scope.init = function(){
+        $scope.getTopSixProjects();
+        $rootScope.showAllProjects();
+    }
+
+    $scope.init();
 
 };
 
