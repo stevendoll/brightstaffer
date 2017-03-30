@@ -252,7 +252,7 @@ def talent_project_match(talent_obj,project):
             ratio=fuzz.partial_ratio(t_concept,p_conecpt)
             if ratio >= 50:
                 count = count+1
-    match = math.ceil(round((count/total_concept)*100,2))
+    match = math.ceil(round((count/total_concept),2))
     TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
 
 # View Talent's Current stage for a single project and Add Talent's stage for a single project
