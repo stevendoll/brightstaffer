@@ -273,6 +273,7 @@ function dropZone($rootScope) {
             scope.completedFiles = [];
             console.log("Creating dropzone");
             $(".talent-panel").mCustomScrollbar();
+
             // Autoprocess the form
             if (scope.autoProcess != null && scope.autoProcess == "false") {
                 scope.autoProcess = false;
