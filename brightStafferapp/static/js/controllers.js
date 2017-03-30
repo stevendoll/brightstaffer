@@ -1852,7 +1852,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $('#assignToProject').addClass('disabled-talent');
                     $('#assignToProject').css('pointer-events', 'none');
                     $('#talent-delete').css('pointer-events', 'none');
-                    $('#talent-delete').css('border-color','');
+                    $('#talent-delete').css('background-color','');
                     $('#add-project').modal('hide');
                     $('html, body').animate({
                         scrollTop: 0
@@ -1901,12 +1901,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
-            $('#talent-delete').css('border-color','#c60202');
+            $('#talent-delete').css('background-color','#e7eaec');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
-            $('#talent-delete').css('border-color','');
+            $('#talent-delete').css('background-color','');
             $('#assignToProject').css('pointer-events', 'none');
         }
         //console.log($scope.choosenCandidates);
@@ -1931,13 +1931,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
-            $('#talent-delete').css('border-color','#c60202');
+            $('#talent-delete').css('background-color','#e7eaec');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
             $('#assignToProject').css('pointer-events', 'none');
-            $('#talent-delete').css('border-color','');
+            $('#talent-delete').css('background-color','');
         }
     }
 
