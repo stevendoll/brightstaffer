@@ -10,7 +10,7 @@ from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept, PdfImages, FileUpload, Recruiter,\
-    Talent, Company, TalentCompany
+    Talent, Company, TalentCompany, Education, TalentEducation
 from brightStafferapp import util
 from brightStafferapp.util import require_post_params, required_headers
 from brightStaffer.settings import Alchemy_api_key
@@ -32,6 +32,7 @@ import os
 import uuid
 import textract
 import datetime
+from datetime import date
 
 
 class UserData(View):
@@ -460,7 +461,7 @@ class FileUploadView(View):
                             concept, created = Concept.objects.get_or_create(concept=skill['name'])
                             tpconcept, created = TalentConcept.objects.get_or_create(
                                 talent=talent_obj, concept=concept,
-                                match=str(round(skill['score'] * 100, 2)))
+                                match=str(round(skill['score'], 2)))
 
                 if "work-experience" in talent_data:
                     for experience in talent_data["work-experience"]:
@@ -480,8 +481,39 @@ class FileUploadView(View):
                                 talent=talent_obj, company=company, is_current=is_current,
                                 designation=experience['JobTitle'], start_date=start_date, end_date=end_date)
 
+                if "education" in talent_data:
+                    for education in talent_obj['education']:
+                        # save user education information
+                        org, created = Education.objects.get_or_create(name=education['organisation'])
+                        start_date, end_date = self.convert_to_start_end(education['duration'])
+                        if start_date and end_date:
+                            tporg, created = TalentEducation.objects.get_or_create(talent=talent_obj, education=org,
+                                                                                   course=education['course'],
+                                                                                   start_date=start_date,
+                                                                                   end_date=end_date
+                                                                                   )
+                        else:
+                            tporg, created = TalentEducation.objects.get_or_create(talent=talent_obj, education=org,
+                                                                                   course=education['course']
+                                                                                   )
+        else:
+            pass
+
+    def convert_to_start_end(self, duration):
+        start_date = None
+        end_date = None
+        day = 1
+        month = 1
+        if duration:
+            duration = duration.split('-')
+            start_year = duration[0]
+            end_year = duration[1]
+            start_date = date(int(start_year), month, day)
+            end_date = date(int(end_year), month, day)
+        return start_date, end_date
+
     def convert_to_date(self, duration):
-        from datetime import date
+
         month_arr = {
             "January": 1,
             "February": 2,

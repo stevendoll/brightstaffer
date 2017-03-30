@@ -6,7 +6,9 @@
           <div class="talent-analysis-div">
             <div class="talent-analysis-image"><img src="static/img/user-placeholder.png" alt=""></div>
             <div class="talent-analysis-info-div">
-              <div class="talent-analysis-name">[[talentDetails.talent_name | capitalizeWord]] <span>[[talentDetails.designation | capitalizeAll]] at [[talentDetails.talent_company[0].company | capitalizeAll]]</span></div>
+              <div class="talent-analysis-name">
+                  [[talentDetails.talent_name | capitalizeWord]] 
+                  <span>[[(talentDetails.designation || talentDetails.talent_company[0].designation) | capitalizeAll]] at [[talentDetails.talent_company[0].company | capitalizeAll]]</span></div>
               <div class="talent-analysis-qual">[[talentDetails.current_location | capitalizeWord]] <span></span> [[talentDetails.industry_focus | capitalizeAll]]</div>
               <button type="" class="btn view-con-info hvr-fade" data-toggle="modal" ng-click="openContactInfo()">View Contact Info</button>
               <div class="linkedin-analysis" href="[[talentDetails.linkedin_url]]"><i class="fa fa-linkedin-square"></i></div>
