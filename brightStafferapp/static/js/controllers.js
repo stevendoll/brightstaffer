@@ -95,12 +95,12 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         $rootScope.isSuccess = false;
     }
 
-    /*$scope.init = function(){
+    $scope.fetchProjects = function(){
         $scope.getTopSixProjects();
         $rootScope.showAllProjects();
     }
 
-    $scope.init();*/
+//    $scope.init();
 
 };
 
@@ -131,8 +131,8 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
                     userData.token = response.user_token;
                     userData.user_email = response.user_name;
                     $rootScope.globals.currentUser = userData; // storing the logged in user data for further communication on site
-                     $rootScope.getTopSixProjects();
-                     $rootScope.showAllProjects();
+                    $rootScope.getTopSixProjects();
+                    $rootScope.showAllProjects();
                     $cookieStore.put('userData', userData);
                     $state.go('dashboard', ""); // after successful log in redirection to dashboard view
                 } else {
@@ -318,9 +318,9 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
             });
         }
     }
-    
+
     $scope.getSearchData();
-    
+
     $rootScope.getCandidateData = function () {
         console.log('fetching candidate data')
         $scope.getSearchData();
@@ -1063,12 +1063,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
 
 
 
@@ -1101,12 +1103,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
 
 
 
@@ -1464,7 +1468,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , value: '50'
         }] // select drop-down options
     $scope.exportType = $scope.exportOptions[0];
-    $scope.recordCount = $scope.recordOptions[0];
+//    $scope.recordCount = $scope.recordOptions[0];
+    $scope.recordCount = "10";
     $scope.namePattern = /^[a-zA-Z\s]*$/;
     $rootScope.talentList = [];
 
@@ -1574,6 +1579,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     });
 
+    $scope.changePage = function (add) {
+        if (add) {
+            if (Math.ceil($rootScope.totalTalentCount / $scope.candidatePagination.count) == $scope.candidatePagination.page) {
+                return;
+            }
+            $scope.candidatePagination.page += 1;
+        } else {
+            if ($scope.candidatePagination.page == 1) return;
+            $scope.candidatePagination.page -= 1;
+        }
+        $rootScope.$emit('fetchCandidateData');
+    }
+
+
     angular.element(document).ready(function () {
         //        $scope.getTalents();
         //        if ($rootScope.getCandidateData) {
@@ -1582,7 +1601,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //            console.log("FAILED to fetch candidate data");
         //        }
 
-//        $rootScope.$emit('fetchCandidateData');
+        //        $rootScope.$emit('fetchCandidateData');
 
     });
 
@@ -1608,7 +1627,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $rootScope.candidatePagination = {
         page: 1
-        , count: parseInt($scope.recordCount.value)
+        , count: parseInt($scope.recordCount)
     }
     $scope.getcandidateData = function () {
         //        $rootScope.getCandidateData();
@@ -1853,6 +1872,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $('#assignToProject').addClass('disabled-talent');
                     $('#assignToProject').css('pointer-events', 'none');
                     $('#talent-delete').css('pointer-events', 'none');
+
                     $('#talent-delete').css('background-color','');
                     $('#add-project').modal('hide');
                     $('html, body').animate({
@@ -1902,11 +1922,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
+
             $('#talent-delete').css('background-color','#e7eaec');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
+
             $('#talent-delete').css('background-color','');
             $('#assignToProject').css('pointer-events', 'none');
         }
@@ -1932,12 +1954,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
+
             $('#talent-delete').css('background-color','#e7eaec');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
             $('#assignToProject').css('pointer-events', 'none');
+
             $('#talent-delete').css('background-color','');
         }
     }
@@ -2193,7 +2217,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
             formData.append('talent_id', id);
             formData.append('contact', candidateContactAdd);
-//            $rootScope.showLoader(true);
+            //            $rootScope.showLoader(true);
             talentApis.talentContact(formData, requestCallback);
 
             function requestCallback(response) {
@@ -2622,6 +2646,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
+            $rootScope.candidatePages = [];
             if (response.hits.length > 0) {
                 $rootScope.Filter = false;
                 console.log(response.hits);
@@ -2633,7 +2658,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 $rootScope.totalTalentCount = count;
                 $rootScope.talentCountEnd = count;
 
-                $rootScope.candidatePages = [];
                 for (var i = 0; i < Math.ceil($rootScope.totalTalentCount / $rootScope.candidatePagination.count); i++) {
                     $rootScope.candidatePages.push({
                         i: true
@@ -2643,6 +2667,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             } else if (response.hits.length == 0) {
                 $rootScope.talentList = [];
                 $rootScope.Filter = true;
+                $rootScope.totalTalentCount = 0;
+                $rootScope.talentCountEnd = 0;
             }
         });
     }
