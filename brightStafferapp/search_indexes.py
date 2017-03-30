@@ -24,6 +24,7 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
     talent_project = indexes.MultiValueField()
     talent_concepts = indexes.MultiValueField()
     talent_stages = indexes.MultiValueField()
+    recruiter_active = indexes.MultiValueField()
     current_location = indexes.CharField(model_attr='current_location')
     rating = indexes.CharField(model_attr='rating')
     status = indexes.CharField(model_attr='status')
@@ -38,6 +39,16 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
 
     def get_model(self):
         return Talent
+
+    def prepare_recruiter_active(self, obj):
+        actives = []
+        for tp_recruiter in obj.talent_active.all():
+            act = dict()
+            act['talent'] = obj.talent_name
+            act['recruiter'] = tp_recruiter.recruiter.username
+            act['is_active'] = tp_recruiter.is_active
+            actives.append(act)
+        return actives
 
     def prepare_activation_date(self, obj):
         return str(obj.get_activation_date)
@@ -107,11 +118,15 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
         return companies
 
     def get_career_gap(self, obj):
-        check_date = obj.start_date
-        previous_company = obj.talent.talent_company.filter(end_date__lt=check_date).order_by('start_date').last()
-        if not previous_company:
-            return 0
-        date_diff = (obj.start_date - previous_company.end_date).days/365
+        date_diff = 0
+        try:
+            check_date = obj.start_date
+            previous_company = obj.talent.talent_company.filter(end_date__lt=check_date).order_by('start_date').last()
+            if not previous_company:
+                return 0
+            date_diff = (obj.start_date - previous_company.end_date).days/365
+        except:
+            pass
         return date_diff
 
     def prepare_talent_project(self, obj):

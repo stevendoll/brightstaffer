@@ -82,6 +82,11 @@ class TalentRecruiterAdmin(admin.ModelAdmin):
     list_display = ('id','talent', 'recruiter', 'is_active')
     list_filter = ('talent',)
 
+
+class TalentProjectAdmin(admin.ModelAdmin):
+    list_display = ('talent', 'project', 'project_match')
+
+
 admin.site.register(Projects, ProjectsAdmin)
 admin.site.register(Concept, ConceptsAdmin)
 admin.site.register(Talent, TalentAdmin)
@@ -89,7 +94,7 @@ admin.site.register(Company, CompanyAdmin)
 admin.site.register(TalentCompany)
 admin.site.register(Education)
 admin.site.register(TalentEducation)
-admin.site.register(TalentProject)
+admin.site.register(TalentProject, TalentProjectAdmin)
 admin.site.register(ProjectConcept, ProjectConceptAdmin)
 admin.site.register(FileUpload)
 admin.site.register(PdfImages)

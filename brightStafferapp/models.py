@@ -13,6 +13,7 @@ import uuid
 import textract
 from datetime import *
 from django.core.management import call_command
+from .tasks import update_indexes
 
 
 STAGE_CHOICES = (('Contacted', 'Contacted'),
@@ -377,35 +378,35 @@ class PdfImages(models.Model):
 
 
 @receiver(post_save, sender=TalentProject)
-def extract_image_from_file(sender, instance=None, created=False, **kwargs):
-    call_command('update_index')
+def talentproject_postsave(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
 
 
 @receiver(post_save, sender=TalentCompany)
-def extract_image_from_file(sender, instance=None, created=False, **kwargs):
-    call_command('update_index')
+def talentcompny_postsave(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
 
 
 @receiver(post_save, sender=TalentConcept)
-def extract_image_from_file(sender, instance=None, created=False, **kwargs):
-    call_command('update_index')
+def talentconcept_postsave(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
 
 
 @receiver(post_save, sender=TalentContact)
-def extract_image_from_file(sender, instance=None, created=False, **kwargs):
-    call_command('update_index')
+def talentcontact_postsave(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
 
 
 @receiver(post_save, sender=TalentEmail)
-def extract_image_from_file(sender, instance=None, created=False, **kwargs):
-    call_command('update_index')
+def talentemail_postsave(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
 
 
 @receiver(post_save, sender=TalentStage)
-def extract_image_from_file(sender, instance=None, created=False, **kwargs):
-    call_command('update_index')
+def talentstage_postsave(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
 
 
 @receiver(post_save, sender=TalentEducation)
-def extract_image_from_file(sender, instance=None, created=False, **kwargs):
-    call_command('update_index')
+def talenteducation_postsave(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()

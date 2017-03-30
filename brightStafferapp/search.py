@@ -103,6 +103,18 @@ INDEX_MAPPING = {
             }
          }
       },
+      "recruiter_active": {
+            "type": "nested",
+            "properties": {
+               "recruiter": {
+                  "type": "string",
+                  "analyzer": "email_analyzer"
+               },
+               "is_active": {
+                  "type": "boolean"
+               }
+            }
+         },
       "talent_concepts": {
          "type": "nested",
          "properties": {
@@ -276,6 +288,13 @@ EMPTY_QUERY = {
         }
 
 BASE_QUERY = {
+   "sort": [
+      {
+         "create_date": {
+            "order": "desc"
+         }
+      }
+   ],
    "from": 0,
    "size": 10,
    "query": {
@@ -288,7 +307,20 @@ BASE_QUERY = {
                     "should": [],
                     "must": [
                        {"match": {"recruiter": "recruiter_term"}},
-                       {"terms": {"status": ["active", "new"]}}
+                       {"terms": {"status": ["active", "new"]}},
+                       {
+                        "nested": {
+                           "path": "recruiter_active",
+                           "query": {
+                              "bool": {
+                                 "must": [
+                                    {"match": {"recruiter_active.recruiter": "recruiter_term"}},
+                                    {"match": {"recruiter_active.is_active":  "true"}}
+                                 ]
+                              }
+                           }
+                        }
+                       },
                     ]
                 }
             }
@@ -296,6 +328,13 @@ BASE_QUERY = {
     }
                 }
 TERM_QUERY = {
+   "sort": [
+         {
+            "create_date": {
+               "order": "desc"
+            }
+         }
+      ],
    "from": 0,
    "size": 10,
    "query": {
@@ -414,7 +453,20 @@ TERM_QUERY = {
                ],
                "must": [
                   {"match": {"recruiter": "recruiter_term"}},
-                  {"terms": {"status": ["active", "new"]}}
+                  {"terms": {"status": ["active", "new"]}},
+                  {
+                        "nested": {
+                           "path": "recruiter_active",
+                           "query": {
+                              "bool": {
+                                 "must": [
+                                    {"match": {"recruiter_active.recruiter": "recruiter_term"}},
+                                    {"match": {"recruiter_active.is_active":  "true"}}
+                                 ]
+                              }
+                           }
+                        }
+                  }
                ]
             }
          }
