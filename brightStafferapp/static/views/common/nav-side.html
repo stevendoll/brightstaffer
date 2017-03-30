@@ -3,7 +3,7 @@
         <ul side-navigation class="nav nav-first-level metismenu" id="side-menu" >
             <li class="sidebar-brand"><img src="static/img/brand-temp.png">
         </li>
-            <li id="dashboard" class="ch" ng-class="{active:[[$state.current.name == 'dashboard']]}" on-touch="setActive()">
+            <li id="dashboard" class="ch" ng-class="{active:[[$state.current.name == 'dashboard']]}" ng-click="fetchProjects()" on-touch="setActive()">
                 <a ui-sref="dashboard" ng-click="SN.detectmob($event)"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboard</span></a>
             </li>
             <li class="ch" ng-class="{active:[[$state.current.name == 'talent.talent-search.talent-search-card']] || [[$state.current.name == 'talent.talent-profile']]}" on-touch="setActive()">

@@ -107,7 +107,7 @@
                           <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                               <span class="text">Total Experience</span>
-                              <span class="percentage">[[calcTotal(talentDetails.talent_company) | number: 2]] Years</span>
+                              <span class="percentage">[[calcTotal(talentDetails.talent_company) | number: 1]] Years</span>
                             </div>
                           </div>
                         </div>
@@ -166,9 +166,11 @@
                                         <div class="link-panel" style="cursor:default;"><a href="">#[[proj.project]]</a><span><a href="">@[[proj.company_name | capitalizeWord]]</a></span></div>
                                       </div>
                                     </td>
-                                    <td><div class="rank-circle">[[proj.rank]]</div></td>
+                                    <td><div class="rank-circle">[[$index+1]]</div></td>
                                     <td><div class="table-date-div">[[proj.date_added | dateFormat]]</div></td>
-                                    <td class="interviewing-text">[[proj.project_stage ]]</td>
+                                    <td class="interviewing-text"><span ng-show="proj.project_stage">[[proj.project_stage ]]</span>
+                                      <span ng-show="!proj.project_stage"> - </span>
+                                    </td>
                                   </tr>
                                   <!--<tr>
                                     <th scope="row" class="padd-left32">
@@ -600,7 +602,7 @@
             <div class="progress">
               <div class="progress-bar" role="progressbar" aria-valuenow="[[(career.years_of_experience/calcTotal(talentCareer)) * 100]]" aria-valuemin="0" aria-valuemax="100" style="width:[[(career.years_of_experience/calcTotal(talentCareer)) * 100]]%;">
                 <span class="text">[[career.company | capitalize]]</span>
-                <span class="percentage">[[career.years_of_experience | number: 2]] Years</span>
+                <span class="percentage">[[career.years_of_experience | number: 1]] Years</span>
               </div>
             </div>
           </div>
