@@ -1847,7 +1847,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $('#assignToProject').addClass('disabled-talent');
                     $('#assignToProject').css('pointer-events', 'none');
                     $('#talent-delete').css('pointer-events', 'none');
-                    $('#talent-delete').css('border-color', '');
+                    $('#talent-delete').removeClass('active');
                     $('#add-project').modal('hide');
                     $('html, body').animate({
                         scrollTop: 0
@@ -1896,12 +1896,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
-            $('#talent-delete').css('border-color', '#3680ca');
+            $('#talent-delete').addClass('active');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
-            $('#talent-delete').css('border-color', '');
+            $('#talent-delete').removeClass('active');
             $('#assignToProject').css('pointer-events', 'none');
         }
         //console.log($scope.choosenCandidates);
@@ -1926,13 +1926,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
-            $('#talent-delete').css('border-color', '#3680ca');
+            $('#talent-delete').addClass('active');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
             $('#assignToProject').css('pointer-events', 'none');
-            $('#talent-delete').css('border-color', '');
+            $('#talent-delete').removeClass('active');
         }
     }
 
