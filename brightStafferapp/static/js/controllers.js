@@ -291,12 +291,12 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         $state.go('login', '');
     }
     $rootScope.candidatePages = [];
-    $scope.getSearchData = function () {
+    $scope.getSearchData = function (onReload) {
         var currentState = $state.current.name;
         var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
         if (allowedArray.indexOf(currentState) > -1) {
             
-            if(currentState == "talent.talent-profile"){
+            if(!onReload && currentState == "talent.talent-profile"){
                 $state.go('talent.talent-search.talent-search-card');
             }
             
@@ -327,7 +327,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         }
     }
 
-    $scope.getSearchData();
+    $scope.getSearchData(true);
 
     $rootScope.getCandidateData = function () {
         console.log('fetching candidate data')

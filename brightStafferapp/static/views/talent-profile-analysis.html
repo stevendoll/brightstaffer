@@ -434,7 +434,7 @@
             <span>[[talentDetails.talent_email[0].email]]</span>
             <div class="contact-edit">
               <span ng-click="showEdit(talentDetails.talent_email)">Edit</span>
-              <span ng-click="showAdd();">Add</span>
+              <span ng-click="showAdd();candidateInfo.candidateEmailAdd='';">Add</span>
             </div>
           </div>
           <div class="cls"></div>
@@ -458,7 +458,7 @@
             <span>[[talentDetails.talent_contact[0].contact]]</span>
             <div class="contact-edit">
               <span ng-click="showContactEdit(talentDetails.talent_contact)">Edit</span>
-              <span ng-click="Contact2.contact_add.focus = true;showContactAdd()">Add</span>
+              <span ng-click="Contact2.contact_add.focus = true;candidateInfo.candidateContactAdd = '';showContactAdd()">Add</span>
             </div>
           </div>
           <div class="cls"></div>
