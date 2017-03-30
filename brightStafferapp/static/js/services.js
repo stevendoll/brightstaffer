@@ -118,9 +118,10 @@ function jobPostService($http, REQUEST_URL) {
     }
 }
 
-function alchemyAnalysis($http, REQUEST_URL) {
+function alchemyAnalysis($rootScope, $http, REQUEST_URL) {
     return {
         alchemyAPI: function (data) {
+        $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'alchemy_analysis/'
                 , method: "POST", // or "get"
@@ -130,6 +131,7 @@ function alchemyAnalysis($http, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
+                $rootScope.showLoader(false);
                 return response.data;
             });
         }
@@ -265,6 +267,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
         },
 
         updateRecruiterName: function (data) {
+            $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'update_recruiter/?recruiter=' + data.recruiter + '&display_name=' + data.display_name
                 , method: "GET", // or "get"
@@ -274,6 +277,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
+                $rootScope.showLoader(false);
                 return response.data;
             });
         },
@@ -407,6 +411,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                     xhr.setRequestHeader(headerName, headerValue);
                 }
             }
+            
             xhr.send(formData);
         },
 
@@ -415,6 +420,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
+                    $rootScope.showLoader(false);
                     callback(xhr.responseText); // Another callback here
                 }
             };
@@ -430,13 +436,14 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                     xhr.setRequestHeader(headerName, headerValue);
                 }
             }
+            $rootScope.showLoader(true);
             xhr.send(formData);
         },
 
         filterTalentData: function (data) {
             $rootScope.showLoader(true);
             return $http({
-                url: REQUEST_URL + 'talent_search_filter/?talent_company=' + data.company + '&rating=' + data.rating + '&project_match=' + data.project_match + '&recruiter=' + data.recruiter + '&concepts=' + data.concepts + '&projects=' + data.projects + '&stages=' + data.stages + '&last_contacted=' + data.contacted + '&date_added=' + data.date + '&term=' + data.term + '&ordering=' + data.ordering + '&is_active=' + data.active
+                url: REQUEST_URL + 'talent_search_filter/?talent_company=' + data.company + '&rating=' + data.rating + '&project_match=' + data.project_match + '&recruiter=' + data.recruiter + '&concepts=' + data.concepts + '&projects=' + data.projects + '&stages=' + data.stages + '&last_contacted=' + data.contacted + '&date_added=' + data.date + '&term=' + data.term + '&ordering=' + data.ordering + '&is_active=' + data.active + '&page=' + data.page + '&count=' + data.count
                 , method: "GET", // or "get"
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'

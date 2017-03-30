@@ -74,7 +74,7 @@
                         <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                                 <span class="text">Total Experience</span>
-                                <span class="percentage">[[calcTotal(talent.talent_company) | number: 2]] Years</span>
+                                <span class="percentage">[[calcTotal(talent.talent_company) | number: 1]] Years</span>
                             </div>
                         </div>
                     </div>
@@ -87,15 +87,15 @@
                             </div>
 -->
                             
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[(talent.talent_company[$index - 1].years_of_experience/calcTotal(talent.talent_company)) * 100]]%; background-color: #e4e4e4 !important;">
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((talent.talent_company[$index - 1].years_of_experience.toFixed(2)/calcTotal(talent.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
                             </div>
 
                             <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talent.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
                             </div>
 
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[(career. years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
+                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[((career.years_of_experience.toFixed(2)/calcTotal(talent.talent_company)) * 100).toFixed(2)]]%;">
                                 <span class="text">[[career.company | capitalize]]</span>
-                                <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
+                                <span class="percentage">[[career.years_of_experience | number:1]] Years</span>
                             </div>
                             
                             
@@ -156,6 +156,21 @@
             </div>
         </div>
     </div>
+    <!--<div class="search-pagination">
+            <ul class="pagination">
+              <li id="prev" class="prev">
+                <a href="" aria-label="Previous">
+                  <span aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
+                </a>
+              </li>
+                <li ng-repeat="i in candidatePages" id="[[$index]]" ng-click="candidatePagination.page = ($index+1);getcandidateData();"><a href="">[[$index+1]]</a></li>
+              <li id="next" class="next">
+                <a href="" aria-label="Next">
+                  <span aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+                </a>
+              </li>
+            </ul>
+          </div>-->
     <!-- more-comp-Modal-starts -->
     <div class="modal fade" id="more-comp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog add-talent-dialog" role="document">
@@ -236,10 +251,10 @@
                     <div class="edit-modal-recruiter">
                         <span>Edit Recruiter</span>
                         <form class="form-group" name="name_edit" id="name_edit" ng-keyup="hideMessages('name_edit')">
-                            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" ng-maxlength="20">
-                            <span class="error" id="name-required" style="color:red" ng-show="[[isName]]">Required.</span>
+                            <input class="form-control" name="username" ng-model="data.recruiterNameInput" autocomplete="off" ng-pattern="namePattern" maxlength="20">
+                            <span class="error" id="name-required" style="color:red" ng-show="isName">Required.</span>
                             <span class="error" style="color:red" ng-show="name_edit.username.$error.pattern">Please enter character only.</span>
-                            <span style='color:red' ng-show="!name_edit.username.$error.pattern && name_edit.username.$error.maxlength">Your input is too long!</span>
+<!--                            <span style='color:red' ng-show="!name_edit.username.$error.pattern && name_edit.username.$error.maxlength">Your input is too long!</span>-->
                         </form>
                         <div class="cls"></div>
                         <button type="" class="btn update" id="nameUpdate" ng-click="updateRecruiterName(data.recruiterNameInput)">Update</button>

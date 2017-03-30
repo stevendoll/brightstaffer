@@ -12,11 +12,12 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.StagesProjectList = [];
     $scope.showLoader = false;
 
+
     $rootScope.showLoader = function (show) {
         $scope.showLoader = show;
     }
 
-    this.getTopSixProjects = function () { // function to fetch top 6 projects
+    $rootScope.getTopSixProjects = function () { // function to fetch top 6 projects
         var requestObject = {
             'token': $rootScope.globals.currentUser.token, // username field value
             'recruiter': $rootScope.globals.currentUser.user_email // password field value
@@ -94,6 +95,13 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         $rootScope.isSuccess = false;
     }
 
+    $scope.fetchProjects = function(){
+        $scope.getTopSixProjects();
+        $rootScope.showAllProjects();
+    }
+
+//    $scope.init();
+
 };
 
 function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $timeout, loginService) { /* login controller responsible for login functionality */
@@ -101,8 +109,8 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
     $scope.isDisabled = false;
     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/; //email validation pattern
     $scope.data = {
-        user_name: 'asha.singh@kiwitech.com'
-        , user_password: 'asha@123'
+        user_name: 'pooja@yopmail.com'
+        , user_password: 'qwerty1!'
     };
     /**Create function for user login **/
     this.userLogin = function () {
@@ -123,6 +131,8 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
                     userData.token = response.user_token;
                     userData.user_email = response.user_name;
                     $rootScope.globals.currentUser = userData; // storing the logged in user data for further communication on site
+                    $rootScope.getTopSixProjects();
+                    $rootScope.showAllProjects();
                     $cookieStore.put('userData', userData);
                     $state.go('dashboard', ""); // after successful log in redirection to dashboard view
                 } else {
@@ -282,7 +292,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         var currentState = $state.current.name;
         var allowedArray = ["talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
         if (allowedArray.indexOf(currentState) > -1) {
-        $rootScope.filterReset();
+            $rootScope.filterReset();
             var requestObject = {
                 'keyword': $rootScope.search.searchKeywords || ''
                 , page: $rootScope.candidatePagination.page
@@ -309,9 +319,14 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         }
     }
 
+    $scope.getSearchData();
+
     $rootScope.getCandidateData = function () {
+        console.log('fetching candidate data')
         $scope.getSearchData();
     }
+
+    $rootScope.$on('fetchCandidateData', $rootScope.getCandidateData);
 }
 
 
@@ -632,7 +647,7 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     $scope.validateLocation = function (value) {
         $scope.patternError = false;
         var zip = /^(?!0{5})\d{5}$/;
-        var city = /^[ A-Za-z0-9-,]*$/;
+        var city = /^[ A-Za-z-,]*$/;
         if (!isNaN(value) && value) {
             if (!zip.test(value)) {
                 $scope.patternError = true;
@@ -1045,12 +1060,20 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
+
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
+
+
+
 
 
 
@@ -1077,12 +1100,20 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
+
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
+
+
+
 
 
 
@@ -1392,6 +1423,15 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 }
 
 function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore) {
+
+    $scope.priceSlider = {
+        value: 0
+        , options: {
+            floor: 0
+            , ceil: 100
+        }
+    }
+
     $scope.exportOptions = [{
         name: 'Export Data'
         , value: 'Export Data'
@@ -1428,7 +1468,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , value: '50'
         }] // select drop-down options
     $scope.exportType = $scope.exportOptions[0];
-    $scope.recordCount = $scope.recordOptions[0];
+//    $scope.recordCount = $scope.recordOptions[0];
+    $scope.recordCount = "10";
     $scope.namePattern = /^[a-zA-Z\s]*$/;
     $rootScope.talentList = [];
 
@@ -1487,7 +1528,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.filterValue = {
         //stage:'Select Stage',
         project: ''
-        , match: '0%'
+        , match: $scope.priceSlider.value + '%'
         , rating: ''
         , lastContacted: ''
         , analysed: ''
@@ -1499,6 +1540,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
     $rootScope.Filter = false;
 
+    $scope.$watch('priceSlider.value', function (n, o) {
+        $scope.filterValue.match = n + '%';
+    })
 
     $scope.hideMessages = function (formName) { /*Hide error messages when user interact with fieds*/
         $('#name-required').addClass('ng-hide');
@@ -1535,9 +1579,30 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     });
 
+    $scope.changePage = function (add) {
+        if (add) {
+            if (Math.ceil($rootScope.totalTalentCount / $scope.candidatePagination.count) == $scope.candidatePagination.page) {
+                return;
+            }
+            $scope.candidatePagination.page += 1;
+        } else {
+            if ($scope.candidatePagination.page == 1) return;
+            $scope.candidatePagination.page -= 1;
+        }
+        $rootScope.$emit('fetchCandidateData');
+    }
+
+
     angular.element(document).ready(function () {
         //        $scope.getTalents();
-        $rootScope.getCandidateData();
+        //        if ($rootScope.getCandidateData) {
+        //            $rootScope.getCandidateData();
+        //        }else{
+        //            console.log("FAILED to fetch candidate data");
+        //        }
+
+        //        $rootScope.$emit('fetchCandidateData');
+
     });
 
 
@@ -1562,10 +1627,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $rootScope.candidatePagination = {
         page: 1
-        , count: $scope.recordCount.value
+        , count: parseInt($scope.recordCount)
     }
     $scope.getcandidateData = function () {
-        $rootScope.getCandidateData();
+        //        $rootScope.getCandidateData();
+        $rootScope.$emit('fetchCandidateData');
     }
     $scope.changeState = function () {
 
@@ -1622,8 +1688,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log(name);
         if (name) {
             $rootScope.recruiter.recruiterName = name;
-            $('#nameUpdate').addClass('disabled');
-            $('#nameUpdate').css('pointer-events', 'none');
+            //            $('#nameUpdate').addClass('disabled');
+            //            $('#nameUpdate').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
                 'display_name': $rootScope.recruiter.recruiterName
@@ -1715,12 +1781,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#recruiter-modal').modal('show');
 
     }
-
+    $scope.isName = false;
     $scope.editRecruiter = function () {
         $scope.isName = false;
         $scope.data.recruiterNameInput = $rootScope.recruiter.recruiterName;
-        $('#nameUpdate').removeClass('disabled');
-        $('#nameUpdate').css('pointer-events', '');
+        //        $('#nameUpdate').removeClass('disabled');
+        //        $('#nameUpdate').css('pointer-events', '');
         $('#recruiter-modal').modal('hide');
         $('#edit-recruiter').modal('show');
     }
@@ -1805,7 +1871,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $('#assignToProject').addClass('disabled-talent');
                     $('#assignToProject').css('pointer-events', 'none');
                     $('#talent-delete').css('pointer-events', 'none');
-                    $('#talent-delete').css('border-color', '');
+
+                    $('#talent-delete').css('background-color','');
                     $('#add-project').modal('hide');
                     $('html, body').animate({
                         scrollTop: 0
@@ -1854,12 +1921,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
-            $('#talent-delete').css('border-color', '#3680ca');
+
+            $('#talent-delete').css('background-color','#e7eaec');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
-            $('#talent-delete').css('border-color', '');
+
+            $('#talent-delete').css('background-color','');
             $('#assignToProject').css('pointer-events', 'none');
         }
         //console.log($scope.choosenCandidates);
@@ -1884,13 +1953,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#assignToProject').addClass('add-talent');
             $('#assignToProject').css('pointer-events', '');
             $('#talent-delete').css('pointer-events', '');
-            $('#talent-delete').css('border-color', '#3680ca');
+
+            $('#talent-delete').css('background-color','#e7eaec');
         } else {
             $('#assignToProject').removeClass('add-talent');
             $('#assignToProject').addClass('disabled-talent');
             $('#talent-delete').css('pointer-events', 'none');
             $('#assignToProject').css('pointer-events', 'none');
-            $('#talent-delete').css('border-color', '');
+
+            $('#talent-delete').css('background-color','');
         }
     }
 
@@ -2029,7 +2100,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.add_email.talentAddEmail.blur = false;
         }
         // form valid end
-
         $scope.isEmailEditable = false;
         $scope.isEmailAdd = false;
         $scope.isContactEditable = false;
@@ -2146,6 +2216,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             formData.append('recruiter', $rootScope.globals.currentUser.user_email);
             formData.append('talent_id', id);
             formData.append('contact', candidateContactAdd);
+            //            $rootScope.showLoader(true);
             talentApis.talentContact(formData, requestCallback);
 
             function requestCallback(response) {
@@ -2157,6 +2228,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 setTimeout(function () {
                     $('#contactSuccess').css('display', 'none');
                 }, 2000);
+                $rootScope.showLoader(false);
             }
         } else {
             $scope.isContact = true;
@@ -2402,8 +2474,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        if (date)
         $scope.stage.date = $rootScope.formatDate($scope.stage.date);
 
-//        $scope.addProjectCheckValidation($scope.stage);
-checkReqValidationForStage();
+        //        $scope.addProjectCheckValidation($scope.stage);
+        checkReqValidationForStage();
         if (!$scope.isStage && !$scope.isProject && !$scope.isDate && !$scope.isDetail && !$scope.isNotes) {
 
             for (var i = 0; i < $rootScope.allProjectList.length; i++) {
@@ -2412,7 +2484,7 @@ checkReqValidationForStage();
                     break;
                 }
             }
-            if (selectedProjectId && !$scope.noteMax && !$scope.detailMax) {
+            if (selectedProjectId) {
 
                 var formData = new FormData();
                 formData.append('project_id', selectedProjectId);
@@ -2504,25 +2576,25 @@ checkReqValidationForStage();
     }
 
     $scope.filterData = function () {
-//        var analysedDate = $('#analysed').val();
-//        var lastContacted = $('#lastContacted').val();
+        //        var analysedDate = $('#analysed').val();
+        //        var lastContacted = $('#lastContacted').val();
 
 
         var selectedProjectId = '';
 
-//            $scope.filterValue.analysed = analysedDate;
-            $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate(analysedDate) : '';
+        //            $scope.filterValue.analysed = analysedDate;
+        $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
 
 
-//            $scope.filterValue.lastContacted = lastContacted;
-            $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate(lastContacted) : '';
+        //            $scope.filterValue.lastContacted = lastContacted;
+        $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
 
         if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined)
             $scope.filterValue.stage = '';
         if ($scope.filterValue.match.split('%')[0] == '0')
-            $scope.filterValue.match = '0%';
+            $scope.filterValue.match = $scope.priceSlider.value + '%';
         else {
-            $scope.filterValue.match = $scope.filterValue.match.split('%')[0] || '0%';
+            $scope.filterValue.match = $scope.filterValue.match.split('%')[0] || $scope.priceSlider.value + '%';
         }
         if ($scope.filterValue.project == 'Select Project' || $scope.filterValue.project == undefined)
             $scope.filterValue.project = '';
@@ -2568,8 +2640,12 @@ checkReqValidationForStage();
         requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
         requestObject.project_match = parseInt(requestObject.project_match.split('%')[0]) || '';
 
+        requestObject.page = $rootScope.candidatePagination.page;
+        requestObject.count = $rootScope.candidatePagination.count;
+
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
+            $rootScope.candidatePages = [];
             if (response.hits.length > 0) {
                 $rootScope.Filter = false;
                 console.log(response.hits);
@@ -2581,7 +2657,6 @@ checkReqValidationForStage();
                 $rootScope.totalTalentCount = count;
                 $rootScope.talentCountEnd = count;
 
-                $rootScope.candidatePages = [];
                 for (var i = 0; i < Math.ceil($rootScope.totalTalentCount / $rootScope.candidatePagination.count); i++) {
                     $rootScope.candidatePages.push({
                         i: true
@@ -2591,15 +2666,18 @@ checkReqValidationForStage();
             } else if (response.hits.length == 0) {
                 $rootScope.talentList = [];
                 $rootScope.Filter = true;
+                $rootScope.totalTalentCount = 0;
+                $rootScope.talentCountEnd = 0;
             }
         });
     }
 
     $rootScope.filterReset = function () {
+        $scope.priceSlider.value = 0;
         $scope.filterValue = {
             stage: ''
             , project: ''
-            , match: '0%'
+            , match: $scope.priceSlider.value + '%'
             , rating: ''
             , lastContacted: ''
             , analysed: ''
@@ -2615,11 +2693,11 @@ checkReqValidationForStage();
         $('#sbSelector_' + selectorId).text(selectedValue);
         $("#projectSelect").val('').selectpicker('refresh');
         // $("#ex3").slider("value", $("#ex3").slider("option", "min") );
-        $('.filter-input-date').datepicker({
-            dateFormat: "dd/mm/yyyy"
-            , changeMonth: true
-            , changeYear: true
-        }).val('');
+        //        $('.filter-input-date').datepicker({
+        //            dateFormat: "dd/mm/yyyy"
+        //            , changeMonth: true
+        //            , changeYear: true
+        //        }).val('');
         //$("#ex3").slider('values', 0, 100);
 
         $("#rate_filter li.filled").removeClass('filled');
@@ -2648,14 +2726,14 @@ checkReqValidationForStage();
 angular
     .module('brightStaffer')
     .controller('MainCtrl', MainCtrl)
+    .controller('talentCtrl', talentCtrl)
     .controller('loginCtrl', loginCtrl)
     .controller('signupCtrl', signupCtrl)
     .controller('forgotCtrl', forgotCtrl)
     .controller('resetPwCtrl', resetPwCtrl)
-    .controller('topnavCtrl', topnavCtrl)
     .controller('createProjectCtrl', createProjectCtrl)
     .controller('tableCtrl', tableCtrl)
     .controller('scoreCardCtrl', scoreCardCtrl)
     .controller('uploadFileCtrl', uploadFileCtrl)
-    .controller('talentCtrl', talentCtrl)
-    .controller('sideNavCtrl', sideNavCtrl);
+    .controller('sideNavCtrl', sideNavCtrl)
+    .controller('topnavCtrl', topnavCtrl);

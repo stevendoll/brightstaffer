@@ -1726,7 +1726,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   color: #808080;
   font-size: 13px;
   font-family: 'open_sansregular';
-  padding: 8px 30px 8px 14px;
+  padding: 8px 8px 8px 14px;
 }
 
 .filter-stage-box .form-group {
@@ -12149,6 +12149,7 @@ ul.rating {
     }
 }
 
+
 /*start client feedback changes*/
 .right-side-search{
     text-align: right;
@@ -12160,4 +12161,15 @@ ul.rating {
     display: inline-block;
     position: relative;
     top: 6px;
+}
+input::-webkit-calendar-picker-indicator{
+    opacity: 0;
+}
+input[type="date"]::-webkit-input-placeholder{
+    visibility: hidden !important;
+}
+input[type=date]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+
 }
