@@ -28,7 +28,7 @@
                 <div class="talent-search-delete-icon" id="talent-delete" style="pointer-events:none;" ng-click="deleteTalents()"><i class="fa fa-trash"></i></div>
               </div>
               <div class="showing-talent-search">
-                <div class="checkbox">
+                <div class="checkbox" ng-show="talentList.length">
                   <input type="checkbox" value="1" id="selectall" class="css-checkbox" ng-click="selectAll()">
                   <label class="css-label" for="selectall"></label>
                 </div>
@@ -147,7 +147,7 @@
               </div>
               <div class="cls"></div>
               <div ui-view></div>
-                  <div class="search-pagination">
+                  <div class="search-pagination" ng-show="talentList.length">
                     <ul class="pagination">
                       <li id="prev" class="prev">
                         <a href="" aria-label="Previous">
