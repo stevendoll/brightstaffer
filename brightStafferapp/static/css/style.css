@@ -173,7 +173,7 @@ h5 {
   margin-right: 0;
 }
 .navbar-top-links .dropdown-menu li a {
-  padding: 3px 20px;
+  padding: 5px 20px;
   min-height: 0;
 }
 .navbar-top-links .dropdown-menu li a div {
@@ -247,7 +247,7 @@ h5 {
   float: left;
   height: 50px;
   padding: 0;
-  width: 400px;
+  width: 600px;
   display: block;
 }
 .navbar-form-custom .form-group {
@@ -1159,10 +1159,14 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   font-family: 'OpenSans-Semibold';
   font-size: 14px;
   color: #6a6a6a;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.bootstrap-select .dropdown-menu {
+    top: 37px;
 }
 
 .info-box-panels span {
@@ -1172,7 +1176,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .info-box-bottom-links {
   width: 100%;
   float: left;
-  margin: 20px 0px 2px 0px;
+  margin: 1px 0px 2px 0px;
   text-align: right;
 }
 
@@ -2091,7 +2095,7 @@ padding: 10px 0px;}
     background-color: #ffffff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
     border: solid 1px #e7eaec;
-    top: 44px;
+    top: 55px;
 }
 
 .dropdown-menu > li > a {
@@ -12144,6 +12148,20 @@ ul.rating {
         }
     }
 }
+
+
+/*start client feedback changes*/
+.right-side-search{
+    text-align: right;
+}
+.right-side-search .dataTables_filter{
+    display:inline-block;
+}
+.right-side-search .checkbox-right-fx{
+    display: inline-block;
+    position: relative;
+    top: 6px;
+}
 input::-webkit-calendar-picker-indicator{
     opacity: 0;
 }
@@ -12153,4 +12171,21 @@ input[type="date"]::-webkit-input-placeholder{
 input[type=date]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     display: none;
+
+}
+
+.count .normal-select {
+  border: 1px solid #e7eaec;
+    height: 36px;
+    border-radius: 2px;
+    font-size: 13px;
+    font-family: 'open_sansregular';
+    color: #383f44;
+    padding: 8px 10px;
+    width: 50px;
+    background: url(../img/select-arrow.png) no-repeat;
+    background-position: 30px 10px;
+    -webkit-appearance: none;
+   -moz-appearance:    none;
+   appearance:         none;
 }

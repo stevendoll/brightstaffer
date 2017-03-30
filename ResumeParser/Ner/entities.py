@@ -3,7 +3,6 @@ from watson_developer_cloud import AlchemyLanguageV1
 
 from ResumeParser.conf.parameters import *
 
-Alchemy_api_key = "770b5c0b1a4b6f1c8140e1b2b4b912d1fd392d8f"
 
 def get_entity_date(tagged):
     ent = []
@@ -37,7 +36,7 @@ def fetch_entities_from_alchemy_api(user_data):
         alchemy_language = AlchemyLanguageV1(api_key=Alchemy_api_key)
         d = alchemy_language.combined(text=user_data,
                                       extract='entities,keywords',
-                                      max_items=25)
+                                      max_items=alchemy_max_entities)
         #d = json.loads(data)
         #Projects.objects.filter(id=project_id).update(description_analysis=d)
     except Exception as e:
