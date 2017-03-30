@@ -533,7 +533,7 @@ function selectRecord($timeout) {
         restrict: 'A'
         , link: function (scope, element, attrs) {
             $timeout(function () {
-                $(element).on('change', function () {
+                $(element).on('change', function (evt) {
                     var selectedValue = $('#recordCount :selected').text();
                     scope.recordCount = selectedValue;
                     console.log(scope.recordCount);

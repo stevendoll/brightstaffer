@@ -18,8 +18,15 @@
               <div class="show-entry-panel">
                 <span>Show entries/page</span>
                 <div class="form-group count">
-                  <select class="form-control select-arrow" id="recordCount" ng-model="recordCount"  ng-options="option.name for option in recordOptions" select-record>
+<!--
+                  <select class="form-control select-arrow" id="recordCount" ng-model="recordCount" ng-change="getTalents(recordCount)" ng-options="option.name for option in recordOptions" select-record>
                   </select>
+-->
+                    
+                    <select class="form-control" id="recordCount" ng-model="recordCount" ng-change="getTalents(recordCount)">
+                        <option ng-repeat="option in recordOptions" value="[[option.name]]">[[option.name]]</option>
+                    </select>
+                    
                 </div>
                 <div class="form-group export">
                   <select class="form-control select-arrow" ng-model="exportType" id="export" ng-options="option.name for option in exportOptions">

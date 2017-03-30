@@ -1468,7 +1468,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , value: '50'
         }] // select drop-down options
     $scope.exportType = $scope.exportOptions[0];
-    $scope.recordCount = $scope.recordOptions[0];
+//    $scope.recordCount = $scope.recordOptions[0];
+    $scope.recordCount = "10";
     $scope.namePattern = /^[a-zA-Z\s]*$/;
     $rootScope.talentList = [];
 
@@ -1626,7 +1627,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $rootScope.candidatePagination = {
         page: 1
-        , count: parseInt($scope.recordCount.value)
+        , count: parseInt($scope.recordCount)
     }
     $scope.getcandidateData = function () {
         //        $rootScope.getCandidateData();
@@ -2644,6 +2645,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
+            $rootScope.candidatePages = [];
             if (response.hits.length > 0) {
                 $rootScope.Filter = false;
                 console.log(response.hits);
@@ -2655,7 +2657,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 $rootScope.totalTalentCount = count;
                 $rootScope.talentCountEnd = count;
 
-                $rootScope.candidatePages = [];
                 for (var i = 0; i < Math.ceil($rootScope.totalTalentCount / $rootScope.candidatePagination.count); i++) {
                     $rootScope.candidatePages.push({
                         i: true
@@ -2665,6 +2666,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             } else if (response.hits.length == 0) {
                 $rootScope.talentList = [];
                 $rootScope.Filter = true;
+                $rootScope.totalTalentCount = 0;
+                $rootScope.talentCountEnd = 0;
             }
         });
     }
