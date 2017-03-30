@@ -10,6 +10,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.isDevice = false;
     $rootScope.projectListView = [];
     $rootScope.StagesProjectList = [];
+    $rootScope.talentAllStages = [];
     $scope.showLoader = false;
 
 
@@ -1783,16 +1784,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     function getTalentStages(id) {
+        $rootScope.talentAllStages = [];
         var requestObject = {
             'token': $rootScope.globals.currentUser.token, // username field value
             'recruiter': $rootScope.globals.currentUser.user_email, // password field value
             'talent_id': id
         };
         talentApis.getTalentAllStages(requestObject).then(function (response) {
+            $state.go('talent.talent-profile', '');
             $rootScope.talentAllStages = response.result;
             $scope.stage.stagesCard = '';
             $scope.stage.stagesCard = response.result;
-            $state.go('talent.talent-profile', '');
             $('html, body').animate({
                 scrollTop: 0
             }, 'fast');
