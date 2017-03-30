@@ -268,53 +268,71 @@ function dropZone($rootScope) {
             , callBack: "="
             , dataMax: "=?"
             , mimetypes: "="
+            , options: '='
         }
         , link: function (scope, element, attrs) {
-            scope.completedFiles = [];
-            console.log("Creating dropzone");
-            $(".talent-panel").mCustomScrollbar();
-
-            // Autoprocess the form
-            if (scope.autoProcess != null && scope.autoProcess == "false") {
-                scope.autoProcess = false;
-            } else {
-                scope.autoProcess = true;
-            }
-
-            // Max file size
-            if (scope.dataMax == null) {
-                scope.dataMax = Dropzone.prototype.defaultOptions.maxFilesize;
-            } else {
-                scope.dataMax = parseInt(scope.dataMax);
-            }
-
-            // Message for the uploading
-            if (scope.message == null) {
-                scope.message = Dropzone.prototype.defaultOptions.dictDefaultMessage;
-            }
-            $('#fileUpload').val('');
-            var recruiter = {
-                'recruiter': $rootScope.globals.currentUser.user_email
-            };
-            var myDropZone = new Dropzone(element[0], {
-                url: scope.action
-                , maxFilesize: 5
-                , paramName: ["file", recruiter]
-                , acceptedFiles: scope.mimetypes
-                , maxThumbnailFilesize: '5'
-                , clickable: ["#backgroundImg", "#file-dropzone", "#fileUpload"]
-                , autoProcessQueue: scope.autoProcess
-                , complete: function (r) {
-                    scope.completedFiles.push(r);
+            var myDropZone = {};
+            scope.init = function () {
+                scope.completedFiles = [];
+                console.log("Creating dropzone");
+                $(".talent-panel").mCustomScrollbar();
+                // Autoprocess the form
+                if (scope.autoProcess != null && scope.autoProcess == "false") {
+                    scope.autoProcess = false;
+                } else {
+                    scope.autoProcess = true;
                 }
-            });
+
+                // Max file size
+                if (scope.dataMax == null) {
+                    scope.dataMax = Dropzone.prototype.defaultOptions.maxFilesize;
+                } else {
+                    scope.dataMax = parseInt(scope.dataMax);
+                }
+
+                // Message for the uploading
+                if (scope.message == null) {
+                    scope.message = Dropzone.prototype.defaultOptions.dictDefaultMessage;
+                }
+                $('#fileUpload').val('');
+                var recruiter = {
+                    'recruiter': $rootScope.globals.currentUser.user_email
+                };
+                myDropZone = new Dropzone(element[0], {
+                    url: scope.action
+                    , maxFilesize: 5
+                    , paramName: ["file", recruiter]
+                    , acceptedFiles: scope.mimetypes
+                    , maxThumbnailFilesize: '5'
+                    , clickable: ["#backgroundImg", "#file-dropzone", "#fileUpload"]
+                    , autoProcessQueue: scope.autoProcess
+                    , complete: function (r) {
+                        scope.completedFiles.push(r);
+                    }
+                });
+            }
 
             scope.callBack = function () {
+                var queFiles = myDropZone.getQueuedFiles();
+                var activeFiles = myDropZone.getActiveFiles();
                 for (var i = 0; i < scope.completedFiles.length; i++) {
                     myDropZone.removeFile(scope.completedFiles[i]);
                 }
+                for (var i = 0; i < queFiles.length; i++) {
+                    myDropZone.removeFile(queFiles[i]);
+                }
+                for (var i = 0; i < activeFiles.length; i++) {
+                    myDropZone.removeFile(activeFiles[i]);
+                }
+                scope.completedFiles = [];
             }
 
+            angular.extend(scope.options, {
+                clearFiles: function () {
+                    scope.callBack();
+                }
+            });
+            scope.init();
         }
     }
 }
@@ -586,8 +604,7 @@ function datePicker($timeout) {
             $timeout(function () {
                 $('.datepicker').remove();
                 $(element).datepicker({
-                    format: "dd/mm/yyyy"
-                    , //todayHighlight:true,
+                    format: "dd/mm/yyyy", //todayHighlight:true,
                     autoclose: true
                 }).on('change', function () {
                     $('.datepicker').hide();
@@ -646,8 +663,7 @@ function datePickerStage($timeout) {
             $timeout(function () {
                 $('.datepicker').remove();
                 $(element).datepicker({
-                    format: "dd/mm/yyyy"
-                    , //todayHighlight:true,
+                    format: "dd/mm/yyyy", //todayHighlight:true,
                     autoclose: true
                 }).on('change', function () {
                     $('.datepicker').hide();
