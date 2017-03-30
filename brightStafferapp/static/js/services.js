@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 var baseUrl = 'http://'+window.location.host+'/';
-=======
-var baseUrl = 'http://' + window.location.host + '/';
->>>>>>> dev
 angular
     .module('brightStaffer')
     .constant('REQUEST_URL', baseUrl)
