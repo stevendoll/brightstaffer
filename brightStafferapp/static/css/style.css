@@ -173,7 +173,7 @@ h5 {
   margin-right: 0;
 }
 .navbar-top-links .dropdown-menu li a {
-  padding: 3px 20px;
+  padding: 5px 20px;
   min-height: 0;
 }
 .navbar-top-links .dropdown-menu li a div {
@@ -247,7 +247,7 @@ h5 {
   float: left;
   height: 50px;
   padding: 0;
-  width: 200px;
+  width: 600px;
   display: block;
 }
 .navbar-form-custom .form-group {
@@ -1159,10 +1159,14 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   font-family: 'OpenSans-Semibold';
   font-size: 14px;
   color: #6a6a6a;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.bootstrap-select .dropdown-menu {
+    top: 37px;
 }
 
 .info-box-panels span {
@@ -1172,7 +1176,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .info-box-bottom-links {
   width: 100%;
   float: left;
-  margin: 20px 0px 2px 0px;
+  margin: 1px 0px 2px 0px;
   text-align: right;
 }
 
@@ -1722,7 +1726,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   color: #808080;
   font-size: 13px;
   font-family: 'open_sansregular';
-  padding: 8px 30px 8px 14px;
+  padding: 8px 8px 8px 14px;
 }
 
 .filter-stage-box .form-group {
@@ -1787,7 +1791,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   border: solid 1px #e7eaec;
   color: #000000;
   font-size: 13px;
-  padding: 8px 5px;
+  padding: 8px 4px;
   font-family: 'open_sansregular';
   text-align: center;
   float: left;
@@ -2091,7 +2095,7 @@ padding: 10px 0px;}
     background-color: #ffffff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
     border: solid 1px #e7eaec;
-    top: 44px;
+    top: 55px;
 }
 
 .dropdown-menu > li > a {
@@ -6743,6 +6747,9 @@ dd.project-people {
 .align-center h5 a.text-project {
   font-size: 18px;
   font-family: 'OpenSans-Bold';
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 @media (max-width: 992px) {
   .chat-users,
@@ -11445,6 +11452,7 @@ input[type="radio"] + label.radio-black {
   border: solid 1px #e7eaec;
   margin-top: 5px;
   position: relative;
+  margin-bottom: 15px;
 }
 
 .talent-srearch-check-panel {
@@ -11555,7 +11563,7 @@ input[type="radio"] + label.radio-black {
 
 .talent-progress .progress .progress-bar {
     background-color: #c9daf8 !important;
-    border-radius: 0px 100px 100px 0px;
+    border-radius: 100px 100px 100px 100px;
 }
 
 .talent-progress .progress .progress-bar span.percentage {
@@ -11568,14 +11576,39 @@ input[type="radio"] + label.radio-black {
   width: auto;
 }
 
+table.dataTables > thead > tr > th:last-child {
+    border-bottom: 0px solid #ddd;
+}
+
+.mtop8 {
+  margin-top: 8px;
+}
+
+table.dataTable thead .sorting:last-child:after {
+    content: initial;
+}
+
+table.dataTables > tbody > tr > td {
+    border-top: 0px solid #e7eaec;
+    border-bottom: 1px solid #e7eaec;
+}
+
+table.dataTables > tbody > tr > td:last-child {
+    border-bottom: 0px solid #e7eaec;
+}
+
 .talent-progress .progress .progress-bar span.text {
-  color: #252525;
-  font-size: 13px;
-  font-family: 'open_sansregular';
-  position: absolute;
-  left: 10px;
-  top: 2px;
-  width: auto;
+    color: #252525;
+    font-size: 13px;
+    font-family: 'open_sansregular';
+    position: absolute;
+    left: 10px;
+    top: 2px;
+    width: 70%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
 }
 
 .indus-focus {
@@ -12114,4 +12147,45 @@ ul.rating {
             top: 2px;
         }
     }
+}
+
+
+/*start client feedback changes*/
+.right-side-search{
+    text-align: right;
+}
+.right-side-search .dataTables_filter{
+    display:inline-block;
+}
+.right-side-search .checkbox-right-fx{
+    display: inline-block;
+    position: relative;
+    top: 6px;
+}
+input::-webkit-calendar-picker-indicator{
+    opacity: 0;
+}
+input[type="date"]::-webkit-input-placeholder{
+    visibility: hidden !important;
+}
+input[type=date]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+
+}
+
+.count .normal-select {
+  border: 1px solid #e7eaec;
+    height: 36px;
+    border-radius: 2px;
+    font-size: 13px;
+    font-family: 'open_sansregular';
+    color: #383f44;
+    padding: 8px 10px;
+    width: 50px;
+    background: url(../img/select-arrow.png) no-repeat;
+    background-position: 30px 10px;
+    -webkit-appearance: none;
+   -moz-appearance:    none;
+   appearance:         none;
 }

@@ -5,13 +5,14 @@ from brightStaffer.settings import concept_relevance
 from django.utils import timezone
 from watson_developer_cloud import AlchemyLanguageV1
 from django.conf import settings
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
-from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept, PdfImages, FileUpload, Recruiter
+from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept, PdfImages, FileUpload, Recruiter,\
+    Talent, Company, TalentCompany
 from brightStafferapp import util
-from brightStafferapp.util import require_post_params
+from brightStafferapp.util import require_post_params, required_headers
 from brightStaffer.settings import Alchemy_api_key
 from django.shortcuts import render, HttpResponse
 from itertools import chain
@@ -24,11 +25,14 @@ from rest_framework.response import Response
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from uuid import UUID
+from ResumeParser.core import create_resume
 import PyPDF2
 from PIL import Image
 import os
 import uuid
 import textract
+import datetime
+
 
 class UserData(View):
     @method_decorator(csrf_exempt)
@@ -71,6 +75,8 @@ class UserLogin(View):
         except ValueError:
             return util.returnErrorShorcut(400, 'Invalid Form Fields')
         user = authenticate(username=user_data["username"], password=user_data["password"])
+        if user is not None:
+            login(request, user)
         try:
             user_profile = User.objects.all().values('first_name', 'last_name').filter(username=user)
             list_result = [entry for entry in user_profile]
@@ -247,13 +253,14 @@ class AlchemyAPI(View):
             alchemy_language = AlchemyLanguageV1(api_key=Alchemy_api_key)
             data = json.dumps(
                 alchemy_language.combined(text=user_data['description'],
-                                          extract='entities,keywords', max_items=25))
+                                          extract='entities,keywords', max_items=40))
             d = json.loads(data)
+            print (d)
             Projects.objects.filter(id=project_id).update(description_analysis=d)
             for item in chain(d["keywords"], d["entities"]):
-                if round(float(item['relevance']), 2) >= concept_relevance:
+                if round(float(item['relevance']), 2) >= float(concept_relevance):
                     keyword_list.append(item['text'].lower())
-            return list(set(keyword_list))[:25]
+            return list(set(keyword_list))[:40]
         except Exception as e:
             return keyword_list
 
@@ -357,6 +364,29 @@ class TopProjectList(generics.ListCreateAPIView):
         return response
 
 
+class ProjectDelete(generics.ListCreateAPIView):
+    queryset = Projects.objects.all()
+    serializer_class = ProjectSerializer
+    http_method_names = ['get']
+
+    @required_headers(params=['HTTP_TOKEN', 'HTTP_RECRUITER'])
+    def get(self,request, *args, **kwargs):
+        param_dict = {}
+        queryset = super(ProjectDelete, self).get_queryset()
+        recruiter = request.META.get('HTTP_RECRUITER', '')
+        token = request.META.get('HTTP_TOKEN','')
+        values = Token.objects.filter(user__username=recruiter, key=token)
+        if not values:
+            return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
+        project_id_list = self.request.query_params.get('project').split(',')
+        for project_id in project_id_list:
+            talent_objs = Projects.objects.filter(id=project_id)
+            if not talent_objs:
+                return util.returnErrorShorcut(403, 'Project with id {} dosen\'t exist in database.'.format(project_id))
+            deleted = Projects.objects.filter(id=project_id).delete()
+        return util.returnSuccessShorcut(param_dict)
+
+
 class UpdateRecruiter(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -409,13 +439,84 @@ class FileUploadView(View):
             for key, file in files.items():
                 file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
                 # extract text from pdf
-                self.extract_text_from_pdf(file_upload_obj)
+                talent_data = self.extract_text_from_pdf(file_upload_obj)
+                self.handle_talent_data(talent_data, user)
                 # extract all images from pdf
                 self.extract_image_from_pdf(file_upload_obj, dest_path='images')
             context = dict()
             return util.returnSuccessShorcut(context)
         except:
             return util.returnErrorShorcut(400, "Error Connection Refused")
+
+    def handle_talent_data(self, talent_data, user):
+        if talent_data:
+            if 'name' in talent_data and talent_data['name']:
+                talent_obj = Talent.objects.create(talent_name=talent_data['name'], recruiter=user,
+                                                   status='New', current_location='New Delhi',
+                                                   linkedin_url='dndk', create_date=datetime.datetime.now())
+                if talent_obj:
+                    if 'skills' in talent_data:
+                        for skill in talent_data['skills']:
+                            concept, created = Concept.objects.get_or_create(concept=skill['name'])
+                            tpconcept, created = TalentConcept.objects.get_or_create(
+                                talent=talent_obj, concept=concept,
+                                match=str(round(skill['score'] * 100, 2)))
+
+                if "work-experience" in talent_data:
+                    for experience in talent_data["work-experience"]:
+                        is_current = False
+                        # save all talent experience information
+                        company, created = Company.objects.get_or_create(company_name=experience['Company'])
+                        if experience['type'].lower() == "current":
+                            is_current = True
+                        start_date, end_date = self.convert_to_date(experience['Duration'])
+                        if end_date == 'Present':
+                            is_current = True
+                            TalentCompany.objects.get_or_create(
+                                talent=talent_obj, company=company, is_current=is_current,
+                                designation=experience['JobTitle'], start_date=start_date)
+                        else:
+                            TalentCompany.objects.get_or_create(
+                                talent=talent_obj, company=company, is_current=is_current,
+                                designation=experience['JobTitle'], start_date=start_date, end_date=end_date)
+
+    def convert_to_date(self, duration):
+        from datetime import date
+        month_arr = {
+            "January": 1,
+            "February": 2,
+            "March": 3,
+            "April": 4,
+            "May": 5,
+            "June": 6,
+            "July": 7,
+            "August": 8,
+            "September": 9,
+            "October": 10,
+            "November": 11,
+            "December": 12
+        }
+        duration = duration.split('-')
+
+        start_date = duration[0]
+        start_date = start_date.split()
+
+        month = start_date[0]
+        year = start_date[1]
+        day = 1
+
+        start_date = date(int(year), int(month_arr[month]), int(day))
+
+        end_date = duration[1]
+        if end_date != 'Present':
+            end_date = duration[1]
+            end_date = end_date.split()
+
+            month = end_date[0]
+            year = end_date[1]
+            day = 1
+            end_date = date(int(year), int(month_arr[month]), int(day))
+        return start_date, end_date
 
     # @staticmethod
     def handle_uploaded_file(self, dest_path, f, user):
@@ -491,9 +592,11 @@ class FileUploadView(View):
         and is now sent to extract text from the pdf file
         :return: None or error
         """
-        text = textract.process(file_upload_obj.file.path)
+        text = textract.process(file_upload_obj.file.path).decode('utf-8')
         file_upload_obj.text = text
         file_upload_obj.save()
+        content = create_resume.create_resume(text)
+        return content
 
 
 def user_validation(data):

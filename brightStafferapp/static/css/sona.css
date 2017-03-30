@@ -388,8 +388,12 @@ li.active a {
     font-size: 14px;
     margin: 6px 0 6px;
     padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
+    width: 100%;
     float: left;
+    padding: 0 45px;
 }
 
 .wbox {
@@ -825,8 +829,8 @@ li.active a {
 
 .concept-tag {
 	margin: 0 6px 6px 0;
-	font-size: 18px;
-    font-family: 'open_sansregular';
+	font-size: 16px;
+    /*font-family: 'open_sansregular';*/
 }
 
 .bootstrap-tagsinput {
@@ -915,7 +919,7 @@ li.active a {
 
 .dataTables {
 	font-size: 14px;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 0px solid #ddd;
 }
 
 .table > thead > tr > th {

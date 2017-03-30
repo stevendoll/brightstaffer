@@ -268,7 +268,7 @@ class TalentProject(models.Model):
 
     class Meta:
         verbose_name_plural = "Talent Projects"
-        ordering = ('-date_added',)
+        ordering = ('-project_match',)
 
     @property
     def company_name(self):
