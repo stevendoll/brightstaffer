@@ -174,12 +174,6 @@
 
                                      <td>
                                         <a href="" class="list-act-butn">[[talent.status]]</a>
-                                        <div class="checkbox-right-fx">
-                                            <div class="checkbox">
-                                              <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
-                                              <label class="css-label" for="check_[[talent.id]]"></label>
-                                            </div>
-                                        </div>
                                      </td>
                                  </tr>
 
@@ -207,6 +201,32 @@
                                 </ul>
                               </div>-->
                   </div>
+                 <div class="chk-bx-rt">
+                     <div class="checkbox-right-fx" ng-repeat="talent in talentList">
+                        <div class="checkbox">
+                          <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
+                          <label class="css-label" for="check_[[talent.id]]"></label>
+                        </div>
+                     </div>
+                    <!-- <div class="checkbox-right-fx">
+                        <div class="checkbox">
+                          <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
+                          <label class="css-label" for="check_[[talent.id]]"></label>
+                        </div>
+                     </div>
+                     <div class="checkbox-right-fx">
+                        <div class="checkbox">
+                          <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
+                          <label class="css-label" for="check_[[talent.id]]"></label>
+                        </div>
+                     </div>
+                     <div class="checkbox-right-fx">
+                        <div class="checkbox">
+                          <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
+                          <label class="css-label" for="check_[[talent.id]]"></label>
+                        </div>
+                     </div>-->
+                 </div>
     </div>
 
   <!-- add-project-Modal-starts -->

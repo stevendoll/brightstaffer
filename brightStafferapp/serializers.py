@@ -119,7 +119,7 @@ class TalentProjectStageSerializer(serializers.ModelSerializer):
 class TalentCompanySerializer(serializers.ModelSerializer):
     talent = serializers.CharField()
     company = serializers.CharField()
-    years_of_experience = serializers.CharField()
+    years_of_experience = serializers.FloatField()
     career_gap = serializers.SerializerMethodField()
     start_date = serializers.CharField(source='get_start_date')
     end_date = serializers.CharField(source='get_end_date')
