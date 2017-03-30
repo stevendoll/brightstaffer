@@ -46,7 +46,7 @@ CELERYBEAT_SCHEDULE = {
         },
     "run-every-1-minutes": {
                 "task": "brightStafferapp.tasks.add",
-                "schedule": timedelta(minuetes=1),
+                "schedule": timedelta(minutes=1),
                 "args": (16, 16)
             },
 }
