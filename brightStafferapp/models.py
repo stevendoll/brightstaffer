@@ -377,6 +377,11 @@ class PdfImages(models.Model):
         return self.name
 
 
+@receiver(post_save, sender=Talent)
+def talent_postsave(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
 @receiver(post_save, sender=TalentProject)
 def talentproject_postsave(sender, instance=None, created=False, **kwargs):
     update_indexes.delay()
@@ -454,4 +459,9 @@ def talenteducation_post_delete(sender, instance=None, created=False, **kwargs):
 
 @receiver(post_delete, sender=TalentRecruiter)
 def talentrecruiter_post_delete(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
+@receiver(post_delete, sender=Talent)
+def talent_post_delete(sender, instance=None, created=False, **kwargs):
     update_indexes.delay()

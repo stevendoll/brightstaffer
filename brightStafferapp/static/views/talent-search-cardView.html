@@ -12,8 +12,13 @@
                 </div>
                 <div class="search-result-panel right-div">
                     <div class="search-result-name">
-                        <div class="search-name-head" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeAll]]</span></div>
-                    <div class="search-result-info">[[talent.current_location | capitalizeWord]] <span></span> [[talent.industry_focus | capitalizeAll]]</div>
+                        <div class="search-name-head" ng-click="loadProfileData(talent.id,talent)">
+                            [[talent.talent_name | capitalizeWord]]</div>
+<!--                        <span>[[talent.designation | capitalizeAll]]</span>-->
+                    </div>
+                    <div class="search-result-info">[[talent.current_location | capitalizeWord]]
+<!--                        <span></span> [[talent.industry_focus | capitalizeAll]]-->
+                    </div>
                 </div>
 
                 <div class="cls"></div>
@@ -35,7 +40,10 @@
                 </div>
                 <div class="col-xs-12 padding-zero">
                     <div class="left-div search-result-edu">Education</div>
-                    <div class="right-div search-detail-edu">[[talent.talent_education[0].education | capitalizeAll]] [[talent.talent_education[0].start_date | yearFormat]]- [[talent.talent_education[0].end_date | yearFormat]]</div>
+                    <div class="right-div search-detail-edu">
+                        [[talent.talent_education[0].education | capitalizeAll]]
+                        <span ng-show="talent.talent_education[0].start_date && talent.talent_education[0].end_date">[[talent.talent_education[0].start_date | yearFormat]]- [[talent.talent_education[0].end_date | yearFormat]]</span>
+                    </div>
                 </div>
             </div>
             <div class="talentsearch-right-panel">
