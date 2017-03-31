@@ -1013,10 +1013,12 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   font-size: 14px;
   color: #337ab7;
   float: left;
-  width: 74%;
+  width: 70%;
   margin-left: 10px;
   margin-top: 9px;
-  word-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .datepicker.dropdown-menu {
