@@ -45,7 +45,9 @@
                         <div star-rating class="star-right-side" rating-value="rating" max="5"></div>
                     </div>
                     <div ng-show="[[talent.talent_project.length > 0]]">
+<!--
                         <div class="schdule-list">[[talent.talent_project[0].project_stage | capitalize]]</div>
+-->
                         <div class="schdule-list-date">[[talent.talent_project[0].date_added | dateFormat]]</div>
                         <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_project[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
                     </div>
