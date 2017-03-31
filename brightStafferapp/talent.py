@@ -485,6 +485,7 @@ class TalentSearchFilter(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         es = Elasticsearch(hosts=[settings.HAYSTACK_CONNECTIONS['default']['URL']])
         recruiter = request.META.get('HTTP_RECRUITER' '')
+        recruiter_param = request.GET.get('recruiter', '')
         token = request.META.get('HTTP_TOKEN', '')
         is_valid = user_validation(data={'recruiter': recruiter,
                                          'token': token})
@@ -575,10 +576,10 @@ class TalentSearchFilter(generics.ListCreateAPIView):
                     }
                 }
                 query['query']['bool']['filter']['bool']['must'].append(concepts_query)
-        if recruiter:
+        if recruiter_param:
             recruiter_query = {
                 "match": {
-                    "recruiter": recruiter
+                    "recruiter": recruiter_param
                 }
             }
             query['query']['bool']['filter']['bool']['must'].append(recruiter_query)
