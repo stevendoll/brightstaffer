@@ -162,7 +162,7 @@
                           <span aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
                         </a>
                       </li>
-                        <li ng-repeat="i in candidatePages" id="[[$index]]" ng-click="candidatePagination.page = ($index+1);getcandidateData();" ng-class="{'active': candidatePagination.page == $index+1}">
+                        <li ng-repeat="i in candidatePages" id="[[$index]]" ng-click="changePage(false, $index+1)" ng-class="{'active': candidatePagination.page == $index+1}">
                             <a href="" ng-class="{'cur-notallow': candidatePagination.page == $index+1}">[[$index+1]]</a>
                         </li>
                       <li id="next" class="next" ng-click="changePage(true)">

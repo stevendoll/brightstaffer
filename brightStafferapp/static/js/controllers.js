@@ -1614,7 +1614,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         return parseInt(a/b);
     }
 
-    $scope.changePage = function (add) {
+    $scope.changePage = function (add, pageNo) {
+        
+        if(pageNo){
+            if($scope.candidatePagination.page == pageNo){
+                return;
+            }
+            $rootScope.getCandidateData();
+            return;
+        }
+        
         if (add) {
             if (Math.ceil($rootScope.totalTalentCount / $scope.candidatePagination.count) == $scope.candidatePagination.page) {
                 return;
@@ -1625,7 +1634,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.candidatePagination.page -= 1;
         }
         //        $rootScope.$emit('fetchCandidateData');
-        $rootScope.getCandidateData()
+        $rootScope.getCandidateData();
     }
 
 
