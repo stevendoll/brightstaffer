@@ -10,6 +10,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.isDevice = false;
     $rootScope.projectListView = [];
     $rootScope.StagesProjectList = [];
+    $rootScope.talentAllStages = [];
     $scope.showLoader = false;
 
 
@@ -1608,8 +1609,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         // var oldie = $.browser.msie && $.browser.version < 9;
 
     });
+    
+    $scope.calcIntegerVal = function(a, b){
+        return parseInt(a/b);
+    }
 
-    $scope.changePage = function (add) {
+    $scope.changePage = function (add, pageNo) {
+        
+        if(pageNo){
+            if($scope.candidatePagination.page == pageNo){
+                return;
+            }
+            $rootScope.getCandidateData();
+            return;
+        }
+        
         if (add) {
             if (Math.ceil($rootScope.totalTalentCount / $scope.candidatePagination.count) == $scope.candidatePagination.page) {
                 return;
@@ -1620,7 +1634,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.candidatePagination.page -= 1;
         }
         //        $rootScope.$emit('fetchCandidateData');
-        $rootScope.getCandidateData()
+        $rootScope.getCandidateData();
     }
 
 
@@ -1783,16 +1797,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     function getTalentStages(id) {
+        $rootScope.talentAllStages = [];
         var requestObject = {
             'token': $rootScope.globals.currentUser.token, // username field value
             'recruiter': $rootScope.globals.currentUser.user_email, // password field value
             'talent_id': id
         };
         talentApis.getTalentAllStages(requestObject).then(function (response) {
+            $state.go('talent.talent-profile', '');
             $rootScope.talentAllStages = response.result;
             $scope.stage.stagesCard = '';
             $scope.stage.stagesCard = response.result;
-            $state.go('talent.talent-profile', '');
             $('html, body').animate({
                 scrollTop: 0
             }, 'fast');
