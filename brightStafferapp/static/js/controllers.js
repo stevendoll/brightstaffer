@@ -324,6 +324,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                         i: true
                     });
                 }
+                $rootScope.createCareerHistoryData();
             });
         }
     }
@@ -2127,14 +2128,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.allConcepts = function (talentConcepts) {
-        if (talentConcepts.length > 0) {
+        if (talentConcepts.length > 6) {
             $scope.talentData = talentConcepts;
             $('#all-concept').modal('show');
         }
     }
 
     $scope.allMetrics = function (talentCareer) {
-        if (talentCareer.length > 0) {
+        if (talentCareer.length > 3) {
             $scope.talentCareer = talentCareer;
             $('#all-metrics').modal('show');
         }
@@ -2721,6 +2722,37 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 $rootScope.talentCountEnd = 0;
             }
         });
+    }
+    
+    $rootScope.createCareerHistoryData = function(){
+        console.log($scope.talentList);
+        $scope.talentList.forEach(function(talent){
+            for(var i=0;i<talent.talent_company.length;i++){
+                var obj = talent.talent_company[i];
+                obj.career_gap = parseFloat(obj.career_gap);
+                obj.years_of_experience = parseFloat(obj.years_of_experience);
+                for(j=0;j<i;j++){
+                    if(!obj.blank_gap)
+                        obj.blank_gap = 0;
+                    
+                    obj.blank_gap += talent.talent_company[j].career_gap;
+                    obj.blank_gap += talent.talent_company[j].years_of_experience;
+                }
+//                obj.career_gap = obj.career_gap.toFixed(2);
+//                obj.years_of_experience = obj.years_of_experience.toFixed(2);
+                if(obj.blank_gap){
+//                    obj.blank_gap = obj.blank_gap.toFixed(2);   
+                }else{
+                    obj.blank_gap = 0;
+                }
+                
+                obj.career_gap = parseFloat(obj.career_gap);
+                obj.years_of_experience = parseFloat(obj.years_of_experience);
+                obj.blank_gap = parseFloat(obj.blank_gap);
+            }
+        });
+        
+        console.log($scope.talentList)
     }
 
     $rootScope.filterReset = function () {
