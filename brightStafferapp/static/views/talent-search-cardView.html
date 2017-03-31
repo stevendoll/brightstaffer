@@ -12,8 +12,13 @@
                 </div>
                 <div class="search-result-panel right-div">
                     <div class="search-result-name">
-                        <div class="search-name-head" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</div> <span>[[talent.designation | capitalizeAll]]</span></div>
-                    <div class="search-result-info">[[talent.current_location | capitalizeWord]] <span></span> [[talent.industry_focus | capitalizeAll]]</div>
+                        <div class="search-name-head" ng-click="loadProfileData(talent.id,talent)">
+                            [[talent.talent_name | capitalizeWord]]</div>
+<!--                        <span>[[talent.designation | capitalizeAll]]</span>-->
+                    </div>
+                    <div class="search-result-info">[[talent.current_location | capitalizeWord]]
+<!--                        <span></span> [[talent.industry_focus | capitalizeAll]]-->
+                    </div>
                 </div>
 
                 <div class="cls"></div>
