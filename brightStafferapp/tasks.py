@@ -37,8 +37,11 @@ def handle_talent_data(talent_data, user):
     if talent_data:
         if 'name' in talent_data and talent_data['name']:
             talent_obj = models.Talent.objects.create(talent_name=talent_data['name'], recruiter=user,
-                                                      status='New', current_location='New Delhi',
-                                                      linkedin_url='dndk', create_date=datetime.datetime.now())
+                                                      status='New', current_location='California',
+                                                      linkedin_url='http://www.example.com',
+                                                      create_date=datetime.datetime.now())
+            talent_recruiter, created = models.TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
+                                                                                     is_active=True)
             if talent_obj:
                 if 'skills' in talent_data:
                     for skill in talent_data['skills']:
@@ -73,7 +76,7 @@ def handle_talent_data(talent_data, user):
                                                                                       course=education['course'],
                                                                                       start_date=start_date,
                                                                                       end_date=end_date
-                                                                               )
+                                                                                      )
                     else:
                         tporg, created = models.TalentEducation.objects.get_or_create(talent=talent_obj, education=org,
                                                                                       course=education['course'])
