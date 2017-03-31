@@ -1609,6 +1609,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         // var oldie = $.browser.msie && $.browser.version < 9;
 
     });
+    
+    $scope.calcIntegerVal = function(a, b){
+        return parseInt(a/b);
+    }
 
     $scope.changePage = function (add) {
         if (add) {
