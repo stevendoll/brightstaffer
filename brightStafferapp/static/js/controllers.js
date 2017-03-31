@@ -1079,12 +1079,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
 
 
 
@@ -1127,12 +1129,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
 
 
 
@@ -1338,9 +1342,10 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         $('#successBox').css('display', 'block');
         $scope.removeCompletedFiles();
         setTimeout(
-            function () {
-                $('#successBox').css('display', 'none');
-            }, 2000);
+        function () {
+            $('#successBox').css('display', 'none');
+//            $state.go('talent.talent-search.talent-search-card', '');
+        }, 2000);
     }
 
     $scope.reopen = function () {
@@ -2252,7 +2257,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
             function requestCallback(response) {
                 response = JSON.parse(response);
-                // console.log(response);
+                if (!talentDetails.talent_email) {
+                    $rootScope.talentDetails.talent_email = [{}];
+                }
+                $rootScope.talentDetails.talent_email[0].email
+                    // console.log(response);
                 $scope.candidateEmailAdd = '';
                 $scope.closeCandidateInfo();
                 //candidateEmailAdd ='';
@@ -2733,7 +2742,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     }
 
+    $scope.convertIntoInt = function (val) {
+        return parseInt(val);
+    }
+
     $rootScope.createCareerHistoryData = function (arr) {
+
+        //        var totalExp = calcTotal(arr);
         arr.forEach(function (talent) {
 
             talent.talent_concepts = talent.talent_concepts.sort(function (a, b) {
@@ -2762,6 +2777,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 obj.career_gap = parseFloat(obj.career_gap);
                 obj.years_of_experience = parseFloat(obj.years_of_experience);
                 obj.blank_gap = parseFloat(obj.blank_gap);
+
+                //                obj.careerPercent = 
             }
         });
         //        return arr;
