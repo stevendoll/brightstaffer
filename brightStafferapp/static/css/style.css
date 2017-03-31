@@ -11807,7 +11807,7 @@ table.dataTables > tbody > tr > td:last-child {
 
 .edit-modal-recruiter .form-group input {
   border-radius: 2px;
-  background-color: #ffffff;
+  background: url(../img/cal-icon.png) #ffffff no-repeat 98% 11px;
   border: solid 1px #e7eaec;
   font-family: 'open_sansregular';
   font-size: 13px;
@@ -12192,3 +12192,6 @@ input[type=date]::-webkit-inner-spin-button {
 
 .chk-bx-rt { width: 28px; float: right; right: -5px; margin-top: 72px; position: absolute;}
 .checkbox-right-fx { width: 28px; float: left; margin-bottom: 32px;}
+.input-right-padding{
+    padding-right: 10px !important;
+}
