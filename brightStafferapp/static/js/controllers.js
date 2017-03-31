@@ -1078,12 +1078,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
 
 
 
@@ -1124,12 +1126,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
 
 
 
@@ -1270,7 +1274,7 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
             return 'rgb(255, 255, 255)'
         };
     }
-    
+
     $rootScope.dirOptions = {};
     $scope.callDirFunc = function () {
         $scope.dirOptions.clearFiles();
@@ -1299,19 +1303,19 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.completedFiles = [];
 
     $scope.filesExits = function () {
-        var fileContainers = document.getElementsByClassName('dz-preview');
-        for (var i = 0; i < fileContainers.length; i++) {
-            if (fileContainers[i].classList.contains('dz-error') || !fileContainers[i].classList.contains('dz-complete')) {
-                return true;
-            }
+            var fileContainers = document.getElementsByClassName('dz-preview');
+            for (var i = 0; i < fileContainers.length; i++) {
+                if (fileContainers[i].classList.contains('dz-error') || !fileContainers[i].classList.contains('dz-complete')) {
+                    return true;
+                }
 
+            }
+            return false;
         }
-        return false;
-    }
-//    $rootScope.dirOptions = {};
-//    $scope.callDirFunc = function () {
-//        $scope.dirOptions.clearFiles();
-//    };
+        //    $rootScope.dirOptions = {};
+        //    $scope.callDirFunc = function () {
+        //        $scope.dirOptions.clearFiles();
+        //    };
     $scope.closePopup = function () {
         var file = $scope.filesExits();
         if (file) {
@@ -1610,22 +1614,22 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         // var oldie = $.browser.msie && $.browser.version < 9;
 
     });
-    
-    $scope.calcIntegerVal = function(a, b){
-        return parseInt(a/b);
+
+    $scope.calcIntegerVal = function (a, b) {
+        return parseInt(a / b);
     }
 
     $scope.changePage = function (add, pageNo) {
-        
-        if(pageNo){
-            if($scope.candidatePagination.page == pageNo){
+
+        if (pageNo) {
+            if ($scope.candidatePagination.page == pageNo) {
                 return;
             }
             $scope.candidatePagination.page = pageNo;
             $rootScope.getCandidateData();
             return;
         }
-        
+
         if (add) {
             if (Math.ceil($rootScope.totalTalentCount / $scope.candidatePagination.count) == $scope.candidatePagination.page) {
                 return;
@@ -1791,10 +1795,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.getCandidateProfile(requestObject).then(function (response) {
             //$state.go('talent.talent-profile','');
             //$('html, body').animate({ scrollTop: 0 }, 'fast');
-            
+
             var a = [response];
             $rootScope.createCareerHistoryData(a);
-            
+
             $rootScope.talentDetails = a[0];
             sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
             getTalentStages(id);
@@ -2718,7 +2722,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         i: true
                     });
                 }
-                
+
             } else if (response.hits.length == 0) {
                 $rootScope.talentList = [];
                 $rootScope.Filter = true;
@@ -2728,34 +2732,39 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $rootScope.createCareerHistoryData($rootScope.talentList);
         });
     }
-    
-    $rootScope.createCareerHistoryData = function(arr){
-        arr.forEach(function(talent){
-            for(var i=0;i<talent.talent_company.length;i++){
+
+    $rootScope.createCareerHistoryData = function (arr) {
+        arr.forEach(function (talent) {
+
+            talent.talent_concepts = talent.talent_concepts.sort(function (a, b) {
+                return parseFloat(a.match) - parseFloat(b.match);
+            });
+            talent.talent_concepts = talent.talent_concepts.reverse();
+            for (var i = 0; i < talent.talent_company.length; i++) {
                 var obj = talent.talent_company[i];
                 obj.career_gap = parseFloat(obj.career_gap);
                 obj.years_of_experience = parseFloat(obj.years_of_experience);
-                for(j=0;j<i;j++){
-                    if(!obj.blank_gap)
+                for (j = 0; j < i; j++) {
+                    if (!obj.blank_gap)
                         obj.blank_gap = 0;
-                    
+
                     obj.blank_gap += talent.talent_company[j].career_gap;
                     obj.blank_gap += talent.talent_company[j].years_of_experience;
                 }
-//                obj.career_gap = obj.career_gap.toFixed(2);
-//                obj.years_of_experience = obj.years_of_experience.toFixed(2);
-                if(obj.blank_gap){
-//                    obj.blank_gap = obj.blank_gap.toFixed(2);   
-                }else{
+                //                obj.career_gap = obj.career_gap.toFixed(2);
+                //                obj.years_of_experience = obj.years_of_experience.toFixed(2);
+                if (obj.blank_gap) {
+                    //                    obj.blank_gap = obj.blank_gap.toFixed(2);   
+                } else {
                     obj.blank_gap = 0;
                 }
-                
+
                 obj.career_gap = parseFloat(obj.career_gap);
                 obj.years_of_experience = parseFloat(obj.years_of_experience);
                 obj.blank_gap = parseFloat(obj.blank_gap);
             }
         });
-//        return arr;
+        //        return arr;
     }
 
     $rootScope.filterReset = function () {
