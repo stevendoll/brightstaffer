@@ -324,7 +324,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                         i: true
                     });
                 }
-                $rootScope.createCareerHistoryData();
+                $rootScope.createCareerHistoryData($rootScope.talentList);
             });
         }
     }
@@ -1791,7 +1791,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.getCandidateProfile(requestObject).then(function (response) {
             //$state.go('talent.talent-profile','');
             //$('html, body').animate({ scrollTop: 0 }, 'fast');
-            $rootScope.talentDetails = response;
+            
+            var a = [response];
+            $rootScope.createCareerHistoryData(a);
+            
+            $rootScope.talentDetails = a[0];
             sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
             getTalentStages(id);
         });
@@ -2714,19 +2718,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         i: true
                     });
                 }
-
+                
             } else if (response.hits.length == 0) {
                 $rootScope.talentList = [];
                 $rootScope.Filter = true;
                 $rootScope.totalTalentCount = 0;
                 $rootScope.talentCountEnd = 0;
             }
+            $rootScope.createCareerHistoryData($rootScope.talentList);
         });
     }
     
-    $rootScope.createCareerHistoryData = function(){
-        console.log($scope.talentList);
-        $scope.talentList.forEach(function(talent){
+    $rootScope.createCareerHistoryData = function(arr){
+        arr.forEach(function(talent){
             for(var i=0;i<talent.talent_company.length;i++){
                 var obj = talent.talent_company[i];
                 obj.career_gap = parseFloat(obj.career_gap);
@@ -2751,8 +2755,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 obj.blank_gap = parseFloat(obj.blank_gap);
             }
         });
-        
-        console.log($scope.talentList)
+//        return arr;
     }
 
     $rootScope.filterReset = function () {
