@@ -393,8 +393,11 @@ class TalentUpdateRank(View):
         if not talent_objs:
             return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
 
-        updated = Talent.objects.filter(id=talent).update(rating=request.GET['rating'])
-        if updated:
+        talent = Talent.objects.filter(id=talent)
+        if talent:
+            talent = talent[0]
+            talent.rating = request.GET['rating']
+            talent.save()
             context['message'] = 'success'
         return util.returnSuccessShorcut(context)
 
