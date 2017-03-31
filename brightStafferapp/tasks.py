@@ -56,6 +56,9 @@ def handle_talent_data(talent_data, user):
                     company, created = models.Company.objects.get_or_create(company_name=experience['Company'])
                     if experience['type'].lower() == "current":
                         is_current = True
+                        designation = experience['JobTitle']
+                        talent_obj.designation = designation
+                        talent_obj.save()
                     start_date, end_date = convert_to_date(experience['Duration'])
                     if end_date == 'Present':
                         is_current = True
