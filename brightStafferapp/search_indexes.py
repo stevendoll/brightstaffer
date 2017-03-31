@@ -158,9 +158,10 @@ class TalentIndex(indexes.SearchIndex, indexes.Indexable):
             con = dict()
             con['talent'] = obj.talent_name
             con['concept'] = concept.concept.concept
-            con['match'] = concept.match
+            con['match'] = float(concept.match)
             con['date_created'] = str(concept.get_date_created)
             concepts.append(con)
+        sorted(concepts, key=lambda x: x['match'], reverse=True)
         return concepts
 
     def index_queryset(self, using=None):
