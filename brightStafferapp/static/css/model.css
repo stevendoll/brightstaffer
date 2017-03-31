@@ -4,8 +4,8 @@
   width: 100%;
   left: 0;
   top: 0;
-  display: none;
-  z-index: 1033;
+/*  display: none;*/
+  z-index: 9999;
   background: rgba(0, 0, 0, 0.6);
 }
 #startup {
@@ -145,3 +145,4 @@
         margin: 0 0.1em;
     }
 }
+

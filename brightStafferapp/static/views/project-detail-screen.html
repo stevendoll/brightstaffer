@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Sona &middot; Dashboard</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Toastr style -->
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <link href="js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/sona.css" rel="stylesheet">
+    <link href="css/select-box-custom.css" rel="stylesheet">
+
+</head>
+
+<body class="no-skin-config">
+<div id="wrapper">
+
+  <nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="sidebar-brand"><img src="img/brand-temp.png"></li>
+            <li class="active">
+                <a href="#"><i class="fa fa-th"></i> <span class="nav-label">Dashboard</span></a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-file-text"></i> <span class="nav-label">Projects</span><span class="fa arrow"></span></a>
+                  <ul class="nav nav-second-level">
+                      <li><a href="#">#designeraccenture</a></li>
+                      <li><a href="#">#uxleadavanade</a></li>
+                      <li><a href="#">#strategistbooz</a></li>
+                      <li><a href="#">#fullstackibm</a></li>
+                      <li><a href="#">#designercapitalone</a></li>
+                      <li><a href="#">#directornytimes</a></li>
+                      <li class="sidebar-divider"></li>
+                      <li><a class="all-projects m-t-sm" href="projects/">All Projects <small class="text-muted m-l-sm">(6)</small></a></li>
+                      <li class="sidebar-divider"></li>
+                      <li><a class="new-project" href="create/">Create New Project <small class="text-muted m-l-xs">+</small></a></li>
+                  </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Team</span><span class="fa arrow"></span></a>
+                  <ul class="nav nav-second-level collapse">
+                      <li><a href="#">@shannon.madden</a></li>
+                      <li><a href="#">@matt.lyden</a></li>
+                      <li><a href="#">@steven.doll</a></li>
+                      <li><a href="#">@jeff.mcweeney</a></li>
+                  </ul>
+            </li>
+        <li>
+            <a href="#"><i class="fa fa-diamond"></i> <span class="nav-label">Talent</span></a>
+        </li>
+        </ul>
+    </div>
+  </nav>
+
+  <div id="page-wrapper" class="gray-bg dashbard-1">
+
+    <!-- Top Nav -->
+    <div class="row border-bottom">
+      <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <div class="visible-xs">
+                <a class="navbar-minimalize minimalize-ui btn btn-default" href="#"><span class="icon icon-unread"></span> </a>
+            </div>
+            <form role="search" class="navbar-form-custom" action="search_results.html">
+                <div class="form-group">
+                    <input type="text" placeholder="Search Sona..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </form>
+        </div>
+          <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle count-info app-notifications" data-toggle="dropdown" href="#">
+                    <span class="icon icon-mail"></span>  <span class="badge badge-warning pull-right">21</span>
+                </a>
+                <ul class="dropdown-menu dropdown-messages">
+                    <li>
+                        <div class="dropdown-messages-box">
+                            <a href="profile.html" class="pull-left">
+                                <img alt="image" class="img-circle" src="img/a7.jpg">
+                            </a>
+                            <div class="media-body">
+                                <small class="pull-right">46h ago</small>
+                                <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <div class="dropdown-messages-box">
+                            <a href="profile.html" class="pull-left">
+                                <img alt="image" class="img-circle" src="img/a4.jpg">
+                            </a>
+                            <div class="media-body ">
+                                <small class="pull-right text-navy">5h ago</small>
+                                <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <div class="dropdown-messages-box">
+                            <a href="profile.html" class="pull-left">
+                                <img alt="image" class="img-circle" src="img/profile.jpg">
+                            </a>
+                            <div class="media-body">
+                                <small class="pull-right">23h ago</small>
+                                <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <brx>
+                                <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <div class="text-center link-block">
+                            <a href="mailbox.html">
+                                <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle count-info app-notifications" data-toggle="dropdown" href="#">
+                    <span class="icon icon-bell"></span> <span class="badge badge-warning pull-right">3</span>
+                </a>
+                <ul class="dropdown-menu dropdown-alerts">
+                    <li>
+                        <a href="mailbox.html">
+                            <div>
+                                <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                <span class="pull-right text-muted small">4 minutes ago</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="profile.html">
+                            <div>
+                                <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                <span class="pull-right text-muted small">12 minutes ago</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="grid_options.html">
+                            <div>
+                                <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                <span class="pull-right text-muted small">4 minutes ago</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <div class="text-center link-block">
+                            <a href="notifications.html">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle app-profile" data-toggle="dropdown" href="#">
+                  <img alt="Profile Photo" class="img-circle-sm" src="img/profile_small.jpg" />
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="profile.html">Profile</a></li>
+                    <li class="divider"></li>
+                    <li><a href="login.html">Logout</a></li>
+                </ul>
+            </li>
+          </ul>
+      </nav>
+    </div>
+
+    <!-- Widgets -->
+    <div class="wrapper wrapper-content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="project-details-container">
+            <div class="leftpanel-div">
+              <div class="delete-section">
+                <i class="fa fa-trash"></i>
+                <span>Delete</span>
+              </div>
+              <div class="project-details-section">
+                <div class="project-details-divs">
+                  <h1>
+                    <span>#fullstackdeveloper</span>
+                    <button type="" class="btn share-buttons">Edit Project</button>
+                    <button type="" class="btn share-buttons">Share</button>
+                  </h1>
+                  <div class="cls"></div>
+                  <div class="detailed-section">
+                    <div class="leftside-panel">
+                      <div class="project-deatil-status">
+                        <div class="status-text">Status:</div>
+                        <div class="status-button">Active</div>
+                      </div>
+                      <div class="detailed-main-section">
+                        <div class="detailed-heading">Created By:</div>
+                        <div class="detailed-text">Marcus Alexander</div>
+                      </div>
+                      <div class="detailed-main-section">
+                        <div class="detailed-heading">Company or Division:</div>
+                        <div class="detailed-text">Accenture Digital</div>
+                      </div>
+                      <div class="detailed-main-section">
+                        <div class="detailed-heading">Location:</div>
+                        <div class="detailed-text">Washington D.C.</div>
+                      </div>
+                    </div>
+                    <div class="rightside-panel">
+                      <div class="detailed-main-section">
+                        <div class="detailed-heading">Last Activity:</div>
+                        <div class="detailed-text">16.08.2014  12:15:57</div>
+                      </div>
+                      <div class="detailed-main-section">
+                        <div class="detailed-heading">Created:</div>
+                        <div class="detailed-text">10.07.2014  12:15:57</div>
+                      </div>
+                      <div class="detailed-main-section">
+                        <div class="detailed-heading">Recent Talent:</div>
+                        <div class="detailed-text">
+                          <div class="talent-members m-n">
+                            <a href="#"><img alt="member" class="img-circle detailedimg" src="img/a1.jpg"></a>
+                            <a href="#"><img alt="member" class="img-circle detailedimg" src="img/a2.jpg"></a>
+                            <a href="#"><img alt="member" class="img-circle detailedimg" src="img/a3.jpg"></a>
+                            <a class="btn btn-outline btn-sm concept-tag text-muted font16">+4</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="cls"></div>
+                <div class="detailed-job-descp">
+                  <div class="job-heading">Job Description: </div>
+                  <div class="job-desp">Lorem Ipsum is simply dummy text of Lorem Ipsum is simply dummy text of novemberLorem Ipsum is simply… dummy text of novemberLorem Ipsum is simply dummy text of novemberLorem Ipsum is simply dummy text of november...</div>
+                  <div class="job-descp-more">More</div>
+                  <div class="cls"></div>
+                  <div class="all-concepts-sections">
+                    <div class="all-concepts-div">Full Stack <span>X</span></div>
+                    <div class="all-concepts-div">Full Stack <span>X</span></div>
+                    <div class="all-concepts-div">Full Stack <span>X</span></div>
+                    <div class="all-concepts-div">Full Stack <span>X</span></div>
+                    <div class="all-concepts-div">Full Stack <span>X</span></div>
+                  </div>
+                  <div class="all-concepts-div-text">All Concepts</div>
+                </div>
+              </div>
+            </div>
+            <div class="rightpanel-div">
+              <div class="project-feeds-div">Project Feed</div>
+              <div class="project-feeds-panel">
+                <div class="project-feeds-scroll">
+                  <div class="project-feed-box">
+                    <div class="project-feed-icon"><i class="fa fa-pencil"></i></div>
+                    <div class="project-feeds-inner">
+                      <div class="project-feed-image"><img src="img/a1.jpg" alt=""></div>
+                      <div class="project-feed-username">Karen megge <span>Today at 12:32:40 am</span></div>
+                      <div class="cls"></div>
+                      <div class="project-feed-note">Add a Note to the <span> Matrix</span> Project.</div>
+                    </div>
+                  </div>
+                  <div class="project-feed-box">
+                    <div class="project-feed-icon"><i class="fa fa-pencil"></i></div>
+                    <div class="project-feeds-inner">
+                      <div class="project-feed-image"><img src="img/a1.jpg" alt=""></div>
+                      <div class="project-feed-username">Karen megge <span>Today at 12:32:40 am</span></div>
+                      <div class="cls"></div>
+                      <div class="project-feed-note">Add a Note to the <span> Matrix</span> Project.</div>
+                    </div>
+                  </div>
+                  <div class="project-feed-box">
+                    <div class="project-feed-icon"><i class="fa fa-circle"></i></div>
+                    <div class="project-feeds-inner">
+                      <div class="project-feed-image"><img src="img/a1.jpg" alt=""></div>
+                      <div class="project-feed-username">Karen megge <span>Today at 12:32:40 am</span></div>
+                      <div class="cls"></div>
+                      <div class="project-feed-note">Add a Note to the <span> Matrix</span> Project.</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="project-feed-search-panel">
+                  <div class="feeds-paperpin"><i class="fa fa-paperclip"></i></div>
+                  <div class="feed-input-box">
+                    <input type="" name="" class="form-control feed-input-box">
+                    <i class="fa fa-send"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="talent-container">
+            <div class="talent-search-bar">
+              <button type="" class="btn add-talent">Add Talent</button>
+              <button type="" class="btn disabled-talent">Send to Project</button>
+            </div>
+            <div class="talent-advance-search-div">
+              <button type="" class="btn advance-search">Advanced Search</button>
+              <div class="talent-search-icon"><i class="fa fa-filter"></i></div>
+              <div class="view-as-panel">
+                <span>View as</span>
+                <div class="bar-view"><i class="fa fa-bars"></i></div>
+                <div class="table-view"><i class="fa fa-table"></i></div>
+              </div>
+              <div class="show-entry-panel">
+                <span>Show entries/page</span>
+                <div class="form-group count">
+                  <select class="form-control select-arrow">
+                    <option>+1</option>
+                    <option>+2</option>
+                    <option>+3</option>
+                    <option>+4</option>
+                    <option>+5</option>
+                  </select>
+                </div>
+                <div class="form-group export">
+                  <select class="form-control select-arrow">
+                    <option>Export Data</option>
+                    <option>Copy</option>
+                    <option>CSV</option>
+                    <option>Excel</option>
+                    <option>PDF</option>
+                    <option>Print</option>
+                  </select>
+                </div>
+              </div>
+              <div class="showing-talent-search">
+                <div class="checkbox">
+                  <input type="checkbox" value="1" id="12" class="css-checkbox" name="">
+                  <label class="css-label" for="12"></label>
+                </div>
+                <span>Showing 1 – 5 entries of 5 entries</span>
+              </div>
+              <div class="cls"></div>
+              <div class="col-xs-12 padding-zero">
+                <div class="talent-srearch-view-panel">
+                  <div class="talentsearch-left-panel">
+                    <div class="left-div"><div class="search-image"><img src="img/a1.jpg" alt=""></div></div>
+                    <div class="search-result-panel right-div">
+                     <div class="search-result-name">Thomas Hall <span>Senior Developer</span></div>
+                     <div class="search-result-info">Newyork, USA <span></span> Computer Software</div>
+                    </div>
+
+                    <div class="cls"></div>
+
+                    <div class="col-xs-12 padding-zero">
+                      <div class="left-div search-result-current pdg-left20">Current</div>
+                      <div class="right-div search-detail-current">Software Architech/<span class="bold-font">Full Stack Developer</span> - Virtual CTO for Companies at Likestyle 2013 - Present</div>
+                    </div>
+                    <div class="col-xs-12 padding-zero">
+                      <div class="left-div search-result-past pdg-left20">Past</div>
+                      <div class="right-div search-detail-past">
+                       Software Architech/<span class="bold-font">Full Stack Developer</span> - Virtual CTO for Companies at Likestyle 2013 <span class="more"><a href="" data-toggle="modal" data-target="#more-comp">More</a></span>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 padding-zero">
+                      <div class="left-div search-result-edu pdg-left20">Education</div>
+                      <div class="right-div search-detail-edu">Pann State University 1988-1999</div>
+                    </div>
+                  </div>
+                  <div class="talentsearch-right-panel">
+                    <div class="active-bttn">Active</div>
+                    <div class="search-star-panel">
+                      <div class="schedule-stars">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                      </div>
+                      <div class="schdule-list">Scheduled for Interview </div>
+                      <div class="schdule-list-date">Dec 10, 2015</div>
+                      <div class="link-schedule"><a href="">#fullstackdev</a> <span><a href="" data-toggle="modal" data-target="#recruiter-modal">More</a></span></div>
+                    </div>
+                  </div>
+                  <div class="cls"></div>
+                  <div class="col-xs-12">
+                    <div class="top-concept-panel">
+                      <div class="top-concept-text">Top Concepts</div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="text">Full Stack</span>
+                            <span class="percentage">60%</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="text">Full Stack</span>
+                            <span class="percentage">60%</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="text">Full Stack</span>
+                            <span class="percentage">60%</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="text">Full Stack</span>
+                            <span class="percentage">60%</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="text">Full Stack</span>
+                            <span class="percentage">60%</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="text">Full Stack</span>
+                            <span class="percentage">60%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="top-concept-panel">
+                      <div class="top-concept-text">Career  History</div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="text">Total Experience</span>
+                            <span class="percentage">10 Years</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="text">Full Stack</span>
+                            <span class="percentage">3.5 Years</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="text">Full Stack</span>
+                            <span class="percentage">1.5 Years</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="cls"></div>
+                      <div class="indus-focus">Industry Focus</div>
+                      <div class="talent-progress">
+                        <div class="progress">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                            <span class="text">Full Stack</span>
+                            <span class="percentage">1.5 Years</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="top-concept-panel">
+                      <div class="top-concept-text">Project Matches</div>
+                      <div class="circle-bg">
+                        <div data-color="#7a7a7a" data-percent="70" class="easy-pie-chart percentage easyPieChart pie-color">
+                          <span class="percent pie-txt">56.2%</span>
+                          <canvas height="60" width="60"></canvas>
+                        </div>
+                        <i class="fa fa-file-text"></i>
+                        <div class="link-panel"><a href="">#fullstackdev</a><span><a href="">@accenture</a></span></div>
+                        <div class="bar-date">Dec 1, 2016</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cls"></div>
+                  <div class="talentsearch-foot">
+                   <button type="" class="btn">View Profile</button>
+                   <button type="" class="btn">Add to Project</button>
+                   <span class="linkedin"><i class="fa fa-linkedin-square"></i></span>
+                  </div>
+                </div>
+                <div class="talent-srearch-check-panel">
+                  <div class="checkbox">
+                    <input type="checkbox" value="1" id="13" class="css-checkbox" name="">
+                    <label class="css-label" for="13"></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<!-- more-comp-Modal-starts -->
+<div class="modal fade" id="more-comp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="past-roles">Past Roles</div>
+        <div class="past-roles-descp">Full Stack Developer at Return Logic 2010-2011</div>
+        <div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>
+        <div class="cls"></div>
+        <div class="edu-roles">Education</div>
+        <div class="past-roles-descp">Full Stack Developer at Return Logic 2010-2011</div>
+        <div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- more-comp-Modal-ends -->
+
+
+<!-- recruiter-Modal-starts -->
+<div class="modal fade" id="recruiter-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="past-roles">Information</div>
+        <div class="info-modal-div">
+          <div class="left-section">Date Added/Analysis</div>
+          <div class="right-section">Dec 22, 2016</div>
+        </div>
+        <div class="info-modal-div">
+          <div class="left-section">Last Activity</div>
+          <div class="right-section">Dec 22, 2016</div>
+        </div>
+        <div class="info-modal-div">
+          <div class="left-section-div">Recruiter</div>
+          <div class="right-section-div">Clayton Medina <span data-toggle="modal" data-target="#edit-recruiter">Edit</span></div>
+        </div>
+        <div class="info-modal-div">
+          <div class="left-section-div">Shared with</div>
+          <div class="right-section-div">Jeffrey Lloyd, +2 <span data-toggle="modal" data-target="#add-recruiter">Add</span></div>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- recruiter-Modal-ends -->
+
+<!-- edit-recruiter-Modal-starts -->
+<div class="modal fade" id="edit-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="edit-modal-recruiter">
+          <span>Edit Recruiter</span>
+          <div class="form-group">
+            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Clayton">
+          </div>
+          <div class="cls"></div>
+          <button type="" class="btn update">Update</button>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- edit-recruiter-Modal-ends -->
+
+<!-- add-recruiter-Modal-starts -->
+<div class="modal fade" id="add-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body roles-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <div class="edit-modal-recruiter">
+          <span>Add Recruiter</span>
+          <div class="form-group">
+            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Add Email">
+          </div>
+          <div class="modal-check-section">
+            <div class="checkbox">
+              <input type="checkbox" value="1" id="1" class="css-checkboxs" name="">
+              <label class="css-labels" for="1"></label>
+            </div>
+            <div class="modal-check-text">Profile + Analysis (View Only)</div>
+          </div>
+          <div class="modal-check-section">
+            <div class="checkbox">
+              <input type="checkbox" value="1" id="2" class="css-checkboxs" name="">
+              <label class="css-labels" for="2"></label>
+            </div>
+            <div class="modal-check-text">Profile + Analysis + Notes (View Only)</div>
+          </div>
+          <div class="modal-check-section">
+            <div class="checkbox">
+              <input type="checkbox" value="1" id="3" class="css-checkboxs" name="">
+              <label class="css-labels" for="3"></label>
+            </div>
+            <div class="modal-check-text">Full Access</div>
+          </div>
+          <div class="cls"></div>
+          <button type="" class="btn add">Add</button>
+          <div class="cls"></div>
+          <div class="already-shared">Already Shared</div>
+          <div class="shared-modal-div">
+            <div class="shared-name">Duane Colane</div>
+            <button type="" class="btn cancel-invite-bttn">Cancel Invite</button>
+            <div class="form-group excess">
+              <select class="form-control select-arrow">
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+              </select>
+            </div>
+          </div>
+          <div class="shared-modal-div">
+            <div class="shared-name">Duane Colane</div>
+            <button type="" class="btn cancel-invite-bttn">Cancel Invite</button>
+            <div class="form-group excess">
+              <select class="form-control select-arrow">
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+                <option>Full Excess</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- add-recruiter-Modal-ends -->
+
+
+
+    <!-- Mainly scripts -->
+<script src="js/angular/angular.min.js"></script>
+<script src="js/angular/angular-cookies.min.js"></script>
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easy-pie-chart.min.js"></script>
+    <script src="js/jquery.selectbox-0.2.js" ></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Peity -->
+    <script src="js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="js/demo/peity-demo.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+    <script src="js/plugins/pace/pace.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+    <!-- GITTER -->
+    <script src="js/plugins/gritter/jquery.gritter.min.js"></script>
+
+    <!-- Sparkline -->
+    <script src="js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Sparkline demo data  -->
+    <script src="js/demo/sparkline-demo.js"></script>
+
+    <!-- ChartJS-->
+    <script src="js/plugins/chartJs/Chart.min.js"></script>
+
+    <!-- Toastr -->
+    <script src="js/plugins/toastr/toastr.min.js"></script>
+
+  <!-- Flot -->
+    <script src="js/plugins/flot/jquery.flot.js"></script>
+    <script src="js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="js/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="js/plugins/flot/jquery.flot.pie.js"></script>
+
+    <script>
+    $(function () {
+      $(".select-arrow").selectbox();
+    });
+    // var oldie = $.browser.msie && $.browser.version < 9;
+     $('.easy-pie-chart').each(function(){
+         console.log(this);
+         $(this).easyPieChart({
+             barColor: $(this).data('color'),
+             trackColor: '#d7d7d7',
+             scaleColor: false,
+             lineCap: 'butt',
+             lineWidth: 6,
+             animate: 1000,
+             size:60
+         }).css('color', $(this).data('color'));
+     });
+        $(document).ready(function() {
+
+/*
+            setTimeout(function() {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown',
+                    timeOut: 4000
+                };
+                toastr.success('Welcome back...', 'Hi Matt!');
+
+            }, 1300);
+*/
+
+
+
+            var data1 = [
+                [0,4],[1,8],[2,5],[3,10],[4,4],[5,16],[6,5],[7,11],[8,6],[9,11],[10,30],[11,10],[12,13],[13,4],[14,3],[15,3],[16,6]
+            ];
+            var data2 = [
+                [0,1],[1,0],[2,2],[3,0],[4,1],[5,3],[6,1],[7,5],[8,2],[9,3],[10,2],[11,1],[12,0],[13,2],[14,8],[15,0],[16,0]
+            ];
+            $("#flot-dashboard-chart").length && $.plot($("#flot-dashboard-chart"), [
+                data1, data2
+            ],
+                    {
+                        series: {
+                            lines: {
+                                show: false,
+                                fill: true
+                            },
+                            splines: {
+                                show: true,
+                                tension: 0.4,
+                                lineWidth: 1,
+                                fill: 0.4
+                            },
+                            points: {
+                                radius: 0,
+                                show: true
+                            },
+                            shadowSize: 2
+                        },
+                        grid: {
+                            hoverable: true,
+                            clickable: true,
+                            tickColor: "#d5d5d5",
+                            borderWidth: 1,
+                            color: '#d5d5d5'
+                        },
+                        colors: ["#1ab394", "#1C84C6"],
+                        xaxis:{
+                        },
+                        yaxis: {
+                            ticks: 4
+                        },
+                        tooltip: false
+                    }
+            );
+
+            var doughnutData = {
+                labels: ["App","Software","Laptop" ],
+                datasets: [{
+                    data: [300,50,100],
+                    backgroundColor: ["#a3e1d4","#dedede","#9CC3DA"]
+                }]
+            } ;
+
+
+            var doughnutOptions = {
+                responsive: false,
+                legend: {
+                    display: false
+                }
+            };
+
+
+            var ctx4 = document.getElementById("doughnutChart").getContext("2d");
+            new Chart(ctx4, {type: 'doughnut', data: doughnutData, options:doughnutOptions});
+
+            var doughnutData = {
+                labels: ["App","Software","Laptop" ],
+                datasets: [{
+                    data: [70,27,85],
+                    backgroundColor: ["#a3e1d4","#dedede","#9CC3DA"]
+                }]
+            } ;
+
+
+            var doughnutOptions = {
+                responsive: false,
+                legend: {
+                    display: false
+                }
+            };
+
+
+            var ctx4 = document.getElementById("doughnutChart2").getContext("2d");
+            new Chart(ctx4, {type: 'doughnut', data: doughnutData, options:doughnutOptions});
+
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!-- Modal -->
+<div ng-controller="uploadFileCtrl as up">
+<div class="modal fade" id="add-talent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="closePopup()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+        <h4 class="modal-title" id="myModalLabel">Add Talent</h4>
+      </div>
+        <span class="exterror msgbox"  ng-show="[[countError]]"><span class="glyphicon glyphicon-warning-sign" style="color: red; padding: 0 11px 0 15px;"></span>Upload only 100 Files at once.</span>
+      <div class="modal-body">
+         <div class="talent-panel">
+          <div class="cls"></div>
+             <form action="/upload/" class="dropzone" drop-zone options="dirOptions" call-back="removeCompletedFiles" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
+                  <img src="static/img/pdf-upload-image.png" alt="" id="backgroundImg">
+                  <div class="cls"></div>
+             </form>
+
+        </div>
+          <div class="progress-bttn">
+            <div class="note-text">NOTE: Max 100 files(doc/docx/pdf of 5MB) allowed at once.</div>
+            <button type="" class="btn talent-modal-done disabled" ng-click="done()" id="done" style="pointer-events:none;">Done</button>
+            <span class="btn talent-modal-add" id="fileUpload">Add Files</span>
+          </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+ <!-- delete-Modal -->
+<div class="modal fade" id="delete-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog add-talent-dialog delete-talent-dailog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="closeForcefully()"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+      </div>
+      <div class="modal-body">
+        <div class="confirm-text">Are you sure you want to <span>cancel</span> the progress.</div>
+        <div class="confirm-bttn-box">
+          <button type="" class="btn" ng-click="closeForcefully()">Yes</button>
+          <button type="" class="btn" ng-click="reopen()">No</button>
+        </div>
+        <div class="cls"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="success-box" id="successBox" style="display:none;">
+    <span><strong>Success!</strong> Talent has been added to the system.</span>
+</div>
+
+</div>

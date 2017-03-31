@@ -1,0 +1,14 @@
+<div id="wrapper" ng-controller="talentCtrl as tl" >
+    <div ng-include="'static/views/common/nav-side.html'"></div>
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <div ng-include="'static/views/common/nav-top.html'"></div>
+
+      <div ui-view></div>
+
+    </div>
+   <div ng-include="'static/views/common/smallChat.html'"></div>
+</div>
+<!-- Modal add talent popup file -->
+ <div ng-include="'static/views/addTalent.html'"></div>

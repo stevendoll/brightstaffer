@@ -1,4 +1,5 @@
- <div class="wrapper wrapper-content" ng-init="main.getTopSixProjects()">
+<div ng-controller="tableCtrl as table" ng-init="table.setButton()">
+<div class="wrapper wrapper-content">
             <div class="row">
                 <div class="col-lg-12">
                 <div class="ibox float-e-margins">
@@ -27,38 +28,54 @@
                               <a class="btn btn-default buttons-print btn-sm" tabindex="0" aria-controls="DataTables_Table_0">
                                   <span>Print</span>
                               </a>
+                              <button ng-click="deleteProjects()">Delete Projects</button>
                           </div>
                       </div>
                     <div class="col-sm-6 col-md-4 p-a-0 m-t small text-muted text-center">
-                        <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing [[projectCountStart]] to [[projectCountEnd]] of [[projectCountEnd]] entries</div>
+                        <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing [[projectCountStart]] to [[projectCountEnd]] of [[totalProjectCount]] entries</div>
                     </div>
-                    <div class="col-sm-6 col-md-4 p-a-0 m-t input-group-sm small">
+                    <div class="col-sm-6 col-md-4 p-a-0 m-t input-group-sm small right-side-search">
                         <div id="DataTables_Table_0_filter" class="dataTables_filter">
                             <label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="DataTables_Table_0"></label>
                         </div>
+                        <div class="checkbox-right-fx mtop8">
+                            <div class="checkbox">
+                              <input type="checkbox" id="projectCheckAll" ng-click="projectCheckAll()" class="css-checkbox" name="">
+                              <label class="css-label" for="projectCheckAll"></label>
+                            </div>
+                        </div>
                     </div>
                          <div class="clear"></div>
-                     <table class="table table-hover dataTables" >
+                     <table class="table table-hover dataTables dt-responsive nowrap" >
                     <thead>
                     <tr>
-                        <th class="sorting" id="project_name">Title</th>
-                        <th class="sorting" id="company_name">Company</th>
-                        <th class="sorting" id="location" >Location</th>
-                        <th class="sorting" id="candidate">Candidates</th>
-                        <th class="sorting" id="Owner" >Owner</span></th>
-                        <th class="sorting" id="shared" >Shared</th>
-                        <th class="sorting" id="created_date" >Created</th>
+                        <th  id="project_name">Title</th>
+                        <th  id="company_name">Company</th>
+                        <th  id="location" >Location</th>
+                        <th  id="candidate">Candidates</th>
+                        <th  id="Owner" >Owner</span></th>
+                        <th  id="shared" >Shared</th>
+                        <th  id="created_date" >Created</th>
+                        <th> </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr class="gradeX" ng-repeat="projects in allProjectList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">
-                        <td>#[[projects.project_name]]</td>
+                        <td ng-click="showChild($event,$index)">#[[projects.project_name]]</td>
                         <td>[[projects.company_name]]</td>
                         <td>[[projects.location]]</td>
                         <td>-</td>
                         <td>@[[globals.currentUser.first_name]].[[globals.currentUser.last_name]]</td>
                         <td>-</td>
-                        <td>[[projects.create_date]]</td>
+                        <td>[[projects.get_date | dateFormat]]</td>
+                        <td>
+                            <div class="checkbox-right-fx mtop8">
+                                <div class="checkbox">
+                                  <input type="checkbox" id="check_[[projects.id]]" ng-click="updateSelection(projects.id)" class="css-checkbox proj-checkbox" value="[[projects.id]]" name="">
+                                  <label class="css-label" for="check_[[projects.id]]"></label>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                     <tfoot>
@@ -66,10 +83,10 @@
                     </tfoot>
                     </table >
 
-                      <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm">
+                      <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm" id="countDropdown">
                           <div class="dataTables_length" id="DataTables_Table_0_length">
                               <label>Show
-                                  <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control input-sm" ng-model="countList" ng-change="main.getValue(countList)"  ng-options="option.name for option in options">
+                                  <select name="DataTables_Table_0_length" aria-controls="DataTables_Table_0" class="form-control input-sm" ng-model="countList" ng-change="table.getValue(countList)"  ng-options="option.name for option in options">
                                   </select> entries
                               </label>
                           </div>
@@ -78,14 +95,14 @@
                       <div class="col-sm-6 col-md-6 p-a-0 m-t-md small input-group-sm">
                         <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
                           <ul class="pagination">
-                            <li class="paginate_button previous disabled" id="Table_previous" ng-disabled="[[paginationCounter == 1]]" >
-                              <a name="prev" tabindex="0" ng-click="main.changePage($event)" ng-class="{'disable':[[paginationCounter == 1]]}" >Previous</a>
+                            <li class="paginate_button previous disabled" ng-disabled="[[paginationCounter == 1]]" >
+                              <a name="prev" tabindex="0" ng-click="table.changePage($event)" id="Table_previous" ng-class="{'disabled':[[!projectPrevious]]}" >Previous</a>
                             </li>
                             <li class="paginate_button active">
                               <a  tabindex="0">[[paginationCounter]]</a>
                             </li>
-                            <li class="paginate_button next " id="Table_next" >
-                              <a tabindex="0" name="next" ng-click="main.changePage($event)">Next</a>
+                            <li class="paginate_button next disabled"  ng-disabled="[[!projectNext]]" >
+                              <a tabindex="0" name="next" ng-click="table.changePage($event)" id="Table_next" ng-class="{'disabled':[[!projectNext]]}" >Next</a>
                             </li>
                           </ul>
                         </div>
@@ -98,11 +115,12 @@
               </div>
             </div>
         </div>
-     </div>
      <!--Modal window-->
-<div class="modal-outer" id="breakPopup" style="display:none">
-  <div class="modal-content">
-    <p>[[publishMsg]]</p>
-    <a ng-if="isSuccess" ng-click="main.removePopupBox()">OK</a>
-  </div>
+    <div class="modal-outer" id="breakPopup" style="display:none">
+      <div class="modal-content">
+        <p>[[popupMsg]]</p>
+        <a ng-if="isSuccess" ng-click="main.removePopupBox()">OK</a>
+      </div>
+    </div>
 </div>
+

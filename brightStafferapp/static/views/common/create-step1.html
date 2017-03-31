@@ -6,7 +6,7 @@
 		<div class="col-sm-8 m-t">
 			  <div class="form-group p-b">
 					<label>Project Name</label>
-					  <input type="text" class="form-control" id="project_name" name="project_name" ng-model="projectForm.project_name" placeholder="Keep it simple, like uidesigner..." ng-pattern="project.projectNamePattern" ng-blur="updateProjectName($event)"  auto-Capitalise-First-Letter ="" ng-keyup="removeValidationMsg($event)" ng-maxlength="30" required>
+					  <input type="text" class="form-control" id="project_name" name="project_name" ng-model="projectForm.project_name" placeholder="Keep it simple, like uidesigner..." ng-pattern="project.projectNamePattern" ng-blur="updateProjectName($event)"   ng-keyup="removeValidationMsg($event)" ng-maxlength="30" required autocomplete="off">
 					  <span  class="error"  style='display:none;color:red'></span>
 				      <span  style='color:red' ng-if="isProjectnmValid">Enter project name first!</span>
 					  <span style="color:red" ng-show="createProjectForm.project_name.$error.pattern">Please enter only alphanumeric value!</span>
@@ -15,7 +15,7 @@
 			</div>
 		   <div class="form-group p-b">
 				<label>Company or Division</label>
-				<input id="company_name" name="company_name" ng-model="projectForm.company_name" type="text" class="form-control" placeholder="Go for a single word..."  ng-blur="saveData('company_name',projectForm.company_name)" ng-click="checkProjectName($event)" auto-Capitalise-First-Letter ="" ng-maxlength="30"  required>
+				<input id="company_name" name="company_name" ng-model="projectForm.company_name" type="text" class="form-control" placeholder="Go for a single word..."  ng-blur="saveData('company_name',projectForm.company_name)" ng-click="checkProjectName($event)"  ng-maxlength="30"  required>
 			     <span  class="error"  style='display:none;color:red'></span>
 			    <span style='color:red' ng-show="createProjectForm.company_name.$error.maxlength">Your input is too long!</span>
 			</div>

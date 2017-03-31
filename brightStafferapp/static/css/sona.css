@@ -18,8 +18,15 @@ body {
   line-height: 1.5;
   color: #373a3c;
   background-color: #f3f3f4;
+   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+.cur-notallow {
+    cursor: not-allowed !important;
+}
 
 hr {
     border: 0;
@@ -43,6 +50,7 @@ h1, .h1 {
 
 h2, .h2 {
   font-size: 2rem;
+  font-family: 'open_sanslight';
 }
 
 h3, .h3 {
@@ -69,7 +77,7 @@ h6, .h6 {
 /* ----- Content ----- */
 
 .wrapper-content {
-    padding: 20px 10px 0px;
+    padding: 10px 10px 0px;
 }
 
 .b-t {
@@ -288,6 +296,9 @@ li.active a {
     position: inherit;
     margin: 0 0 0 240px;
   }
+  .wrapper-content .m-t {
+    margin-top: 10px !important;
+  }
   .navbar-static-side {
     z-index: 2001;
     position: fixed;
@@ -380,8 +391,12 @@ li.active a {
     font-size: 14px;
     margin: 6px 0 6px;
     padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
+    width: 100%;
     float: left;
+    padding: 0 45px;
 }
 
 .wbox {
@@ -817,6 +832,8 @@ li.active a {
 
 .concept-tag {
 	margin: 0 6px 6px 0;
+	font-size: 16px;
+    /*font-family: 'open_sansregular';*/
 }
 
 .bootstrap-tagsinput {
@@ -905,7 +922,7 @@ li.active a {
 
 .dataTables {
 	font-size: 14px;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 0px solid #ddd;
 }
 
 .table > thead > tr > th {
@@ -2415,10 +2432,22 @@ table.dataTable tbody tr.selected {
     background-color: #fff;
     border-color: #ddd;
     opacity:0.5;
+    pointer-events: none;
 }
+
 @media (max-width: 992px){
     .tab-device-margin{
         margin-bottom: 10px !important;
+    }
+    div.dataTables_wrapper div.dataTables_info{
+    /*text-align:left;*/
+    text-align: center;
+    }
+    div.dataTables_wrapper div.dataTables_filter label{
+        white-space:normal;
+    }
+    div.dataTables_wrapper div.dataTables_filter input{
+       width: 150px !important;
     }
 }
 @media (max-width: 568px){
@@ -2428,4 +2457,19 @@ table.dataTable tbody tr.selected {
     .nav > li > a.new-project{
         padding: 15px 5px 15px 5px;
     }
+    .nav > li.sidebar-divider {
+        height: 1px;
+        /*margin: 15px 5px 15px 5px;*/
+        margin: 10px 5px 10px 5px;
+        overflow: hidden;
+        background-color: #2f4050;
+        background-color: #f3f3f4;
+    }
+    .nav-second-level{
+        min-width: 150px !important;
+        padding: 0 !important;
+    }
+    .nav-second-level li a{
+    padding: 10px 5px !important;
+
 }

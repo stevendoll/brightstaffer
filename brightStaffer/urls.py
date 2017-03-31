@@ -13,29 +13,46 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url,include
+from django.conf.urls import url, include
 from django.contrib import admin
-from brightStafferapp import views,resetpassword
+from brightStafferapp import views, resetpassword, talent
 
 
-
-
-urlpatterns =[
+urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^user_account/', views.UserData.user_account,name='user_signup'),
-    url(r'^user_login/', views.UserData.user_login,name='user_login'),
-    url(r'^forget/$', resetpassword.ForgetPassword.forget,name='forget_password'),
-    url(r'^account/reset_password_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',resetpassword.ResetPassword.passwordresetconfirmView, name='reset_password_confirm'),
-    url(r'^resetapi/$', resetpassword.ResetPassword.resetpasswordApi,name='reset_password_api'),
-    url(r'^job_posting/$', views.JobPosting.job_posting,name='JobPosting'),
-    url(r'^alchemy_analysis/$', views.Alchemy_api.analsys,name='JobPosting'),
-    url(r'^update_concept/$', views.JobPosting.update_concept,name='Update Concept'),
-    url(r'^backbuttoninfo/$', views.JobPosting.backButtonInfo,name='Back Button Info'),
-    url(r'^publish_jobPost/$', views.JobPosting.publish, name='Publish Project'),
-    #url(r'^unpublish/$', views.ProjectList.upublish_project, name='Unpublish Project'),
-    url(r'^publish_project/$', views.ProjectList.publish_project, name='Publish Project'),
-    url(r'^top_projectlist/$', views.ProjectList.top_project_list, name='Top 6 Project'),
-    url(r'^pagination/$', views.ProjectList.pagination, name='Top 6 Project'),
-    url(r'', views.UserData.home),
+    url(r'^user_account/', views.UserData.as_view(), name='user_signup'),
+    url(r'^user_login/', views.UserLogin.as_view(), name='user_login'),
+    url(r'^forget/$', resetpassword.ForgetPassword.forget, name='forget_password'),
+    url(r'^account/reset_password_confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
+        resetpassword.ResetPassword.passwordresetconfirmView, name='reset_password_confirm'),
+    url(r'^resetapi/$', resetpassword.ResetPassword.resetpasswordApi, name='reset_password_api'),
+
+    url(r'^job_posting/$', views.JobPosting.as_view(), name='JobPosting'),
+    url(r'^alchemy_analysis/$', views.AlchemyAPI.as_view(), name='JobPosting'),
+    url(r'^update_concept/$', views.UpdateConcepts.as_view(), name='Update Concept'),
+    url(r'^backbuttoninfo/$', views.BackButtonInfo.as_view(), name='Back Button Info'),
+    url(r'^publish_jobPost/$', views.Publish.as_view(), name='Publish Project'),
+    url(r'^project_list/$', views.ProjectList.as_view()),
+    url(r'^delete_projects/$', views.ProjectDelete.as_view()),
+    url(r'^top_project_list/$', views.TopProjectList.as_view()),
+    url(r'^upload/$', views.FileUploadView.as_view(), name="file-upload"),
+    url(r'^update_recruiter/$', views.UpdateRecruiter.as_view()),
+    url(r'^talent_list/$', talent.TalentList.as_view()),
+    # url(r'^insert_talent/$', talent.InsertTalent.as_view()),
+    url(r'^talent_list/(?P<pk>[0-9a-f-]+)/$', talent.TalentDetail.as_view(), name='talent-instance'),
+    url(r'^talent_contact_email/$', talent.TalentEmailContactAPI.as_view()),
+    url(r'^talent_contact/$', talent.TalentContactAPI.as_view()),
+    url(r'^talent_email/$', talent.TalentEmailAPI.as_view()),
+    url(r'^talent_email/(?P<email>[0-9]+)/$', talent.TalentEmailAPI.as_view()),
+    url(r'^talent_project_add/$', talent.TalentProjectAddAPI.as_view()),
+    url(r'^talent_add_stage/$', talent.TalentStageAddAPI.as_view()),
+    url(r'^talent_edit_stage/$', talent.TalentStageEditAPI.as_view()),
+    url(r'^talent_delete_stage/$', talent.TalentStageDeleteAPI.as_view()),
+    url(r'^talent_view_allstages/$', talent.TalentAllStageDetailsAPI.as_view()),
+    url(r'^update_rank/$', talent.TalentUpdateRank.as_view()),
+    url(r'^delete_talent/$', talent.DeleteTalent.as_view()),
+    url(r'^talent_search/$', talent.TalentSearch.as_view()),
+    url(r'^talent_search_filter/$', talent.TalentSearchFilter.as_view()),
+    url(r'', views.home),
 
 ]
