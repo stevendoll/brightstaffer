@@ -164,6 +164,13 @@
                           <div role="tabpanel" class="tab-pane active" id="recent" ng-show="talentDetails.talent_project.length">
                             <div class="recent-table">
                               <table class="table table-condensed">
+                                  <colgroup> 
+                                    <col width="15%"> 
+                                    <col width="30%"> 
+                                    <col width="15%"> 
+                                    <col width="25%"> 
+                                    <col width="15%"> 
+                                  </colgroup>
                                 <thead>
                                   <tr>
                                     <th>Project Matches</th>
@@ -439,7 +446,7 @@
           <div class="right-section-div">
             <span>[[talentDetails.talent_email[0].email]]</span>
             <div class="contact-edit">
-              <span ng-click="showEdit(talentDetails.talent_email)">Edit</span>
+              <span ng-show="talentDetails.talent_email.length && talentDetails.talent_email[0].email" ng-click="showEdit(talentDetails.talent_email)">Edit</span>
               <span ng-click="showAdd();candidateInfo.candidateEmailAdd='';">Add</span>
             </div>
           </div>
@@ -463,7 +470,7 @@
           <div class="right-section-div">
             <span>[[talentDetails.talent_contact[0].contact]]</span>
             <div class="contact-edit">
-              <span ng-click="showContactEdit(talentDetails.talent_contact)">Edit</span>
+              <span ng-show="talentDetails.talent_contact.length && talentDetails.talent_contact[0].contact" ng-click="showContactEdit(talentDetails.talent_contact)">Edit</span>
               <span ng-click="Contact2.contact_add.focus = true;candidateInfo.candidateContactAdd = '';showContactAdd()">Add</span>
             </div>
           </div>

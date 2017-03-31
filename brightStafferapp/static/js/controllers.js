@@ -2252,6 +2252,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
             function requestCallback(response) {
                 response = JSON.parse(response);
+                if(!talentDetails.talent_email){
+                    $rootScope.talentDetails.talent_email = [{}];
+                }
+                $rootScope.talentDetails.talent_email[0].email
                 // console.log(response);
                 $scope.candidateEmailAdd = '';
                 $scope.closeCandidateInfo();
