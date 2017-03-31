@@ -1620,6 +1620,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if($scope.candidatePagination.page == pageNo){
                 return;
             }
+            $scope.candidatePagination.page = pageNo;
             $rootScope.getCandidateData();
             return;
         }
