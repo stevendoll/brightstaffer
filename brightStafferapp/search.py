@@ -125,7 +125,7 @@ INDEX_MAPPING = {
                "type": "text"
             },
             "match": {
-               "type": "float"
+               "type": "text"
             },
             "talent": {
                "type": "text"

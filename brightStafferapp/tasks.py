@@ -37,7 +37,7 @@ def handle_talent_data(talent_data, user):
     if talent_data:
         if 'name' in talent_data and talent_data['name']:
             talent_obj = models.Talent.objects.create(talent_name=talent_data['name'], recruiter=user,
-                                                      status='New', current_location='California',
+                                                      status='New', current_location='New York',
                                                       linkedin_url='http://www.example.com',
                                                       create_date=datetime.datetime.now())
             talent_recruiter, created = models.TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
@@ -67,7 +67,7 @@ def handle_talent_data(talent_data, user):
                             talent=talent_obj, company=company, is_current=is_current,
                             designation=experience['JobTitle'], start_date=start_date, end_date=end_date)
             if "education" in talent_data:
-                for education in talent_obj['education']:
+                for education in talent_data['education']:
                     # save user education information
                     org, created = models.Education.objects.get_or_create(name=education['organisation'])
                     start_date, end_date = convert_to_start_end(education['duration'])
