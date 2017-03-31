@@ -24,6 +24,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.cur-notallow {
+    cursor: not-allowed !important;
+}
 
 hr {
     border: 0;
