@@ -327,11 +327,13 @@ function dropZone($rootScope) {
                 scope.completedFiles = [];
             }
 
-            angular.extend(scope.options, {
-                clearFiles: function () {
-                    scope.callBack();
-                }
-            });
+            if (scope.options) {
+                angular.extend(scope.options, {
+                    clearFiles: function () {
+                        scope.callBack();
+                    }
+                });
+            }
             scope.init();
         }
     }

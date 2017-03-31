@@ -300,7 +300,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
             if (!onReload && currentState == "talent.talent-profile") {
                 $state.go('talent.talent-search.talent-search-card');
             }
-
+            $('#selectall').prop('checked', false);
             $rootScope.filterReset();
             var requestObject = {
                 'keyword': $rootScope.search.searchKeywords || ''
