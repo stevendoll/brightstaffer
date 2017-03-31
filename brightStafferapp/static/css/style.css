@@ -11807,9 +11807,13 @@ table.dataTables > tbody > tr > td:last-child {
   margin-bottom: 14px;
 }
 
+.recruiter-selct-date {
+    background: url(../img/cal-icon.png) #ffffff no-repeat 98% 11px !important;
+}
+
 .edit-modal-recruiter .form-group input {
   border-radius: 2px;
-  background: url(../img/cal-icon.png) #ffffff no-repeat 98% 11px;
+  background: #ffffff;
   border: solid 1px #e7eaec;
   font-family: 'open_sansregular';
   font-size: 13px;

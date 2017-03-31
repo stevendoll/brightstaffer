@@ -2257,10 +2257,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
             function requestCallback(response) {
                 response = JSON.parse(response);
-                if (!talentDetails.talent_email) {
+                if (!$rootScope.talentDetails.talent_email || !$rootScope.talentDetails.talent_email.length) {
                     $rootScope.talentDetails.talent_email = [{}];
                 }
-                $rootScope.talentDetails.talent_email[0].email
+                $rootScope.talentDetails.talent_email[0].email = candidateEmailAdd;
+                sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                     // console.log(response);
                 $scope.candidateEmailAdd = '';
                 $scope.closeCandidateInfo();
@@ -2290,6 +2291,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
             function requestCallback(response) {
                 response = JSON.parse(response);
+
+                if (!$rootScope.talentDetails.talent_contact || !$rootScope.talentDetails.talent_contact.length) {
+                    $rootScope.talentDetails.talent_contact = [{}];
+                }
+                $rootScope.talentDetails.talent_contact[0].contact = candidateContactAdd;
+                sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                 //console.log(response);
                 $scope.closeCandidateInfo();
                 // candidateContact ='';
