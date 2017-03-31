@@ -41,6 +41,10 @@
                             <div class="schdule-list-date">[[stage.stagesCard[0].create_date | dateFormat]]</div>
                             <div class="link-schedule"><a href="" style="cursor:default;">#[[stage.stagesCard[0].project ]]</a></div>
                         </div>
+                        <div ng-show="!stage.stagesCard.length">
+                            <div class="schdule-list">Date Added/Analysed</div>
+                        <div class="schdule-list-date">[[talentDetails.create_date | dateFormat]]</div>
+                        </div>
                     </div>
                 </div>
             </div>
