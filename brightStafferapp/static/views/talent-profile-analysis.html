@@ -19,7 +19,8 @@
             <div class="talent-analysis-activity">
               <div class="talent-activity-panel">
                 <div class="left-div">Last Activity</div>
-                <div class="right-div">[[talentDetails.talent_project[0].date_added | dateFormat]]</div>
+                <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].create_date | dateFormat]]</div>
+                <div class="right-div" ng-show="!stage.stagesCard.length"> - </div>
               </div>
               <div class="talent-rec-panel">
                 <div class="left-div">Recruiter</div>
@@ -31,15 +32,15 @@
               </div>
             </div>
             <div class="talent-analysis-right-panel">
-              <div class="active-bttn">Active</div>
+              <div class="active-bttn">[[talentDetails.status]]</div>
               <div class="talent-analysis-star-panel">
                  <div class="col-md-12 padding-zero" ng-init="rating = [[talentDetails.rating]]">
                    <div star-rating2 class="star-right-side" rating-value="rating" max="5" on-rating-selected="getSelectedRating(rating)"></div>
                  </div>
-               <div ng-show="[[talentDetails.talent_project.length > 0]]">
-                <div class="schdule-list">[[talentDetails.talent_project[0].project_stage | capitalize]] </div>
-                <div class="schdule-list-date">[[talentDetails.talent_project[0].date_added | dateFormat]]</div>
-                <div class="link-schedule"><a href=""style="cursor:default;" >#[[talentDetails.talent_project[0].project ]]</a></div>
+               <div ng-show="[[stage.stagesCard.length > 0]]">
+                <div class="schdule-list">[[stage.stagesCard[0].stage | capitalize]] </div>
+                <div class="schdule-list-date">[[stage.stagesCard[0].create_date | dateFormat]]</div>
+                <div class="link-schedule"><a href=""style="cursor:default;" >#[[stage.stagesCard[0].project ]]</a></div>
                </div>
                <div ng-show="[[talentDetails.talent_project.length == 0]]">
                  <div class="schdule-list-date">[[talentDetails.create_date | dateFormat]]</div>
