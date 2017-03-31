@@ -2737,7 +2737,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     }
 
+    $scope.convertIntoInt = function(val){
+        return parseInt(val);
+    }
+    
     $rootScope.createCareerHistoryData = function (arr) {
+        
+//        var totalExp = calcTotal(arr);
         arr.forEach(function (talent) {
 
             talent.talent_concepts = talent.talent_concepts.sort(function (a, b) {
@@ -2766,6 +2772,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 obj.career_gap = parseFloat(obj.career_gap);
                 obj.years_of_experience = parseFloat(obj.years_of_experience);
                 obj.blank_gap = parseFloat(obj.blank_gap);
+                
+//                obj.careerPercent = 
             }
         });
         //        return arr;
