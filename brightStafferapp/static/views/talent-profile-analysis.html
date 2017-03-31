@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="talent-analysis-concept-panel">
-                                        <div class="top-concept-text">Top Concepts <span data-toggle="modal" ng-click="allConcepts(talentDetails.talent_concepts)">All Concepts</span></div>
+                                        <div class="top-concept-text">Top Concepts <span data-toggle="modal" ng-show="talentDetails.talent_concepts.length > 6" ng-click="allConcepts(talentDetails.talent_concepts)">All Concepts</span></div>
                                         <div class="talent-progress" ng-repeat="concepts in talentDetails.talent_concepts | limitTo: 6">
                                             <div class="progress">
                                                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[concepts.match]]%;">
