@@ -1,5 +1,5 @@
 import uuid
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.conf import settings
@@ -151,7 +151,7 @@ class Talent(models.Model):
 
     @property
     def get_date(self):
-        return self.create_date.date().strftime('%d/%m/%Y')
+        return self.create_date.strftime('%d/%m/%Y %X')
 
     @property
     def get_activation_date(self):
@@ -211,13 +211,13 @@ class TalentEducation(models.Model):
         if self.start_date:
             return self.start_date.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return ""
     @property
     def get_end_date(self):
         if self.end_date:
             return self.end_date.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return ""
 
 
 class TalentCompany(models.Model):
@@ -409,4 +409,49 @@ def talentstage_postsave(sender, instance=None, created=False, **kwargs):
 
 @receiver(post_save, sender=TalentEducation)
 def talenteducation_postsave(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
+@receiver(post_save, sender=TalentRecruiter)
+def talentrecruiter_post_save(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
+@receiver(post_delete, sender=TalentProject)
+def talentproject_post_delete(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
+@receiver(post_delete, sender=TalentCompany)
+def talentcompny_post_delete(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
+@receiver(post_delete, sender=TalentConcept)
+def talentconcept_post_delete(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
+@receiver(post_delete, sender=TalentContact)
+def talentcontact_post_delete(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
+@receiver(post_delete, sender=TalentEmail)
+def talentemail_post_delete(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
+@receiver(post_delete, sender=TalentStage)
+def talentstage_post_delete(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
+@receiver(post_delete, sender=TalentEducation)
+def talenteducation_post_delete(sender, instance=None, created=False, **kwargs):
+    update_indexes.delay()
+
+
+@receiver(post_delete, sender=TalentRecruiter)
+def talentrecruiter_post_delete(sender, instance=None, created=False, **kwargs):
     update_indexes.delay()

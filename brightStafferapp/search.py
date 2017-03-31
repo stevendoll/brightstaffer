@@ -36,7 +36,7 @@ INDEX_MAPPING = {
       },
       "create_date": {
          "type": "date",
-         "format": "dd/mm/yyyy"
+         "format": "dd/mm/yyyy HH:mm:ss"
       },
       "current_location": {
          "type": "text"

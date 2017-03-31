@@ -1,11 +1,11 @@
 import os
 import sys
 
+import re
 import nltk
 import numpy as np
 from nltk.stem import WordNetLemmatizer
 from sklearn.externals import joblib
-
 
 from ResumeParser.Ngram.Ngram import create_ngram
 from ResumeParser.Utility.utility import convert_date_to_duration
@@ -51,7 +51,7 @@ class Resume:
         self.model_type = kwargs['word_model']
 
     def __get_education__(self):
-        index = 0
+        """index = 0
         self.education = [x for x in self.education if x]
         for i, line in enumerate(self.education):
             if line.startswith('Education'):
@@ -60,7 +60,8 @@ class Resume:
         if index + 1 <= len(self.education) - 1:
             return self.education[index + 1:]
         else:
-            return []
+            return []"""
+        return self.education
 
     def __get_skills__(self):
         no_of_skills = sum([skill[1] for skill in self.skills])
@@ -165,6 +166,7 @@ def extract_information_from_resume(all_sents, original, word2vec_model,
         resume.raw_lower = '\n'.join(original).lower()
         mlmodel_lstm = MlModel(classifier_model_lstm, model_type='lstm')
         mlmodel_treebased = MlModel(classifer_model_treebased, model_type='randomforest')
+        __education_block__ = []
         for i, sent in enumerate(all_sents):
             sent_vector = get_word2vec_vector(sent, word2vec_model, 'word2vec')
             if len(sent_vector) >= 1:
@@ -174,7 +176,8 @@ def extract_information_from_resume(all_sents, original, word2vec_model,
                 except Exception as exp:
                     print(exp)
                 if predicted_class_lstm == 0 or predicted_class_treebased == 0:
-                    resume.education.append(original[i])
+                    # resume.education.append(original[i])
+                    __education_block__.append(original[i])
                 elif predicted_class_lstm == 1 or predicted_class_treebased == 1:
                     # Currently classified skills with ML is disabled because it's
                     # required to be processed before it could be used.
@@ -192,8 +195,12 @@ def extract_information_from_resume(all_sents, original, word2vec_model,
                 if word.lower() in skill_model:
                     if '_' in word:
                         word = word.replace('_', ' ')
-                    resume.skills.append((word.title(), resume.raw_lower.count(word.lower())))
-        resume.skills = list(set(resume.skills))
+                    # resume.skills.append((word.title(), resume.raw_lower.count(word.lower())))
+                    resume.skills.append(
+                        (word.title(),
+                         len(re.findall(r'\s?(' + re.escape(word) + ')[\s,(]',
+                                        resume.raw_lower))))
+                    resume.skills = list(set(resume.skills))
         temp_entity = entities[:]
         entities = []
         entity_flag = dict()
@@ -220,6 +227,22 @@ def extract_information_from_resume(all_sents, original, word2vec_model,
                 elif entity['type'] == 'Person':
                     resume.names.append(entity)
         del single_job_title
+
+        organisations_flag = dict()
+        for index, sent in enumerate(__education_block__):
+            education_item_dict = {'organisation': '',
+                                   'course': '',
+                                   'duration': ''}
+            for entity in entities:
+                if entity['type'] == 'Organization' \
+                        and entity['text'] in sent \
+                        and (entity['text'] not in organisations_flag):
+                    education_item_dict['organisation'] = entity['text']
+                    organisations_flag[entity['text']] = 1
+                    resume.education.append(education_item_dict)
+        del __education_block__
+        del organisations_flag
+
         temp_career_history = resume.career_history[:]
         resume.career_history = []
         if len(temp_career_history) >= 1:
