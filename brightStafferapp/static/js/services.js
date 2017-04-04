@@ -121,7 +121,7 @@ function jobPostService($http, REQUEST_URL) {
 function alchemyAnalysis($rootScope, $http, REQUEST_URL) {
     return {
         alchemyAPI: function (data) {
-        $rootScope.showLoader(true);
+            $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'alchemy_analysis/'
                 , method: "POST", // or "get"
@@ -493,8 +493,8 @@ function tableService($rootScope, $http, REQUEST_URL, appService) {
         deleteProjects: function (data, callback) {
             var param = {
                 url: REQUEST_URL + 'delete_projects/'
-                , method: "GET", 
-                headers: {
+                , method: "GET"
+                , headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                     , 'token': $rootScope.globals.currentUser.token
                     , 'recruiter': $rootScope.globals.currentUser.user_email
@@ -525,6 +525,25 @@ function searchData() {
     }
 }
 
+function createTalentFormService(appService) {
+    return {
+        createTalent: function (data, callback) {
+            var param = {
+                url: REQUEST_URL + 'create_talent/'
+                , method: "POST"
+                , headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                    , 'token': $rootScope.globals.currentUser.token
+                    , 'recruiter': $rootScope.globals.currentUser.user_email
+                }
+                , data: data
+                , dataType: 'json'
+            }
+            appService.httpRequest(param, callback);
+        }
+    }
+}
+
 
 angular
     .module('brightStaffer')
@@ -543,4 +562,5 @@ angular
     .service('talentApis', talentApis)
     .service('searchApis', searchApis)
     .service('tableService', tableService)
-    .service('searchData', searchData);
+    .service('searchData', searchData)
+    .service('createTalentFormService', createTalentFormService);

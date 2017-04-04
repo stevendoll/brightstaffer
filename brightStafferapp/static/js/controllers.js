@@ -1080,12 +1080,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
 
 
 
@@ -1130,12 +1132,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
 
 
 
@@ -1342,10 +1346,10 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         $('#successBox').css('display', 'block');
         $scope.removeCompletedFiles();
         setTimeout(
-        function () {
-            $('#successBox').css('display', 'none');
-//            $state.go('talent.talent-search.talent-search-card', '');
-        }, 2000);
+            function () {
+                $('#successBox').css('display', 'none');
+                //            $state.go('talent.talent-search.talent-search-card', '');
+            }, 2000);
     }
 
     $scope.reopen = function () {
@@ -1379,9 +1383,9 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         }
     });
 
-    $scope.openCreateProfile = function(){
-     $('#add-talent').modal('hide');
-     $state.go('talent.create-profile');
+    $scope.openCreateProfile = function () {
+        $('#add-talent').modal('hide');
+        $state.go('talent.create-profile');
 
     }
 }
@@ -2267,7 +2271,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 }
                 $rootScope.talentDetails.talent_email[0].email = candidateEmailAdd;
                 sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
-                    // console.log(response);
+                // console.log(response);
                 $scope.candidateEmailAdd = '';
                 $scope.closeCandidateInfo();
                 //candidateEmailAdd ='';
@@ -2846,6 +2850,33 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
 }
 
+function createTalentFormCtrl($scope, createTalentFormService) {
+    $scope.talentData = {
+        currentOrganization: {},
+        pastOrganization: [{}],
+        education: [{}],
+        topConcepts: [{}]
+    };
+    
+    $scope.addPastOrganization = function(){
+        $scope.talentData.pastOrganization.push({});
+    }
+    $scope.addSkill = function(){
+        $scope.talentData.topConcepts.push({});
+    }
+    
+    $scope.removeIndexFromArr = function(arr, index){
+        arr.splice(index, 1);
+    }
+    
+    $scope.createTalent = function(data){
+        console.log(data)
+//        createTalentFormService.createTalent(data, function(response){
+//            console.log(response)
+//        });
+    }
+}
+
 
 angular
     .module('brightStaffer')
@@ -2860,4 +2891,5 @@ angular
     .controller('scoreCardCtrl', scoreCardCtrl)
     .controller('uploadFileCtrl', uploadFileCtrl)
     .controller('sideNavCtrl', sideNavCtrl)
-    .controller('topnavCtrl', topnavCtrl);
+    .controller('topnavCtrl', topnavCtrl)
+    .controller('createTalentFormCtrl', createTalentFormCtrl);

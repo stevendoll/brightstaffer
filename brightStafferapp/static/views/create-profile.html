@@ -1,235 +1,162 @@
-<div class="wrapper wrapper-content">
-      <div class="row">
+<div class="wrapper wrapper-content" ng-controller="createTalentFormCtrl">
+    [[name]]
+    <button ng-click="aa();"></button>
+<!--
+    <div class="row">
         <div class="col-xs-12 search-result">
-          <h2 class="create-prof">Create Profile</h2>
-          <div class="create-profile-panel">
-            <div class="col-xs-12 padding-zero">
-              <div class="create-profile-form-div">
-                <div class="left-section">
-                  <div class="form-group">
-                    <label for="">First Name</label>
-                    <input type="" class="form-control" id="" placeholder="">
-                  </div>
-                </div>
-                <div class="right-section">
-                  <div class="form-group">
-                    <label for="">Last Name</label>
-                    <input type="" class="form-control" id="" placeholder="">
-                  </div>
-                </div>
-              </div>
-              <div class="create-profile-form-div">
-                <div class="main-section">
-                  <div class="form-group">
-                    <label for="">Linkedin URL</label>
-                    <input type="" class="form-control" id="" placeholder="">
-                  </div>
-                </div>
-              </div>
-              <div class="create-profile-form-div">
-                <div class="create-pro-hd">Current</div>
-                <div class="cls"></div>
-                <div class="col-xs-12 padding-zero">
-                  <div class="first-panel">
-                    <div class="form-group">
-                      <input type="" class="form-control" id="" placeholder="">
+            <h2 class="create-prof">Create Profile</h2>
+            <div class="create-profile-panel">
+                <form name="createTalentForm" ng-submit="createTalentForm.$valid && createTalent(talentData);">
+                    <div class="col-xs-12 padding-zero">
+                        <div class="create-profile-form-div">
+                            <div class="left-section">
+                                <div class="form-group">
+                                    <label for="">First Name</label>
+                                    <input type="text" class="form-control" id="" placeholder="" ng-model="talentData.firstName" required/>
+                                </div>
+                            </div>
+                            <div class="right-section">
+                                <div class="form-group">
+                                    <label for="">Last Name</label>
+                                    <input type="text" class="form-control" id="" placeholder="" ng-model="talentData.lastName" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="create-profile-form-div">
+                            <div class="main-section">
+                                <div class="form-group">
+                                    <label for="">Linkedin URL</label>
+                                    <input type="text" class="form-control" id="" placeholder="" ng-model="talentData.linkedinProfileUrl" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="create-profile-form-div">
+                            <div class="create-pro-hd">Current</div>
+                            <div class="cls"></div>
+                            <div class="col-xs-12 padding-zero">
+                                <div class="first-panel">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="" placeholder="" maxlength="100" ng-model="talentData.currentOrganization.name" required/>
+                                    </div>
+                                </div>
+                                <div class="side-panel m-top4">
+                                    <div class="form-group count">
+                                        <select class="form-control select-arrow" ng-model="talentData.currentOrganization.from" required>
+                                            <option>2015</option>
+                                            <option>2016</option>
+                                            <option>2017</option>
+                                            <option>2017</option>
+                                            <option>2017</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="side-panel m-top4">
+                                    <div class="form-group count">
+                                        <select class="form-control select-arrow" ng-model="talentData.currentOrganization.to" required>
+                                            <option>Present</option>
+                                            <option>Present</option>
+                                            <option>Present</option>
+                                            <option>Present</option>
+                                            <option>Present</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="create-profile-form-div">
+                            <div class="create-pro-hd">Past</div>
+                            <div class="cls"></div>
+                            <div class="col-xs-12 padding-zero" ng-repeat="pastOrganization in talentData.pastOrganization">
+                                <div class="first-panel">
+                                    <div class="form-group">
+                                        <input type="" class="form-control" id="" placeholder="" ng-model="pastOrganization.name" required />
+                                    </div>
+                                </div>
+                                <div class="side-panel m-top4">
+                                    <div class="form-group count">
+                                        <select class="form-control select-arrow" ng-model="pastOrganization.from" required>
+                                            <option>2015</option>
+                                            <option>2016</option>
+                                            <option>2017</option>
+                                            <option>2017</option>
+                                            <option>2017</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="side-panel m-top4">
+                                    <div class="form-group count">
+                                        <select class="form-control select-arrow" ng-model="pastOrganization.to" required>
+                                            <option>2015</option>
+                                            <option>2016</option>
+                                            <option>2017</option>
+                                            <option>2017</option>
+                                            <option>2017</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cls"></div>
+                            <button type="button" class="btn create-profile-add-bttn" ng-click="addPastOrganization()">
+                                Add More
+                            </button>
+                        </div>
+                        <div class="create-profile-form-div">
+                            <div class="create-pro-hd">Education</div>
+                            <div class="cls"></div>
+                            <div class="col-xs-12 padding-zero" ng-repeat="education in talentData.education">
+                                <div class="first-panel">
+                                    <div class="form-group">
+                                        <input type="" class="form-control" id="" placeholder="" ng-model="education.name" required/>
+                                    </div>
+                                </div>
+                                <div class="side-panel m-top4">
+                                    <div class="form-group count">
+                                        <select class="form-control select-arrow" ng-model="education.from" required>
+                                            <option>2015</option>
+                                            <option>2016</option>
+                                            <option>2017</option>
+                                            <option>2017</option>
+                                            <option>2017</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="side-panel m-top4">
+                                    <div class="form-group count">
+                                        <select class="form-control select-arrow" ng-model="education.to" required>
+                                            <option>2015</option>
+                                            <option>2016</option>
+                                            <option>2017</option>
+                                            <option>2017</option>
+                                            <option>2017</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="cls"></div>
+                                <div class="remove-profile-text" ng-show="$index != 0" ng-click="removeIndexFromArr(talentData.education, $index);">Remove</div>
+                            </div>
+                        </div>
+                        <div class="top-concepts-panel">
+                            <div class="top-concept-right-div">
+                                <h2>Top Concepts</h2>
+                                <h3>Relevance</h3>
+                                <div class="top-concept-input-div" ng-repeat="concept in talentData.topConcepts">
+                                    <input type="" class="form-control top-concept-input-part" id="" placeholder="Skill" ng-model="concept.skill" required/>
+                                    <i class="fa fa-close" ng-click="removeIndexFromArr(talentData.topConcepts, $index);"></i>
+                                    <input type="" class="form-control top-concept-right-input-div" id="" placeholder="Percentage" ng-model="concept.percentage" required>
+                                </div>
+                                <button type="" class="btn top-cocep-add-bttn" ng-click="addSkill()">Add More</button>
+                            </div>
+                        </div>
+                        <div class="cls"></div>
+                        <div class="create-profile-footer">
+                            <button type="submit" class="btn create-add-bttn">Create</button>
+                            <button type="button" class="btn create-add-bttn">Cancel</button>
+                        </div>
                     </div>
-                  </div>
-                  <div class="side-panel m-top4">
-                    <div class="form-group count">
-                      <select class="form-control select-arrow">
-                        <option>2015</option>
-                        <option>2016</option>
-                        <option>2017</option>
-                        <option>2017</option>
-                        <option>2017</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="side-panel m-top4">
-                    <div class="form-group count">
-                      <select class="form-control select-arrow">
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="create-profile-form-div">
-                <div class="create-pro-hd">Past</div>
-                <div class="cls"></div>
-                <div class="col-xs-12 padding-zero">
-                  <div class="first-panel">
-                    <div class="form-group">
-                      <input type="" class="form-control" id="" placeholder="">
-                    </div>
-                  </div>
-                  <div class="side-panel m-top4">
-                    <div class="form-group count">
-                      <select class="form-control select-arrow">
-                        <option>2015</option>
-                        <option>2016</option>
-                        <option>2017</option>
-                        <option>2017</option>
-                        <option>2017</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="side-panel m-top4">
-                    <div class="form-group count">
-                      <select class="form-control select-arrow">
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="cls"></div>
-                <button type="" class="btn create-profile-add-bttn" data-toggle="modal" data-target="#edit-profile">Add More</button>
-              </div>
-              <div class="create-profile-form-div">
-                <div class="create-pro-hd">Education</div>
-                <div class="cls"></div>
-                <div class="col-xs-12 padding-zero">
-                  <div class="first-panel">
-                    <div class="form-group">
-                      <input type="" class="form-control" id="" placeholder="">
-                    </div>
-                  </div>
-                  <div class="side-panel m-top4">
-                    <div class="form-group count">
-                      <select class="form-control select-arrow">
-                        <option>2015</option>
-                        <option>2016</option>
-                        <option>2017</option>
-                        <option>2017</option>
-                        <option>2017</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="side-panel m-top4">
-                    <div class="form-group count">
-                      <select class="form-control select-arrow">
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xs-12 padding-zero">
-                  <div class="first-panel">
-                    <div class="form-group">
-                      <input type="" class="form-control" id="" placeholder="">
-                    </div>
-                  </div>
-                  <div class="side-panel m-top4">
-                    <div class="form-group count">
-                      <select class="form-control select-arrow">
-                        <option>2015</option>
-                        <option>2016</option>
-                        <option>2017</option>
-                        <option>2017</option>
-                        <option>2017</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="side-panel m-top4">
-                    <div class="form-group count">
-                      <select class="form-control select-arrow">
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="cls"></div>
-                  <div class="remove-profile-text">Remove</div>
-                </div>
-                <div class="col-xs-12 padding-zero">
-                  <div class="first-panel">
-                    <div class="form-group">
-                      <input type="" class="form-control" id="" placeholder="">
-                    </div>
-                  </div>
-                  <div class="side-panel m-top4">
-                    <div class="form-group count">
-                      <select class="form-control select-arrow">
-                        <option>2015</option>
-                        <option>2016</option>
-                        <option>2017</option>
-                        <option>2017</option>
-                        <option>2017</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="side-panel m-top4">
-                    <div class="form-group count">
-                      <select class="form-control select-arrow">
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                        <option>Present</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="cls"></div>
-                  <div class="remove-profile-text">Remove</div>
-                </div>
-                <div class="cls"></div>
-                <button type="" class="btn create-profile-add-bttn">Add More</button>
-              </div>
-              <div class="top-concepts-panel">
-                <div class="top-concept-right-div">
-                  <h2>Top Concepts</h2>
-                  <h3>Relevance</h3>
-                  <div class="top-concept-input-div">
-                    <input type="" class="form-control top-concept-input-part" id="" placeholder="Full Stack Developer">
-                    <i class="fa fa-close"></i>
-                    <input type="" class="form-control top-concept-right-input-div" id="" placeholder="70%">
-                  </div>
-                  <div class="top-concept-input-div">
-                    <input type="" class="form-control top-concept-input-part" id="" placeholder="Javascript">
-                    <i class="fa fa-close"></i>
-                    <input type="" class="form-control top-concept-right-input-div" id="" placeholder="70%">
-                  </div>
-                  <div class="top-concept-input-div">
-                    <input type="" class="form-control top-concept-input-part" id="" placeholder="Android">
-                    <i class="fa fa-close"></i>
-                    <input type="" class="form-control top-concept-right-input-div" id="" placeholder="70%">
-                  </div>
-                  <div class="top-concept-input-div">
-                    <input type="" class="form-control top-concept-input-part" id="" placeholder="Add Concepts">
-                    <input type="" class="form-control top-concept-right-input-div" id="" placeholder="">
-                  </div>
-                  <button type="" class="btn top-cocep-add-bttn">Add More</button>
-                </div>
-              </div>
-              <div class="cls"></div>
-              <div class="create-profile-footer">
-                <button type="" class="btn create-add-bttn">Create</button>
-                <button type="" class="btn create-add-bttn">Cancel</button>
-              </div>
+                </form>
             </div>
-          </div>
         </div>
 
-      </div>
     </div>
-
-  </div>
-
-
+-->
 </div>
