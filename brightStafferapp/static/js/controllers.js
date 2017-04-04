@@ -2,6 +2,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.topSixProjectList = []; // top six project list array
     $rootScope.allProjectList = []; // all project array
     $rootScope.totalProjectCount = 0;
+    $rootScope.apiHiCounter = 0;
     $rootScope.recruiter = {};
     $rootScope.projectCountStart = 1;
     $rootScope.projectCountEnd = 0;
@@ -1474,8 +1475,8 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore) {
-
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore, createTalentFormService) {
+    
     $scope.priceSlider = {
         value: 0
         , options: {
@@ -1591,6 +1592,37 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , active: ''
     };
     $rootScope.Filter = false;
+    
+    /* create talent code */
+    
+    $scope.talentData = {
+        currentOrganization: {},
+        pastOrganization: [{}],
+        education: [{}],
+        topConcepts: [{}]
+    };
+    var d = new Date().getFullYear();
+    $scope.yearArr = [];
+    for(var i=100;i>=0;i--){
+        $scope.yearArr[i] = d - i;
+    }
+    $scope.addPastOrganization = function(){
+        $scope.talentData.pastOrganization.push({});
+    }
+    $scope.addSkill = function(){
+        $scope.talentData.topConcepts.push({});
+    }
+    
+    $scope.removeIndexFromArr = function(arr, index){
+        arr.splice(index, 1);
+    }
+    
+    $scope.createTalent = function(data){
+        createTalentFormService.createTalent(data, function(response){
+            console.log(response)
+        });
+    }
+    /* create talent code ends */
 
     $scope.$watch('priceSlider.value', function (n, o) {
         $scope.filterValue.match = n + '%';
@@ -2802,6 +2834,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        return arr;
     }
 
+     $scope.openEditProfileForm = function () {
+        $('#edit-profile').modal('show');
+    }
+
     $rootScope.filterReset = function () {
         $scope.priceSlider.value = 0;
         $scope.filterValue = {
@@ -2834,6 +2870,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('.radio-none').attr('checked', false);
 
     }
+
+
     $scope.init = function () {
 
         //        $("#proj-stage-date-text").datepicker({

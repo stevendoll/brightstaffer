@@ -24,6 +24,7 @@ from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 import math
 import datetime
+from datetime import date
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -406,6 +407,44 @@ class TalentUpdateRank(View):
         return util.returnSuccessShorcut(context)
 
 
+class TalentAdd(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(TalentAdd, self).dispatch(request, *args, **kwargs)
+
+    def post(self,request):
+        context = dict()
+        print (request)
+        recruiter = self.request.META.get('HTTP_RECRUITER' '')
+        user = User.objects.filter(username=recruiter)[0]
+        token = self.request.META.get('HTTP_TOKEN' '')
+        profile_data = json.loads(request.body.decode("utf-8"))
+        print (profile_data)
+
+        linkedin_validation=Talent.objects.filter(linkedin_url=profile_data['linkedinProfileUrl'])
+        if linkedin_validation:
+            return util.returnErrorShorcut(404, 'Talent is already exist in the system')
+        else:
+            talent_obj = Talent.objects.create(talent_name=profile_data['firstName'] + profile_data['lastName'],
+                                               recruiter=user,
+                                               status='New', current_location='-',
+                                               linkedin_url=profile_data['linkedinProfileUrl'],
+                                               create_date=datetime.now())
+            talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
+                                                                              is_active=True)
+            # if talent_obj:
+            #     if 'topConcepts' in profile_data:
+            #         for skill in topConcepts['skills']:
+            #             concept, created = Concept.objects.get_or_create(concept=skill['name'])
+            #             tpconcept, created = TalentConcept.objects.get_or_create(
+            #                 talent=talent_obj, concept=concept,
+            #                 match=str(round(skill['score'], 2)))
+            context['message'] = 'success'
+            return util.returnSuccessShorcut(context)
+
+
+
+
 class DeleteTalent(generics.ListCreateAPIView):
     queryset = Talent.objects.all()
     serializer_class = TalentSerializer
@@ -773,3 +812,5 @@ class TalentSearchFilter(generics.ListCreateAPIView):
         query['size'] = count
         res = es.search(index="haystack", doc_type="modelresult", body=query)
         return HttpResponse(json.dumps(res['hits']))
+
+

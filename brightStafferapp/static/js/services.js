@@ -197,6 +197,7 @@ function getAllProjects($http, $rootScope, REQUEST_URL) {
     return {
         allProjects: function (data) {
             $rootScope.showLoader(true);
+            $rootScope.apiHiCounter ++;
             return $http({
                 url: REQUEST_URL + 'project_list/?recruiter=' + data.recruiter + '&token=' + data.token + '&count=' + data.count
                 , method: "GET", // or "get"
@@ -206,7 +207,12 @@ function getAllProjects($http, $rootScope, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
-                $rootScope.showLoader(false);
+                $rootScope.apiHiCounter --;
+                if($rootScope.apiHiCounter <= 0){
+                    $rootScope.apiHiCounter = 0;
+                    $rootScope.showLoader(false);
+                }
+
                 return response.data;
             });
         }
@@ -467,6 +473,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
 function searchApis($rootScope, $http, REQUEST_URL) {
     return {
         talentSearch: function (data) {
+            $rootScope.apiHiCounter ++;
             $rootScope.showLoader(true);
             data.term = data.keyword;
             delete data.keyword;
@@ -481,7 +488,11 @@ function searchApis($rootScope, $http, REQUEST_URL) {
                 , params: data
                 , dataType: 'json'
             }).then(function (response) {
-                $rootScope.showLoader(false);
+                 $rootScope.apiHiCounter --;
+                 if($rootScope.apiHiCounter <= 0){
+                    $rootScope.apiHiCounter = 0;
+                    $rootScope.showLoader(false);
+                }
                 return response.data;
             });
         }
@@ -525,11 +536,11 @@ function searchData() {
     }
 }
 
-function createTalentFormService(appService) {
+function createTalentFormService($rootScope, REQUEST_URL, appService) {
     return {
         createTalent: function (data, callback) {
             var param = {
-                url: REQUEST_URL + 'create_talent/'
+                url: REQUEST_URL + 'talent_add/'
                 , method: "POST"
                 , headers: {
                     'Content-Type': 'application/json; charset=utf-8'
