@@ -434,7 +434,9 @@ def talent_validation(user_data):
 
 
 class TalentSearch(generics.ListCreateAPIView):
+    queryset = Talent.objects.filter(Q(talent_active__is_active=True) & Q(status__in=['New', 'Active']))
     serializer_class = TalentSerializer
+    pagination_class = LargeResultsSetPagination
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -442,39 +444,117 @@ class TalentSearch(generics.ListCreateAPIView):
 
     @required_headers(params=['HTTP_TOKEN', 'HTTP_RECRUITER'])
     def get(self, request, *args, **kwargs):
-        es = Elasticsearch(hosts=[settings.HAYSTACK_CONNECTIONS['default']['URL']])
-        term = request.GET.get('term', '')
         recruiter = request.META.get('HTTP_RECRUITER' '')
         token = request.META.get('HTTP_TOKEN', '')
-        count = request.GET.get('count', '')
-        page = request.GET.get('page', '')
+
         is_valid = user_validation(data={'recruiter': recruiter,
                                          'token': token})
         if not is_valid:
             return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
+        return super(TalentSearch, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(TalentSearch, self).get_queryset()
+        term = self.request.GET.get('term', '')
         term = term.strip('"')
-        term_query = copy.deepcopy(TERM_QUERY)
-        term_query['from'] = 0 if int(page) == 1 else int(page) - 2 + ((int(page) - 1) * 10)
-        term_query['size'] = count
-        try:
-            if term:
-                body = json.loads(re.sub(r"\brecruiter_term\b", recruiter,
-                                         re.sub(r"\bsearch_term\b", term, json.dumps(term_query))))
-                res = es.search(index="haystack", doc_type="modelresult",
-                                body=body
-                                )
-                return HttpResponse(json.dumps(res['hits']))
-            else:
-                base_query = copy.deepcopy(BASE_QUERY)
-                base_query['from'] = 0 if int(page) == 1 else int(page) - 2 + ((int(page) - 1) * 10)
-                base_query['size'] = count
-                base_query = json.loads(re.sub(r"\brecruiter_term\b", recruiter, json.dumps(base_query)))
-                res = es.search(index="haystack", doc_type="modelresult",
-                                body=base_query
-                                )
-                return HttpResponse(json.dumps(res['hits']))
-        except:
-            return HttpResponse(json.dumps(EMPTY_QUERY))
+        recruiter = self.request.META.get('HTTP_RECRUITER' '')
+
+        # get filter options
+        rating = self.request.GET.get('rating', '')
+        talent_company = self.request.GET.get('talent_company', '')
+        project_match = self.request.GET.get('project_match', '')
+        concepts = self.request.GET.get('concepts', '')
+        projects = self.request.GET.get('projects', '')
+        stages = self.request.GET.get('stages', '')
+        last_contacted = self.request.GET.get('last_contacted', '')
+        date_added = self.request.GET.get('date_added', '')
+        ordering = self.request.GET.get('ordering', '')
+        is_active = self.request.GET.get('is_active', '')
+
+        queryset = queryset.filter(Q(recruiter__username=recruiter))
+        if term:
+            queryset = queryset.filter(
+                Q(talent_name__icontains=term) | Q(designation__icontains=term) | Q(current_location__icontains=term) |
+                Q(industry_focus__icontains=term) | Q(talent_company__company__company_name__icontains=term) |
+                Q(talent_company__designation__icontains=term) |
+                Q(talent_project__project__project_name__icontains=term) |
+                Q(talent_concepts__concept__concept__icontains=term) | Q(talent_concepts__match__icontains=term) |
+                Q(talent_education__education__name__icontains=term) | Q(talent_education__course__icontains=term) |
+                Q(talent_email__email__icontains=term) |
+                Q(talent_contact__contact__icontains=term) | Q(talent_stages__notes__icontains=term) |
+                Q(talent_stages__details__icontains=term))
+        if rating:
+            queryset = queryset.filter(rating=rating)
+        if talent_company:
+            queryset = queryset.filter(talent_company__company__company_name=talent_company)
+        if project_match:
+            queryset = queryset.filter(talent_project__project_match__gte=int(project_match))
+        if concepts:
+            concepts = concepts.split(',')
+            queryset = queryset.filter(talent_concepts__concept__concept__in=concepts)
+        if projects:
+            projects = projects.split(',')
+            queryset = queryset.filter(talent_projects__project__project_name__in=projects)
+        if stages:
+            stages = stages.split(',')
+            queryset = queryset.filter(talent_stages__stage__in=stages)
+        if date_added:
+            queryset = queryset.filter(create_date=date_added)
+        if ordering:
+            if ordering == "asc":
+                queryset = queryset.order_by('create_date')
+            if ordering == "desc":
+                queryset = queryset.order_by('-create_date')
+        if is_active:
+            if is_active == "true":
+                queryset = queryset.order_by('-activation_date')
+            if is_active == "false":
+                queryset = queryset.filter(status='InActive')
+        return queryset.distinct()
+
+
+# class TalentSearch(generics.ListCreateAPIView):
+#     serializer_class = TalentSerializer
+#
+#     @method_decorator(csrf_exempt)
+#     def dispatch(self, request, *args, **kwargs):
+#         return super(TalentSearch, self).dispatch(request, *args, **kwargs)
+#
+#     @required_headers(params=['HTTP_TOKEN', 'HTTP_RECRUITER'])
+#     def get(self, request, *args, **kwargs):
+#         es = Elasticsearch(hosts=[settings.HAYSTACK_CONNECTIONS['default']['URL']])
+#         term = request.GET.get('term', '')
+#         recruiter = request.META.get('HTTP_RECRUITER' '')
+#         token = request.META.get('HTTP_TOKEN', '')
+#         count = request.GET.get('count', '')
+#         page = request.GET.get('page', '')
+#         is_valid = user_validation(data={'recruiter': recruiter,
+#                                          'token': token})
+#         if not is_valid:
+#             return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
+#         term = term.strip('"')
+#         term_query = copy.deepcopy(TERM_QUERY)
+#         term_query['from'] = 0 if int(page) == 1 else int(page) - 2 + ((int(page) - 1) * 10)
+#         term_query['size'] = count
+#         try:
+#             if term:
+#                 body = json.loads(re.sub(r"\brecruiter_term\b", recruiter,
+#                                          re.sub(r"\bsearch_term\b", term, json.dumps(term_query))))
+#                 res = es.search(index="haystack", doc_type="modelresult",
+#                                 body=body
+#                                 )
+#                 return HttpResponse(json.dumps(res['hits']))
+#             else:
+#                 base_query = copy.deepcopy(BASE_QUERY)
+#                 base_query['from'] = 0 if int(page) == 1 else int(page) - 2 + ((int(page) - 1) * 10)
+#                 base_query['size'] = count
+#                 base_query = json.loads(re.sub(r"\brecruiter_term\b", recruiter, json.dumps(base_query)))
+#                 res = es.search(index="haystack", doc_type="modelresult",
+#                                 body=base_query
+#                                 )
+#                 return HttpResponse(json.dumps(res['hits']))
+#         except:
+#             return HttpResponse(json.dumps(EMPTY_QUERY))
 
 
 class TalentSearchFilter(generics.ListCreateAPIView):
