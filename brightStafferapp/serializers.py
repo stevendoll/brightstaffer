@@ -61,7 +61,8 @@ class TalentProjectSerializer(serializers.ModelSerializer):
     date_added = serializers.CharField(source='get_date_added')
     project_stage = serializers.SerializerMethodField()
 
-    def get_project_stage(self, obj):
+    @staticmethod
+    def get_project_stage(obj):
         stages = obj.project.talentstage_set.filter(talent=obj.talent).order_by('-date_created')
         if stages:
             return stages[0].stage
@@ -69,7 +70,7 @@ class TalentProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalentProject
-        fields = ('talent', 'project','project_match', 'rank', 'date_added', 'company_name', 'project_stage')
+        fields = ('talent', 'project', 'project_match', 'rank', 'date_added', 'company_name', 'project_stage')
 
 
 class TalentConceptSerializer(serializers.ModelSerializer):
@@ -138,6 +139,15 @@ class TalentCompanySerializer(serializers.ModelSerializer):
                   'years_of_experience', 'career_gap')
 
 
+class TalentStageSerializer(serializers.ModelSerializer):
+    date_created = serializers.CharField(source='get_date_created')
+    date_updated = serializers.CharField(source='get_date_updated')
+
+    class Meta:
+        model = TalentStage
+        fields = ('talent', 'project', 'stage', 'details', 'notes', 'date_created', 'date_updated')
+
+
 class TalentSerializer(serializers.ModelSerializer):
     talent_name = serializers.CharField()
     talent_education = TalentEducationSerializer(many=True)
@@ -148,10 +158,12 @@ class TalentSerializer(serializers.ModelSerializer):
     talent_concepts = TalentConceptSerializer(many=True)
     talent_email = TalentEmailSerializer(many=True)
     talent_contact = TalentContactSerializer(many=True)
+    talent_stages = TalentStageSerializer(many=True)
     activation_date = serializers.CharField(source='get_activation_date')
 
     class Meta:
         model = Talent
-        fields = ('id', 'talent_name', 'designation', 'industry_focus', 'activation_date', 'industry_focus_percentage', 'status',
-        'rating', 'talent_email', 'talent_contact', 'linkedin_url', 'recruiter', 'create_date', 'current_location',
-        'talent_company', 'talent_education', 'talent_project', 'talent_concepts')
+        fields = ('id', 'talent_name', 'designation', 'industry_focus', 'activation_date', 'industry_focus_percentage',
+                  'status', 'rating', 'talent_email', 'talent_stages', 'talent_contact', 'linkedin_url', 'recruiter',
+                  'create_date', 'current_location', 'talent_company', 'talent_education', 'talent_project',
+                  'talent_concepts')
