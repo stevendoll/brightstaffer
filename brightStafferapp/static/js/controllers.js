@@ -2,6 +2,7 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.topSixProjectList = []; // top six project list array
     $rootScope.allProjectList = []; // all project array
     $rootScope.totalProjectCount = 0;
+    $rootScope.apiHiCounter = 0;
     $rootScope.recruiter = {};
     $rootScope.projectCountStart = 1;
     $rootScope.projectCountEnd = 0;
@@ -2802,6 +2803,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        return arr;
     }
 
+     $scope.openEditProfileForm = function () {
+        $('#edit-profile').modal('show');
+    }
+
     $rootScope.filterReset = function () {
         $scope.priceSlider.value = 0;
         $scope.filterValue = {
@@ -2834,6 +2839,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('.radio-none').attr('checked', false);
 
     }
+
+
     $scope.init = function () {
 
         //        $("#proj-stage-date-text").datepicker({
