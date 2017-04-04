@@ -1472,8 +1472,8 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore) {
-
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore, createTalentFormService) {
+    
     $scope.priceSlider = {
         value: 0
         , options: {
@@ -1589,6 +1589,33 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , active: ''
     };
     $rootScope.Filter = false;
+    
+    /* create talent code */
+    
+    $scope.talentData = {
+        currentOrganization: {},
+        pastOrganization: [{}],
+        education: [{}],
+        topConcepts: [{}]
+    };
+    
+    $scope.addPastOrganization = function(){
+        $scope.talentData.pastOrganization.push({});
+    }
+    $scope.addSkill = function(){
+        $scope.talentData.topConcepts.push({});
+    }
+    
+    $scope.removeIndexFromArr = function(arr, index){
+        arr.splice(index, 1);
+    }
+    
+    $scope.createTalent = function(data){
+        createTalentFormService.createTalent(data, function(response){
+            console.log(response)
+        });
+    }
+    /* create talent code ends */
 
     $scope.$watch('priceSlider.value', function (n, o) {
         $scope.filterValue.match = n + '%';
@@ -2850,7 +2877,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
 }
 
-function createTalentFormCtrl($scope, createTalentFormService) {
+function crTalentCtrl($scope, createTalentFormService) {
     $scope.talentData = {
         currentOrganization: {},
         pastOrganization: [{}],
@@ -2892,4 +2919,4 @@ angular
     .controller('uploadFileCtrl', uploadFileCtrl)
     .controller('sideNavCtrl', sideNavCtrl)
     .controller('topnavCtrl', topnavCtrl)
-    .controller('createTalentFormCtrl', createTalentFormCtrl);
+    .controller('crTalentCtrl', crTalentCtrl);
