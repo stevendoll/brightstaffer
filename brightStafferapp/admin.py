@@ -4,6 +4,11 @@ from brightStafferapp.models import Projects, Concept, Talent, Company, TalentCo
     Recruiter,TalentRecruiter
 
 
+def make_active(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+make_active.short_description = "Activate Talents"
+
+
 class TalentCompanyInline(admin.TabularInline):
     model = TalentCompany
     extra = 1
@@ -31,6 +36,11 @@ class TalentProjectInline(admin.TabularInline):
     ordering = ('-date_added',)
 
 
+class TalentStagesInline(admin.TabularInline):
+    model = TalentStage
+    extra = 0
+
+
 class ProjectsAdmin(admin.ModelAdmin):
     list_display = ('id', 'recruiter', 'project_name', 'company_name', 'location', 'create_date')
     list_filter = ('recruiter', 'project_name', 'company_name', 'create_date')
@@ -45,11 +55,14 @@ class ConceptsAdmin(admin.ModelAdmin):
 
 
 class TalentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'talent_name', 'recruiter', 'current_location', 'create_date')
+    list_display = ('talent_name', 'recruiter', 'current_location', 'create_date', 'status')
     list_filter = ('id', 'talent_name')
-    list_display_links = ('id', 'talent_name', 'recruiter')
+    list_display_links = ('talent_name', 'recruiter')
     list_per_page = 2000
-    inlines = (TalentProjectInline, TalentEducationInline, TalentCompanyInline, TalentConceptInline, )
+    search_fields = ('talent_stages__stage', 'talent_company__company__company_name',
+                     'talent_project__project__project_name', 'talent_concepts__concept__concept')
+    inlines = (TalentProjectInline, TalentEducationInline, TalentCompanyInline, TalentConceptInline, TalentStagesInline,
+               )
 
 
 class CompanyAdmin(admin.ModelAdmin):
@@ -79,8 +92,10 @@ class TalentStageAdmin(admin.ModelAdmin):
 
 
 class TalentRecruiterAdmin(admin.ModelAdmin):
-    list_display = ('id','talent', 'recruiter', 'is_active')
+    list_display = ('id', 'talent', 'recruiter', 'is_active')
     list_filter = ('talent',)
+    search_fields = ('talent__talent_name', )
+    actions = [make_active]
 
 
 class TalentProjectAdmin(admin.ModelAdmin):
@@ -101,5 +116,5 @@ admin.site.register(PdfImages)
 admin.site.register(TalentEmail, TalentEmailAdmin)
 admin.site.register(TalentContact, TalentContactAdmin)
 admin.site.register(TalentStage, TalentStageAdmin)
-admin.site.register(TalentRecruiter,TalentRecruiterAdmin)
+admin.site.register(TalentRecruiter, TalentRecruiterAdmin)
 admin.site.register(Recruiter)

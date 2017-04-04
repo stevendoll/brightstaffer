@@ -23,6 +23,8 @@ import copy
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 import math
+import datetime
+
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -240,6 +242,7 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
             talent_project_match(talent_obj,project)
         return talent_result
 
+
 def talent_project_match(talent_obj,project):
     talent_concept_list=TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',flat=True)
     talent_concept_count=TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',flat=True).count()
@@ -249,11 +252,12 @@ def talent_project_match(talent_obj,project):
     count = 0
     for t_concept in talent_concept_list:
         for p_conecpt in project_concept_list:
-            ratio=fuzz.partial_ratio(t_concept,p_conecpt)
+            ratio = fuzz.partial_ratio(t_concept, p_conecpt)
             if ratio >= 50:
-                count = count+1
-    match = math.ceil(round((count/total_concept),2))
+                count += 1
+    match = math.ceil(round((count/total_concept), 2))
     TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+
 
 # View Talent's Current stage for a single project and Add Talent's stage for a single project
 class TalentStageAddAPI(generics.ListCreateAPIView):
@@ -409,20 +413,23 @@ class DeleteTalent(generics.ListCreateAPIView):
 
     def get_queryset(self):
         queryset = super(DeleteTalent, self).get_queryset()
-        talent_result = None
         recruiter = self.request.query_params.get('recruiter')
-        is_active = self.request.query_params.get('is_active')
         talent_id_list = self.request.query_params.get('talent').split(',')  # ('talent[]')[0].split(',')
 
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
             if not talent_objs:
                 return util.returnErrorShorcut(403, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
-            updated = TalentRecruiter.objects.filter(talent=talent_objs, recruiter__username=recruiter)\
-                .update(is_active=is_active)
-            if updated:
-                talent_result = queryset.filter(talent_active__is_active=True)
-        return talent_result
+            talent_id = talent_objs[0]
+            to_delete = TalentRecruiter.objects.filter(talent=talent_id, recruiter__username=recruiter)
+            if to_delete:
+                to_delete = to_delete[0]
+                to_delete.is_active = False
+                to_delete.save()
+
+        return queryset.filter(Q(talent_active__is_active=True) & Q(recruiter__username=recruiter) &
+                               Q(talent_active__recruiter__username=recruiter) &
+                               Q(status__in=['New', 'Active'])).order_by('-create_date')
 
 
 def talent_validation(user_data):
@@ -434,7 +441,7 @@ def talent_validation(user_data):
 
 
 class TalentSearch(generics.ListCreateAPIView):
-    queryset = Talent.objects.filter(Q(talent_active__is_active=True) & Q(status__in=['New', 'Active']))
+    queryset = Talent.objects.all()
     serializer_class = TalentSerializer
     pagination_class = LargeResultsSetPagination
 
@@ -470,10 +477,12 @@ class TalentSearch(generics.ListCreateAPIView):
         date_added = self.request.GET.get('date_added', '')
         ordering = self.request.GET.get('ordering', '')
         is_active = self.request.GET.get('is_active', '')
+        recruiter_param = self.request.GET.get('recruiter', '')
 
-        queryset = queryset.filter(Q(recruiter__username=recruiter))
+        queryset = queryset.filter(Q(recruiter__username__iexact=recruiter) & Q(talent_active__is_active=True) &
+                                   Q(talent_active__recruiter__username=recruiter))
         if term:
-            queryset = queryset.filter(
+            queryset = queryset.filter(Q(talent_active__is_active=True) & Q(status__in=['New', 'Active']) &
                 Q(talent_name__icontains=term) | Q(designation__icontains=term) | Q(current_location__icontains=term) |
                 Q(industry_focus__icontains=term) | Q(talent_company__company__company_name__icontains=term) |
                 Q(talent_company__designation__icontains=term) |
@@ -486,30 +495,38 @@ class TalentSearch(generics.ListCreateAPIView):
         if rating:
             queryset = queryset.filter(rating=rating)
         if talent_company:
-            queryset = queryset.filter(talent_company__company__company_name=talent_company)
+            queryset = queryset.filter(talent_company__company__company_name__icontains=talent_company)
         if project_match:
             queryset = queryset.filter(talent_project__project_match__gte=int(project_match))
         if concepts:
             concepts = concepts.split(',')
-            queryset = queryset.filter(talent_concepts__concept__concept__in=concepts)
+            queryset = queryset.filter(talent_concepts__concept__concept__iregex=r'(' + '|'.join(concepts) + ')')
         if projects:
             projects = projects.split(',')
-            queryset = queryset.filter(talent_projects__project__project_name__in=projects)
+            queryset = queryset.filter(talent_project__project__project_name__in=projects)
         if stages:
             stages = stages.split(',')
             queryset = queryset.filter(talent_stages__stage__in=stages)
+        if recruiter_param:
+            queryset = queryset.filter(recruiter__username=recruiter_param)
         if date_added:
-            queryset = queryset.filter(create_date=date_added)
+            date_added = datetime.date(int(date_added.split('/')[2]), int(date_added.split('/')[0]),
+                                       int(date_added.split('/')[1]))
+            queryset = queryset.filter(create_date__range=(datetime.datetime.combine(date_added, datetime.time.min),
+                                                           datetime.datetime.combine(date_added, datetime.time.max)))
         if ordering:
             if ordering == "asc":
                 queryset = queryset.order_by('create_date')
             if ordering == "desc":
                 queryset = queryset.order_by('-create_date')
-        if is_active:
-            if is_active == "true":
+        if is_active and is_active == "true":
                 queryset = queryset.order_by('-activation_date')
-            if is_active == "false":
-                queryset = queryset.filter(status='InActive')
+        if is_active and is_active == "false":
+            queryset = queryset.filter(status='InActive')
+        else:
+            queryset = queryset.filter(status__in=['New', 'Active'])
+        if not ordering:
+            queryset = queryset.order_by('-create_date')
         return queryset.distinct()
 
 
