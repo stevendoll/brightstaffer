@@ -442,7 +442,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
         filterTalentData: function (data) {
             $rootScope.showLoader(true);
             return $http({
-                url: REQUEST_URL + 'talent_search_filter/?talent_company=' + data.company + '&rating=' + data.rating + '&project_match=' + data.project_match + '&recruiter=' + data.recruiter + '&concepts=' + data.concepts + '&projects=' + data.projects + '&stages=' + data.stages + '&last_contacted=' + data.contacted + '&date_added=' + data.date + '&term=' + data.term + '&ordering=' + data.ordering + '&is_active=' + data.active + '&page=' + data.page + '&count=' + data.count
+                url: REQUEST_URL + 'talent_search/?talent_company=' + data.company + '&rating=' + data.rating + '&project_match=' + data.project_match + '&recruiter=' + data.recruiter + '&concepts=' + data.concepts + '&projects=' + data.projects + '&stages=' + data.stages + '&last_contacted=' + data.contacted + '&date_added=' + data.date + '&term=' + data.term + '&ordering=' + data.ordering + '&is_active=' + data.active + '&page=' + data.page + '&count=' + data.count
                 , method: "GET", // or "get"
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'

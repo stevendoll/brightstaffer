@@ -294,29 +294,31 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     $rootScope.candidatePages = [];
     $scope.getSearchData = function (onReload) {
         var currentState = $state.current.name;
-        var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list"];
+        var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list","talent.create-profile"];
         if (allowedArray.indexOf(currentState) > -1) {
 
-            if (!onReload && currentState == "talent.talent-profile") {
+            if (!onReload && currentState == "talent.talent-profile" || currentState == "talent.create-profile") {
                 $state.go('talent.talent-search.talent-search-card');
             }
             $('#selectall').prop('checked', false);
+
             $rootScope.filterReset();
+
             var requestObject = {
-                'keyword': $rootScope.search.searchKeywords || ''
-                , page: $rootScope.candidatePagination.page
-                , count: $rootScope.candidatePagination.count
+               'keyword': $rootScope.search.searchKeywords || ''
+               , page: $rootScope.candidatePagination.page
+               , count: $rootScope.candidatePagination.count
             };
             searchApis.talentSearch(requestObject).then(function (response) {
                 $rootScope.Filter = false;
                 $rootScope.topSearch = true;
                 $rootScope.talentList = [];
-                if (response.hits.length > 0) {
-                    for (var i = 0; i < response.hits.length; i++) {
-                        $rootScope.talentList.push(response.hits[i]._source);
+                if (response.results.length > 0) {
+                    for (var i = 0; i < response.results.length; i++) {
+                        $rootScope.talentList.push(response.results[i]);
                     }
                 }
-                $rootScope.totalTalentCount = response.total;
+                $rootScope.totalTalentCount = response.count;
                 $rootScope.talentCountEnd = $rootScope.talentList.length;
                 $rootScope.candidatePages = [];
                 for (var i = 0; i < Math.ceil($rootScope.totalTalentCount / $rootScope.candidatePagination.count); i++) {
@@ -2727,12 +2729,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         console.log(requestObject);
         talentApis.filterTalentData(requestObject).then(function (response) {
             $rootScope.candidatePages = [];
-            if (response.hits.length > 0) {
+            if (response.results.length > 0) {
                 $rootScope.Filter = false;
-                console.log(response.hits);
+                console.log(response.results);
                 $rootScope.talentList = [];
-                for (var i = 0; i < response.hits.length; i++) {
-                    $rootScope.talentList.push(response.hits[i]._source);
+                for (var i = 0; i < response.results.length; i++) {
+                    $rootScope.talentList.push(response.results[i]);
                 }
                 var count = $rootScope.talentList.length
                 $rootScope.totalTalentCount = count;
@@ -2744,7 +2746,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     });
                 }
 
-            } else if (response.hits.length == 0) {
+            } else if (response.results.length == 0) {
                 $rootScope.talentList = [];
                 $rootScope.Filter = true;
                 $rootScope.totalTalentCount = 0;
