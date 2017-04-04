@@ -1600,7 +1600,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         education: [{}],
         topConcepts: [{}]
     };
-    
+    var d = new Date().getFullYear();
+    $scope.yearArr = [];
+    for(var i=100;i>=0;i--){
+        $scope.yearArr[i] = d - i;
+    }
     $scope.addPastOrganization = function(){
         $scope.talentData.pastOrganization.push({});
     }
