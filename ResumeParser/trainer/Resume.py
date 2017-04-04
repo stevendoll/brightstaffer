@@ -64,8 +64,7 @@ class Resume:
         return self.education
 
     def __get_skills__(self):
-        no_of_skills = sum([skill[1] for skill in self.skills])
-        self.skills = [{'name': skill[0], 'score': (skill[1] / no_of_skills) * 100} for skill in self.skills]
+        self.skills = [{'name': skill['text'], 'score': skill['relevance']} for skill in self.skills]
         self.skills.sort(key=lambda x: x['score'], reverse=True)
         if len(self.skills) <= max_skill_count:
             return self.skills
@@ -161,6 +160,7 @@ def extract_information_from_resume(all_sents, original, word2vec_model,
     :param word2vec_model:
     :return:
     """
+    entities, keywords = entities[0], entities[1]
     resume = Resume(word_model='word2vec')
     try:
         resume.raw_lower = '\n'.join(original).lower()
@@ -187,20 +187,9 @@ def extract_information_from_resume(all_sents, original, word2vec_model,
                     resume.work.append(original[i])
                 elif predicted_class_lstm == 3 or predicted_class_treebased == 3:
                     resume.additional.append(original[i])
-        skill_model = joblib.load(skill_model_file)
-        all_sents = [sent[0] for sent in all_sents]
-        all_sents = create_ngram(all_sents)
-        for i, sent in enumerate(all_sents):
-            for word in sent:
-                if word.lower() in skill_model:
-                    if '_' in word:
-                        word = word.replace('_', ' ')
-                    # resume.skills.append((word.title(), resume.raw_lower.count(word.lower())))
-                    resume.skills.append(
-                        (word.title(),
-                         len(re.findall(r'\s?(' + re.escape(word) + ')[\s,(]',
-                                        resume.raw_lower))))
-                    resume.skills = list(set(resume.skills))
+
+        resume.skills = keywords
+
         temp_entity = entities[:]
         entities = []
         entity_flag = dict()
