@@ -12201,3 +12201,316 @@ input[type=date]::-webkit-inner-spin-button {
 .input-right-padding{
     padding-right: 10px !important;
 }
+
+
+ /*create-profile-css-starts*/
+.create-profile-panel {
+  width: 100%;
+  float: left;
+  background-color: #ffffff;
+  border: solid 1px #e8e8e8;
+  margin-top: 10px;
+  padding: 35px 0px 10px 0px;
+}
+
+.create-profile-form-div {
+  width: 100%;
+  float: left;
+}
+
+.create-profile-form-div {
+  width: 100%;
+  float: left;
+  padding: 0px 25px 0px 5px;
+}
+
+.create-profile-form-div .left-section {
+  width: 50%;
+  float: left;
+  padding: 0px 15px;
+}
+
+.create-profile-form-div .right-section {
+  width: 50%;
+  float: left;
+  padding: 0px 15px;
+}
+
+.create-profile-form-div .main-section {
+  width: 100%;
+  float: left;
+  padding: 0px 15px;
+}
+
+.create-profile-form-div .first-panel {
+  width: 50%;
+  float: left;
+  padding: 0px 10px 0px 15px;
+}
+
+.create-profile-form-div .side-panel {
+  width: 25%;
+  float: left;
+  padding: 0px 10px;
+}
+
+.create-profile-form-div .create-pro-hd {
+  color: #000000;
+  font-size: 16px;
+  font-family: 'OpenSans-Semibold';
+  font-weight: normal;
+  width: 100%;
+  float: left;
+  padding: 0px 10px 5px 15px;
+}
+
+.create-profile-form-div .form-group label {
+  color: #000000;
+  font-size: 16px;
+  font-family: 'OpenSans-Semibold';
+  font-weight: normal;
+}
+
+.create-profile-form-div .form-group input {
+  border: 1px solid #e7eaec;
+  font-family: 'open_sansregular';
+  font-size: 13px;
+  color: #808080;
+  border-radius: 2px;
+}
+
+.m-top4 {
+  margin-top: 3px;
+}
+
+.create-profile-form-div .form-group .sbHolder a.sbToggle {
+  background: url(../img/arrow.png) no-repeat;
+  margin: 15px 6px 0px 0px;
+}
+
+.create-profile-form-div .form-group .sbHolder {
+  height: 40px;
+}
+
+.create-profile-add-bttn {
+  background-color: #1c84c6;
+  width: 120px;
+  height: 36px;
+  border-radius: 2px;
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  color: #ffffff;
+  float: right;
+  margin-right: 10px;
+}
+
+.create-profile-form-div .form-group .sbHolder a.sbSelector:link, a.sbSelector:visited, a.sbSelector:hover {
+  margin: 5px 0 0 2px;
+}
+
+.create-prof {
+  color: #373a3c;
+}
+
+.top-concepts-panel {
+  width: 100%;
+  float: left;
+  padding: 20px 20px;
+}
+
+.top-concept-right-div {
+  width: 390px;
+  float: left;
+}
+
+.top-concept-right-div h2 {
+  font-family: 'OpenSans-Semibold';
+  font-size: 16px;
+  color: #000000;
+  width: 297px;
+  float: left;
+}
+
+.top-concept-input-div {
+  width: 100%;
+  float: left;
+  margin-bottom: 4px;
+  position: relative;
+}
+
+.top-concept-input-div .top-concept-input-part {
+  width: 297px;
+  float: left;
+  height: 40px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #e7eaec;
+  font-family: 'open_sansregular';
+  font-size: 13px;
+  color: #808080;
+  padding: 8px 30px 8px 14px;
+}
+
+.top-concept-input-div .fa-close {
+  font-size: 18px;
+  color: #6a6a6a;
+  position: absolute;
+  top: 11px;
+  left: 270px;
+  cursor: pointer;
+}
+
+.top-concept-right-div h3 {
+  font-family: 'open_sansregular';
+  font-size: 14px !important;
+  color: #000000 !important;
+  margin-bottom: 12px;
+  width: auto;
+  float: left;
+  margin-left: 10px;
+  font-weight: normal;
+  margin-top: 20px;
+}
+
+.top-concept-input-div .top-concept-right-input-div {
+  height: 40px;
+  width: 70px !important;
+  float: left !important;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #e7eaec;
+  float: left;
+  width: 100%;
+  text-align: center;
+  font-family: 'open_sansregular';
+  font-size: 13px;
+  color: #6a6a6a;
+  margin-bottom: 4px;
+  margin-left: 10px;
+}
+
+.top-cocep-add-bttn {
+  background-color: #1c84c6;
+  width: 120px;
+  height: 36px;
+  border-radius: 2px;
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  color: #ffffff;
+  float: right;
+  margin-right: 15px;
+  margin-top: 3px;
+}
+
+.create-profile-footer {
+  width: 100%;
+  float: left;
+  border-top: solid 1px #e5e5e5;
+  padding: 20px 35px 20px 35px;
+  margin-top: 10px;
+}
+
+.create-add-bttn {
+  background-color: #1c84c6;
+  width: 120px;
+  height: 36px;
+  border-radius: 2px;
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  color: #ffffff;
+  float: right;
+  margin-left: 10px;
+}
+
+.remove-profile-text {
+  width: 100%;
+  float: left;
+  font-family: 'open_sansregular';
+  font-size: 13px;
+  color: #d60000;
+  text-decoration: underline;
+  text-align: right;
+  padding-right: 10px;
+  margin-top: -9px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.edit-profile-screen {
+  width: 100%;
+  float: left;
+  padding: 20px 25px 0px 25px;
+}
+
+.edit-rectangle-left-div {
+  width: 50%;
+  float: left;
+  padding: 0px 5px;
+  margin-bottom: 10px;
+}
+
+.edit-rectangle-full-div .edit-rectangle-input, .edit-rectangle-left-div .edit-rectangle-input {
+  width: 100%;
+  float: left;
+  height: 40px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #e7eaec;
+  font-family: 'open_sansregular';
+  font-size: 13px;
+  color: #6a6a6a;
+}
+
+.edit-rectangle-full-div {
+  width: 100%;
+  float: left;
+  padding: 0px 5px;
+  margin-bottom: 10px;
+}
+
+.edit-profile-screen .past-roles {
+  margin-bottom: 10px;
+  padding: 0px 5px;
+}
+
+.edit-rectangle-left-div .form-group {
+  margin-bottom: 0px;
+}
+
+.edit-rectangle-left-div .form-group .sbHolder a.sbToggle {
+  background: url(../img/arrow.png) no-repeat;
+  margin: 15px 6px 0px 0px;
+}
+
+.edit-rectangle-left-div .form-group .sbHolder {
+  height: 40px;
+}
+
+.edit-rectangle-left-div .form-group .sbHolder a.sbSelector:link, a.sbSelector:visited, a.sbSelector:hover {
+  margin: 5px 0 0 2px;
+}
+
+.modal-edit-profile-hd {
+  width: 100%;
+  float: left;
+  font-family: 'OpenSans-Semibold';
+  font-size: 14px;
+  color: #000000;
+  padding: 0px 5px;
+  margin-bottom: 3px;
+}
+
+.update-profile-add-bttn {
+  background-color: #1c84c6;
+  width: 120px;
+  height: 36px;
+  border-radius: 2px;
+  font-family: 'open_sansregular';
+  font-size: 14px;
+  color: #ffffff;
+  float: right;
+  margin-right: 5px;
+  margin-top: 10px;
+}
+
+/*create-profile-css-ends*/

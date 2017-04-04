@@ -1379,6 +1379,11 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         }
     });
 
+    $scope.openCreateProfile = function(){
+     $('#add-talent').modal('hide');
+     $state.go('talent.create-profile');
+
+    }
 }
 
 
