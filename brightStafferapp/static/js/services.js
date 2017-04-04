@@ -536,11 +536,11 @@ function searchData() {
     }
 }
 
-function createTalentFormService(appService) {
+function createTalentFormService($rootScope, REQUEST_URL, appService) {
     return {
         createTalent: function (data, callback) {
             var param = {
-                url: REQUEST_URL + 'create_talent/'
+                url: REQUEST_URL + 'talent_add/'
                 , method: "POST"
                 , headers: {
                     'Content-Type': 'application/json; charset=utf-8'
