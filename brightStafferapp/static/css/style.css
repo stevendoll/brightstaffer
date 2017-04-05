@@ -2202,6 +2202,9 @@ padding: 10px 0px;}
     margin-top: 7px !important;
 }
 
+.width60 {
+  width: 60% !important;
+}
 
 
 @media (max-width: 768px) {
@@ -12524,7 +12527,7 @@ input[type=date]::-webkit-inner-spin-button {
 }
 
 .edit-rectangle-left-div.form-group.sbHolder a.sbSelector:link, a.sbSelector:visited, a.sbSelector:hover {
-  margin: 5px 0 0 2px;
+  margin: 2px 0 0 2px;
 }
 
 .modal-edit-profile-hd {
