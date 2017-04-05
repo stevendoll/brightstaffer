@@ -142,7 +142,7 @@ class TalentCompanySerializer(serializers.ModelSerializer):
 class TalentStageSerializer(serializers.ModelSerializer):
     date_created = serializers.CharField(source='get_date_created')
     date_updated = serializers.CharField(source='get_date_updated')
-
+    project = serializers.CharField()
     class Meta:
         model = TalentStage
         fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'date_created', 'date_updated')
