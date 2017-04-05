@@ -30,24 +30,24 @@
                         <div class="create-profile-form-div">
                             <div class="create-pro-hd">Current</div>
                             <div class="cls"></div>
-                            <div class="col-xs-12 padding-zero">
+                            <div class="col-xs-12 padding-zero" ng-repeat="currentOrganization in talentData.currentOrganization">
                                 <div class="first-panel">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="" placeholder="" maxlength="100" ng-model="talentData.currentOrganization.name" required/>
+                                        <input type="text" class="form-control" id="" placeholder="" maxlength="100" ng-model="currentOrganization.name" required/>
                                     </div>
                                 </div>
                                 <div class="side-panel m-top4">
                                     <div class="form-group count">
-                                        <select class="form-control select-arrow" ng-model="talentData.currentOrganization.from" required>
-                                            <option ng-show="talentData.currentOrganization.from == ''" value="">Select Year</option>
+                                        <select class="form-control select-arrow" ng-model="currentOrganization.from" required>
+                                            <option ng-show="currentOrganization.from == ''" value="">Select Year</option>
                                             <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="side-panel m-top4">
                                     <div class="form-group count">
-                                        <select class="form-control select-arrow" ng-model="talentData.currentOrganization.to" required>
-                                            <option ng-show="talentData.currentOrganization.to == ''" value="">Select Year</option>
+                                        <select class="form-control select-arrow" ng-model="currentOrganization.to" required>
+                                            <option ng-show="currentOrganization.to == ''" value="">Select Year</option>
                                             <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
                                     </div>
@@ -115,6 +115,10 @@
                                 <div class="cls"></div>
                                 <div class="remove-profile-text" ng-show="$index != 0" ng-click="removeIndexFromArr(talentData.education, $index);">Remove</div>
                             </div>
+                            <div class="cls"></div>
+                            <button type="button" class="btn create-profile-add-bttn" ng-click="addEducation();">
+                                Add More
+                            </button>
                         </div>
                         <div class="top-concepts-panel">
                             <div class="top-concept-right-div">
@@ -125,7 +129,7 @@
                                     <i class="fa fa-close" ng-click="removeIndexFromArr(talentData.topConcepts, $index);"></i>
                                     <input type="text" class="form-control top-concept-right-input-div" id="talent-skill-percent" placeholder="%" ng-model="concept.percentage" ng-change="numberonly(concept, 'percentage');" required>
                                 </div>
-                                <button type="" class="btn top-cocep-add-bttn" ng-click="addSkill()">Add More</button>
+                                <button type="button" class="btn top-cocep-add-bttn" ng-click="addSkill()">Add More</button>
                             </div>
                         </div>
                         <div class="cls"></div>
@@ -138,7 +142,7 @@
             </div>
         </div>
     </div>
-    <div class="main-success-box" id="nameSuccess" ng-show="notification.show">
-        <span><strong>Success!</strong> [[notification.message]]</span>
+    <div class="" ng-class="{'pro-success-box': notification.status == 'Success', 'pro-error-box': notification.status != 'Success'}" id="nameSuccess" ng-show="notification.show">
+        <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
     </div>
 </div>

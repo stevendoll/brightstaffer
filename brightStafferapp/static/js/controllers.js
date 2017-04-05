@@ -1618,14 +1618,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     /* create talent code */
     $scope.notification = {
         show: false
+        , status: ''
         , message: ''
     };
     $scope.showNotification = function (success, message) {
         $scope.notification.show = true;
+        $scope.notification.status = success ? 'Success' : 'Error';
         $scope.notification.message = message;
-        $timeout(function () {
-            $scope.notification.show = false;
-        }, 3000);
+//        $timeout(function () {
+//            $scope.notification.show = false;
+//        }, 3000);
     }
     var d = new Date().getFullYear();
     $scope.yearArr = [];
@@ -1635,11 +1637,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.talentData = {};
     $scope.initTalenData = function () {
         $scope.talentData = {
-            currentOrganization: {
+            currentOrganization: [{
                 name: ''
                 , from: ''
                 , to: ''
-            }
+            }]
             , education: [{
                 name: ''
                 , from: ''
@@ -1649,8 +1651,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         };
     }
     $scope.initTalenData();
-    $scope.addPastOrganization = function () {
-        $scope.talentData.pastOrganization.push({
+    $scope.addEducation = function () {
+        $scope.talentData.education.push({
             name: ''
             , from: ''
             , to: ''
@@ -1670,7 +1672,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 $scope.initTalenData();
                 $scope.showNotification(true, 'Talent profile has been successfully created.');
             } else {
-                $scope.showNotification(true, response.errorstring);
+                $scope.showNotification(false, response.errorstring);
             }
         });
     }

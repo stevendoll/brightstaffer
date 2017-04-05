@@ -2566,6 +2566,55 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     margin-top: 7px !important;
 }
 
+.pro-success-box {
+    height: 50px;
+    border-radius: 2px;
+    background-color: rgba(223, 240, 216, 0.9);
+    border: solid 1px #d6e9c6;
+    margin: 0 auto;
+    padding: 13px 30px;
+    width: auto;
+    float: left;
+    position: absolute;
+    top: 43px;
+    left: 0;
+    z-index: 9999;
+    right: 0;
+    text-align: center;
+}
+
+.pro-success-box span {
+    font-family: 'open_sansregular';
+    font-size: 14px;
+    text-align: left;
+    color: #3c763d;
+}
+
+.pro-error-box {
+    height: 50px;
+    border-radius: 2px;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    margin: 0 auto;
+    padding: 13px 30px;
+    width: auto;
+    float: left;
+    position: absolute;
+    top: 43px;
+    left: 0;
+    z-index: 9999;
+    right: 0;
+    text-align: center;
+}
+
+.pro-error-box span {
+    font-family: 'open_sansregular';
+    font-size: 14px;
+    text-align: left;
+    color: #a94442;
+}
+
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
         display: block;
