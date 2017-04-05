@@ -2616,6 +2616,21 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   width: 60% !important;
 }
 
+.current-tab {
+    width: 48%;
+    float: left;
+    margin-right: 10px;
+}
+
+.mtop-minus4 {
+        margin-top: -4px;
+}
+
+.current-tab1 {
+    width: 48%;
+    float: left;
+}
+
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
         display: block;
