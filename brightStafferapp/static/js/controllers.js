@@ -1090,12 +1090,18 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
+
+
 
 
 
@@ -1154,12 +1160,18 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
+
+
 
 
 
@@ -1669,12 +1681,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         arr.splice(index, 1);
     }
 
-    $scope.createTalent = function (data) {
+    $scope.createTalent = function (data, onEdit) {
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
-                $scope.initTalenData();
-                $scope.showNotification(true, 'Talent profile has been successfully created.');
+                if (onEdit) {
+                    $('#edit-profile').modal('hide');
+                    $scope.showNotification(true, 'Talent profile has been updated successfully.');
+                    $rootScope.getCandidateData();
+                } else {
+                    $scope.initTalenData();
+                    $scope.showNotification(true, 'Talent profile has been created successfully.');
+                }
             } else {
+                if (onEdit) {
+                    $('#edit-profile').modal('hide');
+                }
                 $scope.showNotification(false, response.errorstring);
             }
         });
@@ -2904,11 +2925,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
         //        return arr;
     }
-    
-    $scope.updateTalent = function(data){
-        
+
+    $scope.updateTalent = function (data) {
+
     }
-    
+
     $scope.openEditProfileForm = function (data) {
         // $scope.talentEditableData = talent;
         var talent = angular.copy(data);

@@ -72,7 +72,7 @@
                             <div class="analysis-panel">
                                 <div class="col-xs-12 padding-zero">
                                     <div class="analyzed-div">Analyzed [[talentDetails.create_date | dateFormat]]</div>
-                                    <div class="edit-update-link" style="cursor:default;">Edit/Update</div>
+<!--                                    <div class="edit-update-link" style="cursor:default;" ng-click="openEditProfileForm(talentDetails)">Edit/Update</div>-->
                                 </div>
                                 <div ng-repeat="company in talentDetails.talent_company | limitTo: 2">
                                     <div ng-if="$index == 0">
@@ -98,7 +98,7 @@
                                     <div class="right-div search-detail-edu">[[talentDetails.talent_education[0].education | capitalizeAll ]] [[talentDetails.talent_education[0].start_date | yearFormat]] - [[talentDetails.talent_education[0].end_date | yearFormat]] </div>
                                 </div>
                                 <div class="col-xs-12">
-                                    <div class="talent-analysis-concept-panel width100">
+                                    <div class="talent-analysis-concept-panel">
                                         <div class="top-concept-text">Top Concepts <span data-toggle="modal" ng-show="talentDetails.talent_concepts.length > 6" ng-click="allConcepts(talentDetails.talent_concepts)">All Concepts</span></div>
                                         <div class="talent-progress" ng-repeat="concepts in talentDetails.talent_concepts | limitTo: 6">
                                             <div class="progress">

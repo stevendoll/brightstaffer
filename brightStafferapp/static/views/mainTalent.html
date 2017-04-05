@@ -1,14 +1,123 @@
-<div id="wrapper" ng-controller="talentCtrl as tl" >
+<div id="wrapper" ng-controller="talentCtrl as tl">
     <div ng-include="'static/views/common/nav-side.html'"></div>
 
     <div id="page-wrapper" class="gray-bg">
 
         <div ng-include="'static/views/common/nav-top.html'"></div>
 
-      <div ui-view></div>
+        <div ui-view></div>
 
     </div>
-   <div ng-include="'static/views/common/smallChat.html'"></div>
+    <div ng-include="'static/views/common/smallChat.html'"></div>
+    <!-- edit-profile-Modal-starts -->
+    <div class="modal fade" id="edit-profile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog add-talent-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body roles-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                    <div class="edit-profile-screen">
+                        <div class="past-roles">Edit Details</div>
+                        <form name="editTalentForm" ng-submit="editTalentForm.$valid && createTalent(talentEditableData, true);">
+                            <div class="col-xs-12 padding-zero">
+                                <div class="edit-rectangle-left-div">
+                                    <div class="form-group">
+                                        <input type="" class="form-control edit-rectangle-input" id="" placeholder="First Name" ng-model="talentEditableData.firstName" required/>
+                                    </div>
+                                </div>
+                                <div class="edit-rectangle-left-div">
+                                    <div class="form-group">
+                                        <input type="" class="form-control edit-rectangle-input" id="" placeholder="Last Name" ng-model="talentEditableData.lastName" required/>
+                                    </div>
+                                </div>
+                                <div class="edit-rectangle-full-div">
+                                    <div class="form-group">
+                                        <input type="" class="form-control edit-rectangle-input" id="" placeholder="Designation" ng-model="talentEditableData.currentOrganization[0].JobTitle">
+                                    </div>
+                                </div>
+                                <div class="cls"></div>
+                                <div class="edit-rectangle-left-div">
+                                    <div class="form-group count">
+                                        <input type="" class="form-control edit-rectangle-input" id="" placeholder="City" ng-model="talentEditableData.city">
+                                    </div>
+                                </div>
+                                <div class="edit-rectangle-left-div">
+                                    <div class="form-group count">
+                                        <input type="" class="form-control edit-rectangle-input" id="" placeholder="Country" ng-model="talentEditableData.country">
+                                    </div>
+                                </div>
+                                <div class="cls"></div>
+                                <div class="edit-rectangle-full-div">
+                                    <div class="form-group">
+                                        <input type="" class="form-control edit-rectangle-input" id="" placeholder="Industry Focus" ng-model="talentEditableData.industryFocus">
+                                    </div>
+                                </div>
+                                <div class="cls"></div>
+                                <div class="modal-edit-profile-hd">Current</div>
+                                <div class="edit-rectangle-full-div">
+                                    <div class="form-group">
+                                        <input type="" class="form-control edit-rectangle-input" id="" placeholder="Organization name" ng-model="talentEditableData.currentOrganization[0].name">
+                                    </div>
+                                </div>
+                                <div class="cls"></div>
+                                <div class="edit-rectangle-left-div">
+                                    <div class="form-group count">
+                                        <select class="form-control" ng-model="talentEditableData.currentOrganization[0].from">
+                                            <option ng-show="talentEditableData.currentOrganization[0].from == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="edit-rectangle-left-div">
+                                    <div class="form-group count">
+                                        <select class="form-control" ng-model="talentEditableData.currentOrganization[0].to">
+                                            <option ng-show="talentEditableData.currentOrganization[0].to == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="cls"></div>
+                                <div class="modal-edit-profile-hd">Education</div>
+                                <div ng-repeat="education in talentEditableData.education">
+                                    <div class="edit-rectangle-full-div">
+                                        <div class="form-group">
+                                            <input type="" class="form-control edit-rectangle-input" id="" placeholder="Education" ng-model="education.name">
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                    <div class="edit-rectangle-left-div">
+                                        <div class="form-group count">
+                                            <select class="form-control" ng-model="education.from">
+                                                <option ng-show="education.from == ''" value="">Select Year</option>
+                                                <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="edit-rectangle-left-div">
+                                        <div class="form-group count">
+                                            <select class="form-control" ng-model="education.to">
+                                                <option ng-show="education.to == ''" value="">Select Year</option>
+                                                <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="edit-rectangle-full-div">
+                                    <div class="form-group">
+                                        <label for="" class="modal-edit-profile-hd">Linkedin URL</label>
+                                        <input type="text" class="form-control" id="" placeholder="" ng-model="talentEditableData.linkedinProfileUrl" />
+                                    </div>
+                                </div>
+                                <div class="cls"></div>
+                                <button type="submit" class="btn update-profile-add-bttn">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="cls"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- edit-profile-Modal-ends -->
 </div>
 <!-- Modal add talent popup file -->
- <div ng-include="'static/views/addTalent.html'"></div>
+<div ng-include="'static/views/addTalent.html'"></div>
