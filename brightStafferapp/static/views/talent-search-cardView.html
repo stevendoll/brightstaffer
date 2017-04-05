@@ -57,9 +57,9 @@
                         <div star-rating class="star-right-side" rating-value="rating" max="5"></div>
                     </div>
                     <div ng-show="talent.talent_stages.length">
-                        <div class="schdule-list">[[talent.talent_stages[0].stage | capitalize]]</div>
-                        <div class="schdule-list-date">[[talent.talent_stages[0].date_created | dateFormat]]</div>
-                        <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_stages[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
+                        <div class="schdule-list">[[talent.talent_stages[talent.talent_stages.length-1].stage | capitalize]]</div>
+                        <div class="schdule-list-date">[[talent.talent_stages[talent.talent_stages.length-1].date_created | dateFormat]]</div>
+                        <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_stages[talent.talent_stages.length-1].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
                     </div>
                     <div ng-show="!talent.talent_stages.length">
                         <div class="schdule-list-date">[[talent.create_date | dateFormat]]</div>
