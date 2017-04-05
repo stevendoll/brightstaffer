@@ -9,13 +9,13 @@
                             <div class="left-section">
                                 <div class="form-group">
                                     <label for="">First Name</label>
-                                    <input type="text" class="form-control" id="" placeholder="" ng-model="talentData.firstName" required/>
+                                    <input name="fName" type="text" class="form-control" id="" placeholder="" ng-model="talentData.firstName" required/>
                                 </div>
                             </div>
                             <div class="right-section">
                                 <div class="form-group">
                                     <label for="">Last Name</label>
-                                    <input type="text" class="form-control" id="" placeholder="" ng-model="talentData.lastName" required/>
+                                    <input name="lName" type="text" class="form-control" id="" placeholder="" ng-model="talentData.lastName" required/>
                                 </div>
                             </div>
                         </div>
@@ -39,23 +39,16 @@
                                 <div class="side-panel m-top4">
                                     <div class="form-group count">
                                         <select class="form-control select-arrow" ng-model="talentData.currentOrganization.from" required>
-                                            <option>2015</option>
-                                            <option>2016</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
-                                            <option ng-repeat="year in yearArr" value="year">[[year]]</option>
+                                            <option ng-show="talentData.currentOrganization.from == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="side-panel m-top4">
                                     <div class="form-group count">
                                         <select class="form-control select-arrow" ng-model="talentData.currentOrganization.to" required>
-                                            <option>2015</option>
-                                            <option>2016</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
+                                            <option ng-show="talentData.currentOrganization.to == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
                                     </div>
                                 </div>
@@ -73,22 +66,16 @@
                                 <div class="side-panel m-top4">
                                     <div class="form-group count">
                                         <select class="form-control select-arrow" ng-model="pastOrganization.from" required>
-                                            <option>2015</option>
-                                            <option>2016</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
+                                            <option ng-show="pastOrganization.from == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="side-panel m-top4">
                                     <div class="form-group count">
                                         <select class="form-control select-arrow" ng-model="pastOrganization.to" required>
-                                            <option>2015</option>
-                                            <option>2016</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
+                                            <option ng-show="pastOrganization.to == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
                                     </div>
                                 </div>
@@ -110,22 +97,16 @@
                                 <div class="side-panel m-top4">
                                     <div class="form-group count">
                                         <select class="form-control select-arrow" ng-model="education.from" required>
-                                            <option>2015</option>
-                                            <option>2016</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
+                                            <option ng-show="education.from == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="side-panel m-top4">
                                     <div class="form-group count">
                                         <select class="form-control select-arrow" ng-model="education.to" required>
-                                            <option>2015</option>
-                                            <option>2016</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
-                                            <option>2017</option>
+                                            <option ng-show="education.to == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
                                     </div>
                                 </div>

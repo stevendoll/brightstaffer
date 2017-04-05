@@ -423,24 +423,24 @@ class TalentAdd(View):
 
         linkedin_validation=Talent.objects.filter(linkedin_url=profile_data['linkedinProfileUrl'])
         if linkedin_validation:
-            return util.returnErrorShorcut(404, 'Talent is already exist in the system')
+            return util.returnErrorShorcut(404, 'Linkedin URL is exist in the system')
         else:
             talent_obj = Talent.objects.create(talent_name=profile_data['firstName'] + profile_data['lastName'],
                                                recruiter=user,
                                                status='New', current_location='-',
                                                linkedin_url=profile_data['linkedinProfileUrl'],
-                                               create_date=datetime.now())
+                                               create_date=datetime.datetime.now())
             talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                               is_active=True)
-            # if talent_obj:
+            if talent_obj:
             #     if 'topConcepts' in profile_data:
             #         for skill in topConcepts['skills']:
             #             concept, created = Concept.objects.get_or_create(concept=skill['name'])
             #             tpconcept, created = TalentConcept.objects.get_or_create(
             #                 talent=talent_obj, concept=concept,
             #                 match=str(round(skill['score'], 2)))
-            context['message'] = 'success'
-            return util.returnSuccessShorcut(context)
+                context['message'] = 'success'
+                return util.returnSuccessShorcut(context)
 
 
 
