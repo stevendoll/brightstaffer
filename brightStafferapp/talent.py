@@ -1,5 +1,6 @@
 from brightStafferapp.models import Talent, User, Projects, TalentProject, TalentEmail, TalentContact, \
-    TalentStage, TalentRecruiter, TalentConcept, ProjectConcept
+    TalentStage, TalentRecruiter, TalentConcept, ProjectConcept,Concept, Education, TalentEducation, Company,\
+    TalentCompany
 from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
@@ -390,7 +391,6 @@ class TalentAllStageDetailsAPI(View):
 
 
 class TalentUpdateRank(View):
-
     def get(self, request):
         context = dict()
         talent = request.GET['talent_id']
@@ -423,7 +423,7 @@ class TalentAdd(View):
         if linkedin_validation:
             return util.returnErrorShorcut(400, 'Linkedin URL is exist in the system')
         else:
-            talent_obj = Talent.objects.create(talent_name=profile_data['firstName'] + profile_data['lastName'],
+            talent_obj = Talent.objects.create(talent_name=profile_data['firstName']+ ' ' + profile_data['lastName'],
                                                recruiter=user,
                                                status='New', current_location='-',
                                                linkedin_url=profile_data['linkedinProfileUrl'],
@@ -431,19 +431,48 @@ class TalentAdd(View):
             talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                               is_active=True)
             if talent_obj:
-            #     if 'topConcepts' in profile_data:
-            #         for skill in topConcepts['skills']:
-            #             concept, created = Concept.objects.get_or_create(concept=skill['name'])
-            #             tpconcept, created = TalentConcept.objects.get_or_create(
-            #                 talent=talent_obj, concept=concept,
-            #                 match=str(round(skill['score'], 2)))
-                #context['message'] = 'Talent Added Successfully'
-                context['success'] = True
-                return util.returnSuccessShorcut(context)
+                if 'topConcepts' in profile_data:
+                     for skill in profile_data['topConcepts']:
+                         concept, created = Concept.objects.get_or_create(concept=skill['skill'])
+                         tpconcept, created = TalentConcept.objects.get_or_create(
+                             talent=talent_obj, concept=concept,
+                             match=skill['percentage'])
+
+            if "education" in profile_data:
+                for education in profile_data['education']:
+                    # save user education information
+                    org, created = Education.objects.get_or_create(name=education['name'])
+                    start_date, end_date = convert_to_start_end(education)
+                    if start_date and end_date:
+                        tporg, created = TalentEducation.objects.get_or_create(talent=talent_obj,
+                                                                                          education=org,
+                                                                                          start_date=start_date,
+                                                                                          end_date=end_date
+                                                                                          )
+
+            if 'currentOrganization' in profile_data:
+                for organization in profile_data['currentOrganization']:
+                    company, created = Company.objects.get_or_create(company_name=organization['name'])
+                    start_date, end_date = convert_to_start_end(organization)
+                    if start_date and end_date:
+                        is_current = True
+                        TalentCompany.objects.get_or_create(
+                            talent=talent_obj, company=company, is_current=is_current,
+                            start_date=start_date)
+            context['message'] = 'Talent Added Successfully'
+            context['success'] = True
+            return util.returnSuccessShorcut(context)
 
 
-
-
+def convert_to_start_end(education):
+    start_date = None
+    end_date = None
+    day = 1
+    month = 1
+    start_date = date(int(education['from']), month, day)
+    end_date = date(int(education['to']), month, day)
+    return start_date, end_date
+    
 class DeleteTalent(generics.ListCreateAPIView):
     queryset = Talent.objects.all()
     serializer_class = TalentSerializer
