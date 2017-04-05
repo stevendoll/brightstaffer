@@ -2615,6 +2615,11 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     color: #a94442;
 }
 
+
+.width60 {
+  width: 60% !important;
+}
+
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
         display: block;
@@ -14708,10 +14713,8 @@ a.sbSelector:hover {
     height: 40px;
 }
 
-.edit-rectangle-left-div.form-group.sbHolder a.sbSelector:link,
-a.sbSelector:visited,
-a.sbSelector:hover {
-    margin: 5px 0 0 2px;
+.edit-rectangle-left-div.form-group.sbHolder a.sbSelector:link, a.sbSelector:visited, a.sbSelector:hover {
+  margin: 2px 0 0 2px;
 }
 
 .modal-edit-profile-hd {
