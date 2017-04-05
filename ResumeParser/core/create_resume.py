@@ -5,7 +5,7 @@ from sklearn.externals import joblib
 from ResumeParser.Ner.entities import get_entities
 from ResumeParser.Preprocessing.preprocess import raw_resume_to_data_tri_sentences
 from ResumeParser.conf.parameters import *
-from ResumeParser.trainer.Resume import extract_information_from_resume, Resume
+from ResumeParser.trainer.Resume import extract_information_from_resume, Resume, enhance_information
 
 
 def create_resume(talent_data):
@@ -13,6 +13,7 @@ def create_resume(talent_data):
 
     :return:
     """
+
     try:
         model = Word2Vec.load(model_file)
         classifier_model_treebased = joblib.load(classifier_model_file)
@@ -28,8 +29,9 @@ def create_resume(talent_data):
                                                  entities)
 
     except Exception as exp:
-        print (exp)
+        print(exp)
         resume = Resume(word_model='word2vec')
     finally:
         formated_resume = resume.get_templatized_resume()
+        enhance_information(talent_data, formated_resume)
     return formated_resume
