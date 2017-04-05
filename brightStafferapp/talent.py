@@ -426,16 +426,20 @@ class TalentAdd(View):
         if user:
             user = user[0]
         profile_data = json.loads(request.body.decode("utf-8"))
-        linkedin_validation = Talent.objects.filter(linkedin_url=profile_data['linkedinProfileUrl'])
-        talent_obj = None
-        if linkedin_validation:
-            return util.returnErrorShorcut(400, 'Linkedin URL is exist in the system')
+        if "id" not in profile_data:
+            linkedin_validation = Talent.objects.filter(linkedin_url=profile_data['linkedinProfileUrl'])
+            if linkedin_validation:
+                return util.returnErrorShorcut(400, 'Linkedin URL is exist in the system')
         else:
             if "id" in profile_data:
-                Talent.objects.get(id=profile_data['id']).update(
-                    talent_name=profile_data['firstName'] + ' ' + profile_data['lastName'],
-                    recruiter=user, status='New', current_location=profile_data['city'] + ',' + profile_data['country'],
-                    linkedin_url=profile_data['linkedinProfileUrl'], industry_focus=profile_data['industryFocus'])
+                talent_obj = Talent.objects.filter(id=profile_data['id'])
+                if talent_obj:
+                    talent_obj.update(talent_name=profile_data['firstName'] + ' ' + profile_data['lastName'],
+                                      recruiter=user, status='New',
+                                      current_location=profile_data['city'] + ',' + profile_data['country'],
+                                      linkedin_url=profile_data['linkedinProfileUrl'],
+                                      industry_focus=profile_data['industryFocus'])
+                    talent_obj = talent_obj[0]
             else:
                 talent_obj = Talent.objects.create(
                     talent_name=profile_data['firstName'] + ' ' + profile_data['lastName'],
@@ -458,7 +462,7 @@ class TalentAdd(View):
                     start_date, end_date = convert_to_start_end(education)
                     if "id" in education:
                         # update information, check if id is valid or not
-                        TalentEducation.objects.get(id=education['id']).update(talent=talent_obj,
+                        TalentEducation.objects.filter(id=education['id']).update(talent=talent_obj,
                                                                                education=org,
                                                                                start_date=start_date,
                                                                                end_date=end_date
@@ -478,7 +482,7 @@ class TalentAdd(View):
                         talent_obj.designation = organization['JobTitle']
                         talent_obj.save()
                         # update information, check if id is valid or not
-                        TalentCompany.objects.get(id=organization['id']).update(talent=talent_obj,
+                        TalentCompany.objects.filter(id=organization['id']).update(talent=talent_obj,
                                                                                 company=company,
                                                                                 designation=organization['JobTitle'],
                                                                                 is_current=True,
