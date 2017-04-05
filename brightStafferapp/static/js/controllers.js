@@ -1600,6 +1600,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , active: ''
     };
     $rootScope.Filter = false;
+    /*edit talent details*/
+    $scope.talentEditData = {
+        talentDetails:{},
+        currentOrganization: {},
+        education: {},
+    };
 
     /* create talent code */
     var d = new Date().getFullYear();
@@ -2114,8 +2120,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
 
         if (talent.length > 0) {
-            $('#confirm').addClass('disabled');
-            $('#confirm').css('pointer-events', 'none');
+            //$('#confirm').addClass('disabled');
+            //$('#confirm').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
                 'talent': talent
@@ -2691,7 +2697,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if (!$scope.isFilterChecked) {
             $scope.isFilterChecked = true;
             $('.talent-search-icon').addClass('active');
-            $('.selectpicker').selectpicker();
+            //$('.selectpicker').selectpicker();
+            $('#projectSelect').multiselect({
+                 includeSelectAllOption: true,
+                 enableFiltering:true
+            });
             $("#rate_filter li.filled").removeClass('filled');
             $('#filterStage').change(function () {
                 var selectedValue = $('#filterStage :selected').text();

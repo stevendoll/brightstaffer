@@ -60,7 +60,7 @@
                         <div class="schdule-list-date">[[talent.talent_project[0].date_added | dateFormat]]</div>
                         <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_project[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
                     </div>
-                    <div ng-show="[[talent.talent_project.length == 0]]">
+                    <div ng-show="!talent.talent_project.length">
                         <div class="schdule-list-date">[[talent.create_date | dateFormat]]</div>
                         <div class="link-schedule"><span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
                     </div>
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="top-concept-panel">
+            <!--    <div class="top-concept-panel">
                     <div class="top-concept-text">Career History<span ng-click="allMetrics(talent.talent_company)" ng-show="talent.talent_company.length > 3">More</span></div>
                     <div class="talent-progress">
                         <div class="progress">
@@ -90,19 +90,7 @@
                         </div>
                     </div>
                     <div class="talent-progress" ng-repeat="career in talent.talent_company | limitTo: 3">
-                        <!--
-                        blank: [[(career.blank_gap/calcTotal(talent.talent_company)) * 100]]<br>
-                        exp: [[(career.years_of_experience/calcTotal(talent.talent_company)) * 100]]<br>
-                        gap: [[(career.career_gap/calcTotal(talent.talent_company)) * 100]]<br>
--->
                         <div class="progress">
-                            <!--
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[(career.years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
-                                <span class="text">[[career.company | capitalize]]</span>
-                                <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
-                            </div>
--->
-
                             <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((career.blank_gap/calcTotal(talent.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
                             </div>
 
@@ -116,28 +104,9 @@
                             </div>
 
 
-
-
-
-
-                            <!--
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-if="$index - 1 >= 0" style="width:[[(talent.talent_company[$index - 1].years_of_experience/calcTotal(talent.talent_company)) * 100]]%; background-color: #e4e4e4 !important;">
-                            </div>
-
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-if="career.career_gap" style="width:[[(career.career_gap/calcTotal(talent.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
-                            </div>
-
-                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[(career. years_of_experience/calcTotal(talent.talent_company)) * 100]]%;">
-
-                                <span class="text">[[career.company | capitalize]]</span>
-                                <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
-                            </div>
--->
-
-
                         </div>
                     </div>
-                    <div class="cls"></div>
+                    <div class="cls"></div>-->
                     <!--
                     <div class="indus-focus">Industry Focus</div>
                     <div class="talent-progress">
@@ -149,7 +118,7 @@
                         </div>
                     </div>
 -->
-                </div>
+                <!--</div>-->
                 <div class="top-concept-panel" ng-show="talent.talent_project.length">
                     <div class="top-concept-text">Project Matches</div>
                     <div class="circle-bg" ng-repeat="projects in talent.talent_project | limitTo: 3">
@@ -445,24 +414,12 @@
             <div class="cls"></div>
             <div class="edit-rectangle-left-div">
               <div class="form-group count">
-                <select class="form-control select-arrow">
-                  <option>New York</option>
-                  <option>New York</option>
-                  <option>New York</option>
-                  <option>New York</option>
-                  <option>New York</option>
-                </select>
+                 <input type="" class="form-control edit-rectangle-input" id="" placeholder="Country">
               </div>
             </div>
             <div class="edit-rectangle-left-div">
               <div class="form-group count">
-                <select class="form-control select-arrow">
-                  <option>USA</option>
-                  <option>USA</option>
-                  <option>USA</option>
-                  <option>USA</option>
-                  <option>USA</option>
-                </select>
+                <input type="" class="form-control edit-rectangle-input" id="" placeholder="Country">
               </div>
             </div>
             <div class="cls"></div>
@@ -502,7 +459,7 @@
               </div>
             </div>
             <div class="cls"></div>
-            <div class="modal-edit-profile-hd">Past</div>
+            <!--<div class="modal-edit-profile-hd">Past</div>
             <div class="edit-rectangle-full-div">
               <div class="form-group">
                 <input type="" class="form-control edit-rectangle-input" id="" placeholder="Software Architech/Full Stack Developer - Virtual CTO for Com">
@@ -530,7 +487,7 @@
                   <option>USA</option>
                 </select>
               </div>
-            </div>
+            </div>-->
             <div class="cls"></div>
             <div class="modal-edit-profile-hd">Education</div>
             <div class="edit-rectangle-full-div">
@@ -563,7 +520,8 @@
             </div>
             <div class="edit-rectangle-full-div">
               <div class="form-group">
-                <input type="" class="form-control edit-rectangle-input" id="" placeholder="Software Architech/Full Stack Developer - Virtual CTO for Com">
+                 <label for="" class="modal-edit-profile-hd">Linkedin URL</label>
+                  <input type="text" class="form-control" id="" placeholder="" ng-model="talentData.linkedinProfileUrl" />
               </div>
             </div>
             <div class="cls"></div>
