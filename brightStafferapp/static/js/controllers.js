@@ -1085,12 +1085,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
 
 
 
@@ -1139,12 +1141,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
 
 
 
@@ -1609,24 +1613,23 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     for (var i = 100; i >= 0; i--) {
         $scope.yearArr[i] = d - i;
     }
-    $scope.talentData = {
-        currentOrganization: {
-            name: ''
-            , from: ''
-            , to: ''
-        }
-        , pastOrganization: [{
-            name: ''
-            , from: ''
-            , to: ''
+    $scope.talentData = {};
+    $scope.initTalenData = function () {
+        $scope.talentData = {
+            currentOrganization: {
+                name: ''
+                , from: ''
+                , to: ''
+            }
+            , education: [{
+                name: ''
+                , from: ''
+                , to: ''
         }]
-        , education: [{
-            name: ''
-            , from: ''
-            , to: ''
-        }]
-        , topConcepts: [{}]
-    };
+            , topConcepts: [{}]
+        };
+    }
+    $scope.initTalenData();
     $scope.addPastOrganization = function () {
         $scope.talentData.pastOrganization.push({
             name: ''
@@ -1644,10 +1647,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.createTalent = function (data) {
             createTalentFormService.createTalent(data, function (response) {
-                if (response.status) {
-
+                if (response.success) {
+                    $scope.initTalenData();
                 } else {
-
+                    
                 }
             });
         }
