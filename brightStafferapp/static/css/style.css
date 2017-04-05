@@ -14751,5 +14751,7 @@ a.sbSelector:hover {
     margin-top: 10px;
 }
 
-
+.width100 {
+    width: 100%;
+}
 /*create-profile-css-ends*/
