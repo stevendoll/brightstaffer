@@ -49,7 +49,7 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Stage</label>
-                        <select class="form-control select-arrow" id="filterStage" name="stage" data-ng-model="filterStage">
+                        <select class="form-control select-arrow" id="filterStage" name="stage" data-ng-model="filterStage" drop-down>
                           <option value="" style="display: none;">Select Stage</option>
                           <option>Contacted</option>
                           <option>Replied</option>
@@ -68,13 +68,13 @@
                       <div class="form-group">
                         <label for="" class="filter-label-text">Project Name</label>
 
-                          <!--<select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project" >
+                          <select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project">
                             <option value="" data-tokens="" style="display: none;">Select Project</option>
                             <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
-                          </select>-->
-                          <select id="projectSelect" name="project" multiple="multiple">
-                            <option ng-repeat="option in projectListView" value="[[option.name]]">[[option.name]]</option>
                           </select>
+                          <!--<select id="abc" name="project" multiple="multiple">
+                            <option ng-repeat="option in projectListView" value="[[option.name]]">[[option.name]]</option>
+                          </select>-->
 
                       </div>
                     </div>

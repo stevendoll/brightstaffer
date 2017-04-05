@@ -2557,10 +2557,6 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     outline-offset: -2px;
 }
 
-.bootstrap-select.btn-group .dropdown-menu li.filter {
-    display: none;
-}
-
 .multiselect-container>li>a>label>input[type=checkbox] {
     display: block !important;
     margin-top: 7px !important;
