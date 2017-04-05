@@ -475,7 +475,13 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                     $rootScope.showLoader(false);
                 }
                 return response.data;
-            });
+            }).error(function (response){
+                $rootScope.apiHiCounter --;
+                if($rootScope.apiHiCounter <=0){
+                    $rootScope.apiHiCounter = 0;
+                    $rootScope.showLoader(false);
+                }
+            });;
         }
 
 
