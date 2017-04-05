@@ -423,7 +423,7 @@ class TalentAdd(View):
 
         linkedin_validation=Talent.objects.filter(linkedin_url=profile_data['linkedinProfileUrl'])
         if linkedin_validation:
-            return util.returnErrorShorcut(404, 'Talent is already exist in the system')
+            return util.returnErrorShorcut(404, 'Linkedin URL is exist in the system')
         else:
             talent_obj = Talent.objects.create(talent_name=profile_data['firstName'] + profile_data['lastName'],
                                                recruiter=user,
