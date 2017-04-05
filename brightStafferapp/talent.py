@@ -115,7 +115,7 @@ class TalentContactAPI(View):
         contact = request.POST['contact']
         talent_objs = Talent.objects.filter(id=talent_id)
         if not talent_objs:
-            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+            return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         talent_obj = talent_objs[0]
 
         if 'updated_contact' in request.POST:
@@ -141,7 +141,7 @@ class TalentContactAPI(View):
         talent_id = request.GET['talent_id']
         talent_objs = Talent.objects.filter(id=talent_id)
         if not talent_objs:
-            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+            return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         talent_obj = talent_objs[0]
         if contact:
             is_deleted = TalentContact.objects.filter(talent=talent_obj, contact=contact).delete()[0]
@@ -149,7 +149,7 @@ class TalentContactAPI(View):
                 return util.returnErrorShorcut(400, 'No entry found or already deleted')
             return util.returnSuccessShorcut(context)
         else:
-            return util.returnErrorShorcut(404, 'Contact not found')
+            return util.returnErrorShorcut(400, 'Contact not found')
 
 
 class TalentEmailAPI(View):
@@ -164,7 +164,7 @@ class TalentEmailAPI(View):
         email = request.POST['email']
         talent_objs = Talent.objects.filter(id=talent_id)
         if not talent_objs:
-            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+            return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         talent_obj = talent_objs[0]
 
         if 'updated_email' in request.POST:
@@ -196,7 +196,7 @@ class TalentEmailAPI(View):
         talent_id = request.GET['talent_id']
         talent_objs = Talent.objects.filter(id=talent_id)
         if not talent_objs:
-            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+            return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         talent_obj = talent_objs[0]
         if email:
             is_deleted = TalentEmail.objects.filter(talent=talent_obj, email=email).delete()[0]
@@ -204,7 +204,7 @@ class TalentEmailAPI(View):
                 return util.returnErrorShorcut(400, 'No entry found or already deleted')
             return util.returnSuccessShorcut(context)
         else:
-            return util.returnErrorShorcut(404, 'Email not found')
+            return util.returnErrorShorcut(400, 'Email not found')
 
     def validate_email(self, email):
         users = User.objects.filter(Q(email=email) | Q(username=email))
@@ -227,14 +227,14 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
         # get projects instance to verify if project with project_id and recruiter exists or not
         projects = Projects.objects.filter(id=project_id, recruiter__username=recruiter)
         if not projects:
-            return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project_id))
+            return util.returnErrorShorcut(400, 'Project with id {} doesn\'t exist in database.'.format(project_id))
         project = projects[0]
         # get list of talent ids from POST request
         talent_id_list = self.request.query_params.get('talent_id[]').split(',')
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
             if not talent_objs:
-                return util.returnErrorShorcut(403, 'Talent with id {} doesn\'t exist in database.'.format(talent_id))
+                return util.returnErrorShorcut(400, 'Talent with id {} doesn\'t exist in database.'.format(talent_id))
             talent_obj = talent_objs[0]
             tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
 
@@ -285,11 +285,11 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         date = datetime.strptime(date, "%d/%m/%Y")
         projects = Projects.objects.filter(id=project)
         if not projects:
-            return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project))
+            return util.returnErrorShorcut(400, 'Project with id {} doesn\'t exist in database.'.format(project))
         project = projects[0]
         talent_objs = Talent.objects.filter(id=talent)
         if not talent_objs:
-            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
+            return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent))
         talent_obj = talent_objs[0]
         tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage,
                                                             details=details, notes=notes, date_created=date)
@@ -303,7 +303,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['create_date'] = tp_obj.get_date_created
             return util.returnSuccessShorcut(context)
         else:
-            return util.returnErrorShorcut(403, 'Talent stage and info is exist in database, '
+            return util.returnErrorShorcut(400, 'Talent stage and info is exist in database, '
                                                 'Please create different stage')
 
 
@@ -325,19 +325,19 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         date = datetime.strptime(date, "%d/%m/%Y")
         projects = Projects.objects.filter(id=project)
         if not projects:
-            return util.returnErrorShorcut(403, 'Project with id {} doesn\'t exist in database.'.format(project))
+            return util.returnErrorShorcut(400, 'Project with id {} doesn\'t exist in database.'.format(project))
         project = projects[0]
         talent_objs = Talent.objects.filter(id=talent)
         if not talent_objs:
-            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
+            return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent))
         talent_obj = talent_objs[0]
         stageid = TalentStage.objects.filter(id=stage_id)
         if not stageid:
-            return util.returnErrorShorcut(404, 'Stage id {} is not exist in database'.format(stage_id))
+            return util.returnErrorShorcut(400, 'Stage id {} is not exist in database'.format(stage_id))
         created = TalentStage.objects.filter(talent=talent_obj, project=project, stage=stage, details=details,
                                              notes=notes,date_created=date).exists()
         if created:
-            return util.returnErrorShorcut(403,
+            return util.returnErrorShorcut(400,
                                            'Talent stage and info is exist in database,Please update the stage')
         else:
             updated = TalentStage.objects.filter(id=str(stage_id)).update(stage=stage, details=details,
@@ -358,7 +358,7 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
         id = request.GET['stage_id']
         talent_id = TalentStage.objects.filter(id=id)
         if not talent_id:
-            return util.returnErrorShorcut(403, 'Stage id is not exist in the system')
+            return util.returnErrorShorcut(400, 'Stage id is not exist in the system')
         TalentStage.objects.filter(id=id).delete()
         return util.returnSuccessShorcut(context)
 
@@ -371,7 +371,7 @@ class TalentAllStageDetailsAPI(View):
         talent_id = request.GET['talent_id']
         talent_obj = Talent.objects.filter(id=talent_id)
         if not talent_obj:
-            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent_id))
+            return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         queryset = TalentStage.objects.filter(talent=talent_obj)
         talent_stage = []
         for obj in queryset:
@@ -396,7 +396,7 @@ class TalentUpdateRank(View):
         talent = request.GET['talent_id']
         talent_objs = Talent.objects.filter(id=talent)
         if not talent_objs:
-            return util.returnErrorShorcut(404, 'Talent with id {} not found'.format(talent))
+            return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent))
 
         talent = Talent.objects.filter(id=talent)
         if talent:
@@ -414,16 +414,14 @@ class TalentAdd(View):
 
     def post(self,request):
         context = dict()
-        print (request)
         recruiter = self.request.META.get('HTTP_RECRUITER' '')
         user = User.objects.filter(username=recruiter)[0]
         token = self.request.META.get('HTTP_TOKEN' '')
         profile_data = json.loads(request.body.decode("utf-8"))
         print (profile_data)
-
         linkedin_validation=Talent.objects.filter(linkedin_url=profile_data['linkedinProfileUrl'])
         if linkedin_validation:
-            return util.returnErrorShorcut(404, 'Linkedin URL is exist in the system')
+            return util.returnErrorShorcut(400, 'Linkedin URL is exist in the system')
         else:
             talent_obj = Talent.objects.create(talent_name=profile_data['firstName'] + profile_data['lastName'],
                                                recruiter=user,
@@ -439,7 +437,8 @@ class TalentAdd(View):
             #             tpconcept, created = TalentConcept.objects.get_or_create(
             #                 talent=talent_obj, concept=concept,
             #                 match=str(round(skill['score'], 2)))
-                context['message'] = 'success'
+                #context['message'] = 'Talent Added Successfully'
+                context['success'] = True
                 return util.returnSuccessShorcut(context)
 
 
@@ -458,7 +457,7 @@ class DeleteTalent(generics.ListCreateAPIView):
         for talent_id in talent_id_list:
             talent_objs = Talent.objects.filter(id=talent_id)
             if not talent_objs:
-                return util.returnErrorShorcut(403, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
+                return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
             talent_id = talent_objs[0]
             to_delete = TalentRecruiter.objects.filter(talent=talent_id, recruiter__username=recruiter)
             if to_delete:
