@@ -298,7 +298,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list", "talent.create-profile"];
         if (allowedArray.indexOf(currentState) > -1) {
 
-            if (!onReload && currentState == "talent.talent-profile" || currentState == "talent.create-profile") {
+            if (!onReload && (currentState == "talent.talent-profile" || currentState == "talent.create-profile")) {
                 $state.go('talent.talent-search.talent-search-card');
             }
             $('#selectall').prop('checked', false);
@@ -1620,9 +1620,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.notification.show = true;
         $scope.notification.status = success ? 'Success' : 'Error';
         $scope.notification.message = message;
-//        $timeout(function () {
-//            $scope.notification.show = false;
-//        }, 3000);
+        $timeout(function () {
+            $scope.notification.show = false;
+        }, 3000);
     }
     var d = new Date().getFullYear();
     $scope.yearArr = [];
