@@ -1085,12 +1085,16 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
+
 
 
 
@@ -1139,12 +1143,16 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
+
 
 
 
@@ -1598,35 +1606,45 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $rootScope.Filter = false;
     /*edit talent details*/
     $scope.talentEditData = {
-        talentDetails:{},
-        currentOrganization: {},
-        education: {},
-    };
+        talentDetails: {}
+        , currentOrganization: {}
+        , education: {}
+    , };
 
     /* create talent code */
+    $scope.notification = {
+        show: false
+        , message: ''
+    };
+    $scope.showNotification = function (success, message) {
+        $scope.notification.show = true;
+        $scope.notification.message = message;
+        $timeout(function () {
+            $scope.notification.show = false;
+        }, 3000);
+    }
     var d = new Date().getFullYear();
     $scope.yearArr = [];
     for (var i = 100; i >= 0; i--) {
         $scope.yearArr[i] = d - i;
     }
-    $scope.talentData = {
-        currentOrganization: {
-            name: ''
-            , from: ''
-            , to: ''
-        }
-        , pastOrganization: [{
-            name: ''
-            , from: ''
-            , to: ''
+    $scope.talentData = {};
+    $scope.initTalenData = function () {
+        $scope.talentData = {
+            currentOrganization: {
+                name: ''
+                , from: ''
+                , to: ''
+            }
+            , education: [{
+                name: ''
+                , from: ''
+                , to: ''
         }]
-        , education: [{
-            name: ''
-            , from: ''
-            , to: ''
-        }]
-        , topConcepts: [{}]
-    };
+            , topConcepts: [{}]
+        };
+    }
+    $scope.initTalenData();
     $scope.addPastOrganization = function () {
         $scope.talentData.pastOrganization.push({
             name: ''
@@ -1643,15 +1661,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.createTalent = function (data) {
-            createTalentFormService.createTalent(data, function (response) {
-                if (response.status) {
-
-                } else {
-
-                }
-            });
-        }
-        /* create talent code ends */
+        createTalentFormService.createTalent(data, function (response) {
+            if (response.success) {
+//                    $scope.initTalenData();
+                $scope.showNotification(true, 'Talent profile has been successfully created.');
+            } else {
+                $scope.showNotification(true, response.errorstring);
+            }
+        });
+    }
+    /* create talent code ends */
 
     $scope.$watch('priceSlider.value', function (n, o) {
         $scope.filterValue.match = n + '%';
@@ -2696,8 +2715,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('.talent-search-icon').addClass('active');
             //$('.selectpicker').selectpicker();
             $('#projectSelect').multiselect({
-                 includeSelectAllOption: true,
-                 enableFiltering:true
+                includeSelectAllOption: true
+                , enableFiltering: true
             });
             $("#rate_filter li.filled").removeClass('filled');
             $('#filterStage').change(function () {
