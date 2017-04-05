@@ -429,18 +429,18 @@ class TalentAdd(View):
                                                recruiter=user,
                                                status='New', current_location='-',
                                                linkedin_url=profile_data['linkedinProfileUrl'],
-                                               create_date=datetime.now())
+                                               create_date=datetime.datetime.now())
             talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                               is_active=True)
-            # if talent_obj:
+            if talent_obj:
             #     if 'topConcepts' in profile_data:
             #         for skill in topConcepts['skills']:
             #             concept, created = Concept.objects.get_or_create(concept=skill['name'])
             #             tpconcept, created = TalentConcept.objects.get_or_create(
             #                 talent=talent_obj, concept=concept,
             #                 match=str(round(skill['score'], 2)))
-            context['message'] = 'success'
-            return util.returnSuccessShorcut(context)
+                context['message'] = 'success'
+                return util.returnSuccessShorcut(context)
 
 
 
