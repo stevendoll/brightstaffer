@@ -20,7 +20,10 @@ function appService($rootScope, $http) {
                 callback(response || {});
             }).error(function (error) {
                 $rootScope.showLoader(false);
-                callback(error || {});
+                callback(error || {
+                    status: false,
+                    message: 'Some problem occured.'
+                });
             });
         }
     }

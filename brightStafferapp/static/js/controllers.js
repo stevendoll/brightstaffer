@@ -295,7 +295,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     $rootScope.candidatePages = [];
     $scope.getSearchData = function (onReload) {
         var currentState = $state.current.name;
-        var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list","talent.create-profile"];
+        var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list", "talent.create-profile"];
         if (allowedArray.indexOf(currentState) > -1) {
 
             if (!onReload && currentState == "talent.talent-profile" || currentState == "talent.create-profile") {
@@ -306,9 +306,9 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
             $rootScope.filterReset();
 
             var requestObject = {
-               'keyword': $rootScope.search.searchKeywords || ''
-               , page: $rootScope.candidatePagination.page
-               , count: $rootScope.candidatePagination.count
+                'keyword': $rootScope.search.searchKeywords || ''
+                , page: $rootScope.candidatePagination.page
+                , count: $rootScope.candidatePagination.count
             };
             searchApis.talentSearch(requestObject).then(function (response) {
                 $rootScope.Filter = false;
@@ -1084,12 +1084,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
 
 
 
@@ -1136,12 +1138,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
 
 
 
@@ -1476,7 +1480,7 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 }
 
 function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore, createTalentFormService) {
-    
+
     $scope.priceSlider = {
         value: 0
         , options: {
@@ -1592,52 +1596,56 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , active: ''
     };
     $rootScope.Filter = false;
-    
+
     /* create talent code */
     var d = new Date().getFullYear();
     $scope.yearArr = [];
-    for(var i=100;i>=0;i--){
+    for (var i = 100; i >= 0; i--) {
         $scope.yearArr[i] = d - i;
     }
     $scope.talentData = {
         currentOrganization: {
-            name: '',
-            from: '',
-            to: ''
-        },
-        pastOrganization: [{
-            name: '',
-            from: '',
-            to: ''
-        }],
-        education: [{
-            name: '',
-            from: '',
-            to: ''
-        }],
-        topConcepts: [{}]
+            name: ''
+            , from: ''
+            , to: ''
+        }
+        , pastOrganization: [{
+            name: ''
+            , from: ''
+            , to: ''
+        }]
+        , education: [{
+            name: ''
+            , from: ''
+            , to: ''
+        }]
+        , topConcepts: [{}]
     };
-    $scope.addPastOrganization = function(){
+    $scope.addPastOrganization = function () {
         $scope.talentData.pastOrganization.push({
-            name: '',
-            from: '',
-            to: ''
+            name: ''
+            , from: ''
+            , to: ''
         });
     }
-    $scope.addSkill = function(){
+    $scope.addSkill = function () {
         $scope.talentData.topConcepts.push({});
     }
-    
-    $scope.removeIndexFromArr = function(arr, index){
+
+    $scope.removeIndexFromArr = function (arr, index) {
         arr.splice(index, 1);
     }
-    
-    $scope.createTalent = function(data){
-        createTalentFormService.createTalent(data, function(response){
-            console.log(response)
-        });
-    }
-    /* create talent code ends */
+
+    $scope.createTalent = function (data) {
+            createTalentFormService.createTalent(data, function (response) {
+                if (response.status) {
+
+                } else {
+
+                }
+            });
+        }
+        /* create talent code ends */
 
     $scope.$watch('priceSlider.value', function (n, o) {
         $scope.filterValue.match = n + '%';
@@ -2849,7 +2857,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        return arr;
     }
 
-     $scope.openEditProfileForm = function () {
+    $scope.openEditProfileForm = function () {
         $('#edit-profile').modal('show');
     }
 
@@ -2907,28 +2915,28 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
 function createTalentFormCtrl($scope, createTalentFormService) {
     $scope.talentData = {
-        currentOrganization: {},
-        pastOrganization: [{}],
-        education: [{}],
-        topConcepts: [{}]
+        currentOrganization: {}
+        , pastOrganization: [{}]
+        , education: [{}]
+        , topConcepts: [{}]
     };
-    
-    $scope.addPastOrganization = function(){
+
+    $scope.addPastOrganization = function () {
         $scope.talentData.pastOrganization.push({});
     }
-    $scope.addSkill = function(){
+    $scope.addSkill = function () {
         $scope.talentData.topConcepts.push({});
     }
-    
-    $scope.removeIndexFromArr = function(arr, index){
+
+    $scope.removeIndexFromArr = function (arr, index) {
         arr.splice(index, 1);
     }
-    
-    $scope.createTalent = function(data){
+
+    $scope.createTalent = function (data) {
         console.log(data)
-//        createTalentFormService.createTalent(data, function(response){
-//            console.log(response)
-//        });
+            //        createTalentFormService.createTalent(data, function(response){
+            //            console.log(response)
+            //        });
     }
 }
 
