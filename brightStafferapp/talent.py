@@ -548,8 +548,8 @@ class TalentSearch(generics.ListCreateAPIView):
         if recruiter_param:
             queryset = queryset.filter(recruiter__username=recruiter_param)
         if date_added:
-            date_added = datetime.date(int(date_added.split('/')[2]), int(date_added.split('/')[0]),
-                                       int(date_added.split('/')[1]))
+            date_added = datetime.date(int(date_added.split('/')[2]), int(date_added.split('/')[1]),
+                                       int(date_added.split('/')[0]))
             queryset = queryset.filter(create_date__range=(datetime.datetime.combine(date_added, datetime.time.min),
                                                            datetime.datetime.combine(date_added, datetime.time.max)))
         if ordering:
@@ -558,7 +558,7 @@ class TalentSearch(generics.ListCreateAPIView):
             if ordering == "desc":
                 queryset = queryset.order_by('-create_date')
         if is_active and is_active == "true":
-                queryset = queryset.order_by('-activation_date')
+                queryset = queryset.filter(status='Active').order_by('-activation_date')
         if is_active and is_active == "false":
             queryset = queryset.filter(status='InActive')
         else:
