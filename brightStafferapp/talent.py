@@ -418,7 +418,6 @@ class TalentAdd(View):
         user = User.objects.filter(username=recruiter)[0]
         token = self.request.META.get('HTTP_TOKEN' '')
         profile_data = json.loads(request.body.decode("utf-8"))
-        print (profile_data)
         linkedin_validation=Talent.objects.filter(linkedin_url=profile_data['linkedinProfileUrl'])
         if linkedin_validation:
             return util.returnErrorShorcut(400, 'Linkedin URL is exist in the system')
@@ -449,7 +448,6 @@ class TalentAdd(View):
                                                                                           start_date=start_date,
                                                                                           end_date=end_date
                                                                                           )
-
             if 'currentOrganization' in profile_data:
                 for organization in profile_data['currentOrganization']:
                     company, created = Company.objects.get_or_create(company_name=organization['name'])
