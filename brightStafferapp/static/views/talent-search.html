@@ -68,9 +68,12 @@
                       <div class="form-group">
                         <label for="" class="filter-label-text">Project Name</label>
 
-                          <select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project" >
+                          <!--<select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project" >
                             <option value="" data-tokens="" style="display: none;">Select Project</option>
                             <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
+                          </select>-->
+                          <select id="projectSelect" name="project" multiple="multiple">
+                            <option ng-repeat="option in projectListView" value="[[option.name]]">[[option.name]]</option>
                           </select>
 
                       </div>

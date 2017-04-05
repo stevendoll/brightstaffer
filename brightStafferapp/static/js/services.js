@@ -345,6 +345,8 @@ function talentApis($rootScope, $http, REQUEST_URL) {
         },
 
         deleteTalents: function (data) {
+              $rootScope.apiHiCounter ++;
+             $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'delete_talent/?talent=' + data.talent + '&recruiter=' + data.recruiter + '&is_active=' + data.is_active
                 , method: "GET", // or "get"
@@ -354,6 +356,11 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
+                 $rootScope.apiHiCounter --;
+                 if($rootScope.apiHiCounter <= 0 ){
+                     $rootScope.apiHiCounter = 0;
+                     $rootScope.showLoader(false);
+                 }
                 return response.data;
             });
 
@@ -446,6 +453,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
         },
 
         filterTalentData: function (data) {
+            $rootScope.apiHiCounter ++;
             $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'talent_search/?talent_company=' + data.company + '&rating=' + data.rating + '&project_match=' + data.project_match + '&recruiter=' + data.recruiter + '&concepts=' + data.concepts + '&projects=' + data.projects + '&stages=' + data.stages + '&last_contacted=' + data.contacted + '&date_added=' + data.date + '&term=' + data.term + '&ordering=' + data.ordering + '&is_active=' + data.active + '&page=' + data.page + '&count=' + data.count
@@ -458,7 +466,11 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
-                $rootScope.showLoader(false);
+                $rootScope.apiHiCounter --;
+                if($rootScope.apiHiCounter <=0){
+                    $rootScope.apiHiCounter = 0;
+                    $rootScope.showLoader(false);
+                }
                 return response.data;
             });
         }
