@@ -252,14 +252,24 @@ def talent_project_match(talent_obj,project):
     project_concept_count=ProjectConcept.objects.filter(project=project).values_list('concept__concept',flat=True).count()
     total_concept=talent_concept_count+project_concept_count
     count = 0
-    for t_concept in talent_concept_list:
-        for p_conecpt in project_concept_list:
-            ratio = fuzz.partial_ratio(t_concept, p_conecpt)
-            if ratio >= 50:
-                count += 1
-    # match = math.ceil(round((count/project_concept_count), 2))
-    match = round(count / project_concept_count * 100)
-    TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+    if talent_concept_count<=project_concept_count:
+        for t_concept in talent_concept_list:
+            for p_conecpt in project_concept_list:
+                ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
+                if ratio >= 95:
+                    count += 1
+        # match = math.ceil(round((count/project_concept_count), 2))
+        match = round(count / project_concept_count * 100)
+        TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+    else:
+        for t_concept in talent_concept_list:
+            for p_conecpt in project_concept_list:
+                ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower() )
+                if ratio >= 50:
+                    count += 1
+        # match = math.ceil(round((count/project_concept_count), 2))
+        match = round(count / talent_concept_count * 100)
+        TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
 
 
 # View Talent's Current stage for a single project and Add Talent's stage for a single project
