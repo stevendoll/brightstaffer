@@ -298,7 +298,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list", "talent.create-profile"];
         if (allowedArray.indexOf(currentState) > -1) {
 
-            if (!onReload && currentState == "talent.talent-profile" || currentState == "talent.create-profile") {
+            if (!onReload && (currentState == "talent.talent-profile" || currentState == "talent.create-profile")) {
                 $state.go('talent.talent-search.talent-search-card');
             }
             $('#selectall').prop('checked', false);
@@ -1609,19 +1609,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
     $rootScope.Filter = false;
     /*edit talent details*/
-    $scope.talentEditData = {
-        talentDetails: {}
-        , currentOrganization: {}
-        , education: {}
-    , };
 
     /* create talent code */
     $scope.notification = {
         show: false
+        , status: ''
         , message: ''
     };
     $scope.showNotification = function (success, message) {
         $scope.notification.show = true;
+        $scope.notification.status = success ? 'Success' : 'Error';
         $scope.notification.message = message;
         $timeout(function () {
             $scope.notification.show = false;
@@ -1635,11 +1632,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.talentData = {};
     $scope.initTalenData = function () {
         $scope.talentData = {
-            currentOrganization: {
+            currentOrganization: [{
                 name: ''
                 , from: ''
                 , to: ''
-            }
+            }]
             , education: [{
                 name: ''
                 , from: ''
@@ -1649,8 +1646,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         };
     }
     $scope.initTalenData();
-    $scope.addPastOrganization = function () {
-        $scope.talentData.pastOrganization.push({
+    $scope.addEducation = function () {
+        $scope.talentData.education.push({
             name: ''
             , from: ''
             , to: ''
@@ -1670,7 +1667,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 $scope.initTalenData();
                 $scope.showNotification(true, 'Talent profile has been successfully created.');
             } else {
-                $scope.showNotification(true, response.errorstring);
+                $scope.showNotification(false, response.errorstring);
             }
         });
     }
@@ -2727,11 +2724,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if (!$scope.isFilterChecked) {
             $scope.isFilterChecked = true;
             $('.talent-search-icon').addClass('active');
-            //$('.selectpicker').selectpicker();
-            $('#projectSelect').multiselect({
-                includeSelectAllOption: true
-                , enableFiltering: true
-            });
+            $('.selectpicker').selectpicker();
+            /*$('#projectSelect').multiselect({
+                 includeSelectAllOption: true,
+                 enableFiltering:true
+            });*/
             $("#rate_filter li.filled").removeClass('filled');
             $('#filterStage').change(function () {
                 var selectedValue = $('#filterStage :selected').text();
@@ -2900,7 +2897,33 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        return arr;
     }
 
-    $scope.openEditProfileForm = function () {
+    $scope.openEditProfileForm = function (talent) {
+       // $scope.talentEditableData = talent;
+       var talentName = talent.talent_name.split('');
+        $scope.talentEditableData ={
+            currentOrganization:[],
+            education:[],
+            linkedinProfileUrl:talent.linkedin_url,
+            industry_focus:talent.industry_focus,
+            location:talent.current_location,
+            designation:talent.designation ,
+            firstName:talentName[0],
+            lastName:talentName[1],
+            id:talent.id
+        };
+            if(talent.talent_company.length){
+                    var organisation = {};
+                    organisation.name = talent.talent_company[0].company;
+                    var date = new Date(talent.talent_company[0].start_date);
+                    organisation.from = date.getFullYear();
+                     var date = new Date(talent.talent_company[0].end_date);
+                    organisation.to = date.getFullYear();
+                    organisation.id = talent.talent_company[0].id;
+                    $scope.talentEditableData.currentOrganization.push(organisation);
+            }
+            if(talent.talent_company.length){
+                
+            }
         $('#edit-profile').modal('show');
     }
 

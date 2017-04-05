@@ -345,11 +345,11 @@ function dropDown($timeout) {
         restrict: 'A'
         , link: function (scope, element, attrs) {
             $timeout(function () {
-               // $(element).selectbox();
-               $(element).multiselect({
+                $(element).selectbox();
+               /*$(element).multiselect({
                  includeSelectAllOption: true,
                 // enableFiltering:true
-                });
+                });*/
             });
         }
     };
