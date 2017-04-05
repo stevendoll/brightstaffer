@@ -475,6 +475,8 @@ class TalentAdd(View):
                     company, created = Company.objects.get_or_create(company_name=organization['name'])
                     start_date, end_date = convert_to_start_end(organization)
                     if "id" in organization:
+                        talent_obj.designation = organization['JobTitle']
+                        talent_obj.save()
                         # update information, check if id is valid or not
                         TalentCompany.objects.get(id=organization['id']).update(talent=talent_obj,
                                                                                 company=company,
@@ -484,6 +486,8 @@ class TalentAdd(View):
                     else:
                         if start_date and end_date:
                             is_current = True
+                            talent_obj.designation = organization['JobTitle']
+                            talent_obj.save()
                             TalentCompany.objects.get_or_create(
                                 talent=talent_obj, company=company, designation=organization['JobTitle'],
                                 is_current=is_current,
