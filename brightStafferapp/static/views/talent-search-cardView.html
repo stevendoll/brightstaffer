@@ -56,14 +56,12 @@
                     <div class="col-md-12 padding-zero" ng-init="rating = [[talent.rating]]">
                         <div star-rating class="star-right-side" rating-value="rating" max="5"></div>
                     </div>
-                    <div ng-show="[[talent.talent_project.length > 0]]">
-                        <!--
-                        <div class="schdule-list">[[talent.talent_project[0].project_stage | capitalize]]</div>
--->
-                        <div class="schdule-list-date">[[talent.talent_project[0].date_added | dateFormat]]</div>
-                        <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_project[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
+                    <div ng-show="talent.talent_stages.length">
+                        <div class="schdule-list">[[talent.talent_stages[0].stage | capitalize]]</div>
+                        <div class="schdule-list-date">[[talent.talent_stages[0].date_created | dateFormat]]</div>
+                        <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_stages[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
                     </div>
-                    <div ng-show="!talent.talent_project.length">
+                    <div ng-show="!talent.talent_stages.length">
                         <div class="schdule-list-date">[[talent.create_date | dateFormat]]</div>
                         <div class="link-schedule"><span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
                     </div>
