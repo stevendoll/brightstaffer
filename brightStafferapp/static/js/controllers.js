@@ -1087,12 +1087,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
 
 
 
@@ -1145,12 +1147,14 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
 
 
 
@@ -1663,12 +1667,22 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.createTalent = function (data) {
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
-//                    $scope.initTalenData();
+                $scope.initTalenData();
                 $scope.showNotification(true, 'Talent profile has been successfully created.');
             } else {
                 $scope.showNotification(true, response.errorstring);
             }
         });
+    }
+
+    $scope.gotoState = function (state) {
+        $scope.initTalenData();
+        $rootScope.getCandidateData();
+        $state.go(state);
+    }
+    $scope.numberonly = function(obj, key){
+        if(typeof(obj[key]) == "string")
+            obj[key] = obj[key].replace(/\D+/g, '');
     }
     /* create talent code ends */
 
