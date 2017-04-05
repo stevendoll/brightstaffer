@@ -1088,12 +1088,16 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
+
 
 
 
@@ -1148,12 +1152,16 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
+
 
 
 
@@ -1677,11 +1685,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $rootScope.getCandidateData();
         $state.go(state);
     }
-    $scope.numberonly = function(obj, key){
-        if(typeof(obj[key]) == "string")
-            obj[key] = obj[key].replace(/\D+/g, '');
-    }
-    /* create talent code ends */
+    $scope.numberonly = function (obj, key) {
+            if (typeof (obj[key]) == "string")
+                obj[key] = obj[key].replace(/\D+/g, '');
+        }
+        /* create talent code ends */
 
     $scope.$watch('priceSlider.value', function (n, o) {
         $scope.filterValue.match = n + '%';
@@ -2897,33 +2905,61 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        return arr;
     }
 
-    $scope.openEditProfileForm = function (talent) {
-       // $scope.talentEditableData = talent;
-       var talentName = talent.talent_name.split('');
-        $scope.talentEditableData ={
-            currentOrganization:[],
-            education:[],
-            linkedinProfileUrl:talent.linkedin_url,
-            industry_focus:talent.industry_focus,
-            location:talent.current_location,
-            designation:talent.designation ,
-            firstName:talentName[0],
-            lastName:talentName[1],
-            id:talent.id
+    $scope.openEditProfileForm = function (data) {
+        // $scope.talentEditableData = talent;
+        var talent = angular.copy(data);
+        var talentName = talent.talent_name.split(' ');
+        var location = talent.current_location.split('-');
+        $scope.talentEditableData = {
+            currentOrganization: []
+            , education: []
+            , linkedinProfileUrl: talent.linkedin_url
+            , industry_focus: talent.industry_focus
+            , city: location[0] || ""
+            , country: location[1] || ""
+            , designation: talent.designation
+            , firstName: talentName[0]
+            , lastName: talentName[1]
+            , id: talent.id
         };
-            if(talent.talent_company.length){
-                    var organisation = {};
-                    organisation.name = talent.talent_company[0].company;
-                    var date = new Date(talent.talent_company[0].start_date);
-                    organisation.from = date.getFullYear();
-                     var date = new Date(talent.talent_company[0].end_date);
-                    organisation.to = date.getFullYear();
-                    organisation.id = talent.talent_company[0].id;
-                    $scope.talentEditableData.currentOrganization.push(organisation);
+        if (talent.talent_company.length) {
+            var organisation = {};
+            organisation.name = talent.talent_company[0].company;
+            organisation.JobTitle = talent.talent_company[0].designation;
+            var date = new Date(talent.talent_company[0].start_date);
+            organisation.from = date.getFullYear().toString();
+            var date = new Date(talent.talent_company[0].end_date);
+            organisation.to = date.getFullYear().toString();
+            organisation.id = talent.talent_company[0].id;
+            $scope.talentEditableData.currentOrganization.push(organisation);
+        } else {
+            $scope.talentEditableData.currentOrganization.push({
+                JobTitle: ''
+                , name: ''
+                , from: ''
+                , to: ''
+            });
+        }
+
+        if (talent.talent_education.length) {
+            for (var i = 0; i < talent.talent_education.length; i++) {
+                var organisation = {};
+                organisation.name = talent.talent_education[i].education;
+                var date = new Date(talent.talent_education[i].start_date);
+                organisation.from = date.getFullYear().toString();
+                var date = new Date(talent.talent_education[i].end_date);
+                organisation.to = date.getFullYear().toString();
+                organisation.id = talent.talent_education[i].id;
+                $scope.talentEditableData.education.push(organisation);
             }
-            if(talent.talent_company.length){
-                
-            }
+        } else {
+            $scope.talentEditableData.education.push({
+                name: ''
+                , from: ''
+                , to: ''
+            });
+        }
+
         $('#edit-profile').modal('show');
     }
 
