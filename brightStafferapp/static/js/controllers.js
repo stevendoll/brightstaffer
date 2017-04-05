@@ -1594,20 +1594,35 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $rootScope.Filter = false;
     
     /* create talent code */
-    
-    $scope.talentData = {
-        currentOrganization: {},
-        pastOrganization: [{}],
-        education: [{}],
-        topConcepts: [{}]
-    };
     var d = new Date().getFullYear();
     $scope.yearArr = [];
     for(var i=100;i>=0;i--){
         $scope.yearArr[i] = d - i;
     }
+    $scope.talentData = {
+        currentOrganization: {
+            name: '',
+            from: '',
+            to: ''
+        },
+        pastOrganization: [{
+            name: '',
+            from: '',
+            to: ''
+        }],
+        education: [{
+            name: '',
+            from: '',
+            to: ''
+        }],
+        topConcepts: [{}]
+    };
     $scope.addPastOrganization = function(){
-        $scope.talentData.pastOrganization.push({});
+        $scope.talentData.pastOrganization.push({
+            name: '',
+            from: '',
+            to: ''
+        });
     }
     $scope.addSkill = function(){
         $scope.talentData.topConcepts.push({});
