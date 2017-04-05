@@ -98,7 +98,7 @@
                                     <div class="right-div search-detail-edu">[[talentDetails.talent_education[0].education | capitalizeAll ]] [[talentDetails.talent_education[0].start_date | yearFormat]] - [[talentDetails.talent_education[0].end_date | yearFormat]] </div>
                                 </div>
                                 <div class="col-xs-12">
-                                    <div class="talent-analysis-concept-panel">
+                                    <div class="talent-analysis-concept-panel width100">
                                         <div class="top-concept-text">Top Concepts <span data-toggle="modal" ng-show="talentDetails.talent_concepts.length > 6" ng-click="allConcepts(talentDetails.talent_concepts)">All Concepts</span></div>
                                         <div class="talent-progress" ng-repeat="concepts in talentDetails.talent_concepts | limitTo: 6">
                                             <div class="progress">
@@ -109,53 +109,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="talent-analysis-concept-rightpanel">
-                                        <div class="top-concept-text">Career History <span ng-click="allMetrics(talentDetails.talent_company)" ng-show="talentDetails.talent_company.length > 3">All Metrics</span></div>
-                                        <div class="talent-progress">
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                                                    <span class="text">Total Experience</span>
-                                                    <span class="percentage">[[calcTotal(talentDetails.talent_company) | number: 1]] Years</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="talent-progress" ng-repeat="career in talentDetails.talent_company | limitTo: 3">
 
-
-                                            <div class="progress">
-                                                <!--<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[career.years_of_experience | number:2]]%;">
-                              <span class="text">[[career.company | capitalize]]</span>
-                              <span class="percentage">[[career.years_of_experience | number:2]] Years</span>
-                            </div>-->
-
-                                                <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((career.blank_gap/calcTotal(talentDetails.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
-                                                </div>
-
-
-
-                                                <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[convertIntoInt((career.years_of_experience/calcTotal(talentDetails.talent_company)) * 100)]]%;">
-                                                    <span class="text">[[career.company | capitalize]]</span>
-                                                    <span class="percentage">[[career.years_of_experience | number:1]] Years</span>
-                                                </div>
-
-                                                <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talentDetails.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="cls"></div>
-                                        <!--
-                        <div class="indus-focus">Industry Focus</div>
-                        <div class="talent-progress">
-                          <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[talentDetails.industry_focus_percentage]]%;">
-                              <span class="text">[[talentDetails.industry_focus | capitalize]]</span>
-                              <span class="percentage">[[talentDetails.industry_focus_percentage]]%</span>
-                            </div>
-                          </div>
-                        </div>
--->
-                                    </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="recommended-panel">

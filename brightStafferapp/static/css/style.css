@@ -2586,6 +2586,10 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     color: #3c763d;
 }
 
+<<<<<<< HEAD
+.width100 {
+  width: 100% !important;
+=======
 .pro-error-box {
     height: 50px;
     border-radius: 2px;
@@ -2614,6 +2618,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 
 .width60 {
   width: 60% !important;
+>>>>>>> a5a779e29b86b3f8873b941a8b763a549561a343
 }
 
 .current-tab {
