@@ -435,7 +435,7 @@ class TalentAdd(View):
                 Talent.objects.get(id=profile_data['id']).update(
                     talent_name=profile_data['firstName'] + ' ' + profile_data['lastName'],
                     recruiter=user, status='New', current_location=profile_data['city'] + ',' + profile_data['country'],
-                    linkedin_url=profile_data['linkedinProfileUrl'])
+                    linkedin_url=profile_data['linkedinProfileUrl'], industry_focus=profile_data['industryFocus'])
             else:
                 talent_obj = Talent.objects.create(
                     talent_name=profile_data['firstName'] + ' ' + profile_data['lastName'],
@@ -492,6 +492,9 @@ class TalentAdd(View):
                                 talent=talent_obj, company=company, designation=organization['JobTitle'],
                                 is_current=is_current,
                                 start_date=start_date)
+            if "JobTitle" in profile_data:
+                talent_obj.designation = profile_data['JobTitle']
+                talent_obj.save()
             context['message'] = 'Talent Added Successfully'
             context['success'] = True
             return util.returnSuccessShorcut(context)
