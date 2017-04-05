@@ -2904,20 +2904,24 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
         //        return arr;
     }
-
+    
+    $scope.updateTalent = function(data){
+        
+    }
+    
     $scope.openEditProfileForm = function (data) {
         // $scope.talentEditableData = talent;
         var talent = angular.copy(data);
         var talentName = talent.talent_name.split(' ');
-        var location = talent.current_location.split('-');
+        var location = talent.current_location.split(',');
         $scope.talentEditableData = {
             currentOrganization: []
             , education: []
             , linkedinProfileUrl: talent.linkedin_url
-            , industry_focus: talent.industry_focus
             , city: location[0] || ""
             , country: location[1] || ""
             , designation: talent.designation
+            , industryFocus: talent.industry_focus
             , firstName: talentName[0]
             , lastName: talentName[1]
             , id: talent.id

@@ -398,7 +398,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
                     <div class="edit-profile-screen">
                         <div class="past-roles">Edit Details</div>
-                        <form name="editTalentForm" ng-submit="editTalentForm.$valid && updateTalent();">
+                        <form name="editTalentForm" ng-submit="editTalentForm.$valid && createTalent(talentEditableData);">
                             <div class="col-xs-12 padding-zero">
                                 <div class="edit-rectangle-left-div">
                                     <div class="form-group">
@@ -429,7 +429,7 @@
                                 <div class="cls"></div>
                                 <div class="edit-rectangle-full-div">
                                     <div class="form-group">
-                                        <input type="" class="form-control edit-rectangle-input" id="" placeholder="Computer Software" ng-model="talentEditableData.currentOrganization[0].JobTitle">
+                                        <input type="" class="form-control edit-rectangle-input" id="" placeholder="Industry Focus" ng-model="talentEditableData.industryFocus">
                                     </div>
                                 </div>
                                 <div class="cls"></div>
