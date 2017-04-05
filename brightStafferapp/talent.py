@@ -257,7 +257,8 @@ def talent_project_match(talent_obj,project):
             ratio = fuzz.partial_ratio(t_concept, p_conecpt)
             if ratio >= 50:
                 count += 1
-    match = math.ceil(round((count/total_concept), 2))
+    # match = math.ceil(round((count/project_concept_count), 2))
+    match = round(count / project_concept_count * 100)
     TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
 
 
