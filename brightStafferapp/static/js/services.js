@@ -21,8 +21,8 @@ function appService($rootScope, $http) {
             }).error(function (error) {
                 $rootScope.showLoader(false);
                 callback(error || {
-                    status: false,
-                    message: 'Some problem occured.'
+                    success: false,
+                    errorstring: 'Some problem occured.'
                 });
             });
         }
