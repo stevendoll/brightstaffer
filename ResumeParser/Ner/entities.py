@@ -22,6 +22,7 @@ def get_entity_date(tagged):
             date_ent.append(item)
     return date_ent
 
+
 def get_entity_other(entities_dict, sent):
     keyword_list = []
     for item in entities_dict:
@@ -30,6 +31,7 @@ def get_entity_other(entities_dict, sent):
             keyword_list.append((item['text'].lower(), item['type']))
     return list(set(keyword_list))
 
+
 def fetch_entities_from_alchemy_api(user_data):
     d = {}
     try:
@@ -37,11 +39,12 @@ def fetch_entities_from_alchemy_api(user_data):
         d = alchemy_language.combined(text=user_data,
                                       extract='entities,keywords',
                                       max_items=alchemy_max_entities)
-        #d = json.loads(data)
-        #Projects.objects.filter(id=project_id).update(description_analysis=d)
+        # d = json.loads(data)
+        # Projects.objects.filter(id=project_id).update(description_analysis=d)
     except Exception as e:
-        print (e)
-    return d['entities']
+        print(e)
+    return [d['entities'], d['keywords']]
+
 
 def fetch_entities_stanford_ner(user_data):
     tagger = StanfordNERTagger(tagger_model_file, stanford_tagger_jar)
@@ -52,8 +55,8 @@ def fetch_entities_stanford_ner(user_data):
 
 def get_entities(user_data):
     stanford_ner_entities = fetch_entities_stanford_ner(user_data)
-    alchemy_ner_entities = fetch_entities_from_alchemy_api(user_data)
+    entities, keywords = fetch_entities_from_alchemy_api(user_data)
     for entity in stanford_ner_entities:
-        alchemy_ner_entities.append({'type':'DATE','text':entity[0]})
-    alchemy_ner_entities.append({'type':'DATE','text':'Present'})
-    return alchemy_ner_entities
+        entities.append({'type': 'DATE', 'text': entity[0]})
+    entities.append({'type': 'DATE', 'text': 'Present'})
+    return [entities, keywords ]

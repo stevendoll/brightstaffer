@@ -20,7 +20,10 @@ function appService($rootScope, $http) {
                 callback(response || {});
             }).error(function (error) {
                 $rootScope.showLoader(false);
-                callback(error || {});
+                callback({
+                    success: false,
+                    errorstring: 'Some problem occured.'
+                });
             });
         }
     }
@@ -121,7 +124,7 @@ function jobPostService($http, REQUEST_URL) {
 function alchemyAnalysis($rootScope, $http, REQUEST_URL) {
     return {
         alchemyAPI: function (data) {
-        $rootScope.showLoader(true);
+            $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'alchemy_analysis/'
                 , method: "POST", // or "get"
@@ -197,6 +200,7 @@ function getAllProjects($http, $rootScope, REQUEST_URL) {
     return {
         allProjects: function (data) {
             $rootScope.showLoader(true);
+            $rootScope.apiHiCounter ++;
             return $http({
                 url: REQUEST_URL + 'project_list/?recruiter=' + data.recruiter + '&token=' + data.token + '&count=' + data.count
                 , method: "GET", // or "get"
@@ -206,7 +210,12 @@ function getAllProjects($http, $rootScope, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
-                $rootScope.showLoader(false);
+                $rootScope.apiHiCounter --;
+                if($rootScope.apiHiCounter <= 0){
+                    $rootScope.apiHiCounter = 0;
+                    $rootScope.showLoader(false);
+                }
+
                 return response.data;
             });
         }
@@ -339,6 +348,8 @@ function talentApis($rootScope, $http, REQUEST_URL) {
         },
 
         deleteTalents: function (data) {
+              $rootScope.apiHiCounter ++;
+             $rootScope.showLoader(true);
             return $http({
                 url: REQUEST_URL + 'delete_talent/?talent=' + data.talent + '&recruiter=' + data.recruiter + '&is_active=' + data.is_active
                 , method: "GET", // or "get"
@@ -348,6 +359,11 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
+                 $rootScope.apiHiCounter --;
+                 if($rootScope.apiHiCounter <= 0 ){
+                     $rootScope.apiHiCounter = 0;
+                     $rootScope.showLoader(false);
+                 }
                 return response.data;
             });
 
@@ -440,9 +456,10 @@ function talentApis($rootScope, $http, REQUEST_URL) {
         },
 
         filterTalentData: function (data) {
+            $rootScope.apiHiCounter ++;
             $rootScope.showLoader(true);
             return $http({
-                url: REQUEST_URL + 'talent_search_filter/?talent_company=' + data.company + '&rating=' + data.rating + '&project_match=' + data.project_match + '&recruiter=' + data.recruiter + '&concepts=' + data.concepts + '&projects=' + data.projects + '&stages=' + data.stages + '&last_contacted=' + data.contacted + '&date_added=' + data.date + '&term=' + data.term + '&ordering=' + data.ordering + '&is_active=' + data.active + '&page=' + data.page + '&count=' + data.count
+                url: REQUEST_URL + 'talent_search/?talent_company=' + data.company + '&rating=' + data.rating + '&project_match=' + data.project_match + '&recruiter=' + data.recruiter + '&concepts=' + data.concepts + '&projects=' + data.projects + '&stages=' + data.stages + '&last_contacted=' + data.contacted + '&date_added=' + data.date + '&term=' + data.term + '&ordering=' + data.ordering + '&is_active=' + data.active + '&page=' + data.page + '&count=' + data.count
                 , method: "GET", // or "get"
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
@@ -452,8 +469,18 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                 , data: JSON.stringify(data)
                 , dataType: 'json'
             , }).then(function (response) {
-                $rootScope.showLoader(false);
+                $rootScope.apiHiCounter --;
+                if($rootScope.apiHiCounter <=0){
+                    $rootScope.apiHiCounter = 0;
+                    $rootScope.showLoader(false);
+                }
                 return response.data;
+            }, function (response){
+                $rootScope.apiHiCounter --;
+                if($rootScope.apiHiCounter <=0){
+                    $rootScope.apiHiCounter = 0;
+                    $rootScope.showLoader(false);
+                }
             });
         }
 
@@ -467,6 +494,7 @@ function talentApis($rootScope, $http, REQUEST_URL) {
 function searchApis($rootScope, $http, REQUEST_URL) {
     return {
         talentSearch: function (data) {
+            $rootScope.apiHiCounter ++;
             $rootScope.showLoader(true);
             data.term = data.keyword;
             delete data.keyword;
@@ -481,7 +509,11 @@ function searchApis($rootScope, $http, REQUEST_URL) {
                 , params: data
                 , dataType: 'json'
             }).then(function (response) {
-                $rootScope.showLoader(false);
+                 $rootScope.apiHiCounter --;
+                 if($rootScope.apiHiCounter <= 0){
+                    $rootScope.apiHiCounter = 0;
+                    $rootScope.showLoader(false);
+                }
                 return response.data;
             });
         }
@@ -493,8 +525,8 @@ function tableService($rootScope, $http, REQUEST_URL, appService) {
         deleteProjects: function (data, callback) {
             var param = {
                 url: REQUEST_URL + 'delete_projects/'
-                , method: "GET", 
-                headers: {
+                , method: "GET"
+                , headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                     , 'token': $rootScope.globals.currentUser.token
                     , 'recruiter': $rootScope.globals.currentUser.user_email
@@ -525,6 +557,25 @@ function searchData() {
     }
 }
 
+function createTalentFormService($rootScope, REQUEST_URL, appService) {
+    return {
+        createTalent: function (data, callback) {
+            var param = {
+                url: REQUEST_URL + 'talent_add/'
+                , method: "POST"
+                , headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                    , 'token': $rootScope.globals.currentUser.token
+                    , 'recruiter': $rootScope.globals.currentUser.user_email
+                }
+                , data: data
+                , dataType: 'json'
+            }
+            appService.httpRequest(param, callback);
+        }
+    }
+}
+
 
 angular
     .module('brightStaffer')
@@ -543,4 +594,6 @@ angular
     .service('talentApis', talentApis)
     .service('searchApis', searchApis)
     .service('tableService', tableService)
-    .service('searchData', searchData);
+    .service('searchData', searchData)
+    .service('createTalentFormService', createTalentFormService);
+

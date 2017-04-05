@@ -58,7 +58,7 @@ class UserData(View):
             param_dict['user_name'] = profile_data["userEmail"]
             param_dict['user_token'] = token.key
         except IntegrityError:
-            return util.returnErrorShorcut(404, 'Email id is already exist')
+            return util.returnErrorShorcut(400, 'Email id is already exist')
         return util.returnSuccessShorcut(param_dict)
 
 
@@ -89,7 +89,7 @@ class UserLogin(View):
             param_dict['first_name'] = result_set['first_name']
             param_dict['last_name'] = result_set['last_name']
         except:
-            return util.returnErrorShorcut(401, 'UnAuthorized User')
+            return util.returnErrorShorcut(403, 'UnAuthorized User')
         return util.returnSuccessShorcut(param_dict)
 
 
@@ -129,13 +129,13 @@ class JobPosting(View):
                             param_dict['project_id'] = str(values)
                             return util.returnSuccessShorcut(param_dict)
                 else:
-                    return util.returnErrorShorcut(403, 'Project is already exist in database')
+                    return util.returnErrorShorcut(400, 'Project is already exist in database')
             except:
                 return util.returnErrorShorcut(400, 'API parameter is not valid')
         else:
             project_id = Projects.objects.filter(id=user_data['id']).exists()
             if not project_id:
-                return util.returnErrorShorcut(404, 'Project id is not valid')
+                return util.returnErrorShorcut(400, 'Project id is not valid')
             else:
                 try:
                     del user_data['token']
@@ -255,11 +255,10 @@ class AlchemyAPI(View):
             alchemy_language = AlchemyLanguageV1(api_key=Alchemy_api_key)
             data = json.dumps(
                 alchemy_language.combined(text=user_data['description'],
-                                          extract='entities,keywords', max_items=40))
+                                          extract='keywords', max_items=40))
             d = json.loads(data)
-            print (d)
             Projects.objects.filter(id=project_id).update(description_analysis=d)
-            for item in chain(d["keywords"], d["entities"]):
+            for item in chain(d["keywords"]):
                 if round(float(item['relevance']), 2) >= float(concept_relevance):
                     keyword_list.append(item['text'].lower())
             return list(set(keyword_list))[:40]
@@ -384,7 +383,7 @@ class ProjectDelete(generics.ListCreateAPIView):
         for project_id in project_id_list:
             talent_objs = Projects.objects.filter(id=project_id)
             if not talent_objs:
-                return util.returnErrorShorcut(403, 'Project with id {} dosen\'t exist in database.'.format(project_id))
+                return util.returnErrorShorcut(400, 'Project with id {} dosen\'t exist in database.'.format(project_id))
             deleted = Projects.objects.filter(id=project_id).delete()
         return util.returnSuccessShorcut(param_dict)
 
