@@ -2165,6 +2165,17 @@ padding: 10px 0px;}
  line-height: 30px;
 }
 
+.linkedin-url-text {
+    color: #ff4d50;
+    width: auto;
+    float: left;
+    font-size: 14px;
+    font-family: 'open_sansregular';
+    margin-left: 10px;
+    line-height: 35px;
+    cursor: pointer;
+}
+
 
 
 
@@ -10787,10 +10798,11 @@ input[type=password]
 }
 
 .search-result-name span {
-  display: block;
+  display: inline-block;
   font-size: 14px;
   color: #6a6a6a;
   font-family: 'open_sansregular';
+  padding-left: 10px;
 }
 
 .search-name-head {

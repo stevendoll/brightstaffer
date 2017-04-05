@@ -14,7 +14,7 @@
                     <div class="search-result-name">
                         <div class="search-name-head" ng-click="loadProfileData(talent.id,talent)">
                             [[talent.talent_name | capitalizeWord]]</div>
-                        <span class="more" ><a href="" data-toggle="modal" ng-click="openEditProfileForm()">edit</a></span>
+                        <span class="more" ><a href="" data-toggle="modal" ng-click="openEditProfileForm()">Edit</a></span>
                         <!--                        <span>[[talent.designation | capitalizeAll]]</span>-->
                     </div>
                     <div class="search-result-info">[[talent.current_location | capitalizeWord]]
@@ -168,6 +168,7 @@
                 <button class="btn" id="profile_[[talent.id]]" ng-click="loadProfileData(talent.id,talent)">View Profile</button>
                 <button type="" class="btn" id="add_[[talent.id]]" ng-click="openProjectList(talent.id)">Add to Project</button>
                 <a class="linkedin" href="[[talent.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>
+                <div class="linkedin-url-text">Add Linkedin URL</div>
             </div>
         </div>
         <div class="talent-srearch-check-panel">
