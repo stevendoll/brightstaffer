@@ -48,7 +48,7 @@ def handle_talent_data(talent_data, user):
                         concept, created = models.Concept.objects.get_or_create(concept=skill['name'])
                         tpconcept, created = models.TalentConcept.objects.get_or_create(
                             talent=talent_obj, concept=concept,
-                            match=str(round(skill['score'], 2)))
+                            match=round(float(skill['score']), 2))
             if "work-experience" in talent_data:
                 for experience in talent_data["work-experience"]:
                     is_current = False
