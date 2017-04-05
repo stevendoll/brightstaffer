@@ -2571,7 +2571,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   width: 60% !important;
 }
 
-
+.width100 {
+  width: 100% !important;
+}
 
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
