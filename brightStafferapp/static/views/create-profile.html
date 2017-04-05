@@ -144,7 +144,7 @@
                                 <div class="top-concept-input-div" ng-repeat="concept in talentData.topConcepts">
                                     <input type="" class="form-control top-concept-input-part" id="" placeholder="Skill" ng-model="concept.skill" maxlength="100"/>
                                     <i class="fa fa-close" ng-click="removeIndexFromArr(talentData.topConcepts, $index);"></i>
-                                    <input type="text" class="form-control top-concept-right-input-div" id="talent-skill-percent" placeholder="%" ng-model="concept.percentage" ng-change="numberonly(concept, 'percentage');">
+                                    <input type="text" class="form-control top-concept-right-input-div" id="talent-skill-percent" placeholder="%" maxlength="3" ng-model="concept.percentage" ng-change="numberonly(concept, 'percentage');">
                                 </div>
                                 <button type="button" class="btn top-cocep-add-bttn" ng-click="addSkill()">Add More</button>
                             </div>
