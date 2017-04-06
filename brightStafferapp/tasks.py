@@ -120,13 +120,13 @@ def convert_to_date(duration):
     end_date = None
     try:
         duration = duration.split('-')
-        start_date = duration[0]
+        start_date = duration[0].strip(" ")
         start_date = start_date.split()
         month = start_date[0]
         year = start_date[1]
         day = 1
         start_date = date(int(year), int(month_arr[month]), int(day))
-        end_date = duration[1]
+        end_date = duration[1].strip(" ")
         if end_date != 'Present':
             end_date = duration[1]
             end_date = end_date.split()
