@@ -2754,6 +2754,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         $scope.stage.isStage = false;
 
                         //                            $scope.stage.stagesCard.push(response);
+                        $rootScope.talentDetails = response.talent_updated_data;
+                        sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                         $scope.stage.stagesCard.unshift(response);
                         $scope.$apply();
                         var sbId = $('#stageSelect').attr('sb');

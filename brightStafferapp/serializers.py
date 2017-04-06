@@ -141,6 +141,7 @@ class TalentCompanySerializer(serializers.ModelSerializer):
 
 
 class TalentStageSerializer(serializers.ModelSerializer):
+    talent = serializers.CharField()
     date_created = serializers.CharField(source='get_date_created')
     date_updated = serializers.CharField(source='get_date_updated')
     project = serializers.CharField()
