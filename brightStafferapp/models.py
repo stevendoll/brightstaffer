@@ -288,7 +288,7 @@ class TalentProject(models.Model):
 class TalentConcept(models.Model):
     talent = models.ForeignKey(Talent, related_name='talent_concepts')
     concept = models.ForeignKey(Concept)
-    match = models.CharField(max_length=10, default=0)
+    match = models.FloatField(max_length=20, default=0)
     date_created = models.DateField(auto_now_add=True)
 
     class Meta:
