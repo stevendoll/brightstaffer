@@ -313,6 +313,8 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['details'] = tp_obj.details
             context['notes'] = tp_obj.notes
             context['create_date'] = tp_obj.get_date_created
+            serializer_data = TalentSerializer(talent_obj)
+            context['talent_updated_data'] = serializer_data.data
             return util.returnSuccessShorcut(context)
         else:
             return util.returnErrorShorcut(400, 'Talent stage and info is exist in database, '
