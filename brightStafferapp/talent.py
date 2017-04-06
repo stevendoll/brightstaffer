@@ -438,9 +438,15 @@ class TalentAdd(View):
             user = user[0]
         profile_data = json.loads(request.body.decode("utf-8"))
         if "id" not in profile_data:
-            linkedin_validation = Talent.objects.filter(linkedin_url=profile_data.get('linkedinProfileUrl', ''))
-            if linkedin_validation:
-                return util.returnErrorShorcut(400, 'Linkedin URL is exist in the system')
+            # phone and email
+            phone = profile_data.get('phone', '')
+            email = profile_data.get('email', '')
+            email_talent = TalentEmail.objects.filter(email=email)
+            if email_talent:
+                return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
+            phone_client = TalentContact.objects.filter(contact=phone)
+            if phone_client:
+                return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
             else:
                 add_edit_talent(profile_data, user)
                 context['message'] = 'Talent Added Successfully'
@@ -453,7 +459,7 @@ class TalentAdd(View):
             return util.returnSuccessShorcut(context)
 
 
-def add_edit_talent(profile_data,user):
+def add_edit_talent(profile_data, user):
     if "id" in profile_data:
         talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
         if talent_obj:
@@ -466,12 +472,16 @@ def add_edit_talent(profile_data,user):
     else:
         talent_obj = Talent.objects.create(
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
-            recruiter=user, status='New',
+            recruiter=user, status='New', industry_focus=profile_data.get('industryFocus', ''),
             current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
-            linkedin_url=profile_data.get('industryFocus', ''), create_date=datetime.datetime.now())
+            linkedin_url=profile_data.get('linkedinProfileUrl', ''), create_date=datetime.datetime.now())
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                           is_active=True)
     if talent_obj:
+        # add email and phone for talent
+        TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
+        TalentContact.objects.get_or_create(talent=talent_obj, contact=profile_data.get('phone', ''))
+        # add top concepts for talent
         if 'topConcepts' in profile_data:
             for skill in profile_data.get('topConcepts', ''):
                 if bool(skill):
@@ -532,7 +542,7 @@ def convert_to_start_end(education):
     day = 1
     month = 1
     if education.get('from') != "":
-        start_date = date(education.get('from', 2017), month, day)
+        start_date = date(int(education.get('from', 2017)), month, day)
     end_date = date(2017, month, day)
     return start_date, end_date
 
