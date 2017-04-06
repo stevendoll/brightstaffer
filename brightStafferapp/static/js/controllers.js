@@ -1706,6 +1706,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 }
                 $scope.showNotification(false, response.errorstring);
             }
+            $window.scrollTo(0, 0);
         });
     }
 
