@@ -309,7 +309,7 @@ class TalentConcept(models.Model):
 class TalentStage(models.Model):
     talent = models.ForeignKey(Talent, related_name='talent_stages')
     project = models.ForeignKey(Projects)
-    stage = models.CharField(max_length=20, choices=STAGE_CHOICES)
+    stage = models.CharField(max_length=40, choices=STAGE_CHOICES)
     details = models.TextField(verbose_name='Details', null=True, blank=True)
     notes = models.TextField(verbose_name='Notes', null=True, blank=True)
     date_created = models.DateField(verbose_name='Create Date',null=True, blank=True)
@@ -317,7 +317,7 @@ class TalentStage(models.Model):
 
     class Meta:
         verbose_name_plural = "Talent Stages"
-        ordering = ('-date_created',)
+        ordering = ('date_created',)
 
     @property
     def get_date_created(self):
