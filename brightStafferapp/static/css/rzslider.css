@@ -82,7 +82,8 @@
 
 .rzslider .rz-selection {
   z-index: 2;
-  background: #0db9f0;
+/*  background: #0db9f0;*/
+  background: #ccc;
   border-radius: 2px;
 }
 
