@@ -1534,6 +1534,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , options: {
             floor: 0
             , ceil: 100
+            , showSelectionBar: true
         }
     }
 
