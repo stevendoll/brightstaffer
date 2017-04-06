@@ -1655,7 +1655,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: [{
                 name: ''
                 , from: ''
-                , to: ''
+                , to: 'Present'
             }]
             , education: [{
                 name: ''
