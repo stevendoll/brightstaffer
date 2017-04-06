@@ -377,91 +377,91 @@ class PdfImages(models.Model):
         return self.name
 
 
-@receiver(post_save, sender=Talent)
-def talent_postsave(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_save, sender=TalentProject)
-def talentproject_postsave(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_save, sender=TalentCompany)
-def talentcompny_postsave(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_save, sender=TalentConcept)
-def talentconcept_postsave(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_save, sender=TalentContact)
-def talentcontact_postsave(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_save, sender=TalentEmail)
-def talentemail_postsave(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_save, sender=TalentStage)
-def talentstage_postsave(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_save, sender=TalentEducation)
-def talenteducation_postsave(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_save, sender=TalentRecruiter)
-def talentrecruiter_post_save(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_delete, sender=TalentProject)
-def talentproject_post_delete(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_delete, sender=TalentCompany)
-def talentcompny_post_delete(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_delete, sender=TalentConcept)
-def talentconcept_post_delete(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_delete, sender=TalentContact)
-def talentcontact_post_delete(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_delete, sender=TalentEmail)
-def talentemail_post_delete(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_delete, sender=TalentStage)
-def talentstage_post_delete(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_delete, sender=TalentEducation)
-def talenteducation_post_delete(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_delete, sender=TalentRecruiter)
-def talentrecruiter_post_delete(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
-
-
-@receiver(post_delete, sender=Talent)
-def talent_post_delete(sender, instance=None, created=False, **kwargs):
-    update_indexes.delay()
+# @receiver(post_save, sender=Talent)
+# def talent_postsave(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_save, sender=TalentProject)
+# def talentproject_postsave(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_save, sender=TalentCompany)
+# def talentcompny_postsave(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_save, sender=TalentConcept)
+# def talentconcept_postsave(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_save, sender=TalentContact)
+# def talentcontact_postsave(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_save, sender=TalentEmail)
+# def talentemail_postsave(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_save, sender=TalentStage)
+# def talentstage_postsave(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_save, sender=TalentEducation)
+# def talenteducation_postsave(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_save, sender=TalentRecruiter)
+# def talentrecruiter_post_save(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_delete, sender=TalentProject)
+# def talentproject_post_delete(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_delete, sender=TalentCompany)
+# def talentcompny_post_delete(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_delete, sender=TalentConcept)
+# def talentconcept_post_delete(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_delete, sender=TalentContact)
+# def talentcontact_post_delete(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_delete, sender=TalentEmail)
+# def talentemail_post_delete(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_delete, sender=TalentStage)
+# def talentstage_post_delete(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_delete, sender=TalentEducation)
+# def talenteducation_post_delete(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_delete, sender=TalentRecruiter)
+# def talentrecruiter_post_delete(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
+#
+#
+# @receiver(post_delete, sender=Talent)
+# def talent_post_delete(sender, instance=None, created=False, **kwargs):
+#     update_indexes.delay()
