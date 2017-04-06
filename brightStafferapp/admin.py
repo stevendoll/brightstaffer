@@ -17,7 +17,8 @@ class TalentCompanyInline(admin.TabularInline):
 
 class TalentConceptInline(admin.TabularInline):
     model = TalentConcept
-    extra = 0
+    extra = 1
+    ordering = ('-match',)
 
 
 class ProjectConceptInline(admin.TabularInline):
@@ -51,7 +52,8 @@ class ProjectsAdmin(admin.ModelAdmin):
 class ConceptsAdmin(admin.ModelAdmin):
     list_display = ('id', 'concept')
     list_filter = ('id', )
-    list_per_page = 2000
+    list_per_page = 100
+    ordering = ('-date_created',)
 
 
 class TalentAdmin(admin.ModelAdmin):

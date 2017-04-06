@@ -438,99 +438,115 @@ class TalentAdd(View):
             user = user[0]
         profile_data = json.loads(request.body.decode("utf-8"))
         if "id" not in profile_data:
-            linkedin_validation = Talent.objects.filter(linkedin_url=profile_data['linkedinProfileUrl'])
-            if linkedin_validation:
-                return util.returnErrorShorcut(400, 'Linkedin URL is exist in the system')
+            # phone and email
+            phone = profile_data.get('phone', '')
+            email = profile_data.get('email', '')
+            email_talent = TalentEmail.objects.filter(email=email)
+            if email_talent:
+                return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
+            phone_client = TalentContact.objects.filter(contact=phone)
+            if phone_client:
+                return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
             else:
-                add_edit_talent(profile_data,user)
+                add_edit_talent(profile_data, user)
                 context['message'] = 'Talent Added Successfully'
                 context['success'] = True
                 return util.returnSuccessShorcut(context)
         else:
-            add_edit_talent(profile_data,user)
+            add_edit_talent(profile_data, user)
             context['message'] = 'Talent Updated Successfully'
             context['success'] = True
             return util.returnSuccessShorcut(context)
 
-def add_edit_talent(profile_data,user):
+
+def add_edit_talent(profile_data, user):
     if "id" in profile_data:
-        talent_obj = Talent.objects.filter(id=profile_data['id'])
+        talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
         if talent_obj:
-            talent_obj.update(talent_name=profile_data['firstName'] + ' ' + profile_data['lastName'],
+            talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
-                              current_location=profile_data['city'] + ',' + profile_data['country'],
-                              linkedin_url=profile_data['linkedinProfileUrl'],
-                              industry_focus=profile_data['industryFocus'])
+                              current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
+                              linkedin_url=profile_data.get('linkedinProfileUrl', ''),
+                              industry_focus=profile_data.get('industryFocus', ''))
             talent_obj = talent_obj[0]
     else:
         talent_obj = Talent.objects.create(
-            talent_name=profile_data['firstName'] + ' ' + profile_data['lastName'],
-            recruiter=user, status='New', current_location=profile_data['city'] + ',' + profile_data['country'],
-            linkedin_url=profile_data['linkedinProfileUrl'],
-            create_date=datetime.datetime.now())
+            talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
+            recruiter=user, status='New', industry_focus=profile_data.get('industryFocus', ''),
+            current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
+            linkedin_url=profile_data.get('linkedinProfileUrl', ''), create_date=datetime.datetime.now())
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                           is_active=True)
     if talent_obj:
+        # add email and phone for talent
+        TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
+        TalentContact.objects.get_or_create(talent=talent_obj, contact=profile_data.get('phone', ''))
+        # add top concepts for talent
         if 'topConcepts' in profile_data:
-            for skill in profile_data['topConcepts']:
-                concept, created = Concept.objects.get_or_create(concept=skill['skill'])
-                tpconcept, created = TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept,
-                                                                         match=skill['percentage'])
+            for skill in profile_data.get('topConcepts', ''):
+                if bool(skill):
+                    concept, created = Concept.objects.get_or_create(concept=skill.get('skill'))
+                    tpconcept, created = TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept,
+                                                                             match=skill.get('percentage', 0.00))
 
     if "education" in profile_data:
-        for education in profile_data['education']:
+        for education in profile_data.get('education', ''):
             # save user education information
-            org, created = Education.objects.get_or_create(name=education['name'])
-            start_date, end_date = convert_to_start_end(education)
-            if "id" in education:
-                # update information, check if id is valid or not
-                TalentEducation.objects.filter(id=education['id']).update(talent=talent_obj,
-                                                                          education=org,
-                                                                          start_date=start_date,
-                                                                          end_date=end_date
-                                                                          )
-            else:
-                if start_date and end_date:
-                    tporg, created = TalentEducation.objects.get_or_create(talent=talent_obj,
-                                                                           education=org,
-                                                                           start_date=start_date,
-                                                                           end_date=end_date
-                                                                           )
+            if bool(education):
+                org, created = Education.objects.get_or_create(name=education.get('name', ''))
+                start_date, end_date = convert_to_start_end(education)
+                if "id" in education:
+                    # update information, check if id is valid or not
+                    TalentEducation.objects.filter(id=education.get('id', '')).update(talent=talent_obj,
+                                                                                      education=org,
+                                                                                      start_date=start_date,
+                                                                                      end_date=end_date
+                                                                                      )
+                else:
+                    if start_date and end_date:
+                        tporg, created = TalentEducation.objects.get_or_create(talent=talent_obj,
+                                                                               education=org,
+                                                                               start_date=start_date,
+                                                                               end_date=end_date
+                                                                               )
     if 'currentOrganization' in profile_data:
-        for organization in profile_data['currentOrganization']:
-            company, created = Company.objects.get_or_create(company_name=organization['name'])
-            start_date, end_date = convert_to_start_end(organization)
-            if "id" in organization:
-                talent_obj.designation = organization['JobTitle']
-                talent_obj.save()
-                # update information, check if id is valid or not
-                TalentCompany.objects.filter(id=organization['id']).update(talent=talent_obj,
-                                                                           company=company,
-                                                                           designation=organization['JobTitle'],
-                                                                           is_current=True,
-                                                                           start_date=start_date)
-            else:
-                if start_date and end_date:
-                    is_current = True
-                    talent_obj.designation = organization['JobTitle']
+        for organization in profile_data.get('currentOrganization', ''):
+            if bool(organization):
+                company, created = Company.objects.get_or_create(company_name=organization.get('name', ''))
+                start_date, end_date = convert_to_start_end(organization)
+                if "id" in organization:
+                    talent_obj.designation = organization.get('JobTitle', '')
                     talent_obj.save()
-                    TalentCompany.objects.get_or_create(
-                        talent=talent_obj, company=company, designation=organization['JobTitle'],
-                        is_current=is_current,
+                    # update information, check if id is valid or not
+                    TalentCompany.objects.filter(id=organization.get('id', '')).update(
+                        talent=talent_obj,
+                        company=company, designation=organization.get('JobTitle', ''), is_current=True,
                         start_date=start_date)
+                else:
+                    if start_date and end_date:
+                        is_current = True
+                        talent_obj.designation = organization.get('JobTitle', '')
+                        talent_obj.save()
+                        TalentCompany.objects.get_or_create(
+                            talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
+                            is_current=is_current,
+                            start_date=start_date)
     if "JobTitle" in profile_data:
-        talent_obj.designation = profile_data['JobTitle']
+        talent_obj.designation = profile_data.get('JobTitle', '')
         talent_obj.save()
+
 
 def convert_to_start_end(education):
     start_date = None
     end_date = None
     day = 1
     month = 1
-    start_date = date(int(education['from']), month, day)
-    end_date = date(int(education['to']), month, day)
+    if education.get('from') != "":
+        start_date = date(int(education.get('from', 2017)), month, day)
+    end_date = date(2017, month, day)
     return start_date, end_date
-    
+
+
 class DeleteTalent(generics.ListCreateAPIView):
     queryset = Talent.objects.all()
     serializer_class = TalentSerializer
