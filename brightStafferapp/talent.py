@@ -522,15 +522,17 @@ def add_edit_talent(profile_data,user):
         talent_obj.designation = profile_data['JobTitle']
         talent_obj.save()
 
+
 def convert_to_start_end(education):
     start_date = None
     end_date = None
     day = 1
     month = 1
     start_date = date(int(education['from']), month, day)
-    end_date = date(int(education['to']), month, day)
+    end_date = date(2017, month, day)
     return start_date, end_date
-    
+
+
 class DeleteTalent(generics.ListCreateAPIView):
     queryset = Talent.objects.all()
     serializer_class = TalentSerializer
