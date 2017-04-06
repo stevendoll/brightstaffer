@@ -461,7 +461,7 @@ class TalentAdd(generics.ListCreateAPIView):
                 if talent:
                     talent = talent[0]
                     serializer_data = TalentSerializer(talent)
-                    context['talent_updated_data'] = json.loads(json.dumps(serializer_data.data))
+                    context['talent_updated_data'] = serializer_data.data
             context['message'] = 'Talent Updated Successfully'
             context['success'] = True
             return util.returnSuccessShorcut(context)
@@ -549,9 +549,12 @@ def convert_to_start_end(education):
     end_date = None
     day = 1
     month = 1
-    if education.get('from') != "":
-        start_date = date(int(education.get('from', 2017)), month, day)
-    end_date = date(2017, month, day)
+    try:
+        if education.get('from') != "":
+            start_date = date(int(education.get('from', 2017)), month, day)
+        end_date = date(2017, month, day)
+    except:
+        pass
     return start_date, end_date
 
 

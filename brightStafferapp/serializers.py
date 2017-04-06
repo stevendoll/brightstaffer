@@ -38,6 +38,7 @@ class TopProjectSerializer(serializers.ModelSerializer):
 
 
 class TalentEducationSerializer(serializers.ModelSerializer):
+    talent = serializers.CharField()
     education = serializers.CharField()
     start_date = serializers.CharField(source='get_start_date')
     end_date = serializers.CharField(source='get_end_date')
