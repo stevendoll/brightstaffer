@@ -334,9 +334,9 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
 
     $scope.getSearchData(true);
 
-    $rootScope.getCandidateData = function () {
+    $rootScope.getCandidateData = function (check) {
         console.log('fetching candidate data')
-        $scope.getSearchData();
+        $scope.getSearchData(check);
     }
 
     $rootScope.$on('fetchCandidateData', $rootScope.getCandidateData);
@@ -1784,7 +1784,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.$watch('candidatePagination.page + candidatePagination.count', function () {
         if ($rootScope.getCandidateData)
-            $rootScope.getCandidateData();
+            $rootScope.getCandidateData(true);
     });
 
     //    $scope.changePage = function (add, pageNo) {
