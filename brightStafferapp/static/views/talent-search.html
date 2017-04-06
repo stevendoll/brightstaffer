@@ -157,11 +157,11 @@
               </div>
               <div class="cls"></div>
               <div ui-view></div>
+<!--
                   <div class="search-pagination" ng-show="talentList.length">
                     <ul class="pagination">
                       <li id="prev" class="prev" ng-click="changePage();">
                         <a href="" aria-label="Previous" ng-class="{'cur-notallow': candidatePagination.page == 1}">
-<!--                          <span aria-hidden="true" ><i class="fa fa-chevron-left"></i></span>-->
                           <span aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
                         </a>
                       </li>
@@ -175,6 +175,10 @@
                       </li>
                     </ul>
                   </div>
+-->
+                
+                <pagination class="search-pagination" ng-show="talentList.length" ng-model="candidatePagination.page" items-per-page="candidatePagination.count" total-items="totalTalentCount" max-size="10" boundary-links="true">
+                </pagination>
 
               </div>
               <div class="col-xs-12 padding-zero " ng-show="isAdvanceSearch">

@@ -515,6 +515,13 @@ function searchApis($rootScope, $http, REQUEST_URL) {
                     $rootScope.showLoader(false);
                 }
                 return response.data;
+            }, function(error){
+                $rootScope.apiHiCounter --;
+                 if($rootScope.apiHiCounter <= 0){
+                    $rootScope.apiHiCounter = 0;
+                    $rootScope.showLoader(false);
+                }
+                return {results: [], count:0};
             });
         }
     }

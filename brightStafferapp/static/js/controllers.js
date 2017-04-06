@@ -1,4 +1,4 @@
-function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData, $window, $state, $timeout, $stateParams, $uibModal) { /*global controller */
+function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData, $window, $state, $timeout, $stateParams) { /*global controller */
     $rootScope.topSixProjectList = []; // top six project list array
     $rootScope.allProjectList = []; // all project array
     $rootScope.totalProjectCount = 0;
@@ -1093,12 +1093,20 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
+
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
+
+
+
 
 
 
@@ -1163,12 +1171,20 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
+
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
+
+
+
 
 
 
@@ -1278,7 +1294,7 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 }
 
-function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, $uibModal) {
+function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout) {
     this.analysedData = [
         {
             "key": "analysedData"
@@ -1511,7 +1527,7 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, $uibModal, searchData, $cookieStore, createTalentFormService) {
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, searchData, $cookieStore, createTalentFormService) {
 
     $scope.priceSlider = {
         value: 0
@@ -1650,7 +1666,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.yearArr[i] = d - i;
     }
     $scope.talentData = {};
-    $scope.talentDataValidation = {phone: true};
+    $scope.talentDataValidation = {
+        phone: true
+    };
     $scope.initTalenData = function () {
         $scope.talentData = {
             currentOrganization: [{
@@ -1681,15 +1699,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.removeIndexFromArr = function (arr, index) {
         arr.splice(index, 1);
     }
-    $scope.checkPhoneNumberLength = function(number, maxLength){
-        if(number && number.length && number.length < maxLength){
+    $scope.checkPhoneNumberLength = function (number, maxLength) {
+        if (number && number.length && number.length < maxLength) {
             $scope.talentDataValidation.phone = false;
-        }else{
+        } else {
             $scope.talentDataValidation.phone = true;
         }
     }
     $scope.createTalent = function (data, onEdit) {
-        if(data.phone && data.phone.length < 10)return;
+        if (data.phone && data.phone.length < 10) return;
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
@@ -1764,29 +1782,34 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         return parseInt(a / b);
     }
 
-    $scope.changePage = function (add, pageNo) {
-
-        if (pageNo) {
-            if ($scope.candidatePagination.page == pageNo) {
-                return;
-            }
-            $scope.candidatePagination.page = pageNo;
+    $scope.$watch('candidatePagination.page + candidatePagination.count', function () {
+        if ($rootScope.getCandidateData)
             $rootScope.getCandidateData();
-            return;
-        }
+    });
 
-        if (add) {
-            if (Math.ceil($rootScope.totalTalentCount / $scope.candidatePagination.count) == $scope.candidatePagination.page) {
-                return;
-            }
-            $scope.candidatePagination.page += 1;
-        } else {
-            if ($scope.candidatePagination.page == 1) return;
-            $scope.candidatePagination.page -= 1;
-        }
-        //        $rootScope.$emit('fetchCandidateData');
-        $rootScope.getCandidateData();
-    }
+    //    $scope.changePage = function (add, pageNo) {
+    //
+    //        if (pageNo) {
+    //            if ($scope.candidatePagination.page == pageNo) {
+    //                return;
+    //            }
+    //            $scope.candidatePagination.page = pageNo;
+    //            $rootScope.getCandidateData();
+    //            return;
+    //        }
+    //
+    //        if (add) {
+    //            if (Math.ceil($rootScope.totalTalentCount / $scope.candidatePagination.count) == $scope.candidatePagination.page) {
+    //                return;
+    //            }
+    //            $scope.candidatePagination.page += 1;
+    //        } else {
+    //            if ($scope.candidatePagination.page == 1) return;
+    //            $scope.candidatePagination.page -= 1;
+    //        }
+    //        //        $rootScope.$emit('fetchCandidateData');
+    //        $rootScope.getCandidateData();
+    //    }
 
 
     angular.element(document).ready(function () {
