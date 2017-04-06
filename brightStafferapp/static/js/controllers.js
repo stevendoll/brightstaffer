@@ -1881,7 +1881,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         $rootScope.candidatePagination.page = 1;
         $rootScope.candidatePagination.count = parseInt(recordCount);
-        $scope.getcandidateData();
+//        $scope.getcandidateData();
 
         //        if (recordCount) {
         //            var count = recordCount;
