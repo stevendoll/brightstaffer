@@ -418,13 +418,13 @@ class TalentUpdateRank(View):
         return util.returnSuccessShorcut(context)
 
 
-class TalentAdd(View):
+class TalentAdd(generics.ListCreateAPIView):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(TalentAdd, self).dispatch(request, *args, **kwargs)
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         context = dict()
         recruiter = request.META.get('HTTP_RECRUITER' '')
 
@@ -454,6 +454,14 @@ class TalentAdd(View):
                 return util.returnSuccessShorcut(context)
         else:
             add_edit_talent(profile_data, user)
+            # add updated serializer data to context
+            talent_id = profile_data.get('id', '')
+            if talent_id:
+                talent = Talent.objects.filter(id=talent_id)
+                if talent:
+                    talent = talent[0]
+                    serializer_data = TalentSerializer(talent)
+                    context['talent_updated_data'] = json.loads(json.dumps(serializer_data.data))
             context['message'] = 'Talent Updated Successfully'
             context['success'] = True
             return util.returnSuccessShorcut(context)
