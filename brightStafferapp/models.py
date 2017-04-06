@@ -317,7 +317,7 @@ class TalentStage(models.Model):
 
     class Meta:
         verbose_name_plural = "Talent Stages"
-        ordering = ('-date_created',)
+        ordering = ('date_created',)
 
     @property
     def get_date_created(self):
