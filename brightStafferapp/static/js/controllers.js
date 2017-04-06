@@ -1689,7 +1689,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
     }
     $scope.createTalent = function (data, onEdit) {
-        if(data.phone.length < 10)return;
+        if(data.phone && data.phone.length < 10)return;
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
