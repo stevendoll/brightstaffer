@@ -418,13 +418,13 @@ class TalentUpdateRank(View):
         return util.returnSuccessShorcut(context)
 
 
-class TalentAdd(View):
+class TalentAdd(generics.ListCreateAPIView):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(TalentAdd, self).dispatch(request, *args, **kwargs)
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         context = dict()
         recruiter = request.META.get('HTTP_RECRUITER' '')
 
@@ -454,6 +454,14 @@ class TalentAdd(View):
                 return util.returnSuccessShorcut(context)
         else:
             add_edit_talent(profile_data, user)
+            # add updated serializer data to context
+            talent_id = profile_data.get('id', '')
+            if talent_id:
+                talent = Talent.objects.filter(id=talent_id)
+                if talent:
+                    talent = talent[0]
+                    serializer_data = TalentSerializer(talent)
+                    context['talent_updated_data'] = serializer_data.data
             context['message'] = 'Talent Updated Successfully'
             context['success'] = True
             return util.returnSuccessShorcut(context)
@@ -541,9 +549,12 @@ def convert_to_start_end(education):
     end_date = None
     day = 1
     month = 1
-    if education.get('from') != "":
-        start_date = date(int(education.get('from', 2017)), month, day)
-    end_date = date(2017, month, day)
+    try:
+        if education.get('from') != "":
+            start_date = date(int(education.get('from', 2017)), month, day)
+        end_date = date(2017, month, day)
+    except:
+        pass
     return start_date, end_date
 
 
