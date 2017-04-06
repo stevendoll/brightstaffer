@@ -1957,6 +1957,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
 
     $scope.loadProfileData = function (id, talent) {
+        $scope.isFilterChecked = false;
         if (talent && id) {
             $rootScope.talentDetails = talent;
         }
@@ -2653,7 +2654,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.closeStageModal = function () {
         var sbId = $('#stageSelect').attr('sb');
-        var selectedValue = $('#sbSelector_' + sbId).text('Select Project');
+        var selectedValue = $('#sbSelector_' + sbId).text('Select Stage');
         $scope.stage.stage = selectedValue;
         var sbId = $('#projectListD2').attr('sb');
         var selectedValue = $('#sbSelector_' + sbId).text('Select Project');
