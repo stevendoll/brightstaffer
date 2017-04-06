@@ -64,7 +64,7 @@ class TalentProjectSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_project_stage(obj):
-        stages = obj.project.talentstage_set.filter(talent=obj.talent).order_by('-date_created')
+        stages = obj.project.talentstage_set.filter(talent=obj.talent).order_by('-id')
         if stages:
             return stages[0].stage
         return None
@@ -141,6 +141,7 @@ class TalentCompanySerializer(serializers.ModelSerializer):
 
 
 class TalentStageSerializer(serializers.ModelSerializer):
+    talent = serializers.CharField()
     date_created = serializers.CharField(source='get_date_created')
     date_updated = serializers.CharField(source='get_date_updated')
     project = serializers.CharField()
