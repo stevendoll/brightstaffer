@@ -317,7 +317,7 @@ class TalentStage(models.Model):
 
     class Meta:
         verbose_name_plural = "Talent Stages"
-        ordering = ('date_created',)
+        ordering = ('-id',)
 
     @property
     def get_date_created(self):
@@ -332,7 +332,6 @@ class TalentStage(models.Model):
             return self.date_updated.strftime('%d/%m/%Y')
         else:
             return "01/01/1900"
-
 
 class ProjectConcept(models.Model):
     project = models.ForeignKey(Projects)
