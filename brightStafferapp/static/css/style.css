@@ -6036,6 +6036,7 @@ body {
 html,
 body {
     height: 100%;
+    padding-right: 0 !important;
 }
 
 body.full-height-layout #wrapper,

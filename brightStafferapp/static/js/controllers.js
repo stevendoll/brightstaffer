@@ -1711,9 +1711,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
+                    for(var i=0;i<$rootScope.talentList.length;i++){
+                      if(response.talent_updated_data.id == $rootScope.talentList[i].id){
+                                $rootScope.talentList[i] = response.talent_updated_data;
+                      }
+                    }
                     $('#edit-profile').modal('hide');
                     $scope.showNotification(true, 'Talent profile has been updated successfully.');
-                    $rootScope.getCandidateData();
+                    //$rootScope.getCandidateData();
                 } else {
                     $scope.initTalenData();
                     $scope.showNotification(true, 'Talent profile has been created successfully.');
