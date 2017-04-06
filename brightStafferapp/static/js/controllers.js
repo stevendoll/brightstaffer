@@ -1650,6 +1650,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.yearArr[i] = d - i;
     }
     $scope.talentData = {};
+    $scope.talentDataValidation = {phone: true};
     $scope.initTalenData = function () {
         $scope.talentData = {
             currentOrganization: [{
@@ -1680,8 +1681,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.removeIndexFromArr = function (arr, index) {
         arr.splice(index, 1);
     }
-
+    $scope.checkPhoneNumberLength = function(number, maxLength){
+        if(number && number.length && number.length < maxLength){
+            $scope.talentDataValidation.phone = false;
+        }else{
+            $scope.talentDataValidation.phone = true;
+        }
+    }
     $scope.createTalent = function (data, onEdit) {
+        if(data.phone.length < 10)return;
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
