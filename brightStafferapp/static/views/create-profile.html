@@ -25,7 +25,7 @@
                                     <div class="form-group">
                                         <label for="">Contact Email</label>
                                         <input name="email" type="email" class="form-control" id="" placeholder="Contact Email" maxlength="100" ng-model="talentData.email" ng-pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/' required/>
-                                        <span class="msg-error" ng-show="createTalentForm.email.$dirty && createTalentForm.email.$error.pattern">Please enter valid emailId.</span>
+                                        <span class="msg-error" ng-show="createTalentForm.email.$dirty && createTalentForm.email.$error.pattern">Please enter valid email Id.</span>
                                     </div>
                                 </div>
                                 <div class="right-section">
@@ -81,9 +81,9 @@
                                     </div>
                                     <div class="side-panel">
                                         <div class="form-group count">
-                                            <select class="form-control select-arrow abcd" ng-model="currentOrganization.from">
-                                                <option class="qwe" ng-show="currentOrganization.from == ''" value="">Select Year</option>
-                                                <option class="qwe" ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                            <select class="form-control select-arrow" ng-model="currentOrganization.from">
+                                                <option ng-show="currentOrganization.from == ''" value="">Select Year</option>
+                                                <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
                                         </div>
                                     </div>
@@ -159,7 +159,9 @@
                                         </div>
                                     </div>
                                     <div class="cls"></div>
-                                    <div class="remove-profile-text" ng-show="$index != 0" ng-click="removeIndexFromArr(talentData.education, $index);">Remove</div>
+                                    <div class="remove-profile-text" ng-show="$index != 0" ng-click="removeIndexFromArr(talentData.education, $index);">
+                                        <a href="" style="color:red;">Remove</a>
+                                    </div>
                                 </div>
                                 <div class="cls"></div>
                                 <button type="button" class="btn create-profile-add-bttn" ng-click="addEducation();">
@@ -171,9 +173,9 @@
                                     <h2>Top Concepts</h2>
                                     <h3>Relevance</h3>
                                     <div class="top-concept-input-div" ng-repeat="concept in talentData.topConcepts">
-                                        <input type="" class="form-control top-concept-input-part" id="" placeholder="Skill" ng-model="concept.skill" maxlength="100" />
+                                        <input type="" class="form-control top-concept-input-part" id="" placeholder="Skill" ng-model="concept.skill" maxlength="100" required/>
                                         <i ng-show="$index != 0" class="fa fa-close" ng-click="removeIndexFromArr(talentData.topConcepts, $index);"></i>
-                                        <input type="text" class="form-control top-concept-right-input-div" id="talent-skill-percent" placeholder="%" maxlength="3" ng-model="concept.percentage" ng-change="numberonly(concept, 'percentage');">
+                                        <input type="text" class="form-control top-concept-right-input-div" id="talent-skill-percent" placeholder="%" maxlength="3" ng-model="concept.percentage" ng-change="numberonly(concept, 'percentage');" required/>
                                     </div>
                                     <button type="button" class="btn top-cocep-add-bttn" ng-click="addSkill()">Add More</button>
                                 </div>

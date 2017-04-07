@@ -113,7 +113,7 @@ function locationFormat(){
         if(b[1]){
             b[1] = capitalizeString(b[1]);
         }
-        input = b.join(',')
+        input = b.join(', ')
         return input;
 
          function capitalizeString(inputString) {

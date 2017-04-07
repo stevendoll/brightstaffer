@@ -475,7 +475,7 @@ def add_edit_talent(profile_data, user):
         if talent_obj:
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
-                              current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
+                              current_location=profile_data.get('city', '') + ' ' + profile_data.get('country', ''),
                               linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               industry_focus=profile_data.get('industryFocus', ''))
             talent_obj = talent_obj[0]
@@ -483,7 +483,7 @@ def add_edit_talent(profile_data, user):
         talent_obj = Talent.objects.create(
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
             recruiter=user, status='New', industry_focus=profile_data.get('industryFocus', ''),
-            current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
+            current_location=profile_data.get('city', '') + ' ' + profile_data.get('country', ''),
             linkedin_url=profile_data.get('linkedinProfileUrl', ''), create_date=datetime.datetime.now())
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                           is_active=True)
@@ -504,7 +504,7 @@ def add_edit_talent(profile_data, user):
             # save user education information
             if bool(education):
                 org, created = Education.objects.get_or_create(name=education.get('name', ''))
-                start_date, end_date = convert_to_start_end(education)
+                start_date, end_date = education_convert_to_start_end(education)
                 if "id" in education:
                     # update information, check if id is valid or not
                     TalentEducation.objects.filter(id=education.get('id', '')).update(talent=talent_obj,
@@ -546,15 +546,28 @@ def add_edit_talent(profile_data, user):
         talent_obj.save()
 
 
-def convert_to_start_end(education):
+def convert_to_start_end(organization):
+    start_date = None
+    end_date = None
+    day = 1
+    month = 1
+    try:
+        if organization.get('from') != "":
+            start_date = date(int(organization.get('from', 2017)), month, day)
+        end_date = date(2017, month, day)
+    except:
+        pass
+    return start_date, end_date
+
+def education_convert_to_start_end(education):
     start_date = None
     end_date = None
     day = 1
     month = 1
     try:
         if education.get('from') != "":
-            start_date = date(int(education.get('from', 2017)), month, day)
-        end_date = date(2017, month, day)
+            start_date = date(int(education.get('from')), month, day)
+            end_date = date(int(education.get('to')), month, day)
     except:
         pass
     return start_date, end_date

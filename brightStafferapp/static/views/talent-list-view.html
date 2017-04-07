@@ -142,7 +142,8 @@
 
                              </thead>
                              <tbody>
-                                 <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">
+<!--                                 <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">-->
+                                 <tr ng-repeat="talent in talentList" on-finish-render="ngRepeatFinished">
                                      <td><a href="" class="tbl-link-td" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</a></td>
                                      <td>[[talent.talent_company[0].designation | capitalizeWord]]</td>
                                      <td>[[talent.talent_company[0].company | capitalizeWord]]</td>

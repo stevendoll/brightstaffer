@@ -8,8 +8,9 @@
  *
 */
 
-.abcd .qwe {
-    background-color:blue;
+.unstyled::-webkit-clear-button {
+    display: none;
+    -webkit-appearance: none;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -2615,9 +2616,8 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     color: #a94442;
 }
 
-
 .width60 {
-  width: 60% !important;
+    width: 60% !important;
 }
 
 .current-tab {
@@ -2627,7 +2627,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .mtop-minus4 {
-        margin-top: -4px;
+    margin-top: -4px;
 }
 
 .current-tab1 {
@@ -6242,7 +6242,7 @@ video {
 }
 
 .width55 {
-  width: 55% !important;
+  width: 60% !important;
   word-wrap: break-word;
 }
 
@@ -13899,19 +13899,16 @@ table.dataTables > tbody > tr > td:last-child {
     font-size: 14px;
     color: #337ab7;
     float: left;
-    width: auto;
+    min-width: 1%;
+    max-width: 55%;
     margin-left: 10px;
     margin-top: 9px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-wrap: break-word;
 }
 
 .circle-bg .link-panel span {
     display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-wrap: break-word;
 }
 
 .circle-bg .bar-date {
@@ -14239,8 +14236,9 @@ input[type=checkbox].css-checkboxs:checked + label.css-labels {
     float: left;
     position: absolute;
     top: 42px;
-    right: 41%;
+    right: 38%;
     z-index: 9999;
+    text-align: center;
 }
 
 .talent-file-error {
@@ -14670,8 +14668,8 @@ a.sbSelector:hover {
 }
 
 .remove-profile-text {
-    width: 100%;
-    float: left;
+    width: auto;
+    float: right;
     font-family: 'open_sansregular';
     font-size: 13px;
     color: #d60000;
@@ -14680,7 +14678,7 @@ a.sbSelector:hover {
     padding-right: 10px;
     margin-top: -9px;
     margin-bottom: 10px;
-    cursor: pointer;
+    /*    cursor: pointer;*/
 }
 
 .edit-profile-screen {
@@ -14734,8 +14732,10 @@ a.sbSelector:hover {
     height: 40px;
 }
 
-.edit-rectangle-left-div.form-group.sbHolder a.sbSelector:link, a.sbSelector:visited, a.sbSelector:hover {
-  margin: 2px 0 0 2px;
+.edit-rectangle-left-div.form-group.sbHolder a.sbSelector:link,
+a.sbSelector:visited,
+a.sbSelector:hover {
+    margin: 2px 0 0 2px;
 }
 
 .modal-edit-profile-hd {
@@ -14764,4 +14764,6 @@ a.sbSelector:hover {
 .width100 {
     width: 100%;
 }
+
+
 /*create-profile-css-ends*/
