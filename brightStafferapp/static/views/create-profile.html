@@ -152,9 +152,9 @@
                                     </div>
                                     <div class="side-panel">
                                         <div class="form-group count">
-                                            <select class="form-control select-arrow" ng-model="education.to">
+                                            <select class="form-control select-arrow" ng-model="education.to" ng-disabled="!education.from">
                                                 <option ng-show="education.to == ''" value="">Select Year</option>
-                                                <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                                <option ng-show="year >= education.from" ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
                                         </div>
                                     </div>
