@@ -1097,12 +1097,16 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
                 
                 , {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
                 }
+
+
 
 
 
@@ -1175,12 +1179,16 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
 
 
+
+
                 
                 , {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
                 }
+
+
 
 
 
@@ -1712,17 +1720,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
-                    for(var i=0;i<$rootScope.talentList.length;i++){
-                      if(response.talent_updated_data.id == $rootScope.talentList[i].id){
-                                $rootScope.talentList[i] = response.talent_updated_data;
-                      }
+                    for (var i = 0; i < $rootScope.talentList.length; i++) {
+                        if (response.talent_updated_data.id == $rootScope.talentList[i].id) {
+                            $rootScope.talentList[i] = response.talent_updated_data;
+                        }
                     }
                     $('#edit-profile').modal('hide');
                     $scope.showNotification(true, 'Talent profile has been updated successfully.');
                     //$rootScope.getCandidateData();
                 } else {
                     $scope.initTalenData();
-                    $scope.showNotification(true, 'Talent profile has been created successfully.');
+//                    $scope.showNotification(true, 'Talent profile has been created successfully.');
                     $state.go('talent.talent-search.talent-search-card');
                     $rootScope.getCandidateData();
                 }
@@ -1889,7 +1897,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         $rootScope.candidatePagination.page = 1;
         $rootScope.candidatePagination.count = parseInt(recordCount);
-//        $scope.getcandidateData();
+        //        $scope.getcandidateData();
 
         //        if (recordCount) {
         //            var count = recordCount;
