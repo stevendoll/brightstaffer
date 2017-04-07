@@ -256,7 +256,7 @@ def talent_project_match(talent_obj,project):
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
                 ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
-                if ratio >= 95:
+                if ratio >= 100:
                     count += 1
         # match = math.ceil(round((count/project_concept_count), 2))
         match = round(count / project_concept_count * 100)
@@ -265,7 +265,7 @@ def talent_project_match(talent_obj,project):
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
                 ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower() )
-                if ratio >= 50:
+                if ratio >= 100:
                     count += 1
         # match = math.ceil(round((count/project_concept_count), 2))
         match = round(count / talent_concept_count * 100)
