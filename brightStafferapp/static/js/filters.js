@@ -103,6 +103,25 @@ function contactFormat() {
 
 }
 
+function locationFormat(){
+  return function(input){
+    var input = input;
+        var b = input.split(',');
+        if(b[0]){
+            b[0] = capitalizeString(b[0]);
+        }
+        if(b[1]){
+            b[1] = capitalizeString(b[1]);
+        }
+        input = b.join(',')
+        return input;
+
+         function capitalizeString(inputString) {
+            return inputString.substring(0, 1).toUpperCase() + inputString.substring(1);
+        }
+  }
+}
+
 angular
     .module('brightStaffer')
     .filter('dateFormat', dateFormat)
@@ -111,4 +130,5 @@ angular
     .filter('yearFormat', yearFormat)
     .filter('capitalizeAll', capitalizeAll)
     .filter('capitalizeWord', capitalizeWord)
-    .filter('contactFormat', contactFormat);
+    .filter('contactFormat', contactFormat)
+    .filter('locationFormat', locationFormat);

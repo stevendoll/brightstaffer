@@ -6240,6 +6240,11 @@ video {
     position: relative !important;
 }
 
+.width55 {
+  width: 55% !important;
+  word-wrap: break-word;
+}
+
 @media (min-width: 768px) {
     #page-wrapper {
         position: inherit;
@@ -13893,7 +13898,7 @@ table.dataTables > tbody > tr > td:last-child {
     font-size: 14px;
     color: #337ab7;
     float: left;
-    width: 25%;
+    width: auto;
     margin-left: 10px;
     margin-top: 9px;
     white-space: nowrap;
@@ -13910,11 +13915,11 @@ table.dataTables > tbody > tr > td:last-child {
 
 .circle-bg .bar-date {
     width: auto;
-    float: right;
+    float: left;
     font-family: 'open_sansregular';
     font-size: 13px;
     color: #6e6e6e;
-    margin-left: 5px;
+    margin-left: 35px;
     margin-top: 18px;
 }
 
