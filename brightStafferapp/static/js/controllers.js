@@ -1569,6 +1569,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.createTalent = function (data, onEdit) {
         if (data.phone && data.phone.length < 10) return;
+        var valid = true;
+        data.topConcepts.forEach(function(concept){
+            if(concept.percentage > 100){
+                valid = false;
+            }
+        })
+        if(!valid)return;
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
@@ -2091,10 +2098,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $('.talent-search-icon').removeClass('active');
                     $scope.isFilterChecked = false;
                     $rootScope.filterReset();
-                    $rootScope.talentList = response;
-                    var count = talent.length
-                    $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
-                    $rootScope.talentCountEnd = response.length;
+                    $rootScope.getCandidateData();
+//                    $rootScope.talentList = response;
+//                    var count = talent.length
+//                    $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
+//                    $rootScope.talentCountEnd = response.length;
                     $('#selectall').prop('checked', false);
                     $('#assignToProject').removeClass('add-talent');
                     $('#assignToProject').addClass('disabled-talent');
