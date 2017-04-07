@@ -9,7 +9,7 @@
                         [[talentDetails.talent_name | capitalizeWord]]
                         <!--                  <span>[[(talentDetails.designation || talentDetails.talent_company[0].designation) | capitalizeAll]] at [[talentDetails.talent_company[0].company | capitalizeAll]]</span>-->
                     </div>
-                    <div class="talent-analysis-qual">[[talentDetails.current_location | capitalizeWord]]
+                    <div class="talent-analysis-qual">[[talentDetails.current_location | locationFormat]]
                         <!--                  <span></span> [[talentDetails.industry_focus | capitalizeAll]]-->
                     </div>
                     <button type="" class="btn view-con-info hvr-fade" data-toggle="modal" ng-click="openContactInfo()">View Contact Info</button>
@@ -19,7 +19,7 @@
                     <div class="talent-activity-panel">
                         <div class="left-div">Last Activity</div>
                         <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].create_date | dateFormat]]</div>
-                        <div class="right-div" ng-show="!stage.stagesCard.length"> - </div>
+                        <div class="right-div" ng-show="!stage.stagesCard.length">  -  </div>
                     </div>
                     <div class="talent-rec-panel">
                         <div class="left-div">Recruiter</div>
@@ -72,7 +72,7 @@
                             <div class="analysis-panel">
                                 <div class="col-xs-12 padding-zero">
                                     <div class="analyzed-div">Analyzed [[talentDetails.create_date | dateFormat]]</div>
-<!--                                    <div class="edit-update-link" style="cursor:default;" ng-click="openEditProfileForm(talentDetails)">Edit/Update</div>-->
+                                    <div class="edit-update-link" style="cursor:default;">Edit/Update</div>
                                 </div>
                                 <div ng-repeat="company in talentDetails.talent_company | limitTo: 2">
                                     <div ng-if="$index == 0">
@@ -95,7 +95,7 @@
                                 </div>
                                 <div class="col-xs-12 padding-zero">
                                     <div class="left-div search-result-edu">Education</div>
-                                    <div class="right-div search-detail-edu">[[talentDetails.talent_education[0].education | capitalizeAll ]] [[talentDetails.talent_education[0].start_date | yearFormat]] - [[talentDetails.talent_education[0].end_date | yearFormat]] </div>
+                                    <div class="right-div search-detail-edu" ng-show="talentDetails.talent_education[0].start_date && talentDetails.talent_education[0].end_date">[[talentDetails.talent_education[0].education | capitalizeAll ]] [[talentDetails.talent_education[0].start_date | yearFormat]] - [[talentDetails.talent_education[0].end_date | yearFormat]] </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="talent-analysis-concept-panel">
@@ -390,8 +390,8 @@
                             <h1>[[st.stage]]</h1>
                             <div class="info-box-panels">Date: <span>[[st.create_date | dateFormat]]</span></div>
                             <div class="info-box-panels">Project: <span>#[[st.project]]</span></div>
-                            <div class="info-box-panels">Details: <span>[[st.details]]</span></div>
-                            <div class="info-box-panels">Notes: <span>[[st.notes]]</span></div>
+                            <div class="info-box-panels" tooltip="[[st.details]]">Details: <span>[[st.details]]</span></div>
+                            <div class="info-box-panels" tooltip="[[st.notes]]">Notes: <span>[[st.notes]]</span></div>
                             <div class="info-box-bottom-links" style="cursor:default;">
                                 <span data-toggle="modal" style="cursor:default;">Edit</span>
                                 <span style="cursor:default;">Delete</span>
