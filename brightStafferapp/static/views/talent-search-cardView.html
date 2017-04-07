@@ -72,7 +72,7 @@
             <div class="col-xs-12">
                 <div class="top-concept-panel">
                     <div class="top-concept-text">
-                        Top Concepts<span data-toggle="modal" ng-show="talent.talent_concepts.length > 6" ng-click="allConcepts(talent.talent_concepts)">View All</span>
+                        Top Concepts<div class="top-slash-div" ng-show="!talent.talent_concepts.length">-</div><span data-toggle="modal" ng-show="talent.talent_concepts.length > 6" ng-click="allConcepts(talent.talent_concepts)">View All</span>
                     </div>
                     <div class="talent-progress" ng-repeat="concepts in talent.talent_concepts | limitTo: 6">
                         <div class="progress">
@@ -82,10 +82,6 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-show="!talent.talent_concepts.length">
-                        <span>-</span>
-                    </div>
-
                 </div>
                 <!--    <div class="top-concept-panel">
                     <div class="top-concept-text">Career History<span ng-click="allMetrics(talent.talent_company)" ng-show="talent.talent_company.length > 3">More</span></div>
