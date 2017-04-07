@@ -2239,6 +2239,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     var count = talent.length
                     $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
                     $rootScope.talentCountEnd = response.length;
+                    $('#selectall').prop('checked', false);
+                    $('#assignToProject').removeClass('add-talent');
+                    $('#assignToProject').addClass('disabled-talent');
+                    $('#assignToProject').css('pointer-events', 'none');
+                    $('#talent-delete').css('pointer-events', 'none');
+
+                    $('#talent-delete').css('background-color', '');
                     $('#delete-talent-popup').modal('hide');
                     $('html, body').animate({
                         scrollTop: 0
@@ -2786,32 +2793,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                             , changeYear: true
                         }).val('');
                         sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
-                    }/*else if(response.success == false){
-                         $('#add-stage').modal('hide');
-                            $scope.stage.stage = '';
-
-                            $scope.stage.project = '';
-                            $scope.stage.detail = '';
-                            $scope.stage.notes = '';
-                            $scope.stage.date = '';
-                            $scope.stage.isStage = false;
-                            var sbId = $('#stageSelect').attr('sb');
-                        var selectedValue = $('#sbSelector_' + sbId).text('Select Stage');
-                        $scope.stage.stage = selectedValue;
-                        var sbId = $('#projectListD2').attr('sb');
-                        var selectedValue = $('#sbSelector_' + sbId).text('Select Project');
-                        $scope.stage.project = selectedValue;
-
-                        $('.select-date').datepicker({
-                            dateFormat: "dd/mm/yyyy"
-                            , changeMonth: true
-                            , changeYear: true
-                        }).val('');
-                            $scope.notification.show = true;
-                            $scope.notification.status = 'Error';
-                            $scope.notification.message = response.errorstring;
-
-                    }*/
+                    }
 
                 }
             }
