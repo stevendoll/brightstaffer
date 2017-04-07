@@ -1300,7 +1300,6 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
 
     $scope.openCreateProfile = function () {
         $('#add-talent').modal('hide');
-        $rootScope.search.searchKeywords = '';
         $state.go('talent.create-profile');
 
     }
@@ -1652,9 +1651,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.$watch('candidatePagination.page + candidatePagination.count', function () {
-        if ($rootScope.getCandidateData){
+        if ($rootScope.getCandidateData)
             $rootScope.getCandidateData(true);
-        }
     });
 
     //    $scope.changePage = function (add, pageNo) {
@@ -1822,7 +1820,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
 
     $scope.loadProfileData = function (id, talent) {
-        $rootScope.search.searchKeywords = '';
         $scope.isFilterChecked = false;
         if (talent && id) {
             $rootScope.talentDetails = talent;
@@ -2090,6 +2087,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             //$('#delete-talent-popup').modal('hide');
             talentApis.deleteTalents(requestObject).then(function (response) {
                 if (response) {
+                    $rootScope.search.searchKeywords = '';
                     $rootScope.talentList = response;
                     var count = talent.length
                     $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
