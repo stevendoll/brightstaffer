@@ -2090,6 +2090,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             //$('#delete-talent-popup').modal('hide');
             talentApis.deleteTalents(requestObject).then(function (response) {
                 if (response) {
+                    $rootScope.search.searchKeywords = '';
+                    $('.talent-search-icon').removeClass('active');
+                    $scope.isFilterChecked = false;
+                    $rootScope.filterReset();
                     $rootScope.talentList = response;
                     var count = talent.length
                     $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
