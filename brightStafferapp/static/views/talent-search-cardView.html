@@ -44,6 +44,7 @@
                 </div>
                 <div class="col-xs-12 padding-zero">
                     <div class="left-div search-result-edu">Education</div>
+                    <div class="right-div search-detail-edu" ng-show="!talent.talent_education.length"> - </div>
                     <div class="right-div search-detail-edu">
                         [[talent.talent_education[0].education | capitalizeAll]]
                         <span ng-show="talent.talent_education[0].start_date && talent.talent_education[0].end_date">[[talent.talent_education[0].start_date | yearFormat]] - [[talent.talent_education[0].end_date | yearFormat]]</span>
@@ -70,7 +71,7 @@
             <div class="cls"></div>
             <div class="col-xs-12">
                 <div class="top-concept-panel">
-                    <div class="top-concept-text">Top Concepts<span data-toggle="modal" ng-show="talent.talent_concepts.length > 6" ng-click="allConcepts(talent.talent_concepts)">View All</span></div>
+                    <div class="top-concept-text" ng-show="talent.talent_concepts.length">Top Concepts<span data-toggle="modal" ng-show="talent.talent_concepts.length > 6" ng-click="allConcepts(talent.talent_concepts)">View All</span></div>
                     <div class="talent-progress" ng-repeat="concepts in talent.talent_concepts | limitTo: 6">
                         <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="[[concepts.match]]" aria-valuemin="0" aria-valuemax="100" style="width: [[concepts.match]]%;">
@@ -79,6 +80,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <!--    <div class="top-concept-panel">
                     <div class="top-concept-text">Career History<span ng-click="allMetrics(talent.talent_company)" ng-show="talent.talent_company.length > 3">More</span></div>
