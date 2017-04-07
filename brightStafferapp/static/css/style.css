@@ -2635,6 +2635,11 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     float: left;
 }
 
+.top-slash-div {
+    display: inline-block;
+    margin-left: 12px;
+}
+
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
         display: block;
