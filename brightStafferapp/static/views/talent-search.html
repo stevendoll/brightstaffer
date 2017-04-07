@@ -39,7 +39,18 @@
                   <input type="checkbox" value="1" id="selectall" class="css-checkbox" ng-click="selectAll()">
                   <label class="css-label" for="selectall"></label>
                 </div>
-                <span ng-show="totalTalentCount">Showing [[talentCountStart]] – [[talentCountEnd]] entries of [[totalTalentCount]] entries</span>
+                  
+                  
+<!--
+                  $rootScope.candidatePagination = {
+        page: 1
+        , count: parseInt($scope.recordCount)
+    }
+-->
+                  
+                  
+<!--                <span ng-show="totalTalentCount">Showing [[talentCountStart]] – [[talentCountEnd]] entries of [[totalTalentCount]] entries</span>-->
+                <span ng-show="totalTalentCount">Showing [[((candidatePagination.page-1) * candidatePagination.count)+1]] – [[((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count]] entries of [[totalTalentCount]] entries</span>
                 <span ng-show="!totalTalentCount">Showing 0 entry of [[totalTalentCount]] entries</span>
               </div>
               <div class="cls"></div>
