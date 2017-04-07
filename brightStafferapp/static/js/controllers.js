@@ -1569,6 +1569,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.createTalent = function (data, onEdit) {
         if (data.phone && data.phone.length < 10) return;
+        var valid = true;
+        data.topConcepts.forEach(function(concept){
+            if(concept.percentage > 100){
+                valid = false;
+            }
+        })
+        if(!valid)return;
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
