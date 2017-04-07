@@ -1524,7 +1524,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     var d = new Date().getFullYear();
     $scope.yearArr = [];
-    for (var i = 100; i >= 0; i--) {
+    for (var i = 80; i >= 0; i--) {
         $scope.yearArr[i] = d - i;
     }
     $scope.talentData = {};
