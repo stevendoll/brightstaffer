@@ -114,8 +114,8 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
     $scope.isDisabled = false;
     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/; //email validation pattern
     $scope.data = {
-        user_name: 'pooja@yopmail.com'
-        , user_password: 'qwerty1!'
+        user_name: ''
+        , user_password: ''
     };
     /**Create function for user login **/
     this.userLogin = function () {
@@ -1723,6 +1723,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 } else {
                     $scope.initTalenData();
                     $scope.showNotification(true, 'Talent profile has been created successfully.');
+                    $state.go('talent.talent-search.talent-search-card');
+                    $rootScope.getCandidateData();
                 }
             } else {
                 if (onEdit) {
