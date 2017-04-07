@@ -176,7 +176,7 @@
                                         <input type="" class="form-control top-concept-input-part" id="" placeholder="Skill" ng-model="concept.skill" maxlength="100" required/>
                                         <i ng-show="$index != 0" class="fa fa-close" ng-click="removeIndexFromArr(talentData.topConcepts, $index);"></i>
                                         <input type="text" class="form-control top-concept-right-input-div" id="talent-skill-percent" placeholder="%" maxlength="3" ng-model="concept.percentage" ng-change="numberonly(concept, 'percentage');" required/>
-                                        <span ng-show="concept.percentage > 100" style="color: red;font-weight: 100;font-size: 14px;float: right;margin-right: 10px;">Please enter percentage less than 100.</span>
+                                        <span ng-show="concept.percentage > 100" style="color: red;font-weight: 100;font-size: 14px;float: right;margin-right: 10px;">Please enter percentage less than equal to 100.</span>
                                     </div>
                                     <button type="button" class="btn top-cocep-add-bttn" ng-click="addSkill()">Add More</button>
                                 </div>
