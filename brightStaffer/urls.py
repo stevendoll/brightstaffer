@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^talent_list/$', talent.TalentList.as_view()),
     # url(r'^insert_talent/$', talent.InsertTalent.as_view()),
     url(r'^talent_list/(?P<pk>[0-9a-f-]+)/$', talent.TalentDetail.as_view(), name='talent-instance'),
+    url(r'^talent_add/$', talent.TalentAdd.as_view()),
     url(r'^talent_contact_email/$', talent.TalentEmailContactAPI.as_view()),
     url(r'^talent_contact/$', talent.TalentContactAPI.as_view()),
     url(r'^talent_email/$', talent.TalentEmailAPI.as_view()),

@@ -1,0 +1,196 @@
+<div class="wrapper wrapper-content" ng-controller="talentCtrl">
+    <div class="row">
+        <div class="col-xs-12 search-result">
+            <h2 class="create-prof">Create Profile</h2>
+            <div class="create-profile-panel">
+                <form name="createTalentForm" onkeypress="return event.keyCode != 13;" ng-submit="createTalentForm.$valid && createTalent(talentData);">
+                    <div class="col-xs-12 padding-zero">
+                        <div class="create-profile-form-div">
+                            <div class="left-section">
+                                <div class="form-group">
+                                    <label for="">First Name</label>
+                                    <input name="fName" type="text" class="form-control" id="" placeholder="First Name" maxlength="100" ng-model="talentData.firstName" required/>
+                                </div>
+                            </div>
+                            <div class="right-section">
+                                <div class="form-group">
+                                    <label for="">Last Name</label>
+                                    <input name="lName" type="text" class="form-control" id="" placeholder="Last Name" maxlength="100" ng-model="talentData.lastName" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 padding-zero">
+                            <div class="create-profile-form-div">
+                                <div class="left-section">
+                                    <div class="form-group">
+                                        <label for="">Contact Email</label>
+                                        <input name="email" type="email" class="form-control" id="" placeholder="Contact Email" maxlength="100" ng-model="talentData.email" ng-pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/' required/>
+                                        <span class="msg-error" ng-show="createTalentForm.email.$dirty && createTalentForm.email.$error.pattern">Please enter valid email Id.</span>
+                                    </div>
+                                </div>
+                                <div class="right-section">
+                                    <div class="form-group">
+                                        <label for="">Contact Phone</label>
+                                        <input name="phone" type="text" class="form-control" id="" placeholder="Contact Phone" maxlength="10" ng-model="talentData.phone" ng-change="numberonly(talentData, 'phone');checkPhoneNumberLength(talentData.phone, 10)" required/>
+                                        <span class="msg-error" ng-show="!talentDataValidation.phone">Please enter valid phone number.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="create-profile-form-div">
+                                <div class="left-section">
+                                    <div class="form-group">
+                                        <label for="">City</label>
+                                        <input name="fName" type="text" class="form-control" id="" placeholder="City" maxlength="100" ng-model="talentData.city" />
+                                    </div>
+                                </div>
+                                <div class="right-section">
+                                    <div class="form-group">
+                                        <label for="">Country</label>
+                                        <input name="lName" type="text" class="form-control" id="" placeholder="Country" maxlength="100" ng-model="talentData.country" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="create-profile-form-div">
+                                <div class="left-section">
+                                    <div class="form-group">
+                                        <label for="">Industry</label>
+                                        <input name="industryFocus" type="text" class="form-control" id="" placeholder="Industry focus" maxlength="100" ng-model="talentData.industryFocus" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="create-profile-form-div">
+                                <div class="main-section">
+                                    <div class="form-group">
+                                        <label for="">Linkedin URL</label>
+                                        <input type="text" name="lurl" class="form-control" id="" placeholder="Linkedin profile url" ng-model="talentData.linkedinProfileUrl" ng-pattern="/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i" />
+                                        <span class="msg-error" ng-show="createTalentForm.lurl.$dirty && createTalentForm.lurl.$error.pattern">Please enter valid url.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="create-profile-form-div">
+                                <div class="create-pro-hd">Current</div>
+                                <div class="cls"></div>
+                                <div class="col-xs-12 padding-zero" ng-repeat="currentOrganization in talentData.currentOrganization">
+                                    <div class="first-panel">
+                                        <div class="form-group current-tab">
+                                            <input type="text" class="form-control" id="" placeholder="Organization" maxlength="100" ng-model="currentOrganization.name" />
+                                        </div>
+                                        <div class="form-group current-tab1">
+                                            <input type="text" class="form-control" id="" placeholder="Designation" maxlength="100" ng-model="currentOrganization.JobTitle" />
+                                        </div>
+                                    </div>
+                                    <div class="side-panel">
+                                        <div class="form-group count">
+                                            <select class="form-control select-arrow" ng-model="currentOrganization.from">
+                                                <option ng-show="currentOrganization.from == ''" value="">Select Year</option>
+                                                <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="side-panel">
+                                        <div class="form-group count">
+                                            <input type="text" class="form-control" ng-model="currentOrganization.to" readonly/>
+                                            <!--
+                                        <select class="form-control select-arrow" ng-model="currentOrganization.to">
+                                            <option ng-show="currentOrganization.to == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                        </select>
+-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--
+                        <div class="create-profile-form-div">
+                            <div class="create-pro-hd">Past</div>
+                            <div class="cls"></div>
+                            <div class="col-xs-12 padding-zero" ng-repeat="pastOrganization in talentData.pastOrganization">
+                                <div class="first-panel">
+                                    <div class="form-group">
+                                        <input type="" class="form-control" id="" placeholder="" ng-model="pastOrganization.name" required />
+                                    </div>
+                                </div>
+                                <div class="side-panel m-top4">
+                                    <div class="form-group count">
+                                        <select class="form-control select-arrow" ng-model="pastOrganization.from" required>
+                                            <option ng-show="pastOrganization.from == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="side-panel m-top4">
+                                    <div class="form-group count">
+                                        <select class="form-control select-arrow" ng-model="pastOrganization.to" required>
+                                            <option ng-show="pastOrganization.to == ''" value="">Select Year</option>
+                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cls"></div>
+                            <button type="button" class="btn create-profile-add-bttn" ng-click="addPastOrganization()">
+                                Add More
+                            </button>
+                        </div>
+-->
+                            <div class="create-profile-form-div">
+                                <div class="create-pro-hd">Education</div>
+                                <div class="cls"></div>
+                                <div class="col-xs-12 padding-zero" ng-repeat="education in talentData.education">
+                                    <div class="first-panel">
+                                        <div class="form-group">
+                                            <input type="text" maxlength="100" class="form-control" id="" placeholder="Education" ng-model="education.name" />
+                                        </div>
+                                    </div>
+                                    <div class="side-panel">
+                                        <div class="form-group count">
+                                            <select class="form-control select-arrow" ng-model="education.from">
+                                                <option ng-show="education.from == ''" value="">Select Year</option>
+                                                <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="side-panel">
+                                        <div class="form-group count">
+                                            <select class="form-control select-arrow" ng-model="education.to" ng-disabled="!education.from">
+                                                <option ng-show="education.to == ''" value="">Select Year</option>
+                                                <option ng-show="year >= education.from" ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                    <div class="remove-profile-text" ng-show="$index != 0" ng-click="removeIndexFromArr(talentData.education, $index);">
+                                        <a href="" style="color:red;">Remove</a>
+                                    </div>
+                                </div>
+                                <div class="cls"></div>
+                                <button type="button" class="btn create-profile-add-bttn" ng-click="addEducation();">
+                                    Add More
+                                </button>
+                            </div>
+                            <div class="top-concepts-panel">
+                                <div class="top-concept-right-div">
+                                    <h2>Top Concepts</h2>
+                                    <h3>Relevance</h3>
+                                    <div class="top-concept-input-div" ng-repeat="concept in talentData.topConcepts">
+                                        <input type="" class="form-control top-concept-input-part" id="" placeholder="Skill" ng-model="concept.skill" maxlength="100" required/>
+                                        <i ng-show="$index != 0" class="fa fa-close" ng-click="removeIndexFromArr(talentData.topConcepts, $index);"></i>
+                                        <input type="text" class="form-control top-concept-right-input-div" id="talent-skill-percent" placeholder="%" maxlength="3" ng-model="concept.percentage" ng-change="numberonly(concept, 'percentage');" required/>
+                                    </div>
+                                    <button type="button" class="btn top-cocep-add-bttn" ng-click="addSkill()">Add More</button>
+                                </div>
+                            </div>
+                            <div class="cls"></div>
+                            <div class="create-profile-footer">
+                                <button type="submit" class="btn create-add-bttn">Create</button>
+                                <button type="button" class="btn create-add-bttn" ng-click="gotoState('talent.talent-search.talent-search-card');">Cancel</button>
+                            </div>
+                        </div>
+                </form>
+                </div>
+            </div>
+        </div>
+        <div class="" ng-class="{'pro-success-box': notification.status == 'Success', 'pro-error-box': notification.status != 'Success'}" id="nameSuccess" ng-show="notification.show">
+            <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
+        </div>
+    </div>

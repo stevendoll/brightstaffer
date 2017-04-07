@@ -68,10 +68,13 @@
                       <div class="form-group">
                         <label for="" class="filter-label-text">Project Name</label>
 
-                          <select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project" >
+                          <select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project">
                             <option value="" data-tokens="" style="display: none;">Select Project</option>
                             <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
                           </select>
+                          <!--<select id="abc" name="project" multiple="multiple">
+                            <option ng-repeat="option in projectListView" value="[[option.name]]">[[option.name]]</option>
+                          </select>-->
 
                       </div>
                     </div>
@@ -97,13 +100,13 @@
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text">Date Added/Analyzed</label>
-                        <input type="date" class="form-control filter-input-date " id="analysed" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date">
+                        <input type="date" class="form-control filter-input-date unstyled" id="analysed" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date">
                       </div>
                     </div>
                     <div class="filter-stage-box">
                       <div class="form-group">
                         <label for="" class="filter-label-text" >Last contacted</label>
-                        <input type="date" class="form-control filter-input-date " id="lastContacted" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date">
+                        <input type="date" class="form-control filter-input-date unstyled" id="lastContacted" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date">
                       </div>
                     </div>
                     <div class="filter-stage-box">
@@ -154,11 +157,11 @@
               </div>
               <div class="cls"></div>
               <div ui-view></div>
+<!--
                   <div class="search-pagination" ng-show="talentList.length">
                     <ul class="pagination">
                       <li id="prev" class="prev" ng-click="changePage();">
                         <a href="" aria-label="Previous" ng-class="{'cur-notallow': candidatePagination.page == 1}">
-<!--                          <span aria-hidden="true" ><i class="fa fa-chevron-left"></i></span>-->
                           <span aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
                         </a>
                       </li>
@@ -172,6 +175,10 @@
                       </li>
                     </ul>
                   </div>
+-->
+                
+                <pagination class="search-pagination" ng-show="talentList.length" ng-model="candidatePagination.page" items-per-page="candidatePagination.count" total-items="totalTalentCount" max-size="10" boundary-links="true">
+                </pagination>
 
               </div>
               <div class="col-xs-12 padding-zero " ng-show="isAdvanceSearch">

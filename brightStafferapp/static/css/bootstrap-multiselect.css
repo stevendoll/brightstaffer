@@ -20,7 +20,7 @@
     height: 100%;
     font-weight: 400;
     color:#000;
-    font-family: 'Roboto-Regular';
+    font-family: 'open_sansregular';
 }
 .multiselect-container>li.multiselect-group-clickable label {
     cursor: pointer;
@@ -40,10 +40,14 @@
 }
 .multiselect-container>li>a>label.radio,
 .multiselect-container>li>a>label.checkbox {
-    margin: 0px 0 0 10px;
+    margin: 6px 0 0 10px;
     color: #585858;
-    font-family: 'Roboto-Regular';
+    font-family: 'open_sansregular';
     font-size: 14px;
+    width: 93%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .multiselect-container>li>a>label:hover.radio,
 .multiselect-container>li>a>label:hover.checkbox {
@@ -102,7 +106,7 @@
     font-size: 15px;
     text-align: left;
     padding: 13px 21px;
-    font-family: 'Roboto-Regular';
+    font-family: 'open_sansregular';
 }
 .select-panel .btn-default:active, .select-panel .btn-default:hover, .select-panel .btn-default:focus {
     color: #919191;

@@ -100,6 +100,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
             templateUrl: static_url +'views/talent-profile-analysis.html',
             data: { pageTitle: 'Talent' , requireAuthentication: true}
         })
+        .state('talent.create-profile', {
+            url: "/create-profile",
+            templateUrl: static_url +'views/create-profile.html',
+            data: { pageTitle: 'Create Profile' , requireAuthentication: true}
+        })
 
 }
 

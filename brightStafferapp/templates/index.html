@@ -30,10 +30,11 @@
     <link href="{% static 'css/bootstrap-select.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
     <link href="{% static 'css/select-box-custom.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-multiselect.css' %}" type="text/css"/>
     <link href="{% static 'css/rzslider.css' %}" rel="stylesheet">
-    
-    
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
     
     <!--<link href="{% static 'css/acute.select/acute.select.css' %}" rel="stylesheet" />-->
 </head>
@@ -67,8 +68,8 @@
     <script src="{% static 'js/jquery/jquery-2.1.1.js' %}"></script>
     <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
     
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    
+    <script src="{% static 'js/jquery/jquery-ui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap/bootstrap-multiselect.js' %}"></script>
     <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/slider.js' %}"></script>
     <script src="{% static 'js/jquery/jquery.easy-pie-chart.min.js' %}"></script>
@@ -97,6 +98,9 @@
     <script src="{% static 'js/ui-router/angular-ui-router.min.js' %}"></script>
     <script src="{% static 'js/bootstrap/ui-bootstrap-tpls-1.1.2.min.js' %}"></script>
     <script src="{% static 'js/angular/rzslider.js' %}"></script>
+    
+    <script data-require="ui-bootstrap@*" data-semver="0.12.1" src="{% static 'js/bootstrap/ui-bootstrap-tpls-0.12.1.min.js' %}"></script>
+    
     <!-- Tags Input -->
     <!--<script src="{% static 'js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js' %}"></script>-->
     <!-- Anglar App Script -->

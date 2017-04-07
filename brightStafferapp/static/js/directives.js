@@ -346,6 +346,10 @@ function dropDown($timeout) {
         , link: function (scope, element, attrs) {
             $timeout(function () {
                 $(element).selectbox();
+               /*$(element).multiselect({
+                 includeSelectAllOption: true,
+                // enableFiltering:true
+                });*/
             });
         }
     };
