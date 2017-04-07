@@ -41,16 +41,17 @@
                 </div>
                   
                   
-<!--
-                  $rootScope.candidatePagination = {
-        page: 1
-        , count: parseInt($scope.recordCount)
-    }
--->
-                  
-                  
 <!--                <span ng-show="totalTalentCount">Showing [[talentCountStart]] – [[talentCountEnd]] entries of [[totalTalentCount]] entries</span>-->
-                <span ng-show="totalTalentCount">Showing [[((candidatePagination.page-1) * candidatePagination.count)+1]] – [[((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count]] entries of [[totalTalentCount]] entries</span>
+                  
+                <div ng-show="totalTalentCount" class="totalcount-div">
+                    <span>Showing [[((candidatePagination.page-1) * candidatePagination.count)+1]]</span>
+                    <span>–</span> 
+                    <span ng-show="((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count < totalTalentCount">    [[((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count]]
+                    </span>
+                    <span ng-show="((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count > totalTalentCount">    [[totalTalentCount]]
+                    </span>
+                    <span>entries of [[totalTalentCount]] entries</span>
+                </div>
                 <span ng-show="!totalTalentCount">Showing 0 entry of [[totalTalentCount]] entries</span>
               </div>
               <div class="cls"></div>
