@@ -475,7 +475,7 @@ def add_edit_talent(profile_data, user):
         if talent_obj:
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
-                              current_location=profile_data.get('city', '') + ' ' + profile_data.get('country', ''),
+                              current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
                               linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               industry_focus=profile_data.get('industryFocus', ''))
             talent_obj = talent_obj[0]
@@ -483,7 +483,7 @@ def add_edit_talent(profile_data, user):
         talent_obj = Talent.objects.create(
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
             recruiter=user, status='New', industry_focus=profile_data.get('industryFocus', ''),
-            current_location=profile_data.get('city', '') + ' ' + profile_data.get('country', ''),
+            current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
             linkedin_url=profile_data.get('linkedinProfileUrl', ''), create_date=datetime.datetime.now())
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                           is_active=True)
