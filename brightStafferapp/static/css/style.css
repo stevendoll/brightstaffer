@@ -14239,8 +14239,9 @@ input[type=checkbox].css-checkboxs:checked + label.css-labels {
     float: left;
     position: absolute;
     top: 42px;
-    right: 41%;
+    right: 38%;
     z-index: 9999;
+    text-align: center;
 }
 
 .talent-file-error {
