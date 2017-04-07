@@ -8,8 +8,9 @@
  *
 */
 
-.abcd .qwe {
-    background-color: blue;
+.unstyled::-webkit-clear-button {
+    display: none;
+    -webkit-appearance: none;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -6241,7 +6242,7 @@ video {
 }
 
 .width55 {
-  width: 55% !important;
+  width: 60% !important;
   word-wrap: break-word;
 }
 
@@ -13898,19 +13899,16 @@ table.dataTables > tbody > tr > td:last-child {
     font-size: 14px;
     color: #337ab7;
     float: left;
-    width: auto;
+    min-width: 1%;
+    max-width: 55%;
     margin-left: 10px;
     margin-top: 9px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-wrap: break-word;
 }
 
 .circle-bg .link-panel span {
     display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-wrap: break-word;
 }
 
 .circle-bg .bar-date {
