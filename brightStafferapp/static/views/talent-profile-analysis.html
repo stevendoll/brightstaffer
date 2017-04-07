@@ -95,11 +95,12 @@
                                 </div>
                                 <div class="col-xs-12 padding-zero">
                                     <div class="left-div search-result-edu">Education</div>
+                                    <div class="right-div search-detail-edu" ng-show="!talentDetails.talent_education.length"> - </div>
                                     <div class="right-div search-detail-edu" ng-show="talentDetails.talent_education[0].start_date && talentDetails.talent_education[0].end_date">[[talentDetails.talent_education[0].education | capitalizeAll ]] [[talentDetails.talent_education[0].start_date | yearFormat]] - [[talentDetails.talent_education[0].end_date | yearFormat]] </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="talent-analysis-concept-panel">
-                                        <div class="top-concept-text">Top Concepts <span data-toggle="modal" ng-show="talentDetails.talent_concepts.length > 6" ng-click="allConcepts(talentDetails.talent_concepts)">All Concepts</span></div>
+                                        <div class="top-concept-text" ng-show="talentDetails.talent_concepts.length">Top Concepts <span data-toggle="modal" ng-show="talentDetails.talent_concepts.length > 6" ng-click="allConcepts(talentDetails.talent_concepts)">All Concepts</span></div>
                                         <div class="talent-progress" ng-repeat="concepts in talentDetails.talent_concepts | limitTo: 6">
                                             <div class="progress">
                                                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: [[concepts.match]]%;">
@@ -404,6 +405,9 @@
         </div>
     </div>
 </div>
+<div class="" ng-class="{'pro-error-box': notification.status != 'Success'}" ng-show="notification.show">
+            <span><strong>Error!</strong> [[notification.message]]</span>
+ </div>
 <!-- tabs-panel-ends -->
 
 <!-- contact-info-Modal-starts -->
@@ -530,6 +534,7 @@
                 <div class="cls"></div>
                 <div ng-show="selectedCandidate.talent_education.length" class="edu-roles">Education</div>
                 <div class="past-roles-descp" ng-repeat="edu in selectedCandidate.talent_education">[[edu.education | capitalizeAll]] [[edu.start_date | yearFormat]] - [[edu.end_date | yearFormat]]</div>
+
                 <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
                 <div class="cls"></div>
             </div>
@@ -589,6 +594,7 @@
 <div class="success-box" id="projectSuccess" style="display:none;">
     <span><strong>Success!</strong> Talent has been added to the project.</span>
 </div>
+
 
 <!-- all-Matrics-Modal-starts -->
 <div class="modal fade" id="all-metrics" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -770,6 +776,3 @@
     </div>
 </div>
 <!-- edit-stage-Modal-ends -->
- <div class="" ng-class="{'pro-error-box': notification.status != 'Success'}" id="nameSuccess" ng-show="notification.show">
-            <span><strong>Error!</strong> [[notification.message]]</span>
- </div>
