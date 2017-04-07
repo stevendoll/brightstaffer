@@ -260,9 +260,7 @@ def talent_project_match(talent_obj,project):
                     count += 1
         # match = math.ceil(round((count/project_concept_count), 2))
         match = round(count / project_concept_count * 100)
-        if match == 100:
-            match=100
-            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+        TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
     else:
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
@@ -271,8 +269,6 @@ def talent_project_match(talent_obj,project):
                     count += 1
         # match = math.ceil(round((count/project_concept_count), 2))
         match = round(count / talent_concept_count * 100)
-        if match == 100:
-            match=100
         TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
 
 
