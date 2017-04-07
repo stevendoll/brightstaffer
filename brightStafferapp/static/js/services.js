@@ -601,6 +601,6 @@ angular
     .service('talentApis', talentApis)
     .service('searchApis', searchApis)
     .service('tableService', tableService)
-    .service('searchData', searchData);
+    .service('searchData', searchData)
     .service('createTalentFormService', createTalentFormService);
 
