@@ -132,7 +132,7 @@ angular
 
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-      var talentStates = ['talent.talent-profile','talent.talent-search.talent-search-list','talent.talent-search.talent-search-card'];
+      var talentStates = ['talent.talent-profile','talent.talent-search.talent-search-list','talent.talent-search.talent-search-card','talent.create-profile'];
       if(fromState.name == 'create.step4' && toState.name == 'dashboard'){
             $('#publishBox').css('display','block');
             $timeout( function(){
