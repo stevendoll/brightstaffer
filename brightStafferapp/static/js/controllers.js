@@ -1063,167 +1063,19 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
                     extend: 'copy'
                     , className: 'btn btn-default btn-sm'
                     , title: 'Copy'
-                }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-                , {
+                }, {
                     extend: 'csv'
                     , className: 'btn btn-default btn-sm'
                     , title: 'CSV'
-                }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-                , {
+                }, {
                     extend: 'excel'
                     , className: 'btn btn-default btn-sm'
                     , title: 'Excel'
-                }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-                , {
+                }, {
                     extend: 'pdf'
                     , className: 'btn btn-default btn-sm'
                     , title: 'PDF'
-                }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-                , {
+                }, {
                     extend: 'print'
                     , className: 'btn btn-default btn-sm'
                     , title: 'Print'
@@ -1730,7 +1582,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     //$rootScope.getCandidateData();
                 } else {
                     $scope.initTalenData();
-//                    $scope.showNotification(true, 'Talent profile has been created successfully.');
+                    //                    $scope.showNotification(true, 'Talent profile has been created successfully.');
                     $state.go('talent.talent-search.talent-search-card');
                     $rootScope.getCandidateData();
                 }
@@ -2316,7 +2168,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 $("#headRow").find(".sorting_desc").removeClass("sorting_desc");
             }
             $('#' + propertyName).addClass('sorting_desc');
-
         }
     }
 
@@ -2700,24 +2551,24 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.isDate = date ? false : true;
     }
     $scope.addProjectCheckValidation = function (stage, removeValidation) {
-        if (removeValidation) {
-            $scope.isStage = false;
-            $scope.isProject = false;
-            $scope.isDate = false;
-            $scope.isDetail = false;
-            $scope.isNotes = false;
-        } else {
-            $scope.isStage = stage.stage ? false : true;
-            $scope.isProject = stage.project ? false : true;
-            $scope.isDate = stage.date ? false : true;
-            $scope.isDetail = $scope.stage.detail ? false : true;
-            $scope.isNotes = stage.notes ? false : true;
+            if (removeValidation) {
+                $scope.isStage = false;
+                $scope.isProject = false;
+                $scope.isDate = false;
+                $scope.isDetail = false;
+                $scope.isNotes = false;
+            } else {
+                $scope.isStage = stage.stage ? false : true;
+                $scope.isProject = stage.project ? false : true;
+                $scope.isDate = stage.date ? false : true;
+                $scope.isDetail = $scope.stage.detail ? false : true;
+                $scope.isNotes = stage.notes ? false : true;
+            }
         }
-    }
-  /* $scope.notification = {
-        show:false,
-        message:''
-   };*/
+        /* $scope.notification = {
+              show:false,
+              message:''
+         };*/
 
     $scope.addProjectStage = function (stage) {
         var selectedProjectId;
@@ -2786,32 +2637,33 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                             , changeYear: true
                         }).val('');
                         sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
-                    }/*else if(response.success == false){
-                         $('#add-stage').modal('hide');
-                            $scope.stage.stage = '';
+                    }
+                    /*else if(response.success == false){
+                                             $('#add-stage').modal('hide');
+                                                $scope.stage.stage = '';
 
-                            $scope.stage.project = '';
-                            $scope.stage.detail = '';
-                            $scope.stage.notes = '';
-                            $scope.stage.date = '';
-                            $scope.stage.isStage = false;
-                            var sbId = $('#stageSelect').attr('sb');
-                        var selectedValue = $('#sbSelector_' + sbId).text('Select Stage');
-                        $scope.stage.stage = selectedValue;
-                        var sbId = $('#projectListD2').attr('sb');
-                        var selectedValue = $('#sbSelector_' + sbId).text('Select Project');
-                        $scope.stage.project = selectedValue;
+                                                $scope.stage.project = '';
+                                                $scope.stage.detail = '';
+                                                $scope.stage.notes = '';
+                                                $scope.stage.date = '';
+                                                $scope.stage.isStage = false;
+                                                var sbId = $('#stageSelect').attr('sb');
+                                            var selectedValue = $('#sbSelector_' + sbId).text('Select Stage');
+                                            $scope.stage.stage = selectedValue;
+                                            var sbId = $('#projectListD2').attr('sb');
+                                            var selectedValue = $('#sbSelector_' + sbId).text('Select Project');
+                                            $scope.stage.project = selectedValue;
 
-                        $('.select-date').datepicker({
-                            dateFormat: "dd/mm/yyyy"
-                            , changeMonth: true
-                            , changeYear: true
-                        }).val('');
-                            $scope.notification.show = true;
-                            $scope.notification.status = 'Error';
-                            $scope.notification.message = response.errorstring;
+                                            $('.select-date').datepicker({
+                                                dateFormat: "dd/mm/yyyy"
+                                                , changeMonth: true
+                                                , changeYear: true
+                                            }).val('');
+                                                $scope.notification.show = true;
+                                                $scope.notification.status = 'Error';
+                                                $scope.notification.message = response.errorstring;
 
-                    }*/
+                                        }*/
 
                 }
             }
