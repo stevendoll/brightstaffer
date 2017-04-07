@@ -29,7 +29,7 @@
                             <div class="left-div search-result-current">Current</div>
                             <div class="right-div search-detail-current">
                                 <span class="bold-font" ng-show="current.designation">[[current.designation | capitalizeWord]] -</span>
-                                <span>[[current.company | capitalizeWord]] [[current.start_date | yearFormat]]- Present</span>
+                                <span>[[current.company | capitalizeWord]] [[current.start_date | yearFormat]] - Present</span>
                             </div>
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                     <div class="left-div search-result-edu">Education</div>
                     <div class="right-div search-detail-edu">
                         [[talent.talent_education[0].education | capitalizeAll]]
-                        <span ng-show="talent.talent_education[0].start_date && talent.talent_education[0].end_date">[[talent.talent_education[0].start_date | yearFormat]]- [[talent.talent_education[0].end_date | yearFormat]]</span>
+                        <span ng-show="talent.talent_education[0].start_date && talent.talent_education[0].end_date">[[talent.talent_education[0].start_date | yearFormat]] - [[talent.talent_education[0].end_date | yearFormat]]</span>
                     </div>
                 </div>
             </div>

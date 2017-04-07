@@ -2714,6 +2714,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.isNotes = stage.notes ? false : true;
         }
     }
+  /* $scope.notification = {
+        show:false,
+        message:''
+   };*/
 
     $scope.addProjectStage = function (stage) {
         var selectedProjectId;
@@ -2770,7 +2774,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         $scope.stage.stagesCard.unshift(response);
                         $scope.$apply();
                         var sbId = $('#stageSelect').attr('sb');
-                        var selectedValue = $('#sbSelector_' + sbId).text('Select Project');
+                        var selectedValue = $('#sbSelector_' + sbId).text('Select Stage');
                         $scope.stage.stage = selectedValue;
                         var sbId = $('#projectListD2').attr('sb');
                         var selectedValue = $('#sbSelector_' + sbId).text('Select Project');
@@ -2782,7 +2786,33 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                             , changeYear: true
                         }).val('');
                         sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
-                    }
+                    }/*else if(response.success == false){
+                         $('#add-stage').modal('hide');
+                            $scope.stage.stage = '';
+
+                            $scope.stage.project = '';
+                            $scope.stage.detail = '';
+                            $scope.stage.notes = '';
+                            $scope.stage.date = '';
+                            $scope.stage.isStage = false;
+                            var sbId = $('#stageSelect').attr('sb');
+                        var selectedValue = $('#sbSelector_' + sbId).text('Select Stage');
+                        $scope.stage.stage = selectedValue;
+                        var sbId = $('#projectListD2').attr('sb');
+                        var selectedValue = $('#sbSelector_' + sbId).text('Select Project');
+                        $scope.stage.project = selectedValue;
+
+                        $('.select-date').datepicker({
+                            dateFormat: "dd/mm/yyyy"
+                            , changeMonth: true
+                            , changeYear: true
+                        }).val('');
+                            $scope.notification.show = true;
+                            $scope.notification.status = 'Error';
+                            $scope.notification.message = response.errorstring;
+
+                    }*/
+
                 }
             }
         }
