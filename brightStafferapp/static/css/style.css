@@ -8,6 +8,16 @@
  *
 */
 
+.single-file-dropzone {
+    width: 250px;
+    height: 45px;
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 30px;
+    margin: 20px;
+    font-family: Arial;
+}
+
 .unstyled::-webkit-clear-button {
     display: none;
     -webkit-appearance: none;
@@ -2649,6 +2659,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     float: left;
     margin-right: 5px;
 }
+
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
         display: block;
@@ -6256,8 +6267,8 @@ video {
 }
 
 .width55 {
-  width: 60% !important;
-  word-wrap: break-word;
+    width: 60% !important;
+    word-wrap: break-word;
 }
 
 @media (min-width: 768px) {
@@ -14984,14 +14995,14 @@ a.sbSelector:hover {
 }
 
 .create-pro-resume-panel .fa {
-  font-size: 26px;
-  text-align: center;
-  color: #a2acbd;
-  float: left;
+    font-size: 26px;
+    text-align: center;
+    color: #a2acbd;
+    float: left;
 }
 
 .mtop-25 {
-  margin-top: 25px;
+    margin-top: 25px;
 }
 
 .mar-tb {
@@ -15000,13 +15011,13 @@ a.sbSelector:hover {
 }
 
 .flag-circle {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  background-color: #faa831;
-  border-radius: 20px;
-  top: -6px;
-  right: -8px;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background-color: #faa831;
+    border-radius: 20px;
+    top: -6px;
+    right: -8px;
 }
 
 .flag-circle .fa {
@@ -15015,4 +15026,6 @@ a.sbSelector:hover {
     float: left;
     margin: 6px 5px;
 }
+
+
 /*create-profile-css-ends*/

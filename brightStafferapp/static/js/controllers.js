@@ -1514,24 +1514,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , message: ''
     };
 
+    $scope.image = null;
+    $scope.imageFileName = '';
+    
     $scope.talentFileobj = {};
 
     $scope.onFileLoad = function (e) {
         var file = e.files[0];
         $scope.talentFileobj = e.files[0];
         $timeout(function () {
-                $scope.$apply();
-            })
-            //        var oFReader = new FileReader();
-            //        oFReader.readAsDataURL(file);
-            //        oFReader.onload = function (oFREvent) {
-            //            document.getElementById("uploadPreview").src = oFREvent.target.result;
-            //            $scope.profileImageBase64 = oFREvent.target.result;
-            //        };
+            $scope.$apply();
+        });
     };
 
     $scope.uploadTalentFile = function () {
-        createTalentFormService.uploadTalentFile($scope.talentFileobj, function(response){
+        createTalentFormService.uploadTalentFile($scope.talentFileobj, function (response) {
             console.log(response);
         });
     }

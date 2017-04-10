@@ -8,10 +8,15 @@
                         <img src="static/img/File-Transfer-Icon-1.png" alt="">
                         <div class="cls"></div>
                         <div class="file-upld-pro">
-                            <input type="file" onchange="angular.element(this).scope().onFileLoad(this)">Choose File
+                            <input type="file" accept="application/pdf, application/docx" onchange="angular.element(this).scope().onFileLoad(this)">Choose File
                         </div>
                         <div class="cls"></div>
-                        <div class="choose-pro-file">Choose a file or drag it here.</div>
+                        
+                        <div class="single-file-dropzone choose-pro-file" file-dropzone="[application/pdf, image/png]" file-obj="talentFileobj" file="image" file-name="imageFileName" data-max-file-size="10">
+                            <span>Choose a file or drag it here.</span>
+                        </div>
+                        
+<!--                        <div class="choose-pro-file">Choose a file or drag it here.</div>-->
                     </div>
                     <div class="cls"></div>
                     <div class="talent-profile-panel" ng-show="talentFileobj.name">
