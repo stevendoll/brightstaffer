@@ -1513,6 +1513,29 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , status: ''
         , message: ''
     };
+
+    $scope.talentFileobj = {};
+
+    $scope.onFileLoad = function (e) {
+        var file = e.files[0];
+        $scope.talentFileobj = e.files[0];
+        $timeout(function () {
+                $scope.$apply();
+            })
+            //        var oFReader = new FileReader();
+            //        oFReader.readAsDataURL(file);
+            //        oFReader.onload = function (oFREvent) {
+            //            document.getElementById("uploadPreview").src = oFREvent.target.result;
+            //            $scope.profileImageBase64 = oFREvent.target.result;
+            //        };
+    };
+
+    $scope.uploadTalentFile = function () {
+        createTalentFormService.uploadTalentFile($scope.talentFileobj, function(response){
+            console.log(response);
+        });
+    }
+
     $scope.showNotification = function (success, message) {
         $scope.notification.show = true;
         $scope.notification.status = success ? 'Success' : 'Error';
@@ -1570,15 +1593,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.createTalent = function (data, onEdit) {
         if (data.phone && data.phone.length < 10) return;
         var valid = true;
-        if(data.topConcepts){
-            data.topConcepts.forEach(function(concept){
-                if(concept.percentage > 100){
+        if (data.topConcepts) {
+            data.topConcepts.forEach(function (concept) {
+                if (concept.percentage > 100) {
                     valid = false;
                 }
             })
         }
 
-        if(!valid)return;
+        if (!valid) return;
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
@@ -2102,10 +2125,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $scope.isFilterChecked = false;
                     $rootScope.filterReset();
                     $rootScope.getCandidateData();
-//                    $rootScope.talentList = response;
-//                    var count = talent.length
-//                    $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
-//                    $rootScope.talentCountEnd = response.length;
+                    //                    $rootScope.talentList = response;
+                    //                    var count = talent.length
+                    //                    $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
+                    //                    $rootScope.talentCountEnd = response.length;
                     $('#selectall').prop('checked', false);
                     $('#assignToProject').removeClass('add-talent');
                     $('#assignToProject').addClass('disabled-talent');
