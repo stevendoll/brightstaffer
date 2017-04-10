@@ -13759,6 +13759,7 @@ input[type="radio"] + label.radio-black {
     height: 35px;
     float: left;
     margin-top: -1px;
+    position: relative;
 }
 
 .talentsearch-foot .linkedin .fa-linkedin-square {
@@ -14996,5 +14997,22 @@ a.sbSelector:hover {
 .mar-tb {
     margin-top: 60px;
     margin-bottom: 10px;
+}
+
+.flag-circle {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  background-color: #faa831;
+  border-radius: 20px;
+  top: -6px;
+  right: -8px;
+}
+
+.flag-circle .fa {
+    color: #ffffff;
+    font-size: 11px;
+    float: left;
+    margin: 6px 5px;
 }
 /*create-profile-css-ends*/
