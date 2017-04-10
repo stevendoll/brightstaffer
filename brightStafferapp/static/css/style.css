@@ -12800,6 +12800,7 @@ input[type=password] {
     font-size: 13px;
     float: right;
     font-family: 'open_sansregular';
+    line-height: 22px;
 }
 
 .talent-inner-panel {
@@ -14467,7 +14468,7 @@ input[type=date]::-webkit-inner-spin-button {
     background-color: #ffffff;
     border: solid 1px #e8e8e8;
     margin-top: 10px;
-    padding: 35px 0px 10px 0px;
+    padding: 50px 0px 10px 0px;
 }
 
 .create-profile-form-div {
@@ -14578,8 +14579,9 @@ a.sbSelector:hover {
 }
 
 .top-concept-right-div {
-    width: 390px;
+    width: 30%;
     float: left;
+    margin-right: 50px;
 }
 
 .top-concept-right-div h2 {
@@ -14598,7 +14600,7 @@ a.sbSelector:hover {
 }
 
 .top-concept-input-div .top-concept-input-part {
-    width: 297px;
+    width: 100%;
     float: left;
     height: 40px;
     border-radius: 2px;
@@ -14657,8 +14659,7 @@ a.sbSelector:hover {
     font-size: 14px;
     color: #ffffff;
     float: right;
-    margin-right: 15px;
-    margin-top: 3px;
+    margin-top: 6px;
 }
 
 .create-profile-footer {
@@ -14779,5 +14780,221 @@ a.sbSelector:hover {
     width: 100%;
 }
 
+.concept-view-all {
+    width: auto;
+    font-family: 'open_sansregular';
+    font-size: 14px;
+    color: #4176bb;
+    float: left;
+    cursor: pointer;
+    margin-top: 12px;
+}
 
+.total-exp-text {
+    width: 63%;
+    float: left;
+    font-size: 13px;
+    color: #000000;
+    font-family: 'open_sansregular';
+    line-height: 40px;
+    margin-right: 8px;
+}
+
+.top-concept-input-div .career-years {
+    width: 52px;
+    float: left;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #e7eaec;
+    font-family: 'open_sansregular';
+    font-size: 13px;
+    color: #000000;
+    padding: 8px 10px 8px 10px;
+    text-align: center;
+    margin-right: 8px;
+}
+
+.top-concept-input-div .career-input-div {
+    width: 63%;
+    float: left;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #e7eaec;
+    font-family: 'open_sansregular';
+    font-size: 13px;
+    color: #808080;
+    padding: 8px 14px 8px 14px;
+    text-align: center;
+    margin-right: 8px;
+}
+
+.total-exp-years {
+    width: auto;
+    float: left;
+    font-size: 13px;
+    color: #000000;
+    font-family: 'open_sansregular';
+    line-height: 40px;
+}
+
+.industry-sec-right-div {
+    width: 28%;
+    float: left;
+}
+
+.industry-sec-right-div h2 {
+    font-family: 'OpenSans-Semibold';
+    font-size: 16px;
+    color: #000000;
+    width: 297px;
+    float: left;
+}
+
+.top-concept-input-div .industry-focus-input {
+    width: 100%;
+    float: left;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #e7eaec;
+    font-family: 'open_sansregular';
+    font-size: 13px;
+    color: #808080;
+    padding: 8px 30px 8px 14px;
+}
+
+.create-profile-resume-panel {
+    width: 100%;
+    float: left;
+    padding: 0px 20px;
+}
+
+.file-upld-pro {
+    width: 120px;
+    text-align: center;
+    background: #1d84c6;
+    color: #ffffff;
+    border: 1px solid #1d84c6;
+    font-size: 13px;
+    float: none;
+    padding: 6px 5px;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    right: 0;
+    border-radius: 2px;
+    font-weight: normal;
+    margin: 25px auto 0px auto;
+    left: 0;
+}
+
+.file-upld-pro [type=file] {
+    cursor: pointer;
+    display: block;
+    font-size: 999px;
+    filter: alpha(opacity=0);
+    height: 30px;
+    width: 100%;
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.choose-pro-file {
+    width: 100%;
+    float: left;
+    text-align: center;
+    color: #7b7b7b;
+    font-weight: normal;
+    font-size: 14px;
+    margin-top: 3px;
+    font-family: 'open_sansregular';
+}
+
+.talent-profile-panel {
+    width: 440px;
+    text-align: center;
+    padding: 10px 0px;
+    margin: 0 auto;
+}
+
+.create-pro-or-section {
+    width: 100%;
+    float: left;
+    border-top: solid 1px #e5e5e5;
+    text-align: center;
+    margin: 45px 0px 25px 0px;
+    position: relative;
+}
+
+.create-pro-or-section span {
+    font-family: 'OpenSans-Semibold';
+    font-size: 16px;
+    font-weight: 600;
+    color: #9b9b9b;
+    width: 45px;
+    background-color: #ffffff;
+    margin: 0 auto;
+    position: absolute;
+    top: -14px;
+    left: 0;
+    right: 0;
+}
+
+.create-pro-resume-panel {
+    width: 100%;
+    float: left;
+}
+
+.create-resume-name {
+    float: left;
+    margin-left: 10px;
+    font-family: 'open_sansregular';
+    font-size: 14px;
+    color: #7a7a7a;
+    margin-right: 15px;
+    margin-top: 4px;
+    max-width: 45%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.resume-analysis {
+    width: auto;
+    height: 24px;
+    float: left;
+    border-radius: 2px;
+    background-color: #f1f1f1;
+    padding: 2px 10px;
+    margin-top: 2px;
+}
+
+.resume-analysis span {
+    font-family: 'open_sansregular';
+    font-size: 12px;
+    color: #6d6d6d;
+    line-height: 20px;
+    width: 100%;
+    float: left;
+}
+
+.create-pro-resume-panel .fa {
+  font-size: 26px;
+  text-align: center;
+  color: #a2acbd;
+  float: left;
+}
+
+.mtop-25 {
+  margin-top: 25px;
+}
+
+.mar-tb {
+    margin-top: 60px;
+    margin-bottom: 10px;
+}
 /*create-profile-css-ends*/
