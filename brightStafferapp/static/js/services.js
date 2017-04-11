@@ -486,8 +486,8 @@ function talentApis($rootScope, $http, REQUEST_URL, appService) {
 
         addLinkedinUrl: function (data, callback) {
            var param = {
-                url: REQUEST_URL + ''
-                , method: "POST"
+                url: REQUEST_URL + 'linkedin_data/'
+                , method: "GET"
                 , headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                     , 'token': $rootScope.globals.currentUser.token

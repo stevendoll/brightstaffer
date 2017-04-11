@@ -1517,7 +1517,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , status: ''
         , message: ''
     };
-
+    $scope.todayDate = new Date();
     $scope.imageFileName = '';
     $scope.talentFileobj = {};
 
@@ -1615,6 +1615,22 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.talentDataValidation.phone = true;
         }
     }
+
+    $scope.fetchLinkedinData = function () {
+        if (!$scope.talentData.linkedinProfileUrl) return;
+        var param = {
+            url: $scope.talentData.linkedinProfileUrl
+        }
+        talentApis.addLinkedinUrl(param, function (response) {
+            console.log(response);
+            if (response.success) {
+
+            } else {
+
+            }
+        })
+    }
+
     $scope.createTalent = function (data, onEdit) {
         if (data.phone && data.phone.length < 10) return;
         var valid = true;
@@ -2948,6 +2964,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
+
+
+
+
+
 
 
             
