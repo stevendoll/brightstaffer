@@ -1597,6 +1597,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.addSkill = function () {
         $scope.talentData.topConcepts.unshift({});
     }
+    $scope.addTalentPast = function () {
+        $scope.talentData.pastOrganization.push({
+            name: ''
+            , from: ''
+            , to: ''
+        });
+    }
 
     $scope.removeIndexFromArr = function (arr, index) {
         arr.splice(index, 1);
@@ -2941,6 +2948,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
+
 
             
             , city: location[0] || ""

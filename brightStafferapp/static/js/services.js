@@ -486,7 +486,7 @@ function talentApis($rootScope, $http, REQUEST_URL, appService) {
 
         addLinkedinUrl: function (data, callback) {
            var param = {
-                url: REQUEST_URL + '/'
+                url: REQUEST_URL + ''
                 , method: "POST"
                 , headers: {
                     'Content-Type': 'application/json; charset=utf-8'
@@ -497,14 +497,7 @@ function talentApis($rootScope, $http, REQUEST_URL, appService) {
                 , dataType: 'json'
             }
             appService.httpRequest(param, callback);
-
-        },
-
-
-
-
-
-
+        }
     }
 }
 
