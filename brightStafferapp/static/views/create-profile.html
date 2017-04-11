@@ -4,26 +4,28 @@
             <h2 class="create-prof">Create Profile</h2>
             <div class="create-profile-panel">
                 <div class="create-profile-resume-panel">
-                    <div class="talent-profile-panel" ng-show="!talentFileobj.name">
-                        <img src="static/img/File-Transfer-Icon-1.png" alt="">
+                    <div class="talent-profile-panel" ng-show="!talentFileobj.name" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" data-max-file-size="10">
+                        <img src="static/img/File-Transfer-Icon-1.png" alt="" id="dropzone_backgroundImg">
                         <div class="cls"></div>
                         <div class="file-upld-pro">
                             <input type="file" accept="application/pdf, application/docx" onchange="angular.element(this).scope().onFileLoad(this)">Choose File
                         </div>
                         <div class="cls"></div>
                         
+<!--
                         <div class="choose-pro-file" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" data-max-file-size="10">
-                            <span>Choose a file or drag it here.</span>
+                            <span class="choose-pro-file">Choose a file or drag it here.</span>
                         </div>
+-->
                         
-<!--                        <div class="choose-pro-file">Choose a file or drag it here.</div>-->
+                        <div class="choose-pro-file">Choose a file or drag it here.</div>
                     </div>
                     <div class="cls"></div>
                     <div class="talent-profile-panel" ng-show="talentFileobj.name">
                         <div class="progress-panel">
                             <div class="progress-image">
-<!--                                <img src="img/a1.jpg" alt="">-->
-                                <i class="fa fa-file-text"></i>
+                                <img src="static/img/doc.svg" alt="avatar">
+<!--                                <i class="fa fa-file-text"></i>-->
                             </div>
                             <div class="progress-text">[[talentFileobj.name]]</div>
                             <div class="progress-close" ng-click="removeFile()">
@@ -39,7 +41,10 @@
 -->
                         </div>
                         <div class="cls"></div>
-                        <button type="button" class="btn btn-primary" ng-click="uploadTalentFile()">Upload File</button>
+                        <div class="progress-bttn">
+                          <div class="file-upld-pro mar-tb" ng-click="uploadTalentFile()"><input type="file">Upload File</div>
+                        </div>
+                        
                     </div>
                     <div class="cls"></div>
                     <div class="create-pro-or-section">

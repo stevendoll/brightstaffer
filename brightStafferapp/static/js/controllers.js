@@ -1272,10 +1272,11 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         $('#add-talent').modal('show');
     }
 
-    var dropzoneId = "dropzone";
+    var dropzoneIds = ['dropzone','dropzone_backgroundImg'];
 
     window.addEventListener("dragenter", function (e) {
-        if (e.target.id != dropzoneId) {
+        if (dropzoneIds.indexOf(e.target.id) == -1) {
+            console.log('drag enter: ' + e.target.id  )
             e.preventDefault();
             e.dataTransfer.effectAllowed = "none";
             e.dataTransfer.dropEffect = "none";
@@ -1283,7 +1284,8 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     }, false);
 
     window.addEventListener("dragover", function (e) {
-        if (e.target.id != dropzoneId) {
+        if (dropzoneIds.indexOf(e.target.id) == -1) {
+            console.log('drag over: ' + e.target.id  )
             e.preventDefault();
             e.dataTransfer.effectAllowed = "none";
             e.dataTransfer.dropEffect = "none";
@@ -1291,7 +1293,8 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     });
 
     window.addEventListener("drop", function (e) {
-        if (e.target.id != dropzoneId) {
+        console.log('drop: ' + e.target.id  )
+        if (dropzoneIds.indexOf(e.target.id) == -1) {
             e.preventDefault();
             e.dataTransfer.effectAllowed = "none";
             e.dataTransfer.dropEffect = "none";
@@ -1586,7 +1589,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     }
     $scope.addSkill = function () {
-        $scope.talentData.topConcepts.push({});
+        $scope.talentData.topConcepts.unshift({});
     }
 
     $scope.removeIndexFromArr = function (arr, index) {

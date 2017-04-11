@@ -14938,11 +14938,11 @@ a.sbSelector:hover {
     width: 100%;
     float: left;
     text-align: center;
-    color: #7b7b7b;
+    color: #7b7b7b !important;
     font-weight: normal;
     font-size: 14px;
     margin-top: 3px;
-    font-family: 'open_sansregular';
+    font-family: 'open_sansregular' !important;
 }
 
 .talent-profile-panel {
