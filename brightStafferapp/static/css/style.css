@@ -15016,3 +15016,7 @@ a.sbSelector:hover {
     margin: 6px 5px;
 }
 /*create-profile-css-ends*/
+
+.no-linkedin-url{
+ pointer-events:none;
+}
