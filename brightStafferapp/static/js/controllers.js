@@ -335,7 +335,8 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     $scope.getSearchData(true);
 
     $rootScope.getCandidateData = function (check) {
-        console.log('fetching candidate data')
+        console.log('fetching candidate data');
+        $rootScope.search.searchKeywords = '';
         $scope.getSearchData(check);
     }
 
