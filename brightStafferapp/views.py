@@ -549,7 +549,7 @@ class UploadTalent(View):
 
             context = dict()
             context['success'] = True
-            context['topConcepts'] = content['skills']
+            context['results'] = content['skills']
             return util.returnSuccessShorcut(context)
         except Exception as e:
             print(e)
@@ -581,6 +581,55 @@ class UploadTalent(View):
         file_upload_obj.save()
         content = create_resume.create_resume(text)
         return content
+
+
+class LinkedinDataView(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LinkedinDataView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        content = {
+            "currentOrganization": [
+                {
+                    "name": "kiwi",
+                    "from": "2015",
+                    "to": "Present",
+                    "JobTitle": "SD"
+                }
+            ],
+            "pastOrganization": [
+                {"name": "Kiwi1",
+                 "from": "2016",
+                 "to": "2015",
+                 "JobTitle": "SD"
+                 }
+            ],
+            "education": [
+                {
+                    "name": "asdasda",
+                    "from": "2014",
+                    "to": "2016"
+                },
+                {
+                    "name": "qqqq",
+                    "from": "2013",
+                    "to": "2014"
+                }
+            ],
+            "linkedinProfileUrl": "http://localhost.com",
+            "firstName": "Raj",
+            "lastName": "raj",
+            "city": "ND",
+            "state": "UP",
+            "country": "India",
+            "industryFocus": "SSSSS"
+        }
+        context = dict()
+        context['results'] = content
+        context['success'] = True
+        return util.returnSuccessShorcut(context)
 
 
 def user_validation(data):
