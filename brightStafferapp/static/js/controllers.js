@@ -1514,9 +1514,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , message: ''
     };
 
-    $scope.image = null;
     $scope.imageFileName = '';
-    
     $scope.talentFileobj = {};
 
     $scope.onFileLoad = function (e) {
@@ -1527,8 +1525,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     };
 
+    $scope.removeFile = function () {
+        $scope.talentFileobj = {};
+    }
+
     $scope.uploadTalentFile = function () {
         createTalentFormService.uploadTalentFile($scope.talentFileobj, function (response) {
+            if (response.success) {
+
+            } else {
+
+            }
             console.log(response);
         });
     }
@@ -2812,7 +2819,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 for (var i = 0; i < response.results.length; i++) {
                     $rootScope.talentList.push(response.results[i]);
                 }
-                var count = $rootScope.talentList.length
+                var count = response.count;
                 $rootScope.totalTalentCount = count;
                 $rootScope.talentCountEnd = count;
 

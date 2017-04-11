@@ -12,7 +12,7 @@
                         </div>
                         <div class="cls"></div>
                         
-                        <div class="choose-pro-file" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" file-name="imageFileName" data-max-file-size="10">
+                        <div class="choose-pro-file" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" data-max-file-size="10">
                             <span>Choose a file or drag it here.</span>
                         </div>
                         
@@ -26,7 +26,9 @@
                                 <i class="fa fa-file-text"></i>
                             </div>
                             <div class="progress-text">[[talentFileobj.name]]</div>
-                            <div class="progress-close"><a href="">x</a></div>
+                            <div class="progress-close" ng-click="removeFile()">
+                                <a href="">x</a>
+                            </div>
                             <div class="cls"></div>
 <!--
                             <div class="progress">
@@ -44,10 +46,10 @@
                         <span>or</span>
                     </div>
                     <div class="cls"></div>
-                    <div class="create-pro-resume-panel">
+                    <div class="create-pro-resume-panel" ng-show="talentFileobj.name">
                         <i class="fa fa-file-text"></i>
-                        <div class="create-resume-name">Resume.pdf</div>
-                        <div class="resume-analysis"><span>Last Analyzed/Updated Dec 10, 2015</span></div>
+                        <div class="create-resume-name">[[talentFileobj.name]]</div>
+                        <div class="resume-analysis"><span>Analyzed/Created Dec 10, 2015</span></div>
                     </div>
                 </div>
                 <form name="createTalentForm" onkeypress="return event.keyCode != 13;" ng-submit="createTalentForm.$valid && createTalent(talentData);">
