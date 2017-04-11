@@ -1,6 +1,6 @@
 from brightStafferapp.models import Talent, User, Projects, TalentProject, TalentEmail, TalentContact, \
     TalentStage, TalentRecruiter, TalentConcept, ProjectConcept,Concept, Education, TalentEducation, Company,\
-    TalentCompany
+    TalentCompany, TalentLocation
 from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
@@ -481,9 +481,13 @@ def add_edit_talent(profile_data, user):
     if "id" in profile_data:
         talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
         if talent_obj:
+            talent_location, created = TalentLocation.objects.get_or_create(talent=talent_obj[0],
+                                                                            city=profile_data.get('city', ''),
+                                                                            state=profile_data.get('state', ''),
+                                                                            country=profile_data.get('country', '')
+                                                                            )
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
-                              current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
                               linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               industry_focus=profile_data.get('industryFocus', ''))
             talent_obj = talent_obj[0]
@@ -491,8 +495,12 @@ def add_edit_talent(profile_data, user):
         talent_obj = Talent.objects.create(
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
             recruiter=user, status='New', industry_focus=profile_data.get('industryFocus', ''),
-            current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
             linkedin_url=profile_data.get('linkedinProfileUrl', ''), create_date=datetime.datetime.now())
+        talent_location = TalentLocation.objects.create(talent=talent_obj,
+                                                        city=profile_data.get('city', ''),
+                                                        state=profile_data.get('state', ''),
+                                                        country=profile_data.get('country', '')
+                                                        )
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                           is_active=True)
     if talent_obj:
@@ -657,8 +665,11 @@ class TalentSearch(generics.ListCreateAPIView):
         queryset = queryset.filter(Q(recruiter__username__iexact=recruiter) & Q(talent_active__is_active=True) &
                                    Q(talent_active__recruiter__username=recruiter))
         if term:
-            queryset = queryset.filter(Q(talent_active__is_active=True) & Q(status__in=['New', 'Active']) &
-                Q(talent_name__icontains=term) | Q(designation__icontains=term) | Q(current_location__icontains=term) |
+            queryset = queryset.filter(
+                Q(talent_active__is_active=True) & Q(status__in=['New', 'Active']) &
+                Q(talent_name__icontains=term) | Q(designation__icontains=term) |
+                Q(current_location__city__icontains=term) | Q(current_location__state__icontains=term) |
+                Q(current_location__country__icontains=term) |
                 Q(industry_focus__icontains=term) | Q(talent_company__company__company_name__icontains=term) |
                 Q(talent_company__designation__icontains=term) |
                 Q(talent_project__project__project_name__icontains=term) |

@@ -135,7 +135,7 @@ class Talent(models.Model):
     project = models.ManyToManyField(Projects, through='TalentProject')
     recruiter = models.ForeignKey(User, null=False, verbose_name='Recruiter ID')
     concepts = models.ManyToManyField(Concept, through='TalentConcept')
-    current_location = models.CharField(max_length=255, verbose_name='Current Location', null=True, blank=True)
+    # current_location = models.CharField(max_length=255, verbose_name='Current Location', null=True, blank=True)
     rating = models.IntegerField(default=0)
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
@@ -159,6 +159,16 @@ class Talent(models.Model):
             return self.activation_date.date().strftime('%d/%m/%Y')
         else:
             return "01/01/1900"
+
+
+class TalentLocation(models.Model):
+    talent = models.ForeignKey(Talent, related_name='current_location')
+    city = models.CharField(max_length=50, null=True, blank=True)
+    state = models.CharField(max_length=50, null=True, blank=True)
+    country = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.city + ', ' + self.state + ', ' + self.country)
 
 
 class TalentRecruiter(models.Model):

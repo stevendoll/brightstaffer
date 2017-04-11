@@ -152,6 +152,7 @@ class TalentStageSerializer(serializers.ModelSerializer):
 
 class TalentSerializer(serializers.ModelSerializer):
     talent_name = serializers.CharField()
+    current_location = serializers.SerializerMethodField()
     talent_education = TalentEducationSerializer(many=True)
     recruiter = serializers.CharField()
     create_date = serializers.CharField(source='get_date')
@@ -162,6 +163,12 @@ class TalentSerializer(serializers.ModelSerializer):
     talent_contact = TalentContactSerializer(many=True)
     talent_stages = TalentStageSerializer(many=True)
     activation_date = serializers.CharField(source='get_activation_date')
+
+    def get_current_location(self, obj):
+        if obj.current_location.all():
+            return str(obj.current_location.all()[0])
+        else:
+            return ''
 
     class Meta:
         model = Talent
