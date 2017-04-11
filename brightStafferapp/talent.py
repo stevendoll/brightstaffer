@@ -458,6 +458,8 @@ class TalentAdd(generics.ListCreateAPIView):
             if phone_client:
                 return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
             else:
+                profile_data["currentOrganization"].extend(profile_data["pastOrganization"])
+                del profile_data["pastOrganization"]
                 add_edit_talent(profile_data, user)
                 context['message'] = 'Talent Added Successfully'
                 context['success'] = True
