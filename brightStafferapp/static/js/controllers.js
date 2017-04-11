@@ -1651,6 +1651,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.candidate.id = selectedTalentId;
         $('#add-url').modal('show');
     }
+
     $scope.addLinkedUrl =function (){
     console.log($scope.candidate.id);
          var url = $scope.candidate.linkedinProfileUrl;
@@ -1661,12 +1662,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             };
             /*talentApis.addLinkedinUrl(requestObject).then(function (response) {
                 if (response.message == "success") {
-                  for(var i=0 ; i<$rootScope.talentList.length;i++){
-
-                   }
-
+                   $rootScope.getCandidateData();
+                   $scope.showNotification(true, 'Linkedin URL added successfully.');
                 } else {
                     console.log('error');
+                     $scope.showNotification(false, response.errorstring);
                 }
             });*/
         }
@@ -2937,8 +2937,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , education: []
           //  , linkedinProfileUrl: talent.linkedin_url
             , city: location[0] || ""
-            , country: location[1] || ""
-            , state: location[2] || ""
+            , country: location[2] || ""
+            , state: location[1] || ""
             , designation: talent.designation
             , industryFocus: talent.industry_focus
             , firstName: talentName[0]
