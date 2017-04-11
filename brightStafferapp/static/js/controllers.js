@@ -1563,6 +1563,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 name: ''
                 , from: ''
                 , to: 'Present'
+            }],
+            pastOrganization: [{
+                name: ''
+                , from: ''
+                , to: ''
             }]
             , education: [{
                 name: ''
