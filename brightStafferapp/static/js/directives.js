@@ -686,9 +686,9 @@ function fileDropzone() {
     return {
         restrict: 'A'
         , scope: {
-            file: '='
-            , fileName: '='
-            , fileObj: '='
+//            file: '=',
+            fileName: '=',
+            fileObj: '='
         }
         , link: function (scope, element, attrs) {
             var validMimeTypes = attrs.fileDropzone;
@@ -729,7 +729,7 @@ function fileDropzone() {
                 reader.onload = function (evt) {
                     if (checkSize(size) && isTypeValid(type)) {
                         return scope.$apply(function () {
-                            scope.file = evt.target.result;
+//                            scope.file = evt.target.result;
                             if (angular.isString(scope.fileName)) {
                                 return scope.fileName = name;
                             }
