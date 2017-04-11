@@ -241,7 +241,7 @@ function paginationData($http, REQUEST_URL) {
     }
 }
 
-function talentApis($rootScope, $http, REQUEST_URL) {
+function talentApis($rootScope, $http, REQUEST_URL, appService) {
     return {
         getAllTalents: function (data) {
             $rootScope.showLoader(true);
@@ -482,7 +482,25 @@ function talentApis($rootScope, $http, REQUEST_URL) {
                     $rootScope.showLoader(false);
                 }
             });
-        }
+        },
+
+        addLinkedinUrl: function (data, callback) {
+           var param = {
+                url: REQUEST_URL + '/'
+                , method: "POST"
+                , headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                    , 'token': $rootScope.globals.currentUser.token
+                    , 'recruiter': $rootScope.globals.currentUser.user_email
+                }
+                , params: data
+                , dataType: 'json'
+            }
+            appService.httpRequest(param, callback);
+
+        },
+
+
 
 
 

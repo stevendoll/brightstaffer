@@ -15117,6 +15117,13 @@ a.sbSelector:hover {
     appearance: none;
 }
 
+/*create-profile-css-ends*/
+
+.no-linkedin-url{
+ pointer-events:none;
+}
+
+
 .count .pro-modal-select {
     border: 1px solid #e7eaec;
     height: 40px;
@@ -15169,3 +15176,4 @@ a.sbSelector:hover {
 }
 
 /*create-profile-css-ends*/
+

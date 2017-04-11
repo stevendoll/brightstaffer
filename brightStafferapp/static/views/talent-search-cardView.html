@@ -141,7 +141,7 @@
                 <button class="btn" id="profile_[[talent.id]]" ng-click="loadProfileData(talent.id,talent)">View Profile</button>
                 <button type="" class="btn" id="add_[[talent.id]]" ng-click="openProjectList(talent.id)">Add to Project</button>
 <!--                <a class="linkedin" href="[[talent.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>-->
-                <a class="linkedin" href="[[talent.linkedin_url]]" style="pointer-events: none;"><i class="fa fa-linkedin-square"></i><div class="flag-circle"><i class="fa fa-plus"></i></div> </a>
+                <a class="linkedin" href="[[talent.linkedin_url]]" ng-click="!talent.linkedin_url && openLinkedinPopup($event,talent.id)" tooltip="[[talent.linkedin_url? '':'Add Linkedin Url.']]" ><i class="fa fa-linkedin-square"></i><div ng-show="!talent.linkedin_url" class="flag-circle"><i class="fa fa-plus"></i></div> </a>
                 <!-- <div class="linkedin-url-text">Add Linkedin URL</div>-->
             </div>
         </div>
@@ -392,6 +392,25 @@
         </div>
     </div>
     <!-- all-concepts-Modal-ends -->
+     <!-- add-linkedin-Modal-starts -->
+    <div class="modal fade" id="add-url" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog add-talent-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body roles-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                    <form class="edit-modal-recruiter" name="linkedForm">
+                        <span class="modal-edit-profile-hd">Add Linkedin URL</span>
+                        <div class="cls"></div>
+                        <input type="text" name="url" placeholder="Linkedin profile url" class="form-control" ng-model="candidate.linkedinProfileUrl" ng-pattern="linkedinUrlPattern" required/>
+                        <span class="msg-error" ng-show="linkedForm.url.$dirty && linkedForm.url.$error.pattern">Please enter valid url.</span>
+                        <button type="submit" class="btn add-stage" ng-click="addLinkedUrl()">Add</button>
+                    </form>
+                    <div class="cls"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- add-linkedin-Modal-ends -->
 
 </div>
 

@@ -335,7 +335,8 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     $scope.getSearchData(true);
 
     $rootScope.getCandidateData = function (check) {
-        console.log('fetching candidate data')
+        console.log('fetching candidate data');
+        $rootScope.search.searchKeywords = '';
         $scope.getSearchData(check);
     }
 
@@ -1641,6 +1642,38 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     }
 
+    /* linkedin url add */
+    $scope.linkedinUrlPattern = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+    $scope.candidate={};
+    $scope.openLinkedinPopup = function(event, selectedTalentId){
+        event.preventDefault();
+        event.stopPropagation();
+        $scope.candidate.id = selectedTalentId;
+        $('#add-url').modal('show');
+    }
+    $scope.addLinkedUrl =function (){
+    console.log($scope.candidate.id);
+         var url = $scope.candidate.linkedinProfileUrl;
+         if (url) {
+            var requestObject = {
+                'id': $scope.candidate.id, // password field value
+                'url': url
+            };
+            /*talentApis.addLinkedinUrl(requestObject).then(function (response) {
+                if (response.message == "success") {
+                  for(var i=0 ; i<$rootScope.talentList.length;i++){
+
+                   }
+
+                } else {
+                    console.log('error');
+                }
+            });*/
+        }
+
+    }
+    /*end of linkedin url code*/
+
     $scope.gotoState = function (state) {
         $scope.initTalenData();
         $rootScope.getCandidateData();
@@ -1742,7 +1775,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.getSelectedRating = function (rating) {
         //console.log(rating);
         // console.log($rootScope.talentDetails.id);
-        if (rating) {
+        console.log(rating);
+        if (rating >= 0) {
             var requestObject = {
                 'id': $rootScope.talentDetails.id, // password field value
                 'rating': rating
@@ -2901,9 +2935,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.talentEditableData = {
             currentOrganization: []
             , education: []
-            , linkedinProfileUrl: talent.linkedin_url
+          //  , linkedinProfileUrl: talent.linkedin_url
             , city: location[0] || ""
             , country: location[1] || ""
+            , state: location[2] || ""
             , designation: talent.designation
             , industryFocus: talent.industry_focus
             , firstName: talentName[0]

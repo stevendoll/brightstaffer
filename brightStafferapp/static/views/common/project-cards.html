@@ -16,7 +16,7 @@
                       <span class="label label-primary pull-right new-cards" ng-if="$first">New</span>
                       <h5 class="dash"><a class="text-project" style="cursor:default;">#[[projects.project_name]]</a></h5>
                       <div class="cls"></div>
-                      <div class="box-location"><a style="cursor:default;">@[[projects.company_name | capitalize]]</a> in <span class="text-detail">[[projects.location | capitalize]]</span></div>
+                      <div class="box-location"><a style="cursor:default;">@[[projects.company_name | capitalize]]</a> in <span class="text-detail">[[projects.location | locationFormat]]</span></div>
                   </div>
                   <div class="ibox-content">
                       <div class="started-panel">Started <span>[[projects.get_date | dateFormat]]</span></div>

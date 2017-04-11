@@ -517,6 +517,71 @@ class FileUploadView(View):
                 img_obj.save()
 
 
+class UploadTalent(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(UploadTalent, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request):
+        """
+        :param request: incoming POST request with files
+        :return: success or error response
+        """
+        try:
+            files = request.FILES
+            content = dict()
+            if not files:
+                return util.returnErrorShorcut(400, "No files attached with this request")
+            user_username = request.POST['recruiter']
+            user = User.objects.filter(username=user_username)
+            if user:
+                user = user[0]
+            dest_path = os.path.join(settings.MEDIA_URL, user_username)
+            # create destination path if not exists, send this to utils later, since will occur in many scenarios
+            if not os.path.exists(dest_path):
+                os.makedirs(dest_path)
+
+            for key, file in files.items():
+                file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
+                # extract text from pdf
+                content = self.extract_text_from_pdf(file_upload_obj, user)
+
+            context = dict()
+            context['success'] = True
+            context['topConcepts'] = content['skills']
+            return util.returnSuccessShorcut(context)
+        except:
+            return util.returnErrorShorcut(400, "Error Connection Refused")
+
+    def handle_uploaded_file(self, dest_path, f, user):
+        """
+        :param dest_path: destination path for the file currently being saved
+        :param f: InMemoryUploadedFile object from request.FILES
+        :param user: user uploading the file
+        :return: <FileUpload object> or error
+        """
+        try:
+            file_name = str(uuid.uuid4())
+            file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user)
+            return file_upload_obj
+        except Exception as e:
+            print(e)
+            return util.returnErrorShorcut(400, "Error Connection Refused")
+
+    def extract_text_from_pdf(self, file_upload_obj, user):
+        """
+        :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
+        and is now sent to extract text from the pdf file
+        :return: None or error
+        """
+        text = textract.process(file_upload_obj.file.path).decode('utf-8')
+        file_upload_obj.text = text
+        file_upload_obj.save()
+        content = create_resume.create_resume(text)
+        return content
+
+
 def user_validation(data):
     values = Token.objects.filter(user__username=data['recruiter'], key=data['token'])
     if not values:

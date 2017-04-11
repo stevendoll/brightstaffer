@@ -37,7 +37,7 @@ def handle_talent_data(talent_data, user):
     if talent_data:
         if 'name' in talent_data and talent_data['name']:
             talent_obj = models.Talent.objects.create(talent_name=talent_data['name'], recruiter=user,
-                                                      status='New', current_location='New York',
+                                                      status='New',
                                                       linkedin_url='',
                                                       create_date=datetime.datetime.now())
             talent_recruiter, created = models.TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,

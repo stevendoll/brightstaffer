@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^delete_projects/$', views.ProjectDelete.as_view()),
     url(r'^top_project_list/$', views.TopProjectList.as_view()),
     url(r'^upload/$', views.FileUploadView.as_view(), name="file-upload"),
+    url(r'^upload_talent/$', views.UploadTalent.as_view(), name="talent-upload"),
     url(r'^update_recruiter/$', views.UpdateRecruiter.as_view()),
     url(r'^talent_list/$', talent.TalentList.as_view()),
     # url(r'^insert_talent/$', talent.InsertTalent.as_view()),
