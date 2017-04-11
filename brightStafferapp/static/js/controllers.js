@@ -1536,9 +1536,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.uploadTalentFile = function () {
         createTalentFormService.uploadTalentFile($scope.talentFileobj, function (response) {
             if (response.success) {
-
+                $scope.talentData.topConcepts = response.topConcepts;
             } else {
-
+                $scope.showNotification(false, response.errorstring || 'Error in fetching data from pdf');
+                $window.scrollTo(0, 0);
             }
             console.log(response);
         });
