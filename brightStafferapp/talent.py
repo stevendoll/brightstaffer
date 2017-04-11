@@ -511,7 +511,7 @@ def add_edit_talent(profile_data, user):
         if 'topConcepts' in profile_data:
             for skill in profile_data.get('topConcepts', ''):
                 if bool(skill):
-                    concept, created = Concept.objects.get_or_create(concept=skill.get('skill'))
+                    concept, created = Concept.objects.get_or_create(concept=skill.get('name'))
                     tpconcept, created = TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept,
                                                                              match=skill.get('percentage', 0.00))
 
