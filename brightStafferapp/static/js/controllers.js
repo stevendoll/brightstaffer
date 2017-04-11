@@ -2935,6 +2935,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
           //  , linkedinProfileUrl: talent.linkedin_url
             , city: location[0] || ""
             , country: location[1] || ""
+            , state: location[2] || ""
             , designation: talent.designation
             , industryFocus: talent.industry_focus
             , firstName: talentName[0]

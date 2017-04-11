@@ -414,22 +414,29 @@ function starRating2() {
                 scope.stars = [];
                 for (var i = 0; i < scope.max; i++) {
                     scope.stars.push({
-                        filled: i <= scope.ratingValue
+                        filled: i < scope.ratingValue
                     });
                 }
             };
 
             scope.toggle = function (index) {
-            if(scope.ratingValue == 1 && index == 0){
-                scope.ratingValue = index;
-            }else{
-                scope.ratingValue = index + 1;
-              }
+               /* if(scope.ratingValue == 1 && index == 0){
+                    scope.ratingValue = index;
+                    scope.stars.push({
+                        filled: i<= scope.ratingValue
+                    });
+                }else{
+                    scope.ratingValue = index + 1;
+                  }
                 scope.onRatingSelected({
                     rating: scope.ratingValue
+                });*/
+              scope.ratingValue = index + 1;
+                scope.onRatingSelected({
+                    rating: index + 1
                 });
             };
-
+            updateStars();
             scope.$watch('ratingValue', function (oldVal, newVal) {
                 if (newVal) {
                     updateStars();

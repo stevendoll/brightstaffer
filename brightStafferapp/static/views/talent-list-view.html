@@ -60,6 +60,16 @@
                                          </a>
                                      </span>
                                  </th>
+                                 <th id="project_match" tabindex="0"  >Project Match
+                                    <span class="sor-cont">
+                                         <a class="arw-up" >
+                                            <i class="fa fa-long-arrow-down"></i>
+                                         </a>
+                                         <a class="arw-dwn" >
+                                            <i class="fa fa-long-arrow-up"></i>
+                                         </a>
+                                     </span>
+                                 </th>
 
                                  <th id="talent_prevCompany" tabindex="0"  ng-click="sortBy('talent_prevCompany')">Company/<span class="dis-blc">Division Name
                                       <span class="sor-cont sor-cont-dubl" ng-init="propertyName === 'talent_prevCompany'" ng-class="{reverse: reverse}">
@@ -156,13 +166,15 @@
                                      <!--<td ng-show="[[talent.talent_project.length > 0]] && !talent.talent_project[0].project_stage">-</span></td>-->
                                      <td >
                                         <span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].project"> <a href="">#[[talent.talent_project[0].project]]</a> </span>
-                                        <span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>
+                                        <!--<span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>-->
                                          <span class="dis-blc" ng-show="!talent.talent_project.length"> -  </span>
                                       </td>
-                                     <!--<td ng-show="[[talent.talent_project.length == 0]]">
-                                        <span class="dis-blc"> <a href=""> N/A </a> </span>
-                                      </td>-->
-                                     <td><span ng-show="talent.talent_project.length && talent.talent_project[0].company_name">[[talent.talent_project[0].company | capitalizeWord]]</span>
+                                      <td >
+                                        <span class="dis-blc" ng-show="talent.talent_project.length"> [[talent.talent_project[0].project_match]]</span>
+                                        <!--<span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>-->
+                                         <span class="dis-blc" ng-show="!talent.talent_project.length"> -  </span>
+                                      </td>
+                                     <td><span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>
                                          <span ng-show="!talent.talent_project.length">  -  </span>
                                      </td>
 

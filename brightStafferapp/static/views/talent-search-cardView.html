@@ -141,7 +141,7 @@
                 <button class="btn" id="profile_[[talent.id]]" ng-click="loadProfileData(talent.id,talent)">View Profile</button>
                 <button type="" class="btn" id="add_[[talent.id]]" ng-click="openProjectList(talent.id)">Add to Project</button>
 <!--                <a class="linkedin" href="[[talent.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>-->
-                <a class="linkedin" href="[[talent.linkedin_url]]" ng-click="!talent.linkedin_url && openLinkedinPopup($event,talent.id)"><i class="fa fa-linkedin-square"></i><div ng-show="!talent.linkedin_url" class="flag-circle"><i class="fa fa-flag"></i></div> </a>
+                <a class="linkedin" href="[[talent.linkedin_url]]" ng-click="!talent.linkedin_url && openLinkedinPopup($event,talent.id)" tooltip="[[talent.linkedin_url? '':'Add Linkedin Url.']]" ><i class="fa fa-linkedin-square"></i><div ng-show="!talent.linkedin_url" class="flag-circle"><i class="fa fa-plus"></i></div> </a>
                 <!-- <div class="linkedin-url-text">Add Linkedin URL</div>-->
             </div>
         </div>
