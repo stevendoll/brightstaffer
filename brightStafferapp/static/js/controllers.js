@@ -1697,8 +1697,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     'id': $scope.candidate.id, // password field value
                     'url': url
                 };
-                /*talentApis.addLinkedinUrl(requestObject).then(function (response) {
-                    if (response.message == "success") {
+                /*talentApis.addLinkedinUrl(requestObject, function (response) {
+                    if (response.success) {
                        $rootScope.getCandidateData();
                        $scope.showNotification(true, 'Linkedin URL added successfully.');
                     } else {
@@ -2973,15 +2973,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
-
-
-
-
-
-
-
-
-            
             , city: location[0] || ""
             , country: location[2] || ""
             , state: location[1] || ""
