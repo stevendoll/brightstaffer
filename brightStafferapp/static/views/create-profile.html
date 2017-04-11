@@ -12,7 +12,7 @@
                         </div>
                         <div class="cls"></div>
                         
-                        <div class="choose-pro-file" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" file-name="imageFileName" data-max-file-size="10">
+                        <div class="choose-pro-file" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" data-max-file-size="10">
                             <span>Choose a file or drag it here.</span>
                         </div>
                         
@@ -26,7 +26,9 @@
                                 <i class="fa fa-file-text"></i>
                             </div>
                             <div class="progress-text">[[talentFileobj.name]]</div>
-                            <div class="progress-close"><a href="">x</a></div>
+                            <div class="progress-close" ng-click="removeFile()">
+                                <a href="">x</a>
+                            </div>
                             <div class="cls"></div>
 <!--
                             <div class="progress">
@@ -44,10 +46,10 @@
                         <span>or</span>
                     </div>
                     <div class="cls"></div>
-                    <div class="create-pro-resume-panel">
+                    <div class="create-pro-resume-panel" ng-show="talentFileobj.name">
                         <i class="fa fa-file-text"></i>
-                        <div class="create-resume-name">Resume.pdf</div>
-                        <div class="resume-analysis"><span>Last Analyzed/Updated Dec 10, 2015</span></div>
+                        <div class="create-resume-name">[[talentFileobj.name]]</div>
+                        <div class="resume-analysis"><span>Analyzed/Created Dec 10, 2015</span></div>
                     </div>
                 </div>
                 <form name="createTalentForm" onkeypress="return event.keyCode != 13;" ng-submit="createTalentForm.$valid && createTalent(talentData);">
@@ -104,8 +106,8 @@
                                         <label for="">State</label>
                                         <!--<input name="lName" type="text" class="form-control" id="" placeholder="Country" maxlength="100" ng-model="talentData.country" />-->
                                         <div class="form-group count">
-                                            <select class="form-control select-arrow state-input-select">
-                                                <option">State</option>
+                                            <select class="form-control select-arrow state-input-select" ng-model="talentData.country">
+                                                <option>State</option>
                                                 <option>[[year]]</option>
                                             </select>
                                         </div>
@@ -115,8 +117,8 @@
                                     <div class="form-group count">
                                         <label for="">Country</label>
                                         <!--<input name="lName" type="text" class="form-control" id="" placeholder="Country" maxlength="100" ng-model="talentData.country" />-->
-                                        <select class="form-control select-arrow country-input-select">
-                                            <option">Country</option>
+                                        <select class="form-control select-arrow country-input-select" ng-model="talentData.country">
+                                            <option>Country</option>
                                             <option>[[year]]</option>
                                         </select>
                                     </div>
@@ -159,29 +161,29 @@
                             <div class="create-profile-form-div">
                                 <div class="create-pro-hd">Past Organization</div>
                                 <div class="cls"></div>
-                                <div class="col-xs-12 padding-zero" ng-repeat="currentOrganization in talentData.currentOrganization">
+                                <div class="col-xs-12 padding-zero" ng-repeat="pastOrganization in talentData.pastOrganization">
                                     <div class="first-panel">
                                         <div class="form-group current-tab">
-                                            <input type="text" class="form-control" id="" placeholder="Organization" maxlength="100" ng-model="currentOrganization.name" />
+                                            <input type="text" class="form-control" id="" placeholder="Organization" maxlength="100" ng-model="pastOrganization.name" />
                                         </div>
                                         <div class="form-group current-tab1">
-                                            <input type="text" class="form-control" id="" placeholder="Designation" maxlength="100" ng-model="currentOrganization.JobTitle" />
+                                            <input type="text" class="form-control" id="" placeholder="Designation" maxlength="100" ng-model="pastOrganization.JobTitle" />
                                         </div>
                                     </div>
                                     <div class="side-panel">
                                         <div class="form-group count">
-                                            <select class="form-control select-arrow pro-normal-select" ng-model="currentOrganization.from">
-                                                <option ng-show="currentOrganization.from == ''" value="">From</option>
+                                            <select class="form-control select-arrow pro-normal-select" ng-model="pastOrganization.from">
+                                                <option ng-show="pastOrganization.from == ''" value="">From</option>
                                                 <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="side-panel">
                                         <div class="form-group count">
-                                            <!--<input type="text" class="form-control" ng-model="currentOrganization.to" readonly/>-->
+                                            <!--<input type="text" class="form-control" ng-model="pastOrganization.to" readonly/>-->
 
-                                        <select class="form-control select-arrow pro-normal-select" ng-model="currentOrganization.to">
-                                            <option ng-show="currentOrganization.to == ''" value="">To</option>
+                                        <select class="form-control select-arrow pro-normal-select" ng-model="pastOrganization.to">
+                                            <option ng-show="pastOrganization.to == ''" value="">To</option>
                                             <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
                                         </div>
@@ -191,39 +193,6 @@
                                     Add More
                                 </button>
                             </div>
-                            <!--
-                        <div class="create-profile-form-div">
-                            <div class="create-pro-hd">Past</div>
-                            <div class="cls"></div>
-                            <div class="col-xs-12 padding-zero" ng-repeat="pastOrganization in talentData.pastOrganization">
-                                <div class="first-panel">
-                                    <div class="form-group">
-                                        <input type="" class="form-control" id="" placeholder="" ng-model="pastOrganization.name" required />
-                                    </div>
-                                </div>
-                                <div class="side-panel m-top4">
-                                    <div class="form-group count">
-                                        <select class="form-control select-arrow" ng-model="pastOrganization.from" required>
-                                            <option ng-show="pastOrganization.from == ''" value="">Select Year</option>
-                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="side-panel m-top4">
-                                    <div class="form-group count">
-                                        <select class="form-control select-arrow" ng-model="pastOrganization.to" required>
-                                            <option ng-show="pastOrganization.to == ''" value="">Select Year</option>
-                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="cls"></div>
-                            <button type="button" class="btn create-profile-add-bttn" ng-click="addPastOrganization()">
-                                Add More
-                            </button>
-                        </div>
--->
                             <div class="create-profile-form-div">
                                 <div class="create-pro-hd">Education</div>
                                 <div class="cls"></div>
@@ -275,7 +244,7 @@
                                     <h2>Top Concepts</h2>
                                     <!--<h3>Relevance</h3>-->
                                     <div class="top-concept-input-div" ng-repeat="concept in talentData.topConcepts">
-                                        <input type="" class="form-control top-concept-input-part" id="" placeholder="Top Concept" ng-model="concept.skill" maxlength="100" required/>
+                                        <input type="" class="form-control top-concept-input-part" id="" placeholder="Top Concept" ng-model="concept.skill" maxlength="100"/>
                                         <i ng-show="$index != 0" class="fa fa-close" ng-click="removeIndexFromArr(talentData.topConcepts, $index);"></i>
                                         <!--<input type="text" class="form-control top-concept-right-input-div" id="talent-skill-percent" placeholder="%" maxlength="3" ng-model="concept.percentage" ng-change="numberonly(concept, 'percentage');" required/>-->
                                         <span ng-show="concept.percentage > 100" style="color: red;font-weight: 100;font-size: 14px;float: right;margin-right: 10px;">Please enter percentage less than equal to 100.</span>
