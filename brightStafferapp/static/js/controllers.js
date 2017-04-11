@@ -1538,8 +1538,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if (typeof (response) == "string")
                 response = JSON.parse(response);
             if (response.success) {
-                if (response.topConcepts.length) {
-                    $scope.talentData.topConcepts = response.topConcepts;
+                if (response.results.length) {
+                    $scope.talentData.topConcepts = response.results;
                 }
             } else {
                 $scope.showNotification(false, response.errorstring || 'Error in fetching data from pdf');
@@ -1584,6 +1584,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 , to: ''
         }]
             , topConcepts: [{}]
+            , careerHistory: {
+                total: '',
+                history: [{}]
+            }
         };
     }
     $scope.initTalenData();
@@ -1596,6 +1600,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.addSkill = function () {
         $scope.talentData.topConcepts.unshift({});
+    }
+    $scope.addTalentCareerHistory = function () {
+        $scope.talentData.careerHistory.history.push({});
     }
     $scope.addTalentPast = function () {
         $scope.talentData.pastOrganization.push({
@@ -1624,7 +1631,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.addLinkedinUrl(param, function (response) {
             console.log(response);
             if (response.success) {
-
+                for (var key in response.results) {
+                    $scope.talentData[key] = response.results[key];
+                }
             } else {
 
             }
@@ -1708,9 +1717,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $state.go(state);
     }
     $scope.numberonly = function (obj, key) {
-            if (typeof (obj[key]) == "string")
-                obj[key] = obj[key].replace(/\D+/g, '');
-        }
+        if (typeof (obj[key]) == "string")
+            obj[key] = obj[key].replace(/\D+/g, '');
+    }
         /* create talent code ends */
 
     $scope.$watch('priceSlider.value', function (n, o) {
@@ -2964,6 +2973,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
+
 
 
 
