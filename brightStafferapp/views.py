@@ -551,7 +551,8 @@ class UploadTalent(View):
             context['success'] = True
             context['topConcepts'] = content['skills']
             return util.returnSuccessShorcut(context)
-        except:
+        except Exception as e:
+            print(e)
             return util.returnErrorShorcut(400, "Error Connection Refused")
 
     def handle_uploaded_file(self, dest_path, f, user):

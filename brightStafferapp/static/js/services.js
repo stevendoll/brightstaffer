@@ -604,10 +604,11 @@ function createTalentFormService($rootScope, REQUEST_URL, appService) {
         , uploadTalentFile: function (file, callback) {
             var fd = new FormData();
             fd.append('FILES', file);
+            fd.append('recruiter', $rootScope.globals.currentUser.user_email);
             var obj = {
                 withCredentials: false
                 , method: 'POST'
-                , url: REQUEST_URL + 'upload/'
+                , url: REQUEST_URL + 'upload_talent/'
                 , transformRequest: angular.identity
                 , transformResponse: [function (data) {
                     return data
