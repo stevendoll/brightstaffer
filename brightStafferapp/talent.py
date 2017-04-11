@@ -451,19 +451,25 @@ class TalentAdd(generics.ListCreateAPIView):
             # phone and email
             phone = profile_data.get('phone', '')
             email = profile_data.get('email', '')
-            email_talent = TalentEmail.objects.filter(email=email)
-            if email_talent:
-                return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
-            phone_client = TalentContact.objects.filter(contact=phone)
-            if phone_client:
-                return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
-            else:
-                profile_data["currentOrganization"].extend(profile_data["pastOrganization"])
-                del profile_data["pastOrganization"]
-                add_edit_talent(profile_data, user)
-                context['message'] = 'Talent Added Successfully'
-                context['success'] = True
-                return util.returnSuccessShorcut(context)
+            linkedin_url = profile_data.get('linkedinProfileUrl', '')
+            talent_linkedin = Talent.objects.filter(linkedin_url=linkedin_url)
+            if talent_linkedin != '':
+                if talent_linkedin:
+                    return util.returnErrorShorcut(400, 'Talent with this linkedin url already exists in the system')
+            if email != '':
+                email_talent = TalentEmail.objects.filter(email=email)
+                if email_talent:
+                    return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
+            if phone != '':
+                phone_client = TalentContact.objects.filter(contact=phone)
+                if phone_client:
+                    return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
+            profile_data["currentOrganization"].extend(profile_data["pastOrganization"])
+            del profile_data["pastOrganization"]
+            add_edit_talent(profile_data, user)
+            context['message'] = 'Talent Added Successfully'
+            context['success'] = True
+            return util.returnSuccessShorcut(context)
         else:
             add_edit_talent(profile_data, user)
             # add updated serializer data to context
