@@ -35,14 +35,27 @@
                                     </div>
                                 </div>
                                 <div class="cls"></div>
-                                <div class="edit-rectangle-left-div">
+                                <div class="modal-rectangle-left-div">
                                     <div class="form-group count">
                                         <input type="" class="form-control edit-rectangle-input" id="" placeholder="City" ng-model="talentEditableData.city">
                                     </div>
                                 </div>
-                                <div class="edit-rectangle-left-div">
+                                <div class="modal-rectangle-left-div">
                                     <div class="form-group count">
-                                        <input type="" class="form-control edit-rectangle-input" id="" placeholder="Country" ng-model="talentEditableData.country">
+                                        <!--<input type="" class="form-control edit-rectangle-input" id="" placeholder="Country" ng-model="talentEditableData.country">-->
+                                        <select class="form-control edit-state-modal-select">
+                                            <option value="">State</option>
+                                            <option>[[year]]</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-rectangle-left-div">
+                                    <div class="form-group count">
+                                        <!--<input type="" class="form-control edit-rectangle-input" id="" placeholder="Country" ng-model="talentEditableData.country">-->
+                                        <select class="form-control edit-state-modal-select">
+                                            <option value="">Country</option>
+                                            <option>[[year]]</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="cls"></div>
@@ -61,7 +74,7 @@
                                 <div class="cls"></div>
                                 <div class="edit-rectangle-left-div">
                                     <div class="form-group count">
-                                        <select class="form-control" ng-model="talentEditableData.currentOrganization[0].from">
+                                        <select class="form-control pro-modal-select" ng-model="talentEditableData.currentOrganization[0].from">
                                             <option ng-show="talentEditableData.currentOrganization[0].from == ''" value="">Select Year</option>
                                             <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
@@ -69,9 +82,9 @@
                                 </div>
                                 <div class="edit-rectangle-left-div">
                                     <div class="form-group count">
-                                        <input type="text" class="form-control" value="Present" readonly/>
+                                        <input type="text" class="form-control edit-rectangle-input" value="Present" readonly/>
 <!--
-                                        <select class="form-control" ng-model="talentEditableData.currentOrganization[0].to">
+                                        <select class="form-control pro-modal-select" ng-model="talentEditableData.currentOrganization[0].to">
                                             <option ng-show="talentEditableData.currentOrganization[0].to == ''" value="">Select Year</option>
                                             <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                         </select>
@@ -89,7 +102,7 @@
                                     <div class="cls"></div>
                                     <div class="edit-rectangle-left-div">
                                         <div class="form-group count">
-                                            <select class="form-control" ng-model="education.from">
+                                            <select class="form-control pro-modal-select" ng-model="education.from">
                                                 <option ng-show="education.from == ''" value="">Select Year</option>
                                                 <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
@@ -97,7 +110,7 @@
                                     </div>
                                     <div class="edit-rectangle-left-div">
                                         <div class="form-group count">
-                                            <select class="form-control" ng-model="education.to" ng-disabled="!education.from">
+                                            <select class="form-control pro-modal-select" ng-model="education.to" ng-disabled="!education.from">
                                                 <option ng-show="education.to == ''" value="">Select Year</option>
                                                 <option ng-show="year >= education.from" ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
@@ -107,7 +120,7 @@
                                 <div class="edit-rectangle-full-div">
                                     <div class="form-group">
                                         <label for="" class="modal-edit-profile-hd">Linkedin URL</label>
-                                        <input type="text" name="lurl" class="form-control" id="" placeholder="Linkedin profile url" ng-model="talentEditableData.linkedinProfileUrl" ng-model="talentData.linkedinProfileUrl" ng-pattern="/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i" />
+                                        <input type="text" name="lurl" class="form-control edit-rectangle-input" id="" placeholder="Linkedin profile url" ng-model="talentEditableData.linkedinProfileUrl" ng-model="talentData.linkedinProfileUrl" ng-pattern="/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i" />
                                         <span class="msg-error" ng-show="editTalentForm.lurl.$dirty && editTalentForm.lurl.$error.pattern">Please enter valid url.</span>
                                     </div>
                                 </div>

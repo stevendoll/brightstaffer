@@ -14791,6 +14791,7 @@ a.sbSelector:hover {
     color: #000000;
     padding: 0px 5px;
     margin-bottom: 3px;
+    font-weight: normal;
 }
 
 .update-profile-add-bttn {
@@ -15115,4 +15116,56 @@ a.sbSelector:hover {
     -moz-appearance: none;
     appearance: none;
 }
+
+.count .pro-modal-select {
+    border: 1px solid #e7eaec;
+    height: 40px;
+    border-radius: 2px;
+    font-size: 13px;
+    font-family: 'open_sansregular';
+    color: #383f44;
+    padding: 8px 10px;
+    width: 100%;
+    background: url(../img/arrow.png) no-repeat;
+    background-position: 220px 16px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.modal-rectangle-left-div {
+    width: 33.3%;
+    float: left;
+    padding: 0px 5px;
+    margin-bottom: 10px;
+}
+
+.count .edit-state-modal-select {
+    border: 1px solid #e7eaec;
+    height: 40px;
+    border-radius: 2px;
+    font-size: 13px;
+    font-family: 'open_sansregular';
+    color: #383f44;
+    padding: 8px 10px;
+    width: 100%;
+    background: url(../img/arrow.png) no-repeat;
+    background-position: 138px 16px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.modal-rectangle-left-div .edit-rectangle-input {
+    width: 100%;
+    float: left;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #e7eaec;
+    font-family: 'open_sansregular';
+    font-size: 13px;
+    color: #6a6a6a;
+}
+
 /*create-profile-css-ends*/
