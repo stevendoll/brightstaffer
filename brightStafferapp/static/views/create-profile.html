@@ -11,13 +11,13 @@
                             <input type="file" accept="application/pdf, application/docx" onchange="angular.element(this).scope().onFileLoad(this)">Choose File
                         </div>
                         <div class="cls"></div>
-                        
-<!--
+
+                        <!--
                         <div class="choose-pro-file" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" data-max-file-size="10">
                             <span class="choose-pro-file">Choose a file or drag it here.</span>
                         </div>
 -->
-                        
+
                         <div class="choose-pro-file">Choose a file or drag it here.</div>
                     </div>
                     <div class="cls"></div>
@@ -25,14 +25,14 @@
                         <div class="progress-panel">
                             <div class="progress-image">
                                 <img src="static/img/doc.svg" alt="avatar">
-<!--                                <i class="fa fa-file-text"></i>-->
+                                <!--                                <i class="fa fa-file-text"></i>-->
                             </div>
                             <div class="progress-text">[[talentFileobj.name]]</div>
                             <div class="progress-close" ng-click="removeFile()">
                                 <a href="">x</a>
                             </div>
                             <div class="cls"></div>
-<!--
+                            <!--
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
                                     <span class="sr-only">60% Complete</span>
@@ -42,7 +42,7 @@
                         </div>
                         <div class="cls"></div>
                         <div class="progress-bttn">
-<!--
+                            <!--
                           <div class="file-upld-pro mar-tb">
                               <input type="button" ng-click="uploadTalentFile()">Upload File
                               <button type="button" class="btn btn-primary" ng-click="uploadTalentFile()">Upload File</button>
@@ -50,7 +50,7 @@
 -->
                             <button type="button" class="btn btn-primary" ng-click="uploadTalentFile()">Upload File</button>
                         </div>
-                        
+
                     </div>
                     <div class="cls"></div>
                     <div class="create-pro-or-section">
@@ -115,23 +115,27 @@
                                 <div class="state-section">
                                     <div class="form-group">
                                         <label for="">State</label>
-                                        <!--<input name="lName" type="text" class="form-control" id="" placeholder="Country" maxlength="100" ng-model="talentData.country" />-->
+                                        <input name="lName" type="text" class="form-control" id="" placeholder="Country" maxlength="100" ng-model="talentData.country" />
+                                        <!--
                                         <div class="form-group count">
                                             <select class="form-control select-arrow state-input-select" ng-model="talentData.country">
                                                 <option>State</option>
                                                 <option>[[year]]</option>
                                             </select>
                                         </div>
+-->
                                     </div>
                                 </div>
                                 <div class="country-section">
                                     <div class="form-group count">
                                         <label for="">Country</label>
-                                        <!--<input name="lName" type="text" class="form-control" id="" placeholder="Country" maxlength="100" ng-model="talentData.country" />-->
+                                        <input name="lName" type="text" class="form-control" id="" placeholder="Country" maxlength="100" ng-model="talentData.country" />
+                                        <!--
                                         <select class="form-control select-arrow country-input-select" ng-model="talentData.country">
                                             <option>Country</option>
                                             <option>[[year]]</option>
                                         </select>
+-->
                                     </div>
                                 </div>
                             </div>
@@ -193,10 +197,10 @@
                                         <div class="form-group count">
                                             <!--<input type="text" class="form-control" ng-model="pastOrganization.to" readonly/>-->
 
-                                        <select class="form-control select-arrow pro-normal-select" ng-model="pastOrganization.to">
-                                            <option ng-show="pastOrganization.to == ''" value="">To</option>
-                                            <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
-                                        </select>
+                                            <select class="form-control select-arrow pro-normal-select" ng-model="pastOrganization.to">
+                                                <option ng-show="pastOrganization.to == ''" value="">To</option>
+                                                <option ng-show="year >= pastOrganization.from" ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -254,13 +258,13 @@
                                 <div class="top-concept-right-div">
                                     <h2>Top Concepts</h2>
                                     <!--<h3>Relevance</h3>-->
-                                    <div class="top-concept-input-div" ng-repeat="concept in talentData.topConcepts">
-                                        <input type="" class="form-control top-concept-input-part" id="" placeholder="Top Concept" ng-model="concept.name" maxlength="100"/>
-                                        <i ng-show="$index != 0" class="fa fa-close" ng-click="removeIndexFromArr(talentData.topConcepts, $index);"></i>
+                                    <div class="top-concept-input-div" ng-repeat="concept in talentData.topConcepts | limitTo:5">
+                                        <input type="" class="form-control top-concept-input-part" id="" placeholder="Top Concept" ng-model="concept.name" maxlength="100" />
+                                        <i ng-show="$index != talentData.topConcepts.length-1" class="fa fa-close" ng-click="removeIndexFromArr(talentData.topConcepts, $index);"></i>
                                         <!--<input type="text" class="form-control top-concept-right-input-div" id="talent-skill-percent" placeholder="%" maxlength="3" ng-model="concept.percentage" ng-change="numberonly(concept, 'percentage');" required/>-->
                                         <!--<span ng-show="concept.percentage > 100" style="color: red;font-weight: 100;font-size: 14px;float: right;margin-right: 10px;">Please enter percentage less than equal to 100.</span>-->
                                     </div>
-                                    <div class="concept-view-all">View All</div>
+                                    <div class="concept-view-all" data-target="#view-all-concepts" data-toggle="modal" ng-show="talentData.topConcepts.length > 5">View All</div>
                                     <button type="button" class="btn top-cocep-add-bttn" ng-click="addSkill()">Add More</button>
                                 </div>
                                 <div class="top-concept-right-div">
@@ -299,6 +303,44 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- all-concepts-Modal-starts -->
+        <div class="modal fade" id="view-all-concepts" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog add-talent-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body roles-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                        <div class="edit-modal-recruiter">
+                            <span>All Concepts</span>
+                            <div class="cls"></div>
+                            <div class="talent-progress" ng-repeat="concept in talentData.topConcepts">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>SNo.</th>
+                                            <th>Concept</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>[[$index+1]]</td>
+                                            <td>[[concept.name]]</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="cls"></div>
+                        </div>
+                        <div class="cls"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- all-concepts-Modal-ends -->
+
+
         <div class="" ng-class="{'pro-success-box': notification.status == 'Success', 'pro-error-box': notification.status != 'Success'}" id="nameSuccess" ng-show="notification.show">
             <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
         </div>
