@@ -395,13 +395,14 @@
                             <div class="info-box-panels" tooltip="[[st.notes]]">Notes: <span>[[st.notes]]</span></div>
                             <div class="info-box-bottom-links" style="cursor:default;">
                                 <span data-toggle="modal" style="cursor:default;">Edit</span>
-<!--                                <span style="cursor:default;"  data-toggle="modal" data-target="#delteStageModal" ng-click="setScopeVariable('stageIdToBeDeleted', st.stage_id)">Delete</span>-->
-                                <span style="cursor:default;">Delete</span>
+                                <span style="cursor:default;" data-toggle="modal" data-target="#delteStageModal" ng-click="setScopeVariable('stageIdToBeDeleted', st.stage_id)">Delete</span>
+                                <!--                                <span style="cursor:default;">Delete</span>-->
                             </div>
                         </div>
                     </div>
 
                     <!-- Modal -->
+<!--
                     <div class="modal fade" id="delteStageModal" role="dialog">
                         <div class="modal-dialog modal-sm">
                             <div class="modal-content">
@@ -417,6 +418,29 @@
                             </div>
                         </div>
                     </div>
+-->
+
+
+                    <div class="modal fade" id="delteStageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog add-talent-dialog delete-talent-dailog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="confirm-text">Are you sure you want to <span>delete</span> this Stage.</div>
+                                    <div class="confirm-bttn-box">
+                                        <button type="button" class="btn" id="confirm" ng-click="deleteStage(stageIdToBeDeleted)">Yes</button>
+                                        <button type="button" class="btn" data-dismiss="modal" aria-label="Close">No</button>
+                                    </div>
+                                    <div class="cls"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
                 </div>
 
             </div>

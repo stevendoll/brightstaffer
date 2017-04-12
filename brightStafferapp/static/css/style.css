@@ -15046,6 +15046,7 @@ a.sbSelector:hover {
 .create-pro-resume-panel {
     width: 100%;
     float: left;
+    margin-bottom: 18px;
 }
 
 .create-resume-name {
@@ -15258,6 +15259,19 @@ a.sbSelector:hover {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.create-upload-bttn {
+    width: 120px;
+    text-align: center;
+    background: #1d84c6;
+    color: #ffffff;
+    border: 1px solid #1d84c6;
+    font-size: 13px;
+    float: none;
+    padding: 6px 5px;
+    border-radius: 2px;
+    margin: 30px auto 0px auto;
 }
 
 /*create-profile-css-ends*/
