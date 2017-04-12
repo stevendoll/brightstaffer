@@ -1000,6 +1000,10 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     height: 751px;
 }
 
+.custom-scroll-rightbar #mCSB_2_container {
+    width: 100% !important;
+}
+
 .talents-tabs-panel .left-section .nav-tabs > li > a {
     color: #6a6a6a;
     font-size: 14px;
