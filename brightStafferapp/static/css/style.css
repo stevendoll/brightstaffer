@@ -1000,6 +1000,10 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     height: 751px;
 }
 
+.custom-scroll-rightbar #mCSB_2_container {
+    width: 100% !important;
+}
+
 .talents-tabs-panel .left-section .nav-tabs > li > a {
     color: #6a6a6a;
     font-size: 14px;
@@ -2658,6 +2662,70 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .totalcount-div span {
     float: left;
     margin-right: 5px;
+}
+
+.modal-top-concept-scroll {
+    width: 100%;
+    float: left;
+    max-height: 500px;
+    overflow: auto;
+}
+
+.modal-top-concept-scroll #mCSB_2_container {
+    width: 100% !important;
+}
+
+.roles-body .edit-profile-spadng {
+    padding: 20px 0px 0px 25px;
+}
+
+.pro-edit-success-box {
+    height: 50px;
+    border-radius: 2px;
+    background-color: rgba(223, 240, 216, 0.9);
+    border: solid 1px #d6e9c6;
+    margin: 0 auto;
+    padding: 13px 30px;
+    width: auto;
+    float: left;
+    position: absolute;
+    top: -11px;
+    left: 0;
+    z-index: 9999;
+    right: 0;
+    text-align: center;
+}
+
+.pro-edit-success-box span {
+    font-family: 'open_sansregular';
+    font-size: 14px;
+    text-align: left;
+    color: #3c763d;
+}
+
+.pro-edit-error-box {
+    height: 50px;
+    border-radius: 2px;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    margin: 0 auto;
+    padding: 13px 30px;
+    width: auto;
+    float: left;
+    position: absolute;
+    top: -11px;
+    left: 0;
+    z-index: 9999;
+    right: 0;
+    text-align: center;
+}
+
+.pro-edit-error-box span {
+    font-family: 'open_sansregular';
+    font-size: 14px;
+    text-align: left;
+    color: #a94442;
 }
 
 @media (max-width: 768px) {
@@ -14647,7 +14715,7 @@ a.sbSelector:hover {
     color: #6a6a6a;
     position: absolute;
     top: 11px;
-    left: 270px;
+    left: 92%;
     cursor: pointer;
 }
 
@@ -14822,7 +14890,7 @@ a.sbSelector:hover {
 }
 
 .total-exp-text {
-    width: 63%;
+    width: 60%;
     float: left;
     font-size: 13px;
     color: #000000;
@@ -14832,7 +14900,7 @@ a.sbSelector:hover {
 }
 
 .top-concept-input-div .career-years {
-    width: 52px;
+    width: 22%;
     float: left;
     height: 40px;
     border-radius: 2px;
@@ -14847,7 +14915,7 @@ a.sbSelector:hover {
 }
 
 .top-concept-input-div .career-input-div {
-    width: 63%;
+    width: 60%;
     float: left;
     height: 40px;
     border-radius: 2px;
@@ -14857,13 +14925,13 @@ a.sbSelector:hover {
     font-size: 13px;
     color: #808080;
     padding: 8px 14px 8px 14px;
-    text-align: center;
+    text-align: left;
     margin-right: 8px;
 }
 
 .total-exp-years {
     width: auto;
-    float: left;
+    float: right;
     font-size: 13px;
     color: #000000;
     font-family: 'open_sansregular';
@@ -14978,6 +15046,7 @@ a.sbSelector:hover {
 .create-pro-resume-panel {
     width: 100%;
     float: left;
+    margin-bottom: 18px;
 }
 
 .create-resume-name {
@@ -15056,7 +15125,7 @@ a.sbSelector:hover {
     padding: 8px 10px;
     width: 100%;
     background: url(../img/arrow.png) no-repeat;
-    background-position: 195px 16px;
+    background-position: 97% 16px;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -15173,6 +15242,36 @@ a.sbSelector:hover {
     font-family: 'open_sansregular';
     font-size: 13px;
     color: #6a6a6a;
+}
+
+.top-concept-input-div .top-concept-div-panel {
+    width: 96%;
+    float: left;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #e7eaec;
+    font-family: 'open_sansregular';
+    font-size: 13px;
+    color: #000000;
+    padding: 8px 14px 8px 14px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.create-upload-bttn {
+    width: 120px;
+    text-align: center;
+    background: #1d84c6;
+    color: #ffffff;
+    border: 1px solid #1d84c6;
+    font-size: 13px;
+    float: none;
+    padding: 6px 5px;
+    border-radius: 2px;
+    margin: 30px auto 0px auto;
 }
 
 /*create-profile-css-ends*/

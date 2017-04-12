@@ -336,8 +336,18 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
 
     $rootScope.getCandidateData = function (check) {
         console.log('fetching candidate data');
-        $rootScope.search.searchKeywords = '';
-        $scope.getSearchData(check);
+        if(check == 'sideNav'){
+            $rootScope.search.searchKeywords = '';
+            $rootScope.filterReset();
+            $rootScope.isFilterChecked = false;
+            $('.talent-search-icon').removeClass('active');
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+              $scope.getSearchData();
+        }else{
+              $scope.getSearchData(check);
+        }
     }
 
     $rootScope.$on('fetchCandidateData', $rootScope.getCandidateData);
@@ -1517,6 +1527,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , status: ''
         , message: ''
     };
+    $scope.disableUploadBtn = false;
     $scope.todayDate = new Date();
     $scope.imageFileName = '';
     $scope.talentFileobj = {};
@@ -1534,6 +1545,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.uploadTalentFile = function () {
+        $scope.disableUploadBtn = true;
         createTalentFormService.uploadTalentFile($scope.talentFileobj, function (response) {
             if (typeof (response) == "string")
                 response = JSON.parse(response);
@@ -1544,6 +1556,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             } else {
                 $scope.showNotification(false, response.errorstring || 'Error in fetching data from pdf');
                 $window.scrollTo(0, 0);
+                $scope.disableUploadBtn = false;
             }
             console.log(response);
         });
@@ -1631,6 +1644,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.addLinkedinUrl(param, function (response) {
             console.log(response);
             if (response.success) {
+                delete response.results.linkedinProfileUrl;
                 for (var key in response.results) {
                     $scope.talentData[key] = response.results[key];
                 }
@@ -1697,18 +1711,24 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     'id': $scope.candidate.id, // password field value
                     'url': url
                 };
-                /*talentApis.addLinkedinUrl(requestObject, function (response) {
+                talentApis.addLinkedinUrl(requestObject, function (response) {
+                     $('#add-url').modal('hide');
+                      $('html, body').animate({
+                            scrollTop: 0
+                        }, 'fast');
                     if (response.success) {
+                       //$scope.showNotification(true, 'Linkedin URL added successfully.');
+                       $scope.candidate = {};
                        $rootScope.getCandidateData();
-                       $scope.showNotification(true, 'Linkedin URL added successfully.');
                     } else {
                         console.log('error');
                          $scope.showNotification(false, response.errorstring);
                     }
-                });*/
+                });
             }
 
         }
+
         /*end of linkedin url code*/
 
     $scope.gotoState = function (state) {
@@ -1742,7 +1762,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) { // table responsiveness initialization after data render
         $(".select-arrow").selectbox();
         $('#export').change(function () {
-            $scope.isFilterChecked = false;
+            $rootScope.isFilterChecked = false;
             var selectedValue = $('#export :selected').text();
             $scope.exportType = selectedValue;
         });
@@ -1821,6 +1841,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             talentApis.updateRatings(requestObject).then(function (response) {
                 if (response.message == "success") {
                     console.log('success');
+
                 } else {
                     console.log('error');
                 }
@@ -1842,7 +1863,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $rootScope.candidatePagination.page = 1;
 
         $scope.choosenCandidates = [];
-        $scope.isFilterChecked = false;
+        $rootScope.isFilterChecked = false;
         $('.talent-search-icon').removeClass('active');
         $('#selectall').prop('checked', false);
         $('#assignToProject').removeClass('add-talent');
@@ -1859,6 +1880,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('.table-view').removeClass('active');
             $state.go('talent.talent-search.talent-search-card', '');
         }
+    }
+    $scope.stageIdToBeDeleted = null;
+    $scope.setScopeVariable = function(variable, value){
+        $scope[variable] = value;
+    }
+    $scope.deleteStage = function(id){
+        if(!id)return;
+        talentApis.delteStage({stage_id: id}, function(response){
+            console.log(response);
+        })
     }
 
     $scope.getTalents = function (recordCount) { // function to fetch top 6 projects
@@ -1936,7 +1967,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
 
     $scope.loadProfileData = function (id, talent) {
-        $scope.isFilterChecked = false;
+        $rootScope.isFilterChecked = false;
         if (talent && id) {
             $rootScope.talentDetails = talent;
         }
@@ -2179,7 +2210,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.deleteTalents = function () {
-        $scope.isFilterChecked = false;
+        $rootScope.isFilterChecked = false;
         $('#delete-talent-popup').modal('show');
     }
 
@@ -2205,7 +2236,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 if (response) {
                     $rootScope.search.searchKeywords = '';
                     $('.talent-search-icon').removeClass('active');
-                    $scope.isFilterChecked = false;
+                    $rootScope.isFilterChecked = false;
                     $rootScope.filterReset();
                     $rootScope.getCandidateData();
                     //                    $rootScope.talentList = response;
@@ -2784,8 +2815,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.filterOpen = function () {
-        if (!$scope.isFilterChecked) {
-            $scope.isFilterChecked = true;
+        if (!$rootScope.isFilterChecked) {
+            $rootScope.isFilterChecked = true;
             $('.talent-search-icon').addClass('active');
             $('.selectpicker').selectpicker();
             /*$('#projectSelect').multiselect({
@@ -2799,8 +2830,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $scope.filterValue.stage = selectedValue;
                 // console.log($scope.filterValue.stage);
             });
-        } else if ($scope.isFilterChecked) {
-            $scope.isFilterChecked = false;
+        } else if ($rootScope.isFilterChecked) {
+            $rootScope.isFilterChecked = false;
             $('.talent-search-icon').removeClass('active');
         }
     }
@@ -2973,19 +3004,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
-            , city: location[0] || ""
-            , country: location[2] || ""
-            , state: location[1] || ""
-            , designation: talent.designation
-            , industryFocus: talent.industry_focus
-            , firstName: talentName[0]
-            , lastName: talentName[1]
+            , city: location[0].trim() || ""
+            , country: location[2].trim() || ""
+            , state: location[1].trim() || ""
+            , designation: talent.designation.trim()
+            , industryFocus: talent.industry_focus.trim()
+            , firstName: talentName[0].trim()
+            , lastName: talentName[1].trim()
             , id: talent.id
         };
         if (talent.talent_company.length) {
             var organisation = {};
-            organisation.name = talent.talent_company[0].company;
-            organisation.JobTitle = talent.talent_company[0].designation;
+            organisation.name = talent.talent_company[0].company.trim();
+            organisation.JobTitle = talent.talent_company[0].designation.trim();
             var date = new Date(talent.talent_company[0].start_date);
             organisation.from = date.getFullYear().toString();
             var date = new Date(talent.talent_company[0].end_date);
@@ -3004,7 +3035,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if (talent.talent_education.length) {
             for (var i = 0; i < talent.talent_education.length; i++) {
                 var organisation = {};
-                organisation.name = talent.talent_education[i].education;
+                organisation.name = talent.talent_education[i].education.trim();
                 var date = new Date(talent.talent_education[i].start_date);
                 organisation.from = date.getFullYear().toString();
                 var date = new Date(talent.talent_education[i].end_date);
