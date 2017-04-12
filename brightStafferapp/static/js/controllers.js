@@ -1697,18 +1697,23 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     'id': $scope.candidate.id, // password field value
                     'url': url
                 };
-                /*talentApis.addLinkedinUrl(requestObject, function (response) {
+                talentApis.addLinkedinUrl(requestObject, function (response) {
+                     $('#add-url').modal('hide');
+                      $('html, body').animate({
+                            scrollTop: 0
+                        }, 'fast');
                     if (response.success) {
+                       //$scope.showNotification(true, 'Linkedin URL added successfully.');
                        $rootScope.getCandidateData();
-                       $scope.showNotification(true, 'Linkedin URL added successfully.');
                     } else {
                         console.log('error');
                          $scope.showNotification(false, response.errorstring);
                     }
-                });*/
+                });
             }
 
         }
+
         /*end of linkedin url code*/
 
     $scope.gotoState = function (state) {
@@ -1821,6 +1826,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             talentApis.updateRatings(requestObject).then(function (response) {
                 if (response.message == "success") {
                     console.log('success');
+
                 } else {
                     console.log('error');
                 }
