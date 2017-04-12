@@ -19,7 +19,7 @@
                     <div class="talent-activity-panel">
                         <div class="left-div">Last Activity</div>
                         <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].create_date | dateFormat]]</div>
-                        <div class="right-div" ng-show="!stage.stagesCard.length">  -  </div>
+                        <div class="right-div" ng-show="!stage.stagesCard.length"> - </div>
                     </div>
                     <div class="talent-rec-panel">
                         <div class="left-div">Recruiter</div>
@@ -43,7 +43,7 @@
                         </div>
                         <div ng-show="!stage.stagesCard.length">
                             <div class="schdule-list">Date Added/Analysed</div>
-                        <div class="schdule-list-date">[[talentDetails.create_date | dateFormat]]</div>
+                            <div class="schdule-list-date">[[talentDetails.create_date | dateFormat]]</div>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                   <!-- <div ng-if="$index == 1">
+                                    <!-- <div ng-if="$index == 1">
                                         <div class="col-xs-12 padding-zero">
                                             <div class="left-div search-result-past">Past</div>
                                             <div class="right-div search-detail-past">
@@ -395,19 +395,38 @@
                             <div class="info-box-panels" tooltip="[[st.notes]]">Notes: <span>[[st.notes]]</span></div>
                             <div class="info-box-bottom-links" style="cursor:default;">
                                 <span data-toggle="modal" style="cursor:default;">Edit</span>
+<!--                                <span style="cursor:default;"  data-toggle="modal" data-target="#delteStageModal" ng-click="setScopeVariable('stageIdToBeDeleted', st.stage_id)">Delete</span>-->
                                 <span style="cursor:default;">Delete</span>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Modal -->
+                    <div class="modal fade" id="delteStageModal" role="dialog">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Delete Stage</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure?</p>
+                                    <button class="btn btn-danger" data-dismiss="modal">No</button>
+                                    <button class="btn btn-primary" ng-click="deleteStage(stageIdToBeDeleted)">Yes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+</div>
 <div class="" ng-class="{'pro-error-box': notification.status != 'Success'}" ng-show="notification.show">
-            <span><strong>Error!</strong> [[notification.message]]</span>
- </div>
+    <span><strong>Error!</strong> [[notification.message]]</span>
+</div>
 <!-- tabs-panel-ends -->
 
 <!-- contact-info-Modal-starts -->
