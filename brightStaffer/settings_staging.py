@@ -30,7 +30,7 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+# HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 BROKER_URL = Config.get('REDIS CONNECTIONS', 'BROKER_URL')
 CELERY_RESULT_BACKEND = Config.get('REDIS CONNECTIONS', 'CELERY_RESULT_BACKEND')

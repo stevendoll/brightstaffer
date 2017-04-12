@@ -1,6 +1,6 @@
 from brightStafferapp.models import Talent, User, Projects, TalentProject, TalentEmail, TalentContact, \
     TalentStage, TalentRecruiter, TalentConcept, ProjectConcept,Concept, Education, TalentEducation, Company,\
-    TalentCompany
+    TalentCompany, TalentLocation
 from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
@@ -451,17 +451,25 @@ class TalentAdd(generics.ListCreateAPIView):
             # phone and email
             phone = profile_data.get('phone', '')
             email = profile_data.get('email', '')
-            email_talent = TalentEmail.objects.filter(email=email)
-            if email_talent:
-                return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
-            phone_client = TalentContact.objects.filter(contact=phone)
-            if phone_client:
-                return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
-            else:
-                add_edit_talent(profile_data, user)
-                context['message'] = 'Talent Added Successfully'
-                context['success'] = True
-                return util.returnSuccessShorcut(context)
+            linkedin_url = profile_data.get('linkedinProfileUrl', '')
+            talent_linkedin = Talent.objects.filter(linkedin_url=linkedin_url)
+            if talent_linkedin != '':
+                if talent_linkedin:
+                    return util.returnErrorShorcut(400, 'Talent with this linkedin url already exists in the system')
+            if email != '':
+                email_talent = TalentEmail.objects.filter(email=email)
+                if email_talent:
+                    return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
+            if phone != '':
+                phone_client = TalentContact.objects.filter(contact=phone)
+                if phone_client:
+                    return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
+            profile_data["currentOrganization"].extend(profile_data["pastOrganization"])
+            del profile_data["pastOrganization"]
+            add_edit_talent(profile_data, user)
+            context['message'] = 'Talent Added Successfully'
+            context['success'] = True
+            return util.returnSuccessShorcut(context)
         else:
             add_edit_talent(profile_data, user)
             # add updated serializer data to context
@@ -481,9 +489,13 @@ def add_edit_talent(profile_data, user):
     if "id" in profile_data:
         talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
         if talent_obj:
+            talent_location, created = TalentLocation.objects.get_or_create(talent=talent_obj[0],
+                                                                            city=profile_data.get('city', ''),
+                                                                            state=profile_data.get('state', ''),
+                                                                            country=profile_data.get('country', '')
+                                                                            )
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
-                              current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
                               linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               industry_focus=profile_data.get('industryFocus', ''))
             talent_obj = talent_obj[0]
@@ -491,8 +503,12 @@ def add_edit_talent(profile_data, user):
         talent_obj = Talent.objects.create(
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
             recruiter=user, status='New', industry_focus=profile_data.get('industryFocus', ''),
-            current_location=profile_data.get('city', '') + ',' + profile_data.get('country', ''),
             linkedin_url=profile_data.get('linkedinProfileUrl', ''), create_date=datetime.datetime.now())
+        talent_location = TalentLocation.objects.create(talent=talent_obj,
+                                                        city=profile_data.get('city', ''),
+                                                        state=profile_data.get('state', ''),
+                                                        country=profile_data.get('country', '')
+                                                        )
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                           is_active=True)
     if talent_obj:
@@ -503,9 +519,9 @@ def add_edit_talent(profile_data, user):
         if 'topConcepts' in profile_data:
             for skill in profile_data.get('topConcepts', ''):
                 if bool(skill):
-                    concept, created = Concept.objects.get_or_create(concept=skill.get('skill'))
+                    concept, created = Concept.objects.get_or_create(concept=skill.get('name'))
                     tpconcept, created = TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept,
-                                                                             match=skill.get('percentage', 0.00))
+                                                                             match=float(skill.get('percentage', 0.00)))
 
     if "education" in profile_data:
         for education in profile_data.get('education', ''):
@@ -657,8 +673,11 @@ class TalentSearch(generics.ListCreateAPIView):
         queryset = queryset.filter(Q(recruiter__username__iexact=recruiter) & Q(talent_active__is_active=True) &
                                    Q(talent_active__recruiter__username=recruiter))
         if term:
-            queryset = queryset.filter(Q(talent_active__is_active=True) & Q(status__in=['New', 'Active']) &
-                Q(talent_name__icontains=term) | Q(designation__icontains=term) | Q(current_location__icontains=term) |
+            queryset = queryset.filter(
+                Q(talent_active__is_active=True) & Q(status__in=['New', 'Active']) &
+                Q(talent_name__icontains=term) | Q(designation__icontains=term) |
+                Q(current_location__city__icontains=term) | Q(current_location__state__icontains=term) |
+                Q(current_location__country__icontains=term) |
                 Q(industry_focus__icontains=term) | Q(talent_company__company__company_name__icontains=term) |
                 Q(talent_company__designation__icontains=term) |
                 Q(talent_project__project__project_name__icontains=term) |

@@ -110,10 +110,13 @@ function locationFormat() {
             return '';
         var b = input.split(',');
         if (b[0]) {
-            b[0] = capitalizeString(b[0]);
+            b[0] = capitalizeString(b[0].trim());
         }
         if (b[1]) {
-            b[1] = capitalizeString(b[1]);
+            b[1] = capitalizeString(b[1].trim());
+        }
+        if(b[2]){
+             b[2] = capitalizeString(b[2].trim());
         }
         input = b.join(', ')
         return input;

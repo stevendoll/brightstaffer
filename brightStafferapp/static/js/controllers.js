@@ -335,7 +335,8 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     $scope.getSearchData(true);
 
     $rootScope.getCandidateData = function (check) {
-        console.log('fetching candidate data')
+        console.log('fetching candidate data');
+        $rootScope.search.searchKeywords = '';
         $scope.getSearchData(check);
     }
 
@@ -1272,10 +1273,11 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         $('#add-talent').modal('show');
     }
 
-    var dropzoneId = "dropzone";
+    var dropzoneIds = ['dropzone', 'dropzone_backgroundImg'];
 
     window.addEventListener("dragenter", function (e) {
-        if (e.target.id != dropzoneId) {
+        if (dropzoneIds.indexOf(e.target.id) == -1) {
+            console.log('drag enter: ' + e.target.id)
             e.preventDefault();
             e.dataTransfer.effectAllowed = "none";
             e.dataTransfer.dropEffect = "none";
@@ -1283,7 +1285,8 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     }, false);
 
     window.addEventListener("dragover", function (e) {
-        if (e.target.id != dropzoneId) {
+        if (dropzoneIds.indexOf(e.target.id) == -1) {
+            console.log('drag over: ' + e.target.id)
             e.preventDefault();
             e.dataTransfer.effectAllowed = "none";
             e.dataTransfer.dropEffect = "none";
@@ -1291,7 +1294,8 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     });
 
     window.addEventListener("drop", function (e) {
-        if (e.target.id != dropzoneId) {
+        console.log('drop: ' + e.target.id)
+        if (dropzoneIds.indexOf(e.target.id) == -1) {
             e.preventDefault();
             e.dataTransfer.effectAllowed = "none";
             e.dataTransfer.dropEffect = "none";
@@ -1513,6 +1517,38 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , status: ''
         , message: ''
     };
+    $scope.todayDate = new Date();
+    $scope.imageFileName = '';
+    $scope.talentFileobj = {};
+
+    $scope.onFileLoad = function (e) {
+        var file = e.files[0];
+        $scope.talentFileobj = e.files[0];
+        $timeout(function () {
+            $scope.$apply();
+        });
+    };
+
+    $scope.removeFile = function () {
+        $scope.talentFileobj = {};
+    }
+
+    $scope.uploadTalentFile = function () {
+        createTalentFormService.uploadTalentFile($scope.talentFileobj, function (response) {
+            if (typeof (response) == "string")
+                response = JSON.parse(response);
+            if (response.success) {
+                if (response.results.length) {
+                    $scope.talentData.topConcepts = response.results;
+                }
+            } else {
+                $scope.showNotification(false, response.errorstring || 'Error in fetching data from pdf');
+                $window.scrollTo(0, 0);
+            }
+            console.log(response);
+        });
+    }
+
     $scope.showNotification = function (success, message) {
         $scope.notification.show = true;
         $scope.notification.status = success ? 'Success' : 'Error';
@@ -1537,12 +1573,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 , from: ''
                 , to: 'Present'
             }]
+            , pastOrganization: [{
+                name: ''
+                , from: ''
+                , to: ''
+            }]
             , education: [{
                 name: ''
                 , from: ''
                 , to: ''
         }]
             , topConcepts: [{}]
+            , careerHistory: {
+                total: '',
+                history: [{}]
+            }
         };
     }
     $scope.initTalenData();
@@ -1554,7 +1599,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     }
     $scope.addSkill = function () {
-        $scope.talentData.topConcepts.push({});
+        $scope.talentData.topConcepts.unshift({});
+    }
+    $scope.addTalentCareerHistory = function () {
+        $scope.talentData.careerHistory.history.push({});
+    }
+    $scope.addTalentPast = function () {
+        $scope.talentData.pastOrganization.push({
+            name: ''
+            , from: ''
+            , to: ''
+        });
     }
 
     $scope.removeIndexFromArr = function (arr, index) {
@@ -1567,18 +1622,36 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.talentDataValidation.phone = true;
         }
     }
+
+    $scope.fetchLinkedinData = function () {
+        if (!$scope.talentData.linkedinProfileUrl) return;
+        var param = {
+            url: $scope.talentData.linkedinProfileUrl
+        }
+        talentApis.addLinkedinUrl(param, function (response) {
+            console.log(response);
+            if (response.success) {
+                for (var key in response.results) {
+                    $scope.talentData[key] = response.results[key];
+                }
+            } else {
+
+            }
+        })
+    }
+
     $scope.createTalent = function (data, onEdit) {
         if (data.phone && data.phone.length < 10) return;
         var valid = true;
-        if(data.topConcepts){
-            data.topConcepts.forEach(function(concept){
-                if(concept.percentage > 100){
+        if (data.topConcepts) {
+            data.topConcepts.forEach(function (concept) {
+                if (concept.percentage > 100) {
                     valid = false;
                 }
             })
         }
 
-        if(!valid)return;
+        if (!valid) return;
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
@@ -1606,15 +1679,47 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     }
 
+    /* linkedin url add */
+    $scope.linkedinUrlPattern = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+    $scope.candidate = {};
+    $scope.openLinkedinPopup = function (event, selectedTalentId) {
+        event.preventDefault();
+        event.stopPropagation();
+        $scope.candidate.id = selectedTalentId;
+        $('#add-url').modal('show');
+    }
+
+    $scope.addLinkedUrl = function () {
+            console.log($scope.candidate.id);
+            var url = $scope.candidate.linkedinProfileUrl;
+            if (url) {
+                var requestObject = {
+                    'id': $scope.candidate.id, // password field value
+                    'url': url
+                };
+                /*talentApis.addLinkedinUrl(requestObject, function (response) {
+                    if (response.success) {
+                       $rootScope.getCandidateData();
+                       $scope.showNotification(true, 'Linkedin URL added successfully.');
+                    } else {
+                        console.log('error');
+                         $scope.showNotification(false, response.errorstring);
+                    }
+                });*/
+            }
+
+        }
+        /*end of linkedin url code*/
+
     $scope.gotoState = function (state) {
         $scope.initTalenData();
         $rootScope.getCandidateData();
         $state.go(state);
     }
     $scope.numberonly = function (obj, key) {
-            if (typeof (obj[key]) == "string")
-                obj[key] = obj[key].replace(/\D+/g, '');
-        }
+        if (typeof (obj[key]) == "string")
+            obj[key] = obj[key].replace(/\D+/g, '');
+    }
         /* create talent code ends */
 
     $scope.$watch('priceSlider.value', function (n, o) {
@@ -1707,7 +1812,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.getSelectedRating = function (rating) {
         //console.log(rating);
         // console.log($rootScope.talentDetails.id);
-        if (rating) {
+        console.log(rating);
+        if (rating >= 0) {
             var requestObject = {
                 'id': $rootScope.talentDetails.id, // password field value
                 'rating': rating
@@ -2102,10 +2208,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $scope.isFilterChecked = false;
                     $rootScope.filterReset();
                     $rootScope.getCandidateData();
-//                    $rootScope.talentList = response;
-//                    var count = talent.length
-//                    $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
-//                    $rootScope.talentCountEnd = response.length;
+                    //                    $rootScope.talentList = response;
+                    //                    var count = talent.length
+                    //                    $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
+                    //                    $rootScope.talentCountEnd = response.length;
                     $('#selectall').prop('checked', false);
                     $('#assignToProject').removeClass('add-talent');
                     $('#assignToProject').addClass('disabled-talent');
@@ -2792,7 +2898,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 for (var i = 0; i < response.results.length; i++) {
                     $rootScope.talentList.push(response.results[i]);
                 }
-                var count = $rootScope.talentList.length
+                var count = response.count;
                 $rootScope.totalTalentCount = count;
                 $rootScope.talentCountEnd = count;
 
@@ -2866,9 +2972,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.talentEditableData = {
             currentOrganization: []
             , education: []
-            , linkedinProfileUrl: talent.linkedin_url
+                //  , linkedinProfileUrl: talent.linkedin_url
             , city: location[0] || ""
-            , country: location[1] || ""
+            , country: location[2] || ""
+            , state: location[1] || ""
             , designation: talent.designation
             , industryFocus: talent.industry_focus
             , firstName: talentName[0]
