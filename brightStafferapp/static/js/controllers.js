@@ -338,7 +338,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         console.log('fetching candidate data');
         if(check == 'sideNav'){
             $rootScope.search.searchKeywords = '';
-            $rootScope.filterReset();
+            //$rootScope.filterReset();
             $rootScope.isFilterChecked = false;
             $('.talent-search-icon').removeClass('active');
             $('html, body').animate({
@@ -3004,19 +3004,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
-            , city: location[0].trim() || ""
-            , country: location[2].trim() || ""
-            , state: location[1].trim() || ""
-            , designation: talent.designation.trim()
-            , industryFocus: talent.industry_focus.trim()
-            , firstName: talentName[0].trim()
-            , lastName: talentName[1].trim()
+            , city: location[0]? location[0].trim():""
+            , country: location[2]? location[2].trim():""
+            , state: location[1] ? location[1].trim():""
+            , designation: talent.designation ? talent.designation.trim():''
+            , industryFocus: talent.industry_focus ? talent.industry_focus.trim(): ''
+            , firstName: talentName[0]? talentName[0].trim(): ''
+            , lastName: talentName[1] ? talentName[1].trim(): ''
             , id: talent.id
         };
         if (talent.talent_company.length) {
             var organisation = {};
-            organisation.name = talent.talent_company[0].company.trim();
-            organisation.JobTitle = talent.talent_company[0].designation.trim();
+            organisation.name = talent.talent_company[0].company ? talent.talent_company[0].company.trim():'';
+            organisation.JobTitle = talent.talent_company[0].designation? talent.talent_company[0].designation.trim(): '';
             var date = new Date(talent.talent_company[0].start_date);
             organisation.from = date.getFullYear().toString();
             var date = new Date(talent.talent_company[0].end_date);
@@ -3035,7 +3035,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if (talent.talent_education.length) {
             for (var i = 0; i < talent.talent_education.length; i++) {
                 var organisation = {};
-                organisation.name = talent.talent_education[i].education.trim();
+                organisation.name = talent.talent_education[i].education ? talent.talent_education[i].education.trim(): '';
                 var date = new Date(talent.talent_education[i].start_date);
                 organisation.from = date.getFullYear().toString();
                 var date = new Date(talent.talent_education[i].end_date);
