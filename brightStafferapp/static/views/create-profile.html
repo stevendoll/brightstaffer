@@ -305,23 +305,7 @@
                             <div class="cls"></div>
                             <div class="top-concept-input-div" ng-repeat="concept in talentData.topConcepts | limitTo:5">
                                 <!--<input type="" class="form-control top-concept-input-part" id="" placeholder="Top Concept" ng-model="concept.name" maxlength="100" />-->
-                                <div class="top-concept-div-panel">top concept</div>
-                            </div>
-                            <div class="talent-progress" ng-repeat="concept in talentData.topConcepts">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>SNo.</th>
-                                            <th>Concept</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>[[$index+1]]</td>
-                                            <td>[[concept.name]]</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="top-concept-div-panel" ng-show="concept.name">[[concept.name]]</div>
                             </div>
 
                             <div class="cls"></div>
