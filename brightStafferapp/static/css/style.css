@@ -14651,7 +14651,7 @@ a.sbSelector:hover {
     color: #6a6a6a;
     position: absolute;
     top: 11px;
-    left: 270px;
+    left: 92%;
     cursor: pointer;
 }
 
@@ -14826,7 +14826,7 @@ a.sbSelector:hover {
 }
 
 .total-exp-text {
-    width: 63%;
+    width: 60%;
     float: left;
     font-size: 13px;
     color: #000000;
@@ -14836,7 +14836,7 @@ a.sbSelector:hover {
 }
 
 .top-concept-input-div .career-years {
-    width: 52px;
+    width: 22%;
     float: left;
     height: 40px;
     border-radius: 2px;
@@ -14851,7 +14851,7 @@ a.sbSelector:hover {
 }
 
 .top-concept-input-div .career-input-div {
-    width: 63%;
+    width: 60%;
     float: left;
     height: 40px;
     border-radius: 2px;
@@ -14861,13 +14861,13 @@ a.sbSelector:hover {
     font-size: 13px;
     color: #808080;
     padding: 8px 14px 8px 14px;
-    text-align: center;
+    text-align: left;
     margin-right: 8px;
 }
 
 .total-exp-years {
     width: auto;
-    float: left;
+    float: right;
     font-size: 13px;
     color: #000000;
     font-family: 'open_sansregular';
@@ -15060,7 +15060,7 @@ a.sbSelector:hover {
     padding: 8px 10px;
     width: 100%;
     background: url(../img/arrow.png) no-repeat;
-    background-position: 195px 16px;
+    background-position: 97% 16px;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -15177,6 +15177,23 @@ a.sbSelector:hover {
     font-family: 'open_sansregular';
     font-size: 13px;
     color: #6a6a6a;
+}
+
+.top-concept-input-div .top-concept-div-panel {
+    width: 100%;
+    float: left;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #e7eaec;
+    font-family: 'open_sansregular';
+    font-size: 13px;
+    color: #000000;
+    padding: 8px 14px 8px 14px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /*create-profile-css-ends*/

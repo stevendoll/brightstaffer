@@ -1866,6 +1866,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $state.go('talent.talent-search.talent-search-card', '');
         }
     }
+    $scope.stageIdToBeDeleted = null;
+    $scope.setScopeVariable = function(variable, value){
+        $scope[variable] = value;
+    }
+    $scope.deleteStage = function(id){
+        if(!id)return;
+        talentApis.delteStage({stage_id: id}, function(response){
+            console.log(response);
+        })
+    }
 
     $scope.getTalents = function (recordCount) { // function to fetch top 6 projects
 
