@@ -497,6 +497,20 @@ function talentApis($rootScope, $http, REQUEST_URL, appService) {
                 , dataType: 'json'
             }
             appService.httpRequest(param, callback);
+        },
+        delteStage: function (data, callback) {
+           var param = {
+                url: REQUEST_URL + 'talent_delete_stage/'
+                , method: "GET"
+                , headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                    , 'token': $rootScope.globals.currentUser.token
+                    , 'recruiter': $rootScope.globals.currentUser.user_email
+                }
+                , params: data
+                , dataType: 'json'
+            }
+            appService.httpRequest(param, callback);
         }
     }
 }

@@ -463,6 +463,18 @@ function tableScroll($timeout) {
     };
 }
 
+function viewAllScroll($timeout) {
+    return {
+        restrict: 'A'
+        , link: function (scope, element, attrs) {
+            $timeout(function () {
+                $(".modal-top-concept-scroll").mCustomScrollbar();
+            });
+        }
+    };
+}
+
+$(".talent-panel").mCustomScrollbar();
 function pieChart($timeout) {
     return {
         restrict: 'A'
@@ -790,4 +802,5 @@ angular
     .directive('datePicker', datePicker)
     .directive('datePicker2', datePicker2)
     .directive('datePickerStage', datePickerStage)
-    .directive('fileDropzone', fileDropzone);
+    .directive('fileDropzone', fileDropzone)
+    .directive('viewAllScroll', viewAllScroll);
