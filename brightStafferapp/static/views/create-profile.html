@@ -114,7 +114,7 @@
                                 <div class="state-section">
                                     <div class="form-group">
                                         <label for="">State</label>
-                                        <input name="lName" type="text" class="form-control" id="" placeholder="Country" maxlength="100" ng-model="talentData.state" />
+                                        <input name="lName" type="text" class="form-control" id="" placeholder="State" maxlength="100" ng-model="talentData.state" />
                                         <!--
                                         <div class="form-group count">
                                             <select class="form-control select-arrow state-input-select" ng-model="talentData.country">
@@ -300,9 +300,13 @@
                 <div class="modal-content">
                     <div class="modal-body roles-body">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-                        <div class="edit-modal-recruiter">
-                            <span>All Concepts</span>
+                        <div class="edit-profile-screen">
+                            <div class="past-roles">All Concepts</div>
                             <div class="cls"></div>
+                            <div class="top-concept-input-div" ng-repeat="concept in talentData.topConcepts | limitTo:5">
+                                <!--<input type="" class="form-control top-concept-input-part" id="" placeholder="Top Concept" ng-model="concept.name" maxlength="100" />-->
+                                <div class="top-concept-div-panel">top concept</div>
+                            </div>
                             <div class="talent-progress" ng-repeat="concept in talentData.topConcepts">
                                 <table class="table">
                                     <thead>
