@@ -1538,6 +1538,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $timeout(function () {
             $scope.$apply();
         });
+        e.value = "";
     };
 
     $scope.removeFile = function () {
