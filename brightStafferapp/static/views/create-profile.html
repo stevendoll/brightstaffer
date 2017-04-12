@@ -270,12 +270,12 @@
                                     <h2>Career History</h2>
                                     <div class="top-concept-input-div">
                                         <div class="total-exp-text">Total Experience</div>
-                                        <input type="" class="form-control career-years" id="" placeholder="Years" ng-model="talentData.careerHistory.total" ng-change="numberonly(talentData.careerHistory, 'total');"/>
+                                        <input type="" maxlength="2" class="form-control career-years" id="" placeholder="Years" ng-model="talentData.careerHistory.total" ng-change="numberonly(talentData.careerHistory, 'total');"/>
                                         <div class="total-exp-years">Years</div>
                                     </div>
                                     <div class="top-concept-input-div" ng-repeat="careerHistory in talentData.careerHistory.history">
                                         <input type="" class="form-control career-input-div" id="" placeholder="Career" ng-model="careerHistory.name"/>
-                                        <input type="" class="form-control career-years" id="" placeholder="Years" ng-model="careerHistory.year" ng-change="numberonly(careerHistory, 'year');"/>
+                                        <input type="" maxlength="2" class="form-control career-years" id="" placeholder="Years" ng-model="careerHistory.year" ng-change="numberonly(careerHistory, 'year');"/>
                                         <div class="total-exp-years">Years</div>
                                     </div>
                                     <button type="button" class="btn top-cocep-add-bttn" ng-click="addTalentCareerHistory()">Add More</button>

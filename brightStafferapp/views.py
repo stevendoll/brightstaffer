@@ -34,6 +34,7 @@ import textract
 import datetime
 from datetime import date
 from .tasks import handle_talent_data, extract_text_from_pdf, add
+from brightStafferapp.linkedin_scrap import LinkedInParser
 
 
 class UserData(View):
@@ -590,42 +591,10 @@ class LinkedinDataView(View):
         return super(LinkedinDataView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        content = {
-            "currentOrganization": [
-                {
-                    "name": "kiwi",
-                    "from": "2015",
-                    "to": "Present",
-                    "JobTitle": "SD"
-                }
-            ],
-            "pastOrganization": [
-                {"name": "Kiwi1",
-                 "from": "2016",
-                 "to": "2015",
-                 "JobTitle": "SD"
-                 }
-            ],
-            "education": [
-                {
-                    "name": "asdasda",
-                    "from": "2014",
-                    "to": "2016"
-                },
-                {
-                    "name": "qqqq",
-                    "from": "2013",
-                    "to": "2014"
-                }
-            ],
-            "linkedinProfileUrl": "http://localhost.com",
-            "firstName": "Raj",
-            "lastName": "raj",
-            "city": "ND",
-            "state": "UP",
-            "country": "India",
-            "industryFocus": "SSSSS"
-        }
+        url=request.GET['url']
+        linkedin=LinkedInParser()
+        content=linkedin.linkedin_data("chandan.varma@kiwitech.com", 'AAA@064110',url)
+        print (content)
         context = dict()
         context['results'] = content
         context['success'] = True
