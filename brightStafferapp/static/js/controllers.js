@@ -1527,6 +1527,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , status: ''
         , message: ''
     };
+    $scope.disableUploadBtn = false;
     $scope.todayDate = new Date();
     $scope.imageFileName = '';
     $scope.talentFileobj = {};
@@ -1544,6 +1545,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.uploadTalentFile = function () {
+        $scope.disableUploadBtn = true;
         createTalentFormService.uploadTalentFile($scope.talentFileobj, function (response) {
             if (typeof (response) == "string")
                 response = JSON.parse(response);
@@ -1554,6 +1556,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             } else {
                 $scope.showNotification(false, response.errorstring || 'Error in fetching data from pdf');
                 $window.scrollTo(0, 0);
+                $scope.disableUploadBtn = false;
             }
             console.log(response);
         });
@@ -1641,6 +1644,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.addLinkedinUrl(param, function (response) {
             console.log(response);
             if (response.success) {
+                delete response.results.linkedinProfileUrl;
                 for (var key in response.results) {
                     $scope.talentData[key] = response.results[key];
                 }
