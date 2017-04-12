@@ -2660,6 +2660,70 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     margin-right: 5px;
 }
 
+.modal-top-concept-scroll {
+    width: 100%;
+    float: left;
+    max-height: 500px;
+    overflow: auto;
+}
+
+.modal-top-concept-scroll #mCSB_2_container {
+    width: 100% !important;
+}
+
+.roles-body .edit-profile-spadng {
+    padding: 20px 0px 0px 25px;
+}
+
+.pro-edit-success-box {
+    height: 50px;
+    border-radius: 2px;
+    background-color: rgba(223, 240, 216, 0.9);
+    border: solid 1px #d6e9c6;
+    margin: 0 auto;
+    padding: 13px 30px;
+    width: auto;
+    float: left;
+    position: absolute;
+    top: -11px;
+    left: 0;
+    z-index: 9999;
+    right: 0;
+    text-align: center;
+}
+
+.pro-edit-success-box span {
+    font-family: 'open_sansregular';
+    font-size: 14px;
+    text-align: left;
+    color: #3c763d;
+}
+
+.pro-edit-error-box {
+    height: 50px;
+    border-radius: 2px;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    margin: 0 auto;
+    padding: 13px 30px;
+    width: auto;
+    float: left;
+    position: absolute;
+    top: -11px;
+    left: 0;
+    z-index: 9999;
+    right: 0;
+    text-align: center;
+}
+
+.pro-edit-error-box span {
+    font-family: 'open_sansregular';
+    font-size: 14px;
+    text-align: left;
+    color: #a94442;
+}
+
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
         display: block;
@@ -15176,7 +15240,7 @@ a.sbSelector:hover {
 }
 
 .top-concept-input-div .top-concept-div-panel {
-    width: 100%;
+    width: 96%;
     float: left;
     height: 40px;
     border-radius: 2px;
