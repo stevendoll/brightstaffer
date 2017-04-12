@@ -156,26 +156,26 @@
                                  <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">
                                      <td><a href="" class="tbl-link-td" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</a></td>
                                      <td><span ng-show="talent.talent_company.length && talent.talent_company[0].designation">[[talent.talent_company[0].designation | capitalizeWord]]</span>
-                                         <span ng-show="!talent.talent_company.length"> - </span>
+                                         <span ng-show="!talent.talent_company.length"> N/A </span>
                                      </td>
                                      <td><span ng-show="talent.talent_company.length && talent.talent_company[0].company">[[talent.talent_company[0].company | capitalizeWord]]</span>
-                                         <span ng-show="!talent.talent_company.length"> - </span>
+                                         <span ng-show="!talent.talent_company.length"> N/A </span>
                                      </td>
                                      <td><span ng-show="talent.talent_stages.length && talent.talent_stages[0].stage">[[talent.talent_stages[0].stage]]</span>
-                                         <span ng-show="!talent.talent_stages.length">  - </span></td>
+                                         <span ng-show="!talent.talent_stages.length">  N/A </span></td>
                                      <!--<td ng-show="[[talent.talent_project.length > 0]] && !talent.talent_project[0].project_stage">-</span></td>-->
                                      <td >
                                         <span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].project"> <a href="">#[[talent.talent_project[0].project]]</a> </span>
                                         <!--<span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>-->
-                                         <span class="dis-blc" ng-show="!talent.talent_project.length"> -  </span>
+                                         <span class="dis-blc" ng-show="!talent.talent_project.length"> N/A  </span>
                                       </td>
                                       <td >
                                         <span class="dis-blc" ng-show="talent.talent_project.length"> [[talent.talent_project[0].project_match]]</span>
                                         <!--<span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>-->
-                                         <span class="dis-blc" ng-show="!talent.talent_project.length"> -  </span>
+                                         <span class="dis-blc" ng-show="!talent.talent_project.length"> N/A  </span>
                                       </td>
-                                     <td><span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>
-                                         <span ng-show="!talent.talent_project.length">  -  </span>
+                                     <td><span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name | capitalizeWord]] </a> </span>
+                                         <span ng-show="!talent.talent_project.length">  N/A  </span>
                                      </td>
 
                                      <td><span ng-show="talent.talent_stages.length">[[talent.talent_stages[0].date_created  | dateFormat]]</span>
@@ -184,9 +184,9 @@
                                      <td><span ng-show="talent.talent_stages.length">[[talent.talent_stages[0].date_created | dateFormat]]</span>
                                          <span ng-show="!talent.talent_stages.length">[[talent.create_date | dateFormat]]</span></td>
                                      <td><span ng-show="talent.talent_email.length && talent.talent_email[0].email != ''">[[talent.talent_email[0].email]]</span>
-                                         <span ng-show="!talent.talent_email.length || talent.talent_email[0].email == ''"> - </span></td>
+                                         <span ng-show="!talent.talent_email.length || talent.talent_email[0].email == ''"> N/A </span></td>
                                      <td><span ng-show="talent.talent_contact.length && talent.talent_contact[0].contact != ''">[[talent.talent_contact[0].contact | contactFormat]]</span>
-                                         <span ng-show="!talent.talent_contact.length || talent.talent_contact[0].contact == ''">  - </span>
+                                         <span ng-show="!talent.talent_contact.length || talent.talent_contact[0].contact == ''">  N/A </span>
                                      </td>
                                      <td class="likd-icn">
                                           <i class="fa fa-linkedin-square tbl-linkdedin-font"></i>
