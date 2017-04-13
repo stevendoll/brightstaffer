@@ -395,7 +395,7 @@
                             <div class="info-box-panels" tooltip="[[st.notes]]">Notes: <span>[[st.notes]]</span></div>
                             <div class="info-box-bottom-links" style="cursor:default;">
                                 <span data-toggle="modal" style="cursor:default;">Edit</span>
-                                <span style="cursor:default;" data-toggle="modal" data-target="#delteStageModal" ng-click="setScopeVariable('stageIdToBeDeleted', st.stage_id)">Delete</span>
+                                <span data-toggle="modal" data-target="#delteStageModal" ng-click="setScopeVariable('stageIdToBeDeleted', st.stage_id)">Delete</span>
                                 <!--                                <span style="cursor:default;">Delete</span>-->
                             </div>
                         </div>
@@ -437,10 +437,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="" ng-class="{'main-success-box': notification.status == 'Success', 'pro-error-box': notification.status != 'Success'}" id="" ng-show="notification.show">
-                        <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
                     </div>
 
                 </div>
@@ -821,3 +817,8 @@
     </div>
 </div>
 <!-- edit-stage-Modal-ends -->
+
+
+<div class="" ng-class="{'main-success-box': notification.status == 'Success', 'pro-error-box': notification.status != 'Success'}" id="" ng-show="notification.show">
+    <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
+</div>
