@@ -320,7 +320,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['stage']=tp_obj.stage
             context['details'] = tp_obj.details
             context['notes'] = tp_obj.notes
-            context['create_date'] = tp_obj.get_date_created
+            context['date_created'] = tp_obj.get_date_created
             serializer_data = TalentSerializer(talent_obj)
             context['talent_updated_data'] = serializer_data.data
             return util.returnSuccessShorcut(context)
@@ -337,6 +337,7 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         context = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
         recruiter = request.META.get('HTTP_RECRUITER' '')
 
         token = request.META.get('HTTP_TOKEN' '')
@@ -344,13 +345,13 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
                                          'token': token})
         if not is_valid:
             return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
-        talent = request.POST['talent_id']
+        talent = profile_data['talent_id']
         # project = request.POST['project_id']
-        stage = request.POST['stage']
-        details = request.POST['details']
-        notes = request.POST['notes']
-        stage_id = request.POST['stage_id']
-        date = request.POST['create_date']
+        stage = profile_data['stage']
+        details = profile_data['details']
+        notes = profile_data['notes']
+        stage_id = profile_data['stage_id']
+        date = profile_data['create_date']
         date = datetime.datetime.strptime(date, "%d/%m/%Y")
         #projects = Projects.objects.filter(id=project)
         #if not projects:
@@ -435,7 +436,7 @@ class TalentAllStageDetailsAPI(View):
             response['stage'] = obj.stage
             response['details'] = obj.details
             response['notes'] = obj.notes
-            response['create_date'] = obj.get_date_created
+            response['date_created'] = obj.get_date_created
             talent_stage.append(response)
         talent_stage_all = dict()
         talent_stage_all['result'] = talent_stage
@@ -549,9 +550,15 @@ def add_edit_talent(profile_data, user):
         if 'topConcepts' in profile_data:
             for skill in profile_data.get('topConcepts', ''):
                 if bool(skill):
+                    match = float(skill.get('percentage', skill.get('score', '')))
+                    if match and match < 1:
+                        match *= 100
+                        match = round(match, 2)
+                    if match and match > 100:
+                        match = 100
                     concept, created = Concept.objects.get_or_create(concept=skill.get('name'))
                     tpconcept, created = TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept,
-                                                                             match=float(skill.get('percentage', 0.00)))
+                                                                             match=match)
 
     if "education" in profile_data:
         for education in profile_data.get('education', ''):
