@@ -1406,7 +1406,7 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, searchData, $cookieStore, createTalentFormService) {
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, searchData, $cookieStore, createTalentFormService , $filter) {
 
     $scope.priceSlider = {
         value: 0
@@ -1897,8 +1897,40 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             stage_id: id
         }, function (response) {
             console.log(response);
-        })
+        });
     }
+    /*  edit-stage code start */
+    function convertToIso(date){
+        var d = date.split('/');
+        d = d[1] + '/' + d[0] + '/' + d[2];
+        d = new Date(d);
+        //d = d.toISOString();
+        return d;
+    }
+    $scope.editStageModal= function(selectedStage){
+    console.log(selectedStage);
+        $scope.selectedStage = {};
+        $scope.selectedStage.stage = selectedStage.stage;
+        //$scope.selectedStage.project = '#'+selectedStage.project;
+        $scope.selectedStage.create_date = convertToIso(selectedStage.create_date);
+        $scope.selectedStage.details = selectedStage.details;
+        $scope.selectedStage.notes = selectedStage.notes;
+        $scope.selectedStage.stage_id = selectedStage.stage_id;
+        $('#edit-stage').modal('show');
+    }
+
+    $scope.saveProjectStage = function(){
+        console.log($scope.selectedStage);
+        $scope.selectedStage.create_date =  $rootScope.formatDate($scope.selectedStage.create_date);
+        var requestObj = $scope.selectedStage;
+            requestObj.talent_id = $rootScope.talentDetails.id;
+        talentApis.editStage(requestObj , function (response) {
+            console.log(response);
+             $('#edit-stage').modal('hide');
+        });
+
+    }
+    /* edit-stage code end */
 
     $scope.getTalents = function (recordCount) { // function to fetch top 6 projects
 
