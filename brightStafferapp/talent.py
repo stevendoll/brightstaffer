@@ -460,7 +460,6 @@ class TalentUpdateRank(View):
 
 
 class TalentAdd(generics.ListCreateAPIView):
-
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(TalentAdd, self).dispatch(request, *args, **kwargs)
