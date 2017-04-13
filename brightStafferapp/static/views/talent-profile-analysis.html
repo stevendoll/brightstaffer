@@ -110,7 +110,44 @@
                                             </div>
                                         </div>
                                     </div>
+                                         <div class="talent-analysis-concept-rightpanel">
+                                    <div class="top-concept-text">Career  History <span ng-click="allMetrics(talentDetails.talent_company)" ng-show="talentDetails.talent_company.length > 3">More</span></div>
+                                    <div class="talent-progress">
+                                      <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                          <span class="text">Total Experience</span>
+                                           <span class="percentage">[[calcTotal(talentDetails.talent_company) | number: 1]] Years</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="talent-progress" ng-repeat="career in talentDetails.talent_company | limitTo: 3">
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((career.blank_gap/calcTotal(talentDetails.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
+                                            </div>
 
+
+                                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[convertIntoInt((career.years_of_experience/calcTotal(talentDetails.talent_company)) * 100)]]%;">
+                                                <span class="text">[[career.company | capitalize]]</span>
+                                                <span class="percentage">[[career.years_of_experience | number:1]] Years</span>
+                                            </div>
+
+                                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talentDetails.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                   <!-- <div class="indus-focus">Industry Focus</div>
+                                    <div class="talent-progress">
+                                      <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                          <span class="text">Full Stack</span>
+                                          <span class="percentage">1.5 Years</span>
+                                        </div>
+                                      </div>
+                                    </div>-->
+                                  </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="recommended-panel">
