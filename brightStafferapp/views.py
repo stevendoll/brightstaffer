@@ -182,7 +182,7 @@ class BackButtonInfo(View):
                     param_dict['concept'] = concept_key['concept']
         return util.returnSuccessShorcut(param_dict)
 
-
+#Publish Project API
 class Publish(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -267,6 +267,7 @@ class AlchemyAPI(View):
             return keyword_list
 
 
+#Update Concept Function
 class UpdateConcepts(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -314,6 +315,7 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 
+#Generic Project List API
 class ProjectList(generics.ListCreateAPIView):
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
@@ -341,6 +343,7 @@ class ProjectList(generics.ListCreateAPIView):
         return response
 
 
+#Top Project List API
 class TopProjectList(generics.ListCreateAPIView):
     queryset = Projects.objects.all()
     serializer_class = TopProjectSerializer
@@ -366,6 +369,7 @@ class TopProjectList(generics.ListCreateAPIView):
         return response
 
 
+#Project Details API
 class ProjectDelete(generics.ListCreateAPIView):
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
@@ -389,6 +393,8 @@ class ProjectDelete(generics.ListCreateAPIView):
         return util.returnSuccessShorcut(param_dict)
 
 
+
+#Update Recruiter API
 class UpdateRecruiter(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -406,6 +412,7 @@ class UpdateRecruiter(View):
         return util.returnSuccessShorcut(param_dict)
 
 
+# TO upload Bulk upload Talent's Data
 class FileUploadView(View):
     """
     Handles file uploading by drag and drop feature for add talent functionality.
@@ -518,6 +525,7 @@ class FileUploadView(View):
                 img_obj.save()
 
 
+# TO upload Talent's Profile
 class UploadTalent(View):
 
     @method_decorator(csrf_exempt)
@@ -584,6 +592,8 @@ class UploadTalent(View):
         return content
 
 
+
+#To fetch Linkedin Public Profile Data
 class LinkedinDataView(View):
 
     @method_decorator(csrf_exempt)

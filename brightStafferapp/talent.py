@@ -337,18 +337,25 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         context = {}
+        recruiter = request.META.get('HTTP_RECRUITER' '')
+
+        token = request.META.get('HTTP_TOKEN' '')
+        is_valid = user_validation(data={'recruiter': recruiter,
+                                         'token': token})
+        if not is_valid:
+            return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
         talent = request.POST['talent_id']
-        project = request.POST['project_id']
+        # project = request.POST['project_id']
         stage = request.POST['stage']
         details = request.POST['details']
         notes = request.POST['notes']
-        stage_id = request.POST['id']
-        date = request.POST['date']
+        stage_id = request.POST['stage_id']
+        date = request.POST['create_date']
         date = datetime.datetime.strptime(date, "%d/%m/%Y")
-        projects = Projects.objects.filter(id=project)
-        if not projects:
-            return util.returnErrorShorcut(400, 'Project with id {} doesn\'t exist in database.'.format(project))
-        project = projects[0]
+        #projects = Projects.objects.filter(id=project)
+        #if not projects:
+        #    return util.returnErrorShorcut(400, 'Project with id {} doesn\'t exist in database.'.format(project))
+        #project = projects[0]
         talent_objs = Talent.objects.filter(id=talent)
         if not talent_objs:
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent))
@@ -356,7 +363,7 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         stageid = TalentStage.objects.filter(id=stage_id)
         if not stageid:
             return util.returnErrorShorcut(400, 'Stage id {} is not exist in database'.format(stage_id))
-        created = TalentStage.objects.filter(talent=talent_obj, project=project, stage=stage, details=details,
+        created = TalentStage.objects.filter(talent=talent_obj, stage=stage, details=details,
                                              notes=notes,date_created=date).exists()
         if created:
             return util.returnErrorShorcut(400,
@@ -365,7 +372,13 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
             updated = TalentStage.objects.filter(id=str(stage_id)).update(stage=stage, details=details,
                                                                           notes=notes, date_created=date)
             if updated:
-                context['message'] = 'success'
+                queryset = super(TalentStageEditAPI, self).get_queryset()
+                queryset = queryset.filter(talent_id=talent)
+                serializer_data = TalentProjectStageSerializer(queryset, many=True).data
+                context['talent_updated_stage'] = serializer_data
+                context['message'] = 'Talent Stage Updated Successfully'
+                context['success'] = True
+                return util.returnSuccessShorcut(context)
         return util.returnSuccessShorcut(context)
 
 
@@ -377,11 +390,29 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
 
     def delete(self, request, *args, **kwargs):
         context = dict()
+        recruiter = request.META.get('HTTP_RECRUITER' '')
+
+        token = request.META.get('HTTP_TOKEN' '')
+        is_valid = user_validation(data={'recruiter': recruiter,
+                                         'token': token})
+        if not is_valid:
+            return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
+        user = User.objects.filter(username=recruiter)
         id = request.GET['stage_id']
-        talent_id = TalentStage.objects.filter(id=id)
-        if not talent_id:
-            return util.returnErrorShorcut(400, 'Stage id is not exist in the system')
-        TalentStage.objects.filter(id=id).delete()
+        stage_id = TalentStage.objects.filter(id=id)
+        if not stage_id:
+            return util.returnErrorShorcut(400, 'Stage id {} not found'.format(id))
+        talent_id = request.GET['talent_id']
+        talent_objs = Talent.objects.filter(id=talent_id)
+        if not talent_objs:
+            return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
+        TalentStage.objects.filter(id=id,talent=talent_id).delete()
+        queryset = super(TalentStageDeleteAPI, self).get_queryset()
+        queryset = queryset.filter(talent_id=talent_id)
+        serializer_data = TalentProjectStageSerializer(queryset, many=True).data
+        context['talent_deleted_data'] = serializer_data
+        context['message'] = 'Talent Stage Deleted Successfully'
+        context['success'] = True
         return util.returnSuccessShorcut(context)
 
 
@@ -429,7 +460,6 @@ class TalentUpdateRank(View):
 
 
 class TalentAdd(generics.ListCreateAPIView):
-
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(TalentAdd, self).dispatch(request, *args, **kwargs)
