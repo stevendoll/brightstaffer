@@ -168,16 +168,16 @@
                                          <span ng-show="!talent.talent_stages.length">  N/A </span></td>
                                      <!--<td ng-show="[[talent.talent_project.length > 0]] && !talent.talent_project[0].project_stage">-</span></td>-->
                                      <td >
-                                        <span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].project"> <a href="">#[[talent.talent_project[0].project]]</a> </span>
+                                        <span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[talent.talent_project.length - 1].project"> <a href="">#[[talent.talent_project[talent.talent_project.length - 1].project]]</a> </span>
                                         <!--<span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>-->
                                          <span class="dis-blc" ng-show="!talent.talent_project.length"> N/A  </span>
                                       </td>
                                       <td >
-                                        <span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].project_match != null"><a href="">[[talent.talent_project[0].project_match]]%</a></span>
+                                        <span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[talent.talent_project.length - 1].project_match != null"><a href="">[[talent.talent_project[talent.talent_project.length - 1].project_match]]%</a></span>
                                         <!--<span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>-->
-                                         <span class="dis-blc" ng-show="!talent.talent_project.length || talent.talent_project[0].project_match == null"> N/A  </span>
+                                         <span class="dis-blc" ng-show="!talent.talent_project.length || talent.talent_project[talent.talent_project.length - 1].project_match == null"> N/A  </span>
                                       </td>
-                                     <td><span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name | capitalizeWord]] </a> </span>
+                                     <td><span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[talent.talent_project.length - 1].company_name"> <a href="">@[[talent.talent_project[talent.talent_project.length - 1].company_name | capitalizeWord]] </a> </span>
                                          <span ng-show="!talent.talent_project.length">  N/A  </span>
                                      </td>
 
