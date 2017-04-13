@@ -254,10 +254,10 @@
                                 <div class="create-pro-optional-section">
                                     <span>optional</span>
                                 </div>
-                                <div class="top-concept-right-div">
+                                <div class="top-concept-right-div" style="display:none;">
                                     <h2>Top Concepts</h2>
                                     <!--<h3>Relevance</h3>-->
-                                    <div class="top-concept-input-div" ng-repeat="concept in talentData.topConcepts | limitTo:5">
+                                    <div class="top-concept-input-div"  ng-repeat="concept in talentData.topConcepts | limitTo:5">
                                         <input type="" class="form-control top-concept-input-part" id="" placeholder="Top Concept" ng-model="concept.name" maxlength="100" readonly/>
                                         <i ng-show="$index != talentData.topConcepts.length-1" class="fa fa-close" ng-click="removeIndexFromArr(talentData.topConcepts, $index);"></i>
                                         <!--<input type="text" class="form-control top-concept-right-input-div" id="talent-skill-percent" placeholder="%" maxlength="3" ng-model="concept.percentage" ng-change="numberonly(concept, 'percentage');" required/>-->
