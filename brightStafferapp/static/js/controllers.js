@@ -1933,7 +1933,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var requestObj = $scope.selectedStage;
             requestObj.talent_id = $rootScope.talentDetails.id;
         talentApis.editStage(requestObj , function (response) {
-            console.log(response);
+                console.log(response);
              $('#edit-stage').modal('hide');
         });
     }
