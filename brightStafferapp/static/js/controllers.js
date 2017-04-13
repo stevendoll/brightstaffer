@@ -1553,6 +1553,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.uploadTalentFile = function () {
         $scope.disableUploadBtn = true;
         createTalentFormService.uploadTalentFile($scope.talentFileobj, function (response) {
+        $(".top-concept-right-div").style('display', 'block');
             if (typeof (response) == "string")
                 response = JSON.parse(response);
             if (response.success) {
