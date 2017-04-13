@@ -18,7 +18,7 @@
                 <div class="talent-analysis-activity">
                     <div class="talent-activity-panel">
                         <div class="left-div">Last Activity</div>
-                        <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].date_created | dateFormat]]</div>
+                        <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].create_date | dateFormat]]</div>
                         <div class="right-div" ng-show="!stage.stagesCard.length"> - </div>
                     </div>
                     <div class="talent-rec-panel">
@@ -38,7 +38,7 @@
                         </div>
                         <div ng-show="stage.stagesCard.length">
                             <div class="schdule-list">[[stage.stagesCard[0].stage | capitalize]] </div>
-                            <div class="schdule-list-date">[[stage.stagesCard[0].date_created | dateFormat]]</div>
+                            <div class="schdule-list-date">[[stage.stagesCard[0].create_date | dateFormat]]</div>
                             <div class="link-schedule"><a href="" style="cursor:default;">#[[stage.stagesCard[0].project ]]</a></div>
                         </div>
                         <div ng-show="!stage.stagesCard.length">
@@ -426,7 +426,7 @@
                         <div class="right-info-comm-box">
                             <em></em>
                             <h1>[[st.stage]]</h1>
-                            <div class="info-box-panels">Date: <span>[[st.date_created | dateFormat]]</span></div>
+                            <div class="info-box-panels">Date: <span>[[st.create_date | dateFormat]]</span></div>
                             <div class="info-box-panels">Project: <span>#[[st.project]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.details]]">Details: <span>[[st.details]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.notes]]">Notes: <span>[[st.notes]]</span></div>

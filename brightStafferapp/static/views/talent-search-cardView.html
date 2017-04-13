@@ -59,7 +59,7 @@
                     </div>
                     <div ng-show="talent.talent_stages.length">
                         <div class="schdule-list">[[talent.talent_stages[0].stage | capitalize]]</div>
-                        <div class="schdule-list-date">[[talent.talent_stages[0].date_created | dateFormat]]</div>
+                        <div class="schdule-list-date">[[talent.talent_stages[0].create_date | dateFormat]]</div>
                         <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_stages[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
                     </div>
                     <div ng-show="!talent.talent_stages.length">
