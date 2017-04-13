@@ -1926,7 +1926,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.selectedStage = {};
         $scope.selectedStage.stage = selectedStage.stage;
         $scope.selectedStage.project = selectedStage.project;
-        $scope.selectedStage.create_date = convertToIso(selectedStage.create_date);
+        $scope.selectedStage.create_date = convertToIso(selectedStage.date_created);
         $scope.selectedStage.details = selectedStage.details;
         $scope.selectedStage.notes = selectedStage.notes;
         $scope.selectedStage.stage_id = selectedStage.stage_id;
