@@ -1553,6 +1553,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.uploadTalentFile = function () {
         $scope.disableUploadBtn = true;
         createTalentFormService.uploadTalentFile($scope.talentFileobj, function (response) {
+        $(".top-concepts-panel").css('display', 'block');
             if (typeof (response) == "string")
                 response = JSON.parse(response);
             if (response.success) {
@@ -2866,8 +2867,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         $scope.stage.isStage = false;
 
                         //                            $scope.stage.stagesCard.push(response);
-//                        $rootScope.talentDetails = response.talent_updated_data;
-//                        sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
+                       $rootScope.talentDetails = response.result;
+                       sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
 //                        $scope.stage.stagesCard.unshift(response);
                         $scope.stage.stagesCard = response.result.talent_stages;
                         $scope.$apply();

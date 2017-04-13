@@ -583,14 +583,20 @@ def add_edit_talent(profile_data, user):
                         company=company, designation=organization.get('JobTitle', ''), is_current=True,
                         start_date=start_date)
                 else:
-                    if start_date and end_date:
-                        is_current = True
-                        talent_obj.designation = organization.get('JobTitle', '')
-                        talent_obj.save()
-                        TalentCompany.objects.get_or_create(
-                            talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
-                            is_current=is_current,
-                            start_date=start_date)
+                    talent_obj.designation = organization.get('JobTitle', '')
+                    talent_obj.save()
+                    if start_date:
+                        if not end_date:
+                            TalentCompany.objects.get_or_create(
+                                talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
+                                is_current=True,
+                                start_date=start_date)
+                        else:
+                            TalentCompany.objects.get_or_create(
+                                talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
+                                is_current=False,
+                                start_date=start_date, end_date=end_date)
+
     if "JobTitle" in profile_data:
         talent_obj.designation = profile_data.get('JobTitle', '')
         talent_obj.save()
@@ -601,13 +607,11 @@ def convert_to_start_end(organization):
     end_date = None
     day = 1
     month = 1
-    try:
-        if organization.get('from') != "":
-            start_date = date(int(organization.get('from', 2017)), month, day)
-        end_date = date(2017, month, day)
-    except:
-        pass
+    start_date = date(int(organization.get('from', 2017)), month, day)
+    if organization.get('to', 2017).strip(" ") != "Present":
+        end_date = date(int(organization.get('to', 2017)), month, day)
     return start_date, end_date
+
 
 def education_convert_to_start_end(education):
     start_date = None
