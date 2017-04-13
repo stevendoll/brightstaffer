@@ -1900,10 +1900,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 console.log(response);
                 if (response.success) {
                     $scope.showNotification(true, 'Stage has been successfully removed');
-
-                    $rootScope.talentAllStages = response.results;
+                    
+                    $rootScope.talentAllStages = response.talent_deleted_data;
+                    $scope.stage.stagesCard = response.talent_deleted_data;
                     sessionStorage.removeItem('talentAllStages');
-                    sessionStorage.talentAllStages = JSON.stringify($rootScope.talentAllStages);
+                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                 } else {
                     $scope.showNotification(false, response.errorstring || 'Some problem occured');
                 }
