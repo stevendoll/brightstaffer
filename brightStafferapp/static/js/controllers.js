@@ -1406,7 +1406,7 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, searchData, $cookieStore, createTalentFormService) {
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, searchData, $cookieStore, createTalentFormService, $filter) {
 
     $scope.priceSlider = {
         value: 0
@@ -1892,13 +1892,58 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope[variable] = value;
     }
     $scope.deleteStage = function (id) {
-        if (!id) return;
-        talentApis.delteStage({
-            stage_id: id
-        }, function (response) {
-            console.log(response);
-        })
+            if (!id) return;
+            talentApis.delteStage({
+                stage_id: id
+                , talent_id: $scope.talentDetails.id
+            }, function (response) {
+                console.log(response);
+                if (response.success) {
+                    $scope.showNotification(true, 'Stage has been successfully removed');
+                    
+                    $rootScope.talentAllStages = response.talent_deleted_data;
+                    $scope.stage.stagesCard = response.talent_deleted_data;
+                    sessionStorage.removeItem('talentAllStages');
+                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+                } else {
+                    $scope.showNotification(false, response.errorstring || 'Some problem occured');
+                }
+                $('#delteStageModal').modal('hide');
+                $window.scroll(0, 0);
+
+            });
+        }
+        /*  edit-stage code start */
+    function convertToIso(date) {
+        var d = date.split('/');
+        d = d[1] + '/' + d[0] + '/' + d[2];
+        d = new Date(d);
+        //d = d.toISOString();
+        return d;
     }
+    $scope.editStageModal = function (selectedStage) {
+        console.log(selectedStage);
+        $scope.selectedStage = {};
+        $scope.selectedStage.stage = selectedStage.stage;
+        $scope.selectedStage.project = selectedStage.project;
+        $scope.selectedStage.create_date = convertToIso(selectedStage.create_date);
+        $scope.selectedStage.details = selectedStage.details;
+        $scope.selectedStage.notes = selectedStage.notes;
+        $scope.selectedStage.stage_id = selectedStage.stage_id;
+        $('#edit-stage').modal('show');
+    }
+
+    $scope.saveProjectStage = function () {
+            console.log($scope.selectedStage);
+            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
+            var requestObj = $scope.selectedStage;
+            requestObj.talent_id = $rootScope.talentDetails.id;
+            talentApis.editStage(requestObj, function (response) {
+                console.log(response);
+                $('#edit-stage').modal('hide');
+            });
+        }
+        /* edit-stage code end */
 
     $scope.getTalents = function (recordCount) { // function to fetch top 6 projects
 
@@ -2319,6 +2364,23 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         } else if ($scope.isContactAdd) {
             $scope.isContactAdd = false;
         }
+    }
+
+    $scope.talentSorted = {};
+    $scope.setAndGetSortedArr = function (arr, key) {
+        if (key in $scope.talentSorted) {
+            arr = arr.reverse();
+        } else {
+            $scope.talentSorted[key] = true;
+            $scope.sortArr(arr, key);
+        }
+    }
+    $scope.sortArr = function (arr, key) {
+        arr.sort(function (a, b) {
+            if (a[key] < b[key]) return -1;
+            if (a[key] > b[key]) return 1;
+            return 0;
+        });
     }
 
     $scope.reverse = false;
@@ -3012,7 +3074,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
-                
+
+
+
+
+
+            
             , city: location[0] ? location[0].trim() : ""
             , country: location[2] ? location[2].trim() : ""
             , state: location[1] ? location[1].trim() : ""

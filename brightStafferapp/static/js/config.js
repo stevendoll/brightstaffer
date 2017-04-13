@@ -105,6 +105,11 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interp
             templateUrl: static_url +'views/create-profile.html',
             data: { pageTitle: 'Create Profile' , requireAuthentication: true}
         })
+        .state('pageNotFound', {
+            url: "/page-not-found",
+            templateUrl: static_url +'views/page-not-found.html',
+            data: { pageTitle: 'page-not-found' , requireAuthentication: false}
+        })
 
 }
 

@@ -84,14 +84,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div ng-if="$index == 1">
+                                    <div ng-if="$index == 1">
                                         <div class="col-xs-12 padding-zero">
                                             <div class="left-div search-result-past">Past</div>
                                             <div class="right-div search-detail-past">
                                                 <span class="bold-font">[[company.designation | capitalizeWord]]</span>- at [[company.company | capitalizeWord]] [[company.start_date | yearFormat]] - [[company.end_date | yearFormat]] <span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talentDetails)">More</a></span>
                                             </div>
                                         </div>
-                                    </div>-->
+                                    </div>
                                 </div>
                                 <div class="col-xs-12 padding-zero">
                                     <div class="left-div search-result-edu">Education</div>
@@ -394,15 +394,17 @@
                             <div class="info-box-panels" tooltip="[[st.details]]">Details: <span>[[st.details]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.notes]]">Notes: <span>[[st.notes]]</span></div>
                             <div class="info-box-bottom-links" style="cursor:default;">
-                                <span data-toggle="modal" style="cursor:default;">Edit</span>
-                                <span style="cursor:default;" data-toggle="modal" data-target="#delteStageModal" ng-click="setScopeVariable('stageIdToBeDeleted', st.stage_id)">Delete</span>
+
+                                <span data-toggle="modal" ng-click="editStageModal(st)">Edit</span>
+                                <span data-toggle="modal" data-target="#delteStageModal" ng-click="setScopeVariable('stageIdToBeDeleted', st.stage_id)">Delete</span>
+
                                 <!--                                <span style="cursor:default;">Delete</span>-->
                             </div>
                         </div>
                     </div>
 
                     <!-- Modal -->
-<!--
+                    <!--
                     <div class="modal fade" id="delteStageModal" role="dialog">
                         <div class="modal-dialog modal-sm">
                             <div class="modal-content">
@@ -438,8 +440,6 @@
                             </div>
                         </div>
                     </div>
-
-
 
                 </div>
 
@@ -779,12 +779,12 @@
         <div class="modal-content">
             <div class="modal-body roles-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-                <div class="edit-modal-recruiter">
+                <form class="edit-modal-recruiter" name="stageEditForm" onkeypress="return event.keyCode != 13;" ng-submit="stageEditForm.$valid && saveProjectStage()" novalidate>
                     <span>Edit</span>
                     <div class="cls"></div>
                     <div class="form-group export">
-                        <select class="form-control select-arrow" ng-model="stage.stage">
-                            <option value="Select Stage">Select Stage</option>
+                        <select class="form-control" ng-model="selectedStage.stage" required>
+                            <option ng-show="selectedStage.stage == ''" value="Select Stage">Select Stage</option>
                             <option>Contacted</option>
                             <option>Replied</option>
                             <option>Interested</option>
@@ -798,24 +798,29 @@
                         </select>
                     </div>
                     <div class="form-group export">
-                        <select class="form-control select-arrow" ng-model="stage.project" id="projectListD3" ng-options="option.name for option in projectListView" drop-down>
-                        </select>
-                    </div>
-                    <div class="form-group" data-provide="datepicker">
-                        <input type="text" class="form-control select-date" ng-model="stage.date" placeholder="Select Date">
+                        <input class="form-control" ng-model="selectedStage.project" id="" readonly>
+                        </input>
                     </div>
                     <div class="form-group">
-                        <textarea rows="2" class="form-control details" ng-model="stage.detail" placeholder="Enter Details"></textarea>
+                        <input type="date" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="selectedStage.create_date" placeholder="Select Date" required>
                     </div>
                     <div class="form-group">
-                        <textarea rows="2" class="form-control details" ng-model="stage.notes" placeholder="Enter Notes"></textarea>
+                        <textarea rows="2" class="form-control details" ng-model="selectedStage.details" placeholder="Enter Details" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea rows="2" class="form-control details" ng-model="selectedStage.notes" placeholder="Enter Notes" required></textarea>
                     </div>
                     <div class="cls"></div>
-                    <button type="" class="btn update">Update</button>
-                </div>
+                    <button type="submit" class="btn update">Update</button>
+                </form>
                 <div class="cls"></div>
             </div>
         </div>
     </div>
 </div>
 <!-- edit-stage-Modal-ends -->
+
+
+<div class="" ng-class="{'main-success-box': notification.status == 'Success', 'pro-error-box': notification.status != 'Success'}" id="" ng-show="notification.show">
+    <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
+</div>

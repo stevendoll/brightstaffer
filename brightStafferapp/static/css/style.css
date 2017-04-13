@@ -1004,6 +1004,10 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     width: 100% !important;
 }
 
+ .talent-panel #mCSB_2_container {
+    width: 100% !important;
+}
+
 .talents-tabs-panel .left-section .nav-tabs > li > a {
     color: #6a6a6a;
     font-size: 14px;
