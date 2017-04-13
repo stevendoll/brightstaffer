@@ -13998,25 +13998,28 @@ table.dataTables > tbody > tr > td:last-child {
     font-size: 14px;
     color: #337ab7;
     float: left;
-    min-width: 1%;
-    max-width: 55%;
+    width: 26%;
     margin-left: 10px;
     margin-top: 9px;
-    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .circle-bg .link-panel span {
     display: block;
-    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .circle-bg .bar-date {
     width: auto;
-    float: left;
+    float: right;
     font-family: 'open_sansregular';
     font-size: 13px;
     color: #6e6e6e;
-    margin-left: 35px;
+    margin-left: 6px;
     margin-top: 18px;
 }
 
