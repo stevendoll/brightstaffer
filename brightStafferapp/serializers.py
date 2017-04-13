@@ -112,6 +112,7 @@ class TalentContactEmailSerializer(serializers.ModelSerializer):
 class TalentProjectStageSerializer(serializers.ModelSerializer):
     talent = serializers.CharField()
     project = serializers.CharField()
+    date_created=serializers.CharField(source='get_date_created')
 
     class Meta:
         model = TalentStage

@@ -18,7 +18,7 @@
                 <div class="talent-analysis-activity">
                     <div class="talent-activity-panel">
                         <div class="left-div">Last Activity</div>
-                        <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].create_date | dateFormat]]</div>
+                        <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].date_created | dateFormat]]</div>
                         <div class="right-div" ng-show="!stage.stagesCard.length"> - </div>
                     </div>
                     <div class="talent-rec-panel">
@@ -38,7 +38,7 @@
                         </div>
                         <div ng-show="stage.stagesCard.length">
                             <div class="schdule-list">[[stage.stagesCard[0].stage | capitalize]] </div>
-                            <div class="schdule-list-date">[[stage.stagesCard[0].create_date | dateFormat]]</div>
+                            <div class="schdule-list-date">[[stage.stagesCard[0].date_created | dateFormat]]</div>
                             <div class="link-schedule"><a href="" style="cursor:default;">#[[stage.stagesCard[0].project ]]</a></div>
                         </div>
                         <div ng-show="!stage.stagesCard.length">
@@ -110,7 +110,44 @@
                                             </div>
                                         </div>
                                     </div>
+                                         <div class="talent-analysis-concept-rightpanel">
+                                    <div class="top-concept-text">Career  History <span ng-click="allMetrics(talentDetails.talent_company)" ng-show="talentDetails.talent_company.length > 3">More</span></div>
+                                    <div class="talent-progress">
+                                      <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                          <span class="text">Total Experience</span>
+                                           <span class="percentage">[[calcTotal(talentDetails.talent_company) | number: 1]] Years</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="talent-progress" ng-repeat="career in talentDetails.talent_company | limitTo: 3">
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((career.blank_gap/calcTotal(talentDetails.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
+                                            </div>
 
+
+                                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[convertIntoInt((career.years_of_experience/calcTotal(talentDetails.talent_company)) * 100)]]%;">
+                                                <span class="text">[[career.company | capitalize]]</span>
+                                                <span class="percentage">[[career.years_of_experience | number:1]] Years</span>
+                                            </div>
+
+                                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talentDetails.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                   <!-- <div class="indus-focus">Industry Focus</div>
+                                    <div class="talent-progress">
+                                      <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                          <span class="text">Full Stack</span>
+                                          <span class="percentage">1.5 Years</span>
+                                        </div>
+                                      </div>
+                                    </div>-->
+                                  </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="recommended-panel">
@@ -389,7 +426,7 @@
                         <div class="right-info-comm-box">
                             <em></em>
                             <h1>[[st.stage]]</h1>
-                            <div class="info-box-panels">Date: <span>[[st.create_date | dateFormat]]</span></div>
+                            <div class="info-box-panels">Date: <span>[[st.date_created | dateFormat]]</span></div>
                             <div class="info-box-panels">Project: <span>#[[st.project]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.details]]">Details: <span>[[st.details]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.notes]]">Notes: <span>[[st.notes]]</span></div>

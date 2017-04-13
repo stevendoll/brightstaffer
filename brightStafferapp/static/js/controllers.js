@@ -1926,7 +1926,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.selectedStage = {};
         $scope.selectedStage.stage = selectedStage.stage;
         $scope.selectedStage.project = selectedStage.project;
-        $scope.selectedStage.create_date = convertToIso(selectedStage.create_date);
+        $scope.selectedStage.create_date = convertToIso(selectedStage.date_created);
         $scope.selectedStage.details = selectedStage.details;
         $scope.selectedStage.notes = selectedStage.notes;
         $scope.selectedStage.stage_id = selectedStage.stage_id;
@@ -1939,8 +1939,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             var requestObj = $scope.selectedStage;
             requestObj.talent_id = $rootScope.talentDetails.id;
             talentApis.editStage(requestObj, function (response) {
-                console.log(response);
-                $('#edit-stage').modal('hide');
+             if(response.message == 'success'){
+                 $rootScope.talentAllStages = response.talent_updated_stage;
+                    $scope.stage.stagesCard = response.talent_updated_stage;
+                    sessionStorage.removeItem('talentAllStages');
+                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+                    $('#edit-stage').modal('hide');
+                }
             });
         }
         /* edit-stage code end */
