@@ -323,7 +323,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['notes'] = tp_obj.notes
             context['date_created'] = tp_obj.get_date_created
             serializer_data = TalentSerializer(talent_obj)
-            context['talent_updated_data'] = serializer_data.data
+            context['result'] = serializer_data.data
             return util.returnSuccessShorcut(context)
         else:
             return util.returnErrorShorcut(400, 'Talent stage and info is exist in database, '
@@ -377,7 +377,7 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
                 queryset = super(TalentStageEditAPI, self).get_queryset()
                 queryset = queryset.filter(talent_id=talent)
                 serializer_data = TalentProjectStageSerializer(queryset, many=True).data
-                context['talent_updated_stage'] = serializer_data
+                context['result'] = serializer_data
                 context['message'] = 'Talent Stage Updated Successfully'
                 context['success'] = True
                 return util.returnSuccessShorcut(context)
@@ -412,7 +412,7 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
         queryset = super(TalentStageDeleteAPI, self).get_queryset()
         queryset = queryset.filter(talent_id=talent_id)
         serializer_data = TalentProjectStageSerializer(queryset, many=True).data
-        context['talent_deleted_data'] = serializer_data
+        context['result'] = serializer_data
         context['message'] = 'Talent Stage Deleted Successfully'
         context['success'] = True
         return util.returnSuccessShorcut(context)
