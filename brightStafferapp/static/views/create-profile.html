@@ -250,11 +250,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="top-concepts-panel">
-                                <div class="create-pro-optional-section">
-                                    <span>optional</span>
-                                </div>
-                                <div class="top-concept-right-div" style="display:none;">
+                            <div class="top-concepts-panel" style="display:none;">
+                                <!--<div class="create-pro-optional-section">-->
+                                    <!--<span>optional</span>-->
+                                <!--</div>-->
+                                <div class="top-concept-right-div" >
                                     <h2>Top Concepts</h2>
                                     <!--<h3>Relevance</h3>-->
                                     <div class="top-concept-input-div"  ng-repeat="concept in talentData.topConcepts | limitTo:5">
@@ -266,7 +266,7 @@
                                     <div class="concept-view-all" data-target="#view-all-concepts" data-toggle="modal" ng-show="talentData.topConcepts.length > 5">View All</div>
 <!--                                    <button type="button" class="btn top-cocep-add-bttn" ng-click="addSkill()">Add More</button>-->
                                 </div>
-                                <div class="top-concept-right-div">
+                                <div class="top-concept-right-div" style="display:none;">
                                     <h2>Career History</h2>
                                     <div class="top-concept-input-div">
                                         <div class="total-exp-text">Total Experience</div>
