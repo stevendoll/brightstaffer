@@ -1894,9 +1894,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.deleteStage = function (id) {
         if (!id) return;
         talentApis.delteStage({
-            stage_id: id
+            stage_id: id,
+            talent_id: $scope.talentDetails.id
         }, function (response) {
             console.log(response);
+            if(response.success){
+                $scope.showNotification(true, 'Stage has been successfully removed');
+                // todo add code remove stages from localstorage
+            }else{
+                $scope.showNotification(false,  response.errorstring || 'Some problem occured');
+            }
+            $('#delteStageModal').modal('hide');
         })
     }
 
@@ -2319,6 +2327,23 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         } else if ($scope.isContactAdd) {
             $scope.isContactAdd = false;
         }
+    }
+
+    $scope.talentSorted = {};
+    $scope.setAndGetSortedArr = function (arr, key) {
+        if (key in $scope.talentSorted) {
+            arr = arr.reverse();
+        } else {
+            $scope.talentSorted[key] = true;
+            $scope.sortArr(arr, key);
+        }
+    }
+    $scope.sortArr = function (arr, key) {
+        arr.sort(function (a, b) {
+            if (a[key] < b[key]) return -1;
+            if (a[key] > b[key]) return 1;
+            return 0;
+        });
     }
 
     $scope.reverse = false;
@@ -3012,7 +3037,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
-                
+
+
+
+            
             , city: location[0] ? location[0].trim() : ""
             , country: location[2] ? location[2].trim() : ""
             , state: location[1] ? location[1].trim() : ""

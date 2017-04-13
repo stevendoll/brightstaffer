@@ -9,6 +9,7 @@
                          <table class="table talent-lst">
                              <thead id="headRow">
                                  <th id="talent_name" tabindex="0"  ng-click="sortBy('talent_name')">Name
+<!--                                 <th id="talent_name" tabindex="0"  ng-click="setAndGetSortedArr(talentList, 'talent_name')">Name-->
                                      <span class="sor-cont" ng-init="propertyName === 'talent_name'" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
@@ -107,6 +108,7 @@
                                       </span>
                                  </th>
                                   <th id="talent_email" tabindex="0"  ng-click="sortBy('talent_email')">Contact Email
+<!--                                  <th id="talent_email" tabindex="0"  ng-click="setAndGetSortedArr(talentList, 'talent_email')">Contact Email-->
                                     <span class="sor-cont" ng-init="propertyName === 'talent_email'" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
@@ -138,7 +140,8 @@
 
 
                                  </th>
-                                  <th id="talent_rating" ng-click="sortBy('rating')">Stars/rating
+<!--                                  <th id="talent_rating" ng-click="sortBy('rating')">Stars/rating-->
+                                  <th id="talent_rating" ng-click="setAndGetSortedArr(talentList, 'rating')">Stars/rating
                                     <span class="sor-cont" ng-init="propertyName === 'rating'" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
