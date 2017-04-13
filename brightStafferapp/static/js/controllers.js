@@ -1894,9 +1894,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.deleteStage = function (id) {
         if (!id) return;
         talentApis.delteStage({
-            stage_id: id
+            stage_id: id,
+            talent_id: $scope.talentDetails.id
         }, function (response) {
             console.log(response);
+            if(response.success){
+                $scope.showNotification(true, 'Stage has been successfully removed');
+                // todo add code remove stages from localstorage
+            }else{
+                $scope.showNotification(false,  response.errorstring || 'Some problem occured');
+            }
+            $('#delteStageModal').modal('hide');
         })
     }
 
