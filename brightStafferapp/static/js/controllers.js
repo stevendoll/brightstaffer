@@ -1900,7 +1900,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 console.log(response);
                 if (response.success) {
                     $scope.showNotification(true, 'Stage has been successfully removed');
-                    
+
                     $rootScope.talentAllStages = response.talent_deleted_data;
                     $scope.stage.stagesCard = response.talent_deleted_data;
                     sessionStorage.removeItem('talentAllStages');
@@ -2643,8 +2643,18 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log($scope.activePageNumber)
     }
 
+    function initDatePicker(id) {
+        $("#" + id).datepicker({
+            dateFormat: 'M d, yy'
+            , changeYear: true
+            , yearRange: '1900:' + new Date().getFullYear()
+            , yearRange: '1900:' + new Date().getFullYear()
+            , maxDate: new Date()
+        });
+    }
 
     $scope.openAddStagePopup = function (id) {
+        $('#addStageDate').val('')
             $scope.stage = {
                 stage: ''
                 , project: ''
@@ -2679,7 +2689,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $scope.stage.stage = selectedValue;
                 // console.log($scope.stage.stage);
             });
-
+            initDatePicker('addStageDate');
             $('#add-stage').modal('show');
         }
         //$scope.stage.stagesArray = [];
@@ -2785,6 +2795,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.isDate = date ? false : true;
     }
     $scope.addProjectCheckValidation = function (stage, removeValidation) {
+            stage.date = stage.date ? stage.date : $('#addStageDate').val();
             if (removeValidation) {
                 $scope.isStage = false;
                 $scope.isProject = false;
@@ -2805,6 +2816,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };*/
 
     $scope.addProjectStage = function (stage) {
+        stage.date = stage.date ? stage.date : $('#addStageDate').val();
         var selectedProjectId;
         console.log($scope.stage);
         if (typeof ($scope.stage.project) == 'object' || $scope.stage.project == 'Select Project') {
@@ -3079,6 +3091,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
+
 
 
 

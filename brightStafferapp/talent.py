@@ -1,7 +1,8 @@
 from brightStafferapp.models import Talent, User, Projects, TalentProject, TalentEmail, TalentContact, \
     TalentStage, TalentRecruiter, TalentConcept, ProjectConcept,Concept, Education, TalentEducation, Company,\
     TalentCompany, TalentLocation
-from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer
+from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer, \
+    TalentStageSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
@@ -419,27 +420,15 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
 
 # View All Talent's stages
 class TalentAllStageDetailsAPI(View):
-
     def get(self, request):
-
         talent_id = request.GET['talent_id']
         talent_obj = Talent.objects.filter(id=talent_id)
         if not talent_obj:
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         queryset = TalentStage.objects.filter(talent=talent_obj)
-        talent_stage = []
-        for obj in queryset:
-            response = dict()
-            response['talent_id'] = obj.talent.talent_name
-            response['stage_id'] = obj.id
-            response['project'] = obj.project.project_name
-            response['stage'] = obj.stage
-            response['details'] = obj.details
-            response['notes'] = obj.notes
-            response['date_created'] = obj.get_date_created
-            talent_stage.append(response)
+        serializer_data = TalentStageSerializer(queryset, many=True).data
         talent_stage_all = dict()
-        talent_stage_all['result'] = talent_stage
+        talent_stage_all['result'] = serializer_data
         return util.returnSuccessShorcut(talent_stage_all)
 
 
