@@ -59,7 +59,7 @@
                     </div>
                     <div ng-show="talent.talent_stages.length">
                         <div class="schdule-list">[[talent.talent_stages[0].stage | capitalize]]</div>
-                        <div class="schdule-list-date">[[talent.talent_stages[0].date_created | dateFormat]]</div>
+                        <div class="schdule-list-date">[[talent.talent_stages[0].create_date | dateFormat]]</div>
                         <div class="link-schedule"><a href="" style="cursor:default;">#[[talent.talent_stages[0].project ]]</a> <span><a href="" data-toggle="modal" ng-click="showRecruiterPopup(talent)">More</a></span></div>
                     </div>
                     <div ng-show="!talent.talent_stages.length">
@@ -123,7 +123,7 @@
                     </div>
 -->
                 </div>
-                <div class="top-concept-panel width55" ng-show="talent.talent_project.length">
+                <div class="top-concept-panel" ng-show="talent.talent_project.length">
                     <div class="top-concept-text">Project Matches</div>
                     <div class="circle-bg" ng-repeat="projects in talent.talent_project | limitTo: 3">
                         <div data-color="#7a7a7a" data-percent="[[projects.project_match]]" class="easy-pie-chart percentage easyPieChart pie-color" pie-chart>
@@ -131,7 +131,7 @@
                             <canvas height="60" width="60"></canvas>
                         </div>
                         <i class="fa fa-file-text"></i>
-                        <div class="link-panel"><a href="" style="cursor:default;">#[[projects.project ]]</a><span><a href="" style="cursor:default;">@[[projects.company_name ]]</a></span></div>
+                        <div class="link-panel"><a href="" style="cursor:default;" tooltip="[[projects.company_name]]">#[[projects.project ]]</a><span><a href="" style="cursor:default;" tooltip="[[projects.company_name]]">@[[projects.company_name]]</a></span></div>
                         <div class="bar-date">[[projects.date_added | dateFormat]]</div>
                     </div>
                 </div>
