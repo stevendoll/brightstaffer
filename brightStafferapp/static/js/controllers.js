@@ -2321,6 +2321,23 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
     }
 
+    $scope.talentSorted = {};
+    $scope.setAndGetSortedArr = function (arr, key) {
+        if (key in $scope.talentSorted) {
+            arr = arr.reverse();
+        } else {
+            $scope.talentSorted[key] = true;
+            $scope.sortArr(arr, key);
+        }
+    }
+    $scope.sortArr = function (arr, key) {
+        arr.sort(function (a, b) {
+            if (a[key] < b[key]) return -1;
+            if (a[key] > b[key]) return 1;
+            return 0;
+        });
+    }
+
     $scope.reverse = false;
     $scope.sortBy = function (propertyName) { // filed sorting functionality in all project view
         $scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
@@ -3012,7 +3029,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
-                
+
+
+
+            
             , city: location[0] ? location[0].trim() : ""
             , country: location[2] ? location[2].trim() : ""
             , state: location[1] ? location[1].trim() : ""
