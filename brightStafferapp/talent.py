@@ -337,6 +337,7 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         context = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
         recruiter = request.META.get('HTTP_RECRUITER' '')
 
         token = request.META.get('HTTP_TOKEN' '')
@@ -344,13 +345,13 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
                                          'token': token})
         if not is_valid:
             return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
-        talent = request.POST['talent_id']
+        talent = profile_data['talent_id']
         # project = request.POST['project_id']
-        stage = request.POST['stage']
-        details = request.POST['details']
-        notes = request.POST['notes']
-        stage_id = request.POST['stage_id']
-        date = request.POST['create_date']
+        stage = profile_data['stage']
+        details = profile_data['details']
+        notes = profile_data['notes']
+        stage_id = profile_data['stage_id']
+        date = profile_data['create_date']
         date = datetime.datetime.strptime(date, "%d/%m/%Y")
         #projects = Projects.objects.filter(id=project)
         #if not projects:
