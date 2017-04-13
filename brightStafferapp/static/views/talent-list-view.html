@@ -8,9 +8,9 @@
                       <div class="mCustomScrollbar tabl-scrol" data-mcs-theme="dark" table-scroll>
                          <table class="table talent-lst">
                              <thead id="headRow">
-                                 <th id="talent_name" tabindex="0"  ng-click="sortBy('talent_name')">Name
+                                 <th id="talent_name" tabindex="0" >Name
 <!--                                 <th id="talent_name" tabindex="0"  ng-click="setAndGetSortedArr(talentList, 'talent_name')">Name-->
-                                     <span class="sor-cont" ng-init="propertyName === 'talent_name'" ng-class="{reverse: reverse}">
+                                     <span class="sor-cont" ng-click="sortBy('talent_name')" ng-init="propertyName === 'talent_name'" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -19,8 +19,8 @@
                                          </a>
                                      </span>
                                  </th>
-                                 <th  id="role" tabindex="0" ng-click="sortBy('role')" >Current Role
-                                    <span class="sor-cont" ng-init="propertyName === 'role'" ng-class="{reverse: reverse}">
+                                 <th  id="role" tabindex="0" >Current Role
+                                    <span class="sor-cont" ng-click="sortBy('role')"  ng-init="propertyName === 'role'" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -29,8 +29,8 @@
                                          </a>
                                      </span>
                                  </th>
-                                  <th id="talent_company" tabindex="0"  ng-click="sortBy('talent_company')"> Current Company
-                                    <span class="sor-cont" ng-init="propertyName === 'talent_company'" ng-class="{reverse: reverse}">
+                                  <th id="talent_company" tabindex="0"> Current Company
+                                    <span class="sor-cont" ng-click="sortBy('talent_company')" ng-init="propertyName === 'talent_company'" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -40,8 +40,8 @@
                                      </span>
                                   </th>
 
-                                 <th id="talent_stage" tabindex="0"  ng-click="sortBy('talent_stage')">Stage
-                                    <span class="sor-cont" ng-init="propertyName === 'talent_stage'" ng-class="{reverse: reverse}">
+                                 <th id="talent_stage" tabindex="0">Stage
+                                    <span class="sor-cont"  ng-click="sortBy('talent_stage')" ng-init="propertyName === 'talent_stage'" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -51,8 +51,8 @@
                                      </span>
                                  </th>
 
-                                 <th id="talent_project" tabindex="0"  ng-click="sortBy('talent_project')">Projects
-                                    <span class="sor-cont" ng-init="propertyName === 'talent_project'" ng-class="{reverse: reverse}">
+                                 <th id="talent_project" tabindex="0" >Projects
+                                    <span class="sor-cont" ng-click="sortBy('talent_project')" ng-init="propertyName === 'talent_project'" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -173,18 +173,18 @@
                                          <span class="dis-blc" ng-show="!talent.talent_project.length"> N/A  </span>
                                       </td>
                                       <td >
-                                        <span class="dis-blc" ng-show="talent.talent_project.length"> [[talent.talent_project[0].project_match]]</span>
+                                        <span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].project_match != null"><a href="">[[talent.talent_project[0].project_match]]%</a></span>
                                         <!--<span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name]] </a> </span>-->
-                                         <span class="dis-blc" ng-show="!talent.talent_project.length"> N/A  </span>
+                                         <span class="dis-blc" ng-show="!talent.talent_project.length || talent.talent_project[0].project_match == null"> N/A  </span>
                                       </td>
                                      <td><span class="dis-blc" ng-show="talent.talent_project.length && talent.talent_project[0].company_name"> <a href="">@[[talent.talent_project[0].company_name | capitalizeWord]] </a> </span>
                                          <span ng-show="!talent.talent_project.length">  N/A  </span>
                                      </td>
 
-                                     <td><span ng-show="talent.talent_stages.length">[[talent.talent_stages[0].date_created  | dateFormat]]</span>
+                                     <td><span ng-show="talent.talent_stages.length">[[talent.talent_stages[0].create_date  | dateFormat]]</span>
                                          <span ng-show="!talent.talent_stages.length">[[talent.create_date | dateFormat]]</span>
                                      </td>
-                                     <td><span ng-show="talent.talent_stages.length">[[talent.talent_stages[0].date_created | dateFormat]]</span>
+                                     <td><span ng-show="talent.talent_stages.length">[[talent.talent_stages[0].create_date | dateFormat]]</span>
                                          <span ng-show="!talent.talent_stages.length">[[talent.create_date | dateFormat]]</span></td>
                                      <td><span ng-show="talent.talent_email.length && talent.talent_email[0].email != ''">[[talent.talent_email[0].email]]</span>
                                          <span ng-show="!talent.talent_email.length || talent.talent_email[0].email == ''"> N/A </span></td>

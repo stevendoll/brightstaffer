@@ -1,7 +1,8 @@
 from brightStafferapp.models import Talent, User, Projects, TalentProject, TalentEmail, TalentContact, \
     TalentStage, TalentRecruiter, TalentConcept, ProjectConcept,Concept, Education, TalentEducation, Company,\
     TalentCompany, TalentLocation
-from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer
+from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer, \
+    TalentStageSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
@@ -322,7 +323,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['notes'] = tp_obj.notes
             context['create_date'] = tp_obj.get_date_created
             serializer_data = TalentSerializer(talent_obj)
-            context['talent_updated_data'] = serializer_data.data
+            context['result'] = serializer_data.data
             return util.returnSuccessShorcut(context)
         else:
             return util.returnErrorShorcut(400, 'Talent stage and info is exist in database, '
@@ -337,6 +338,7 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         context = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
         recruiter = request.META.get('HTTP_RECRUITER' '')
 
         token = request.META.get('HTTP_TOKEN' '')
@@ -344,13 +346,13 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
                                          'token': token})
         if not is_valid:
             return util.returnErrorShorcut(403, 'Either Recruiter Email or Token id is not valid')
-        talent = request.POST['talent_id']
+        talent = profile_data['talent_id']
         # project = request.POST['project_id']
-        stage = request.POST['stage']
-        details = request.POST['details']
-        notes = request.POST['notes']
-        stage_id = request.POST['stage_id']
-        date = request.POST['create_date']
+        stage = profile_data['stage']
+        details = profile_data['details']
+        notes = profile_data['notes']
+        stage_id = profile_data['stage_id']
+        date = profile_data['create_date']
         date = datetime.datetime.strptime(date, "%d/%m/%Y")
         #projects = Projects.objects.filter(id=project)
         #if not projects:
@@ -375,7 +377,7 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
                 queryset = super(TalentStageEditAPI, self).get_queryset()
                 queryset = queryset.filter(talent_id=talent)
                 serializer_data = TalentProjectStageSerializer(queryset, many=True).data
-                context['talent_updated_stage'] = serializer_data
+                context['result'] = serializer_data
                 context['message'] = 'Talent Stage Updated Successfully'
                 context['success'] = True
                 return util.returnSuccessShorcut(context)
@@ -410,7 +412,7 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
         queryset = super(TalentStageDeleteAPI, self).get_queryset()
         queryset = queryset.filter(talent_id=talent_id)
         serializer_data = TalentProjectStageSerializer(queryset, many=True).data
-        context['talent_deleted_data'] = serializer_data
+        context['result'] = serializer_data
         context['message'] = 'Talent Stage Deleted Successfully'
         context['success'] = True
         return util.returnSuccessShorcut(context)
@@ -418,27 +420,15 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
 
 # View All Talent's stages
 class TalentAllStageDetailsAPI(View):
-
     def get(self, request):
-
         talent_id = request.GET['talent_id']
         talent_obj = Talent.objects.filter(id=talent_id)
         if not talent_obj:
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         queryset = TalentStage.objects.filter(talent=talent_obj)
-        talent_stage = []
-        for obj in queryset:
-            response = dict()
-            response['talent_id'] = obj.talent.talent_name
-            response['stage_id'] = obj.id
-            response['project'] = obj.project.project_name
-            response['stage'] = obj.stage
-            response['details'] = obj.details
-            response['notes'] = obj.notes
-            response['create_date'] = obj.get_date_created
-            talent_stage.append(response)
+        serializer_data = TalentStageSerializer(queryset, many=True).data
         talent_stage_all = dict()
-        talent_stage_all['result'] = talent_stage
+        talent_stage_all['result'] = serializer_data
         return util.returnSuccessShorcut(talent_stage_all)
 
 
@@ -460,7 +450,6 @@ class TalentUpdateRank(View):
 
 
 class TalentAdd(generics.ListCreateAPIView):
-
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(TalentAdd, self).dispatch(request, *args, **kwargs)
@@ -550,9 +539,15 @@ def add_edit_talent(profile_data, user):
         if 'topConcepts' in profile_data:
             for skill in profile_data.get('topConcepts', ''):
                 if bool(skill):
+                    match = float(skill.get('percentage', skill.get('score', '')))
+                    if match and match < 1:
+                        match *= 100
+                        match = round(match, 2)
+                    if match and match > 100:
+                        match = 100
                     concept, created = Concept.objects.get_or_create(concept=skill.get('name'))
                     tpconcept, created = TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept,
-                                                                             match=float(skill.get('percentage', 0.00)))
+                                                                             match=match)
 
     if "education" in profile_data:
         for education in profile_data.get('education', ''):

@@ -1406,7 +1406,7 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, searchData, $cookieStore, createTalentFormService) {
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, searchData, $cookieStore, createTalentFormService, $filter) {
 
     $scope.priceSlider = {
         value: 0
@@ -1892,21 +1892,63 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope[variable] = value;
     }
     $scope.deleteStage = function (id) {
-        if (!id) return;
-        talentApis.delteStage({
-            stage_id: id,
-            talent_id: $scope.talentDetails.id
-        }, function (response) {
-            console.log(response);
-            if(response.success){
-                $scope.showNotification(true, 'Stage has been successfully removed');
-                // todo add code remove stages from localstorage
-            }else{
-                $scope.showNotification(false,  response.errorstring || 'Some problem occured');
-            }
-            $('#delteStageModal').modal('hide');
-        })
+            if (!id) return;
+            talentApis.delteStage({
+                stage_id: id
+                , talent_id: $scope.talentDetails.id
+            }, function (response) {
+                console.log(response);
+                if (response.success) {
+                    $scope.showNotification(true, 'Stage has been successfully removed');
+
+                    $rootScope.talentAllStages = response.result;
+                    $scope.stage.stagesCard = response.result;
+                    sessionStorage.removeItem('talentAllStages');
+                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+                } else {
+                    $scope.showNotification(false, response.errorstring || 'Some problem occured');
+                }
+                $('#delteStageModal').modal('hide');
+                $window.scroll(0, 0);
+
+            });
+        }
+        /*  edit-stage code start */
+    function convertToIso(date) {
+        var d = date.split('/');
+        d = d[1] + '/' + d[0] + '/' + d[2];
+        d = new Date(d);
+        //d = d.toISOString();
+        return d;
     }
+    $scope.editStageModal = function (selectedStage) {
+        console.log(selectedStage);
+        $scope.selectedStage = {};
+        $scope.selectedStage.stage = selectedStage.stage;
+        $scope.selectedStage.project = selectedStage.project;
+        $scope.selectedStage.create_date = convertToIso(selectedStage.create_date);
+        $scope.selectedStage.details = selectedStage.details;
+        $scope.selectedStage.notes = selectedStage.notes;
+        $scope.selectedStage.stage_id = selectedStage.id;
+        $('#edit-stage').modal('show');
+    }
+
+    $scope.saveProjectStage = function () {
+            console.log($scope.selectedStage);
+            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
+            var requestObj = $scope.selectedStage;
+            requestObj.talent_id = $rootScope.talentDetails.id;
+            talentApis.editStage(requestObj, function (response) {
+             if(response.message == 'success'){
+                 $rootScope.talentAllStages = response.result;
+                    $scope.stage.stagesCard = response.result;
+                    sessionStorage.removeItem('talentAllStages');
+                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+                    $('#edit-stage').modal('hide');
+                }
+            });
+        }
+        /* edit-stage code end */
 
     $scope.getTalents = function (recordCount) { // function to fetch top 6 projects
 
@@ -2601,8 +2643,18 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log($scope.activePageNumber)
     }
 
+    function initDatePicker(id) {
+        $("#" + id).datepicker({
+            dateFormat: 'M d, yy'
+            , changeYear: true
+            , yearRange: '1900:' + new Date().getFullYear()
+            , yearRange: '1900:' + new Date().getFullYear()
+            , maxDate: new Date()
+        });
+    }
 
     $scope.openAddStagePopup = function (id) {
+        $('#addStageDate').val('')
             $scope.stage = {
                 stage: ''
                 , project: ''
@@ -2637,7 +2689,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $scope.stage.stage = selectedValue;
                 // console.log($scope.stage.stage);
             });
-
+            initDatePicker('addStageDate');
             $('#add-stage').modal('show');
         }
         //$scope.stage.stagesArray = [];
@@ -2743,6 +2795,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.isDate = date ? false : true;
     }
     $scope.addProjectCheckValidation = function (stage, removeValidation) {
+            stage.date = stage.date ? stage.date : $('#addStageDate').val();
             if (removeValidation) {
                 $scope.isStage = false;
                 $scope.isProject = false;
@@ -2763,6 +2816,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };*/
 
     $scope.addProjectStage = function (stage) {
+        stage.date = stage.date ? stage.date : $('#addStageDate').val();
         var selectedProjectId;
         console.log($scope.stage);
         if (typeof ($scope.stage.project) == 'object' || $scope.stage.project == 'Select Project') {
@@ -2812,9 +2866,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         $scope.stage.isStage = false;
 
                         //                            $scope.stage.stagesCard.push(response);
-                        $rootScope.talentDetails = response.talent_updated_data;
-                        sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
-                        $scope.stage.stagesCard.unshift(response);
+//                        $rootScope.talentDetails = response.talent_updated_data;
+//                        sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
+//                        $scope.stage.stagesCard.unshift(response);
+                        $scope.stage.stagesCard = response.result.talent_stages;
                         $scope.$apply();
                         var sbId = $('#stageSelect').attr('sb');
                         var selectedValue = $('#sbSelector_' + sbId).text('Select Stage');
@@ -3037,6 +3092,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
+
+
+
 
 
 

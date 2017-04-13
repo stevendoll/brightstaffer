@@ -468,7 +468,13 @@ function viewAllScroll($timeout) {
         restrict: 'A'
         , link: function (scope, element, attrs) {
             $timeout(function () {
-                $(".modal-top-concept-scroll").mCustomScrollbar();
+                $(".modal-top-concept-scroll").mCustomScrollbar({
+                    scrollButtons: {
+                        enable: true
+                    }
+                    , axis: "y", // horizontal scrollbar
+                    scrollInertia: 60,
+                });
             });
         }
     };

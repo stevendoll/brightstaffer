@@ -112,10 +112,11 @@ class TalentContactEmailSerializer(serializers.ModelSerializer):
 class TalentProjectStageSerializer(serializers.ModelSerializer):
     talent = serializers.CharField()
     project = serializers.CharField()
+    create_date=serializers.CharField(source='get_date_created')
 
     class Meta:
         model = TalentStage
-        fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'date_created', 'date_updated')
+        fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'create_date', 'date_updated')
 
 
 class TalentCompanySerializer(serializers.ModelSerializer):
@@ -142,12 +143,12 @@ class TalentCompanySerializer(serializers.ModelSerializer):
 
 class TalentStageSerializer(serializers.ModelSerializer):
     talent = serializers.CharField()
-    date_created = serializers.CharField(source='get_date_created')
+    create_date = serializers.CharField(source='get_date_created')
     date_updated = serializers.CharField(source='get_date_updated')
     project = serializers.CharField()
     class Meta:
         model = TalentStage
-        fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'date_created', 'date_updated')
+        fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'create_date', 'date_updated')
 
 
 class TalentSerializer(serializers.ModelSerializer):
