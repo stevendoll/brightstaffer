@@ -47,7 +47,7 @@ class LinkedInParser(object):
         ]
 
         # Login
-        self.loginPage()
+        #self.loginPage()
 
         title = self.loadTitle(url)
         self.cj.save()
@@ -79,20 +79,20 @@ class LinkedInParser(object):
         soup = BeautifulSoup(html,"html.parser")
         return soup
 
-    def loginPage(self):
-        """
-        Handle login. This should populate our cookie jar.
-        """
-        soup = self.loadSoup("https://www.linkedin.com/")
-        csrf = soup.find(id="loginCsrfParam-login")['value']
-        login_data = urllib.parse.urlencode({
-            'session_key': self.login,
-            'session_password': self.password,
-            'loginCsrfParam': csrf,
-        }).encode('utf8')
-
-        self.loadPage("https://www.linkedin.com/uas/login-submit", login_data)
-        return
+    # def loginPage(self):
+    #     """
+    #     Handle login. This should populate our cookie jar.
+    #     """
+    #     soup = self.loadSoup("https://www.linkedin.com/")
+    #     csrf = soup.find(id="loginCsrfParam-login")['value']
+    #     login_data = urllib.parse.urlencode({
+    #         'session_key': self.login,
+    #         'session_password': self.password,
+    #         'loginCsrfParam': csrf,
+    #     }).encode('utf8')
+    #
+    #     self.loadPage("https://www.linkedin.com/uas/login-submit", login_data)
+    #     return
 
     def loadTitle(self,url):
         #url='https://www.linkedin.com/in/chandan-varma-89203b54/'
