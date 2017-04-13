@@ -321,7 +321,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             context['stage']=tp_obj.stage
             context['details'] = tp_obj.details
             context['notes'] = tp_obj.notes
-            context['date_created'] = tp_obj.get_date_created
+            context['create_date'] = tp_obj.get_date_created
             serializer_data = TalentSerializer(talent_obj)
             context['result'] = serializer_data.data
             return util.returnSuccessShorcut(context)
