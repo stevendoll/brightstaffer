@@ -2378,6 +2378,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 
 .tabl-fl-height .table > thead > tr > th {
     border-bottom: 2px solid #e7eaec;
+    outline: 0;
 }
 
 .tbl-link-td {
