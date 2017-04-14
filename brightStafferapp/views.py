@@ -603,7 +603,7 @@ class LinkedinDataView(View):
     def get(self, request):
         url=request.GET['url']
         linkedin=LinkedInParser()
-        content=linkedin.linkedin_data("chandan.varma@kiwitech.com", 'AAA@064110',url)
+        content=linkedin.linkedin_data(url)
         print (content)
         context = dict()
         context['results'] = content
