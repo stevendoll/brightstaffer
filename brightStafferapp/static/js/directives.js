@@ -428,7 +428,7 @@ function starRating2() {
                 scope.onRatingSelected({
                     rating: scope.ratingValue
                 });*/
-              scope.ratingValue = index + 1;
+             scope.ratingValue = index + 1;
                 scope.onRatingSelected({
                     rating: index + 1
                 });

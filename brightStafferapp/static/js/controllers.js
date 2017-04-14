@@ -1588,7 +1588,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
     $scope.initTalenData = function () {
         $scope.talentData = {
-            currentOrganization: [{
+           profile_image:''
+           ,currentOrganization: [{
                 name: ''
                 , from: ''
                 , to: 'Present'
@@ -1840,6 +1841,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log(rating);
         // console.log($rootScope.talentDetails.id);
         console.log(rating);
+       /* if(rating == 1){
+            $scope.stars.push({
+                        filled: true
+                    });
+        }*/
         if (rating >= 0) {
             var requestObject = {
                 'id': $rootScope.talentDetails.id, // password field value
