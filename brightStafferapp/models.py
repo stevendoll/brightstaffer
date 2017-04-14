@@ -126,6 +126,7 @@ class Talent(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     talent_name = models.CharField(max_length=100, verbose_name='Talent Name', null=False, blank=False,
                                    default='')
+    image = models.URLField(null=True, blank=True)
     designation = models.CharField(max_length=100, default='', null=True, blank=True)
     industry_focus = models.CharField(max_length=100, default='', null=True, blank=True)
     industry_focus_percentage = models.CharField(max_length=30, default='', null=True, blank=True)
@@ -263,14 +264,14 @@ class TalentCompany(models.Model):
         if self.start_date:
             return self.start_date.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return ""
 
     @property
     def get_end_date(self):
         if self.end_date:
             return self.end_date.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return ""
 
     def __str__(self):
         return str(self.talent.talent_name + " works at " + self.company.company_name)
