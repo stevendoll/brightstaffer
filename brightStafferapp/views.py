@@ -256,13 +256,13 @@ class AlchemyAPI(View):
             alchemy_language = AlchemyLanguageV1(api_key=Alchemy_api_key)
             data = json.dumps(
                 alchemy_language.combined(text=user_data['description'],
-                                          extract='keywords', max_items=40))
+                                          extract='keywords'))
             d = json.loads(data)
             Projects.objects.filter(id=project_id).update(description_analysis=d)
             for item in chain(d["keywords"]):
-                if round(float(item['relevance']), 2) >= float(concept_relevance):
-                    keyword_list.append(item['text'].lower())
-            return list(set(keyword_list))[:40]
+                #if round(float(item['relevance']), 2) >= float(concept_relevance):
+                keyword_list.append(item['text'].lower())
+            return list(set(keyword_list))#[:40]
         except Exception as e:
             return keyword_list
 
