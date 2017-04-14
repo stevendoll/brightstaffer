@@ -420,11 +420,8 @@ function starRating2() {
             };
 
             scope.toggle = function (index) {
-               /* if(scope.ratingValue == 1 && index == 0){
+              /* if(scope.ratingValue == 1 && index == 0){
                     scope.ratingValue = index;
-                    scope.stars.push({
-                        filled: i<= scope.ratingValue
-                    });
                 }else{
                     scope.ratingValue = index + 1;
                   }

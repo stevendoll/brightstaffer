@@ -3120,13 +3120,22 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , id: talent.id
         };
         if (talent.talent_company.length) {
-            var organisation = {};
+            var organisation = {
+                 JobTitle: ''
+                , name: ''
+                , from: ''
+                , to: ''
+            };
             organisation.name = talent.talent_company[0].company ? talent.talent_company[0].company.trim() : '';
             organisation.JobTitle = talent.talent_company[0].designation ? talent.talent_company[0].designation.trim() : '';
-            var date = new Date(talent.talent_company[0].start_date);
-            organisation.from = date.getFullYear().toString();
-            var date = new Date(talent.talent_company[0].end_date);
-            organisation.to = date.getFullYear().toString();
+            if(talent.talent_company[0].start_date){
+                var date = new Date(talent.talent_company[0].start_date);
+                organisation.from = date.getFullYear().toString();
+            }
+            if(talent.talent_company[0].end_date){
+                var date = new Date(talent.talent_company[0].end_date);
+                organisation.to = date.getFullYear().toString();
+            }
             organisation.id = talent.talent_company[0].id;
             $scope.talentEditableData.currentOrganization.push(organisation);
         } else {
@@ -3140,12 +3149,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         if (talent.talent_education.length) {
             for (var i = 0; i < talent.talent_education.length; i++) {
-                var organisation = {};
+                var organisation = {
+                 name: ''
+                , from: ''
+                , to: ''
+                };
                 organisation.name = talent.talent_education[i].education ? talent.talent_education[i].education.trim() : '';
-                var date = new Date(talent.talent_education[i].start_date);
-                organisation.from = date.getFullYear().toString();
-                var date = new Date(talent.talent_education[i].end_date);
-                organisation.to = date.getFullYear().toString();
+                if(talent.talent_education[i].start_date){
+                    var date = new Date(talent.talent_education[i].start_date);
+                    organisation.from = date.getFullYear().toString();
+                }
+                if(talent.talent_education[i].end_date){
+                    var date = new Date(talent.talent_education[i].end_date);
+                    organisation.to = date.getFullYear().toString();
+                }
                 organisation.id = talent.talent_education[i].id;
                 $scope.talentEditableData.education.push(organisation);
             }
