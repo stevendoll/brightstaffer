@@ -1324,7 +1324,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     padding: 0px 0px;
     text-decoration: underline;
     margin: 10px 0px 13px 0px;
-    cursor: pointer;
+    /*cursor: pointer;*/
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
