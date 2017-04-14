@@ -1946,7 +1946,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     sessionStorage.removeItem('talentAllStages');
                     sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                     $('#edit-stage').modal('hide');
+                }else if(response.success == false){
+                    $('#edit-stage').modal('hide');
+                  $scope.showNotification(false, response.errorstring || 'Some problem occured');
                 }
+                $window.scrollTo(0, 0);
             });
         }
         /* edit-stage code end */
