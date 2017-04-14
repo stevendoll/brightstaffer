@@ -1324,7 +1324,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     padding: 0px 0px;
     text-decoration: underline;
     margin: 10px 0px 13px 0px;
-    cursor: pointer;
+    /*cursor: pointer;*/
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2432,11 +2432,25 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     width: auto;
     float: left;
     position: absolute;
-    top: -31px;
+    top: 43px;
     right: 41%;
     z-index: 9999;
 }
 
+.main-success-box2 {
+    height: 50px;
+    border-radius: 2px;
+    background-color: rgba(223, 240, 216, 0.9);
+    border: solid 1px #d6e9c6;
+    margin: 0 auto;
+    padding: 13px 30px;
+    width: auto;
+    float: left;
+    position: absolute;
+    top: -10px;
+    right: 41%;
+    z-index: 9999;
+}
 .bs-searchbox .form-control {
     height: 40px;
     border-radius: 2px;
@@ -2622,9 +2636,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     float: left;
     position: absolute;
     top: 43px;
-    left: 0;
+   /* left: 0;*/
     z-index: 9999;
-    right: 0;
+    right: 28%;
     text-align: center;
 }
 

@@ -1651,7 +1651,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.addLinkedinUrl(param, function (response) {
             console.log(response);
             if (response.success) {
-                delete response.results.linkedinProfileUrl;
+               // delete response.results.linkedinProfileUrl;
                 for (var key in response.results) {
                     $scope.talentData[key] = response.results[key];
                 }
@@ -1946,9 +1946,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     sessionStorage.removeItem('talentAllStages');
                     sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                     $('#edit-stage').modal('hide');
+                    $scope.showNotification(true, 'Stage has been updated Successfully.');
                 }else if(response.success == false){
                     $('#edit-stage').modal('hide');
-                  $scope.showNotification(false, response.errorstring || 'Some problem occured');
+                  $scope.showNotification(true, 'Stage has been updated Successfully.');
                 }
                 $window.scrollTo(0, 0);
             });
@@ -2861,7 +2862,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     response = JSON.parse(response);
                     if (response.message == "success") {
                         $('#add-stage').modal('hide');
-
+                        $scope.showNotification(true, 'Stage has been added Successfully.');
                         $scope.stage.stage = '';
 
                         $scope.stage.project = '';
@@ -2890,6 +2891,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         }).val('');
                         sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                     }
+                     $window.scrollTo(0, 0);
                 }
             }
         }

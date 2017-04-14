@@ -603,8 +603,10 @@ class LinkedinDataView(View):
     def get(self, request):
         url=request.GET['url']
         linkedin=LinkedInParser()
-        content=linkedin.linkedin_data("chandan.varma@kiwitech.com", 'AAA@064110',url)
-        print (content)
+        content=linkedin.linkedin_data(url)
+        #if content==None:
+        #    response=request.get("https: // www.googleapis.com / customsearch / v1?q ="+ url+" & cx = 002086705837668586439:l1o6lrd_few & num = 1 & key = AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU")
+        #    print (response.text())
         context = dict()
         context['results'] = content
         context['success'] = True
