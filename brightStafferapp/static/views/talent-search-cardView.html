@@ -8,7 +8,9 @@
         <div class="talent-srearch-view-panel">
             <div class="talentsearch-left-panel">
                 <div class="left-div">
-                    <div class="search-image"><img src="static/img/user-placeholder.png" alt=""></div>
+                    <div class="search-image"><img ng-show="!talent.image || talent.image == ''" src="static/img/user-placeholder.png" alt="">
+                        <img ng-show="talent.image" src="[[talent.image]]" alt="">
+                    </div>
                 </div>
                 <div class="search-result-panel right-div">
                     <div class="search-result-name">

@@ -3,7 +3,9 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="talent-analysis-div">
-                <div class="talent-analysis-image"><img src="static/img/user-placeholder.png" alt=""></div>
+                <div class="talent-analysis-image"><img ng-show="!talentDetails.image || talentDetails.image == ''" src="static/img/user-placeholder.png" alt="">
+                    <img ng-show="talentDetails.image" src="[[talentDetails.image]]" alt="">
+                </div>
                 <div class="talent-analysis-info-div">
                     <div class="talent-analysis-name">
                         [[talentDetails.talent_name | capitalizeWord]]
@@ -197,8 +199,8 @@
                                                                 <td>
                                                                     <div class="table-date-div">[[proj.date_added | dateFormat]]</div>
                                                                 </td>
-                                                                <td class="interviewing-text"><span ng-show="proj.project_stage">[[proj.project_stage ]]</span>
-                                                                    <span ng-show="!proj.project_stage text-center"> - </span>
+                                                                <td class="interviewing-text text-center"><span ng-show="proj.project_stage">[[proj.project_stage ]]</span>
+                                                                    <span ng-show="!proj.project_stage"> - </span>
                                                                 </td>
                                                             </tr>
                                                             <!--<tr>

@@ -20,6 +20,8 @@ class GoogleCustomSearch(object):
                                 result['city']=j['location']
                                 result['talent_designation']=j['role']
                                 current['name'] = j['org']
+                                current['from'] = ''
+                                current['to'] = ''
                                 result['currentOrganization']= currentOrganization
                                 currentOrganization.append(current)
                         else:
@@ -29,9 +31,6 @@ class GoogleCustomSearch(object):
                                     result['lastName'] = j['fn'].split(' ')[1]
                                     result['profile_image']=j['photo']
 
-
-                    #for i in xyz['pagemap']['hcard']:
-                    #    print (i['fn'])
             return result
         except:
             pass

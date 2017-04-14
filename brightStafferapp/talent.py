@@ -523,11 +523,13 @@ def add_edit_talent(profile_data, user):
         talent_obj = Talent.objects.create(
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
             recruiter=user, status='New', industry_focus=profile_data.get('industryFocus', ''),
-            linkedin_url=profile_data.get('linkedinProfileUrl', ''), create_date=datetime.datetime.now())
+            linkedin_url=profile_data.get('linkedinProfileUrl', ''), image=profile_data.get('profile_image', ''),
+            create_date=datetime.datetime.now())
         talent_location = TalentLocation.objects.create(talent=talent_obj,
                                                         city=profile_data.get('city', ''),
                                                         state=profile_data.get('state', ''),
-                                                        country=profile_data.get('country', '')
+                                                        country=profile_data.get('country', ''),
+
                                                         )
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                           is_active=True)
@@ -613,12 +615,12 @@ def convert_to_start_end(organization):
     start_year = organization.get('from')
     end_year = organization.get('to')
     if start_year != "" and end_year != "":
-        start_date = date(start_year, month, day)
+        start_date = date(int(start_year), month, day)
 
         if end_year.strip(" ") == "Present":
             return start_date, end_date
         else:
-            end_date = date(start_year, month, day)
+            end_date = date(int(end_year), month, day)
         return start_date, end_date
     return start_date, end_date
 

@@ -1588,7 +1588,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
     $scope.initTalenData = function () {
         $scope.talentData = {
-            currentOrganization: [{
+           profile_image:''
+           ,currentOrganization: [{
                 name: ''
                 , from: ''
                 , to: 'Present'
@@ -1840,6 +1841,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log(rating);
         // console.log($rootScope.talentDetails.id);
         console.log(rating);
+       /* if(rating == 1){
+            $scope.stars.push({
+                        filled: true
+                    });
+        }*/
         if (rating >= 0) {
             var requestObject = {
                 'id': $rootScope.talentDetails.id, // password field value
@@ -1896,12 +1902,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if (!id) return;
             talentApis.delteStage({
                 stage_id: id
-                , talent_id: $scope.talentDetails.id
+                , talent_id: $rootScope.talentDetails.id
             }, function (response) {
                 console.log(response);
                 if (response.success) {
-                    $scope.showNotification(true, 'Stage has been successfully removed');
-
+                    //$scope.showNotification(true, 'Stage has been successfully removed');
+                    $scope.loadProfileData($rootScope.talentDetails.id, $rootScope.talentDetails, 'deleteStage');
                     $rootScope.talentAllStages = response.result;
                     $scope.stage.stagesCard = response.result;
                     sessionStorage.removeItem('talentAllStages');
@@ -2030,7 +2036,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         return sum;
     };
 
-    $scope.loadProfileData = function (id, talent) {
+    $scope.loadProfileData = function (id, talent, callFrom) {
         $rootScope.isFilterChecked = false;
         if (talent && id) {
             $rootScope.talentDetails = talent;
@@ -2043,7 +2049,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.getCandidateProfile(requestObject).then(function (response) {
             //$state.go('talent.talent-profile','');
             //$('html, body').animate({ scrollTop: 0 }, 'fast');
-
+            if(callFrom == 'deleteStage'){
+                $window.scroll(0, 0);
+                $scope.showNotification(true, 'Stage has been successfully removed');
+                }
             var a = [response];
             $rootScope.createCareerHistoryData(a);
 
@@ -2875,6 +2884,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                        $rootScope.talentDetails = response.result;
                        sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
 //                        $scope.stage.stagesCard.unshift(response);
+
                         $scope.stage.stagesCard = response.result.talent_stages;
                         $scope.$apply();
                         var sbId = $('#stageSelect').attr('sb');
@@ -3116,13 +3126,22 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , id: talent.id
         };
         if (talent.talent_company.length) {
-            var organisation = {};
+            var organisation = {
+                 JobTitle: ''
+                , name: ''
+                , from: ''
+                , to: ''
+            };
             organisation.name = talent.talent_company[0].company ? talent.talent_company[0].company.trim() : '';
             organisation.JobTitle = talent.talent_company[0].designation ? talent.talent_company[0].designation.trim() : '';
-            var date = new Date(talent.talent_company[0].start_date);
-            organisation.from = date.getFullYear().toString();
-            var date = new Date(talent.talent_company[0].end_date);
-            organisation.to = date.getFullYear().toString();
+            if(talent.talent_company[0].start_date){
+                var date = new Date(talent.talent_company[0].start_date);
+                organisation.from = date.getFullYear().toString();
+            }
+            if(talent.talent_company[0].end_date){
+                var date = new Date(talent.talent_company[0].end_date);
+                organisation.to = date.getFullYear().toString();
+            }
             organisation.id = talent.talent_company[0].id;
             $scope.talentEditableData.currentOrganization.push(organisation);
         } else {
@@ -3136,12 +3155,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         if (talent.talent_education.length) {
             for (var i = 0; i < talent.talent_education.length; i++) {
-                var organisation = {};
+                var organisation = {
+                 name: ''
+                , from: ''
+                , to: ''
+                };
                 organisation.name = talent.talent_education[i].education ? talent.talent_education[i].education.trim() : '';
-                var date = new Date(talent.talent_education[i].start_date);
-                organisation.from = date.getFullYear().toString();
-                var date = new Date(talent.talent_education[i].end_date);
-                organisation.to = date.getFullYear().toString();
+                if(talent.talent_education[i].start_date){
+                    var date = new Date(talent.talent_education[i].start_date);
+                    organisation.from = date.getFullYear().toString();
+                }
+                if(talent.talent_education[i].end_date){
+                    var date = new Date(talent.talent_education[i].end_date);
+                    organisation.to = date.getFullYear().toString();
+                }
                 organisation.id = talent.talent_education[i].id;
                 $scope.talentEditableData.education.push(organisation);
             }
