@@ -2432,7 +2432,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     width: auto;
     float: left;
     position: absolute;
-    top: -31px;
+    top: 43px;
     right: 41%;
     z-index: 9999;
 }
@@ -2622,9 +2622,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     float: left;
     position: absolute;
     top: 43px;
-    left: 0;
+   /* left: 0;*/
     z-index: 9999;
-    right: 0;
+    right: 28%;
     text-align: center;
 }
 

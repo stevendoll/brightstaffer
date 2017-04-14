@@ -1946,6 +1946,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     sessionStorage.removeItem('talentAllStages');
                     sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                     $('#edit-stage').modal('hide');
+                    $scope.showNotification(true, 'Stage has been updated Successfully.');
                 }else if(response.success == false){
                     $('#edit-stage').modal('hide');
                   $scope.showNotification(false, response.errorstring || 'Some problem occured');
@@ -2861,7 +2862,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     response = JSON.parse(response);
                     if (response.message == "success") {
                         $('#add-stage').modal('hide');
-
+                        $scope.showNotification(true, 'Stage has been added Successfully.');
                         $scope.stage.stage = '';
 
                         $scope.stage.project = '';
@@ -2890,6 +2891,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         }).val('');
                         sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                     }
+                     $window.scrollTo(0, 0);
                 }
             }
         }
