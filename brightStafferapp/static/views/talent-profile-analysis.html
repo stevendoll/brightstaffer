@@ -3,7 +3,9 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="talent-analysis-div">
-                <div class="talent-analysis-image"><img src="static/img/user-placeholder.png" alt=""></div>
+                <div class="talent-analysis-image"><img ng-show="!talentDetails.image || talentDetails.image == ''" src="static/img/user-placeholder.png" alt="">
+                    <img ng-show="talentDetails.image" src="[[talentDetails.image]]" alt="">
+                </div>
                 <div class="talent-analysis-info-div">
                     <div class="talent-analysis-name">
                         [[talentDetails.talent_name | capitalizeWord]]
