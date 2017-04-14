@@ -681,8 +681,8 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
         return super(LinkedinAddUrl, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        linkedin_url = request.POST.get('linkedin_url', '')
-        talent_id = str(request.POST.get('talent_id', ''))
+        linkedin_url = request.data['url']
+        talent_id = request.data['id']
         talent = Talent.objects.filter(id=talent_id)
         if not talent:
             return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
@@ -694,11 +694,14 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
         # 'firstName': 'Matt', 'talent_designation': 'Co-founder, CEO at BrightStaffer'}
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(linkedin_url)
-        talent.talent_name = content['firstName'] + content['lastName']
-        talent.designation = content['talent_designation']
-        talent.image = content['profile_image']
-        talent.save()
-
+        if content:
+            talent.talent_name = content['firstName'] + " " + content['lastName']
+            talent.designation = content['talent_designation']
+            talent.image = content['profile_image']
+            talent.save()
+        context = dict()
+        context['success'] = True
+        return util.returnSuccessShorcut(context)
 
 
 class TalentSearch(generics.ListCreateAPIView):
