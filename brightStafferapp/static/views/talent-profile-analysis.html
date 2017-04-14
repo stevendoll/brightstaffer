@@ -19,7 +19,7 @@
                     <div class="talent-activity-panel">
                         <div class="left-div">Last Activity</div>
                         <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].create_date | dateFormat]]</div>
-                        <div class="right-div" ng-show="!stage.stagesCard.length">  -  </div>
+                        <div class="right-div text-center" ng-show="!stage.stagesCard.length"> - </div>
                     </div>
                     <div class="talent-rec-panel">
                         <div class="left-div">Recruiter</div>
@@ -43,7 +43,7 @@
                         </div>
                         <div ng-show="!stage.stagesCard.length">
                             <div class="schdule-list">Date Added/Analysed</div>
-                        <div class="schdule-list-date">[[talentDetails.create_date | dateFormat]]</div>
+                            <div class="schdule-list-date">[[talentDetails.create_date | dateFormat]]</div>
                         </div>
                     </div>
                 </div>
@@ -84,14 +84,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                   <!-- <div ng-if="$index == 1">
+                                    <div ng-if="$index == 1">
                                         <div class="col-xs-12 padding-zero">
                                             <div class="left-div search-result-past">Past</div>
                                             <div class="right-div search-detail-past">
                                                 <span class="bold-font">[[company.designation | capitalizeWord]]</span>- at [[company.company | capitalizeWord]] [[company.start_date | yearFormat]] - [[company.end_date | yearFormat]] <span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talentDetails)">More</a></span>
                                             </div>
                                         </div>
-                                    </div>-->
+                                    </div>
                                 </div>
                                 <div class="col-xs-12 padding-zero">
                                     <div class="left-div search-result-edu">Education</div>
@@ -110,7 +110,44 @@
                                             </div>
                                         </div>
                                     </div>
+                                         <div class="talent-analysis-concept-rightpanel">
+                                    <div class="top-concept-text">Career  History <span ng-click="allMetrics(talentDetails.talent_company)" ng-show="talentDetails.talent_company.length > 3">More</span></div>
+                                    <div class="talent-progress">
+                                      <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                          <span class="text">Total Experience</span>
+                                           <span class="percentage">[[calcTotal(talentDetails.talent_company) | number: 1]] Years</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="talent-progress" ng-repeat="career in talentDetails.talent_company | limitTo: 3">
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((career.blank_gap/calcTotal(talentDetails.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
+                                            </div>
 
+
+                                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:[[convertIntoInt((career.years_of_experience/calcTotal(talentDetails.talent_company)) * 100)]]%;">
+                                                <span class="text">[[career.company | capitalize]]</span>
+                                                <span class="percentage">[[career.years_of_experience | number:1]] Years</span>
+                                            </div>
+
+                                            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="career.career_gap" style="width:[[(career.career_gap/calcTotal(talentDetails.talent_company)) * 100]]%;background-color: #f9cb9c !important;">
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="cls"></div>
+                                   <!-- <div class="indus-focus">Industry Focus</div>
+                                    <div class="talent-progress">
+                                      <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                          <span class="text">Full Stack</span>
+                                          <span class="percentage">1.5 Years</span>
+                                        </div>
+                                      </div>
+                                    </div>-->
+                                  </div>
                                 </div>
                                 <div class="col-xs-12">
                                     <div class="recommended-panel">
@@ -161,7 +198,7 @@
                                                                     <div class="table-date-div">[[proj.date_added | dateFormat]]</div>
                                                                 </td>
                                                                 <td class="interviewing-text"><span ng-show="proj.project_stage">[[proj.project_stage ]]</span>
-                                                                    <span ng-show="!proj.project_stage"> - </span>
+                                                                    <span ng-show="!proj.project_stage text-center"> - </span>
                                                                 </td>
                                                             </tr>
                                                             <!--<tr>
@@ -390,24 +427,65 @@
                             <em></em>
                             <h1>[[st.stage]]</h1>
                             <div class="info-box-panels">Date: <span>[[st.create_date | dateFormat]]</span></div>
-                            <div class="info-box-panels">Project: <span>#[[st.project]]</span></div>
+                            <div class="info-box-panels" tooltip="[[st.project]]">Project: <span>#[[st.project]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.details]]">Details: <span>[[st.details]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.notes]]">Notes: <span>[[st.notes]]</span></div>
                             <div class="info-box-bottom-links" style="cursor:default;">
-                                <span data-toggle="modal" style="cursor:default;">Edit</span>
-                                <span style="cursor:default;">Delete</span>
+
+                                <span data-toggle="modal" ng-click="editStageModal(st)">Edit</span>
+                                <span data-toggle="modal" data-target="#delteStageModal" ng-click="setScopeVariable('stageIdToBeDeleted', st.id)">Delete</span>
+
+                                <!--                                <span style="cursor:default;">Delete</span>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <!--
+                    <div class="modal fade" id="delteStageModal" role="dialog">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Delete Stage</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure?</p>
+                                    <button class="btn btn-danger" data-dismiss="modal">No</button>
+                                    <button class="btn btn-primary" ng-click="deleteStage(stageIdToBeDeleted)">Yes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+-->
+
+
+                    <div class="modal fade" id="delteStageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog add-talent-dialog delete-talent-dailog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="confirm-text">Are you sure you want to <span>delete</span> this Stage.</div>
+                                    <div class="confirm-bttn-box">
+                                        <button type="button" class="btn" id="confirm" ng-click="deleteStage(stageIdToBeDeleted)">Yes</button>
+                                        <button type="button" class="btn" data-dismiss="modal" aria-label="Close">No</button>
+                                    </div>
+                                    <div class="cls"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
+
             </div>
         </div>
     </div>
 </div>
-<div class="" ng-class="{'pro-error-box': notification.status != 'Success'}" ng-show="notification.show">
-            <span><strong>Error!</strong> [[notification.message]]</span>
- </div>
+</div>
+
 <!-- tabs-panel-ends -->
 
 <!-- contact-info-Modal-starts -->
@@ -701,11 +779,18 @@
                         </select>
                         <span class="msg-error" style="color:red;" ng-show="isProject">Required.</span>
                     </div>
-                    <div class="dob-box form-group">
+                    <div class="form-group datpick">
                         <!--            <input type="text" id="proj-stage-date-text" class="form-control select-date" ng-model="stage.date" placeholder="Select Date" date-picker-stage readonly>-->
 
 
-                        <input type="date" id="add-stage-date" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="stage.date" placeholder="DD MM, YYYY" ng-change="addProjectCheckValidation(stage, true)" />
+                        <!--                        <input type="date" id="add-stage-date" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="stage.date" placeholder="DD MM, YYYY" ng-change="addProjectCheckValidation(stage, true)" />-->
+                        
+                        
+<!--                            <input type="text" id="addStageDate" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="stage.date" placeholder="DD MM, YYYY" ng-change="addProjectCheckValidation(stage, true)" />-->
+
+                            <input id="addStageDate" type="text" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" placeholder="Select Date" ng-blur="addProjectCheckValidation(stage, true)" readonly/>
+                      
+
                         <span class="msg-error" style="color:red;" ng-show="isDate">Required.</span>
                     </div>
                     <div class="form-group">
@@ -736,12 +821,12 @@
         <div class="modal-content">
             <div class="modal-body roles-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-                <div class="edit-modal-recruiter">
-                    <span>Edit</span>
+                <form class="edit-modal-recruiter" name="stageEditForm"  ng-submit="stageEditForm.$valid && saveProjectStage()">
+                    <span>Edit Stage</span>
                     <div class="cls"></div>
                     <div class="form-group export">
-                        <select class="form-control select-arrow" ng-model="stage.stage">
-                            <option value="Select Stage">Select Stage</option>
+                        <select class="form-control edit-stage-stage-box" ng-model="selectedStage.stage" required>
+                            <option ng-show="selectedStage.stage == ''" value="Select Stage">Select Stage</option>
                             <option>Contacted</option>
                             <option>Replied</option>
                             <option>Interested</option>
@@ -755,24 +840,34 @@
                         </select>
                     </div>
                     <div class="form-group export">
-                        <select class="form-control select-arrow" ng-model="stage.project" id="projectListD3" ng-options="option.name for option in projectListView" drop-down>
-                        </select>
-                    </div>
-                    <div class="form-group" data-provide="datepicker">
-                        <input type="text" class="form-control select-date" ng-model="stage.date" placeholder="Select Date">
+                        <input class="form-control" ng-model="selectedStage.project" id="" readonly>
+                        </input>
                     </div>
                     <div class="form-group">
-                        <textarea rows="2" class="form-control details" ng-model="stage.detail" placeholder="Enter Details"></textarea>
+                        <input type="date" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="selectedStage.create_date" placeholder="Select Date" required>
                     </div>
                     <div class="form-group">
-                        <textarea rows="2" class="form-control details" ng-model="stage.notes" placeholder="Enter Notes"></textarea>
+                        <textarea rows="2" class="form-control details" ng-model="selectedStage.details" placeholder="Enter Details" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea rows="2" class="form-control details" ng-model="selectedStage.notes" placeholder="Enter Notes" required></textarea>
                     </div>
                     <div class="cls"></div>
-                    <button type="" class="btn update">Update</button>
-                </div>
+                    <button type="submit" class="btn update">Update</button>
+                </form>
                 <div class="cls"></div>
             </div>
         </div>
     </div>
 </div>
 <!-- edit-stage-Modal-ends -->
+
+
+<div class="" ng-class="{'main-success-box': notification.status == 'Success', 'pro-error-box': notification.status != 'Success'}" id="" ng-show="notification.show">
+    <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
+</div>
+
+<!--
+<div class="" ng-class="{'pro-error-box': notification.status != 'Success'}" ng-show="notification.show">
+    <span><strong>Error!</strong> [[notification.message]]</span>
+</div>-->

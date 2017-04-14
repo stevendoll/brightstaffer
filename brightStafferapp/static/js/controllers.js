@@ -336,8 +336,23 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
 
     $rootScope.getCandidateData = function (check) {
         console.log('fetching candidate data');
-        $rootScope.search.searchKeywords = '';
-        $scope.getSearchData(check);
+        if (check == 'sideNav') {
+            $scope.recordCount = 10;
+            $rootScope.candidatePagination = {
+                page: 1
+                , count: parseInt($scope.recordCount)
+            }
+            $rootScope.search.searchKeywords = '';
+            //$rootScope.filterReset();
+            $rootScope.isFilterChecked = false;
+            $('.talent-search-icon').removeClass('active');
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+            $scope.getSearchData();
+        } else {
+            $scope.getSearchData(check);
+        }
     }
 
     $rootScope.$on('fetchCandidateData', $rootScope.getCandidateData);
@@ -1391,7 +1406,7 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 
 }
 
-function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, searchData, $cookieStore, createTalentFormService) {
+function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, searchData, $cookieStore, createTalentFormService, $filter) {
 
     $scope.priceSlider = {
         value: 0
@@ -1517,6 +1532,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , status: ''
         , message: ''
     };
+    $scope.disableUploadBtn = false;
     $scope.todayDate = new Date();
     $scope.imageFileName = '';
     $scope.talentFileobj = {};
@@ -1527,6 +1543,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $timeout(function () {
             $scope.$apply();
         });
+        e.value = "";
     };
 
     $scope.removeFile = function () {
@@ -1534,7 +1551,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.uploadTalentFile = function () {
+        $scope.disableUploadBtn = true;
         createTalentFormService.uploadTalentFile($scope.talentFileobj, function (response) {
+        $(".top-concepts-panel").css('display', 'block');
             if (typeof (response) == "string")
                 response = JSON.parse(response);
             if (response.success) {
@@ -1544,6 +1563,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             } else {
                 $scope.showNotification(false, response.errorstring || 'Error in fetching data from pdf');
                 $window.scrollTo(0, 0);
+                $scope.disableUploadBtn = false;
             }
             console.log(response);
         });
@@ -1585,8 +1605,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }]
             , topConcepts: [{}]
             , careerHistory: {
-                total: '',
-                history: [{}]
+                total: ''
+                , history: [{}]
             }
         };
     }
@@ -1631,6 +1651,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.addLinkedinUrl(param, function (response) {
             console.log(response);
             if (response.success) {
+               // delete response.results.linkedinProfileUrl;
                 for (var key in response.results) {
                     $scope.talentData[key] = response.results[key];
                 }
@@ -1690,26 +1711,32 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.addLinkedUrl = function () {
-            console.log($scope.candidate.id);
-            var url = $scope.candidate.linkedinProfileUrl;
-            if (url) {
-                var requestObject = {
-                    'id': $scope.candidate.id, // password field value
-                    'url': url
-                };
-                /*talentApis.addLinkedinUrl(requestObject, function (response) {
-                    if (response.success) {
-                       $rootScope.getCandidateData();
-                       $scope.showNotification(true, 'Linkedin URL added successfully.');
-                    } else {
-                        console.log('error');
-                         $scope.showNotification(false, response.errorstring);
-                    }
-                });*/
-            }
-
+        console.log($scope.candidate.id);
+        var url = $scope.candidate.linkedinProfileUrl;
+        if (url) {
+            var requestObject = {
+                'id': $scope.candidate.id, // password field value
+                'url': url
+            };
+            talentApis.addLinkedinUrl(requestObject, function (response) {
+                $('#add-url').modal('hide');
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 'fast');
+                if (response.success) {
+                    //$scope.showNotification(true, 'Linkedin URL added successfully.');
+                    $scope.candidate = {};
+                    $rootScope.getCandidateData();
+                } else {
+                    console.log('error');
+                    $scope.showNotification(false, response.errorstring);
+                }
+            });
         }
-        /*end of linkedin url code*/
+
+    }
+
+    /*end of linkedin url code*/
 
     $scope.gotoState = function (state) {
         $scope.initTalenData();
@@ -1717,9 +1744,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $state.go(state);
     }
     $scope.numberonly = function (obj, key) {
-        if (typeof (obj[key]) == "string")
-            obj[key] = obj[key].replace(/\D+/g, '');
-    }
+            if (typeof (obj[key]) == "string")
+                obj[key] = obj[key].replace(/\D+/g, '');
+        }
         /* create talent code ends */
 
     $scope.$watch('priceSlider.value', function (n, o) {
@@ -1742,7 +1769,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) { // table responsiveness initialization after data render
         $(".select-arrow").selectbox();
         $('#export').change(function () {
-            $scope.isFilterChecked = false;
+            $rootScope.isFilterChecked = false;
             var selectedValue = $('#export :selected').text();
             $scope.exportType = selectedValue;
         });
@@ -1821,6 +1848,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             talentApis.updateRatings(requestObject).then(function (response) {
                 if (response.message == "success") {
                     console.log('success');
+
                 } else {
                     console.log('error');
                 }
@@ -1842,7 +1870,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $rootScope.candidatePagination.page = 1;
 
         $scope.choosenCandidates = [];
-        $scope.isFilterChecked = false;
+        $rootScope.isFilterChecked = false;
         $('.talent-search-icon').removeClass('active');
         $('#selectall').prop('checked', false);
         $('#assignToProject').removeClass('add-talent');
@@ -1860,6 +1888,73 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $state.go('talent.talent-search.talent-search-card', '');
         }
     }
+    $scope.stageIdToBeDeleted = null;
+    $scope.setScopeVariable = function (variable, value) {
+        $scope[variable] = value;
+    }
+    $scope.deleteStage = function (id) {
+            if (!id) return;
+            talentApis.delteStage({
+                stage_id: id
+                , talent_id: $scope.talentDetails.id
+            }, function (response) {
+                console.log(response);
+                if (response.success) {
+                    $scope.showNotification(true, 'Stage has been successfully removed');
+
+                    $rootScope.talentAllStages = response.result;
+                    $scope.stage.stagesCard = response.result;
+                    sessionStorage.removeItem('talentAllStages');
+                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+                } else {
+                    $scope.showNotification(false, response.errorstring || 'Some problem occured');
+                }
+                $('#delteStageModal').modal('hide');
+                $window.scroll(0, 0);
+
+            });
+        }
+        /*  edit-stage code start */
+    function convertToIso(date) {
+        var d = date.split('/');
+        d = d[1] + '/' + d[0] + '/' + d[2];
+        d = new Date(d);
+        //d = d.toISOString();
+        return d;
+    }
+    $scope.editStageModal = function (selectedStage) {
+        console.log(selectedStage);
+        $scope.selectedStage = {};
+        $scope.selectedStage.stage = selectedStage.stage;
+        $scope.selectedStage.project = selectedStage.project;
+        $scope.selectedStage.create_date = convertToIso(selectedStage.create_date);
+        $scope.selectedStage.details = selectedStage.details;
+        $scope.selectedStage.notes = selectedStage.notes;
+        $scope.selectedStage.stage_id = selectedStage.id;
+        $('#edit-stage').modal('show');
+    }
+
+    $scope.saveProjectStage = function () {
+            console.log($scope.selectedStage);
+            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
+            var requestObj = $scope.selectedStage;
+            requestObj.talent_id = $rootScope.talentDetails.id;
+            talentApis.editStage(requestObj, function (response) {
+             if(response.message == 'success'){
+                 $rootScope.talentAllStages = response.result;
+                    $scope.stage.stagesCard = response.result;
+                    sessionStorage.removeItem('talentAllStages');
+                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+                    $('#edit-stage').modal('hide');
+                    $scope.showNotification(true, 'Stage has been updated Successfully.');
+                }else if(response.success == false){
+                    $('#edit-stage').modal('hide');
+                  $scope.showNotification(true, 'Stage has been updated Successfully.');
+                }
+                $window.scrollTo(0, 0);
+            });
+        }
+        /* edit-stage code end */
 
     $scope.getTalents = function (recordCount) { // function to fetch top 6 projects
 
@@ -1936,7 +2031,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
 
     $scope.loadProfileData = function (id, talent) {
-        $scope.isFilterChecked = false;
+        $rootScope.isFilterChecked = false;
         if (talent && id) {
             $rootScope.talentDetails = talent;
         }
@@ -2179,7 +2274,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.deleteTalents = function () {
-        $scope.isFilterChecked = false;
+        $rootScope.isFilterChecked = false;
         $('#delete-talent-popup').modal('show');
     }
 
@@ -2205,7 +2300,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 if (response) {
                     $rootScope.search.searchKeywords = '';
                     $('.talent-search-icon').removeClass('active');
-                    $scope.isFilterChecked = false;
+                    $rootScope.isFilterChecked = false;
                     $rootScope.filterReset();
                     $rootScope.getCandidateData();
                     //                    $rootScope.talentList = response;
@@ -2280,6 +2375,23 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         } else if ($scope.isContactAdd) {
             $scope.isContactAdd = false;
         }
+    }
+
+    $scope.talentSorted = {};
+    $scope.setAndGetSortedArr = function (arr, key) {
+        if (key in $scope.talentSorted) {
+            arr = arr.reverse();
+        } else {
+            $scope.talentSorted[key] = true;
+            $scope.sortArr(arr, key);
+        }
+    }
+    $scope.sortArr = function (arr, key) {
+        arr.sort(function (a, b) {
+            if (a[key] < b[key]) return -1;
+            if (a[key] > b[key]) return 1;
+            return 0;
+        });
     }
 
     $scope.reverse = false;
@@ -2537,8 +2649,18 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log($scope.activePageNumber)
     }
 
+    function initDatePicker(id) {
+        $("#" + id).datepicker({
+            dateFormat: 'M d, yy'
+            , changeYear: true
+            , yearRange: '1900:' + new Date().getFullYear()
+            , yearRange: '1900:' + new Date().getFullYear()
+            , maxDate: new Date()
+        });
+    }
 
     $scope.openAddStagePopup = function (id) {
+        $('#addStageDate').val('')
             $scope.stage = {
                 stage: ''
                 , project: ''
@@ -2573,7 +2695,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $scope.stage.stage = selectedValue;
                 // console.log($scope.stage.stage);
             });
-
+            initDatePicker('addStageDate');
             $('#add-stage').modal('show');
         }
         //$scope.stage.stagesArray = [];
@@ -2679,6 +2801,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.isDate = date ? false : true;
     }
     $scope.addProjectCheckValidation = function (stage, removeValidation) {
+            stage.date = stage.date ? stage.date : $('#addStageDate').val();
             if (removeValidation) {
                 $scope.isStage = false;
                 $scope.isProject = false;
@@ -2699,6 +2822,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
          };*/
 
     $scope.addProjectStage = function (stage) {
+        stage.date = stage.date ? stage.date : $('#addStageDate').val();
         var selectedProjectId;
         console.log($scope.stage);
         if (typeof ($scope.stage.project) == 'object' || $scope.stage.project == 'Select Project') {
@@ -2738,7 +2862,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     response = JSON.parse(response);
                     if (response.message == "success") {
                         $('#add-stage').modal('hide');
-
+                        $scope.showNotification(true, 'Stage has been added Successfully.');
                         $scope.stage.stage = '';
 
                         $scope.stage.project = '';
@@ -2748,9 +2872,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         $scope.stage.isStage = false;
 
                         //                            $scope.stage.stagesCard.push(response);
-                        $rootScope.talentDetails = response.talent_updated_data;
-                        sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
-                        $scope.stage.stagesCard.unshift(response);
+                       $rootScope.talentDetails = response.result;
+                       sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
+//                        $scope.stage.stagesCard.unshift(response);
+                        $scope.stage.stagesCard = response.result.talent_stages;
                         $scope.$apply();
                         var sbId = $('#stageSelect').attr('sb');
                         var selectedValue = $('#sbSelector_' + sbId).text('Select Stage');
@@ -2766,6 +2891,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         }).val('');
                         sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                     }
+                     $window.scrollTo(0, 0);
                 }
             }
         }
@@ -2784,8 +2910,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.filterOpen = function () {
-        if (!$scope.isFilterChecked) {
-            $scope.isFilterChecked = true;
+        if (!$rootScope.isFilterChecked) {
+            $rootScope.isFilterChecked = true;
             $('.talent-search-icon').addClass('active');
             $('.selectpicker').selectpicker();
             /*$('#projectSelect').multiselect({
@@ -2799,8 +2925,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $scope.filterValue.stage = selectedValue;
                 // console.log($scope.filterValue.stage);
             });
-        } else if ($scope.isFilterChecked) {
-            $scope.isFilterChecked = false;
+        } else if ($rootScope.isFilterChecked) {
+            $rootScope.isFilterChecked = false;
             $('.talent-search-icon').removeClass('active');
         }
     }
@@ -2973,19 +3099,26 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
-            , city: location[0] || ""
-            , country: location[2] || ""
-            , state: location[1] || ""
-            , designation: talent.designation
-            , industryFocus: talent.industry_focus
-            , firstName: talentName[0]
-            , lastName: talentName[1]
+
+
+
+
+
+
+            
+            , city: location[0] ? location[0].trim() : ""
+            , country: location[2] ? location[2].trim() : ""
+            , state: location[1] ? location[1].trim() : ""
+            , designation: talent.designation ? talent.designation.trim() : ''
+            , industryFocus: talent.industry_focus ? talent.industry_focus.trim() : ''
+            , firstName: talentName[0] ? talentName[0].trim() : ''
+            , lastName: talentName[1] ? talentName[1].trim() : ''
             , id: talent.id
         };
         if (talent.talent_company.length) {
             var organisation = {};
-            organisation.name = talent.talent_company[0].company;
-            organisation.JobTitle = talent.talent_company[0].designation;
+            organisation.name = talent.talent_company[0].company ? talent.talent_company[0].company.trim() : '';
+            organisation.JobTitle = talent.talent_company[0].designation ? talent.talent_company[0].designation.trim() : '';
             var date = new Date(talent.talent_company[0].start_date);
             organisation.from = date.getFullYear().toString();
             var date = new Date(talent.talent_company[0].end_date);
@@ -3004,7 +3137,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if (talent.talent_education.length) {
             for (var i = 0; i < talent.talent_education.length; i++) {
                 var organisation = {};
-                organisation.name = talent.talent_education[i].education;
+                organisation.name = talent.talent_education[i].education ? talent.talent_education[i].education.trim() : '';
                 var date = new Date(talent.talent_education[i].start_date);
                 organisation.from = date.getFullYear().toString();
                 var date = new Date(talent.talent_education[i].end_date);

@@ -34,7 +34,8 @@ import textract
 import datetime
 from datetime import date
 from .tasks import handle_talent_data, extract_text_from_pdf, add
-
+from brightStafferapp.linkedin_scrap import LinkedInParser
+from brightStafferapp.google_custom_search import GoogleCustomSearch
 
 class UserData(View):
     @method_decorator(csrf_exempt)
@@ -181,7 +182,7 @@ class BackButtonInfo(View):
                     param_dict['concept'] = concept_key['concept']
         return util.returnSuccessShorcut(param_dict)
 
-
+#Publish Project API
 class Publish(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -266,6 +267,7 @@ class AlchemyAPI(View):
             return keyword_list
 
 
+#Update Concept Function
 class UpdateConcepts(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -313,6 +315,7 @@ class StandardResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 
+#Generic Project List API
 class ProjectList(generics.ListCreateAPIView):
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
@@ -340,6 +343,7 @@ class ProjectList(generics.ListCreateAPIView):
         return response
 
 
+#Top Project List API
 class TopProjectList(generics.ListCreateAPIView):
     queryset = Projects.objects.all()
     serializer_class = TopProjectSerializer
@@ -365,6 +369,7 @@ class TopProjectList(generics.ListCreateAPIView):
         return response
 
 
+#Project Details API
 class ProjectDelete(generics.ListCreateAPIView):
     queryset = Projects.objects.all()
     serializer_class = ProjectSerializer
@@ -388,6 +393,8 @@ class ProjectDelete(generics.ListCreateAPIView):
         return util.returnSuccessShorcut(param_dict)
 
 
+
+#Update Recruiter API
 class UpdateRecruiter(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -405,6 +412,7 @@ class UpdateRecruiter(View):
         return util.returnSuccessShorcut(param_dict)
 
 
+# TO upload Bulk upload Talent's Data
 class FileUploadView(View):
     """
     Handles file uploading by drag and drop feature for add talent functionality.
@@ -517,6 +525,7 @@ class FileUploadView(View):
                 img_obj.save()
 
 
+# TO upload Talent's Profile
 class UploadTalent(View):
 
     @method_decorator(csrf_exempt)
@@ -583,6 +592,8 @@ class UploadTalent(View):
         return content
 
 
+
+#To fetch Linkedin Public Profile Data
 class LinkedinDataView(View):
 
     @method_decorator(csrf_exempt)
@@ -590,42 +601,14 @@ class LinkedinDataView(View):
         return super(LinkedinDataView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        content = {
-            "currentOrganization": [
-                {
-                    "name": "kiwi",
-                    "from": "2015",
-                    "to": "Present",
-                    "JobTitle": "SD"
-                }
-            ],
-            "pastOrganization": [
-                {"name": "Kiwi1",
-                 "from": "2016",
-                 "to": "2015",
-                 "JobTitle": "SD"
-                 }
-            ],
-            "education": [
-                {
-                    "name": "asdasda",
-                    "from": "2014",
-                    "to": "2016"
-                },
-                {
-                    "name": "qqqq",
-                    "from": "2013",
-                    "to": "2014"
-                }
-            ],
-            "linkedinProfileUrl": "http://localhost.com",
-            "firstName": "Raj",
-            "lastName": "raj",
-            "city": "ND",
-            "state": "UP",
-            "country": "India",
-            "industryFocus": "SSSSS"
-        }
+        url=request.GET['url']
+        linkedin=LinkedInParser()
+        content=linkedin.linkedin_data(url)
+        if content is None:
+            googleCSE = GoogleCustomSearch()
+            content = googleCSE.google_custom()
+            print(content)
+                #request.get("https: // www.googleapis.com / customsearch / v1?q ="+ url+" & cx = 002086705837668586439:l1o6lrd_few & num = 1 & key = AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU")
         context = dict()
         context['results'] = content
         context['success'] = True

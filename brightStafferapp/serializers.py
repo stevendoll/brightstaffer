@@ -112,10 +112,11 @@ class TalentContactEmailSerializer(serializers.ModelSerializer):
 class TalentProjectStageSerializer(serializers.ModelSerializer):
     talent = serializers.CharField()
     project = serializers.CharField()
+    create_date=serializers.CharField(source='get_date_created')
 
     class Meta:
         model = TalentStage
-        fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'date_created', 'date_updated')
+        fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'create_date', 'date_updated')
 
 
 class TalentCompanySerializer(serializers.ModelSerializer):
@@ -128,11 +129,12 @@ class TalentCompanySerializer(serializers.ModelSerializer):
 
     def get_career_gap(self, obj):
         check_date = obj.start_date
-        previous_company = obj.talent.talent_company.filter(end_date__lt=check_date).order_by('start_date').last()
-        if not previous_company:
-            return 0
-        date_diff = (obj.start_date - previous_company.end_date).days/365
-        return date_diff
+        if check_date:
+            previous_company = obj.talent.talent_company.filter(end_date__lt=check_date).order_by('start_date').last()
+            if not previous_company:
+                return 0
+            date_diff = (obj.start_date - previous_company.end_date).days/365
+            return date_diff
 
     class Meta:
         model = TalentCompany
@@ -142,12 +144,12 @@ class TalentCompanySerializer(serializers.ModelSerializer):
 
 class TalentStageSerializer(serializers.ModelSerializer):
     talent = serializers.CharField()
-    date_created = serializers.CharField(source='get_date_created')
+    create_date = serializers.CharField(source='get_date_created')
     date_updated = serializers.CharField(source='get_date_updated')
     project = serializers.CharField()
     class Meta:
         model = TalentStage
-        fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'date_created', 'date_updated')
+        fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'create_date', 'date_updated')
 
 
 class TalentSerializer(serializers.ModelSerializer):
