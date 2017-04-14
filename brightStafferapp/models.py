@@ -263,14 +263,14 @@ class TalentCompany(models.Model):
         if self.start_date:
             return self.start_date.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return ""
 
     @property
     def get_end_date(self):
         if self.end_date:
             return self.end_date.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return ""
 
     def __str__(self):
         return str(self.talent.talent_name + " works at " + self.company.company_name)
