@@ -473,18 +473,18 @@ class TalentAdd(generics.ListCreateAPIView):
             phone = profile_data.get('phone', '')
             email = profile_data.get('email', '')
             linkedin_url = profile_data.get('linkedinProfileUrl', '')
-            talent_linkedin = Talent.objects.filter(linkedin_url=linkedin_url)
-            if talent_linkedin != '':
-                if talent_linkedin:
-                    return util.returnErrorShorcut(400, 'Talent with this linkedin url already exists in the system')
+            # talent_linkedin = Talent.objects.filter(linkedin_url=linkedin_url)
+            # if talent_linkedin != '':
+            #     if talent_linkedin:
+            #         return util.returnErrorShorcut(400, 'Talent with this linkedin url already exists in the system')
             if email != '':
                 email_talent = TalentEmail.objects.filter(email=email)
                 if email_talent:
                     return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
-            if phone != '':
-                phone_client = TalentContact.objects.filter(contact=phone)
-                if phone_client:
-                    return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
+            # if phone != '':
+            #     phone_client = TalentContact.objects.filter(contact=phone)
+            #     if phone_client:
+            #         return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
             profile_data["currentOrganization"].extend(profile_data["pastOrganization"])
             del profile_data["pastOrganization"]
             add_edit_talent(profile_data, user)
