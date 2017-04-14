@@ -1896,12 +1896,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if (!id) return;
             talentApis.delteStage({
                 stage_id: id
-                , talent_id: $scope.talentDetails.id
+                , talent_id: $rootScope.talentDetails.id
             }, function (response) {
                 console.log(response);
                 if (response.success) {
-                    $scope.showNotification(true, 'Stage has been successfully removed');
-
+                    //$scope.showNotification(true, 'Stage has been successfully removed');
+                    $scope.loadProfileData($rootScope.talentDetails.id, $rootScope.talentDetails, 'deleteStage');
                     $rootScope.talentAllStages = response.result;
                     $scope.stage.stagesCard = response.result;
                     sessionStorage.removeItem('talentAllStages');
@@ -2030,7 +2030,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         return sum;
     };
 
-    $scope.loadProfileData = function (id, talent) {
+    $scope.loadProfileData = function (id, talent, callFrom) {
         $rootScope.isFilterChecked = false;
         if (talent && id) {
             $rootScope.talentDetails = talent;
@@ -2043,7 +2043,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.getCandidateProfile(requestObject).then(function (response) {
             //$state.go('talent.talent-profile','');
             //$('html, body').animate({ scrollTop: 0 }, 'fast');
-
+            if(callFrom == 'deleteStage'){
+                $window.scroll(0, 0);
+                $scope.showNotification(true, 'Stage has been successfully removed');
+                }
             var a = [response];
             $rootScope.createCareerHistoryData(a);
 
@@ -2875,6 +2878,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                        $rootScope.talentDetails = response.result;
                        sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
 //                        $scope.stage.stagesCard.unshift(response);
+
                         $scope.stage.stagesCard = response.result.talent_stages;
                         $scope.$apply();
                         var sbId = $('#stageSelect').attr('sb');
