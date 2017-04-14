@@ -126,6 +126,7 @@ class Talent(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     talent_name = models.CharField(max_length=100, verbose_name='Talent Name', null=False, blank=False,
                                    default='')
+    image = models.URLField(null=True, blank=True)
     designation = models.CharField(max_length=100, default='', null=True, blank=True)
     industry_focus = models.CharField(max_length=100, default='', null=True, blank=True)
     industry_focus_percentage = models.CharField(max_length=30, default='', null=True, blank=True)
