@@ -606,9 +606,7 @@ class LinkedinDataView(View):
         content=linkedin.linkedin_data(url)
         if content is None:
             googleCSE = GoogleCustomSearch()
-            content = googleCSE.google_custom()
-            print(content)
-                #request.get("https: // www.googleapis.com / customsearch / v1?q ="+ url+" & cx = 002086705837668586439:l1o6lrd_few & num = 1 & key = AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU")
+            content = googleCSE.google_custom(url)
         context = dict()
         context['results'] = content
         context['success'] = True
