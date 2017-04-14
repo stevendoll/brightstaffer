@@ -1841,7 +1841,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log(rating);
         // console.log($rootScope.talentDetails.id);
         console.log(rating);
-       /* if(rating == 1){
+ /*       if(rating >=1){
+            $scope.stars = [];
             $scope.stars.push({
                         filled: true
                     });
@@ -1854,7 +1855,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             talentApis.updateRatings(requestObject).then(function (response) {
                 if (response.message == "success") {
                     console.log('success');
-
+                    $rootScope.talentDetails.rating = rating;
+                    sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                 } else {
                     console.log('error');
                 }
