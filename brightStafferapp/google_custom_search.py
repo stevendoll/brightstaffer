@@ -21,7 +21,7 @@ class GoogleCustomSearch(object):
                                 result['talent_designation']=j['role']
                                 current['name'] = j['org']
                                 current['from'] = ''
-                                current['to'] = ''
+                                current['to'] = 'Present'
                                 result['currentOrganization']= currentOrganization
                                 currentOrganization.append(current)
                         else:
