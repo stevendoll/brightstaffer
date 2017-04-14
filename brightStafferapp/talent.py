@@ -27,6 +27,7 @@ from fuzzywuzzy import process
 import math
 import datetime
 from datetime import date
+from brightStafferapp.google_custom_search import GoogleCustomSearch
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -555,9 +556,9 @@ def add_edit_talent(profile_data, user):
         for education in profile_data.get('education', ''):
             # save user education information
             if bool(education):
-                education = education.get('name', '')
-                if education != "":
-                    org, created = Education.objects.get_or_create(name=education.get('name', ''))
+                talent_education = education.get('name', '')
+                if talent_education != "":
+                    org, created = Education.objects.get_or_create(name=talent_education)
                     start_date, end_date = education_convert_to_start_end(education)
                     if "id" in education:
                         # update information, check if id is valid or not
@@ -614,13 +615,13 @@ def convert_to_start_end(organization):
     month = 1
     start_year = organization.get('from')
     end_year = organization.get('to')
-    if start_year != "" and end_year != "":
+    if start_year != "":
         start_date = date(int(start_year), month, day)
-
-        if end_year.strip(" ") == "Present":
-            return start_date, end_date
-        else:
-            end_date = date(int(end_year), month, day)
+        if end_year != "":
+            if end_year.strip(" ") == "Present":
+                return start_date, end_date
+            else:
+                end_date = date(int(end_year), month, day)
         return start_date, end_date
     return start_date, end_date
 
@@ -671,6 +672,25 @@ def talent_validation(user_data):
         return False
     else:
         return True
+
+
+class LinkedinAddUrl(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LinkedinAddUrl, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        linkedin_url = request.POST.get('linkedin_url', '')
+        talent_id = request.POST.get('talent_id', '')
+        talent = Talent.objects.filter(id=talent_id)
+        if not talent:
+            return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
+        talent = talent[0]
+        talent.linkedin_url = linkedin_url
+        talent.save()
+        googleCSE = GoogleCustomSearch()
+        content = googleCSE.google_custom(linkedin_url)
 
 
 class TalentSearch(generics.ListCreateAPIView):

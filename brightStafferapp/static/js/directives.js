@@ -420,18 +420,20 @@ function starRating2() {
             };
 
             scope.toggle = function (index) {
-              /* if(scope.ratingValue == 1 && index == 0){
+               if(scope.ratingValue == 1 && index == 0){
                     scope.ratingValue = index;
+                    $(".rating li.filled").removeClass('filled');
                 }else{
                     scope.ratingValue = index + 1;
+                    updateStars();
                   }
                 scope.onRatingSelected({
                     rating: scope.ratingValue
-                });*/
-             scope.ratingValue = index + 1;
+                });
+            /* scope.ratingValue = index + 1;
                 scope.onRatingSelected({
                     rating: index + 1
-                });
+                });*/
             };
             updateStars();
             scope.$watch('ratingValue', function (oldVal, newVal) {
