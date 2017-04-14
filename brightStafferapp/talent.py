@@ -517,7 +517,6 @@ def add_edit_talent(profile_data, user):
                                                                             )
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
-                              linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               industry_focus=profile_data.get('industryFocus', ''))
             talent_obj = talent_obj[0]
     else:
@@ -599,6 +598,7 @@ def add_edit_talent(profile_data, user):
                             if end_date:
                                 talent_company.end_date = end_date
                                 talent_company.is_current = False
+                                talent_company.save()
                         else:
                             talent_company, created = TalentCompany.objects.get_or_create(
                                 talent=talent_obj, company=company, designation=organization.get('JobTitle', ''))
@@ -674,7 +674,7 @@ def talent_validation(user_data):
         return True
 
 
-class LinkedinAddUrl(View):
+class LinkedinAddUrl(generics.ListCreateAPIView):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -689,8 +689,16 @@ class LinkedinAddUrl(View):
         talent = talent[0]
         talent.linkedin_url = linkedin_url
         talent.save()
+        # {'lastName': 'Lyden', 'currentOrganization': [{'name': 'BrightStaffer', 'to': 'Present', 'from': ''}],
+        #  'city': 'Washington D.C. Metro Area', 'profile_image': 'https://me',
+        # 'firstName': 'Matt', 'talent_designation': 'Co-founder, CEO at BrightStaffer'}
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(linkedin_url)
+        talent.talent_name = content['firstName'] + content['lastName']
+        talent.designation = content['talent_designation']
+        talent.image = content['profile_image']
+        talent.save()
+
 
 
 class TalentSearch(generics.ListCreateAPIView):
