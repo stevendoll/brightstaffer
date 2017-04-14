@@ -7,6 +7,9 @@ from bs4 import BeautifulSoup
 from lxml import html
 import csv, os, json
 import requests
+import random
+from random import shuffle
+from collections import OrderedDict
 # from exceptions import ValueError
 from time import sleep
 
@@ -18,39 +21,36 @@ from time import sleep
 
 class LinkedInParser(object):
 
-    def linkedin_data(self, login, password,url):
+    def linkedin_data(self,url):
 
-        #cookie_filename = "parser.cookies.txt"
-        dir_path = os.path.dirname(os.path.abspath(__file__))
-        # previous_path = os.path.split(dir_path)[0]
-
-        # basepath = os.path.basename()
-        # Keras training parameters
-        cookies_file = 'parser.cookies.txt'
-        cookies_file_model_file = os.path.join(dir_path, cookies_file)
-        if os.path.exists(cookies_file_model_file):
-            os.remove(cookies_file_model_file)
-        self.login = login
-        self.password = password
-        # Simulate browser with cookies enabled
-        self.cj = cookielib.MozillaCookieJar(cookies_file_model_file)
-        if os.access(cookies_file_model_file, os.F_OK):
-            self.cj.load()
-        self.opener = urllib.request.build_opener(
-            urllib.request.HTTPRedirectHandler(),
-            urllib.request.HTTPHandler(debuglevel=0),
-            urllib.request.HTTPSHandler(debuglevel=0),
-            urllib.request.HTTPCookieProcessor(self.cj)
-        )
-        self.opener.addheaders = [
-            ('User-agent', ("Chrome/57.0.2987.133 (Macintosh; Intel Mac OS X 10_12_0)"))
-        ]
-
-        # Login
-        #self.loginPage()
+        # #cookie_filename = "parser.cookies.txt"
+        # dir_path = os.path.dirname(os.path.abspath(__file__))
+        # # previous_path = os.path.split(dir_path)[0]
+        #
+        # # basepath = os.path.basename()
+        # # Keras training parameters
+        # cookies_file = 'parser.cookies.txt'
+        # cookies_file_model_file = os.path.join(dir_path, cookies_file)
+        # if os.path.exists(cookies_file_model_file):
+        #     os.remove(cookies_file_model_file)
+        # self.cj = cookielib.MozillaCookieJar(cookies_file_model_file)
+        # if os.access(cookies_file_model_file, os.F_OK):
+        #     self.cj.load()
+        # self.opener = urllib.request.build_opener(
+        #     urllib.request.HTTPRedirectHandler(),
+        #     urllib.request.HTTPHandler(debuglevel=0),
+        #     urllib.request.HTTPSHandler(debuglevel=0),
+        #     urllib.request.HTTPCookieProcessor(self.cj)
+        # )
+        # self.opener.addheaders = [
+        #     ('User-agent', ("Chrome/57.0.2987.133 (Macintosh; Intel Mac OS X 10_12_0)"))
+        # ]
+        #
+        # # Login
+        # #self.loginPage()
 
         title = self.loadTitle(url)
-        self.cj.save()
+        #self.cj.save()
         return title
 
     def loadPage(self, url, data=None):
@@ -96,10 +96,22 @@ class LinkedInParser(object):
 
     def loadTitle(self,url):
         #url='https://www.linkedin.com/in/chandan-varma-89203b54/'
+        user_agent={1:"Chrome/57.0.2987.133 (Macintosh; Intel Mac OS X 10_12_0)",
+                    2:"Mozilla/5.0 (X11; Linux x86_32) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36",
+                    3:"Mozilla/5.0 (X11; Window x86_32) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36",
+                    4:'b',
+                    5:'c',
+                    6:'d',
+                    7:'e',
+                    8:'f',
+                    9:'g',
+                    10:'h'}
+        agent=random.choice(list(user_agent))
+        print (agent)
         try:
             headers = {
-                'User-Agent': "Chrome/57.0.2987.133 (Macintosh; Intel Mac OS X 10_12_0)"}
-            response = requests.get(url, headers=headers)
+                'User-Agent': user_agent[agent]}
+            response = requests.get(url)
             #page = self.loadSoup(url)
             formatted_response = str(response.content).replace('<!--', '').replace('-->', '')
             doc = html.fromstring(formatted_response)

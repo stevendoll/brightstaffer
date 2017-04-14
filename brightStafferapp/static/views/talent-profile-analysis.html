@@ -427,7 +427,7 @@
                             <em></em>
                             <h1>[[st.stage]]</h1>
                             <div class="info-box-panels">Date: <span>[[st.create_date | dateFormat]]</span></div>
-                            <div class="info-box-panels">Project: <span>#[[st.project]]</span></div>
+                            <div class="info-box-panels" tooltip="[[st.project]]">Project: <span>#[[st.project]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.details]]">Details: <span>[[st.details]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.notes]]">Notes: <span>[[st.notes]]</span></div>
                             <div class="info-box-bottom-links" style="cursor:default;">
@@ -485,9 +485,7 @@
     </div>
 </div>
 </div>
-<div class="" ng-class="{'pro-error-box': notification.status != 'Success'}" ng-show="notification.show">
-    <span><strong>Error!</strong> [[notification.message]]</span>
-</div>
+
 <!-- tabs-panel-ends -->
 
 <!-- contact-info-Modal-starts -->
@@ -823,7 +821,7 @@
         <div class="modal-content">
             <div class="modal-body roles-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-                <form class="edit-modal-recruiter" name="stageEditForm" onkeypress="return event.keyCode != 13;" ng-submit="stageEditForm.$valid && saveProjectStage()" novalidate>
+                <form class="edit-modal-recruiter" name="stageEditForm"  ng-submit="stageEditForm.$valid && saveProjectStage()">
                     <span>Edit</span>
                     <div class="cls"></div>
                     <div class="form-group export">
@@ -849,10 +847,10 @@
                         <input type="date" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="selectedStage.create_date" placeholder="Select Date" required>
                     </div>
                     <div class="form-group">
-                        <textarea rows="2" class="form-control details" ng-model="selectedStage.details" placeholder="Enter Details" required></textarea>
+                        <textarea rows="2" class="form-control details" ng-model="selectedStage.details" placeholder="Enter Details"></textarea>
                     </div>
                     <div class="form-group">
-                        <textarea rows="2" class="form-control details" ng-model="selectedStage.notes" placeholder="Enter Notes" required></textarea>
+                        <textarea rows="2" class="form-control details" ng-model="selectedStage.notes" placeholder="Enter Notes"></textarea>
                     </div>
                     <div class="cls"></div>
                     <button type="submit" class="btn update">Update</button>
@@ -868,3 +866,8 @@
 <div class="" ng-class="{'main-success-box': notification.status == 'Success', 'pro-error-box': notification.status != 'Success'}" id="" ng-show="notification.show">
     <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
 </div>
+
+<!--
+<div class="" ng-class="{'pro-error-box': notification.status != 'Success'}" ng-show="notification.show">
+    <span><strong>Error!</strong> [[notification.message]]</span>
+</div>-->
