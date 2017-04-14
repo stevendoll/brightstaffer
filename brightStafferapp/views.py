@@ -35,7 +35,7 @@ import datetime
 from datetime import date
 from .tasks import handle_talent_data, extract_text_from_pdf, add
 from brightStafferapp.linkedin_scrap import LinkedInParser
-
+from brightStafferapp.google_custom_search import GoogleCustomSearch
 
 class UserData(View):
     @method_decorator(csrf_exempt)
@@ -604,9 +604,11 @@ class LinkedinDataView(View):
         url=request.GET['url']
         linkedin=LinkedInParser()
         content=linkedin.linkedin_data(url)
-        #if content==None:
-        #    response=request.get("https: // www.googleapis.com / customsearch / v1?q ="+ url+" & cx = 002086705837668586439:l1o6lrd_few & num = 1 & key = AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU")
-        #    print (response.text())
+        if content is None:
+            googleCSE = GoogleCustomSearch()
+            content = googleCSE.google_custom()
+            print(content)
+                #request.get("https: // www.googleapis.com / customsearch / v1?q ="+ url+" & cx = 002086705837668586439:l1o6lrd_few & num = 1 & key = AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU")
         context = dict()
         context['results'] = content
         context['success'] = True
