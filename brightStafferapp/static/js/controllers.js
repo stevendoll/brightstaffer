@@ -2186,9 +2186,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         scrollTop: 0
                     }, 'fast');
                     $('#projectSuccess').css('display', 'block');
-                    setTimeout(function () {
+                    /*setTimeout(function () {
                         $('#projectSuccess').css('display', 'none');
-                    }, 2000);
+                    }, 2000);*/
                 } else if (callFrom == 'profile') {
                     $('#add-project').modal('hide');
                     $('html, body').animate({
