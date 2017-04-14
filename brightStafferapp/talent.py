@@ -682,7 +682,7 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         linkedin_url = request.POST.get('linkedin_url', '')
-        talent_id = request.POST.get('talent_id', '')
+        talent_id = str(request.POST.get('talent_id', ''))
         talent = Talent.objects.filter(id=talent_id)
         if not talent:
             return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
