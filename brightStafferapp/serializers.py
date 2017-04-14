@@ -129,11 +129,12 @@ class TalentCompanySerializer(serializers.ModelSerializer):
 
     def get_career_gap(self, obj):
         check_date = obj.start_date
-        previous_company = obj.talent.talent_company.filter(end_date__lt=check_date).order_by('start_date').last()
-        if not previous_company:
-            return 0
-        date_diff = (obj.start_date - previous_company.end_date).days/365
-        return date_diff
+        if check_date:
+            previous_company = obj.talent.talent_company.filter(end_date__lt=check_date).order_by('start_date').last()
+            if not previous_company:
+                return 0
+            date_diff = (obj.start_date - previous_company.end_date).days/365
+            return date_diff
 
     class Meta:
         model = TalentCompany

@@ -19,7 +19,7 @@
                     <div class="talent-activity-panel">
                         <div class="left-div">Last Activity</div>
                         <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].create_date | dateFormat]]</div>
-                        <div class="right-div" ng-show="!stage.stagesCard.length"> - </div>
+                        <div class="right-div text-center" ng-show="!stage.stagesCard.length"> - </div>
                     </div>
                     <div class="talent-rec-panel">
                         <div class="left-div">Recruiter</div>
@@ -198,7 +198,7 @@
                                                                     <div class="table-date-div">[[proj.date_added | dateFormat]]</div>
                                                                 </td>
                                                                 <td class="interviewing-text"><span ng-show="proj.project_stage">[[proj.project_stage ]]</span>
-                                                                    <span ng-show="!proj.project_stage"> - </span>
+                                                                    <span ng-show="!proj.project_stage text-center"> - </span>
                                                                 </td>
                                                             </tr>
                                                             <!--<tr>
@@ -822,7 +822,7 @@
             <div class="modal-body roles-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
                 <form class="edit-modal-recruiter" name="stageEditForm"  ng-submit="stageEditForm.$valid && saveProjectStage()">
-                    <span>Edit</span>
+                    <span>Edit Stage</span>
                     <div class="cls"></div>
                     <div class="form-group export">
                         <select class="form-control edit-stage-stage-box" ng-model="selectedStage.stage" required>
@@ -847,10 +847,10 @@
                         <input type="date" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="selectedStage.create_date" placeholder="Select Date" required>
                     </div>
                     <div class="form-group">
-                        <textarea rows="2" class="form-control details" ng-model="selectedStage.details" placeholder="Enter Details"></textarea>
+                        <textarea rows="2" class="form-control details" ng-model="selectedStage.details" placeholder="Enter Details" required></textarea>
                     </div>
                     <div class="form-group">
-                        <textarea rows="2" class="form-control details" ng-model="selectedStage.notes" placeholder="Enter Notes"></textarea>
+                        <textarea rows="2" class="form-control details" ng-model="selectedStage.notes" placeholder="Enter Notes" required></textarea>
                     </div>
                     <div class="cls"></div>
                     <button type="submit" class="btn update">Update</button>
