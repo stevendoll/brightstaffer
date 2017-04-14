@@ -473,18 +473,18 @@ class TalentAdd(generics.ListCreateAPIView):
             phone = profile_data.get('phone', '')
             email = profile_data.get('email', '')
             linkedin_url = profile_data.get('linkedinProfileUrl', '')
-            talent_linkedin = Talent.objects.filter(linkedin_url=linkedin_url)
-            if talent_linkedin != '':
-                if talent_linkedin:
-                    return util.returnErrorShorcut(400, 'Talent with this linkedin url already exists in the system')
+            # talent_linkedin = Talent.objects.filter(linkedin_url=linkedin_url)
+            # if talent_linkedin != '':
+            #     if talent_linkedin:
+            #         return util.returnErrorShorcut(400, 'Talent with this linkedin url already exists in the system')
             if email != '':
                 email_talent = TalentEmail.objects.filter(email=email)
                 if email_talent:
                     return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
-            if phone != '':
-                phone_client = TalentContact.objects.filter(contact=phone)
-                if phone_client:
-                    return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
+            # if phone != '':
+            #     phone_client = TalentContact.objects.filter(contact=phone)
+            #     if phone_client:
+            #         return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
             profile_data["currentOrganization"].extend(profile_data["pastOrganization"])
             del profile_data["pastOrganization"]
             add_edit_talent(profile_data, user)
@@ -517,7 +517,6 @@ def add_edit_talent(profile_data, user):
                                                                             )
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
-                              linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               industry_focus=profile_data.get('industryFocus', ''))
             talent_obj = talent_obj[0]
     else:
@@ -599,6 +598,7 @@ def add_edit_talent(profile_data, user):
                             if end_date:
                                 talent_company.end_date = end_date
                                 talent_company.is_current = False
+                                talent_company.save()
                         else:
                             talent_company, created = TalentCompany.objects.get_or_create(
                                 talent=talent_obj, company=company, designation=organization.get('JobTitle', ''))
@@ -674,7 +674,7 @@ def talent_validation(user_data):
         return True
 
 
-class LinkedinAddUrl(View):
+class LinkedinAddUrl(generics.ListCreateAPIView):
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -682,15 +682,23 @@ class LinkedinAddUrl(View):
 
     def post(self, request, *args, **kwargs):
         linkedin_url = request.POST.get('linkedin_url', '')
-        talent_id = request.POST.get('talent_id', '')
+        talent_id = str(request.POST.get('talent_id', ''))
         talent = Talent.objects.filter(id=talent_id)
         if not talent:
             return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
         talent = talent[0]
         talent.linkedin_url = linkedin_url
         talent.save()
+        # {'lastName': 'Lyden', 'currentOrganization': [{'name': 'BrightStaffer', 'to': 'Present', 'from': ''}],
+        #  'city': 'Washington D.C. Metro Area', 'profile_image': 'https://me',
+        # 'firstName': 'Matt', 'talent_designation': 'Co-founder, CEO at BrightStaffer'}
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(linkedin_url)
+        talent.talent_name = content['firstName'] + content['lastName']
+        talent.designation = content['talent_designation']
+        talent.image = content['profile_image']
+        talent.save()
+
 
 
 class TalentSearch(generics.ListCreateAPIView):

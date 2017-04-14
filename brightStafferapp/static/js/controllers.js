@@ -1719,7 +1719,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 'id': $scope.candidate.id, // password field value
                 'url': url
             };
-            talentApis.addLinkedinUrl(requestObject, function (response) {
+            talentApis.addLinkedinUrlCard(requestObject, function (response) {
                 $('#add-url').modal('hide');
                 $('html, body').animate({
                     scrollTop: 0

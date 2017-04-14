@@ -103,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-                  <div class="top-concept-panel" ng-show="talent.talent_company.length || talent.talent_company[0].years_of_experience">
+                  <div class="top-concept-panel" ng-show="talent.talent_company.length && talent.talent_company[0].start_date != ''">
                     <div class="top-concept-text">Career History<span ng-click="allMetrics(talent.talent_company)" ng-show="talent.talent_company.length > 3">More</span></div>
                     <div class="talent-progress">
                         <div class="progress">

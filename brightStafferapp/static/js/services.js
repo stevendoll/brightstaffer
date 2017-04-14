@@ -525,6 +525,20 @@ function talentApis($rootScope, $http, REQUEST_URL, appService) {
                 , dataType: 'json'
             }
             appService.httpRequest(param, callback);
+        },
+        addLinkedinUrlCard: function (data, callback) {
+           var param = {
+                url: REQUEST_URL + 'add_linkedin_url/'
+                , method: "POST"
+                , headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                    , 'token': $rootScope.globals.currentUser.token
+                    , 'recruiter': $rootScope.globals.currentUser.user_email
+                }
+                , data: data
+                , dataType: 'json'
+            }
+            appService.httpRequest(param, callback);
         }
 
     }
