@@ -98,14 +98,7 @@ class LinkedInParser(object):
         #url='https://www.linkedin.com/in/chandan-varma-89203b54/'
         user_agent={1:"Chrome/57.0.2987.133 (Macintosh; Intel Mac OS X 10_12_0)",
                     2:"Mozilla/5.0 (X11; Linux x86_32) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36",
-                    3:"Mozilla/5.0 (X11; Window x86_32) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36",
-                    4:'b',
-                    5:'c',
-                    6:'d',
-                    7:'e',
-                    8:'f',
-                    9:'g',
-                    10:'h'}
+                    3:"Mozilla/5.0 (X11; Window x86_32) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36"}
         agent=random.choice(list(user_agent))
         print (agent)
         try:
