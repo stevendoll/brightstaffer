@@ -1657,6 +1657,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                // delete response.results.linkedinProfileUrl;
                 for (var key in response.results) {
                     $scope.talentData[key] = response.results[key];
+                    $('#linkedinUrl').blur();
                 }
             } else {
 
@@ -2555,19 +2556,30 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
             function requestCallback(response) {
                 response = JSON.parse(response);
-                if (!$rootScope.talentDetails.talent_email || !$rootScope.talentDetails.talent_email.length) {
-                    $rootScope.talentDetails.talent_email = [{}];
-                }
-                $rootScope.talentDetails.talent_email[0].email = candidateEmailAdd;
-                sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
-                // console.log(response);
-                $scope.candidateEmailAdd = '';
-                $scope.closeCandidateInfo();
-                //candidateEmailAdd ='';
-                $('#emailSuccess').css('display', 'block');
-                setTimeout(function () {
-                    $('#emailSuccess').css('display', 'none');
-                }, 2000);
+                if(response.message == "success"){
+                    if (!$rootScope.talentDetails.talent_email || !$rootScope.talentDetails.talent_email.length) {
+                        $rootScope.talentDetails.talent_email = [{}];
+                    }
+                    $rootScope.talentDetails.talent_email[0].email = candidateEmailAdd;
+                    sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
+                    // console.log(response);
+                    $scope.candidateEmailAdd = '';
+                    $scope.closeCandidateInfo();
+                    //candidateEmailAdd ='';
+
+                    $('#emailSuccess').css('display', 'block');
+                    setTimeout(function () {
+                        $('#emailSuccess').css('display', 'none');
+                    }, 3000);
+                 }else if(response.success == false){
+                        $scope.candidateEmailAdd = '';
+                        $scope.closeCandidateInfo();
+                         $('#emailError').css('display', 'block');
+                        setTimeout(function () {
+                            $('#emailError').css('display', 'none');
+                        }, 2000);
+                       // $scope.showNotification(false, response.errorstring.error);
+                 }
             }
         } else {
             $scope.isEmail = true;
