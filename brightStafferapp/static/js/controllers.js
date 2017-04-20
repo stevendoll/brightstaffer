@@ -2527,16 +2527,24 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
             function requestCallback(response) {
                 response = JSON.parse(response);
+              if(response.message == "success"){
                 //console.log(response);
 
                 $scope.closeCandidateInfo();
                 //candidateEmail ='';
                 $rootScope.talentDetails.talent_email[0].email = candidateEmail;
                 sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
-                $('#emailUpdated').css('display', 'block');
-                setTimeout(function () {
-                    $('#emailUpdated').css('display', 'none');
-                }, 5000);
+                    $('#emailUpdated').css('display', 'block');
+                    setTimeout(function () {
+                        $('#emailUpdated').css('display', 'none');
+                    }, 3000);
+                }
+                else if(response.success == false){
+                        $scope.candidateEmail = '';
+                        $scope.closeCandidateInfo();
+                       $scope.showNotification(false, response.errorstring.error);
+                       $scope.$apply();
+                 }
             }
         } else {
             $scope.isEmail = true;
