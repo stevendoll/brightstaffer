@@ -2642,6 +2642,24 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     text-align: center;
 }
 
+.pro-error-box-email {
+    height: 50px;
+    border-radius: 2px;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    margin: 0 auto;
+    padding: 13px 30px;
+    width: auto;
+    float: left;
+    position: absolute;
+    top: 43px;
+   /* left: 0;*/
+    z-index: 9999;
+    right: 34%;
+    text-align: center;
+}
+
 .pro-error-box span {
     font-family: 'open_sansregular';
     font-size: 14px;
