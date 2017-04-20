@@ -776,6 +776,52 @@ function fileDropzone() {
     };
 }
 
+function phoneMask($timeout) {
+
+    function makePhoneNo (value) {
+     var result = value;
+
+      var ssn = value ? value.toString() : '';
+      if (ssn.length > 3) {
+        result = ssn.substr(0, 3) + '-';
+        if (ssn.length > 6) {
+          result += ssn.substr(3, 3) + '-';
+          result += ssn.substr(6, 4);
+        }
+        else {
+          result += ssn.substr(3);
+        }
+      }
+
+      return result;
+    }
+
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function (scope, element, attrs, ngModel) {
+        ngModel.$formatters.push(function (value) {
+          return makePhoneNo(value);
+        });
+
+        // clean output as digits
+        ngModel.$parsers.push(function (value) {
+          var cursorPosition = element[0].selectionStart;
+          var oldLength = value.toString().length;
+          var nonDigits = /(^0$)|[^0-9]/g;
+          var intValue = value.replace(nonDigits, '');
+          if (intValue.length > 10) {
+            intValue = intValue.substr(0, 10);
+          }
+          var newValue = makePhoneNo(intValue);
+          ngModel.$setViewValue(newValue);
+          ngModel.$render();
+          $timeout (function(){element[0].setSelectionRange(cursorPosition + newValue.length - oldLength, cursorPosition + newValue.length - oldLength)},100);
+          return intValue;
+        });
+      }
+    };
+  }
 /**
  *
  * Pass all functions into module
@@ -808,4 +854,5 @@ angular
     .directive('datePicker2', datePicker2)
     .directive('datePickerStage', datePickerStage)
     .directive('fileDropzone', fileDropzone)
-    .directive('viewAllScroll', viewAllScroll);
+    .directive('viewAllScroll', viewAllScroll)
+    .directive('phoneMask', phoneMask);

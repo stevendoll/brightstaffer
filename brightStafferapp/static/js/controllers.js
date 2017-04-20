@@ -1637,7 +1637,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         arr.splice(index, 1);
     }
     $scope.checkPhoneNumberLength = function (number, maxLength) {
-        if (number && number.length && number.length < maxLength) {
+       var phone = angular.copy(number);
+           phone = phone.replace(/-/g, '');
+        if (phone && phone.length && phone.length < maxLength || phone.length > maxLength) {
             $scope.talentDataValidation.phone = false;
         } else {
             $scope.talentDataValidation.phone = true;
@@ -1744,10 +1746,24 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $rootScope.getCandidateData();
         $state.go(state);
     }
-    $scope.numberonly = function (obj, key) {
+    /*$scope.numberonly = function (obj, key) {
             if (typeof (obj[key]) == "string")
                 obj[key] = obj[key].replace(/\D+/g, '');
+        }*/
+
+    $scope.contactFormat = function(obj, key) {
+        if(obj[key] && obj[key] != "string"){
+            obj[key] = obj[key].replace(/(^0$)|[^0-9]/g,"");
         }
+         var regexPhoneNumber = /^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/;
+         if(obj[key] && obj[key].match(regexPhoneNumber)){
+                obj[key] = obj[key].toString();
+                obj[key] = obj[key].substr(0, 3) + '-' + obj[key].substr(3);
+                obj[key] = obj[key].substr(0, 7) + '-' + obj[key].substr(7);
+         }else if(typeof (obj[key]) == "string"){
+                obj[key] = obj[key].replace(/\D+/g, '');
+         }
+    }
         /* create talent code ends */
 
     $scope.$watch('priceSlider.value', function (n, o) {

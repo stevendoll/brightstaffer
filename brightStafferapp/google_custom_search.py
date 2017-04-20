@@ -29,7 +29,10 @@ class GoogleCustomSearch(object):
                                 for j in values:
                                     result['firstName']=j['fn'].split(' ')[0]
                                     result['lastName'] = j['fn'].split(' ')[1]
-                                    result['profile_image']=j['photo']
+                                    try:
+                                        result['profile_image']=j['photo']
+                                    except:
+                                        result['profile_image'] = ''
 
             return result
         except:

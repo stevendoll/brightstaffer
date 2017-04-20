@@ -258,7 +258,7 @@ def talent_project_match(talent_obj,project):
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
                 ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
-                if ratio >= 100:
+                if ratio >= 90:
                     count += 1
         # match = math.ceil(round((count/project_concept_count), 2))
         match = round(count / project_concept_count * 100)
@@ -271,7 +271,7 @@ def talent_project_match(talent_obj,project):
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
                 ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower() )
-                if ratio >= 100:
+                if ratio >= 90:
                     count += 1
         # match = math.ceil(round((count/project_concept_count), 2))
         match = round(count / talent_concept_count * 100)
@@ -473,18 +473,10 @@ class TalentAdd(generics.ListCreateAPIView):
             phone = profile_data.get('phone', '')
             email = profile_data.get('email', '')
             linkedin_url = profile_data.get('linkedinProfileUrl', '')
-            # talent_linkedin = Talent.objects.filter(linkedin_url=linkedin_url)
-            # if talent_linkedin != '':
-            #     if talent_linkedin:
-            #         return util.returnErrorShorcut(400, 'Talent with this linkedin url already exists in the system')
             if email != '':
-                email_talent = TalentEmail.objects.filter(email=email)
+                email_talent = TalentEmail.objects.filter(email=email, talent__talent_active__is_active=True)
                 if email_talent:
                     return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
-            # if phone != '':
-            #     phone_client = TalentContact.objects.filter(contact=phone)
-            #     if phone_client:
-            #         return util.returnErrorShorcut(400, 'Talent with this contact already exists in the system')
             profile_data["currentOrganization"].extend(profile_data["pastOrganization"])
             del profile_data["pastOrganization"]
             add_edit_talent(profile_data, user)
