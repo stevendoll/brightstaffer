@@ -192,8 +192,11 @@
                                          <span ng-show="!talent.talent_contact.length || talent.talent_contact[0].contact == ''">  N/A </span>
                                      </td>
                                      <td class="likd-icn">
-                                        <a href="[[talent.linkedin_url]]" target="_blank"><i class="fa fa-linkedin-square tbl-linkdedin-font">
+                                        <a href="[[talent.linkedin_url]]" target="_blank" ng-show="talent.linkedin_url"><i class="fa fa-linkedin-square tbl-linkdedin-font">
                                         </i></a>
+                                         
+                                         <i class="fa fa-linkedin-square tbl-linkdedin-font" ng-show="!talent.linkedin_url" style="cursor: not-allowed;">
+                                        </i>
                                      </td>
                                      <td>
                                           <div class="col-md-12 padding-zero" ng-init="rating = [[talent.rating]]">
