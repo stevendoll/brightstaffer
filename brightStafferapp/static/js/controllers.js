@@ -1240,6 +1240,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.isDisabled = true;
     $scope.noFile = false;
     $scope.completedFiles = [];
+    $scope.filesArr = [];
 
     $scope.filesExits = function () {
             var fileContainers = document.getElementsByClassName('dz-preview');
