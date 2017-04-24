@@ -2420,12 +2420,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
     }
 
-    $scope.talentSorted = {};
+    $scope.talentSorted = '';
     $scope.setAndGetSortedArr = function (arr, key, isNumericVal) {
-        if (key in $scope.talentSorted) {
+        if (key == $scope.talentSorted) {
             arr = arr.reverse();
         } else {
-            $scope.talentSorted[key] = true;
+            $scope.talentSorted = key;
             if (isNumericVal) {
                 $scope.sortNumericArr(arr, key);
             } else {
@@ -2440,17 +2440,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     }
 
-    $scope.sortArr = function (arr, key) {
-        
+    $scope.sortArr = function (arr, key) {        
         arr.sort(function (a, b) {
-            return a[key] > b[key];
+            if (a[key].toLowerCase() < b[key].toLowerCase()) return 1;
+            if (a[key].toLowerCase() > b[key].toLowerCase()) return -1;
+            return 0;
         });
-        
-//        arr.sort(function (a, b) {
-//            if (a[key] < b[key]) return -1;
-//            if (a[key] > b[key]) return 1;
-//            return 0;
-//        });
     }
 
     $scope.reverse = false;
