@@ -2421,6 +2421,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.talentSorted = '';
+
+    $scope.sortjsonArray = function (arr, arrKey, key) {
+        if (key == $scope.talentSorted) {
+            arr = arr.reverse();
+        } else {
+            $scope.talentSorted = key;
+            arr.sort(function (a, b) {
+                if (a[arrKey][0][key].toLowerCase() < b[arrKey][0][key].toLowerCase()) return 1;
+                if (a[arrKey][0][key].toLowerCase() > b[arrKey][0][key].toLowerCase()) return -1;
+                return 0;
+            });
+        }
+    }
+
     $scope.setAndGetSortedArr = function (arr, key, isNumericVal) {
         if (key == $scope.talentSorted) {
             arr = arr.reverse();
@@ -2440,7 +2454,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     }
 
-    $scope.sortArr = function (arr, key) {        
+    $scope.sortArr = function (arr, key) {
         arr.sort(function (a, b) {
             if (a[key].toLowerCase() < b[key].toLowerCase()) return 1;
             if (a[key].toLowerCase() > b[key].toLowerCase()) return -1;
@@ -3179,6 +3193,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
+
 
 
 
