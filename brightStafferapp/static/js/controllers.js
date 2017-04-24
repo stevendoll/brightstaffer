@@ -1926,9 +1926,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 console.log(response);
                 if (response.success) {
                     //$scope.showNotification(true, 'Stage has been successfully removed');
+
+                    $scope.talentDetails = response.result;
+                    $rootScope.talentAllStages = response.result.talent_stages;
+
                     $scope.loadProfileData($rootScope.talentDetails.id, $rootScope.talentDetails, 'deleteStage');
-                    $rootScope.talentAllStages = response.result;
-                    $scope.stage.stagesCard = response.result;
+                    $rootScope.talentAllStages = response.result.talent_stages;
+                    $scope.stage.stagesCard = response.result.talent_stages;
                     sessionStorage.removeItem('talentAllStages');
                     sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                 } else {
@@ -1966,12 +1970,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             requestObj.talent_id = $rootScope.talentDetails.id;
             talentApis.editStage(requestObj, function (response) {
              if(response.message == 'success'){
-                 $rootScope.talentAllStages = response.result;
-                    $scope.stage.stagesCard = response.result;
-                    sessionStorage.removeItem('talentAllStages');
-                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
-                    $('#edit-stage').modal('hide');
-                    $scope.showNotification(true, 'Stage has been updated Successfully.');
+
+                $scope.talentDetails = response.result;
+
+                $rootScope.talentAllStages = response.result.talent_stages;
+                $scope.stage.stagesCard = response.result.talent_stages;
+                sessionStorage.removeItem('talentAllStages');
+                sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+                $('#edit-stage').modal('hide');
+                $scope.showNotification(true, 'Stage has been updated Successfully.');
                 }else if(response.success == false){
                     $('#edit-stage').modal('hide');
                   $scope.showNotification(true, 'Stage has been updated Successfully.');
@@ -2919,9 +2926,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         $scope.stage.isStage = false;
 
                         //                            $scope.stage.stagesCard.push(response);
-                       $rootScope.talentDetails = response.result;
+                        $scope.talentDetails = response.result;
+//                       $rootScope.talentDetails = response.result;
                        sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
 //                        $scope.stage.stagesCard.unshift(response);
+
+                    $rootScope.talentAllStages = response.result.talent_stages;
+                    $scope.stage.stagesCard = response.result.talent_stages;
+                    sessionStorage.removeItem('talentAllStages');
+                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+
 
                         $scope.stage.stagesCard = response.result.talent_stages;
                         $scope.$apply();
@@ -2937,7 +2951,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                             , changeMonth: true
                             , changeYear: true
                         }).val('');
-                        sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+//                        sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                     }
                      $window.scrollTo(0, 0);
                 }
