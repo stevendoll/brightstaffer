@@ -4,7 +4,7 @@
             <h2 class="create-prof">Create Profile</h2>
             <div class="create-profile-panel">
                 <div class="create-profile-resume-panel">
-                    <div class="talent-profile-panel" ng-show="!talentFileobj.name" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" data-max-file-size="10">
+                    <div class="talent-profile-panel" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" data-max-file-size="10">
                         <img src="static/img/File-Transfer-Icon-1.png" alt="" id="dropzone_backgroundImg">
                         <div class="cls"></div>
                         <div class="file-upld-pro">
@@ -20,37 +20,25 @@
                         <div class="choose-pro-file">Choose a file or drag it here.</div>
                     </div>
                     <div class="cls"></div>
+<!--
                     <div class="talent-profile-panel" ng-show="talentFileobj.name">
                         <div class="progress-panel">
                             <div class="progress-image">
                                 <img src="static/img/pdf.svg" alt="avatar">
-                                <!--                                <i class="fa fa-file-text"></i>-->
+                                                                <i class="fa fa-file-text"></i>
                             </div>
                             <div class="progress-text">[[talentFileobj.name]]</div>
                             <div class="progress-close" ng-click="removeFile()">
                                 <a href="">x</a>
                             </div>
                             <div class="cls"></div>
-                            <!--
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                                    <span class="sr-only">60% Complete</span>
-                                </div>
-                            </div>
--->
                         </div>
                         <div class="cls"></div>
                         <div class="progress-bttn">
-                            <!--
-                          <div class="file-upld-pro mar-tb">
-                              <input type="button" ng-click="uploadTalentFile()">Upload File
-                              <button type="button" class="btn btn-primary" ng-click="uploadTalentFile()">Upload File</button>
-                            </div>
--->
                             <button type="button" class="btn btn-primary create-upload-bttn" ng-click="uploadTalentFile()" ng-disabled="disableUploadBtn">Upload File</button>
                         </div>
-
                     </div>
+-->
                     <div class="cls"></div>
                     <div class="create-pro-or-section">
                         <span>or</span>

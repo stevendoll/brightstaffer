@@ -260,8 +260,9 @@ function myDirective($rootScope) {
 }
 
 
-function dropZone($rootScope) {
+function dropZone($rootScope, $timeout) {
     return {
+        restrict: 'A',
         scope: {
             action: "@"
             , autoProcess: "="
@@ -269,6 +270,7 @@ function dropZone($rootScope) {
             , dataMax: "=?"
             , mimetypes: "="
             , options: '='
+            , files: '='
         }
         , link: function (scope, element, attrs) {
             var myDropZone = {};
@@ -308,6 +310,9 @@ function dropZone($rootScope) {
                     , autoProcessQueue: scope.autoProcess
                     , complete: function (r) {
                         scope.completedFiles.push(r);
+                        $timeout(function(){
+                            scope.files.push(r);    
+                        });
                     }
                 });
             }
@@ -325,6 +330,7 @@ function dropZone($rootScope) {
                     myDropZone.removeFile(activeFiles[i]);
                 }
                 scope.completedFiles = [];
+                scope.files = [];
             }
 
             if (scope.options) {

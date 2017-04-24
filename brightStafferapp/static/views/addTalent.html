@@ -11,7 +11,7 @@
       <div class="modal-body">
          <div class="talent-panel">
           <div class="cls"></div>
-             <form action="/upload/" class="dropzone" drop-zone options="dirOptions" call-back="removeCompletedFiles" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
+             <form action="/upload/" class="dropzone" drop-zone files="filesArr" options="dirOptions" call-back="removeCompletedFiles" data-max="5" auto-process="true" mimetypes=['.doc','.docx','.pdf'] id="file-dropzone">
                   <img src="static/img/pdf-upload-image.png" alt="" id="backgroundImg">
                   <div class="cls"></div>
              </form>
@@ -21,7 +21,7 @@
             <!--<div class="note-text">NOTE: Max 100 files(doc/docx/pdf of 5MB) allowed at once.</div>-->
             <button type="" class="btn talent-modal-done disabled" ng-click="done();getCandidateData();" id="done" style="pointer-events:none;">Done</button>
             <span class="btn talent-modal-add" id="fileUpload">Add Files</span>
-            <span class="btn talent-modal-add" id="createProfile" ng-click="openCreateProfile()">Create Profile</span>
+            <button class="btn talent-modal-add" id="createProfile" ng-disabled="filesArr.length" ng-click="openCreateProfile()">Create Profile</button>
           </div>
         <div class="cls"></div>
       </div>
