@@ -1538,6 +1538,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.imageFileName = '';
     $scope.talentFileobj = {};
 
+    $scope.$watch('talentFileobj.name', function(newVal, oldVal){
+        if($scope.talentFileobj.name){
+            $scope.uploadTalentFile();
+        }
+    });
+    
     $scope.onFileLoad = function (e) {
         var file = e.files[0];
         $scope.talentFileobj = e.files[0];
@@ -1545,6 +1551,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.$apply();
         });
         e.value = "";
+//        $scope.uploadTalentFile();
     };
 
     $scope.removeFile = function () {
