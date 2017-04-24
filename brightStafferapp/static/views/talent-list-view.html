@@ -9,8 +9,8 @@
                          <table class="table talent-lst">
                              <thead id="headRow">
                                  <th id="talent_name" tabindex="0" >Name
-<!--                                 <th id="talent_name" tabindex="0"  ng-click="setAndGetSortedArr(talentList, 'talent_name')">Name-->
                                      <span class="sor-cont" ng-click="sortBy('talent_name')" ng-init="propertyName === 'talent_name'" ng-class="{reverse: reverse}">
+<!--                                     <span class="sor-cont" ng-click="setAndGetSortedArr(talentList, 'talent_name')" ng-class="{reverse: reverse}">-->
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -42,6 +42,7 @@
 
                                  <th id="talent_stage" tabindex="0">Stage
                                     <span class="sor-cont"  ng-click="sortBy('talent_stage')" ng-init="propertyName === 'talent_stage'" ng-class="{reverse: reverse}">
+<!--                                    <span class="sor-cont"  ng-click="setAndGetSortedArr(talentList, 'talent_stage')" ng-class="{reverse: reverse}">-->
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -141,7 +142,7 @@
 
                                  </th>
 <!--                                  <th id="talent_rating" ng-click="sortBy('rating')">Stars/rating-->
-                                  <th id="talent_rating" ng-click="setAndGetSortedArr(talentList, 'rating')">Stars/rating
+                                  <th id="talent_rating" ng-click="setAndGetSortedArr(talentList, 'rating', true)">Stars/rating
                                     <span class="sor-cont" ng-init="propertyName === 'rating'" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
