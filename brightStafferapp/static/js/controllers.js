@@ -1724,9 +1724,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             };
             talentApis.addLinkedinUrlCard(requestObject, function (response) {
                 $('#add-url').modal('hide');
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 'fast');
+//                $('html, body').animate({
+//                    scrollTop: 0
+//                }, 'fast');
                 if (response.success) {
                     //$scope.showNotification(true, 'Linkedin URL added successfully.');
                     $scope.candidate = {};
