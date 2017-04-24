@@ -175,7 +175,7 @@ class TalentEmailAPI(View):
             updated_email = request.POST['updated_email']
             if_exists = self.validate_email(updated_email)
             if if_exists:
-                return util.returnErrorShorcut(409, 'A user is already associated with this email.')
+                return util.returnErrorShorcut(409, 'Email is already exist in the System.')
             talent_email_obj = TalentEmail.objects.filter(email=email)
             if talent_email_obj:
                 talent_email_obj = talent_email_obj[0]
@@ -185,7 +185,7 @@ class TalentEmailAPI(View):
 
         if_exists = self.validate_email(email)
         if if_exists:
-            return util.returnErrorShorcut(409, 'A user is already associated with this email.')
+            return util.returnErrorShorcut(409, 'Email is already exist in the System.')
         talent_email_obj, created = TalentEmail.objects.get_or_create(talent=talent_obj, email=email)
         if created:
             return util.returnSuccessShorcut(context)
@@ -210,7 +210,7 @@ class TalentEmailAPI(View):
             return util.returnErrorShorcut(400, 'Email not found')
 
     def validate_email(self, email):
-        users = User.objects.filter(Q(email=email) | Q(username=email))
+        users = User.objects.filter(email=email)
         if users:
             return True
         else:
@@ -377,8 +377,8 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
             if updated:
                 queryset = super(TalentStageEditAPI, self).get_queryset()
                 queryset = queryset.filter(talent_id=talent)
-                serializer_data = TalentProjectStageSerializer(queryset, many=True).data
-                context['result'] = serializer_data
+                serializer_data = TalentSerializer(talent_obj)
+                context['result'] = serializer_data.data
                 context['message'] = 'Talent Stage Updated Successfully'
                 context['success'] = True
                 return util.returnSuccessShorcut(context)
@@ -409,11 +409,12 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
         talent_objs = Talent.objects.filter(id=talent_id)
         if not talent_objs:
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
+        talent_obj = talent_objs[0]
         TalentStage.objects.filter(id=id,talent=talent_id).delete()
         queryset = super(TalentStageDeleteAPI, self).get_queryset()
         queryset = queryset.filter(talent_id=talent_id)
-        serializer_data = TalentProjectStageSerializer(queryset, many=True).data
-        context['result'] = serializer_data
+        serializer_data = TalentSerializer(talent_obj)
+        context['result'] = serializer_data.data
         context['message'] = 'Talent Stage Deleted Successfully'
         context['success'] = True
         return util.returnSuccessShorcut(context)
