@@ -128,7 +128,7 @@
                                          </a>
                                      </span>
                                  </th>
-                                 <th>Linkidin url
+                                 <th>Linkedin url
                                     <span class="sor-cont">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
@@ -192,7 +192,8 @@
                                          <span ng-show="!talent.talent_contact.length || talent.talent_contact[0].contact == ''">  N/A </span>
                                      </td>
                                      <td class="likd-icn">
-                                          <i class="fa fa-linkedin-square tbl-linkdedin-font"></i>
+                                        <a href="[[talent.linkedin_url]]" target="_blank"><i class="fa fa-linkedin-square tbl-linkdedin-font">
+                                        </i></a>
                                      </td>
                                      <td>
                                           <div class="col-md-12 padding-zero" ng-init="rating = [[talent.rating]]">
