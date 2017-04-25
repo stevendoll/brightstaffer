@@ -132,10 +132,12 @@ class TalentContactAPI(View):
                 talent_contact_obj = talent_contact_obj[0]
                 talent_contact_obj.contact = updated_contact
                 talent_contact_obj.save()
+                context['success'] = True
                 return util.returnSuccessShorcut(context)
 
         talent_contact_obj, created = TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
         if created:
+            context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
             context['error'] = 'Contact is already exist in the System.'
