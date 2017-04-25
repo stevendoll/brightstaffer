@@ -55,8 +55,8 @@
                                  </th>
 
                                  <th id="talent_project" tabindex="0" >Projects
-<!--                                    <span class="sor-cont" ng-click="sortBy('talent_project')" ng-init="propertyName === 'talent_project'" ng-class="{reverse: reverse}">-->
-                                    <span class="sor-cont" ng-click="sortjsonArray(talentList, 'talent_project', 'project_stage')" ng-class="{reverse: reverse}">
+                                    <span class="sor-cont" ng-click="sortBy('talent_project')" ng-init="propertyName === 'talent_project'" ng-class="{reverse: reverse}">
+<!--                                    <span class="sor-cont" ng-click="sortjsonArray(talentList, 'talent_project', 'project_stage', true)" ng-class="{reverse: reverse}">-->
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -87,9 +87,10 @@
                                      </span>
                                   </span>
                                  </th>
-                                 <th id="date_contacted" tabindex="0"  ng-click="sortBy('date_contacted')">Last date
+                                 <th id="date_contacted" tabindex="0" >Last date
                                     <span class="dis-blc">contacted
                                       <span class="sor-cont sor-cont-dubl" ng-init="propertyName === 'date_contacted'" ng-class="{reverse: reverse}">
+<!--                                      <span class="sor-cont sor-cont-dubl" ng-click="sortArrayByDate(talentList, 'talent_stages', 'create_date')" ng-class="{reverse: reverse}">-->
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -112,9 +113,8 @@
                                       </span>
                                  </th>
                                   <th id="talent_email" tabindex="0"  ng-click="sortBy('talent_email')">Contact Email
-<!--                                  <th id="talent_email" tabindex="0"  ng-click="setAndGetSortedArr(talentList, 'talent_email')">Contact Email-->
-<!--                                    <span class="sor-cont" ng-init="propertyName === 'talent_email'" ng-class="{reverse: reverse}">-->
-                                    <span class="sor-cont" ng-click="sortjsonArray(talentList, 'talent_email', 'email')" ng-class="{reverse: reverse}">
+                                    <span class="sor-cont" ng-init="propertyName === 'talent_email'" ng-class="{reverse: reverse}">
+<!--                                    <span class="sor-cont" ng-click="sortjsonArray(talentList, 'talent_email', 'email')" ng-class="{reverse: reverse}">-->
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
