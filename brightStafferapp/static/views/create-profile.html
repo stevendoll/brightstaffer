@@ -4,7 +4,7 @@
             <h2 class="create-prof">Create Profile</h2>
             <div class="create-profile-panel">
                 <div class="create-profile-resume-panel">
-                    <div class="talent-profile-panel" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" data-max-file-size="10">
+                    <div class="talent-profile-panel" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" data-max-file-size="10" ng-show="!talentFileobj.name">
                         <img src="static/img/File-Transfer-Icon-1.png" alt="" id="dropzone_backgroundImg">
                         <div class="cls"></div>
                         <div class="file-upld-pro">
@@ -20,12 +20,11 @@
                         <div class="choose-pro-file">Choose a file or drag it here.</div>
                     </div>
                     <div class="cls"></div>
-<!--
                     <div class="talent-profile-panel" ng-show="talentFileobj.name">
                         <div class="progress-panel">
                             <div class="progress-image">
                                 <img src="static/img/pdf.svg" alt="avatar">
-                                                                <i class="fa fa-file-text"></i>
+<!--                                <i class="fa fa-file-text"></i>-->
                             </div>
                             <div class="progress-text">[[talentFileobj.name]]</div>
                             <div class="progress-close" ng-click="removeFile()">
@@ -34,11 +33,12 @@
                             <div class="cls"></div>
                         </div>
                         <div class="cls"></div>
+<!--
                         <div class="progress-bttn">
                             <button type="button" class="btn btn-primary create-upload-bttn" ng-click="uploadTalentFile()" ng-disabled="disableUploadBtn">Upload File</button>
                         </div>
-                    </div>
 -->
+                    </div>
                     <div class="cls"></div>
                     <div class="create-pro-or-section">
                         <span>or</span>
