@@ -2421,9 +2421,42 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.talentSorted = '';
+    
+    $scope.sortArrayByDate = function(arr, arrKey, key){
+        if (key == $scope.talentSorted) {
+            arr = arr.reverse();
+        } else {
+            $scope.talentSorted = key;
+            arr.sort(function (a, b) {
+                
+                var str1 = null, str2 = null;
+                
+                if(!a[arrKey].length){
+                    str1 = 0;
+                };
+                
+                if(!b[arrKey].length){
+                    str2 = 0;
+                };
+//                str1 = str1 == null ? a[arrKey][index1][key] ? new Date(a[arrKey][index1][key]).getTime() : 0 : 0;
+//                str2 = str2 == null ? b[arrKey][index2][key] ? new Date(b[arrKey][index2][key]).getTime() : 0 : 0;
+                
+                if(str1 == null && a[arrKey][0][key]){
+                    var d = a[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/,"$2$1$3");
+                    str1 = new Date(d).getTime()
+                }
+                if(str2 == null && b[arrKey][0][key]){
+                    var d = b[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/,"$2$1$3");
+                    str2 = new Date(d).getTime()
+                }
+                
+                return str1 - str2;
+            });
+        }
+    }
 
-    $scope.sortjsonArray = function (arr, arrKey, key, index) {
-        index = index || 0;
+    $scope.sortjsonArray = function (arr, arrKey, key, lastIndex) {
+        var index1 = 0, index2 = 0;
         if (key == $scope.talentSorted) {
             arr = arr.reverse();
         } else {
@@ -2439,9 +2472,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 if(!b[arrKey].length){
                     str2 = '';
                 };
-                
-                str1 = str1 == null ? a[arrKey][index][key] ? a[arrKey][index][key].toLowerCase() : '' : str1;
-                str2 = str2 == null ? b[arrKey][index][key] ? b[arrKey][index][key].toLowerCase() : '' : str2;
+                if(lastIndex){
+                    index1 = a[arrKey].length ? a[arrKey].length-1 : 0;
+                    index2 = b[arrKey].length ? b[arrKey].length-1 : 0;
+                }
+                str1 = str1 == null ? a[arrKey][index1][key] ? a[arrKey][index1][key].toLowerCase() : '' : str1;
+                str2 = str2 == null ? b[arrKey][index2][key] ? b[arrKey][index2][key].toLowerCase() : '' : str2;
                 
                 if (str1 < str2) return 1;
                 if (str1 > str2) return -1;
@@ -2596,7 +2632,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 } else if (response.success == false) {
                     $scope.candidateEmail = '';
                     $scope.closeCandidateInfo();
-                    $scope.showNotification(false, response.errorstring.error);
+                    $scope.showNotification(false, response.errorstring);
                     $scope.$apply();
                 }
             }

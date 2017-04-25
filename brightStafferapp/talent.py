@@ -124,18 +124,28 @@ class TalentContactAPI(View):
         if 'updated_contact' in request.POST:
             # request to update the existing email address
             updated_contact = request.POST['updated_contact']
+            if_exists = self.validate_contact(updated_contact)
+            if if_exists:
+                context['success'] = False
+                return util.returnErrorShorcut(409, 'Contact is already exist in the System.')
             talent_contact_obj = TalentContact.objects.filter(contact=contact)
             if talent_contact_obj:
                 talent_contact_obj = talent_contact_obj[0]
                 talent_contact_obj.contact = updated_contact
                 talent_contact_obj.save()
+                context['success'] = True
                 return util.returnSuccessShorcut(context)
 
+        if_exists = self.validate_contact(contact)
+        if if_exists:
+            return util.returnErrorShorcut(409, 'Contact is already exist in the System.')
         talent_contact_obj, created = TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
         if created:
+            context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
-            context['error'] = 'Contact already added for this user'
+            context['success'] = False
+            context['error'] = 'Contact is already exist in the System.'
             return util.returnErrorShorcut(409, context)
 
     def delete(self, request):
@@ -153,6 +163,13 @@ class TalentContactAPI(View):
             return util.returnSuccessShorcut(context)
         else:
             return util.returnErrorShorcut(400, 'Contact not found')
+
+    def validate_contact(self,contact):
+        users = TalentContact.objects.filter(contact=contact)
+        if users:
+            return True
+        else:
+            return False
 
 
 class TalentEmailAPI(View):
@@ -190,7 +207,7 @@ class TalentEmailAPI(View):
         if created:
             return util.returnSuccessShorcut(context)
         else:
-            context['error'] = 'Email already added for this user'
+            context['error'] = 'Email is already exist in the System.'
             return util.returnErrorShorcut(409, context)
 
     def delete(self, request):
@@ -210,7 +227,7 @@ class TalentEmailAPI(View):
             return util.returnErrorShorcut(400, 'Email not found')
 
     def validate_email(self, email):
-        users = User.objects.filter(email=email)
+        users = TalentEmail.objects.filter(email=email)
         if users:
             return True
         else:
