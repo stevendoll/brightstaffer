@@ -2428,6 +2428,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         } else {
             $scope.talentSorted = key;
             arr.sort(function (a, b) {
+                
+                if(!a[arrKey].length){
+//                    a[arrKey] = [];
+                    a[arrKey].push({[key]: ''});
+                };
+                
+                if(!b[arrKey].length){
+//                    b[arrKey] = [];
+                    b[arrKey].push({[key]: ''});
+                };
+                
                 if (a[arrKey][0][key].toLowerCase() < b[arrKey][0][key].toLowerCase()) return 1;
                 if (a[arrKey][0][key].toLowerCase() > b[arrKey][0][key].toLowerCase()) return -1;
                 return 0;
