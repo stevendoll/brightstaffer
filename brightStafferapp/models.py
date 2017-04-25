@@ -201,6 +201,9 @@ class TalentEmail(models.Model):
     def __str__(self):
         return self.talent.talent_name + self.email
 
+    class Meta:
+        ordering = ('-id',)
+
 
 class TalentContact(models.Model):
     talent = models.ForeignKey(Talent, related_name='talent_contact')
@@ -209,6 +212,9 @@ class TalentContact(models.Model):
 
     def __str__(self):
         return self.talent.talent_name + self.contact
+
+    class Meta:
+        ordering = ('-id',)
 
 
 class TalentEducation(models.Model):
