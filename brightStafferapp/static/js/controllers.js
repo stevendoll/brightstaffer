@@ -2225,9 +2225,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
                     $('#talent-delete').css('background-color', '');
                     $('#add-project').modal('hide');
-                    $('html, body').animate({
-                        scrollTop: 0
-                    }, 'fast');
+//                    $('html, body').animate({
+//                        scrollTop: 0
+//                    }, 'fast');
                     $('#projectSuccess').css('display', 'block');
                     setTimeout(function () {
                         $('#projectSuccess').css('display', 'none');
