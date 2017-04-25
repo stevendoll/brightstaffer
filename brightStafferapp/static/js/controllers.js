@@ -2632,7 +2632,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 } else if (response.success == false) {
                     $scope.candidateEmail = '';
                     $scope.closeCandidateInfo();
-                    $scope.showNotification(false, response.errorstring.error);
+                    $scope.showNotification(false, response.errorstring);
                     $scope.$apply();
                 }
             }
