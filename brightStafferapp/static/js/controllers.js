@@ -2422,25 +2422,29 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.talentSorted = '';
 
-    $scope.sortjsonArray = function (arr, arrKey, key) {
+    $scope.sortjsonArray = function (arr, arrKey, key, index) {
+        index = index || 0;
         if (key == $scope.talentSorted) {
             arr = arr.reverse();
         } else {
             $scope.talentSorted = key;
             arr.sort(function (a, b) {
                 
+                var str1 = null, str2 = null;
+                
                 if(!a[arrKey].length){
-//                    a[arrKey] = [];
-                    a[arrKey].push({[key]: ''});
+                    str1 = '';
                 };
                 
                 if(!b[arrKey].length){
-//                    b[arrKey] = [];
-                    b[arrKey].push({[key]: ''});
+                    str2 = '';
                 };
                 
-                if (a[arrKey][0][key].toLowerCase() < b[arrKey][0][key].toLowerCase()) return 1;
-                if (a[arrKey][0][key].toLowerCase() > b[arrKey][0][key].toLowerCase()) return -1;
+                str1 = str1 == null ? a[arrKey][index][key] ? a[arrKey][index][key].toLowerCase() : '' : str1;
+                str2 = str2 == null ? b[arrKey][index][key] ? b[arrKey][index][key].toLowerCase() : '' : str2;
+                
+                if (str1 < str2) return 1;
+                if (str1 > str2) return -1;
                 return 0;
             });
         }
