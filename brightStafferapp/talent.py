@@ -190,7 +190,7 @@ class TalentEmailAPI(View):
         if created:
             return util.returnSuccessShorcut(context)
         else:
-            context['error'] = 'Email already added for this user'
+            context['error'] = 'Email is already exist in the System.'
             return util.returnErrorShorcut(409, context)
 
     def delete(self, request):
@@ -210,7 +210,7 @@ class TalentEmailAPI(View):
             return util.returnErrorShorcut(400, 'Email not found')
 
     def validate_email(self, email):
-        users = User.objects.filter(email=email)
+        users = TalentEmail.objects.filter(email=email)
         if users:
             return True
         else:
