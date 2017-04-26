@@ -1540,9 +1540,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.notification.status = success ? 'Success' : 'Error';
         $scope.notification.message = message;
         });
-//        $timeout(function () {
-//            $scope.notification.show = false;
-//        }, 3000);
+        $timeout(function () {
+            $scope.notification.show = false;
+        }, 3000);
     }
 
     $scope.disableUploadBtn = false;
