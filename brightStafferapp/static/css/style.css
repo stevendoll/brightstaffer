@@ -2786,6 +2786,11 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     appearance: none;
 }
 
+
+.tabl-scrol .mCSB_container {
+    width: 2240px;
+}
+
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
         display: block;
