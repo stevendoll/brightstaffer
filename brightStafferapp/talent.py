@@ -154,14 +154,18 @@ class TalentContactAPI(View):
         talent_id = request.GET['talent_id']
         talent_objs = Talent.objects.filter(id=talent_id)
         if not talent_objs:
+            context['success'] = False
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         talent_obj = talent_objs[0]
         if contact:
             is_deleted = TalentContact.objects.filter(talent=talent_obj, contact=contact).delete()[0]
             if not is_deleted:
+                context['success'] = False
                 return util.returnErrorShorcut(400, 'No entry found or already deleted')
+            context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
+            context['success'] = False
             return util.returnErrorShorcut(400, 'Contact not found')
 
     def validate_contact(self,contact):
@@ -184,6 +188,7 @@ class TalentEmailAPI(View):
         email = request.POST['email']
         talent_objs = Talent.objects.filter(id=talent_id)
         if not talent_objs:
+            context['success'] = False
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         talent_obj = talent_objs[0]
 
@@ -192,21 +197,26 @@ class TalentEmailAPI(View):
             updated_email = request.POST['updated_email']
             if_exists = self.validate_email(updated_email)
             if if_exists:
+                context['success'] = False
                 return util.returnErrorShorcut(409, 'Email is already exist in the System.')
             talent_email_obj = TalentEmail.objects.filter(email=email)
             if talent_email_obj:
                 talent_email_obj = talent_email_obj[0]
                 talent_email_obj.email = updated_email
                 talent_email_obj.save()
+                context['success'] = True
                 return util.returnSuccessShorcut(context)
 
         if_exists = self.validate_email(email)
         if if_exists:
+            context['success'] = False
             return util.returnErrorShorcut(409, 'Email is already exist in the System.')
         talent_email_obj, created = TalentEmail.objects.get_or_create(talent=talent_obj, email=email)
         if created:
+            context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
+            context['success'] = False
             context['error'] = 'Email is already exist in the System.'
             return util.returnErrorShorcut(409, context)
 
@@ -216,14 +226,18 @@ class TalentEmailAPI(View):
         talent_id = request.GET['talent_id']
         talent_objs = Talent.objects.filter(id=talent_id)
         if not talent_objs:
+            context['success'] = False
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         talent_obj = talent_objs[0]
         if email:
             is_deleted = TalentEmail.objects.filter(talent=talent_obj, email=email).delete()[0]
             if not is_deleted:
+                context['success'] = False
                 return util.returnErrorShorcut(400, 'No entry found or already deleted')
+            context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
+            context['success'] = False
             return util.returnErrorShorcut(400, 'Email not found')
 
     def validate_email(self, email):

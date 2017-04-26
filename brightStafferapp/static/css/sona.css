@@ -396,7 +396,7 @@ li.active a {
     text-overflow: ellipsis;
     width: 100%;
     float: left;
-    padding: 0 45px;
+    padding: 0px 45px 4px 45px;
 }
 
 .wbox {
@@ -524,7 +524,7 @@ li.active a {
 }
 .open-small-chat:hover {
   color: white;
-  background: #004a7c;
+  background: #1c84c6;
 }
 
 .small-chat-box.ng-small-chat {
