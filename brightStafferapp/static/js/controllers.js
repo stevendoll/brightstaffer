@@ -1538,9 +1538,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.showNotification = function (success, message) {
         $timeout(function () {
-        $scope.notification.show = true;
-        $scope.notification.status = success ? 'Success' : 'Error';
-        $scope.notification.message = message;
+            $scope.notification.show = true;
+            $scope.notification.status = success ? 'Success' : 'Error';
+            $scope.notification.message = message;
         });
         $timeout(function () {
             $scope.notification.show = false;
@@ -1665,6 +1665,36 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var param = {
             url: $scope.talentData.linkedinProfileUrl
         }
+
+        $scope.talentData.profile_image = '';
+        $scope.talentData.firstName = '';
+        $scope.talentData.lastName = '';
+        $scope.talentData.email = '';
+        $scope.talentData.phone = '';
+        $scope.talentData.city = '';
+        $scope.talentData.state = '';
+        $scope.talentData.country = '';
+        $scope.talentData.industryFocus = '';
+        $scope.talentData.currentOrganization = [{
+            name: ''
+            , from: ''
+            , to: 'Present'
+        }];
+        $scope.talentData.pastOrganization = [{
+            name: ''
+            , from: ''
+            , to: ''
+        }];
+        $scope.talentData.education = [{
+            name: ''
+            , from: ''
+            , to: ''
+        }];
+        $scope.talentData.careerHistory = {
+            total: ''
+            , history: [{}]
+        };
+
         talentApis.addLinkedinUrl(param, function (response) {
             console.log(response);
             if (response.success) {
@@ -2634,10 +2664,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     //candidateEmail ='';
                     $rootScope.talentDetails.talent_email[0].email = candidateEmail;
                     sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
-//                    $('#emailUpdated').css('display', 'block');
-//                    setTimeout(function () {
-//                        $('#emailUpdated').css('display', 'none');
-//                    }, 3000);
+                    //                    $('#emailUpdated').css('display', 'block');
+                    //                    setTimeout(function () {
+                    //                        $('#emailUpdated').css('display', 'none');
+                    //                    }, 3000);
                     $scope.showNotification(true, "Talent email is updated.");
                 } else if (response.success == false) {
                     $scope.candidateEmail = '';
@@ -2675,19 +2705,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $scope.closeCandidateInfo();
                     //candidateEmailAdd ='';
 
-//                    $('#emailSuccess').css('display', 'block');
-//                    setTimeout(function () {
-//                        $('#emailSuccess').css('display', 'none');
-//                    }, 3000);
-                    
+                    //                    $('#emailSuccess').css('display', 'block');
+                    //                    setTimeout(function () {
+                    //                        $('#emailSuccess').css('display', 'none');
+                    //                    }, 3000);
+
                     $scope.showNotification(true, 'Email has been added.');
                 } else if (response.success == false) {
                     $scope.candidateEmailAdd = '';
                     $scope.closeCandidateInfo();
-//                    $('#emailError').css('display', 'block');
-//                    setTimeout(function () {
-//                        $('#emailError').css('display', 'none');
-//                    }, 2000);
+                    //                    $('#emailError').css('display', 'block');
+                    //                    setTimeout(function () {
+                    //                        $('#emailError').css('display', 'none');
+                    //                    }, 2000);
                     $scope.showNotification(false, response.errorstring);
                 }
             }
@@ -2720,16 +2750,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 //console.log(response);
                 $scope.closeCandidateInfo();
                 // candidateContact ='';
-//                $('#contactSuccess').css('display', 'block');
-//                setTimeout(function () {
-//                    $('#contactSuccess').css('display', 'none');
-//                }, 2000);
+                //                $('#contactSuccess').css('display', 'block');
+                //                setTimeout(function () {
+                //                    $('#contactSuccess').css('display', 'none');
+                //                }, 2000);
                 $rootScope.showLoader(false);
-                
+
                 if (response.success) {
                     $scope.showNotification(true, "Talent contact has been added.");
                 } else {
-                    $scope.showNotification(false, response.errorstring);          
+                    $scope.showNotification(false, response.errorstring);
                 }
             }
         } else {
@@ -2759,17 +2789,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                 if (response.success) {
                     $scope.showNotification(true, "Talent contact has been updated successfully.");
-//                    $('#contactUpdated').css('display', 'block');
-//                    setTimeout(function () {
-//                        $('#contactUpdated').css('display', 'none');
-//                    }, 2000);
-                    
+                    //                    $('#contactUpdated').css('display', 'block');
+                    //                    setTimeout(function () {
+                    //                        $('#contactUpdated').css('display', 'none');
+                    //                    }, 2000);
+
                 } else {
                     $scope.showNotification(false, response.errorstring);
-//                    $('#contactError').css('display', 'block');
-//                    setTimeout(function () {
-//                        $('#contactError').css('display', 'none');
-//                    }, 2000);             
+                    //                    $('#contactError').css('display', 'block');
+                    //                    setTimeout(function () {
+                    //                        $('#contactError').css('display', 'none');
+                    //                    }, 2000);             
                 }
             }
         } else {
@@ -3092,12 +3122,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                  enableFiltering:true
             });*/
             $("#rate_filter li.filled").removeClass('filled');
-//            $('#filterStage').change(function () {
-//                var selectedValue = $('#filterStage :selected').text();
-//                if (selectedValue != 'Select Stage')
-//                    $scope.filterValue.stage = selectedValue;
-//                // console.log($scope.filterValue.stage);
-//            });
+            //            $('#filterStage').change(function () {
+            //                var selectedValue = $('#filterStage :selected').text();
+            //                if (selectedValue != 'Select Stage')
+            //                    $scope.filterValue.stage = selectedValue;
+            //                // console.log($scope.filterValue.stage);
+            //            });
         } else if ($rootScope.isFilterChecked) {
             $rootScope.isFilterChecked = false;
             $('.talent-search-icon').removeClass('active');
