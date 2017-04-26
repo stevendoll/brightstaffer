@@ -126,18 +126,25 @@ class TalentContactAPI(View):
             updated_contact = request.POST['updated_contact']
             if_exists = self.validate_contact(updated_contact)
             if if_exists:
+                context['success'] = False
                 return util.returnErrorShorcut(409, 'Contact is already exist in the System.')
             talent_contact_obj = TalentContact.objects.filter(contact=contact)
             if talent_contact_obj:
                 talent_contact_obj = talent_contact_obj[0]
                 talent_contact_obj.contact = updated_contact
                 talent_contact_obj.save()
+                context['success'] = True
                 return util.returnSuccessShorcut(context)
 
+        if_exists = self.validate_contact(contact)
+        if if_exists:
+            return util.returnErrorShorcut(409, 'Contact is already exist in the System.')
         talent_contact_obj, created = TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
         if created:
+            context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
+            context['success'] = False
             context['error'] = 'Contact is already exist in the System.'
             return util.returnErrorShorcut(409, context)
 
