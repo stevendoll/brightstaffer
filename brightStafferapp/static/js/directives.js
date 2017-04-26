@@ -468,6 +468,23 @@ function tableScroll($timeout) {
     };
 }
 
+function createTableScroll($timeout) {
+    return {
+        restrict: 'A'
+        , link: function (scope, element, attrs) {
+            $timeout(function () {
+                $(".crt-stp-scroll").mCustomScrollbar({
+                    scrollButtons: {
+                        enable: true
+                    }
+                    , axis: "y", // horizontal scrollbar
+
+                });
+            });
+        }
+    };
+}
+
 function viewAllScroll($timeout) {
     return {
         restrict: 'A'
@@ -850,6 +867,7 @@ angular
     .directive('starRating', starRating)
     .directive('starRating2', starRating2)
     .directive('tableScroll', tableScroll)
+    .directive('createTableScroll', createTableScroll)
     .directive('pieChart', pieChart)
     .directive('searchDropDown', searchDropDown)
     .directive('sliderInit', sliderInit)

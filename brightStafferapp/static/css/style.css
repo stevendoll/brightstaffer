@@ -1004,7 +1004,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     width: 100% !important;
 }
 
- .talent-panel #mCSB_2_container {
+.talent-panel #mCSB_2_container {
     width: 100% !important;
 }
 
@@ -2451,6 +2451,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     right: 41%;
     z-index: 9999;
 }
+
 .bs-searchbox .form-control {
     height: 40px;
     border-radius: 2px;
@@ -2636,7 +2637,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     float: left;
     position: absolute;
     top: 43px;
-   /* left: 0;*/
+    /* left: 0;*/
     z-index: 9999;
     right: 28%;
     text-align: center;
@@ -2654,7 +2655,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     float: left;
     position: absolute;
     top: 43px;
-   /* left: 0;*/
+    /* left: 0;*/
     z-index: 9999;
     right: 34%;
     text-align: center;
@@ -2785,7 +2786,6 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     -moz-appearance: none;
     appearance: none;
 }
-
 
 .tabl-scrol .mCSB_container {
     width: 2240px;
@@ -15252,12 +15252,12 @@ a.sbSelector:hover {
     appearance: none;
 }
 
+
 /*create-profile-css-ends*/
 
-.no-linkedin-url{
- pointer-events:none;
+.no-linkedin-url {
+    pointer-events: none;
 }
-
 
 .count .pro-modal-select {
     border: 1px solid #e7eaec;
@@ -15340,5 +15340,15 @@ a.sbSelector:hover {
     margin: 30px auto 0px auto;
 }
 
-/*create-profile-css-ends*/
+.crt-stp-scroll {
+    max-height: 250px;
+    width: 100%;
+    float: left;
+}
 
+.crt-stp-scroll .mCustomScrollBox {
+    max-width: 100%;
+}
+
+
+/*create-profile-css-ends*/
