@@ -1495,7 +1495,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.candidateInfo = {};
     $scope.data = {};
     //$scope.projectSelect ;
-    $scope.filterStage;
+    $scope.tFilter = {
+        stage: "0"
+    };
     var stagesTemp = [];
     $scope.stage = {
         stage: ''
@@ -3090,12 +3092,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                  enableFiltering:true
             });*/
             $("#rate_filter li.filled").removeClass('filled');
-            $('#filterStage').change(function () {
-                var selectedValue = $('#filterStage :selected').text();
-                if (selectedValue != 'Select Stage')
-                    $scope.filterValue.stage = selectedValue;
-                // console.log($scope.filterValue.stage);
-            });
+//            $('#filterStage').change(function () {
+//                var selectedValue = $('#filterStage :selected').text();
+//                if (selectedValue != 'Select Stage')
+//                    $scope.filterValue.stage = selectedValue;
+//                // console.log($scope.filterValue.stage);
+//            });
         } else if ($rootScope.isFilterChecked) {
             $rootScope.isFilterChecked = false;
             $('.talent-search-icon').removeClass('active');
@@ -3131,7 +3133,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //            $scope.filterValue.lastContacted = lastContacted;
         $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
 
-        if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined)
+        $scope.filterValue.stage = $scope.tFilter.stage;
+        if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined || $scope.filterValue.stage == "0")
             $scope.filterValue.stage = '';
         if ($scope.filterValue.match.split('%')[0] == '0')
             $scope.filterValue.match = $scope.priceSlider.value + '%';
