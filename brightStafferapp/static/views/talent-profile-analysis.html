@@ -650,6 +650,7 @@
 </div>
 <!-- all-concepts-Modal-ends -->
 
+<!--
 <div class="success-box" id="nameSuccess" style="display:none;">
     <span><strong>Success!</strong> Recruiter name is updated.</span>
 </div>
@@ -671,6 +672,10 @@
     <span><strong>Success!</strong> Talent contact has been added.</span>
 </div>
 
+<div class="pro-error-box-email" id="contactError" style="display:none;">
+    <span><strong>Error!</strong> Error in updating contact info.</span>
+</div>
+
 <div class="success-box" id="contactUpdated" style="display:none;">
     <span><strong>Success!</strong> Talent contact is updated.</span>
 </div>
@@ -678,6 +683,13 @@
 <div class="success-box" id="projectSuccess" style="display:none;">
     <span><strong>Success!</strong> Talent has been added to the project.</span>
 </div>
+-->
+
+<!--
+<div ng-class="{'success-box': notification.status == 'Success', 'pro-error-box-email': notification.status == 'Error'}" ng-show="notification.show">
+    <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
+</div>
+-->
 
 
 <!-- all-Matrics-Modal-starts -->

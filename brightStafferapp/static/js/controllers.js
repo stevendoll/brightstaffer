@@ -1530,9 +1530,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     /* create talent code */
     $scope.notification = {
         show: false
-        , status: ''
+        , status: 'wow'
         , message: ''
     };
+
+    $scope.showNotification = function (success, message) {
+        $timeout(function () {
+        $scope.notification.show = true;
+        $scope.notification.status = success ? 'Success' : 'Error';
+        $scope.notification.message = message;
+        });
+//        $timeout(function () {
+//            $scope.notification.show = false;
+//        }, 3000);
+    }
+
     $scope.disableUploadBtn = false;
     $scope.todayDate = new Date();
     $scope.imageFileName = '';
@@ -1577,14 +1589,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     }
 
-    $scope.showNotification = function (success, message) {
-        $scope.notification.show = true;
-        $scope.notification.status = success ? 'Success' : 'Error';
-        $scope.notification.message = message;
-        $timeout(function () {
-            $scope.notification.show = false;
-        }, 3000);
-    }
     var d = new Date().getFullYear();
     $scope.yearArr = [];
     for (var i = 80; i >= 0; i--) {
@@ -2225,9 +2229,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
                     $('#talent-delete').css('background-color', '');
                     $('#add-project').modal('hide');
-//                    $('html, body').animate({
-//                        scrollTop: 0
-//                    }, 'fast');
+                    //                    $('html, body').animate({
+                    //                        scrollTop: 0
+                    //                    }, 'fast');
                     $('#projectSuccess').css('display', 'block');
                     setTimeout(function () {
                         $('#projectSuccess').css('display', 'none');
@@ -2421,64 +2425,67 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.talentSorted = '';
-    
-    $scope.sortArrayByDate = function(arr, arrKey, key){
+
+    $scope.sortArrayByDate = function (arr, arrKey, key) {
         if (key == $scope.talentSorted) {
             arr = arr.reverse();
         } else {
             $scope.talentSorted = key;
             arr.sort(function (a, b) {
-                
-                var str1 = null, str2 = null;
-                
-                if(!a[arrKey].length){
+
+                var str1 = null
+                    , str2 = null;
+
+                if (!a[arrKey].length) {
                     str1 = 0;
                 };
-                
-                if(!b[arrKey].length){
+
+                if (!b[arrKey].length) {
                     str2 = 0;
                 };
-//                str1 = str1 == null ? a[arrKey][index1][key] ? new Date(a[arrKey][index1][key]).getTime() : 0 : 0;
-//                str2 = str2 == null ? b[arrKey][index2][key] ? new Date(b[arrKey][index2][key]).getTime() : 0 : 0;
-                
-                if(str1 == null && a[arrKey][0][key]){
-                    var d = a[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/,"$2$1$3");
+                //                str1 = str1 == null ? a[arrKey][index1][key] ? new Date(a[arrKey][index1][key]).getTime() : 0 : 0;
+                //                str2 = str2 == null ? b[arrKey][index2][key] ? new Date(b[arrKey][index2][key]).getTime() : 0 : 0;
+
+                if (str1 == null && a[arrKey][0][key]) {
+                    var d = a[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
                     str1 = new Date(d).getTime()
                 }
-                if(str2 == null && b[arrKey][0][key]){
-                    var d = b[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/,"$2$1$3");
+                if (str2 == null && b[arrKey][0][key]) {
+                    var d = b[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
                     str2 = new Date(d).getTime()
                 }
-                
+
                 return str1 - str2;
             });
         }
     }
 
     $scope.sortjsonArray = function (arr, arrKey, key, lastIndex) {
-        var index1 = 0, index2 = 0;
+        var index1 = 0
+            , index2 = 0;
         if (key == $scope.talentSorted) {
             arr = arr.reverse();
         } else {
             $scope.talentSorted = key;
             arr.sort(function (a, b) {
-                
-                var str1 = null, str2 = null;
-                
-                if(!a[arrKey].length){
+
+                var str1 = null
+                    , str2 = null;
+
+                if (!a[arrKey].length) {
                     str1 = '';
                 };
-                
-                if(!b[arrKey].length){
+
+                if (!b[arrKey].length) {
                     str2 = '';
                 };
-                if(lastIndex){
-                    index1 = a[arrKey].length ? a[arrKey].length-1 : 0;
-                    index2 = b[arrKey].length ? b[arrKey].length-1 : 0;
+                if (lastIndex) {
+                    index1 = a[arrKey].length ? a[arrKey].length - 1 : 0;
+                    index2 = b[arrKey].length ? b[arrKey].length - 1 : 0;
                 }
                 str1 = str1 == null ? a[arrKey][index1][key] ? a[arrKey][index1][key].toLowerCase() : '' : str1;
                 str2 = str2 == null ? b[arrKey][index2][key] ? b[arrKey][index2][key].toLowerCase() : '' : str2;
-                
+
                 if (str1 < str2) return 1;
                 if (str1 > str2) return -1;
                 return 0;
@@ -2625,10 +2632,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     //candidateEmail ='';
                     $rootScope.talentDetails.talent_email[0].email = candidateEmail;
                     sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
-                    $('#emailUpdated').css('display', 'block');
-                    setTimeout(function () {
-                        $('#emailUpdated').css('display', 'none');
-                    }, 3000);
+//                    $('#emailUpdated').css('display', 'block');
+//                    setTimeout(function () {
+//                        $('#emailUpdated').css('display', 'none');
+//                    }, 3000);
+                    $scope.showNotification(true, "Talent email is updated.");
                 } else if (response.success == false) {
                     $scope.candidateEmail = '';
                     $scope.closeCandidateInfo();
@@ -2665,18 +2673,20 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $scope.closeCandidateInfo();
                     //candidateEmailAdd ='';
 
-                    $('#emailSuccess').css('display', 'block');
-                    setTimeout(function () {
-                        $('#emailSuccess').css('display', 'none');
-                    }, 3000);
+//                    $('#emailSuccess').css('display', 'block');
+//                    setTimeout(function () {
+//                        $('#emailSuccess').css('display', 'none');
+//                    }, 3000);
+                    
+                    $scope.showNotification(true, 'Email has been added.');
                 } else if (response.success == false) {
                     $scope.candidateEmailAdd = '';
                     $scope.closeCandidateInfo();
-                    $('#emailError').css('display', 'block');
-                    setTimeout(function () {
-                        $('#emailError').css('display', 'none');
-                    }, 2000);
-                    // $scope.showNotification(false, response.errorstring.error);
+//                    $('#emailError').css('display', 'block');
+//                    setTimeout(function () {
+//                        $('#emailError').css('display', 'none');
+//                    }, 2000);
+                    $scope.showNotification(false, response.errorstring);
                 }
             }
         } else {
@@ -2708,11 +2718,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 //console.log(response);
                 $scope.closeCandidateInfo();
                 // candidateContact ='';
-                $('#contactSuccess').css('display', 'block');
-                setTimeout(function () {
-                    $('#contactSuccess').css('display', 'none');
-                }, 2000);
+//                $('#contactSuccess').css('display', 'block');
+//                setTimeout(function () {
+//                    $('#contactSuccess').css('display', 'none');
+//                }, 2000);
                 $rootScope.showLoader(false);
+                
+                if (response.success) {
+                    $scope.showNotification(true, "Talent contact has been added.");
+                } else {
+                    $scope.showNotification(false, response.errorstring);          
+                }
             }
         } else {
             $scope.isContact = true;
@@ -2735,14 +2751,24 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             function requestCallback(response) {
                 response = JSON.parse(response);
                 // console.log(response);
+
                 $scope.closeCandidateInfo();
                 $rootScope.talentDetails.talent_contact[0].contact = candidateContactAdd;
                 sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
-                //candidateContact = '';
-                $('#contactUpdated').css('display', 'block');
-                setTimeout(function () {
-                    $('#contactUpdated').css('display', 'none');
-                }, 2000);
+                if (response.success) {
+                    $scope.showNotification(true, "Talent contact has been updated successfully.");
+//                    $('#contactUpdated').css('display', 'block');
+//                    setTimeout(function () {
+//                        $('#contactUpdated').css('display', 'none');
+//                    }, 2000);
+                    
+                } else {
+                    $scope.showNotification(false, response.errorstring);
+//                    $('#contactError').css('display', 'block');
+//                    setTimeout(function () {
+//                        $('#contactError').css('display', 'none');
+//                    }, 2000);             
+                }
             }
         } else {
             $scope.isContact = true;
@@ -3244,6 +3270,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , education: []
                 //  , linkedinProfileUrl: talent.linkedin_url
+
 
 
 
