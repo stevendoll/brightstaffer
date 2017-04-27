@@ -61,6 +61,17 @@ class TalentProjectSerializer(serializers.ModelSerializer):
     company_name = serializers.CharField()
     date_added = serializers.CharField(source='get_date_added')
     project_stage = serializers.SerializerMethodField()
+    rank = serializers.SerializerMethodField()
+
+    def get_rank(self, obj):
+        tp = TalentProject.objects.filter(project=obj.project).order_by('-project_match').values_list('project_match',
+                                                                                                     flat=True)
+        rank = 0
+        for i, t in enumerate(tp):
+            if obj.project_match >= t:
+                return i+1
+
+        return rank
 
     @staticmethod
     def get_project_stage(obj):
@@ -71,7 +82,8 @@ class TalentProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalentProject
-        fields = ('id', 'talent', 'project', 'project_match', 'rank', 'date_added', 'company_name', 'project_stage')
+        fields = ('id', 'talent', 'project', 'project_match', 'rank',
+                  'date_added', 'company_name', 'project_stage')
 
 
 class TalentConceptSerializer(serializers.ModelSerializer):
