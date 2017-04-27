@@ -1800,6 +1800,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .table.talent-lst>tbody>tr>td.likd-icn {
     font-size: 45px;
     color: #7f7f7f;
+    position: relative;
 }
 
 .table.talent-lst>thead>tr>th:last-child {
@@ -2505,6 +2506,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .dropdown-menu>li>a:focus,
 .dropdown-menu>li>a:hover {
     border-radius: 0px !important;
+    outline: 0;
 }
 
 .dropdown-menu > li > a:last-child {
@@ -2788,7 +2790,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .tabl-scrol .mCSB_container {
-    width: 2240px;
+    width: 2455px !important;
 }
 
 @media (max-width: 768px) {
@@ -15181,6 +15183,22 @@ a.sbSelector:hover {
     margin: 5px 6px;
 }
 
+.plus-circles {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background-color: #faa831;
+    border-radius: 20px;
+    top: 4px;
+    left: 28px;
+}
+
+.plus-circles .fa {
+    color: #ffffff;
+    font-size: 10px;
+    float: left;
+    margin: 5px 6px;
+}
 .count .pro-normal-select {
     border: 1px solid #e7eaec;
     height: 40px;
@@ -15350,5 +15368,12 @@ a.sbSelector:hover {
     max-width: 100%;
 }
 
+.crt-stp-scroll #mCSB_2_container {
+    width: 100% !important;
+}
+
+a {
+    cursor: pointer;
+}
 
 /*create-profile-css-ends*/

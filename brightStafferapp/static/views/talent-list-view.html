@@ -55,8 +55,8 @@
                                  </th>
 
                                  <th id="talent_project" tabindex="0" >Projects
-                                    <span class="sor-cont" ng-click="sortBy('talent_project')" ng-init="propertyName === 'talent_project'" ng-class="{reverse: reverse}">
-<!--                                    <span class="sor-cont" ng-click="sortjsonArray(talentList, 'talent_project', 'project_stage', true)" ng-class="{reverse: reverse}">-->
+<!--                                    <span class="sor-cont" ng-click="sortBy('talent_project')" ng-init="propertyName === 'talent_project'" ng-class="{reverse: reverse}">-->
+                                    <span class="sor-cont" ng-click="sortjsonArray(talentList, 'talent_project', 'project', true)" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -66,6 +66,7 @@
                                      </span>
                                  </th>
                                  <th id="project_match" tabindex="0"  >Project Match
+                                    <span class="sor-cont" ng-click="sortjsonArray(talentList, 'talent_project', 'project_match', true)" ng-class="{reverse: reverse}">
                                     <span class="sor-cont">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
@@ -76,8 +77,9 @@
                                      </span>
                                  </th>
 
-                                 <th id="talent_prevCompany" tabindex="0"  ng-click="sortBy('talent_prevCompany')">Company/<span class="dis-blc">Division Name
-                                      <span class="sor-cont sor-cont-dubl" ng-init="propertyName === 'talent_prevCompany'" ng-class="{reverse: reverse}">
+                                 <th id="talent_prevCompany" tabindex="0">Company/<span class="dis-blc">Division Name
+<!--                                      <span class="sor-cont sor-cont-dubl" ng-init="propertyName === 'talent_prevCompany'" ng-class="{reverse: reverse}">-->
+                                      <span class="sor-cont sor-cont-dubl" ng-click="sortjsonArray(talentList, 'talent_project', 'company_name', true)" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -89,8 +91,8 @@
                                  </th>
                                  <th id="date_contacted" tabindex="0" >Last date
                                     <span class="dis-blc">contacted
-                                      <span class="sor-cont sor-cont-dubl" ng-init="propertyName === 'date_contacted'" ng-class="{reverse: reverse}">
-<!--                                      <span class="sor-cont sor-cont-dubl" ng-click="sortArrayByDate(talentList, 'talent_stages', 'create_date')" ng-class="{reverse: reverse}">-->
+<!--                                      <span class="sor-cont sor-cont-dubl" ng-init="propertyName === 'date_contacted'" ng-class="{reverse: reverse}">-->
+                                      <span class="sor-cont sor-cont-dubl" ng-click="sortArrayByDate(talentList, 'talent_stages', 'create_date')" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -100,9 +102,10 @@
                                      </span>
                                     </span>
                                  </th>
-                                 <th id="date_analyzed" tabindex="0"  ng-click="sortBy('date_analyzed')">Last date
+                                 <th id="date_analyzed" tabindex="0">Last date
                                      <span class="dis-blc"> analyzed
-                                        <span class="sor-cont sor-cont-dubl" ng-init="propertyName === 'date_analyzed'" ng-class="{reverse: reverse}">
+<!--                                        <span class="sor-cont sor-cont-dubl" ng-init="propertyName === 'date_analyzed'" ng-class="{reverse: reverse}">-->
+                                         <span class="sor-cont sor-cont-dubl" ng-click="sortArrayByDate(talentList, 'talent_stages', 'create_date')" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -113,8 +116,8 @@
                                       </span>
                                  </th>
                                   <th id="talent_email" tabindex="0"  ng-click="sortBy('talent_email')">Contact Email
-                                    <span class="sor-cont" ng-init="propertyName === 'talent_email'" ng-class="{reverse: reverse}">
-<!--                                    <span class="sor-cont" ng-click="sortjsonArray(talentList, 'talent_email', 'email')" ng-class="{reverse: reverse}">-->
+<!--                                    <span class="sor-cont" ng-init="propertyName === 'talent_email'" ng-class="{reverse: reverse}">-->
+                                    <span class="sor-cont" ng-click="sortjsonArray(talentList, 'talent_email', 'email')" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -125,6 +128,7 @@
                                  </th>
                                   <th id="talent_contact" tabindex="0"  ng-click="sortBy('talent_contact')">Contact phone
                                     <span class="sor-cont" ng-init="propertyName === 'talent_contact'" ng-class="{reverse: reverse}">
+<!--                                      <span class="sor-cont" ng-click="sortjsonArray(talentList, 'talent_contact', 'contact')" ng-class="{reverse: reverse}">-->
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -134,7 +138,8 @@
                                      </span>
                                  </th>
                                  <th>Linkedin url
-                                    <span class="sor-cont">
+<!--                                    <span class="sor-cont">-->
+                                    <span class="sor-cont" ng-click="setAndGetSortedArr(talentList, 'linkedin_url')" ng-class="{reverse: reverse}">
                                          <a class="arw-up" >
                                             <i class="fa fa-long-arrow-down"></i>
                                          </a>
@@ -187,7 +192,10 @@
                                      </td>
 
                                      <td><span ng-show="talent.talent_stages.length">[[talent.talent_stages[0].create_date  | dateFormat]]</span>
-                                         <span ng-show="!talent.talent_stages.length">[[talent.create_date | dateFormat]]</span>
+                                         <span ng-show="!talent.talent_stages.length">
+<!--                                             [[talent.create_date | dateFormat]]-->
+                                             N/A
+                                         </span>
                                      </td>
                                      <td><span ng-show="talent.talent_stages.length">[[talent.talent_stages[0].create_date | dateFormat]]</span>
                                          <span ng-show="!talent.talent_stages.length">[[talent.create_date | dateFormat]]</span></td>
@@ -197,11 +205,20 @@
                                          <span ng-show="!talent.talent_contact.length || talent.talent_contact[0].contact == ''">  N/A </span>
                                      </td>
                                      <td class="likd-icn">
-                                        <a href="[[talent.linkedin_url]]" target="_blank" ng-show="talent.linkedin_url"><i class="fa fa-linkedin-square tbl-linkdedin-font">
-                                        </i></a>
                                          
+                                         <a href="[[talent.linkedin_url]]" target="_blank" ng-show="talent.linkedin_url">
+                                             [[talent.linkedin_url]]
+                                         </a>
+                                         
+                                        <a ng-show="!talent.linkedin_url" ng-click="openLinkedinPopup($event,talent.id)">
+                                            <i class="fa fa-linkedin-square tbl-linkdedin-font"></i>
+                                            <div class="plus-circles"><i class="fa fa-plus"></i></div>
+                                         </a>
+                                         
+<!--
                                          <i class="fa fa-linkedin-square tbl-linkdedin-font" ng-show="!talent.linkedin_url" style="cursor: not-allowed;">
                                         </i>
+-->
                                      </td>
                                      <td>
                                           <div class="col-md-12 padding-zero" ng-init="rating = [[talent.rating]]">

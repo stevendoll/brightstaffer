@@ -1,9 +1,13 @@
 import os
 import json
 import ast
-from brightStaffer.settings import concept_relevance
+import requests
+import os
+import uuid
+import textract
+import PyPDF2
+from brightStaffer.settings import alchemy_username,alchmey_password
 from django.utils import timezone
-from watson_developer_cloud import AlchemyLanguageV1
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
@@ -13,7 +17,6 @@ from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentCon
     Talent, Company, TalentCompany, Education, TalentEducation
 from brightStafferapp import util
 from brightStafferapp.util import require_post_params, required_headers
-from brightStaffer.settings import Alchemy_api_key
 from django.shortcuts import render, HttpResponse
 from itertools import chain
 from brightStafferapp.serializers import ProjectSerializer, TopProjectSerializer, UserSerializer
@@ -26,16 +29,11 @@ from django.views.generic import View
 from django.utils.decorators import method_decorator
 from uuid import UUID
 from ResumeParser.core import create_resume
-import PyPDF2
 from PIL import Image
-import os
-import uuid
-import textract
-import datetime
-from datetime import date
-from .tasks import handle_talent_data, extract_text_from_pdf, add
+from .tasks import extract_text_from_pdf
 from brightStafferapp.linkedin_scrap import LinkedInParser
 from brightStafferapp.google_custom_search import GoogleCustomSearch
+
 
 class UserData(View):
     @method_decorator(csrf_exempt)
@@ -249,20 +247,22 @@ class AlchemyAPI(View):
         context['concept'] = keyword_concepts
         return util.returnSuccessShorcut(context)
 
+
     # @staticmethod
     def alchemy_api(self, user_data, project_id):
         keyword_list = []
+        url = 'https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27'
+        json_data = {"features": {"keywords": {}}, "text": user_data['description']}
+        headers = {'content-type': 'application/json'}
+        username = alchemy_username
+        password = alchmey_password
         try:
-            alchemy_language = AlchemyLanguageV1(api_key=Alchemy_api_key)
-            data = json.dumps(
-                alchemy_language.combined(text=user_data['description'],
-                                          extract='keywords'))
-            d = json.loads(data)
-            Projects.objects.filter(id=project_id).update(description_analysis=d)
-            for item in chain(d["keywords"]):
-                #if round(float(item['relevance']), 2) >= float(concept_relevance):
+            response_object = requests.post(url, data=json.dumps(json_data), auth=(username, password), headers=headers)
+            data = response_object.json()
+            Projects.objects.filter(id=project_id).update(description_analysis=data)
+            for item in chain(data["keywords"]):
                 keyword_list.append(item['text'].lower())
-            return list(set(keyword_list))#[:40]
+            return list(set(keyword_list))
         except Exception as e:
             return keyword_list
 

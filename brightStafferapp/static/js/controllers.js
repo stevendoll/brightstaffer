@@ -1997,6 +1997,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.editStageModal = function (selectedStage) {
         console.log(selectedStage);
+        initDatePicker('editStageDate');
         $scope.selectedStage = {};
         $scope.selectedStage.stage = selectedStage.stage;
         $scope.selectedStage.project = selectedStage.project;
@@ -2009,7 +2010,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.saveProjectStage = function () {
             console.log($scope.selectedStage);
-            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
+            $scope.selectedStage.create_date = $rootScope.formatDate($('#editStageDate').val());
+//            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
             var requestObj = $scope.selectedStage;
             requestObj.talent_id = $rootScope.talentDetails.id;
             talentApis.editStage(requestObj, function (response) {
@@ -2465,24 +2467,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.talentSorted = key;
             arr.sort(function (a, b) {
 
-                var str1 = null
-                    , str2 = null;
+                var str1 = 0
+                    , str2 = 0;
 
-                if (!a[arrKey].length) {
-                    str1 = 0;
-                };
-
-                if (!b[arrKey].length) {
-                    str2 = 0;
-                };
-                //                str1 = str1 == null ? a[arrKey][index1][key] ? new Date(a[arrKey][index1][key]).getTime() : 0 : 0;
-                //                str2 = str2 == null ? b[arrKey][index2][key] ? new Date(b[arrKey][index2][key]).getTime() : 0 : 0;
-
-                if (str1 == null && a[arrKey][0][key]) {
+                if (a[arrKey].length && a[arrKey][0][key]) {
                     var d = a[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
-                    str1 = new Date(d).getTime()
+                    str1 = new Date(d).getTime();
                 }
-                if (str2 == null && b[arrKey][0][key]) {
+
+                if (b[arrKey].length && b[arrKey][0][key]) {
                     var d = b[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
                     str2 = new Date(d).getTime()
                 }
@@ -3111,7 +3104,22 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //            $('.datepicker').toggle();
         //        });
     }
+    
+    function initDatepicker(id) {
+        $("#" + id).datepicker({
+            dateFormat: 'M d, yy'
+            , changeYear: true
+            , yearRange: '1900:' + new Date().getFullYear()
+            , yearRange: '1900:' + new Date().getFullYear()
+            , maxDate: new Date()
+        });
+    }
 
+    $scope.initDatePickers = function(){
+        initDatepicker('filter-from');
+        initDatepicker('filter-to');
+    }
+    
     $scope.filterOpen = function () {
         if (!$rootScope.isFilterChecked) {
             $rootScope.isFilterChecked = true;
@@ -3157,11 +3165,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var selectedProjectId = '';
 
         //            $scope.filterValue.analysed = analysedDate;
-        $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
+//        $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
+        $scope.filterValue.analysed = $('#filter-from').val() ? $rootScope.formatDate($('#filter-from').val()) : '';
 
 
         //            $scope.filterValue.lastContacted = lastContacted;
-        $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
+//        $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
+        $scope.filterValue.lastContacted = $('#filter-to').val() ? $rootScope.formatDate($('#filter-to').val()) : '';
 
         $scope.filterValue.stage = $scope.tFilter.stage;
         if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined || $scope.filterValue.stage == "0")
@@ -3381,6 +3391,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $rootScope.filterReset = function () {
+        $('#filter-from').val('');
+        $('#filter-to').val('');
         $scope.priceSlider.value = 0;
         $scope.filterValue = {
             stage: ''

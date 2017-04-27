@@ -5,18 +5,20 @@ from brightStafferapp import models
 from datetime import date
 import textract
 from ResumeParser.core import create_resume
+import requests
+from brightStaffer.settings import ml_url
 
 
 @app.task
 def add(x, y):
     return x + y
-
-
-@app.task
-def update_indexes():
-    print("Indexing process started at {}".format(datetime.datetime.now()))
-    call_command('update_index')
-    print("Indexing process ended at {}".format(datetime.datetime.now()))
+#
+#
+# @app.task
+# def update_indexes():
+#     print("Indexing process started at {}".format(datetime.datetime.now()))
+#     call_command('update_index')
+#     print("Indexing process ended at {}".format(datetime.datetime.now()))
 
 
 @app.task
@@ -29,7 +31,8 @@ def extract_text_from_pdf(file_upload_obj, user):
     text = textract.process(file_upload_obj.file.path).decode('utf-8')
     file_upload_obj.text = text
     file_upload_obj.save()
-    content = create_resume.create_resume(text)
+    url = ml_url
+    content = requests.post(url, data=text.encode('utf-8')).json()
     handle_talent_data(content, user)
 
 
@@ -52,7 +55,7 @@ def handle_talent_data(talent_data, user):
             if "work-experience" in talent_data:
                 for experience in talent_data["work-experience"]:
                     is_current = False
-                    # save all talent experience information
+                     # save all talent experience information
                     company, created = models.Company.objects.get_or_create(company_name=experience['Company'])
                     if experience['type'].lower() == "current":
                         is_current = True
@@ -62,24 +65,33 @@ def handle_talent_data(talent_data, user):
                     start_date, end_date = convert_to_date(experience['Duration'])
                     if end_date == 'Present':
                         is_current = True
-                        models.TalentCompany.objects.get_or_create(
-                            talent=talent_obj, company=company, is_current=is_current,
-                            designation=experience['JobTitle'], start_date=start_date)
+                        try:
+                            models.TalentCompany.objects.get_or_create(
+                                talent=talent_obj, company=company, is_current=is_current,
+                                designation=experience['JobTitle'], start_date=start_date)
+                        except:
+                            pass
                     else:
-                        models.TalentCompany.objects.get_or_create(
-                            talent=talent_obj, company=company, is_current=is_current,
-                            designation=experience['JobTitle'], start_date=start_date, end_date=end_date)
+                        try:
+                            models.TalentCompany.objects.get_or_create(
+                                talent=talent_obj, company=company, is_current=is_current,
+                                designation=experience['JobTitle'], start_date=start_date, end_date=end_date)
+                        except:
+                            pass
             if "education" in talent_data:
                 for education in talent_data['education']:
                     # save user education information
                     org, created = models.Education.objects.get_or_create(name=education['organisation'])
                     start_date, end_date = convert_to_start_end(education['duration'])
                     if start_date and end_date:
-                        tporg, created = models.TalentEducation.objects.get_or_create(talent=talent_obj, education=org,
-                                                                                      course=education['course'],
-                                                                                      start_date=start_date,
-                                                                                      end_date=end_date
-                                                                                      )
+                        try:
+                            tporg, created = models.TalentEducation.objects.get_or_create(talent=talent_obj, education=org,
+                                                                                          course=education['course'],
+                                                                                          start_date=start_date,
+                                                                                          end_date=end_date
+                                                                                          )
+                        except:
+                            pass
                     else:
                         tporg, created = models.TalentEducation.objects.get_or_create(talent=talent_obj, education=org,
                                                                                       course=education['course'])

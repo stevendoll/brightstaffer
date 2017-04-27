@@ -1,53 +1,54 @@
-  <h1 id="form-h-3" tabindex="-1" class="title"></h1>
-			                <fieldset id="form-p-3" role="tabpanel" aria-labelledby="form-h-3" class="body" aria-hidden="true">
-                        <h2 class="m-b text-create">Publish</h2>
-                          <div class="row">
-                          <div class="col-sm-12">
-                            <!-- <h5 class="p-y">If these details look great, hit Publish to activate this project.</h5> -->
-                            <div class="row b-t">
-                              <div class="col-sm-8 m-t">
-                                  <div class="p-b">
-                                    <label>Project Name</label>
-                                    <p class="form-control text-black"># [[projectForm.project_name | capitalize]]</p>
-                                  </div>
-                                  <div class="p-b">
-                                    <label>Company or Division</label>
-                                    <p class="form-control text-black">@ [[projectForm.company_name | capitalize]]</p>
-                                  </div>
-                               <div class="p-b">
-                                <label>Location</label>
-                                <p class="form-control text-black">[[projectForm.location | capitalize]]</p>
-                              </div>
-                          </div>
-                          </div>
-                          </div>
-			                    </div>
-			                    <!-- Describe -->
-								        <div class="row">
-			                        <div class="col-sm-12">
-						                <label>Job Description</label>
-											<p class="publish-textarea text-black">
-                                                [[projectForm.description | capitalize]]
-                                            </p>
-									</div>
-								</div>
-								<!-- Review Concepts -->
-								<div class="row p-y-md b-b">
-			            <div class="col-sm-12">
-										<label>Concepts</label>
-											<div class="ibox-content p-a-0">
-                                            <span class="btn btn-default btn-lg concept-tag" ng-repeat="concepts in jobDescriptionResult.concept" id="skill_[[concepts]]">[[concepts | capitalize]]</span>
-			                        		</div>
-								  </div>
-			                </div></fieldset>
+<h1 id="form-h-3" tabindex="-1" class="title"></h1>
+<fieldset id="form-p-3" role="tabpanel" aria-labelledby="form-h-3" class="body" aria-hidden="true">
+    <h2 class="m-b text-create">Publish</h2>
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- <h5 class="p-y">If these details look great, hit Publish to activate this project.</h5> -->
+            <div class="row b-t">
+                <div class="col-sm-8 m-t">
+                    <div class="p-b">
+                        <label>Project Name</label>
+                        <p class="form-control text-black"># [[projectForm.project_name | capitalize]]</p>
+                    </div>
+                    <div class="p-b">
+                        <label>Company or Division</label>
+                        <p class="form-control text-black">@ [[projectForm.company_name | capitalize]]</p>
+                    </div>
+                    <div class="p-b">
+                        <label>Location</label>
+                        <p class="form-control text-black">[[projectForm.location | capitalize]]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Describe -->
+    <div class="row">
+        <div class="col-sm-12">
+            <label>Job Description</label>
+            <p class="publish-textarea text-black">
+                [[projectForm.description | capitalize]]
+            </p>
+        </div>
+    </div>
+    <!-- Review Concepts -->
+    <div class="row p-y-md b-b">
+        <div class="col-sm-12">
+            <label>Concepts</label>
+            <div class="ibox-content p-a-0">
+                <div class="crt-stp-scroll" create-table-scroll>
+                    <span class="btn btn-default btn-lg concept-tag" ng-repeat="concepts in jobDescriptionResult.concept" id="skill_[[concepts]]">[[concepts | capitalize]]</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
 
 
-  <!--Modal window-->
+<!--Modal window-->
 <div class="modal-outer" id="breakPopup" style="display:none">
-  <div class="modal-content">
-    <p>[[publishMsg]]</p>
-    <a ng-if="isSuccess" ng-click="main.removePopupBox()">OK</a>
-  </div>
+    <div class="modal-content">
+        <p>[[publishMsg]]</p>
+        <a ng-if="isSuccess" ng-click="main.removePopupBox()">OK</a>
+    </div>
 </div>
-
-
