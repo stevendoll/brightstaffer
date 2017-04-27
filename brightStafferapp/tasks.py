@@ -5,6 +5,7 @@ from brightStafferapp import models
 from datetime import date
 import textract
 from ResumeParser.core import create_resume
+import requests
 
 
 # @app.task
@@ -29,7 +30,8 @@ def extract_text_from_pdf(file_upload_obj, user):
     text = textract.process(file_upload_obj.file.path).decode('utf-8')
     file_upload_obj.text = text
     file_upload_obj.save()
-    content = create_resume.create_resume(text)
+    url = 'http://172.31.25.111:5000/parse'
+    content = requests.post(url, data=text.encode('utf-8')).json()
     handle_talent_data(content, user)
 
 
@@ -52,7 +54,7 @@ def handle_talent_data(talent_data, user):
             if "work-experience" in talent_data:
                 for experience in talent_data["work-experience"]:
                     is_current = False
-                    # save all talent experience information
+                     # save all talent experience information
                     company, created = models.Company.objects.get_or_create(company_name=experience['Company'])
                     if experience['type'].lower() == "current":
                         is_current = True
