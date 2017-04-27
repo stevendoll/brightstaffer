@@ -15350,5 +15350,9 @@ a.sbSelector:hover {
     max-width: 100%;
 }
 
+.crt-stp-scroll #mCSB_2_container {
+    width: 100% !important;
+}
+
 
 /*create-profile-css-ends*/
