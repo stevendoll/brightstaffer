@@ -83,7 +83,7 @@
                                 <div class="edit-rectangle-left-div">
                                     <div class="form-group count">
                                         <input type="text" class="form-control edit-rectangle-input" value="Present" readonly/>
-<!--
+                                        <!--
                                         <select class="form-control pro-modal-select" ng-model="talentEditableData.currentOrganization[0].to">
                                             <option ng-show="talentEditableData.currentOrganization[0].to == ''" value="">Select Year</option>
                                             <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
@@ -135,6 +135,27 @@
         </div>
     </div>
     <!-- edit-profile-Modal-ends -->
+
+    <!-- add-linkedin-Modal-starts -->
+    <div class="modal fade" id="add-url" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog add-talent-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body roles-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                    <form class="edit-modal-recruiter" name="linkedForm" autocomplete="off">
+                        <span class="modal-edit-profile-hd">Add Linkedin URL</span>
+                        <div class="cls"></div>
+                        <input type="text" name="url" placeholder="Linkedin profile url" class="form-control" ng-model="candidate.linkedinProfileUrl" ng-pattern="linkedinUrlPattern" required/>
+                        <span class="msg-error" ng-show="linkedForm.url.$dirty && linkedForm.url.$error.pattern">Please enter valid url.</span>
+                        <button type="submit" class="btn add-stage" ng-click="addLinkedUrl()">Add</button>
+                    </form>
+                    <div class="cls"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- add-linkedin-Modal-ends -->
+
 </div>
 <!-- Modal add talent popup file -->
 <div ng-include="'static/views/addTalent.html'"></div>
