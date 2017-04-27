@@ -2790,7 +2790,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .tabl-scrol .mCSB_container {
-    width: 2240px;
+    width: 2455px !important;
 }
 
 @media (max-width: 768px) {
