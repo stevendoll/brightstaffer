@@ -68,8 +68,13 @@ class TalentProjectSerializer(serializers.ModelSerializer):
                                                                                                      flat=True)
         rank = 0
         for i, t in enumerate(tp):
-            if obj.project_match >= t:
-                return i+1
+            try:
+                if obj.project_match >= t:
+                    return i+1
+            except:
+                t=0
+                if obj.project_match >= t:
+                    return i+1
 
         return rank
 
