@@ -155,4 +155,6 @@ EMAIL_BACKEND = Config.get('SMTP', 'EMAIL_BACKEND')
 alchemy_username = Config.get('ALCHEMY', 'username')
 alchmey_password = Config.get('ALCHEMY', 'password')
 
+ml_url = Config.get('ML','URL')
+
 
