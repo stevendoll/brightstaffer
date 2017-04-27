@@ -9,7 +9,7 @@
                 </div>
                 <div class="talent-advance-search-div">
                     <button type="" class="btn advance-search">Advanced Search</button>
-                    <div class="talent-search-icon" ng-click="filterOpen()"><i class="fa fa-filter"></i></div>
+                    <div class="talent-search-icon" ng-click="initDatePickers();filterOpen()"><i class="fa fa-filter"></i></div>
                     <div class="view-as-panel">
                         <span>View as</span>
                         <div class="bar-view active" ng-click="changeState()"><i class="fa fa-bars"></i></div>
@@ -135,13 +135,15 @@
                                 <div class="filter-stage-box">
                                     <div class="form-group">
                                         <label for="" class="filter-label-text">Date Added/Analyzed</label>
-                                        <input type="date" class="form-control filter-input-date unstyled" id="analysed" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date">
+<!--                                        <input type="date" class="form-control filter-input-date unstyled" id="analysed" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date">-->
+                                        <input id="filter-from" type="text" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" placeholder="Select Date" readonly/>
                                     </div>
                                 </div>
                                 <div class="filter-stage-box">
                                     <div class="form-group">
                                         <label for="" class="filter-label-text">Last contacted</label>
-                                        <input type="date" class="form-control filter-input-date unstyled" id="lastContacted" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date">
+<!--                                        <input type="date" class="form-control filter-input-date unstyled" id="lastContacted" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date">-->
+                                        <input id="filter-to" type="text" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" placeholder="Select Date" readonly/>
                                     </div>
                                 </div>
                                 <div class="filter-stage-box">

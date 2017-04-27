@@ -1997,6 +1997,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.editStageModal = function (selectedStage) {
         console.log(selectedStage);
+        initDatePicker('editStageDate');
         $scope.selectedStage = {};
         $scope.selectedStage.stage = selectedStage.stage;
         $scope.selectedStage.project = selectedStage.project;
@@ -2009,7 +2010,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.saveProjectStage = function () {
             console.log($scope.selectedStage);
-            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
+            $scope.selectedStage.create_date = $rootScope.formatDate($('#editStageDate').val());
+//            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
             var requestObj = $scope.selectedStage;
             requestObj.talent_id = $rootScope.talentDetails.id;
             talentApis.editStage(requestObj, function (response) {
@@ -3111,7 +3113,22 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //            $('.datepicker').toggle();
         //        });
     }
+    
+    function initDatepicker(id) {
+        $("#" + id).datepicker({
+            dateFormat: 'M d, yy'
+            , changeYear: true
+            , yearRange: '1900:' + new Date().getFullYear()
+            , yearRange: '1900:' + new Date().getFullYear()
+            , maxDate: new Date()
+        });
+    }
 
+    $scope.initDatePickers = function(){
+        initDatepicker('filter-from');
+        initDatepicker('filter-to');
+    }
+    
     $scope.filterOpen = function () {
         if (!$rootScope.isFilterChecked) {
             $rootScope.isFilterChecked = true;
@@ -3157,11 +3174,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var selectedProjectId = '';
 
         //            $scope.filterValue.analysed = analysedDate;
-        $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
+//        $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
+        $scope.filterValue.analysed = $('#filter-from').val() ? $rootScope.formatDate($('#filter-from').val()) : '';
 
 
         //            $scope.filterValue.lastContacted = lastContacted;
-        $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
+//        $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
+        $scope.filterValue.lastContacted = $('#filter-to').val() ? $rootScope.formatDate($('#filter-to').val()) : '';
 
         $scope.filterValue.stage = $scope.tFilter.stage;
         if ($scope.filterValue.stage == 'Select Stage' || $scope.filterValue.stage == undefined || $scope.filterValue.stage == "0")
@@ -3381,6 +3400,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $rootScope.filterReset = function () {
+        $('#filter-from').val('');
+        $('#filter-to').val('');
         $scope.priceSlider.value = 0;
         $scope.filterValue = {
             stage: ''
