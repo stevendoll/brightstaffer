@@ -2506,6 +2506,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .dropdown-menu>li>a:focus,
 .dropdown-menu>li>a:hover {
     border-radius: 0px !important;
+    outline: 0;
 }
 
 .dropdown-menu > li > a:last-child {
