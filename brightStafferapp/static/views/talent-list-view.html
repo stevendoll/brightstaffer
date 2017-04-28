@@ -197,8 +197,10 @@
                                              N/A
                                          </span>
                                      </td>
-                                     <td><span ng-show="talent.talent_stages.length">[[talent.talent_stages[0].create_date | dateFormat]]</span>
-                                         <span ng-show="!talent.talent_stages.length">[[talent.create_date | dateFormat]]</span></td>
+                                     <td>
+                                         <span ng-show="talent.talent_project.length">[[talent.talent_project[0].date_added | dateFormat]]</span>
+                                         <span ng-show="!talent.talent_project.length">[[talent.create_date | dateFormat]]</span>
+                                     </td>
                                      <td><span ng-show="talent.talent_email.length && talent.talent_email[0].email != ''">[[talent.talent_email[0].email]]</span>
                                          <span ng-show="!talent.talent_email.length || talent.talent_email[0].email == ''"> N/A </span></td>
                                      <td><span ng-show="talent.talent_contact.length && talent.talent_contact[0].contact != ''">[[talent.talent_contact[0].contact | contactFormat]]</span>
