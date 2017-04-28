@@ -28,6 +28,7 @@ import math
 import datetime
 from datetime import date
 from brightStafferapp.google_custom_search import GoogleCustomSearch
+from django.utils import timezone
 
 
 class LargeResultsSetPagination(PageNumberPagination):
@@ -271,8 +272,7 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
                 return util.returnErrorShorcut(400, 'Talent with id {} doesn\'t exist in database.'.format(talent_id))
             talent_obj = talent_objs[0]
             tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
-
-            #TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match="50", rank="3")
+            Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
             talent_result = queryset.filter(talent_active__is_active=True)
             talent_project_match(talent_obj,project)
         return talent_result
@@ -344,6 +344,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         if not talent_objs:
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent))
         talent_obj = talent_objs[0]
+        Talent.objects.filter(id=talent).update(activation_date=timezone.now())
         tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage,
                                                             details=details, notes=notes, date_created=date)
         if created:
@@ -386,10 +387,6 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         stage_id = profile_data['stage_id']
         date = profile_data['create_date']
         date = datetime.datetime.strptime(date, "%d/%m/%Y")
-        #projects = Projects.objects.filter(id=project)
-        #if not projects:
-        #    return util.returnErrorShorcut(400, 'Project with id {} doesn\'t exist in database.'.format(project))
-        #project = projects[0]
         talent_objs = Talent.objects.filter(id=talent)
         if not talent_objs:
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent))
@@ -403,6 +400,7 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
             return util.returnErrorShorcut(400,
                                            'Talent stage and info is exist in database,Please update the stage')
         else:
+            Talent.objects.filter(id=talent).update(activation_date=timezone.now())
             updated = TalentStage.objects.filter(id=str(stage_id)).update(stage=stage, details=details,
                                                                           notes=notes, date_created=date)
             if updated:
@@ -441,6 +439,7 @@ class TalentStageDeleteAPI(generics.ListCreateAPIView):
         if not talent_objs:
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
         talent_obj = talent_objs[0]
+        Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
         TalentStage.objects.filter(id=id,talent=talent_id).delete()
         queryset = super(TalentStageDeleteAPI, self).get_queryset()
         queryset = queryset.filter(talent_id=talent_id)
@@ -476,6 +475,7 @@ class TalentUpdateRank(View):
         talent = Talent.objects.filter(id=talent)
         if talent:
             talent = talent[0]
+            Talent.objects.filter(id=talent).update(activation_date=timezone.now())
             talent.rating = request.GET['rating']
             talent.save()
             context['message'] = 'success'
@@ -708,6 +708,7 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
         linkedin_url = request.data['url']
         talent_id = request.data['id']
         talent = Talent.objects.filter(id=talent_id)
+        Talent.objects.filter(id=talent).update(activation_date=timezone.now())
         if not talent:
             return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
         talent = talent[0]
