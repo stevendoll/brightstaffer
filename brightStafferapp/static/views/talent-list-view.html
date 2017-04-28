@@ -206,10 +206,10 @@
                                      <td><span ng-show="talent.talent_contact.length && talent.talent_contact[0].contact != ''">[[talent.talent_contact[0].contact | contactFormat]]</span>
                                          <span ng-show="!talent.talent_contact.length || talent.talent_contact[0].contact == ''">  N/A </span>
                                      </td>
-                                     <td class="likd-icn">
+                                     <td class="likd-icn" title="[[talent.linkedin_url]]">
                                          
                                          <a href="[[talent.linkedin_url]]" target="_blank" ng-show="talent.linkedin_url">
-                                             [[talent.linkedin_url]]
+                                             [[talent.linkedin_url | characterlimit:true:30:' ...']]
                                          </a>
                                          
                                         <a ng-show="!talent.linkedin_url" ng-click="openLinkedinPopup($event,talent.id)">
