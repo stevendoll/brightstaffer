@@ -731,7 +731,7 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             talent.designation = content['talent_designation']
             talent.image = content['profile_image']
             talent.save()
-            TalentLocation.objects.filter(id=talent).update(city=content['city'])
+            TalentLocation.objects.filter(id=talent_id).update(city=content['city'])
         context['success'] = True
         return util.returnSuccessShorcut(context)
 
