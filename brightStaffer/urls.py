@@ -56,7 +56,7 @@ urlpatterns = [
     url(r'^update_rank/$', talent.TalentUpdateRank.as_view()),
     url(r'^delete_talent/$', talent.DeleteTalent.as_view()),
     url(r'^talent_search/$', talent.TalentSearch.as_view()),
-    url(r'^talent_search_filter/$', talent.TalentSearchFilter.as_view()),
+    # url(r'^talent_search_filter/$', talent.TalentSearchFilter.as_view()),
     url(r'', views.home),
 
 ]

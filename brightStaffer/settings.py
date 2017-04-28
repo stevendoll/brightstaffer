@@ -151,7 +151,10 @@ EMAIL_HOST_PASSWORD = Config.get('SMTP', 'EMAIL_HOST_PASSWORD')
 EMAIL_BACKEND = Config.get('SMTP', 'EMAIL_BACKEND')
 
 # Alchemy Service Credentials:-
-Alchemy_api_key = Config.get('ALCHEMY', 'ALCHEMY_KEY')
+# Alchemy_api_key = Config.get('ALCHEMY', 'ALCHEMY_KEY')
+alchemy_username = Config.get('ALCHEMY', 'username')
+alchmey_password = Config.get('ALCHEMY', 'password')
 
-concept_relevance = Config.get('ALCHEMY', 'RELEVANCE_SCORE')
+ml_url = Config.get('ML','URL')
+
 
