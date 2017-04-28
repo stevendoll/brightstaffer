@@ -559,7 +559,7 @@ class UploadTalent(View):
 
             context = dict()
             context['success'] = True
-            context['results'] = content['skills']
+            context['results'] = content
             return util.returnSuccessShorcut(context)
         except Exception as e:
             print(e)
