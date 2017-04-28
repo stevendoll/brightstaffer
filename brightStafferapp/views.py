@@ -33,6 +33,7 @@ from PIL import Image
 from .tasks import extract_text_from_pdf
 from brightStafferapp.linkedin_scrap import LinkedInParser
 from brightStafferapp.google_custom_search import GoogleCustomSearch
+from brightStaffer.settings import ml_url
 
 
 class UserData(View):
@@ -588,7 +589,9 @@ class UploadTalent(View):
         text = textract.process(file_upload_obj.file.path).decode('utf-8')
         file_upload_obj.text = text
         file_upload_obj.save()
-        content = create_resume.create_resume(text)
+        #content = create_resume.create_resume(text)
+        url = ml_url
+        content = requests.post(url, data=text.encode('utf-8')).json()
         return content
 
 
