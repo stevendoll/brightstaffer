@@ -602,15 +602,16 @@ class LinkedinDataView(View):
 
     def get(self, request):
         url=request.GET['url']
-        linkedin=LinkedInParser()
-        content=linkedin.linkedin_data(url)
-        if content is None:
-            googleCSE = GoogleCustomSearch()
-            content = googleCSE.google_custom(url)
         context = dict()
-        context['results'] = content
-        context['success'] = True
-        return util.returnSuccessShorcut(context)
+        googleCSE = GoogleCustomSearch()
+        content = googleCSE.google_custom(url)
+        if content==None:
+            context['success'] = False
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+        else:
+            context['results'] = content
+            context['success'] = True
+            return util.returnSuccessShorcut(context)
 
 
 def user_validation(data):
