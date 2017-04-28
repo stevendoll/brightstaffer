@@ -324,6 +324,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         talent_id = self.request.query_params.get('talent_id')
         project_id = self.request.query_params.get('project_id')
         stage_id = self.request.query_params.get('stage_id')
+        Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
         queryset = queryset.filter(id=stage_id, talent_id=talent_id, project_id=project_id)
         return queryset
 
@@ -348,13 +349,15 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage,
                                                             details=details, notes=notes, date_created=date)
         if created:
-            context['talent_id']=tp_obj.talent.talent_name
-            context['stage_id']=tp_obj.id
-            context['project']=tp_obj.project.project_name
-            context['stage']=tp_obj.stage
-            context['details'] = tp_obj.details
-            context['notes'] = tp_obj.notes
-            context['create_date'] = tp_obj.get_date_created
+            queryset = super(TalentStageAddAPI, self).get_queryset()
+            queryset = queryset.filter(talent_id=talent)
+            # context['talent_id']=tp_obj.talent.talent_name
+            # context['stage_id']=tp_obj.id
+            # context['project']=tp_obj.project.project_name
+            # context['stage']=tp_obj.stage
+            # context['details'] = tp_obj.details
+            # context['notes'] = tp_obj.notes
+            # context['create_date'] = tp_obj.get_date_created
             serializer_data = TalentSerializer(talent_obj)
             context['result'] = serializer_data.data
             return util.returnSuccessShorcut(context)
