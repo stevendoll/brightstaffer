@@ -20,8 +20,8 @@
                 <div class="talent-analysis-activity">
                     <div class="talent-activity-panel">
                         <div class="left-div">Last Activity</div>
-                        <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].create_date | dateFormat]]</div>
-                        <div class="right-div text-center" ng-show="!stage.stagesCard.length"> - </div>
+                        <div class="right-div" ng-show="talentDetails.activation_date">[[talentDetails.activation_date | dateFormat]]</div>
+                        <div class="right-div text-center" ng-show="!talentDetails.activation_date"> - </div>
                     </div>
                     <div class="talent-rec-panel">
                         <div class="left-div">Recruiter</div>
@@ -194,7 +194,8 @@
                                                                     </div>
                                                                 </td>
                                                                 <td>
-                                                                    <div class="rank-circle">[[$index+1]]</div>
+<!--                                                                    <div class="rank-circle">[[$index+1]]</div>-->
+                                                                    <div class="rank-circle">[[proj.rank]]</div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="table-date-div">[[proj.date_added | dateFormat]]</div>

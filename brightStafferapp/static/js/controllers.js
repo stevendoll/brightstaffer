@@ -2484,6 +2484,34 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             });
         }
     }
+    
+    $scope.sortAnalysedDate = function (arr, arrKey, key) {
+        if (key == $scope.talentSorted) {
+            arr = arr.reverse();
+        } else {
+            $scope.talentSorted = key;
+            arr.sort(function (a, b) {
+
+                var str1 = a.create_date.split(' ')[0].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
+                var str2 = b.create_date.split(' ')[0].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");;
+
+                str1 = new Date(str1).getTime();
+                str2 = new Date(str2).getTime();
+                
+                if (a[arrKey].length && a[arrKey][0][key]) {
+                    var d = a[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
+                    str1 = new Date(d).getTime();
+                }
+
+                if (b[arrKey].length && b[arrKey][0][key]) {
+                    var d = b[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
+                    str2 = new Date(d).getTime()
+                }
+
+                return str1 - str2;
+            });
+        }
+    }
 
     $scope.sortjsonArray = function (arr, arrKey, key, lastIndex) {
         var index1 = 0
