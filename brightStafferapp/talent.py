@@ -720,14 +720,18 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
         # {'lastName': 'Lyden', 'currentOrganization': [{'name': 'BrightStaffer', 'to': 'Present', 'from': ''}],
         #  'city': 'Washington D.C. Metro Area', 'profile_image': 'https://me',
         # 'firstName': 'Matt', 'talent_designation': 'Co-founder, CEO at BrightStaffer'}
+        context = dict()
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(linkedin_url)
-        if content:
+        if content==None:
+            context['success'] = False
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+        else:
             talent.talent_name = content['firstName'] + " " + content['lastName']
             talent.designation = content['talent_designation']
             talent.image = content['profile_image']
             talent.save()
-        context = dict()
+            TalentLocation.objects.filter(id=talent).update(city=content['city'])
         context['success'] = True
         return util.returnSuccessShorcut(context)
 
