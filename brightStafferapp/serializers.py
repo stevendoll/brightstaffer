@@ -73,8 +73,8 @@ class TalentProjectSerializer(serializers.ModelSerializer):
                     return i+1
             except:
                 t=0
-                if obj.project_match >= t:
-                    return i+1
+                # if obj.project_match >= t:
+                #     return i+1
 
         return rank
 
