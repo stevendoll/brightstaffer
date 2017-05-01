@@ -154,13 +154,16 @@ class Talent(models.Model):
 
     @property
     def get_date(self):
-        return self.create_date.strftime('%d/%m/%Y %X')
+        return self.create_date.strftime('%d/%m/%Y')
 
     @property
     def get_activation_date(self):
-        if self.activation_date:
-            return self.activation_date.date().strftime('%d/%m/%Y')
-        else:
+        try:
+            if self.activation_date:
+                return self.activation_date.date().strftime('%d/%m/%Y')
+            else:
+                return self.get_date
+        except:
             return self.get_date
 
 
