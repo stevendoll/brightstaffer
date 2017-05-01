@@ -14,6 +14,7 @@ import textract
 from datetime import *
 from django.core.management import call_command
 #from .tasks import update_indexes
+from django.utils import timezone
 
 
 STAGE_CHOICES = (('Contacted', 'Contacted'),
@@ -159,7 +160,7 @@ class Talent(models.Model):
         if self.activation_date:
             return self.activation_date.date().strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return self.create_date.strftime('%d/%m/%Y %X')
 
 
 class TalentLocation(models.Model):
