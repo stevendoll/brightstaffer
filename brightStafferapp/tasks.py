@@ -22,7 +22,7 @@ def add(x, y):
 
 
 @app.task
-def extract_text_from_pdf1(file_upload_obj, user,request):
+def extract_text_from_pdf(file_upload_obj, user,request):
     """
     :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
     and is now sent to extract text from the pdf file
