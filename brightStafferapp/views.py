@@ -559,6 +559,7 @@ class UploadTalent(View):
 
             context = dict()
             context['success'] = True
+            #ml_to_ui(content,user)
             context['results'] = content
             return util.returnSuccessShorcut(context)
         except Exception as e:
