@@ -1570,6 +1570,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.removeFile = function () {
         $scope.talentFileobj = {};
+        $scope.talentData.topConcepts = [{}];
     }
 
     $scope.uploadTalentFile = function () {
