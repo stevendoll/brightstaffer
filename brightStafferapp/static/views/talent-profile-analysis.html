@@ -74,7 +74,7 @@
                             <div class="analysis-panel">
                                 <div class="col-xs-12 padding-zero">
                                     <div class="analyzed-div">Analyzed [[talentDetails.create_date | dateFormat]]</div>
-                                    <div class="edit-update-link" style="cursor:default;">Edit/Update</div>
+                                    <div class="edit-update-link" style="cursor:pointer;" ng-click="openEditProfileForm(talentDetails);">Edit/Update</div>
                                 </div>
                                 <div ng-repeat="company in talentDetails.talent_company | limitTo: 2">
                                     <div ng-if="$index == 0">
@@ -112,7 +112,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                         <div class="talent-analysis-concept-rightpanel" ng-show="talentDetails.talent_company.length && talentDetails.talent_company[0].start_date != ''">
+                                         <div class="talent-analysis-concept-rightpanel" ng-show="talentDetails.talent_company.length && talentDetails.talent_company[0].start_date != '' && talentDetails.request_by != 'bulk'">
                                     <div class="top-concept-text">Career  History <span ng-click="allMetrics(talentDetails.talent_company)" ng-show="talentDetails.talent_company.length > 3">More</span></div>
                                     <div class="talent-progress">
                                       <div class="progress">
