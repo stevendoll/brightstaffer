@@ -175,7 +175,7 @@ class TalentSerializer(serializers.ModelSerializer):
     current_location = serializers.SerializerMethodField()
     talent_education = TalentEducationSerializer(many=True)
     recruiter = serializers.CharField()
-    requested_by = serializers.CharField()
+    request_by = serializers.CharField()
     create_date = serializers.CharField(source='get_date')
     talent_company = TalentCompanySerializer(many=True)
     talent_project = TalentProjectSerializer(many=True)
@@ -195,5 +195,5 @@ class TalentSerializer(serializers.ModelSerializer):
         model = Talent
         fields = ('id', 'image', 'talent_name', 'designation', 'industry_focus', 'activation_date', 'industry_focus_percentage',
                   'status', 'rating', 'talent_email', 'talent_stages', 'talent_contact', 'linkedin_url', 'recruiter',
-                  'create_date', 'current_location', 'talent_company', 'talent_education', 'talent_project','requested_by',
+                  'create_date', 'current_location', 'talent_company', 'talent_education', 'talent_project','request_by',
                   'talent_concepts')

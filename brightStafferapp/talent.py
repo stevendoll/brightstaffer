@@ -527,6 +527,7 @@ class TalentAdd(generics.ListCreateAPIView):
                 if talent:
                     talent = talent[0]
                     Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
+                    Talent.objects.filter(id=talent_id).update(request_by=profile_data.get('request_by', ''))
                     serializer_data = TalentSerializer(talent)
                     context['talent_updated_data'] = serializer_data.data
             context['message'] = 'Talent Updated Successfully'
@@ -537,7 +538,6 @@ class TalentAdd(generics.ListCreateAPIView):
 def add_edit_talent(profile_data, user):
     if "id" in profile_data:
         talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
-        print (talent_obj)
         if talent_obj:
             talent_location, created = TalentLocation.objects.get_or_create(talent=talent_obj[0],
                                                                             city=profile_data.get('city', ''),
@@ -553,7 +553,7 @@ def add_edit_talent(profile_data, user):
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
             recruiter=user, status='New', industry_focus=profile_data.get('industryFocus', ''),
             linkedin_url=profile_data.get('linkedinProfileUrl', ''), image=profile_data.get('profile_image', ''),
-            requested_by=profile_data.get('request_by', ''),
+            request_by=profile_data.get('request_by', ''),
             create_date=datetime.datetime.now())
         talent_location = TalentLocation.objects.create(talent=talent_obj,
                                                         city=profile_data.get('city', ''),

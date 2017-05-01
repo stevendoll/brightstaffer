@@ -22,7 +22,7 @@ def add(x, y):
 
 
 @app.task
-def extract_text_from_pdf(file_upload_obj, user):
+def extract_text_from_pdf1(file_upload_obj, user,request):
     """
     :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
     and is now sent to extract text from the pdf file
@@ -33,15 +33,16 @@ def extract_text_from_pdf(file_upload_obj, user):
     file_upload_obj.save()
     url = ml_url
     content = requests.post(url, data=text.encode('utf-8')).json()
-    handle_talent_data(content, user)
+    handle_talent_data(content, user,request)
 
 
-def handle_talent_data(talent_data, user):
+def handle_talent_data(talent_data, user,request):
     if talent_data:
         if 'name' in talent_data and talent_data['name']:
             talent_obj = models.Talent.objects.create(talent_name=talent_data['name'], recruiter=user,
                                                       status='New',
                                                       linkedin_url='',
+                                                      request_by=request,
                                                       create_date=datetime.datetime.now())
             talent_recruiter, created = models.TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                                      is_active=True)
