@@ -113,7 +113,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="talent-progress" ng-repeat="career in talent.talent_company | limitTo: 3">
+                    <div class="talent-progress" ng-repeat="career in talent.talent_company | limitTo: 3" ng-show="career.request_by != 'bulk'">
                         <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((career.blank_gap/calcTotal(talent.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
                             </div>
