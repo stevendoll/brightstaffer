@@ -505,6 +505,7 @@ class TalentAdd(generics.ListCreateAPIView):
         profile_data = json.loads(request.body.decode("utf-8"))
         if "id" not in profile_data:
             # phone and email
+            #Talent.objects.filter(id=id).update(activation_date=timezone.now())
             phone = profile_data.get('phone', '')
             email = profile_data.get('email', '')
             linkedin_url = profile_data.get('linkedinProfileUrl', '')
@@ -526,6 +527,7 @@ class TalentAdd(generics.ListCreateAPIView):
                 talent = Talent.objects.filter(id=talent_id)
                 if talent:
                     talent = talent[0]
+                    Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
                     serializer_data = TalentSerializer(talent)
                     context['talent_updated_data'] = serializer_data.data
             context['message'] = 'Talent Updated Successfully'
