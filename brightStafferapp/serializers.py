@@ -66,17 +66,18 @@ class TalentProjectSerializer(serializers.ModelSerializer):
     def get_rank(self, obj):
         tp = TalentProject.objects.filter(project=obj.project).order_by('-project_match').values_list('project_match',
                                                                                                      flat=True)
-        rank = 0
-        for i, t in enumerate(tp):
-            try:
+        try:
+
+            tp=sorted(list(set(list(tp))),reverse=True)
+            print (tp)
+            rank = 0
+            for i, t in enumerate(tp):
                 if obj.project_match >= t:
                     return i+1
-            except:
-                t=0
-                # if obj.project_match >= t:
-                return i+1
+            return rank
+        except:
+            tp = TalentProject.objects.filter(project=obj.project).update(project_match=0)
 
-        return rank
 
     @staticmethod
     def get_project_stage(obj):
