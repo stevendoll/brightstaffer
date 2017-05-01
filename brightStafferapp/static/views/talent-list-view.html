@@ -175,7 +175,11 @@
 <!--                                 <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">-->
                                  <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">
                                      <td><a href="" class="tbl-link-td" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</a></td>
-                                     <td><span ng-show="talent.talent_company.length && talent.talent_company[0].designation">[[talent.talent_company[0].designation | capitalizeWord]]</span>
+                                     <td>
+                                         <span ng-show="talent.talent_company.length && talent.talent_company[0].designation">              [[talent.talent_company[0].designation | capitalizeWord]]
+                                         </span>
+                                         <span ng-show="talent.talent_company.length && !talent.talent_company[0].designation">              N/A
+                                         </span>
                                          <span ng-show="!talent.talent_company.length"> N/A </span>
                                      </td>
                                      <td><span ng-show="talent.talent_company.length && talent.talent_company[0].company">[[talent.talent_company[0].company | capitalizeWord]]</span>
