@@ -2462,10 +2462,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.talentSorted = '';
-
+    $scope.tListsorted = true;
     $scope.sortArrayByDate = function (arr, arrKey, key) {
-        if (key == $scope.talentSorted) {
+        var sorted = false;
+        if (key == $scope.talentSorted && $scope.tListsorted) {
             arr = arr.reverse();
+        } else if(key == $scope.talentSorted && !$scope.tListsorted){
+            return;
         } else {
             $scope.talentSorted = key;
             arr.sort(function (a, b) {
@@ -2482,15 +2485,22 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     var d = b[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
                     str2 = new Date(d).getTime()
                 }
-
+                if(str1-str2 != 0){
+                    sorted = true;
+                }
+                
                 return str1 - str2;
             });
+            sorted ? $scope.tListsorted = true : $scope.tListsorted = false;
         }
     }
     
     $scope.sortAnalysedDate = function (arr, arrKey, key) {
-        if (key == $scope.talentSorted) {
+        var sorted = false;
+        if (key == $scope.talentSorted && $scope.tListsorted) {
             arr = arr.reverse();
+        } else if(key == $scope.talentSorted && !$scope.tListsorted){
+            return;
         } else {
             $scope.talentSorted = key;
             arr.sort(function (a, b) {
@@ -2510,17 +2520,25 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     var d = b[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
                     str2 = new Date(d).getTime()
                 }
-
+                
+                if(str1 != str2){
+                    sorted = true;
+                }
+                
                 return str1 - str2;
             });
+            sorted ? $scope.tListsorted = true : $scope.tListsorted = false;
         }
     }
 
     $scope.sortjsonArray = function (arr, arrKey, key, lastIndex) {
         var index1 = 0
-            , index2 = 0;
-        if (key == $scope.talentSorted) {
+            , index2 = 0
+            , sorted = false;
+        if (key == $scope.talentSorted && $scope.tListsorted) {
             arr = arr.reverse();
+        } else if(key == $scope.talentSorted && !$scope.tListsorted){
+            return;
         } else {
             $scope.talentSorted = key;
             arr.sort(function (a, b) {
@@ -2541,17 +2559,24 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 }
                 str1 = str1 == null ? a[arrKey][index1][key] ? a[arrKey][index1][key].toLowerCase() : '' : str1;
                 str2 = str2 == null ? b[arrKey][index2][key] ? b[arrKey][index2][key].toLowerCase() : '' : str2;
-
+                
+                if(str1 != str2){
+                    sorted = true;
+                }
+                
                 if (str1 < str2) return 1;
                 if (str1 > str2) return -1;
                 return 0;
             });
+            sorted ? $scope.tListsorted = true : $scope.tListsorted = false;
         }
     }
 
     $scope.setAndGetSortedArr = function (arr, key, isNumericVal) {
-        if (key == $scope.talentSorted) {
+        if (key == $scope.talentSorted && $scope.tListsorted) {
             arr = arr.reverse();
+        } else if(key == $scope.talentSorted && !$scope.tListsorted){
+            return;
         } else {
             $scope.talentSorted = key;
             if (isNumericVal) {
@@ -2563,17 +2588,28 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.sortNumericArr = function (arr, key) {
+        var sorted = false;
         arr.sort(function (a, b) {
-            return parseFloat(a[key]) - parseFloat(b[key]);
+            var result = parseFloat(a[key]) - parseFloat(b[key]);
+            if(result != 0){
+                sorted = true;
+            }
+            return result;
         });
+        sorted ? $scope.tListsorted = true : $scope.tListsorted = false;
     }
 
     $scope.sortArr = function (arr, key) {
+        var sorted = false;
         arr.sort(function (a, b) {
+            if(a[key].toLowerCase() != b[key].toLowerCase()){
+                sorted = true;
+            }
             if (a[key].toLowerCase() < b[key].toLowerCase()) return 1;
             if (a[key].toLowerCase() > b[key].toLowerCase()) return -1;
             return 0;
         });
+        sorted ? $scope.tListsorted = true : $scope.tListsorted = false;
     }
 
     $scope.reverse = false;
