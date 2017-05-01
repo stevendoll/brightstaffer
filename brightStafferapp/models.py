@@ -15,7 +15,7 @@ from datetime import *
 from django.core.management import call_command
 #from .tasks import update_indexes
 from django.utils import timezone
-
+import datetime
 
 STAGE_CHOICES = (('Contacted', 'Contacted'),
                  ('Replied', 'Replied'),
@@ -154,7 +154,10 @@ class Talent(models.Model):
 
     @property
     def get_date(self):
-        return self.create_date.strftime('%d/%m/%Y')
+        if self.create_date:
+            return self.create_date.strftime('%d/%m/%Y')
+        else:
+            datetime.date.today().strftime("%d/%m/%Y")
 
     @property
     def get_activation_date(self):
@@ -162,9 +165,9 @@ class Talent(models.Model):
             if self.activation_date:
                 return self.activation_date.date().strftime('%d/%m/%Y')
             else:
-                return self.get_date
+                datetime.date.today().strftime("%d/%m/%Y")
         except:
-            return self.get_date
+            datetime.date.today().strftime("%d/%m/%Y")
 
 
 class TalentLocation(models.Model):
@@ -267,7 +270,7 @@ class TalentCompany(models.Model):
         if self.end_date and self.start_date:
             return (self.end_date - self.start_date).days / 365
         if self.start_date and not self.end_date:
-            return (datetime.now().date() - self.start_date).days / 365
+            return (datetime.datetime.now().date() - self.start_date).days / 365
 
 
     @property
