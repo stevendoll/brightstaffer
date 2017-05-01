@@ -142,7 +142,7 @@ class Talent(models.Model):
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
     activation_date = models.DateTimeField(verbose_name='Activation Date', null=True, blank=True)
-    requested_by = models.CharField(max_length=100, default='', null=True, blank=True)
+    request_by = models.CharField(max_length=100, default='', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Talent'

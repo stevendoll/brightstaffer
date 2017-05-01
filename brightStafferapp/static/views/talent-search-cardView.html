@@ -103,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-                  <div class="top-concept-panel" ng-show="talent.talent_company.length && talent.talent_company[0].start_date != ''">
+                  <div class="top-concept-panel" ng-show="talent.talent_company.length && talent.talent_company[0].start_date != '' && talent.request_by != 'bulk'">
                     <div class="top-concept-text">Career History<span ng-click="allMetrics(talent.talent_company)" ng-show="talent.talent_company.length > 3">More</span></div>
                     <div class="talent-progress">
                         <div class="progress">
@@ -113,7 +113,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="talent-progress" ng-repeat="career in talent.talent_company | limitTo: 3" ng-show="career.request_by != 'bulk'">
+                    <div class="talent-progress" ng-repeat="career in talent.talent_company | limitTo: 3">
                         <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-show="($index - 1) >= 0" style="width:[[((career.blank_gap/calcTotal(talent.talent_company)) * 100).toFixed(2)]]%; background-color: #e4e4e4 !important;">
                             </div>
