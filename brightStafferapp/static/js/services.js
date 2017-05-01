@@ -623,6 +623,13 @@ function searchData() {
 
 function createTalentFormService($rootScope, REQUEST_URL, appService) {
     return {
+        talentDetails: {},
+        setTalentDetails: function(data){
+            this.talentDetails = data;
+        },
+        getTalentDetails: function(){
+            return this.talentDetails;
+        },
         createTalent: function (data, callback) {
             var param = {
                 url: REQUEST_URL + 'talent_add/'

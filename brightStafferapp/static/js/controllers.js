@@ -1231,7 +1231,7 @@ function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieSt
 
 }
 
-function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout) {
+function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, createTalentFormService) {
     $scope.validMimeTypes = ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword', 'application/pdf'];
     $rootScope.attachedFilesData = [];
     $scope.FilesList = [];
@@ -1319,9 +1319,9 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     });
 
     $scope.openCreateProfile = function () {
+        createTalentFormService.setTalentDetails({});
         $('#add-talent').modal('hide');
         $state.go('talent.create-profile');
-
     }
 }
 
@@ -1535,7 +1535,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         , status: 'wow'
         , message: ''
     };
-
+    $scope.talentData = {};
     $scope.showNotification = function (success, message) {
         $timeout(function () {
             $scope.notification.show = true;
@@ -1551,6 +1551,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.todayDate = new Date();
     $scope.imageFileName = '';
     $scope.talentFileobj = {};
+
+//    $rootScope.editTalentDetail = function (data) {
+//        $timeout(function(d){
+//            a.talentData = d;
+//            console.log($scope.talentData)
+//        }, 3000, true, data);
+//        
+//    };
 
     $scope.$watch('talentFileobj.name', function (newVal, oldVal) {
         if ($scope.talentFileobj.name) {
@@ -1597,29 +1605,36 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     for (var i = 80; i >= 0; i--) {
         $scope.yearArr[i] = d - i;
     }
-    $scope.talentData = {};
+
     $scope.talentDataValidation = {
         phone: true
     };
     $scope.initTalenData = function () {
+        var details = createTalentFormService.getTalentDetails();
+        if(Object.keys(details).length){
+            $scope.talentData = details;
+            return;
+        }
+        
         $scope.talentData = {
             profile_image: ''
+            , industryFocus: {
+                name: '',
+                percentage: ''
+            }
             , currentOrganization: [{
                 name: ''
                 , from: ''
                 , to: 'Present'
-            }]
-            , pastOrganization: [{
+        }], pastOrganization: [{
                 name: ''
                 , from: ''
                 , to: ''
-            }]
-            , education: [{
+        }], education: [{
                 name: ''
                 , from: ''
                 , to: ''
-        }]
-            , topConcepts: [{}]
+        }], topConcepts: [{}]
             , careerHistory: {
                 total: ''
                 , history: [{}]
@@ -1706,7 +1721,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 }
             } else {
                 $scope.showNotification(false, response.errorstring);
-                $window.scrollTo(0,0);
+                $window.scrollTo(0, 0);
             }
         })
     }
@@ -1723,6 +1738,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
 
         if (!valid) return;
+        
+        data.id ? data.key = 'edit' : data.key = "create";
+        
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
@@ -1740,6 +1758,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $state.go('talent.talent-search.talent-search-card');
                     $rootScope.getCandidateData();
                 }
+                createTalentFormService.setTalentDetails({});
             } else {
                 if (onEdit) {
                     $('#edit-profile').modal('hide');
@@ -2014,7 +2033,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.saveProjectStage = function () {
             console.log($scope.selectedStage);
             $scope.selectedStage.create_date = $rootScope.formatDate($('#editStageDate').val());
-//            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
+            //            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
             var requestObj = $scope.selectedStage;
             requestObj.talent_id = $rootScope.talentDetails.id;
             talentApis.editStage(requestObj, function (response) {
@@ -2467,7 +2486,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var sorted = false;
         if (key == $scope.talentSorted && $scope.tListsorted) {
             arr = arr.reverse();
-        } else if(key == $scope.talentSorted && !$scope.tListsorted){
+        } else if (key == $scope.talentSorted && !$scope.tListsorted) {
             return;
         } else {
             $scope.talentSorted = key;
@@ -2485,21 +2504,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     var d = b[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
                     str2 = new Date(d).getTime()
                 }
-                if(str1-str2 != 0){
+                if (str1 - str2 != 0) {
                     sorted = true;
                 }
-                
+
                 return str1 - str2;
             });
             sorted ? $scope.tListsorted = true : $scope.tListsorted = false;
         }
     }
-    
+
     $scope.sortAnalysedDate = function (arr, arrKey, key) {
         var sorted = false;
         if (key == $scope.talentSorted && $scope.tListsorted) {
             arr = arr.reverse();
-        } else if(key == $scope.talentSorted && !$scope.tListsorted){
+        } else if (key == $scope.talentSorted && !$scope.tListsorted) {
             return;
         } else {
             $scope.talentSorted = key;
@@ -2510,7 +2529,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
                 str1 = new Date(str1).getTime();
                 str2 = new Date(str2).getTime();
-                
+
                 if (a[arrKey].length && a[arrKey][0][key]) {
                     var d = a[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
                     str1 = new Date(d).getTime();
@@ -2520,11 +2539,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     var d = b[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
                     str2 = new Date(d).getTime()
                 }
-                
-                if(str1 != str2){
+
+                if (str1 != str2) {
                     sorted = true;
                 }
-                
+
                 return str1 - str2;
             });
             sorted ? $scope.tListsorted = true : $scope.tListsorted = false;
@@ -2537,7 +2556,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , sorted = false;
         if (key == $scope.talentSorted && $scope.tListsorted) {
             arr = arr.reverse();
-        } else if(key == $scope.talentSorted && !$scope.tListsorted){
+        } else if (key == $scope.talentSorted && !$scope.tListsorted) {
             return;
         } else {
             $scope.talentSorted = key;
@@ -2559,11 +2578,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 }
                 str1 = str1 == null ? a[arrKey][index1][key] ? a[arrKey][index1][key].toLowerCase() : '' : str1;
                 str2 = str2 == null ? b[arrKey][index2][key] ? b[arrKey][index2][key].toLowerCase() : '' : str2;
-                
-                if(str1 != str2){
+
+                if (str1 != str2) {
                     sorted = true;
                 }
-                
+
                 if (str1 < str2) return 1;
                 if (str1 > str2) return -1;
                 return 0;
@@ -2575,7 +2594,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.setAndGetSortedArr = function (arr, key, isNumericVal) {
         if (key == $scope.talentSorted && $scope.tListsorted) {
             arr = arr.reverse();
-        } else if(key == $scope.talentSorted && !$scope.tListsorted){
+        } else if (key == $scope.talentSorted && !$scope.tListsorted) {
             return;
         } else {
             $scope.talentSorted = key;
@@ -2591,7 +2610,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var sorted = false;
         arr.sort(function (a, b) {
             var result = parseFloat(a[key]) - parseFloat(b[key]);
-            if(result != 0){
+            if (result != 0) {
                 sorted = true;
             }
             return result;
@@ -2602,7 +2621,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.sortArr = function (arr, key) {
         var sorted = false;
         arr.sort(function (a, b) {
-            if(a[key].toLowerCase() != b[key].toLowerCase()){
+            if (a[key].toLowerCase() != b[key].toLowerCase()) {
                 sorted = true;
             }
             if (a[key].toLowerCase() < b[key].toLowerCase()) return 1;
@@ -3171,7 +3190,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //            $('.datepicker').toggle();
         //        });
     }
-    
+
     function initDatepicker(id) {
         $("#" + id).datepicker({
             dateFormat: 'M d, yy'
@@ -3182,11 +3201,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         });
     }
 
-    $scope.initDatePickers = function(){
+    $scope.initDatePickers = function () {
         initDatepicker('filter-from');
         initDatepicker('filter-to');
     }
-    
+
     $scope.filterOpen = function () {
         if (!$rootScope.isFilterChecked) {
             $rootScope.isFilterChecked = true;
@@ -3232,12 +3251,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var selectedProjectId = '';
 
         //            $scope.filterValue.analysed = analysedDate;
-//        $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
+        //        $scope.filterValue.analysed = $scope.filterValue.analysed ? $rootScope.formatDate($scope.filterValue.analysed) : '';
         $scope.filterValue.analysed = $('#filter-from').val() ? $rootScope.formatDate($('#filter-from').val()) : '';
 
 
         //            $scope.filterValue.lastContacted = lastContacted;
-//        $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
+        //        $scope.filterValue.lastContacted = $scope.filterValue.lastContacted ? $rootScope.formatDate($scope.filterValue.lastContacted) : '';
         $scope.filterValue.lastContacted = $('#filter-to').val() ? $rootScope.formatDate($('#filter-to').val()) : '';
 
         $scope.filterValue.stage = $scope.tFilter.stage;
@@ -3370,31 +3389,24 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.updateTalent = function (data) {
 
     }
-
     $scope.openEditProfileForm = function (data) {
         // $scope.talentEditableData = talent;
+
         var talent = angular.copy(data);
         var talentName = talent.talent_name.split(' ');
         var location = talent.current_location.split(',');
         $scope.talentEditableData = {
             currentOrganization: []
             , education: []
-                //  , linkedinProfileUrl: talent.linkedin_url
-
-
-
-
-
-
-
-
-
-            
+            , linkedinProfileUrl: data.linkedin_url
             , city: location[0] ? location[0].trim() : ""
             , country: location[2] ? location[2].trim() : ""
             , state: location[1] ? location[1].trim() : ""
             , designation: talent.designation ? talent.designation.trim() : ''
-            , industryFocus: talent.industry_focus ? talent.industry_focus.trim() : ''
+            , industryFocus: {
+                name: talent.industry_focus ? talent.industry_focus.trim() : '',
+                percentage: talent.percentage ? talent.percentage : ''
+            }
             , firstName: talentName[0] ? talentName[0].trim() : ''
             , lastName: talentName[1] ? talentName[1].trim() : ''
             , id: talent.id
@@ -3453,8 +3465,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 , to: ''
             });
         }
-
-        $('#edit-profile').modal('show');
+        
+        $state.go('talent.create-profile');
+        createTalentFormService.setTalentDetails(angular.copy($scope.talentEditableData));
+        
+//        $rootScope.editTalentDetail($scope.talentEditableData);
+        //$('#edit-profile').modal('show');
     }
 
     $rootScope.filterReset = function () {

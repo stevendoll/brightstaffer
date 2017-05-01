@@ -64,7 +64,7 @@
                         <div class="create-profile-form-div">
                             <div class="left-section">
                                 <div class="form-group">
-                                    <label for="">First Name</label>
+                                    <label for="">First Name </label>
                                     <input name="fName" type="text" class="form-control" id="" placeholder="First Name" maxlength="100" ng-model="talentData.firstName" required/>
                                 </div>
                             </div>
@@ -230,6 +230,7 @@
                                     Add More
                                 </button>
                             </div>
+<!--
                             <div class="create-profile-form-div">
                                 <div class="main-section">
                                     <div class="form-group">
@@ -237,6 +238,15 @@
                                         <input name="industryFocus" type="text" class="form-control" id="" placeholder="Industry focus" maxlength="100" ng-model="talentData.industryFocus" />
                                     </div>
                                 </div>
+                            </div>
+-->
+                            <div class="top-concept-right-div">
+                              <h2>Industry Focus</h2>
+                              <h3>Relevance</h3>
+                              <div class="top-concept-input-div">
+                                <input type="" class="form-control top-concept-input-part" id="" placeholder="Industry focus" maxlength="100" ng-model="talentData.industryFocus.name" />
+                                <input type="" class="form-control top-concept-right-input-div" id="" placeholder="%" ng-model="talentData.industryFocus.percentage" ng-change="numberonly(talentData.industryFocus, 'percentage');"/>
+                              </div>
                             </div>
                             <div class="top-concepts-panel" style="display:none;">
                                 <!--<div class="create-pro-optional-section">-->
