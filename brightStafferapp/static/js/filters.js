@@ -106,7 +106,7 @@ function contactFormat() {
 function locationFormat() {
     return function (input) {
         input = input.trim();
-        if(input == ',')
+        if (input == ',')
             return '';
         var b = input.split(',');
         if (b[0]) {
@@ -115,8 +115,8 @@ function locationFormat() {
         if (b[1]) {
             b[1] = capitalizeString(b[1].trim());
         }
-        if(b[2]){
-             b[2] = capitalizeString(b[2].trim());
+        if (b[2]) {
+            b[2] = capitalizeString(b[2].trim());
         }
         input = b.join(', ')
         return input;
@@ -125,6 +125,30 @@ function locationFormat() {
             return inputString.substring(0, 1).toUpperCase() + inputString.substring(1);
         }
     }
+}
+
+function characterlimit() {
+    return function (value, wordwise, max, tail) {
+        if (!value) return '';
+
+        max = parseInt(max, 10);
+        if (!max) return value;
+        if (value.length <= max) return value;
+
+        value = value.substr(0, max);
+        if (wordwise) {
+            var lastspace = value.lastIndexOf(' ');
+            if (lastspace !== -1) {
+                //Also remove . and , so its gives a cleaner result.
+                if (value.charAt(lastspace - 1) === '.' || value.charAt(lastspace - 1) === ',') {
+                    lastspace = lastspace - 1;
+                }
+                value = value.substr(0, lastspace);
+            }
+        }
+
+        return value + (tail || ' …');
+    };
 }
 
 angular
@@ -136,4 +160,5 @@ angular
     .filter('capitalizeAll', capitalizeAll)
     .filter('capitalizeWord', capitalizeWord)
     .filter('contactFormat', contactFormat)
+    .filter('characterlimit', characterlimit)
     .filter('locationFormat', locationFormat);

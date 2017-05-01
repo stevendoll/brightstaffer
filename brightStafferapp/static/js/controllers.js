@@ -1570,6 +1570,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.removeFile = function () {
         $scope.talentFileobj = {};
+        $scope.talentData.topConcepts = [{}];
     }
 
     $scope.uploadTalentFile = function () {
@@ -1704,7 +1705,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $('#linkedinUrl').blur();
                 }
             } else {
-
+                $scope.showNotification(false, response.errorstring);
+                $window.scrollTo(0,0);
             }
         })
     }
@@ -1778,6 +1780,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 } else {
                     console.log('error');
                     $scope.showNotification(false, response.errorstring);
+                    $window.scrollTo(0, 0);
                 }
             });
         }
