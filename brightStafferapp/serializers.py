@@ -176,13 +176,13 @@ class TalentSerializer(serializers.ModelSerializer):
     recruiter = serializers.CharField()
     request_by = serializers.CharField()
     create_date = serializers.CharField(source='get_date')
+    activation_date = serializers.CharField(source='get_activation_date')
     talent_company = TalentCompanySerializer(many=True)
     talent_project = TalentProjectSerializer(many=True)
     talent_concepts = TalentConceptSerializer(many=True)
     talent_email = TalentEmailSerializer(many=True)
     talent_contact = TalentContactSerializer(many=True)
     talent_stages = TalentStageSerializer(many=True)
-    activation_date = serializers.CharField(source='get_activation_date')
 
     def get_current_location(self, obj):
         if obj.current_location.all():
