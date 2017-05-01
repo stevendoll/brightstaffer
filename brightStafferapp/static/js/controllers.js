@@ -1813,10 +1813,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $rootScope.getCandidateData();
             $state.go(state);
         }
-        /*$scope.numberonly = function (obj, key) {
-                if (typeof (obj[key]) == "string")
-                    obj[key] = obj[key].replace(/\D+/g, '');
-            }*/
+    $scope.numberonly = function (obj, key, isPercentage) {
+        if (typeof (obj[key]) == "string")
+            obj[key] = obj[key].replace(/\D+/g, '');
+        
+        if(obj[key] > 100)
+            obj[key] = 100;
+    }
 
     $scope.contactFormat = function (obj, key) {
             if (obj[key] && obj[key] != "string") {
