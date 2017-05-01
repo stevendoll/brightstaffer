@@ -505,7 +505,6 @@ class TalentAdd(generics.ListCreateAPIView):
         profile_data = json.loads(request.body.decode("utf-8"))
         if "id" not in profile_data:
             # phone and email
-            #Talent.objects.filter(id=id).update(activation_date=timezone.now())
             phone = profile_data.get('phone', '')
             email = profile_data.get('email', '')
             linkedin_url = profile_data.get('linkedinProfileUrl', '')
@@ -538,6 +537,7 @@ class TalentAdd(generics.ListCreateAPIView):
 def add_edit_talent(profile_data, user):
     if "id" in profile_data:
         talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
+        print (talent_obj)
         if talent_obj:
             talent_location, created = TalentLocation.objects.get_or_create(talent=talent_obj[0],
                                                                             city=profile_data.get('city', ''),
@@ -553,6 +553,7 @@ def add_edit_talent(profile_data, user):
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
             recruiter=user, status='New', industry_focus=profile_data.get('industryFocus', ''),
             linkedin_url=profile_data.get('linkedinProfileUrl', ''), image=profile_data.get('profile_image', ''),
+            requested_by=profile_data.get('request_by', ''),
             create_date=datetime.datetime.now())
         talent_location = TalentLocation.objects.create(talent=talent_obj,
                                                         city=profile_data.get('city', ''),
@@ -562,6 +563,7 @@ def add_edit_talent(profile_data, user):
                                                         )
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                           is_active=True)
+
     if talent_obj:
         # add email and phone for talent
         TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
@@ -570,7 +572,7 @@ def add_edit_talent(profile_data, user):
         if 'topConcepts' in profile_data:
             for skill in profile_data.get('topConcepts', ''):
                 if bool(skill):
-                    match = float(skill.get('percentage', skill.get('score', '')))
+                    match = float(skill.get('percentage', skill.get('match', '')))
                     if match and match < 1:
                         match *= 100
                         match = round(match, 2)

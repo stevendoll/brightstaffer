@@ -1588,9 +1588,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if (typeof (response) == "string")
                 response = JSON.parse(response);
             if (response.success) {
-                if (response.results.length) {
-                    $scope.talentData.topConcepts = response.results;
-                }
+                $scope.talentData = response.results;
             } else {
                 $scope.showNotification(false, response.errorstring || 'Error in fetching data from pdf');
                 $window.scrollTo(0, 0);
