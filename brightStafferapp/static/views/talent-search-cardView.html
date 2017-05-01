@@ -103,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-                  <div class="top-concept-panel" ng-show="talent.talent_company.length && talent.talent_company[0].start_date != ''">
+                  <div class="top-concept-panel" ng-show="talent.talent_company.length && talent.talent_company[0].start_date != '' && talent.request_by != 'bulk'">
                     <div class="top-concept-text">Career History<span ng-click="allMetrics(talent.talent_company)" ng-show="talent.talent_company.length > 3">More</span></div>
                     <div class="talent-progress">
                         <div class="progress">
@@ -131,7 +131,7 @@
                         </div>
                     </div>
                     <div class="cls"></div>
-                <!--
+                
                     <div class="indus-focus">Industry Focus</div>
                     <div class="talent-progress">
                         <div class="progress">
@@ -141,7 +141,7 @@
                             </div>
                         </div>
                     </div>
--->
+
                 </div>
                 <div class="top-concept-panel" ng-show="talent.talent_project.length">
                     <div class="top-concept-text">Project Matches</div>

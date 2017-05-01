@@ -623,6 +623,13 @@ function searchData() {
 
 function createTalentFormService($rootScope, REQUEST_URL, appService) {
     return {
+        talentDetails: {},
+        setTalentDetails: function(data){
+            this.talentDetails = data;
+        },
+        getTalentDetails: function(){
+            return this.talentDetails;
+        },
         createTalent: function (data, callback) {
             var param = {
                 url: REQUEST_URL + 'talent_add/'
@@ -641,10 +648,11 @@ function createTalentFormService($rootScope, REQUEST_URL, appService) {
             var fd = new FormData();
             fd.append('FILES', file);
             fd.append('recruiter', $rootScope.globals.currentUser.user_email);
+            fd.append('request_by', 'create');
             var obj = {
                 withCredentials: false
                 , method: 'POST'
-                , url: REQUEST_URL + 'upload_talent/'
+                , url: REQUEST_URL + 'upload/'
                 , transformRequest: angular.identity
                 , transformResponse: [function (data) {
                     return data
