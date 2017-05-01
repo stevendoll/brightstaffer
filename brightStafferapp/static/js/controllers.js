@@ -1739,7 +1739,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         if (!valid) return;
         
-        data.id ? data.key = 'edit' : data.key = "create";
+        data.id ? data.request_by = 'edit' : data.request_by = "create";
         
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {

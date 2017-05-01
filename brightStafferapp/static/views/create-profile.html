@@ -1,7 +1,8 @@
 <div class="wrapper wrapper-content" ng-controller="talentCtrl">
     <div class="row">
         <div class="col-xs-12 search-result">
-            <h2 class="create-prof">Create Profile</h2>
+            <h2 class="create-prof" ng-show="!talentData.id">Create Profile</h2>
+            <h2 class="create-prof" ng-show="talentData.id">Edit Profile</h2>
             <div class="create-profile-panel">
                 <div class="create-profile-resume-panel">
                     <div class="talent-profile-panel" id="dropzone" file-dropzone="[application/pdf]" file-obj="talentFileobj" data-max-file-size="10" ng-show="!talentFileobj.name">
@@ -282,7 +283,8 @@
                             </div>
                             <div class="cls"></div>
                             <div class="create-profile-footer">
-                                <button type="submit" class="btn create-add-bttn">Create</button>
+                                <button type="submit" class="btn create-add-bttn" ng-show="!talentData.id">Create</button>
+                                <button type="submit" class="btn create-add-bttn" ng-show="talentData.id">Update</button>
                                 <button type="button" class="btn create-add-bttn" ng-click="gotoState('talent.talent-search.talent-search-card');">Cancel</button>
                             </div>
                         </div>
