@@ -69,7 +69,6 @@ class TalentProjectSerializer(serializers.ModelSerializer):
         try:
 
             tp=sorted(list(set(list(tp))),reverse=True)
-            print (tp)
             rank = 0
             for i, t in enumerate(tp):
                 if obj.project_match >= t:
