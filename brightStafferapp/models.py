@@ -155,7 +155,7 @@ class Talent(models.Model):
     @property
     def get_date(self):
         if self.create_date:
-            return self.create_date.strftime('%d/%m/%Y')
+            return self.create_date.date().strftime('%d/%m/%Y')
         else:
             datetime.date.today().strftime("%d/%m/%Y")
 
