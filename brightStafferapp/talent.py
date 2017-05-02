@@ -170,7 +170,7 @@ class TalentContactAPI(View):
             return util.returnErrorShorcut(400, 'Contact not found')
 
     def validate_contact(self,contact):
-        users = TalentContact.objects.filter(contact=contact)
+        users = TalentContact.objects.filter(contact=contact,talent__talent_active__is_active=True)
         if users:
             return True
         else:
@@ -242,7 +242,7 @@ class TalentEmailAPI(View):
             return util.returnErrorShorcut(400, 'Email not found')
 
     def validate_email(self, email):
-        users = TalentEmail.objects.filter(email=email)
+        users = TalentEmail.objects.filter(email=email,talent__talent_active__is_active=True)
         if users:
             return True
         else:
