@@ -542,12 +542,14 @@ def add_edit_talent(profile_data, user):
             talent_location, created = TalentLocation.objects.get_or_create(talent=talent_obj[0],
                                                                             city=profile_data.get('city', ''),
                                                                             state=profile_data.get('state', ''),
-                                                                            country=profile_data.get('country', '')
-                                                                            )
+                                                                            country=profile_data.get('country', ''))
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
                               industry_focus=profile_data.get('industryFocus','')['name'],
-                              industry_focus_percentage=profile_data.get('industryFocus','')['percentage'])
+                              industry_focus_percentage=profile_data.get('industryFocus','')['percentage'],
+                              linkedin_url=profile_data.get('linkedinProfileUrl', ''),
+                              image=profile_data.get('profile_image', '')
+                              )
             talent_obj = talent_obj[0]
     else:
         talent_obj = Talent.objects.create(
@@ -565,12 +567,6 @@ def add_edit_talent(profile_data, user):
                                                         )
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                           is_active=True)
-
-    # if "industryFocus" in profile_data:
-    #     update = talent_obj.update(industry_focus=profile_data.get('industryFocus','')['name'],
-    #                                industry_focus_percentage=profile_data.get('industryFocus', '')['percentage'])
-
-
 
     if talent_obj:
         # add email and phone for talent
