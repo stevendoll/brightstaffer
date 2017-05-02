@@ -77,7 +77,7 @@
                         </select>
 -->
 
-                                        <select id="filterStage" name="stage" class="selectpicker" name="project" ng-model="tFilter.stage">
+                                        <select id="filterStage" name="stage" class="selectpicker" name="project" ng-model="tFilter.stage" ng-change="setFilterChangedVal(1);">
 <!--
                                             <option value="" data-tokens="" style="display: none;">Select Project</option>
                                             <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
