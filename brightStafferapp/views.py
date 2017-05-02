@@ -479,7 +479,6 @@ class FileUploadView(View):
             file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user)
             return file_upload_obj
         except Exception as e:
-            print(e)
             return util.returnErrorShorcut(400, "Error Connection Refused")
 
     def extract_image_from_pdf(self, file_upload_obj, dest_path=None):
@@ -567,7 +566,7 @@ def handle_talent_data(talent_data, user):
             result['city'] = ''
             result['state'] = ''
             result['country'] = ''
-            result['IndustryFocus'] = {'name':'', 'percentage':''}
+            result['industryFocus'] = {'name':'', 'percentage':''}
             result['create_date'] = ''
 
         skills = []
@@ -586,8 +585,6 @@ def handle_talent_data(talent_data, user):
                 current = dict()
                 current['company_name'] = experience['Company']
                 start_date, end_date = convert_to_date(experience['Duration'])
-                print (start_date)
-                print (end_date)
                 if end_date == 'Present':
                     is_current = True
                     try:
@@ -621,8 +618,6 @@ def handle_talent_data(talent_data, user):
                 # save user education information
                 name = education['organisation']
                 start_date, end_date = convert_to_start_end(education['duration'])
-                print(start_date)
-                print(end_date)
                 if start_date and end_date:
                     try:
                         current['name'] = name
@@ -742,62 +737,3 @@ def validate_project_by_id(request_data):
     else:
         # Return True if the project id is valid
         return True
-
-
-
-
-
-# TO upload Talent's Profile
-# class UploadTalent(View):
-#
-#     @method_decorator(csrf_exempt)
-#     def dispatch(self, request, *args, **kwargs):
-#         return super(UploadTalent, self).dispatch(request, *args, **kwargs)
-#
-#     def post(self, request):
-#         """
-#         :param request: incoming POST request with files
-#         :return: success or error response
-#         """
-#         try:
-#             files = request.FILES
-#             content = dict()
-#             if not files:
-#                 return util.returnErrorShorcut(400, "No files attached with this request")
-#             user_username = request.POST['recruiter']
-#             user = User.objects.filter(username=user_username)
-#             if user:
-#                 user = user[0]
-#             dest_path = os.path.join(settings.MEDIA_URL, user_username)
-#             # create destination path if not exists, send this to utils later, since will occur in many scenarios
-#             if not os.path.exists(dest_path):
-#                 os.makedirs(dest_path)
-#
-#             for key, file in files.items():
-#                 file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
-#                 # extract text from pdf
-#                 content = self.extract_text_from_pdf(file_upload_obj, user)
-#
-#             context = dict()
-#             context['success'] = True
-#             #ml_to_ui(content,user)
-#             context['results'] = content
-#             return util.returnSuccessShorcut(context)
-#         except Exception as e:
-#             print(e)
-#             return util.returnErrorShorcut(400, "Error Connection Refused")
-#
-#     def handle_uploaded_file(self, dest_path, f, user):
-#         """
-#         :param dest_path: destination path for the file currently being saved
-#         :param f: InMemoryUploadedFile object from request.FILES
-#         :param user: user uploading the file
-#         :return: <FileUpload object> or error
-#         """
-#         try:
-#             file_name = str(uuid.uuid4())
-#             file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user)
-#             return file_upload_obj
-#         except Exception as e:
-#             print(e)
-#             return util.returnErrorShorcut(400, "Error Connection Refused")

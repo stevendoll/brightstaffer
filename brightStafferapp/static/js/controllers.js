@@ -1590,7 +1590,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if (typeof (response) == "string")
                 response = JSON.parse(response);
             if (response.success) {
-                $scope.talentData = response.results;
+//                $scope.talentData = response.results;
+                for (var key in response.results) {
+                    $scope.talentData[key] = response.results[key];
+                }
             } else {
                 $scope.showNotification(false, response.errorstring || 'Error in fetching data from pdf');
                 $window.scrollTo(0, 0);
@@ -1634,8 +1637,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 name: ''
                 , from: ''
                 , to: ''
-        }], topConcepts: [{}]
-            , careerHistory: {
+        }], topConcepts: [{
+            name: '',
+            match: ''
+        }], careerHistory: {
                 total: ''
                 , history: [{}]
             }
@@ -1682,43 +1687,44 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             url: $scope.talentData.linkedinProfileUrl
         }
 
-        $scope.talentData.profile_image = '';
-        $scope.talentData.firstName = '';
-        $scope.talentData.lastName = '';
-        $scope.talentData.email = '';
-        $scope.talentData.phone = '';
-        $scope.talentData.city = '';
-        $scope.talentData.state = '';
-        $scope.talentData.country = '';
-        $scope.talentData.industryFocus = '';
-        $scope.talentData.currentOrganization = [{
-            name: ''
-            , from: ''
-            , to: 'Present'
-        }];
-        $scope.talentData.pastOrganization = [{
-            name: ''
-            , from: ''
-            , to: ''
-        }];
-        $scope.talentData.education = [{
-            name: ''
-            , from: ''
-            , to: ''
-        }];
-        $scope.talentData.careerHistory = {
-            total: ''
-            , history: [{}]
-        };
+//        $scope.talentData.profile_image = '';
+//        $scope.talentData.firstName = '';
+//        $scope.talentData.lastName = '';
+//        $scope.talentData.email = '';
+//        $scope.talentData.phone = '';
+//        $scope.talentData.city = '';
+//        $scope.talentData.state = '';
+//        $scope.talentData.country = '';
+//        $scope.talentData.industryFocus = '';
+//        $scope.talentData.currentOrganization = [{
+//            name: ''
+//            , from: ''
+//            , to: 'Present'
+//        }];
+//        $scope.talentData.pastOrganization = [{
+//            name: ''
+//            , from: ''
+//            , to: ''
+//        }];
+//        $scope.talentData.education = [{
+//            name: ''
+//            , from: ''
+//            , to: ''
+//        }];
+//        $scope.talentData.careerHistory = {
+//            total: ''
+//            , history: [{}]
+//        };
 
         talentApis.addLinkedinUrl(param, function (response) {
             console.log(response);
             if (response.success) {
                 // delete response.results.linkedinProfileUrl;
+//                for (var key in response.results) {
                 for (var key in response.results) {
                     $scope.talentData[key] = response.results[key];
-                    $('#linkedinUrl').blur();
                 }
+                $('#linkedinUrl').blur();
             } else {
                 $scope.showNotification(false, response.errorstring);
                 $window.scrollTo(0, 0);

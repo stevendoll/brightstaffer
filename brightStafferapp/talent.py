@@ -580,7 +580,10 @@ def add_edit_talent(profile_data, user):
         if 'topConcepts' in profile_data:
             for skill in profile_data.get('topConcepts', ''):
                 if bool(skill):
-                    match = float(skill.get('percentage', skill.get('match', '')))
+                    try:
+                        match = float(skill.get('percentage', skill.get('match', '')))
+                    except:
+                        match = 0
                     if match and match < 1:
                         match *= 100
                         match = round(match, 2)
