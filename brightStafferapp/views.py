@@ -567,7 +567,7 @@ def handle_talent_data(talent_data, user):
             result['city'] = ''
             result['state'] = ''
             result['country'] = ''
-            result['IndustryFocus'] = {'name':'', 'percentage':''}
+            result['industryFocus'] = {'name':'', 'percentage':''}
             result['create_date'] = ''
 
         skills = []
