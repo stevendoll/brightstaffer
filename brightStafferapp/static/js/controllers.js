@@ -3259,10 +3259,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     
     $scope.filterData = function () {
         
-//        if($scope.filterChanged){
-//            $rootScope.candidatePagination.page = 1;
-//        }
-//        $scope.filterChanged = 0;
+        if($scope.filterChanged){
+            $rootScope.candidatePagination.page = 1;
+        }
+        $scope.filterChanged = 0;
         
         //        var analysedDate = $('#analysed').val();
         //        var lastContacted = $('#lastContacted').val();
