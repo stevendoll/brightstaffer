@@ -1955,7 +1955,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             });
         }
     }
-
+    
+    $scope.filterChanged = 0;
     $rootScope.candidatePagination = {
         page: 1
         , count: parseInt($scope.recordCount)
@@ -3251,8 +3252,18 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.filterValue.rating = rating;
         //console.log($scope.filterValue);
     }
-
+    
+    $scope.setFilterChangedVal = function(val){
+        $scope.filterChanged = val;
+    }
+    
     $scope.filterData = function () {
+        
+//        if($scope.filterChanged){
+//            $rootScope.candidatePagination.page = 1;
+//        }
+//        $scope.filterChanged = 0;
+        
         //        var analysedDate = $('#analysed').val();
         //        var lastContacted = $('#lastContacted').val();
 
