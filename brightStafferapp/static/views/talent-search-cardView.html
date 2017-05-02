@@ -209,7 +209,8 @@
                 <div class="modal-body roles-body">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
                     <div class="past-roles">Past Roles</div>
-                    <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company">[[role.designation | capitalizeWord]] at [[role.company | capitalizeWord]] [[role.start_date | yearFormat]]- [[role.end_date | yearFormat]]</div>
+                    <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company">
+                        <span ng-show="role.designation">[[role.designation | capitalizeWord]] at</span> [[role.company | capitalizeWord]] <span ng-show="role.start_date || role.end_date">[[role.start_date | yearFormat]]- [[role.end_date | yearFormat]]</span></div>
                     <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
                     <div class="cls"></div>
                     <div ng-show="selectedCandidate.talent_education.length" class="edu-roles">Education</div>
