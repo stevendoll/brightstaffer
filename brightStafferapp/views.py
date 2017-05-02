@@ -30,7 +30,7 @@ from django.utils.decorators import method_decorator
 from uuid import UUID
 from ResumeParser.core import create_resume
 from PIL import Image
-from .tasks import extract_text_from_pdf
+from .tasks import bulk_extract_text_from_pdf
 from brightStafferapp.linkedin_scrap import LinkedInParser
 from brightStafferapp.google_custom_search import GoogleCustomSearch
 from brightStaffer.settings import ml_url
@@ -461,7 +461,7 @@ class FileUploadView(View):
 
                 if request.POST['request_by'] == 'bulk':
                     request = request.POST['request_by']
-                    extract_text_from_pdf(file_upload_obj, user,request)
+                    bulk_extract_text_from_pdf.delay(file_upload_obj, user,request)
                     context = dict()
                     return util.returnSuccessShorcut(context)
         except:
@@ -567,7 +567,7 @@ def handle_talent_data(talent_data, user):
             result['city'] = ''
             result['state'] = ''
             result['country'] = ''
-            result['IndustryFocus'] = {'name':'', 'percentage':''}
+            result['industryFocus'] = {'name':'', 'percentage':''}
             result['create_date'] = ''
 
         skills = []

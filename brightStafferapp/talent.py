@@ -566,6 +566,12 @@ def add_edit_talent(profile_data, user):
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                           is_active=True)
 
+    # if "industryFocus" in profile_data:
+    #     update = talent_obj.update(industry_focus=profile_data.get('industryFocus','')['name'],
+    #                                industry_focus_percentage=profile_data.get('industryFocus', '')['percentage'])
+
+
+
     if talent_obj:
         # add email and phone for talent
         TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
