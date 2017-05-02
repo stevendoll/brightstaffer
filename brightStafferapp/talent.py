@@ -478,7 +478,7 @@ class TalentUpdateRank(View):
         talent = Talent.objects.filter(id=talent)
         if talent:
             talent = talent[0]
-            Talent.objects.filter(id=talent).update(activation_date=timezone.now())
+            Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now())
             talent.rating = request.GET['rating']
             talent.save()
             context['message'] = 'success'
