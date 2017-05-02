@@ -546,12 +546,14 @@ def add_edit_talent(profile_data, user):
                                                                             )
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
-                              industry_focus=profile_data.get('industryFocus', ''))
+                              industry_focus=profile_data.get('industryFocus','')['name'],
+                              industry_focus_percentage=profile_data.get('industryFocus','')['percentage'])
             talent_obj = talent_obj[0]
     else:
         talent_obj = Talent.objects.create(
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
-            recruiter=user, status='New', industry_focus=profile_data.get('industryFocus', ''),
+            recruiter=user, status='New', industry_focus=profile_data.get('industryFocus','')['name'],
+            industry_focus_percentage=profile_data.get('industryFocus','')['percentage'],
             linkedin_url=profile_data.get('linkedinProfileUrl', ''), image=profile_data.get('profile_image', ''),
             request_by=profile_data.get('request_by', ''),
             create_date=datetime.datetime.now())

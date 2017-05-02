@@ -3408,7 +3408,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , designation: talent.designation ? talent.designation.trim() : ''
             , industryFocus: {
                 name: talent.industry_focus ? talent.industry_focus.trim() : '',
-                percentage: talent.percentage ? talent.percentage : ''
+                percentage: talent.industry_focus_percentage ? talent.industry_focus_percentage : ''
             }
             , firstName: talentName[0] ? talentName[0].trim() : ''
             , lastName: talentName[1] ? talentName[1].trim() : ''
