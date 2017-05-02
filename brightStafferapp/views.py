@@ -461,7 +461,7 @@ class FileUploadView(View):
 
                 if request.POST['request_by'] == 'bulk':
                     request = request.POST['request_by']
-                    extract_text_from_pdf(file_upload_obj, user,request)
+                    extract_text_from_pdf.delay(file_upload_obj, user,request)
                     context = dict()
                     return util.returnSuccessShorcut(context)
         except:
