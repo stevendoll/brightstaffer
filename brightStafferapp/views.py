@@ -591,11 +591,11 @@ def handle_talent_data(talent_data, user):
                         current['name'] = experience['Company']
                         current['is_current'] = is_current
                         current['JobTitle'] = experience['JobTitle']
-                        current['from'] = str(start_date).split('-')
-                        try:
-                            current['from'] = current['from'][0]
-                        except:
+                        if start_date == []:
                             current['from'] = ''
+                        else:
+                            current['from'] = str(start_date).split('-')
+                            current['from'] = current['from'][0]
                         current['to'] = 'Present'
                         result['currentOrganization'] = currentOrganization
                         currentOrganization.append(current)
@@ -605,16 +605,17 @@ def handle_talent_data(talent_data, user):
                     try:
                         current['name'] = experience['Company']
                         current['JobTitle'] = experience['JobTitle']
-                        current['from'] = str(start_date).split('-')
-                        try:
-                            current['from'] = current['from'][0]
-                        except:
+                        if start_date==[]:
                             current['from'] = ''
-                        current['to'] = str(end_date).split('-')
-                        try:
+                        else:
+                            current['from'] = str(start_date).split('-')
+                            current['from'] = current['from'][0]
+
+                        if end_date == None:
+                            current['to']= ''
+                        else:
+                            current['to'] = str(end_date).split('-')
                             current['to'] = current['to'][0]
-                        except:
-                            current['to'] = ''
                         result['pastOrganization'] = pastOrganization
                         pastOrganization.append(current)
                     except:
@@ -630,16 +631,17 @@ def handle_talent_data(talent_data, user):
                 if start_date and end_date:
                     try:
                         current['name'] = name
-                        current['from'] = str(start_date).split('-')
-                        try:
+                        if start_date == []:
+                            current['from']=''
+                        else:
+                            current['from'] = str(start_date).split('-')
                             current['from'] = current['from'][0]
-                        except:
-                            current['from'] = ''
-                        current['to'] = str(end_date).split('-')
-                        try:
+
+                        if end_date == None:
+                            current['to']=''
+                        else:
+                            current['to'] = str(end_date).split('-')
                             current['to'] = current['to'][0]
-                        except:
-                            current['to'] = ''
                         result['education'] = educationlist
                         educationlist.append(current)
                     except:
