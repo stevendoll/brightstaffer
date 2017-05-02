@@ -3418,6 +3418,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , pastOrganization: []
             , education: []
+            , profile_image: data.image
             , linkedinProfileUrl: data.linkedin_url
             , city: location[0] ? location[0].trim() : ""
             , country: location[2] ? location[2].trim() : ""
