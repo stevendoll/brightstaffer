@@ -841,13 +841,13 @@ class TalentSearch(generics.ListCreateAPIView):
             if ordering == "desc":
                 queryset = queryset.order_by('-create_date')
         if is_active and is_active == "true":
-                queryset = queryset.filter(status='Active').order_by('activation_date')
+                queryset = queryset.filter(status='Active').order_by('-activation_date')
         if is_active and is_active == "false":
             queryset = queryset.filter(status='InActive')
         else:
             queryset = queryset.filter(status__in=['New', 'Active'])
         if not ordering:
-            queryset = queryset.order_by('create_date')
+            queryset = queryset.order_by('-create_date')
         return queryset.distinct()
 
 

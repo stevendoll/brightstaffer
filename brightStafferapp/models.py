@@ -157,7 +157,7 @@ class Talent(models.Model):
         if self.create_date:
             return self.create_date.date().strftime('%d/%m/%Y')
         else:
-            datetime.date.today().strftime("%d/%m/%Y")
+            return "01/01/1900"
 
     @property
     def get_activation_date(self):
@@ -165,9 +165,9 @@ class Talent(models.Model):
             if self.activation_date:
                 return self.activation_date.date().strftime('%d/%m/%Y')
             else:
-                datetime.date.today().strftime("%d/%m/%Y")
+                return "01/01/1900"
         except:
-            datetime.date.today().strftime("%d/%m/%Y")
+            return "01/01/1900"
 
 
 class TalentLocation(models.Model):
