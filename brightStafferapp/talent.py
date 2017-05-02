@@ -272,7 +272,7 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
                 return util.returnErrorShorcut(400, 'Talent with id {} doesn\'t exist in database.'.format(talent_id))
             talent_obj = talent_objs[0]
             tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
-            Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
+            #Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
             talent_result = queryset.filter(talent_active__is_active=True)
             talent_project_match(talent_obj,project)
         return talent_result
