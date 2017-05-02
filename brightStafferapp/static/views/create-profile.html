@@ -1,10 +1,11 @@
 <div class="wrapper wrapper-content" ng-controller="talentCtrl">
     <div class="row">
         <div class="col-xs-12 search-result">
-            <h2 class="create-prof">Create Profile</h2>
+            <h2 class="create-prof" ng-show="!talentData.id">Create Profile</h2>
+            <h2 class="create-prof" ng-show="talentData.id">Edit Profile</h2>
             <div class="create-profile-panel">
                 <div class="create-profile-resume-panel">
-                    <div class="talent-profile-panel" ng-show="!talentFileobj.name" id="dropzone" file-dropzone="[application/pdf, application/docx]" file-obj="talentFileobj" data-max-file-size="10">
+                    <div class="talent-profile-panel" id="dropzone" file-dropzone="[application/pdf]" file-obj="talentFileobj" data-max-file-size="10" ng-show="!talentFileobj.name">
                         <img src="static/img/File-Transfer-Icon-1.png" alt="" id="dropzone_backgroundImg">
                         <div class="cls"></div>
                         <div class="file-upld-pro">
@@ -24,32 +25,20 @@
                         <div class="progress-panel">
                             <div class="progress-image">
                                 <img src="static/img/pdf.svg" alt="avatar">
-                                <!--                                <i class="fa fa-file-text"></i>-->
+<!--                                <i class="fa fa-file-text"></i>-->
                             </div>
                             <div class="progress-text">[[talentFileobj.name]]</div>
                             <div class="progress-close" ng-click="removeFile()">
                                 <a href="">x</a>
                             </div>
                             <div class="cls"></div>
-                            <!--
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                                    <span class="sr-only">60% Complete</span>
-                                </div>
-                            </div>
--->
                         </div>
                         <div class="cls"></div>
+<!--
                         <div class="progress-bttn">
-                            <!--
-                          <div class="file-upld-pro mar-tb">
-                              <input type="button" ng-click="uploadTalentFile()">Upload File
-                              <button type="button" class="btn btn-primary" ng-click="uploadTalentFile()">Upload File</button>
-                            </div>
--->
                             <button type="button" class="btn btn-primary create-upload-bttn" ng-click="uploadTalentFile()" ng-disabled="disableUploadBtn">Upload File</button>
                         </div>
-
+-->
                     </div>
                     <div class="cls"></div>
                     <div class="create-pro-or-section">
@@ -68,7 +57,7 @@
                             <div class="main-section">
                                 <div class="form-group">
                                     <label for="">Linkedin URL</label>
-                                    <input type="text" name="lurl" class="form-control" id="" placeholder="Linkedin profile url" ng-blur="fetchLinkedinData()" ng-model="talentData.linkedinProfileUrl" ng-pattern="/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i"/>
+                                    <input type="text" name="lurl" class="form-control" id="linkedinUrl" placeholder="Linkedin profile url" ng-keyup="$event.keyCode == 13 && fetchLinkedinData()" ng-blur="fetchLinkedinData()" ng-model="talentData.linkedinProfileUrl" ng-pattern="/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i" required/>
                                     <span class="msg-error" ng-show="createTalentForm.lurl.$dirty && createTalentForm.lurl.$error.pattern">Please enter valid url.</span>
                                 </div>
                             </div>
@@ -76,7 +65,7 @@
                         <div class="create-profile-form-div">
                             <div class="left-section">
                                 <div class="form-group">
-                                    <label for="">First Name</label>
+                                    <label for="">First Name </label>
                                     <input name="fName" type="text" class="form-control" id="" placeholder="First Name" maxlength="100" ng-model="talentData.firstName" required/>
                                 </div>
                             </div>
@@ -92,14 +81,14 @@
                                 <div class="left-section">
                                     <div class="form-group">
                                         <label for="">Contact Email</label>
-                                        <input name="email" type="email" class="form-control" id="" placeholder="Contact Email" maxlength="100" ng-model="talentData.email" ng-pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/' required/>
+                                        <input name="email" type="email" class="form-control" id="" placeholder="Contact Email" maxlength="100" ng-model="talentData.email" ng-pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'/>
                                         <span class="msg-error" ng-show="createTalentForm.email.$dirty && createTalentForm.email.$error.pattern">Please enter valid email Id.</span>
                                     </div>
                                 </div>
                                 <div class="right-section">
                                     <div class="form-group">
                                         <label for="">Contact Phone</label>
-                                        <input name="phone" type="text" class="form-control" id="" placeholder="Contact Phone" maxlength="10" ng-model="talentData.phone" ng-change="numberonly(talentData, 'phone');checkPhoneNumberLength(talentData.phone, 10)"/>
+                                        <input name="phone" type="text" class="form-control" id="" placeholder="Contact Phone" maxlength="12" ng-model="talentData.phone" ng-change="checkPhoneNumberLength(talentData.phone,10)" phone-mask autocomplete="off"/>
                                         <span class="msg-error" ng-show="!talentDataValidation.phone">Please enter valid phone number.</span>
                                     </div>
                                 </div>
@@ -147,7 +136,7 @@
                                             <input type="text" class="form-control" id="" placeholder="Organization" maxlength="100" ng-model="currentOrganization.name" />
                                         </div>
                                         <div class="form-group current-tab1">
-                                            <input type="text" class="form-control" id="" placeholder="Designation" maxlength="100" ng-model="currentOrganization.JobTitle" />
+                                            <input type="text" class="form-control" id="" placeholder="Title" maxlength="100" ng-model="currentOrganization.JobTitle" />
                                         </div>
                                     </div>
                                     <div class="side-panel">
@@ -181,7 +170,7 @@
                                             <input type="text" class="form-control" id="" placeholder="Organization" maxlength="100" ng-model="pastOrganization.name" />
                                         </div>
                                         <div class="form-group current-tab1">
-                                            <input type="text" class="form-control" id="" placeholder="Designation" maxlength="100" ng-model="pastOrganization.JobTitle" />
+                                            <input type="text" class="form-control" id="" placeholder="Title" maxlength="100" ng-model="pastOrganization.JobTitle" />
                                         </div>
                                     </div>
                                     <div class="side-panel">
@@ -242,6 +231,7 @@
                                     Add More
                                 </button>
                             </div>
+<!--
                             <div class="create-profile-form-div">
                                 <div class="main-section">
                                     <div class="form-group">
@@ -249,6 +239,15 @@
                                         <input name="industryFocus" type="text" class="form-control" id="" placeholder="Industry focus" maxlength="100" ng-model="talentData.industryFocus" />
                                     </div>
                                 </div>
+                            </div>
+-->
+                            <div class="top-concept-right-div">
+                              <h2>Industry Focus</h2>
+                              <h3>Relevance</h3>
+                              <div class="top-concept-input-div">
+                                <input type="" class="form-control top-concept-input-part" id="" placeholder="Industry focus" maxlength="100" ng-model="talentData.industryFocus.name" />
+                                <input type="" class="form-control top-concept-right-input-div" id="" placeholder="%" ng-model="talentData.industryFocus.percentage" ng-change="numberonly(talentData.industryFocus, 'percentage', true);" maxlength="3"/>
+                              </div>
                             </div>
                             <div class="top-concepts-panel" style="display:none;">
                                 <!--<div class="create-pro-optional-section">-->
@@ -284,7 +283,8 @@
                             </div>
                             <div class="cls"></div>
                             <div class="create-profile-footer">
-                                <button type="submit" class="btn create-add-bttn">Create</button>
+                                <button type="submit" class="btn create-add-bttn" ng-show="!talentData.id">Create</button>
+                                <button type="submit" class="btn create-add-bttn" ng-show="talentData.id">Update</button>
                                 <button type="button" class="btn create-add-bttn" ng-click="gotoState('talent.talent-search.talent-search-card');">Cancel</button>
                             </div>
                         </div>

@@ -61,6 +61,22 @@ class TalentProjectSerializer(serializers.ModelSerializer):
     company_name = serializers.CharField()
     date_added = serializers.CharField(source='get_date_added')
     project_stage = serializers.SerializerMethodField()
+    rank = serializers.SerializerMethodField()
+
+    def get_rank(self, obj):
+        tp = TalentProject.objects.filter(project=obj.project).order_by('-project_match').values_list('project_match',
+                                                                                                     flat=True)
+        try:
+
+            tp=sorted(list(set(list(tp))),reverse=True)
+            rank = 0
+            for i, t in enumerate(tp):
+                if obj.project_match >= t:
+                    return i+1
+            return rank
+        except:
+            tp = TalentProject.objects.filter(project=obj.project).update(project_match=0)
+
 
     @staticmethod
     def get_project_stage(obj):
@@ -71,7 +87,8 @@ class TalentProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TalentProject
-        fields = ('id', 'talent', 'project', 'project_match', 'rank', 'date_added', 'company_name', 'project_stage')
+        fields = ('id', 'talent', 'project', 'project_match', 'rank',
+                  'date_added', 'company_name', 'project_stage')
 
 
 class TalentConceptSerializer(serializers.ModelSerializer):
@@ -157,14 +174,15 @@ class TalentSerializer(serializers.ModelSerializer):
     current_location = serializers.SerializerMethodField()
     talent_education = TalentEducationSerializer(many=True)
     recruiter = serializers.CharField()
+    request_by = serializers.CharField()
     create_date = serializers.CharField(source='get_date')
+    activation_date = serializers.CharField(source='get_activation_date')
     talent_company = TalentCompanySerializer(many=True)
     talent_project = TalentProjectSerializer(many=True)
     talent_concepts = TalentConceptSerializer(many=True)
     talent_email = TalentEmailSerializer(many=True)
     talent_contact = TalentContactSerializer(many=True)
     talent_stages = TalentStageSerializer(many=True)
-    activation_date = serializers.CharField(source='get_activation_date')
 
     def get_current_location(self, obj):
         if obj.current_location.all():
@@ -176,5 +194,5 @@ class TalentSerializer(serializers.ModelSerializer):
         model = Talent
         fields = ('id', 'image', 'talent_name', 'designation', 'industry_focus', 'activation_date', 'industry_focus_percentage',
                   'status', 'rating', 'talent_email', 'talent_stages', 'talent_contact', 'linkedin_url', 'recruiter',
-                  'create_date', 'current_location', 'talent_company', 'talent_education', 'talent_project',
+                  'create_date', 'current_location', 'talent_company', 'talent_education', 'talent_project','request_by',
                   'talent_concepts')

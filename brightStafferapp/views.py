@@ -1,9 +1,13 @@
 import os
 import json
 import ast
-from brightStaffer.settings import concept_relevance
+import requests
+import os
+import uuid
+import textract
+import PyPDF2
+from brightStaffer.settings import alchemy_username,alchmey_password
 from django.utils import timezone
-from watson_developer_cloud import AlchemyLanguageV1
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
@@ -13,7 +17,6 @@ from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentCon
     Talent, Company, TalentCompany, Education, TalentEducation
 from brightStafferapp import util
 from brightStafferapp.util import require_post_params, required_headers
-from brightStaffer.settings import Alchemy_api_key
 from django.shortcuts import render, HttpResponse
 from itertools import chain
 from brightStafferapp.serializers import ProjectSerializer, TopProjectSerializer, UserSerializer
@@ -26,16 +29,12 @@ from django.views.generic import View
 from django.utils.decorators import method_decorator
 from uuid import UUID
 from ResumeParser.core import create_resume
-import PyPDF2
 from PIL import Image
-import os
-import uuid
-import textract
-import datetime
-from datetime import date
-from .tasks import handle_talent_data, extract_text_from_pdf, add
+from .tasks import bulk_extract_text_from_pdf
 from brightStafferapp.linkedin_scrap import LinkedInParser
 from brightStafferapp.google_custom_search import GoogleCustomSearch
+from brightStaffer.settings import ml_url
+from datetime import date
 
 class UserData(View):
     @method_decorator(csrf_exempt)
@@ -249,20 +248,22 @@ class AlchemyAPI(View):
         context['concept'] = keyword_concepts
         return util.returnSuccessShorcut(context)
 
+
     # @staticmethod
     def alchemy_api(self, user_data, project_id):
         keyword_list = []
+        url = 'https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27'
+        json_data = {"features": {"keywords": {}}, "text": user_data['description']}
+        headers = {'content-type': 'application/json'}
+        username = alchemy_username
+        password = alchmey_password
         try:
-            alchemy_language = AlchemyLanguageV1(api_key=Alchemy_api_key)
-            data = json.dumps(
-                alchemy_language.combined(text=user_data['description'],
-                                          extract='keywords'))
-            d = json.loads(data)
-            Projects.objects.filter(id=project_id).update(description_analysis=d)
-            for item in chain(d["keywords"]):
-                #if round(float(item['relevance']), 2) >= float(concept_relevance):
+            response_object = requests.post(url, data=json.dumps(json_data), auth=(username, password), headers=headers)
+            data = response_object.json()
+            Projects.objects.filter(id=project_id).update(description_analysis=data)
+            for item in chain(data["keywords"]):
                 keyword_list.append(item['text'].lower())
-            return list(set(keyword_list))#[:40]
+            return list(set(keyword_list))
         except Exception as e:
             return keyword_list
 
@@ -450,10 +451,19 @@ class FileUploadView(View):
                 # extract all images from pdf
                 self.extract_image_from_pdf(file_upload_obj, dest_path='images')
                 # extract text from pdf
-                extract_text_from_pdf.delay(file_upload_obj, user)
+                if request.POST['request_by'] == 'create':
+                    content = extract_text_from_pdf(self, file_upload_obj, user)
+                    result = handle_talent_data(content, user)
+                    context = dict()
+                    context['results'] = result
+                    context['success'] = True
+                    return util.returnSuccessShorcut(context)
 
-            context = dict()
-            return util.returnSuccessShorcut(context)
+                if request.POST['request_by'] == 'bulk':
+                    request = request.POST['request_by']
+                    bulk_extract_text_from_pdf.delay(file_upload_obj, user,request)
+                    context = dict()
+                    return util.returnSuccessShorcut(context)
         except:
             return util.returnErrorShorcut(400, "Error Connection Refused")
 
@@ -469,7 +479,6 @@ class FileUploadView(View):
             file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user)
             return file_upload_obj
         except Exception as e:
-            print(e)
             return util.returnErrorShorcut(400, "Error Connection Refused")
 
     def extract_image_from_pdf(self, file_upload_obj, dest_path=None):
@@ -525,75 +534,166 @@ class FileUploadView(View):
                 img_obj.save()
 
 
-# TO upload Talent's Profile
-class UploadTalent(View):
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(UploadTalent, self).dispatch(request, *args, **kwargs)
-
-    def post(self, request):
-        """
-        :param request: incoming POST request with files
-        :return: success or error response
-        """
-        try:
-            files = request.FILES
-            content = dict()
-            if not files:
-                return util.returnErrorShorcut(400, "No files attached with this request")
-            user_username = request.POST['recruiter']
-            user = User.objects.filter(username=user_username)
-            if user:
-                user = user[0]
-            dest_path = os.path.join(settings.MEDIA_URL, user_username)
-            # create destination path if not exists, send this to utils later, since will occur in many scenarios
-            if not os.path.exists(dest_path):
-                os.makedirs(dest_path)
-
-            for key, file in files.items():
-                file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
-                # extract text from pdf
-                content = self.extract_text_from_pdf(file_upload_obj, user)
-
-            context = dict()
-            context['success'] = True
-            context['results'] = content['skills']
-            return util.returnSuccessShorcut(context)
-        except Exception as e:
-            print(e)
-            return util.returnErrorShorcut(400, "Error Connection Refused")
-
-    def handle_uploaded_file(self, dest_path, f, user):
-        """
-        :param dest_path: destination path for the file currently being saved
-        :param f: InMemoryUploadedFile object from request.FILES
-        :param user: user uploading the file
-        :return: <FileUpload object> or error
-        """
-        try:
-            file_name = str(uuid.uuid4())
-            file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user)
-            return file_upload_obj
-        except Exception as e:
-            print(e)
-            return util.returnErrorShorcut(400, "Error Connection Refused")
-
-    def extract_text_from_pdf(self, file_upload_obj, user):
-        """
-        :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
-        and is now sent to extract text from the pdf file
-        :return: None or error
-        """
-        text = textract.process(file_upload_obj.file.path).decode('utf-8')
-        file_upload_obj.text = text
-        file_upload_obj.save()
-        content = create_resume.create_resume(text)
-        return content
 
 
+def extract_text_from_pdf(self, file_upload_obj, user):
+    """
+    :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
+    and is now sent to extract text from the pdf file
+    :return: None or error
+    """
+    text = textract.process(file_upload_obj.file.path).decode('utf-8')
+    file_upload_obj.text = text
+    file_upload_obj.save()
+    url = ml_url
+    content = requests.post(url, data=text.encode('utf-8')).json()
+    return content
 
-#To fetch Linkedin Public Profile Data
+
+def handle_talent_data(talent_data, user):
+    result = {}
+    if talent_data:
+        if 'name' in talent_data and talent_data['name']:
+            talent_name = talent_data['name'].split(' ')
+            result['firstName'] = talent_name[0]
+            result['lastName'] = talent_name[1]
+            # result['recruiter'] = user
+            result['status'] = 'New'
+            result['linkedin_url'] = ''
+            result['linkedinProfileUrl'] = ''
+            result['email'] = ''
+            result['phone'] = ''
+            result['city'] = ''
+            result['state'] = ''
+            result['country'] = ''
+            result['industryFocus'] = {'name':'', 'percentage':''}
+            result['create_date'] = ''
+
+        skills = []
+        if 'skills' in talent_data:
+            for skill in talent_data['skills']:
+                current_skill = dict()
+                current_skill['name'] = skill['name']
+                current_skill['match'] = round(float(skill['score']), 2)*100
+                result['topConcepts'] = skills
+                skills.append(current_skill)
+
+        currentOrganization = []
+        pastOrganization = []
+        if "work-experience" in talent_data:
+            for experience in talent_data["work-experience"]:
+                current = dict()
+                current['company_name'] = experience['Company']
+                start_date, end_date = convert_to_date(experience['Duration'])
+                if end_date == 'Present':
+                    is_current = True
+                    try:
+                        current['name'] = experience['Company']
+                        current['is_current'] = is_current
+                        current['JobTitle'] = experience['JobTitle']
+                        current['from'] = str(start_date).split('-')
+                        current['from'] = current['from'][0]
+                        current['to'] = 'Present'
+                        result['currentOrganization'] = currentOrganization
+                        currentOrganization.append(current)
+                    except:
+                        pass
+                else:
+                    try:
+                        current['name'] = experience['Company']
+                        current['JobTitle'] = experience['JobTitle']
+                        current['from'] = str(start_date).split('-')
+                        current['from'] = current['from'][0]
+                        current['to'] = str(end_date).split('-')
+                        current['to'] = current['to'][0]
+                        result['pastOrganization'] = pastOrganization
+                        pastOrganization.append(current)
+                    except:
+                        pass
+
+        educationlist = []
+        if "education" in talent_data:
+            for education in talent_data['education']:
+                current = dict()
+                # save user education information
+                name = education['organisation']
+                start_date, end_date = convert_to_start_end(education['duration'])
+                if start_date and end_date:
+                    try:
+                        current['name'] = name
+                        current['from'] = str(start_date).split('-')
+                        current['from'] = current['from'][0]
+                        current['to'] = str(end_date).split('-')
+                        current['to'] = current['to'][0]
+                        result['education'] = educationlist
+                        educationlist.append(current)
+                    except:
+                        pass
+                else:
+                    current['name'] = name
+                    current['from'] = ''
+                    current['to'] = ''
+                    result['education'] = educationlist
+
+                    educationlist.append(current)
+        return result
+    else:
+        pass
+
+
+def convert_to_start_end(duration):
+    start_date = None
+    end_date = None
+    day = 1
+    month = 1
+    if duration:
+        duration = duration.split('-')
+        start_year = duration[0]
+        end_year = duration[1]
+        start_date = date(int(start_year), month, day)
+        end_date = date(int(end_year), month, day)
+    return start_date, end_date
+
+
+def convert_to_date(duration):
+    month_arr = {
+        "January": 1,
+        "February": 2,
+        "March": 3,
+        "April": 4,
+        "May": 5,
+        "June": 6,
+        "July": 7,
+        "August": 8,
+        "September": 9,
+        "October": 10,
+        "November": 11,
+        "December": 12
+    }
+    start_date = None
+    end_date = None
+    try:
+        duration = duration.split('-')
+        start_date = duration[0].strip(" ")
+        start_date = start_date.split()
+        month = start_date[0]
+        year = start_date[1]
+        day = 1
+        start_date = date(int(year), int(month_arr[month]), int(day))
+        end_date = duration[1].strip(" ")
+        if end_date != 'Present':
+            end_date = duration[1]
+            end_date = end_date.split()
+            month = end_date[0]
+            year = end_date[1]
+            day = 1
+            end_date = date(int(year), int(month_arr[month]), int(day))
+    except:
+        pass
+    return start_date, end_date
+
+
+# To fetch Linkedin Public Profile Data
 class LinkedinDataView(View):
 
     @method_decorator(csrf_exempt)
@@ -602,15 +702,16 @@ class LinkedinDataView(View):
 
     def get(self, request):
         url=request.GET['url']
-        linkedin=LinkedInParser()
-        content=linkedin.linkedin_data(url)
-        if content is None:
-            googleCSE = GoogleCustomSearch()
-            content = googleCSE.google_custom(url)
         context = dict()
-        context['results'] = content
-        context['success'] = True
-        return util.returnSuccessShorcut(context)
+        googleCSE = GoogleCustomSearch()
+        content = googleCSE.google_custom(url)
+        if content == None:
+            context['success'] = False
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+        else:
+            context['results'] = content
+            context['success'] = True
+            return util.returnSuccessShorcut(context)
 
 
 def user_validation(data):

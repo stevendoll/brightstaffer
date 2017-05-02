@@ -15,13 +15,13 @@
                         <!--                  <span></span> [[talentDetails.industry_focus | capitalizeAll]]-->
                     </div>
                     <button type="" class="btn view-con-info hvr-fade" data-toggle="modal" ng-click="openContactInfo()">View Contact Info</button>
-                    <div class="linkedin-analysis" href="[[talentDetails.linkedin_url]]"><i class="fa fa-linkedin-square"></i></div>
+                    <div class="linkedin-analysis" target="_blank" href="[[talentDetails.linkedin_url]]"><i class="fa fa-linkedin-square"></i></div>
                 </div>
                 <div class="talent-analysis-activity">
                     <div class="talent-activity-panel">
                         <div class="left-div">Last Activity</div>
-                        <div class="right-div" ng-show="stage.stagesCard.length">[[stage.stagesCard[0].create_date | dateFormat]]</div>
-                        <div class="right-div text-center" ng-show="!stage.stagesCard.length"> - </div>
+                        <div class="right-div" ng-show="talentDetails.activation_date">[[talentDetails.activation_date | dateFormat]]</div>
+                        <div class="right-div text-center" ng-show="!talentDetails.activation_date"> - </div>
                     </div>
                     <div class="talent-rec-panel">
                         <div class="left-div">Recruiter</div>
@@ -74,7 +74,7 @@
                             <div class="analysis-panel">
                                 <div class="col-xs-12 padding-zero">
                                     <div class="analyzed-div">Analyzed [[talentDetails.create_date | dateFormat]]</div>
-                                    <div class="edit-update-link" style="cursor:default;">Edit/Update</div>
+                                    <div class="edit-update-link" style="cursor:pointer;" ng-click="openEditProfileForm(talentDetails);">Edit/Update</div>
                                 </div>
                                 <div ng-repeat="company in talentDetails.talent_company | limitTo: 2">
                                     <div ng-if="$index == 0">
@@ -112,7 +112,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                         <div class="talent-analysis-concept-rightpanel" ng-show="talentDetails.talent_company.length && talentDetails.talent_company[0].start_date != ''">
+                                         <div class="talent-analysis-concept-rightpanel" ng-show="talentDetails.talent_company.length && talentDetails.talent_company[0].start_date != '' && talentDetails.request_by != 'bulk'">
                                     <div class="top-concept-text">Career  History <span ng-click="allMetrics(talentDetails.talent_company)" ng-show="talentDetails.talent_company.length > 3">More</span></div>
                                     <div class="talent-progress">
                                       <div class="progress">
@@ -194,7 +194,8 @@
                                                                     </div>
                                                                 </td>
                                                                 <td>
-                                                                    <div class="rank-circle">[[$index+1]]</div>
+<!--                                                                    <div class="rank-circle">[[$index+1]]</div>-->
+                                                                    <div class="rank-circle">[[proj.rank]]</div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="table-date-div">[[proj.date_added | dateFormat]]</div>
@@ -650,6 +651,7 @@
 </div>
 <!-- all-concepts-Modal-ends -->
 
+<!--
 <div class="success-box" id="nameSuccess" style="display:none;">
     <span><strong>Success!</strong> Recruiter name is updated.</span>
 </div>
@@ -657,6 +659,10 @@
 
 <div class="success-box" id="emailSuccess" style="display:none;">
     <span><strong>Success!</strong> Email has been added.</span>
+</div>
+
+<div class="pro-error-box-email" id="emailError" style="display:none;">
+    <span><strong>Error!</strong> Email is already exist in the System.</span>
 </div>
 
 <div class="success-box" id="emailUpdated" style="display:none;">
@@ -667,6 +673,10 @@
     <span><strong>Success!</strong> Talent contact has been added.</span>
 </div>
 
+<div class="pro-error-box-email" id="contactError" style="display:none;">
+    <span><strong>Error!</strong> Error in updating contact info.</span>
+</div>
+
 <div class="success-box" id="contactUpdated" style="display:none;">
     <span><strong>Success!</strong> Talent contact is updated.</span>
 </div>
@@ -674,6 +684,13 @@
 <div class="success-box" id="projectSuccess" style="display:none;">
     <span><strong>Success!</strong> Talent has been added to the project.</span>
 </div>
+-->
+
+<!--
+<div ng-class="{'success-box': notification.status == 'Success', 'pro-error-box-email': notification.status == 'Error'}" ng-show="notification.show">
+    <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
+</div>
+-->
 
 
 <!-- all-Matrics-Modal-starts -->
@@ -846,7 +863,10 @@
                         </input>
                     </div>
                     <div class="form-group">
-                        <input type="date" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="selectedStage.create_date" placeholder="Select Date" required>
+<!--                        <input type="date" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="selectedStage.create_date" placeholder="Select Date" required>-->
+                        
+                        <input id="editStageDate" type="text" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" placeholder="Select Date" readonly/>
+                        
                     </div>
                     <div class="form-group">
                         <textarea rows="2" class="form-control details" ng-model="selectedStage.details" placeholder="Enter Details" required></textarea>

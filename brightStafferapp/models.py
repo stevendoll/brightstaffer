@@ -13,8 +13,9 @@ import uuid
 import textract
 from datetime import *
 from django.core.management import call_command
-from .tasks import update_indexes
-
+#from .tasks import update_indexes
+from django.utils import timezone
+import datetime
 
 STAGE_CHOICES = (('Contacted', 'Contacted'),
                  ('Replied', 'Replied'),
@@ -141,6 +142,7 @@ class Talent(models.Model):
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(verbose_name='CreateDate', null=True, blank=True)
     activation_date = models.DateTimeField(verbose_name='Activation Date', null=True, blank=True)
+    request_by = models.CharField(max_length=100, default='', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Talent'
@@ -152,14 +154,20 @@ class Talent(models.Model):
 
     @property
     def get_date(self):
-        return self.create_date.strftime('%d/%m/%Y %X')
+        if self.create_date:
+            return self.create_date.strftime('%d/%m/%Y')
+        else:
+            datetime.date.today().strftime("%d/%m/%Y")
 
     @property
     def get_activation_date(self):
-        if self.activation_date:
-            return self.activation_date.date().strftime('%d/%m/%Y')
-        else:
-            return "01/01/1900"
+        try:
+            if self.activation_date:
+                return self.activation_date.date().strftime('%d/%m/%Y')
+            else:
+                datetime.date.today().strftime("%d/%m/%Y")
+        except:
+            datetime.date.today().strftime("%d/%m/%Y")
 
 
 class TalentLocation(models.Model):
@@ -201,6 +209,9 @@ class TalentEmail(models.Model):
     def __str__(self):
         return self.talent.talent_name + self.email
 
+    class Meta:
+        ordering = ('-id',)
+
 
 class TalentContact(models.Model):
     talent = models.ForeignKey(Talent, related_name='talent_contact')
@@ -209,6 +220,9 @@ class TalentContact(models.Model):
 
     def __str__(self):
         return self.talent.talent_name + self.contact
+
+    class Meta:
+        ordering = ('-id',)
 
 
 class TalentEducation(models.Model):
@@ -256,7 +270,7 @@ class TalentCompany(models.Model):
         if self.end_date and self.start_date:
             return (self.end_date - self.start_date).days / 365
         if self.start_date and not self.end_date:
-            return (datetime.now().date() - self.start_date).days / 365
+            return (datetime.datetime.now().date() - self.start_date).days / 365
 
 
     @property
@@ -392,93 +406,3 @@ class PdfImages(models.Model):
 
     def __str__(self):
         return self.name
-
-
-# @receiver(post_save, sender=Talent)
-# def talent_postsave(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_save, sender=TalentProject)
-# def talentproject_postsave(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_save, sender=TalentCompany)
-# def talentcompny_postsave(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_save, sender=TalentConcept)
-# def talentconcept_postsave(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_save, sender=TalentContact)
-# def talentcontact_postsave(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_save, sender=TalentEmail)
-# def talentemail_postsave(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_save, sender=TalentStage)
-# def talentstage_postsave(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_save, sender=TalentEducation)
-# def talenteducation_postsave(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_save, sender=TalentRecruiter)
-# def talentrecruiter_post_save(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_delete, sender=TalentProject)
-# def talentproject_post_delete(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_delete, sender=TalentCompany)
-# def talentcompny_post_delete(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_delete, sender=TalentConcept)
-# def talentconcept_post_delete(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_delete, sender=TalentContact)
-# def talentcontact_post_delete(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_delete, sender=TalentEmail)
-# def talentemail_post_delete(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_delete, sender=TalentStage)
-# def talentstage_post_delete(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_delete, sender=TalentEducation)
-# def talenteducation_post_delete(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_delete, sender=TalentRecruiter)
-# def talentrecruiter_post_delete(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()
-#
-#
-# @receiver(post_delete, sender=Talent)
-# def talent_post_delete(sender, instance=None, created=False, **kwargs):
-#     update_indexes.delay()

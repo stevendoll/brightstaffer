@@ -1004,7 +1004,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     width: 100% !important;
 }
 
- .talent-panel #mCSB_2_container {
+.talent-panel #mCSB_2_container {
     width: 100% !important;
 }
 
@@ -1800,6 +1800,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .table.talent-lst>tbody>tr>td.likd-icn {
     font-size: 45px;
     color: #7f7f7f;
+    position: relative;
 }
 
 .table.talent-lst>thead>tr>th:last-child {
@@ -2451,6 +2452,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     right: 41%;
     z-index: 9999;
 }
+
 .bs-searchbox .form-control {
     height: 40px;
     border-radius: 2px;
@@ -2504,6 +2506,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .dropdown-menu>li>a:focus,
 .dropdown-menu>li>a:hover {
     border-radius: 0px !important;
+    outline: 0;
 }
 
 .dropdown-menu > li > a:last-child {
@@ -2636,9 +2639,27 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     float: left;
     position: absolute;
     top: 43px;
-   /* left: 0;*/
+    /* left: 0;*/
     z-index: 9999;
     right: 28%;
+    text-align: center;
+}
+
+.pro-error-box-email {
+    height: 50px;
+    border-radius: 2px;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    margin: 0 auto;
+    padding: 13px 30px;
+    width: auto;
+    float: left;
+    position: absolute;
+    top: 43px;
+    /* left: 0;*/
+    z-index: 9999;
+    right: 34%;
     text-align: center;
 }
 
@@ -2766,6 +2787,10 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+}
+
+.tabl-scrol .mCSB_container {
+    width: 2455px !important;
 }
 
 @media (max-width: 768px) {
@@ -9047,7 +9072,7 @@ body.body-small .vote-icon {
 
 .open-small-chat:hover {
     color: white;
-    background: #1ab394;
+    background: #1c84c6;
 }
 
 .small-chat-box {
@@ -14723,13 +14748,14 @@ a.sbSelector:hover {
     width: 30%;
     float: left;
     margin-right: 50px;
+    margin-left: 20px;
 }
 
 .top-concept-right-div h2 {
     font-family: 'OpenSans-Semibold';
     font-size: 16px;
     color: #000000;
-    width: 297px;
+    width: 240px;
     float: left;
 }
 
@@ -14738,6 +14764,36 @@ a.sbSelector:hover {
     float: left;
     margin-bottom: 4px;
     position: relative;
+}
+
+.top-concept-input-div .top-concept-input-part {
+    width: 240px !important;
+    float: left;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #e7eaec;
+    font-family: 'open_sansregular';
+    font-size: 13px;
+    color: #808080;
+    padding: 8px 30px 8px 14px;
+}
+
+.top-concept-input-div .top-concept-right-input-div {
+    height: 40px;
+    width: 65px !important;
+    float: left !important;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #e7eaec;
+    float: left;
+    width: 100%;
+    text-align: center;
+    font-family: 'open_sansregular';
+    font-size: 13px;
+    color: #6a6a6a;
+    margin-bottom: 4px;
+    margin-left: 10px;
 }
 
 .top-concept-input-div .top-concept-input-part {
@@ -14776,7 +14832,7 @@ a.sbSelector:hover {
 
 .top-concept-input-div .top-concept-right-input-div {
     height: 40px;
-    width: 70px !important;
+    width: 65px !important;
     float: left !important;
     border-radius: 2px;
     background-color: #ffffff;
@@ -15158,6 +15214,22 @@ a.sbSelector:hover {
     margin: 5px 6px;
 }
 
+.plus-circles {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background-color: #faa831;
+    border-radius: 20px;
+    top: 4px;
+    left: 28px;
+}
+
+.plus-circles .fa {
+    color: #ffffff;
+    font-size: 10px;
+    float: left;
+    margin: 5px 6px;
+}
 .count .pro-normal-select {
     border: 1px solid #e7eaec;
     height: 40px;
@@ -15229,12 +15301,12 @@ a.sbSelector:hover {
     appearance: none;
 }
 
+
 /*create-profile-css-ends*/
 
-.no-linkedin-url{
- pointer-events:none;
+.no-linkedin-url {
+    pointer-events: none;
 }
-
 
 .count .pro-modal-select {
     border: 1px solid #e7eaec;
@@ -15317,5 +15389,22 @@ a.sbSelector:hover {
     margin: 30px auto 0px auto;
 }
 
-/*create-profile-css-ends*/
+.crt-stp-scroll {
+    max-height: 250px;
+    width: 100%;
+    float: left;
+}
 
+.crt-stp-scroll .mCustomScrollBox {
+    max-width: 100%;
+}
+
+.crt-stp-scroll #mCSB_2_container {
+    width: 100% !important;
+}
+
+a {
+    cursor: pointer;
+}
+
+/*create-profile-css-ends*/

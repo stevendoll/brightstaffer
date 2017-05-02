@@ -1,66 +1,67 @@
-  <!-- Widgets Talent Card-->
-    <div class="wrapper wrapper-content">
-      <div class="row">
+<!-- Widgets Talent Card-->
+<div class="wrapper wrapper-content">
+    <div class="row">
         <div class="col-xs-12">
-          <div class="talent-container">
-            <div class="talent-search-bar">
-              <button type="" class="btn add-talent" data-toggle="modal" oncontextmenu="return false;" data-target="#add-talent" ng-click="resetModal()">Add Talent</button>
-              <button type="" class="btn disabled-talent" id="assignToProject" ng-click="openProjectList()">Send to Project</button>
-            </div>
-            <div class="talent-advance-search-div">
-              <button type="" class="btn advance-search">Advanced Search</button>
-              <div class="talent-search-icon" ng-click="filterOpen()"><i class="fa fa-filter"></i></div>
-              <div class="view-as-panel">
-                <span>View as</span>
-                <div class="bar-view active"  ng-click="changeState()"><i class="fa fa-bars"></i></div>
-                <div class="table-view"  ng-click="changeState()"><i class="fa fa-table"></i></div>
-              </div>
-              <div class="show-entry-panel">
-                <span>Show entries/page</span>
-                <div class="form-group count">
-<!--
+            <div class="talent-container">
+                <div class="talent-search-bar">
+                    <button type="" class="btn add-talent" data-toggle="modal" oncontextmenu="return false;" data-target="#add-talent" ng-click="resetModal()">Add Talent</button>
+                    <button type="" class="btn disabled-talent" id="assignToProject" ng-click="openProjectList()">Send to Project</button>
+                </div>
+                <div class="talent-advance-search-div">
+                    <button type="" class="btn advance-search">Advanced Search</button>
+                    <div class="talent-search-icon" ng-click="initDatePickers();filterOpen()"><i class="fa fa-filter"></i></div>
+                    <div class="view-as-panel">
+                        <span>View as</span>
+                        <div class="bar-view active" ng-click="changeState()"><i class="fa fa-bars"></i></div>
+                        <div class="table-view" ng-click="changeState();talentSorted='';"><i class="fa fa-table"></i></div>
+                    </div>
+                    <div class="show-entry-panel">
+                        <span>Show entries/page</span>
+                        <div class="form-group count">
+                            <!--
                   <select class="form-control select-arrow" id="recordCount" ng-model="recordCount" ng-change="getTalents(recordCount)" ng-options="option.name for option in recordOptions" select-record>
                   </select>
 -->
-                    
-                    <select class="form-control normal-select" id="recordCount" ng-model="recordCount" ng-change="getTalents(recordCount)">
-                        <option ng-repeat="option in recordOptions" value="[[option.name]]">[[option.name]]</option>
-                    </select>
-                    
-                </div>
-                <div class="form-group export">
-                  <select class="form-control select-arrow" ng-model="exportType" id="export" ng-options="option.name for option in exportOptions">
-                  </select>
-                </div>
-                <div class="talent-search-delete-icon" id="talent-delete" style="pointer-events:none;" ng-click="deleteTalents()"><i class="fa fa-trash"></i></div>
-              </div>
-              <div class="showing-talent-search">
-                <div class="checkbox" ng-show="talentList.length">
-                  <input type="checkbox" value="1" id="selectall" class="css-checkbox" ng-click="selectAll()">
-                  <label class="css-label" for="selectall"></label>
-                </div>
-                  
-                  
-<!--                <span ng-show="totalTalentCount">Showing [[talentCountStart]] – [[talentCountEnd]] entries of [[totalTalentCount]] entries</span>-->
-                  
-                <div ng-show="totalTalentCount" class="totalcount-div">
-                    <span>Showing [[((candidatePagination.page-1) * candidatePagination.count)+1]]</span>
-                    <span>–</span> 
-                    <span ng-show="((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count < totalTalentCount">    [[((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count]]
+
+                            <select class="form-control normal-select" id="recordCount" ng-model="recordCount" ng-change="getTalents(recordCount)">
+                                <option ng-repeat="option in recordOptions" value="[[option.name]]">[[option.name]]</option>
+                            </select>
+
+                        </div>
+                        <div class="form-group export">
+                            <select class="form-control select-arrow" ng-model="exportType" id="export" ng-options="option.name for option in exportOptions">
+                            </select>
+                        </div>
+                        <div class="talent-search-delete-icon" id="talent-delete" style="pointer-events:none;" ng-click="deleteTalents()"><i class="fa fa-trash"></i></div>
+                    </div>
+                    <div class="showing-talent-search">
+                        <div class="checkbox" ng-show="talentList.length">
+                            <input type="checkbox" value="1" id="selectall" class="css-checkbox" ng-click="selectAll()">
+                            <label class="css-label" for="selectall"></label>
+                        </div>
+
+
+                        <!--                <span ng-show="totalTalentCount">Showing [[talentCountStart]] – [[talentCountEnd]] entries of [[totalTalentCount]] entries</span>-->
+
+                        <div ng-show="totalTalentCount" class="totalcount-div">
+                            <span>Showing [[((candidatePagination.page-1) * candidatePagination.count)+1]]</span>
+                            <span>–</span>
+                            <span ng-show="((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count < totalTalentCount">    [[((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count]]
                     </span>
-                    <span ng-show="((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count > totalTalentCount">    [[totalTalentCount]]
+                            <span ng-show="((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count > totalTalentCount">    [[totalTalentCount]]
                     </span>
-                    <span>entries of [[totalTalentCount]] entries</span>
-                </div>
-                <span ng-show="!totalTalentCount">Showing 0 entry of [[totalTalentCount]] entries</span>
-              </div>
-              <div class="cls"></div>
-              <div class="col-xs-12 padding-zero" ng-show="isFilterChecked">
-                <div class="filter-search-panel">
-                  <form name="filterForm" id="filter_form" autocomplete="off" ng-submit="filterForm.$valid && filterData()">
-                    <div class="filter-stage-box">
-                      <div class="form-group">
-                        <label for="" class="filter-label-text">Stage</label>
+                            <span>entries of [[totalTalentCount]] entries</span>
+                        </div>
+                        <span ng-show="!totalTalentCount">Showing 0 entry of [[totalTalentCount]] entries</span>
+                    </div>
+                    <div class="cls"></div>
+                    <div class="col-xs-12 padding-zero" ng-show="isFilterChecked">
+                        <div class="filter-search-panel">
+                            <form name="filterForm" id="filter_form" autocomplete="off" ng-submit="filterForm.$valid && filterData()">
+                                <div class="filter-stage-box">
+                                    <div class="form-group">
+                                        <label for="" class="filter-label-text">Stage</label>
+                                        <!--
                         <select class="form-control select-arrow" id="filterStage" name="stage" data-ng-model="filterStage" drop-down>
                           <option value="" style="display: none;">Select Stage</option>
                           <option>Contacted</option>
@@ -74,102 +75,126 @@
                           <option>Hired</option>
                           <option>Rejected</option>
                         </select>
-                      </div>
-                    </div>
-                    <div class="filter-stage-box">
-                      <div class="form-group">
-                        <label for="" class="filter-label-text">Project Name</label>
+-->
 
-                          <select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project">
-                            <option value="" data-tokens="" style="display: none;">Select Project</option>
-                            <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
-                          </select>
-                          <!--<select id="abc" name="project" multiple="multiple">
+                                        <select id="filterStage" name="stage" class="selectpicker" name="project" ng-model="tFilter.stage">
+<!--
+                                            <option value="" data-tokens="" style="display: none;">Select Project</option>
+                                            <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
+-->
+
+                                            <option value="0" data-tokens="0">Select Stage</option>
+                                            <option data-tokens="Contacted">Contacted</option>
+                                            <option data-tokens="Replied">Replied</option>
+                                            <option data-tokens="Interested">Interested</option>
+                                            <option data-tokens="Not Interested">Not Interested</option>
+                                            <option data-tokens="Under Review">Under Review</option>
+                                            <option data-tokens="Scheduled for Interview">Scheduled for Interview</option>
+                                            <option data-tokens="Interviewing">Interviewing</option>
+                                            <option data-tokens="Offer">Offer</option>
+                                            <option data-tokens="Hired">Hired</option>
+                                            <option data-tokens="Rejected">Rejected</option>
+
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div class="filter-stage-box">
+                                    <div class="form-group">
+                                        <label for="" class="filter-label-text">Project Name</label>
+
+                                        <select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project">
+                                            <option value="" data-tokens="" style="display: none;">Select Project</option>
+                                            <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
+                                        </select>
+                                        <!--<select id="abc" name="project" multiple="multiple">
                             <option ng-repeat="option in projectListView" value="[[option.name]]">[[option.name]]</option>
                           </select>-->
 
-                      </div>
-                    </div>
-                    <div class="range-picker-div">
-                      <div class="form-group">
-                        <label for="" class="filter-label-text">Project Match Percentage</label>
-                        <div class="cls"></div>
-                        <input type="text" class="form-control percentage-input-box" name="match" ng-model="filterValue.match" readonly>
-                        <div class="range-slider-div" >
-                          <span>0%</span>
-<!--                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"  data-slider-tooltip="hide" slider-init/>-->
-                            <rzslider rz-slider-model="priceSlider.value" rz-slider-options="priceSlider.options"></rzslider>
-                          <span>100%</span>
+                                    </div>
+                                </div>
+                                <div class="range-picker-div">
+                                    <div class="form-group">
+                                        <label for="" class="filter-label-text">Project Match Percentage</label>
+                                        <div class="cls"></div>
+                                        <input type="text" class="form-control percentage-input-box" name="match" ng-model="filterValue.match" readonly>
+                                        <div class="range-slider-div">
+                                            <span>0%</span>
+                                            <!--                          <input id="ex3" data-slider-id='ex3Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"  data-slider-tooltip="hide" slider-init/>-->
+                                            <rzslider rz-slider-model="priceSlider.value" rz-slider-options="priceSlider.options"></rzslider>
+                                            <span>100%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="filter-stage-box">
+                                    <div class="form-group">
+                                        <label for="" class="filter-label-text">Company/Divison Name</label>
+                                        <input type="text" class="form-control filter-input-box" name="company" ng-model="filterValue.company" placeholder="Enter Company Name">
+                                    </div>
+                                </div>
+                                <div class="filter-stage-box">
+                                    <div class="form-group">
+                                        <label for="" class="filter-label-text">Date Added/Analyzed</label>
+<!--                                        <input type="date" class="form-control filter-input-date unstyled" id="analysed" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date">-->
+                                        <input id="filter-from" type="text" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" placeholder="Select Date" readonly/>
+                                    </div>
+                                </div>
+                                <div class="filter-stage-box">
+                                    <div class="form-group">
+                                        <label for="" class="filter-label-text">Last contacted</label>
+<!--                                        <input type="date" class="form-control filter-input-date unstyled" id="lastContacted" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date">-->
+                                        <input id="filter-to" type="text" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" placeholder="Select Date" readonly/>
+                                    </div>
+                                </div>
+                                <div class="filter-stage-box">
+                                    <div class="form-group">
+                                        <label for="" class="filter-label-text">Concept</label>
+                                        <input type="text" class="form-control filter-input-box" name="concepts" ng-model="filterValue.concepts" placeholder="Enter Concept">
+                                    </div>
+                                </div>
+                                <div class="filter-stage-box">
+                                    <div class="form-group">
+                                        <label for="" class="filter-label-text">Rating</label>
+                                        <div class="filter-rating">
+                                            <div id="rate_filter" star-rating2 rating-value="1" max="5" name="rate" on-rating-selected="getfilterRating(rating)"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="filter-stage-box">
+                                    <div class="form-group">
+                                        <label for="" class="filter-label-text">Recruiter</label>
+                                        <input type="email" class="form-control filter-input-box" name="recruiter_name" placeholder="Enter Email" ng-model="filterValue.recruiter_name" ng-pattern="emailPattern">
+                                        <span class="msg-error" style="color:red" ng-show="filterForm.recruiter_name.$error.pattern">Enter valid email!</span>
+                                    </div>
+                                </div>
+                                <div class="filter-stage-radiobox">
+                                    <div class="form-group">
+                                        <input class="radio-none order" type="radio" id="radio1" value="desc" name="ordering" ng-model="filterValue.ordering" />
+                                        <label for="radio1" class="radio-black"></label> <span>Newest</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="radio-none act" type="radio" id="radio2" value="active" name="active" ng-model="filterValue.active" />
+                                        <label for="radio2" class="radio-black"></label> <span>Recently Active</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="radio-none order" type="radio" id="radio3" value="asc" name="ordering" ng-model="filterValue.ordering" />
+                                        <label for="radio3" class="radio-black"></label> <span>Oldest</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="radio-none act" type="radio" id="radio4" value="inactive" name="active" ng-model="filterValue.active" />
+                                        <label for="radio4" class="radio-black"></label> <span>Inactive</span>
+                                    </div>
+                                </div>
+                                <div class="filter-bttn-box">
+                                    <button type="button" class="btn reset-bttn" ng-click="filterReset();filterData();">Reset</button>
+                                    <button type="submit" class="btn filter-bttn">Filter</button>
+                                </div>
+                            </form>
                         </div>
-                      </div>
                     </div>
-                    <div class="filter-stage-box">
-                      <div class="form-group">
-                        <label for="" class="filter-label-text">Company/Divison Name</label>
-                        <input type="text" class="form-control filter-input-box" name="company" ng-model="filterValue.company" placeholder="Enter Company Name">
-                      </div>
-                    </div>
-                    <div class="filter-stage-box">
-                      <div class="form-group">
-                        <label for="" class="filter-label-text">Date Added/Analyzed</label>
-                        <input type="date" class="form-control filter-input-date unstyled" id="analysed" name="analysed" ng-model="filterValue.analysed" placeholder="Select Date">
-                      </div>
-                    </div>
-                    <div class="filter-stage-box">
-                      <div class="form-group">
-                        <label for="" class="filter-label-text" >Last contacted</label>
-                        <input type="date" class="form-control filter-input-date unstyled" id="lastContacted" name="lastContacted" ng-model="filterValue.lastContacted" placeholder="Select Date">
-                      </div>
-                    </div>
-                    <div class="filter-stage-box">
-                      <div class="form-group">
-                        <label for="" class="filter-label-text">Concept</label>
-                        <input type="text" class="form-control filter-input-box" name="concepts" ng-model="filterValue.concepts" placeholder="Enter Concept">
-                      </div>
-                    </div>
-                    <div class="filter-stage-box">
-                      <div class="form-group">
-                        <label for="" class="filter-label-text">Rating</label>
-                          <div class="filter-rating">
-                           <div id="rate_filter" star-rating2  rating-value="1" max="5" name="rate" on-rating-selected="getfilterRating(rating)"></div>
-                         </div>
-                      </div>
-                    </div>
-                    <div class="filter-stage-box">
-                      <div class="form-group">
-                        <label for="" class="filter-label-text">Recruiter</label>
-                        <input type="email" class="form-control filter-input-box" name="recruiter_name"  placeholder="Enter Email" ng-model="filterValue.recruiter_name" ng-pattern="emailPattern">
-                        <span class="msg-error" style="color:red" ng-show="filterForm.recruiter_name.$error.pattern">Enter valid email!</span>
-                      </div>
-                    </div>
-                    <div class="filter-stage-radiobox">
-                      <div class="form-group">
-                      <input class="radio-none order" type="radio" id="radio1" value="desc" name="ordering" ng-model="filterValue.ordering" />
-                      <label for="radio1" class="radio-black"></label> <span>Newest</span>
-                      </div>
-                      <div class="form-group">
-                      <input class="radio-none act" type="radio" id="radio2" value="active" name="active" ng-model="filterValue.active"  />
-                       <label for="radio2" class="radio-black"></label> <span>Recently Active</span>
-                     </div>
-                   <div class="form-group">
-                        <input class="radio-none order" type="radio" id="radio3" value="asc" name="ordering" ng-model="filterValue.ordering" />
-                       <label for="radio3" class="radio-black"></label> <span>Oldest</span>
-                  </div>
-                      <div class="form-group">
-                        <input class="radio-none act" type="radio" id="radio4" value="inactive" name="active" ng-model="filterValue.active" />
-                        <label for="radio4" class="radio-black"></label> <span>Inactive</span>
-                   </div>
-                   </div>
-                    <div class="filter-bttn-box">
-                      <button type="button" class="btn reset-bttn" ng-click="filterReset();filterData();">Reset</button>
-                      <button type="submit" class="btn filter-bttn">Filter</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div class="cls"></div>
-              <div ui-view></div>
-<!--
+                    <div class="cls"></div>
+                    <div ui-view></div>
+                    <!--
                   <div class="search-pagination" ng-show="talentList.length">
                     <ul class="pagination">
                       <li id="prev" class="prev" ng-click="changePage();">
@@ -188,226 +213,226 @@
                     </ul>
                   </div>
 -->
-                
-                <pagination class="search-pagination" ng-show="talentList.length" ng-model="candidatePagination.page" items-per-page="candidatePagination.count" total-items="totalTalentCount" max-size="10" boundary-links="true">
-                </pagination>
 
-              </div>
-              <div class="col-xs-12 padding-zero " ng-show="isAdvanceSearch">
-              <div class="col-sm-2 adv-srh-reslt-l adv-srh-bor">
-                 <p class="shw-srh-fr">Showing Result for:</p>
-                 <div class="col-md-12 padding-zero job-tit-cont">
-                  <p class="ad-j-tit">Job Titles</p>
-                  <p class="j-tit-bolen">+ Job Titles or Boolean</p>
-                  <p class="sr-devlp">
-                    <a href="#">+ Sr. Developer,</a> <a href="#">+ Lead Developer</a>
-                  </p>
+                    <pagination class="search-pagination" ng-show="talentList.length" ng-model="candidatePagination.page" items-per-page="candidatePagination.count" total-items="totalTalentCount" max-size="10" boundary-links="true">
+                    </pagination>
+
                 </div>
-                <div class="col-md-12 padding-zero job-tit-cont">
-                  <p class="ad-j-tit">Location
-                  <span class="pull-right">
+                <div class="col-xs-12 padding-zero " ng-show="isAdvanceSearch">
+                    <div class="col-sm-2 adv-srh-reslt-l adv-srh-bor">
+                        <p class="shw-srh-fr">Showing Result for:</p>
+                        <div class="col-md-12 padding-zero job-tit-cont">
+                            <p class="ad-j-tit">Job Titles</p>
+                            <p class="j-tit-bolen">+ Job Titles or Boolean</p>
+                            <p class="sr-devlp">
+                                <a href="#">+ Sr. Developer,</a> <a href="#">+ Lead Developer</a>
+                            </p>
+                        </div>
+                        <div class="col-md-12 padding-zero job-tit-cont">
+                            <p class="ad-j-tit">Location
+                                <span class="pull-right">
                       <div class="location-slider-div">
                         <span>Within</span>
-                        <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
-                        <span>50 Miles</span>
-                      </div>
-                      <div class="cls"></div>
-                  </span>
-                  </p>
-                  <p class="loc-btn clearfix">
-                    <button class="btn pro-details">Washington</button>
-                    <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
-                  </p>
-                </div>
-                <div class="col-md-12 padding-zero job-tit-cont">
-                  <p class="ad-j-tit">Skills</p>
-                  <p class="loc-btn clearfix">
-                    <button class="btn pro-details">Developer</button>
-                    <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
-                  </p>
-                </div>
-
-                <div class="col-md-12 padding-zero job-tit-cont">
-                  <p class="ad-j-tit">Job Titles</p>
-                  <p class="j-tit-bolen">+ Add Company</p>
-                  <p class="sr-devlp">
-                    <a href="#">+ Apple,</a> <a href="#">+ Google,</a> <a href="#">+ Wipro</a>
-                  </p>
-                  <div class="showing-talent-search chk-lft chk-wd-long">
-                    <div class="checkbox">
-                      <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
-                      <label class="css-label" for="apl"></label>
+                                <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                                <span>50 Miles</span>
+                        </div>
+                        <div class="cls"></div>
+                        </span>
+                        </p>
+                        <p class="loc-btn clearfix">
+                            <button class="btn pro-details">Washington</button>
+                            <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
+                        </p>
                     </div>
-                    <span>Current or Past</span>
-                  </div>
-                  <div class="showing-talent-search chk-lft">
-                    <div class="checkbox">
-                      <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
-                      <label class="css-label" for="apl"></label>
+                    <div class="col-md-12 padding-zero job-tit-cont">
+                        <p class="ad-j-tit">Skills</p>
+                        <p class="loc-btn clearfix">
+                            <button class="btn pro-details">Developer</button>
+                            <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
+                        </p>
                     </div>
-                    <span>Current </span>
-                  </div>
-                  <div class="showing-talent-search chk-lft chk-wd-long">
-                    <div class="checkbox">
-                      <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
-                      <label class="css-label" for="apl"></label>
+
+                    <div class="col-md-12 padding-zero job-tit-cont">
+                        <p class="ad-j-tit">Job Titles</p>
+                        <p class="j-tit-bolen">+ Add Company</p>
+                        <p class="sr-devlp">
+                            <a href="#">+ Apple,</a> <a href="#">+ Google,</a> <a href="#">+ Wipro</a>
+                        </p>
+                        <div class="showing-talent-search chk-lft chk-wd-long">
+                            <div class="checkbox">
+                                <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
+                                <label class="css-label" for="apl"></label>
+                            </div>
+                            <span>Current or Past</span>
+                        </div>
+                        <div class="showing-talent-search chk-lft">
+                            <div class="checkbox">
+                                <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
+                                <label class="css-label" for="apl"></label>
+                            </div>
+                            <span>Current </span>
+                        </div>
+                        <div class="showing-talent-search chk-lft chk-wd-long">
+                            <div class="checkbox">
+                                <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
+                                <label class="css-label" for="apl"></label>
+                            </div>
+                            <span>Past Not Current</span>
+                        </div>
+                        <div class="showing-talent-search chk-lft">
+                            <div class="checkbox">
+                                <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
+                                <label class="css-label" for="apl"></label>
+                            </div>
+                            <span>Current </span>
+                        </div>
                     </div>
-                    <span>Past Not Current</span>
-                  </div>
-                  <div class="showing-talent-search chk-lft">
-                    <div class="checkbox">
-                      <input type="checkbox" value="1" id="apl" class="css-checkbox" name="">
-                      <label class="css-label" for="apl"></label>
+
+                    <div class="col-md-12 padding-zero job-tit-cont">
+                        <p class="ad-j-tit">Schools</p>
+                        <p class="j-tit-bolen">+ Schools Attended</p>
+                        <p class="sr-devlp">
+                            <a href="#">+ Universitry of Pheonix (41),</a>
+                        </p>
                     </div>
-                    <span>Current </span>
-                  </div>
-                </div>
 
-                <div class="col-md-12 padding-zero job-tit-cont">
-                  <p class="ad-j-tit">Schools</p>
-                  <p class="j-tit-bolen">+ Schools Attended</p>
-                  <p class="sr-devlp">
-                    <a href="#">+ Universitry of Pheonix (41),</a>
-                  </p>
-                </div>
+                    <div class="col-md-12 padding-zero job-tit-cont">
+                        <p class="ad-j-tit">Industries</p>
+                        <p class="j-tit-bolen">+ Candidate Industries</p>
+                        <p class="sr-devlp">
+                            <a href="#">+ Information Technology,</a>
+                        </p>
+                    </div>
 
-                <div class="col-md-12 padding-zero job-tit-cont">
-                  <p class="ad-j-tit">Industries</p>
-                  <p class="j-tit-bolen">+ Candidate Industries</p>
-                  <p class="sr-devlp">
-                    <a href="#">+ Information Technology,</a>
-                  </p>
-                </div>
+                    <div class="col-md-12 padding-zero job-tit-cont">
+                        <p class="ad-j-tit">Keywords</p>
+                        <p class="loc-btn clearfix">
+                            <button class="btn pro-details">Full Stack Developer</button>
+                            <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
+                        </p>
+                    </div>
 
-                <div class="col-md-12 padding-zero job-tit-cont">
-                  <p class="ad-j-tit">Keywords</p>
-                  <p class="loc-btn clearfix">
-                    <button class="btn pro-details">Full Stack Developer</button>
-                    <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
-                  </p>
-                </div>
-
-                <div class="col-md-12 padding-zero job-tit-cont">
-                  <p class="ad-j-tit">Years of Experience
-                    <span class="pull-right">
+                    <div class="col-md-12 padding-zero job-tit-cont">
+                        <p class="ad-j-tit">Years of Experience
+                            <span class="pull-right">
                       <div class="location-slider-div">
                         <span>0</span>
-                        <input id="ex2" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
-                        <span>50</span>
-                      </div>
+                            <input id="ex2" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
+                            <span>50</span>
+                    </div>
                     </span>
-                  </p>
-                  <p class="loc-btn clearfix">
-                    <button class="btn pro-details">6 to 10 Years</button>
-                    <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
-                  </p>
-                   <p class="sr-devlp">
-                    <a href="#">+ Less than 1 year (2),</a>
-                  </p>
+                    </p>
+                    <p class="loc-btn clearfix">
+                        <button class="btn pro-details">6 to 10 Years</button>
+                        <a class="loc-add" href="#"><i class="fa fa-plus"></i></a>
+                    </p>
+                    <p class="sr-devlp">
+                        <a href="#">+ Less than 1 year (2),</a>
+                    </p>
                 </div>
 
-                 <div class="col-sm-12 padding-zero text-right job-tit-cont adv-srh-sub-btn">
-                  <button type="submit" class="btn rset">Reset</button>
-                  <button type="submit" class="btn adv-srh">Search</button>
-                  <p class="ss-searh"><a href="#">Save this Search</a></p>
+                <div class="col-sm-12 padding-zero text-right job-tit-cont adv-srh-sub-btn">
+                    <button type="submit" class="btn rset">Reset</button>
+                    <button type="submit" class="btn adv-srh">Search</button>
+                    <p class="ss-searh"><a href="#">Save this Search</a></p>
                 </div>
 
-                 <div class="col-md-12 padding-zero job-tit-cont">
-                     <p class="shw-srh-fr l-sv-srh">Last saved search</p>
-                      <ul class="seh-fil-seltd-contnr">
-                      <li class="btn btn-default btn-sm seh-fil-seltd">ui
-                      <span class="canc-tag">X</span>
-                      </li>
-                       <li class="btn btn-default btn-sm seh-fil-seltd">full stack developer
-                      <span class="canc-tag">X</span>
-                      </li>
-
-                      <li class="btn btn-default btn-sm seh-fil-seltd">full stack developer
-                      <span class="canc-tag">X</span>
-                      </li>
+                <div class="col-md-12 padding-zero job-tit-cont">
+                    <p class="shw-srh-fr l-sv-srh">Last saved search</p>
+                    <ul class="seh-fil-seltd-contnr">
                         <li class="btn btn-default btn-sm seh-fil-seltd">ui
-                      <span class="canc-tag">X</span>
-                      </li>
-                      </ul>
-                 </div>
-              </div>
+                            <span class="canc-tag">X</span>
+                        </li>
+                        <li class="btn btn-default btn-sm seh-fil-seltd">full stack developer
+                            <span class="canc-tag">X</span>
+                        </li>
 
+                        <li class="btn btn-default btn-sm seh-fil-seltd">full stack developer
+                            <span class="canc-tag">X</span>
+                        </li>
+                        <li class="btn btn-default btn-sm seh-fil-seltd">ui
+                            <span class="canc-tag">X</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
-          </div>
         </div>
-      </div>
+
     </div>
+</div>
+</div>
+</div>
 
 <!-- Modal add talent popup file -->
- <!--<div ng-include="'static/views/addTalent.html'"></div>-->
+<!--<div ng-include="'static/views/addTalent.html'"></div>-->
 
 
 <!-- add-recruiter-Modal-starts -->
 <div class="modal fade" id="add-recruiter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog add-talent-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-body roles-body">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-        <div class="edit-modal-recruiter">
-          <span>Add Recruiter</span>
-          <div class="form-group">
-            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Add Email">
-          </div>
-          <div class="modal-check-section">
-            <div class="checkbox">
-              <input type="checkbox" value="1" id="1" class="css-checkboxs" name="">
-              <label class="css-labels" for="1"></label>
+    <div class="modal-dialog add-talent-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body roles-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                <div class="edit-modal-recruiter">
+                    <span>Add Recruiter</span>
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Add Email">
+                    </div>
+                    <div class="modal-check-section">
+                        <div class="checkbox">
+                            <input type="checkbox" value="1" id="1" class="css-checkboxs" name="">
+                            <label class="css-labels" for="1"></label>
+                        </div>
+                        <div class="modal-check-text">Profile + Analysis (View Only)</div>
+                    </div>
+                    <div class="modal-check-section">
+                        <div class="checkbox">
+                            <input type="checkbox" value="1" id="2" class="css-checkboxs" name="">
+                            <label class="css-labels" for="2"></label>
+                        </div>
+                        <div class="modal-check-text">Profile + Analysis + Notes (View Only)</div>
+                    </div>
+                    <div class="modal-check-section">
+                        <div class="checkbox">
+                            <input type="checkbox" value="1" id="3" class="css-checkboxs" name="">
+                            <label class="css-labels" for="3"></label>
+                        </div>
+                        <div class="modal-check-text">Full Access</div>
+                    </div>
+                    <div class="cls"></div>
+                    <button type="" class="btn add">Add</button>
+                    <div class="cls"></div>
+                    <div class="already-shared">Already Shared</div>
+                    <div class="shared-modal-div">
+                        <div class="shared-name">Duane Colane</div>
+                        <button type="" class="btn cancel-invite-bttn">Cancel Invite</button>
+                        <div class="form-group excess">
+                            <select class="form-control select-arrow">
+                                <option>Full Excess</option>
+                                <option>Full Excess</option>
+                                <option>Full Excess</option>
+                                <option>Full Excess</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="shared-modal-div">
+                        <div class="shared-name">Duane Colane</div>
+                        <button type="" class="btn cancel-invite-bttn">Cancel Invite</button>
+                        <div class="form-group excess">
+                            <select class="form-control select-arrow">
+                                <option>Full Excess</option>
+                                <option>Full Excess</option>
+                                <option>Full Excess</option>
+                                <option>Full Excess</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="cls"></div>
             </div>
-            <div class="modal-check-text">Profile + Analysis (View Only)</div>
-          </div>
-          <div class="modal-check-section">
-            <div class="checkbox">
-              <input type="checkbox" value="1" id="2" class="css-checkboxs" name="">
-              <label class="css-labels" for="2"></label>
-            </div>
-            <div class="modal-check-text">Profile + Analysis + Notes (View Only)</div>
-          </div>
-          <div class="modal-check-section">
-            <div class="checkbox">
-              <input type="checkbox" value="1" id="3" class="css-checkboxs" name="">
-              <label class="css-labels" for="3"></label>
-            </div>
-            <div class="modal-check-text">Full Access</div>
-          </div>
-          <div class="cls"></div>
-          <button type="" class="btn add">Add</button>
-          <div class="cls"></div>
-          <div class="already-shared">Already Shared</div>
-          <div class="shared-modal-div">
-            <div class="shared-name">Duane Colane</div>
-            <button type="" class="btn cancel-invite-bttn">Cancel Invite</button>
-            <div class="form-group excess">
-              <select class="form-control select-arrow">
-                <option>Full Excess</option>
-                <option>Full Excess</option>
-                <option>Full Excess</option>
-                <option>Full Excess</option>
-              </select>
-            </div>
-          </div>
-          <div class="shared-modal-div">
-            <div class="shared-name">Duane Colane</div>
-            <button type="" class="btn cancel-invite-bttn">Cancel Invite</button>
-            <div class="form-group excess">
-              <select class="form-control select-arrow">
-                <option>Full Excess</option>
-                <option>Full Excess</option>
-                <option>Full Excess</option>
-                <option>Full Excess</option>
-              </select>
-            </div>
-          </div>
         </div>
-        <div class="cls"></div>
-      </div>
     </div>
-  </div>
 </div>
 <!-- add-recruiter-Modal-ends -->
 
@@ -416,26 +441,25 @@
     <span><strong>Success!</strong> Talent has been added to the project.</span>
 </div>
 
- <div class="success-box" id="deleteSuccess" style="display:none;">
+<div class="success-box" id="deleteSuccess" style="display:none;">
     <span><strong>Success!</strong> Talent has been deleted.</span>
 </div>
 
- <!-- delete-Modal -->
+<!-- delete-Modal -->
 <div class="modal fade" id="delete-talent-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog add-talent-dialog delete-talent-dailog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-      </div>
-      <div class="modal-body">
-        <div class="confirm-text">Are you sure you want to <span>delete</span> this Talent.</div>
-        <div class="confirm-bttn-box">
-          <button type="" class="btn" id="confirm" ng-click="deleteTalentsConfirm()">Yes</button>
-          <button type="" class="btn" data-dismiss="modal" aria-label="Close">No</button>
+    <div class="modal-dialog add-talent-dialog delete-talent-dailog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-text">Are you sure you want to <span>delete</span> this Talent.</div>
+                <div class="confirm-bttn-box">
+                    <button type="" class="btn" id="confirm" ng-click="deleteTalentsConfirm()">Yes</button>
+                    <button type="" class="btn" data-dismiss="modal" aria-label="Close">No</button>
+                </div>
+                <div class="cls"></div>
+            </div>
         </div>
-        <div class="cls"></div>
-      </div>
     </div>
-  </div>
 </div>
-

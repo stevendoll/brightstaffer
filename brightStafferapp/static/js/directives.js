@@ -260,15 +260,17 @@ function myDirective($rootScope) {
 }
 
 
-function dropZone($rootScope) {
+function dropZone($rootScope, $timeout) {
     return {
-        scope: {
+        restrict: 'A'
+        , scope: {
             action: "@"
             , autoProcess: "="
             , callBack: "="
             , dataMax: "=?"
             , mimetypes: "="
             , options: '='
+            , files: '='
         }
         , link: function (scope, element, attrs) {
             var myDropZone = {};
@@ -298,18 +300,28 @@ function dropZone($rootScope) {
                 var recruiter = {
                     'recruiter': $rootScope.globals.currentUser.user_email
                 };
+                var requestBy = {
+                    'request_by': 'bulk'
+                };
                 myDropZone = new Dropzone(element[0], {
                     url: scope.action
                     , maxFilesize: 5
-                    , paramName: ["file", recruiter]
+                    , paramName: ["file", recruiter, requestBy]
                     , acceptedFiles: scope.mimetypes
                     , maxThumbnailFilesize: '5'
                     , clickable: ["#backgroundImg", "#file-dropzone", "#fileUpload"]
                     , autoProcessQueue: scope.autoProcess
                     , complete: function (r) {
                         scope.completedFiles.push(r);
+                        $timeout(function () {
+                            scope.files.push(r);
+                        });
                     }
                 });
+                myDropZone.on("sending", function (file, xhr, data) {
+                    console.log(data);
+                    data.append("request_by", "bulk");
+                })
             }
 
             scope.callBack = function () {
@@ -325,6 +337,7 @@ function dropZone($rootScope) {
                     myDropZone.removeFile(activeFiles[i]);
                 }
                 scope.completedFiles = [];
+                scope.files = [];
             }
 
             if (scope.options) {
@@ -420,20 +433,20 @@ function starRating2() {
             };
 
             scope.toggle = function (index) {
-               if(scope.ratingValue == 1 && index == 0){
+                if (scope.ratingValue == 1 && index == 0) {
                     scope.ratingValue = index;
                     $(".rating li.filled").removeClass('filled');
-                }else{
+                } else {
                     scope.ratingValue = index + 1;
                     updateStars();
-                  }
+                }
                 scope.onRatingSelected({
                     rating: scope.ratingValue
                 });
-            /* scope.ratingValue = index + 1;
-                scope.onRatingSelected({
-                    rating: index + 1
-                });*/
+                /* scope.ratingValue = index + 1;
+                    scope.onRatingSelected({
+                        rating: index + 1
+                    });*/
             };
             updateStars();
             scope.$watch('ratingValue', function (oldVal, newVal) {
@@ -462,6 +475,23 @@ function tableScroll($timeout) {
     };
 }
 
+function createTableScroll($timeout) {
+    return {
+        restrict: 'A'
+        , link: function (scope, element, attrs) {
+            $timeout(function () {
+                $(".crt-stp-scroll").mCustomScrollbar({
+                    scrollButtons: {
+                        enable: true
+                    }
+                    , axis: "y", // horizontal scrollbar
+                    scrollInertia: 60
+                , });
+            });
+        }
+    };
+}
+
 function viewAllScroll($timeout) {
     return {
         restrict: 'A'
@@ -472,14 +502,15 @@ function viewAllScroll($timeout) {
                         enable: true
                     }
                     , axis: "y", // horizontal scrollbar
-                    scrollInertia: 60,
-                });
+                    scrollInertia: 60
+                , });
             });
         }
     };
 }
 
 $(".talent-panel").mCustomScrollbar();
+
 function pieChart($timeout) {
     return {
         restrict: 'A'
@@ -714,9 +745,9 @@ function fileDropzone() {
     return {
         restrict: 'A'
         , scope: {
-//            file: '=',
-            fileName: '=',
-            fileObj: '='
+            //            file: '=',
+            fileName: '='
+            , fileObj: '='
         }
         , link: function (scope, element, attrs) {
             var validMimeTypes = attrs.fileDropzone;
@@ -757,7 +788,7 @@ function fileDropzone() {
                 reader.onload = function (evt) {
                     if (checkSize(size) && isTypeValid(type)) {
                         return scope.$apply(function () {
-//                            scope.file = evt.target.result;
+                            //                            scope.file = evt.target.result;
                             if (angular.isString(scope.fileName)) {
                                 return scope.fileName = name;
                             }
@@ -776,6 +807,53 @@ function fileDropzone() {
     };
 }
 
+function phoneMask($timeout) {
+
+    function makePhoneNo(value) {
+        var result = value;
+
+        var ssn = value ? value.toString() : '';
+        if (ssn.length > 3) {
+            result = ssn.substr(0, 3) + '-';
+            if (ssn.length > 6) {
+                result += ssn.substr(3, 3) + '-';
+                result += ssn.substr(6, 4);
+            } else {
+                result += ssn.substr(3);
+            }
+        }
+
+        return result;
+    }
+
+    return {
+        restrict: 'A'
+        , require: 'ngModel'
+        , link: function (scope, element, attrs, ngModel) {
+            ngModel.$formatters.push(function (value) {
+                return makePhoneNo(value);
+            });
+
+            // clean output as digits
+            ngModel.$parsers.push(function (value) {
+                var cursorPosition = element[0].selectionStart;
+                var oldLength = value.toString().length;
+                var nonDigits = /(^0$)|[^0-9]/g;
+                var intValue = value.replace(nonDigits, '');
+                if (intValue.length > 10) {
+                    intValue = intValue.substr(0, 10);
+                }
+                var newValue = makePhoneNo(intValue);
+                ngModel.$setViewValue(newValue);
+                ngModel.$render();
+                $timeout(function () {
+                    element[0].setSelectionRange(cursorPosition + newValue.length - oldLength, cursorPosition + newValue.length - oldLength)
+                }, 100);
+                return intValue;
+            });
+        }
+    };
+}
 /**
  *
  * Pass all functions into module
@@ -798,6 +876,7 @@ angular
     .directive('starRating', starRating)
     .directive('starRating2', starRating2)
     .directive('tableScroll', tableScroll)
+    .directive('createTableScroll', createTableScroll)
     .directive('pieChart', pieChart)
     .directive('searchDropDown', searchDropDown)
     .directive('sliderInit', sliderInit)
@@ -808,4 +887,5 @@ angular
     .directive('datePicker2', datePicker2)
     .directive('datePickerStage', datePickerStage)
     .directive('fileDropzone', fileDropzone)
-    .directive('viewAllScroll', viewAllScroll);
+    .directive('viewAllScroll', viewAllScroll)
+    .directive('phoneMask', phoneMask);

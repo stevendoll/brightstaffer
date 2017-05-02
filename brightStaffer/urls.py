@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^delete_projects/$', views.ProjectDelete.as_view()),
     url(r'^top_project_list/$', views.TopProjectList.as_view()),
     url(r'^upload/$', views.FileUploadView.as_view(), name="file-upload"),
-    url(r'^upload_talent/$', views.UploadTalent.as_view(), name="talent-upload"),
+    # url(r'^upload_talent/$', views.UploadTalent.as_view(), name="talent-upload"),
     url('^linkedin_data/$', views.LinkedinDataView.as_view(), name="linkedin-data"),
     url('^add_linkedin_url/$', talent.LinkedinAddUrl.as_view(), name="linkedin-add-url"),
     url(r'^update_recruiter/$', views.UpdateRecruiter.as_view()),
@@ -56,7 +56,7 @@ urlpatterns = [
     url(r'^update_rank/$', talent.TalentUpdateRank.as_view()),
     url(r'^delete_talent/$', talent.DeleteTalent.as_view()),
     url(r'^talent_search/$', talent.TalentSearch.as_view()),
-    url(r'^talent_search_filter/$', talent.TalentSearchFilter.as_view()),
+    # url(r'^talent_search_filter/$', talent.TalentSearchFilter.as_view()),
     url(r'', views.home),
 
 ]

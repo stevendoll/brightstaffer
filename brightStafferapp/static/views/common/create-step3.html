@@ -1,16 +1,19 @@
 <h1 id="form-h-2" class="title"></h1>
-			<fieldset id="form-p-2" role="tabpanel" aria-labelledby="form-h-2" class="body" aria-hidden="true">
-		<h2 class="m-b text-create">Review</h2>
-				<div class="row">
-					<div class="col-sm-12">
-						<p class="p-y">We've analyzed the job description, and these are the stand out concepts. Remove the ones you don't like, or type in more (use Enter to save them). Think of concepts as traits, skills, and technologies. Use them to define the type of people exactly right for this position.</p>
-						  <span ng-if="isDescriptionError" style='color:red'>[[apiErrorMsg]]</span>
-						  <div class="ibox-content p-a-0" >
-										<div class="bootstrap-tagsinput" >
-						  <span class="tag label label-primary" ng-repeat="concepts in jobDescriptionResult.concept | limitTo: 40" id="skill_[[concepts]]">[[concepts]]<span data-role="remove" remove-Me id="remove_[[concepts]]"></span></span>
-						  <input type="text" id="newSkill" placeholder="Type a concept, hit enter..." ng-keyup="$event.keyCode == 13 && updateSkillView($event)" autocomplete="off"></div>
+<fieldset id="form-p-2" role="tabpanel" aria-labelledby="form-h-2" class="body" aria-hidden="true">
+    <h2 class="m-b text-create">Review</h2>
+    <div class="row">
+        <div class="col-sm-12">
+            <p class="p-y">We've analyzed the job description, and these are the stand out concepts. Remove the ones you don't like, or type in more (use Enter to save them). Think of concepts as traits, skills, and technologies. Use them to define the type of people exactly right for this position.</p>
+            <span ng-if="isDescriptionError" style='color:red'>[[apiErrorMsg]]</span>
+            <div class="ibox-content p-a-0">
+                <div class="bootstrap-tagsinput">
+<!--                    <div class="crt-stp-scroll" create-table-scroll>-->
+                        <span class="tag label label-primary" ng-repeat="concepts in jobDescriptionResult.concept" id="skill_[[concepts]]">[[concepts]]<span data-role="remove" remove-Me id="remove_[[concepts]]"></span></span>
+<!--                    </div>-->
+                    <input type="text" id="newSkill" placeholder="Type a concept, hit enter..." ng-keyup="$event.keyCode == 13 && updateSkillView($event)" autocomplete="off">
+                </div>
 
-							</div>
-				     </div>
-				</div>
-			</fieldset>
+            </div>
+        </div>
+    </div>
+</fieldset>

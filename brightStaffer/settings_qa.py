@@ -40,16 +40,24 @@ CELERY_RESULT_BACKEND = Config.get('REDIS CONNECTIONS', 'CELERY_RESULT_BACKEND')
 CELERY_TIMEZONE = Config.get('REDIS CONNECTIONS', 'CELERY_TIMEZONE')
 
 CELERYBEAT_SCHEDULE = {
-    "run-every-10-minutes": {
-            "task": "brightStafferapp.tasks.update_indexes",
-            "schedule": timedelta(minutes=10),
-        },
     "run-every-1-minutes": {
                 "task": "brightStafferapp.tasks.add",
                 "schedule": timedelta(minutes=1),
                 "args": (16, 16)
             },
 }
+
+# CELERYBEAT_SCHEDULE = {
+#     "run-every-10-minutes": {
+#             "task": "brightStafferapp.tasks.update_indexes",
+#             "schedule": timedelta(minutes=10),
+#         },
+#     "run-every-1-minutes": {
+#                 "task": "brightStafferapp.tasks.add",
+#                 "schedule": timedelta(minutes=1),
+#                 "args": (16, 16)
+#             },
+# }
 
 STATIC_ROOT = '/home/ubuntu/brightstaffer/brightStafferapp/static/'
 STATIC_URL = '/static/'
