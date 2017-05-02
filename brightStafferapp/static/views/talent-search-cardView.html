@@ -66,7 +66,7 @@
                     <div class="left-div search-result-edu">Education</div>
                     <div class="right-div search-detail-edu" ng-show="!talent.talent_education.length"> - </div>
                     <div class="right-div search-detail-edu">
-                        [[talent.talent_education[0].education | capitalizeAll]]
+                        [[talent.talent_education[0].education | capitalizeWord]]
                         <span ng-show="talent.talent_education[0].start_date && talent.talent_education[0].end_date">[[talent.talent_education[0].start_date | yearFormat]] - [[talent.talent_education[0].end_date | yearFormat]]</span>
                     </div>
                 </div>
@@ -213,7 +213,7 @@
                     <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
                     <div class="cls"></div>
                     <div ng-show="selectedCandidate.talent_education.length" class="edu-roles">Education</div>
-                    <div class="past-roles-descp" ng-repeat="edu in selectedCandidate.talent_education | limitTo: 2">[[edu.education | capitalizeAll]] [[edu.start_date | yearFormat]] - [[edu.end_date | yearFormat]]</div>
+                    <div class="past-roles-descp" ng-repeat="edu in selectedCandidate.talent_education | limitTo: 2">[[edu.education | capitalizeWord]] [[edu.start_date | yearFormat]] - [[edu.end_date | yearFormat]]</div>
                     <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
                     <div class="cls"></div>
                 </div>
