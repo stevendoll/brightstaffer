@@ -77,7 +77,7 @@
                         </select>
 -->
 
-                                        <select id="filterStage" name="stage" class="selectpicker" name="project" ng-model="tFilter.stage" ng-change="setFilterChangedVal(1);">
+                                        <select id="filterStage" name="stage" class="selectpicker" name="project" ng-model="tFilter.stage">
 <!--
                                             <option value="" data-tokens="" style="display: none;">Select Project</option>
                                             <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
@@ -103,7 +103,7 @@
                                     <div class="form-group">
                                         <label for="" class="filter-label-text">Project Name</label>
 
-                                        <select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project" ng-change="setFilterChangedVal(1);">
+                                        <select id="projectSelect" class="selectpicker" data-live-search="true" name="project" ng-model="filterValue.project">
                                             <option value="" data-tokens="" style="display: none;">Select Project</option>
                                             <option ng-repeat="option in projectListView" data-tokens="[[option.name]]">[[option.name]]</option>
                                         </select>

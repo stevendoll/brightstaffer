@@ -165,9 +165,9 @@ class Talent(models.Model):
             if self.activation_date:
                 return self.activation_date.date().strftime('%d/%m/%Y')
             else:
-                return "01/01/1900"
+                return self.get_date
         except:
-            return "01/01/1900"
+            return self.get_date
 
 
 class TalentLocation(models.Model):

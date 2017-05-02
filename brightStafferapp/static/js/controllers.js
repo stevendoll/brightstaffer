@@ -3257,16 +3257,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log($scope.filterValue);
     }
 
-    $scope.setFilterChangedVal = function (val) {
-        $scope.filterChanged = val;
-    }
-
     $scope.filterData = function () {
 
-        if ($scope.filterChanged) {
-            $rootScope.candidatePagination.page = 1;
-        }
-        $scope.filterChanged = 0;
+        $rootScope.candidatePagination.page = 1;
 
         //        var analysedDate = $('#analysed').val();
         //        var lastContacted = $('#lastContacted').val();
