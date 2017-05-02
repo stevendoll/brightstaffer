@@ -592,7 +592,10 @@ def handle_talent_data(talent_data, user):
                         current['is_current'] = is_current
                         current['JobTitle'] = experience['JobTitle']
                         current['from'] = str(start_date).split('-')
-                        current['from'] = current['from'][0]
+                        try:
+                            current['from'] = current['from'][0]
+                        except:
+                            current['from'] = ''
                         current['to'] = 'Present'
                         result['currentOrganization'] = currentOrganization
                         currentOrganization.append(current)
@@ -603,9 +606,15 @@ def handle_talent_data(talent_data, user):
                         current['name'] = experience['Company']
                         current['JobTitle'] = experience['JobTitle']
                         current['from'] = str(start_date).split('-')
-                        current['from'] = current['from'][0]
+                        try:
+                            current['from'] = current['from'][0]
+                        except:
+                            current['from'] = ''
                         current['to'] = str(end_date).split('-')
-                        current['to'] = current['to'][0]
+                        try:
+                            current['to'] = current['to'][0]
+                        except:
+                            current['to'] = ''
                         result['pastOrganization'] = pastOrganization
                         pastOrganization.append(current)
                     except:
@@ -622,9 +631,15 @@ def handle_talent_data(talent_data, user):
                     try:
                         current['name'] = name
                         current['from'] = str(start_date).split('-')
-                        current['from'] = current['from'][0]
+                        try:
+                            current['from'] = current['from'][0]
+                        except:
+                            current['from'] = ''
                         current['to'] = str(end_date).split('-')
-                        current['to'] = current['to'][0]
+                        try:
+                            current['to'] = current['to'][0]
+                        except:
+                            current['to'] = ''
                         result['education'] = educationlist
                         educationlist.append(current)
                     except:

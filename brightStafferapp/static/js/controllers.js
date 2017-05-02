@@ -3259,7 +3259,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.filterData = function () {
 
-        $rootScope.candidatePagination.page = 1;
+//        $rootScope.candidatePagination.page = 1;
+        
 
         //        var analysedDate = $('#analysed').val();
         //        var lastContacted = $('#lastContacted').val();
@@ -3329,6 +3330,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         requestObject.project_match = parseInt(requestObject.project_match.split('%')[0]) || '';
 
         requestObject.page = $rootScope.candidatePagination.page;
+//        requestObject.page = 1;
         requestObject.count = $rootScope.candidatePagination.count;
 
         console.log(requestObject);
