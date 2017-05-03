@@ -2152,7 +2152,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         console.log(exportType.value);
     }
 
-    $scope.calcTotal = function (filtered) {
+    $scope.calcTotal = function (filtered, name) {
+        if(name == "sagar kumar"){
+            console.log(filtered);
+        }
         var sum = 0;
         for (var i = 0; i < filtered.length; i++) {
             sum = sum + Math.round(filtered[i].years_of_experience * 100) / 100;
@@ -3402,6 +3405,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 return parseFloat(a.match) - parseFloat(b.match);
             });
             talent.talent_concepts = talent.talent_concepts.reverse();
+            var isEmptyDate = false;
+            talent.total_experience = $scope.calcTotal(talent.talent_company);
             for (var i = 0; i < talent.talent_company.length; i++) {
                 var obj = talent.talent_company[i];
                 obj.career_gap = parseFloat(obj.career_gap);
@@ -3424,8 +3429,15 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 obj.career_gap = parseFloat(obj.career_gap);
                 obj.years_of_experience = parseFloat(obj.years_of_experience);
                 obj.blank_gap = parseFloat(obj.blank_gap);
-
-                //                obj.careerPercent = 
+                
+                if((i != 0) && !obj.end_date || !obj.start_date){
+                    isEmptyDate = true;
+                }
+                if(isEmptyDate){
+                    obj.career_gap = 0;
+                    obj.years_of_experience = 0;
+                    obj.blank_gap = 0;
+                }
             }
         });
         //        return arr;
