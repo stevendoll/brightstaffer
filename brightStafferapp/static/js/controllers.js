@@ -293,7 +293,16 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         $state.go('login', '');
     }
     $rootScope.candidatePages = [];
-    $scope.getSearchData = function (onReload) {
+    $rootScope.globalSearch = true;
+    $scope.getSearchData = function (onReload, globalSearch) {
+        if (globalSearch) {
+            $rootScope.globalSearch = true;
+            if ($rootScope.candidatePagination.page == 1) {} else {
+                $rootScope.candidatePagination.page = 1;
+                return;
+            }
+
+        }
         var currentState = $state.current.name;
         var allowedArray = ["talent.talent-profile", "talent.talent-search", "talent.talent-search.talent-search-card", "talent.talent-search.talent-search-list", "talent.create-profile"];
         if (allowedArray.indexOf(currentState) > -1) {
@@ -332,7 +341,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         }
     }
 
-    $scope.getSearchData(true);
+    //    $scope.getSearchData(true);
 
     $rootScope.getCandidateData = function (check) {
         console.log('fetching candidate data');
@@ -1890,8 +1899,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.$watch('candidatePagination.page + candidatePagination.count', function () {
-        if ($rootScope.getCandidateData)
-            $rootScope.getCandidateData(true);
+        //        if ($rootScope.getCandidateData)
+        //            $rootScope.getCandidateData(true);
+
+        if ($rootScope.globalSearch) {
+            if ($rootScope.getCandidateData)
+                $rootScope.getCandidateData(true);
+        } else {
+            if ($scope.filterData)
+                $scope.filterData();
+        }
     });
 
     //    $scope.changePage = function (add, pageNo) {
@@ -3257,10 +3274,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //console.log($scope.filterValue);
     }
 
+    $scope.getFilterData = function () {
+        $rootScope.globalSearch = false;
+        if ($rootScope.candidatePagination.page == 1) {
+            $scope.filterData();
+        } else {
+            $rootScope.candidatePagination.page = 1;
+        }
+    }
+
     $scope.filterData = function () {
 
-//        $rootScope.candidatePagination.page = 1;
-        
+        //        $rootScope.candidatePagination.page = 1;
+
 
         //        var analysedDate = $('#analysed').val();
         //        var lastContacted = $('#lastContacted').val();
@@ -3324,13 +3350,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , 'date': $scope.filterValue.analysed
             , 'active': $scope.filterValue.active
             , 'ordering': $scope.filterValue.ordering
-            , 'term': $rootScope.search.searchKeywords ? $rootScope.search.searchKeywords : ''
+            , 'term': ($rootScope.search && $rootScope.search.searchKeywords) ? $rootScope.search.searchKeywords : ''
         };
         requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
         requestObject.project_match = parseInt(requestObject.project_match.split('%')[0]) || '';
 
         requestObject.page = $rootScope.candidatePagination.page;
-//        requestObject.page = 1;
+        //        requestObject.page = 1;
         requestObject.count = $rootScope.candidatePagination.count;
 
         console.log(requestObject);
@@ -3481,7 +3507,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 organisation.id = talent.talent_company[i].id;
                 $scope.talentEditableData.pastOrganization.push(organisation);
             }
-        }else{
+        } else {
             $scope.talentEditableData.pastOrganization.push({
                 JobTitle: ''
                 , name: ''
