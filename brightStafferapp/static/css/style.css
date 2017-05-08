@@ -2568,6 +2568,11 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     color: #888888;
     font-family: 'open_sansregular';
     line-height: 30px;
+    margin-bottom: 0px;
+}
+
+.bs-caret {
+    width: auto !important;
 }
 
 .linkedin-url-text {

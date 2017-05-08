@@ -1794,6 +1794,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.openLinkedinPopup = function (event, selectedTalentId) {
         event.preventDefault();
         event.stopPropagation();
+        $scope.candidate.linkedinProfileUrl = '';
         $scope.candidate.id = selectedTalentId;
         $('#add-url').modal('show');
     }
@@ -2153,9 +2154,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.calcTotal = function (filtered, name) {
-        if(name == "sagar kumar"){
-            console.log(filtered);
-        }
         var sum = 0;
         for (var i = 0; i < filtered.length; i++) {
             sum = sum + Math.round(filtered[i].years_of_experience * 100) / 100;
