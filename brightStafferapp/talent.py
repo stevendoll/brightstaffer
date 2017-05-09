@@ -655,7 +655,7 @@ def add_edit_talent(profile_data, user):
                         TalentCompany.objects.filter(id=organization.get('id', '')).update(
                             talent=talent_obj,
                             company=company, designation=organization.get('JobTitle', ''), is_current=False,
-                            start_date=start_date)
+                            start_date=start_date, end_date=end_date)
                     else:
                         talent_obj.designation = organization.get('JobTitle', '')
                         talent_obj.save()
@@ -674,6 +674,9 @@ def add_edit_talent(profile_data, user):
     if "JobTitle" in profile_data:
         talent_obj.designation = profile_data.get('JobTitle', '')
         talent_obj.save()
+    else:
+        talent_obj.save()
+
 
 
 def convert_to_start_end(organization):
@@ -750,29 +753,37 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         linkedin_url = request.data['url']
+        if linkedin_url != '':
+            linkedin_talent = Talent.objects.filter(linkedin_url=linkedin_url, talent_active__is_active=True)
+            if linkedin_talent:
+                return util.returnErrorShorcut(400, 'Linkedin URL is already exists in the system')
         talent_id = request.data['id']
         talent = Talent.objects.filter(id=talent_id)
         Talent.objects.filter(id=talent).update(activation_date=timezone.now())
         if not talent:
             return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
         talent = talent[0]
-        talent.linkedin_url = linkedin_url
-        talent.save()
         # {'lastName': 'Lyden', 'currentOrganization': [{'name': 'BrightStaffer', 'to': 'Present', 'from': ''}],
         #  'city': 'Washington D.C. Metro Area', 'profile_image': 'https://me',
         # 'firstName': 'Matt', 'talent_designation': 'Co-founder, CEO at BrightStaffer'}
         context = dict()
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(linkedin_url)
-        if content==None:
+        if content=={}:
+            context['success'] = False
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+        if content is None:
             context['success'] = False
             return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
         else:
             talent.talent_name = content['firstName'] + " " + content['lastName']
             talent.designation = content['talent_designation']
             talent.image = content['profile_image']
+            talent.linkedin_url = linkedin_url
             talent.save()
-            #TalentLocation.objects.filter(id=talent).update(city=content['city'])
+            talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
+            talent_loc.city = content['city']
+            talent_loc.save()
         context['success'] = True
         return util.returnSuccessShorcut(context)
 
