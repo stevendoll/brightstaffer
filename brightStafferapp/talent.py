@@ -611,6 +611,10 @@ def add_edit_talent(profile_data, user):
                                                                                    start_date=start_date,
                                                                                    end_date=end_date
                                                                                    )
+                        else:
+                            tporg, created = TalentEducation.objects.get_or_create(talent=talent_obj,
+                                                                                   education=org,
+                                                                                   )
     if 'currentOrganization' in profile_data:
         for organization in profile_data.get('currentOrganization', ''):
             if bool(organization):
@@ -649,6 +653,7 @@ def add_edit_talent(profile_data, user):
                     company, created = Company.objects.get_or_create(company_name=organization.get('name', ''))
                     start_date, end_date = convert_to_start_end(organization)
                     if "id" in organization:
+                        #TalentCompany.objects.filter(talent=talent_obj).delete()
                         talent_obj.designation = organization.get('JobTitle', '')
                         talent_obj.save()
                         # update information, check if id is valid or not
@@ -674,9 +679,6 @@ def add_edit_talent(profile_data, user):
     if "JobTitle" in profile_data:
         talent_obj.designation = profile_data.get('JobTitle', '')
         talent_obj.save()
-    else:
-        talent_obj.save()
-
 
 
 def convert_to_start_end(organization):
