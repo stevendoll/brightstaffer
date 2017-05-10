@@ -602,8 +602,10 @@ def handle_talent_data(talent_data, user):
                     except:
                         pass
                 else:
+                    is_current = False
                     try:
                         current['name'] = experience['Company']
+                        current['is_current'] = is_current
                         current['JobTitle'] = experience['JobTitle']
                         if start_date==[]:
                             current['from'] = ''

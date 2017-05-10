@@ -31,6 +31,7 @@ class GoogleCustomSearch(object):
                                     current['name'] = ''
                                 current['from'] = ''
                                 current['to'] = 'Present'
+                                current['is_current'] = True
                                 try:
                                     result['currentOrganization']= currentOrganization
                                 except:
