@@ -3468,7 +3468,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , lastName: talentName[1] ? talentName[1].trim() : ''
             , id: talent.id
         };
-        if (talent.talent_company.length) {
+        if (talent.talent_company.length && talent.talent_company[0].is_current) {
             var organisation = {
                 JobTitle: ''
                 , name: ''
@@ -3496,8 +3496,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             });
         }
 
-        if (talent.talent_company.length > 1) {
-            for (var i = 1; i < talent.talent_company.length; i++) {
+        if (talent.talent_company.length) {
+            
+            var index = 0;
+            talent.talent_company[0].is_current ? index = 1 : 0
+            
+            for (var i = index; i < talent.talent_company.length; i++) {
                 var organisation = {
                     JobTitle: ''
                     , name: ''
