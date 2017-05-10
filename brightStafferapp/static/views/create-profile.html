@@ -193,7 +193,7 @@
                                         </div>
                                     </div>
                                     <div class="cls"></div>
-                                    <div class="remove-profile-text" ng-show="$index != 0" ng-click="removeIndexFromArr(talentData.pastOrganization, $index);">
+                                    <div class="remove-profile-text" ng-click="removeIndexFromArr(talentData.pastOrganization, $index);">
                                         <a href="" style="color:red;">Remove</a>
                                     </div>
                                 </div>
@@ -227,7 +227,7 @@
                                         </div>
                                     </div>
                                     <div class="cls"></div>
-                                    <div class="remove-profile-text" ng-show="$index != 0" ng-click="removeIndexFromArr(talentData.education, $index);">
+                                    <div class="remove-profile-text" ng-click="removeIndexFromArr(talentData.education, $index);">
                                         <a href="" style="color:red;">Remove</a>
                                     </div>
                                 </div>
@@ -254,7 +254,7 @@
                                 <input type="" class="form-control top-concept-right-input-div" id="" placeholder="%" ng-model="talentData.industryFocus.percentage" ng-change="numberonly(talentData.industryFocus, 'percentage', true);" maxlength="3"/>
                               </div>
                             </div>
-                            <div class="top-concepts-panel" style="display:none;">
+                            <div class="top-concepts-panel" ng-show="talentData.topConcepts.length">
                                 <!--<div class="create-pro-optional-section">-->
                                     <!--<span>optional</span>-->
                                 <!--</div>-->

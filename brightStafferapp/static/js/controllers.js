@@ -3454,6 +3454,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             currentOrganization: []
             , pastOrganization: []
             , education: []
+            , topConcepts: []
             , profile_image: data.image
             , linkedinProfileUrl: data.linkedin_url
             , city: location[0] ? location[0].trim() : ""
@@ -3468,6 +3469,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , lastName: talentName[1] ? talentName[1].trim() : ''
             , id: talent.id
         };
+        
+        data.talent_concepts.forEach(function(concept){
+            $scope.talentEditableData.topConcepts.push({
+                name: concept.concept,
+//                match: concept.match
+            });
+        });
+        
         if (talent.talent_company.length && talent.talent_company[0].is_current) {
             var organisation = {
                 JobTitle: ''
