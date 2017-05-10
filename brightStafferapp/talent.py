@@ -905,3 +905,31 @@ class TalentSearch(generics.ListCreateAPIView):
 
 
 
+class DeleteOrg(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DeleteOrg, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        return HttpResponse("405 ERROR:-Method is not allowed")
+
+    def post(self, request):
+        param_dict = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
+        print (profile_data)
+        return util.returnSuccessShorcut(param_dict)
+
+
+class DeleteEdu(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DeleteEdu, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        return HttpResponse("405 ERROR:-Method is not allowed")
+
+    def post(self, request):
+        param_dict = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
+        print (profile_data)
+        return util.returnSuccessShorcut(param_dict)

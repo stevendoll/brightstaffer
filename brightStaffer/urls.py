@@ -55,6 +55,8 @@ urlpatterns = [
     url(r'^talent_view_allstages/$', talent.TalentAllStageDetailsAPI.as_view()),
     url(r'^update_rank/$', talent.TalentUpdateRank.as_view()),
     url(r'^delete_talent/$', talent.DeleteTalent.as_view()),
+    url(r'^delete_org/$', talent.DeleteOrg.as_view()),
+    url(r'^delete_edu/$', talent.DeleteEdu.as_view()),
     url(r'^talent_search/$', talent.TalentSearch.as_view()),
     # url(r'^talent_search_filter/$', talent.TalentSearchFilter.as_view()),
     url(r'', views.home),
