@@ -916,7 +916,15 @@ class DeleteOrg(View):
     def post(self, request):
         param_dict = {}
         profile_data = json.loads(request.body.decode("utf-8"))
-        print (profile_data)
+        company = TalentCompany.objects.filter(id=profile_data['id'])
+        if not company:
+            return util.returnErrorShorcut(400, 'Company id {} dosen\'t exist in database.'.format(
+                profile_data['id']))
+        talent_objs = Talent.objects.filter(id=profile_data['talent_id'])
+        if not talent_objs:
+            return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(profile_data['talent_id']))
+        talent_id = talent_objs[0]
+        TalentCompany.objects.filter(talent=talent_id, id=profile_data['id']).delete()
         return util.returnSuccessShorcut(param_dict)
 
 
@@ -931,5 +939,14 @@ class DeleteEdu(View):
     def post(self, request):
         param_dict = {}
         profile_data = json.loads(request.body.decode("utf-8"))
-        print (profile_data)
+        education = TalentEducation.objects.filter(id=profile_data['id'])
+        if not education:
+            return util.returnErrorShorcut(400, 'Education id {} dosen\'t exist in database.'.format(
+                profile_data['id']))
+        talent_objs = Talent.objects.filter(id=profile_data['talent_id'])
+        if not talent_objs:
+            return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(
+                profile_data['talent_id']))
+        talent_id = talent_objs[0]
+        TalentEducation.objects.filter(talent=talent_id, id=profile_data['id']).delete()
         return util.returnSuccessShorcut(param_dict)
