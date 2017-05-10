@@ -177,7 +177,7 @@
                                     <div class="side-panel">
                                         <div class="form-group count">
                                             <select class="form-control select-arrow pro-normal-select" ng-model="pastOrganization.from">
-                                                <option value="">From</option>
+                                                <option value="" ng-show="!pastOrganization.to">From</option>
                                                 <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
                                         </div>
@@ -186,7 +186,7 @@
                                         <div class="form-group count">
                                             <!--<input type="text" class="form-control" ng-model="pastOrganization.to" readonly/>-->
 
-                                            <select class="form-control select-arrow pro-normal-select" ng-model="pastOrganization.to">
+                                            <select class="form-control select-arrow pro-normal-select" ng-model="pastOrganization.to" ng-disabled="!pastOrganization.from">
                                                 <option value="">To</option>
                                                 <option ng-show="year >= pastOrganization.from" ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
@@ -213,7 +213,7 @@
                                     <div class="side-panel">
                                         <div class="form-group count">
                                             <select class="form-control select-arrow pro-normal-select" ng-model="education.from">
-                                                <option value="">From</option>
+                                                <option value="" ng-show="!education.to">From</option>
                                                 <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
                                         </div>
