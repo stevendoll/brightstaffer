@@ -389,6 +389,8 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         notes = profile_data['notes']
         stage_id = profile_data['stage_id']
         date = profile_data['create_date']
+        if date is '':
+            date = datetime.datetime.now().strftime("%d/%m/%Y")
         date = datetime.datetime.strptime(date, "%d/%m/%Y")
         talent_objs = Talent.objects.filter(id=talent)
         if not talent_objs:
@@ -505,9 +507,9 @@ class TalentAdd(generics.ListCreateAPIView):
         profile_data = json.loads(request.body.decode("utf-8"))
         if "id" not in profile_data:
             # phone and email
-            phone = profile_data.get('phone', '')
+            # phone = profile_data.get('phone', '')
             email = profile_data.get('email', '')
-            linkedin_url = profile_data.get('linkedinProfileUrl', '')
+            # linkedin_url = profile_data.get('linkedinProfileUrl', '')
             if email != '':
                 email_talent = TalentEmail.objects.filter(email=email, talent__talent_active__is_active=True)
                 if email_talent:
@@ -539,17 +541,18 @@ def add_edit_talent(profile_data, user):
     if "id" in profile_data:
         talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
         if talent_obj:
-            talent_location, created = TalentLocation.objects.get_or_create(talent=talent_obj[0],
-                                                                            city=profile_data.get('city', ''),
-                                                                            state=profile_data.get('state', ''),
-                                                                            country=profile_data.get('country', ''))
+            TalentLocation.objects.get_or_create(talent=talent_obj[0], city=profile_data.get('city', ''),
+                                                 state=profile_data.get('state', ''),
+                                                 country=profile_data.get('country', ''))
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
                               industry_focus=profile_data.get('industryFocus','')['name'],
-                              industry_focus_percentage=profile_data.get('industryFocus','')['percentage'],
+                              industry_focus_percentage=profile_data.get('industryFocus', '')['percentage'],
                               linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               image=profile_data.get('profile_image', '')
                               )
+            TalentLocation.objects.update(talent=talent_obj[0], city=profile_data.get('city', ''),
+                                          state=profile_data.get('state', ''), country=profile_data.get('country', ''))
             talent_obj = talent_obj[0]
     else:
         talent_obj = Talent.objects.create(
@@ -559,14 +562,9 @@ def add_edit_talent(profile_data, user):
             linkedin_url=profile_data.get('linkedinProfileUrl', ''), image=profile_data.get('profile_image', ''),
             request_by=profile_data.get('request_by', ''),
             create_date=datetime.datetime.now())
-        talent_location = TalentLocation.objects.create(talent=talent_obj,
-                                                        city=profile_data.get('city', ''),
-                                                        state=profile_data.get('state', ''),
-                                                        country=profile_data.get('country', ''),
-
-                                                        )
-        talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
-                                                                          is_active=True)
+        TalentLocation.objects.create(talent=talent_obj,city=profile_data.get('city', ''),
+                                      state=profile_data.get('state', ''), country=profile_data.get('country', ''))
+        TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user, is_active=True)
 
     if talent_obj:
         # add email and phone for talent
@@ -586,8 +584,7 @@ def add_edit_talent(profile_data, user):
                     if match and match > 100:
                         match = 100
                     concept, created = Concept.objects.get_or_create(concept=skill.get('name'))
-                    tpconcept, created = TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept,
-                                                                             match=match)
+                    TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept, match=match)
 
     if "education" in profile_data:
         for education in profile_data.get('education', ''):
@@ -606,15 +603,10 @@ def add_edit_talent(profile_data, user):
                                                                                           )
                     else:
                         if start_date and end_date:
-                            tporg, created = TalentEducation.objects.get_or_create(talent=talent_obj,
-                                                                                   education=org,
-                                                                                   start_date=start_date,
-                                                                                   end_date=end_date
-                                                                                   )
+                            TalentEducation.objects.get_or_create(talent=talent_obj, education=org, start_date=start_date,
+                                                                  end_date=end_date)
                         else:
-                            tporg, created = TalentEducation.objects.get_or_create(talent=talent_obj,
-                                                                                   education=org,
-                                                                                   )
+                            TalentEducation.objects.get_or_create(talent=talent_obj,education=org)
     if 'currentOrganization' in profile_data:
         for organization in profile_data.get('currentOrganization', ''):
             if bool(organization):
@@ -643,7 +635,7 @@ def add_edit_talent(profile_data, user):
                                     talent_company.is_current = True
                                     talent_company.save()
                             else:
-                                talent_company, created = TalentCompany.objects.get_or_create(
+                                TalentCompany.objects.get_or_create(
                                     talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
                                     is_current=organization.get('is_current', ''))
                         else:
@@ -656,7 +648,7 @@ def add_edit_talent(profile_data, user):
                                     talent_company.is_current = True
                                     talent_company.save()
                             else:
-                                talent_company, created = TalentCompany.objects.get_or_create(
+                                TalentCompany.objects.get_or_create(
                                     talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
                                     is_current=True,)
 
@@ -687,7 +679,7 @@ def add_edit_talent(profile_data, user):
                                 talent_company.is_current = False
                                 talent_company.save()
                         else:
-                            talent_company, created = TalentCompany.objects.get_or_create(
+                            TalentCompany.objects.get_or_create(
                                 talent=talent_obj, company=company, designation=organization.get('JobTitle', ''))
 
     if "JobTitle" in profile_data:
