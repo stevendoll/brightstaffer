@@ -918,6 +918,7 @@ class DeleteOrg(View):
             return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(profile_data['talent_id']))
         talent_id = talent_objs[0]
         TalentCompany.objects.filter(talent=talent_id, id=profile_data['id']).delete()
+        param_dict['success'] = True
         return util.returnSuccessShorcut(param_dict)
 
 
@@ -942,4 +943,5 @@ class DeleteEdu(View):
                 profile_data['talent_id']))
         talent_id = talent_objs[0]
         TalentEducation.objects.filter(talent=talent_id, id=profile_data['id']).delete()
+        param_dict['success'] = True
         return util.returnSuccessShorcut(param_dict)
