@@ -1693,7 +1693,38 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.talentDataValidation.phone = true;
         }
     }
-
+    
+    $scope.removePastOrganization = function(arr, index){
+        if(!$scope.talentData.id){
+            arr.splice(index, 1);
+            return;
+        }
+        var removeObj = arr[index];
+        createTalentFormService.removePastOrganization({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
+            if(response.success){
+                arr.splice(index, 1);
+            }else{
+                $scope.showNotification(false, response.errorstring || 'Error in removing past organisation');
+            }
+        });
+    }
+    
+    $scope.removeTalentEducation = function(arr, index){
+        if(!$scope.talentData.id){
+            arr.splice(index, 1);
+            return;
+        }
+        var removeObj = arr[index];
+        createTalentFormService.removeTalentEducation({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
+            if(response.success){
+                arr.splice(index, 1);
+            }else{
+                $scope.showNotification(false, response.errorstring || 'Error in removing past organisation');
+            }
+        });
+    }
+    
+    
     $scope.fetchLinkedinData = function () {
         if (!$scope.talentData.linkedinProfileUrl) return;
         var param = {
