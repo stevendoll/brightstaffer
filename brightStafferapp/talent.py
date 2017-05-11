@@ -541,9 +541,9 @@ def add_edit_talent(profile_data, user):
     if "id" in profile_data:
         talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
         if talent_obj:
-            TalentLocation.objects.get_or_create(talent=talent_obj[0], city=profile_data.get('city', ''),
-                                                 state=profile_data.get('state', ''),
-                                                 country=profile_data.get('country', ''))
+            # TalentLocation.objects.get_or_create(talent=talent_obj[0], city=profile_data.get('city', ''),
+            #                                      state=profile_data.get('state', ''),
+            #                                      country=profile_data.get('country', ''))
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
                               industry_focus=profile_data.get('industryFocus','')['name'],
@@ -629,7 +629,7 @@ def add_edit_talent(profile_data, user):
                             if start_date:
                                 talent_company, created = TalentCompany.objects.get_or_create(
                                     talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
-                                    start_date=start_date)
+                                    start_date=start_date, is_current=True)
                                 if end_date:
                                     talent_company.end_date = end_date
                                     talent_company.is_current = True
@@ -642,7 +642,7 @@ def add_edit_talent(profile_data, user):
                             if start_date:
                                 talent_company, created = TalentCompany.objects.get_or_create(
                                     talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
-                                    start_date=start_date)
+                                    start_date=start_date,is_current=organization.get('is_current', ''))
                                 if end_date:
                                     talent_company.end_date = end_date
                                     talent_company.is_current = True
@@ -673,14 +673,15 @@ def add_edit_talent(profile_data, user):
                         if start_date:
                             talent_company, created = TalentCompany.objects.get_or_create(
                                 talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
-                                start_date=start_date)
+                                start_date=start_date, is_current=False)
                             if end_date:
                                 talent_company.end_date = end_date
                                 talent_company.is_current = False
                                 talent_company.save()
                         else:
                             TalentCompany.objects.get_or_create(
-                                talent=talent_obj, company=company, designation=organization.get('JobTitle', ''))
+                                talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
+                                is_current=False)
 
     if "JobTitle" in profile_data:
         talent_obj.designation = profile_data.get('JobTitle', '')
