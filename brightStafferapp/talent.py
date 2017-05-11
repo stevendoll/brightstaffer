@@ -541,9 +541,6 @@ def add_edit_talent(profile_data, user):
     if "id" in profile_data:
         talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
         if talent_obj:
-            # TalentLocation.objects.get_or_create(talent=talent_obj[0], city=profile_data.get('city', ''),
-            #                                      state=profile_data.get('state', ''),
-            #                                      country=profile_data.get('country', ''))
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
                               industry_focus=profile_data.get('industryFocus','')['name'],
@@ -651,6 +648,11 @@ def add_edit_talent(profile_data, user):
                                 TalentCompany.objects.get_or_create(
                                     talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
                                     is_current=True,)
+                else:
+                    if "id" in organization:
+                        TalentCompany.objects.filter(id=organization.get('id', '')).update(
+                            talent=talent_obj,
+                            company=company_name, designation=organization.get('JobTitle', ''), is_current=True)
 
     if 'pastOrganization' in profile_data:
         for organization in profile_data.get('pastOrganization', ''):
