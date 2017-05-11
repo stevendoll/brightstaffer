@@ -3398,7 +3398,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         //        var totalExp = calcTotal(arr);
         arr.forEach(function (talent) {
-
+//            if (talent.talent_company.length) {
+//                var currentComp = {};
+//                talent.talent_company.filter(function (company) {
+//                    if (company.is_current) {
+//                        currentComp = company;
+//                    }
+//                    return !company.is_current;
+//                });
+//
+//                Object.keys(currentComp).length ? talent.talent_company.unshift(currentComp): '';
+//            }
             talent.talent_concepts = talent.talent_concepts.sort(function (a, b) {
                 return parseFloat(a.match) - parseFloat(b.match);
             });
@@ -3427,11 +3437,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 obj.career_gap = parseFloat(obj.career_gap);
                 obj.years_of_experience = parseFloat(obj.years_of_experience);
                 obj.blank_gap = parseFloat(obj.blank_gap);
-                
-                if((i != 0) && !obj.end_date || !obj.start_date){
+
+                if ((i != 0) && !obj.end_date || !obj.start_date) {
                     isEmptyDate = true;
                 }
-                if(isEmptyDate){
+                if (isEmptyDate) {
                     obj.career_gap = 0;
                     obj.years_of_experience = 0;
                     obj.blank_gap = 0;
@@ -3469,14 +3479,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , lastName: talentName[1] ? talentName[1].trim() : ''
             , id: talent.id
         };
-        
-        data.talent_concepts.forEach(function(concept){
+
+        data.talent_concepts.forEach(function (concept) {
             $scope.talentEditableData.topConcepts.push({
-                name: concept.concept,
-//                match: concept.match
+                name: concept.concept
+                , //                match: concept.match
             });
         });
-        
+
         if (talent.talent_company.length && talent.talent_company[0].is_current) {
             var organisation = {
                 JobTitle: ''
@@ -3506,10 +3516,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
 
         if (talent.talent_company.length) {
-            
+
             var index = 0;
             talent.talent_company[0].is_current ? index = 1 : 0
-            
+
             for (var i = index; i < talent.talent_company.length; i++) {
                 var organisation = {
                     JobTitle: ''
