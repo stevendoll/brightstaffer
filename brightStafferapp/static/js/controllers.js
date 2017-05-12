@@ -3528,8 +3528,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.openEditProfileForm = function (data) {
         // $scope.talentEditableData = talent;
-
+        
+        $scope.search.searchKeywords = '';
+        
         var talent = angular.copy(data);
+        
         var talentName = talent.talent_name.split(' ');
         var location = talent.current_location.split(',');
         $scope.talentEditableData = {
