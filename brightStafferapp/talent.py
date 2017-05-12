@@ -664,12 +664,12 @@ def add_edit_talent(profile_data, user):
                             else:
                                 TalentCompany.objects.get_or_create(
                                     talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
-                                    is_current=organization.get('is_current', ''))
+                                    is_current=True)
                         else:
                             if start_date:
                                 talent_company, created = TalentCompany.objects.get_or_create(
                                     talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
-                                    start_date=start_date,is_current=organization.get('is_current', ''))
+                                    start_date=start_date,is_current=True)
                                 if end_date:
                                     talent_company.end_date = end_date
                                     talent_company.is_current = True
