@@ -1702,6 +1702,32 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
     }
     
+    $scope.removeTopConcepts = function(arr, index) {
+//        arr.splice(index, 1);
+//            return;
+        if(!$scope.talentData.id){
+            arr.splice(index, 1);
+            return;
+        }
+        
+        var removeObj = arr[index];
+        
+        if(!removeObj.id){
+            arr.splice(index, 1);
+            return;
+        }
+        
+        createTalentFormService.removeTopConcepts({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
+            if(response.success){
+                arr.splice(index, 1);
+            }else{
+                $('#view-all-concepts').modal('hide');
+                $scope.showNotification(false, response.errorstring || 'Error in removing concept.');
+                $window.scrollTo(0,0);
+            }
+        });
+    }
+    
     $scope.removeCurrentOrganization = function(arr, index){
         if(!$scope.talentData.id){
             arr.splice(index, 1);
@@ -1719,7 +1745,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if(response.success){
                 arr.splice(index, 1);
             }else{
-                $scope.showNotification(false, response.errorstring || 'Error in removing past organisation');
+                $scope.showNotification(false, response.errorstring || 'Error in removing current organisation.');
             }
         });
     }
@@ -1741,7 +1767,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if(response.success){
                 arr.splice(index, 1);
             }else{
-                $scope.showNotification(false, response.errorstring || 'Error in removing past organisation');
+                $scope.showNotification(false, response.errorstring || 'Error in removing past organisation.');
             }
         });
     }
@@ -1760,7 +1786,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if(response.success){
                 arr.splice(index, 1);
             }else{
-                $scope.showNotification(false, response.errorstring || 'Error in removing past organisation');
+                $scope.showNotification(false, response.errorstring || 'Error in education.');
             }
         });
     }
@@ -3528,8 +3554,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.openEditProfileForm = function (data) {
         // $scope.talentEditableData = talent;
-
+        
+        $scope.search.searchKeywords = '';
+        
         var talent = angular.copy(data);
+        
         var talentName = talent.talent_name.split(' ');
         var location = talent.current_location.split(',');
         $scope.talentEditableData = {
@@ -3556,7 +3585,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         talent.talent_concepts.forEach(function (concept) {
             $scope.talentEditableData.topConcepts.push({
-                name: concept.concept
+                name: concept.concept,
+                id: concept.id
                 , //                match: concept.match
             });
         });
