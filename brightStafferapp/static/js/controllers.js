@@ -1680,6 +1680,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , to: ''
         });
     }
+    
+    $scope.addCurrentOrganization = function () {
+        $scope.talentData.currentOrganization.push({
+            name: ''
+            , from: ''
+            , to: ''
+        });
+    }
 
     $scope.removeIndexFromArr = function (arr, index) {
         arr.splice(index, 1);
@@ -1694,12 +1702,41 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
     }
     
+    $scope.removeCurrentOrganization = function(arr, index){
+        if(!$scope.talentData.id){
+            arr.splice(index, 1);
+            return;
+        }
+        
+        var removeObj = arr[index];
+        
+        if(!removeObj.id){
+            arr.splice(index, 1);
+            return;
+        }
+        
+        createTalentFormService.removePastOrganization({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
+            if(response.success){
+                arr.splice(index, 1);
+            }else{
+                $scope.showNotification(false, response.errorstring || 'Error in removing past organisation');
+            }
+        });
+    }
+    
     $scope.removePastOrganization = function(arr, index){
         if(!$scope.talentData.id){
             arr.splice(index, 1);
             return;
         }
+        
         var removeObj = arr[index];
+        
+        if(!removeObj.id){
+            arr.splice(index, 1);
+            return;
+        }
+        
         createTalentFormService.removePastOrganization({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
             if(response.success){
                 arr.splice(index, 1);
@@ -1715,6 +1752,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             return;
         }
         var removeObj = arr[index];
+        if(!removeObj.id){
+            arr.splice(index, 1);
+            return;
+        }
         createTalentFormService.removeTalentEducation({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
             if(response.success){
                 arr.splice(index, 1);

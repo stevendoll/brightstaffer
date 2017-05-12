@@ -159,7 +159,13 @@
 -->
                                         </div>
                                     </div>
+                                    <div class="remove-profile-text" ng-click="removeCurrentOrganization(talentData.currentOrganization, $index);">
+                                        <a href="" style="color:red;">Remove</a>
+                                    </div>
                                 </div>
+                                <button type="button" class="btn create-profile-add-bttn" ng-click="addCurrentOrganization()">
+                                    Add More
+                                </button>
                             </div>
 
                             <div class="create-profile-form-div">
