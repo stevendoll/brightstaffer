@@ -551,6 +551,8 @@ def add_edit_talent(profile_data, user):
             TalentLocation.objects.update(talent=talent_obj[0], city=profile_data.get('city', ''),
                                           state=profile_data.get('state', ''), country=profile_data.get('country', ''))
             talent_obj = talent_obj[0]
+            TalentEmail.objects.filter(talent=talent_obj).update(email=profile_data.get('email', ''))
+            TalentContact.objects.filter(talent=talent_obj).update(contact=profile_data.get('phone', ''))
     else:
         talent_obj = Talent.objects.create(
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
@@ -563,10 +565,10 @@ def add_edit_talent(profile_data, user):
                                       state=profile_data.get('state', ''), country=profile_data.get('country', ''))
         TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user, is_active=True)
 
-    if talent_obj:
         # add email and phone for talent
         TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
         TalentContact.objects.get_or_create(talent=talent_obj, contact=profile_data.get('phone', ''))
+
         # add top concepts for talent
         if 'topConcepts' in profile_data:
             for skill in profile_data.get('topConcepts', ''):
