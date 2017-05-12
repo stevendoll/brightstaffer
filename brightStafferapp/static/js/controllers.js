@@ -3537,8 +3537,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , pastOrganization: []
             , education: []
             , topConcepts: []
-            , profile_image: data.image
-            , linkedinProfileUrl: data.linkedin_url
+            , email: talent.talent_email.length ? talent.talent_email[0].email : ''
+            , phone: talent.talent_contact.length ? talent.talent_contact[0].contact : ''
+            , profile_image: talent.image
+            , linkedinProfileUrl: talent.linkedin_url
             , city: location[0] ? location[0].trim() : ""
             , country: location[2] ? location[2].trim() : ""
             , state: location[1] ? location[1].trim() : ""
@@ -3552,7 +3554,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             , id: talent.id
         };
 
-        data.talent_concepts.forEach(function (concept) {
+        talent.talent_concepts.forEach(function (concept) {
             $scope.talentEditableData.topConcepts.push({
                 name: concept.concept
                 , //                match: concept.match
