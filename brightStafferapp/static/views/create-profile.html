@@ -142,7 +142,7 @@
                                     <div class="side-panel">
                                         <div class="form-group count">
                                             <select class="form-control select-arrow pro-normal-select" ng-model="currentOrganization.from">
-                                                <option ng-show="currentOrganization.from == ''" value="">From</option>
+                                                <option value="">From</option>
                                                 <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
                                         </div>
@@ -177,7 +177,7 @@
                                     <div class="side-panel">
                                         <div class="form-group count">
                                             <select class="form-control select-arrow pro-normal-select" ng-model="pastOrganization.from">
-                                                <option ng-show="pastOrganization.from == ''" value="">From</option>
+                                                <option value="" ng-show="!pastOrganization.to">From</option>
                                                 <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
                                         </div>
@@ -186,11 +186,21 @@
                                         <div class="form-group count">
                                             <!--<input type="text" class="form-control" ng-model="pastOrganization.to" readonly/>-->
 
-                                            <select class="form-control select-arrow pro-normal-select" ng-model="pastOrganization.to">
-                                                <option ng-show="pastOrganization.to == ''" value="">To</option>
+                                            <select class="form-control select-arrow pro-normal-select" ng-model="pastOrganization.to" ng-disabled="!pastOrganization.from">
+                                                <option value="">To</option>
                                                 <option ng-show="year >= pastOrganization.from" ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="cls"></div>
+<!--
+                                    <div class="remove-profile-text" ng-click="removeIndexFromArr(talentData.pastOrganization, $index);">
+                                        <a href="" style="color:red;">Remove</a>
+                                    </div>
+-->
+                                    
+                                    <div class="remove-profile-text" ng-click="removePastOrganization(talentData.pastOrganization, $index);">
+                                        <a href="" style="color:red;">Remove</a>
                                     </div>
                                 </div>
                                 <button type="button" class="btn create-profile-add-bttn" ng-click="addTalentPast()">
@@ -209,7 +219,7 @@
                                     <div class="side-panel">
                                         <div class="form-group count">
                                             <select class="form-control select-arrow pro-normal-select" ng-model="education.from">
-                                                <option ng-show="education.from == ''" value="">From</option>
+                                                <option value="" ng-show="!education.to">From</option>
                                                 <option ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
                                         </div>
@@ -217,13 +227,18 @@
                                     <div class="side-panel">
                                         <div class="form-group count">
                                             <select class="form-control select-arrow pro-normal-select" ng-model="education.to" ng-disabled="!education.from">
-                                                <option ng-show="education.to == ''" value="">To</option>
+                                                <option value="">To</option>
                                                 <option ng-show="year >= education.from" ng-repeat="year in yearArr" value="[[year]]">[[year]]</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="cls"></div>
-                                    <div class="remove-profile-text" ng-show="$index != 0" ng-click="removeIndexFromArr(talentData.education, $index);">
+<!--
+                                    <div class="remove-profile-text" ng-click="removeIndexFromArr(talentData.education, $index);">
+                                        <a href="" style="color:red;">Remove</a>
+                                    </div>
+-->
+                                    <div class="remove-profile-text" ng-click="removeTalentEducation(talentData.education, $index);">
                                         <a href="" style="color:red;">Remove</a>
                                     </div>
                                 </div>
@@ -250,7 +265,7 @@
                                 <input type="" class="form-control top-concept-right-input-div" id="" placeholder="%" ng-model="talentData.industryFocus.percentage" ng-change="numberonly(talentData.industryFocus, 'percentage', true);" maxlength="3"/>
                               </div>
                             </div>
-                            <div class="top-concepts-panel" style="display:none;">
+                            <div class="top-concepts-panel" ng-show="talentData.topConcepts.length">
                                 <!--<div class="create-pro-optional-section">-->
                                     <!--<span>optional</span>-->
                                 <!--</div>-->

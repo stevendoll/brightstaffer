@@ -57,7 +57,8 @@
                     <div class="cls"></div>
                     <div class="col-xs-12 padding-zero" ng-show="isFilterChecked">
                         <div class="filter-search-panel">
-                            <form name="filterForm" id="filter_form" autocomplete="off" ng-submit="filterForm.$valid && filterData()">
+<!--                            <form name="filterForm" id="filter_form" autocomplete="off" ng-submit="filterForm.$valid && filterData()">-->
+                            <form name="filterForm" id="filter_form" autocomplete="off" ng-submit="filterForm.$valid && getFilterData()">
                                 <div class="filter-stage-box">
                                     <div class="form-group">
                                         <label for="" class="filter-label-text">Stage</label>

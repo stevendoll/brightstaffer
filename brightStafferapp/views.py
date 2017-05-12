@@ -602,8 +602,10 @@ def handle_talent_data(talent_data, user):
                     except:
                         pass
                 else:
+                    is_current = False
                     try:
                         current['name'] = experience['Company']
+                        current['is_current'] = is_current
                         current['JobTitle'] = experience['JobTitle']
                         if start_date==[]:
                             current['from'] = ''
@@ -718,11 +720,18 @@ class LinkedinDataView(View):
         return super(LinkedinDataView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        url=request.GET['url']
+        url = request.GET['url']
+        if url != '':
+            linkedin_talent = Talent.objects.filter(linkedin_url=url, talent_active__is_active=True)
+            if linkedin_talent:
+                return util.returnErrorShorcut(400, 'Linkedin URL is already exists in the system')
         context = dict()
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(url)
-        if content == None:
+        if content == {}:
+            context['success'] = False
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+        if content is None:
             context['success'] = False
             return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
         else:
