@@ -522,7 +522,7 @@ class TalentAdd(generics.ListCreateAPIView):
             return util.returnSuccessShorcut(context)
         else:
             result = add_edit_talent(profile_data, user)
-            if result == False:
+            if result is False:
                 return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
             # add updated serializer data to context
             else:
@@ -956,5 +956,30 @@ class DeleteEdu(View):
                 profile_data['talent_id']))
         talent_id = talent_objs[0]
         TalentEducation.objects.filter(talent=talent_id, id=profile_data['id']).delete()
+        param_dict['success'] = True
+        return util.returnSuccessShorcut(param_dict)
+
+
+class DeleteConcept(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DeleteConcept, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        return HttpResponse("405 ERROR:-Method is not allowed")
+
+    def post(self, request):
+        param_dict = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
+        concept = TalentConcept.objects.filter(id=profile_data['id'])
+        if not concept:
+            return util.returnErrorShorcut(400, 'Concept id {} dosen\'t exist in database.'.format(
+                profile_data['id']))
+        talent_objs = Talent.objects.filter(id=profile_data['talent_id'])
+        if not talent_objs:
+            return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(
+                profile_data['talent_id']))
+        talent_id = talent_objs[0]
+        TalentConcept.objects.filter(talent=talent_id, id=profile_data['id']).delete()
         param_dict['success'] = True
         return util.returnSuccessShorcut(param_dict)
