@@ -521,20 +521,23 @@ class TalentAdd(generics.ListCreateAPIView):
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
-            add_edit_talent(profile_data, user)
+            result = add_edit_talent(profile_data, user)
+            if result == False:
+                return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
             # add updated serializer data to context
-            talent_id = profile_data.get('id', '')
-            if talent_id:
-                talent = Talent.objects.filter(id=talent_id)
-                if talent:
-                    talent = talent[0]
-                    Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
-                    Talent.objects.filter(id=talent_id).update(request_by=profile_data.get('request_by', ''))
-                    serializer_data = TalentSerializer(talent)
-                    context['talent_updated_data'] = serializer_data.data
-            context['message'] = 'Talent Updated Successfully'
-            context['success'] = True
-            return util.returnSuccessShorcut(context)
+            else:
+                talent_id = profile_data.get('id', '')
+                if talent_id:
+                    talent = Talent.objects.filter(id=talent_id)
+                    if talent:
+                        talent = talent[0]
+                        Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
+                        Talent.objects.filter(id=talent_id).update(request_by=profile_data.get('request_by', ''))
+                        serializer_data = TalentSerializer(talent)
+                        context['talent_updated_data'] = serializer_data.data
+                context['message'] = 'Talent Updated Successfully'
+                context['success'] = True
+                return util.returnSuccessShorcut(context)
 
 
 def add_edit_talent(profile_data, user):
@@ -551,7 +554,13 @@ def add_edit_talent(profile_data, user):
             TalentLocation.objects.update(talent=talent_obj[0], city=profile_data.get('city', ''),
                                           state=profile_data.get('state', ''), country=profile_data.get('country', ''))
             talent_obj = talent_obj[0]
-            TalentEmail.objects.filter(talent=talent_obj).update(email=profile_data.get('email', ''))
+            email = profile_data.get('email', '')
+            if email != '':
+                email_talent = TalentEmail.objects.filter(email=email, talent__talent_active__is_active=True)
+                if email_talent:
+                    return False
+                else:
+                    TalentEmail.objects.filter(talent=talent_obj).update(email=profile_data.get('email', ''))
             TalentContact.objects.filter(talent=talent_obj).update(contact=profile_data.get('phone', ''))
     else:
         talent_obj = Talent.objects.create(
