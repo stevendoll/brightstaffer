@@ -1703,6 +1703,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     
     $scope.removeTopConcepts = function(arr, index) {
+        arr.splice(index, 1);
+            return;
         if(!$scope.talentData.id){
             arr.splice(index, 1);
             return;
@@ -1721,6 +1723,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             }else{
                 $('#view-all-concepts').modal('hide');
                 $scope.showNotification(false, response.errorstring || 'Error in removing concept.');
+                $window.scrollTo(0,0);
             }
         });
     }
