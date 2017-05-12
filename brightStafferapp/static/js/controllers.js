@@ -1703,8 +1703,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     
     $scope.removeTopConcepts = function(arr, index) {
-        arr.splice(index, 1);
-            return;
+//        arr.splice(index, 1);
+//            return;
         if(!$scope.talentData.id){
             arr.splice(index, 1);
             return;
