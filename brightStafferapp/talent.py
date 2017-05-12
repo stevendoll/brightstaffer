@@ -277,40 +277,30 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
             talent_project_match(talent_obj,project)
         return talent_result
 
-
-def talent_project_match(talent_obj,project):
-    talent_concept_list=TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',flat=True)
-    talent_concept_count=TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',flat=True).count()
-    project_concept_list=ProjectConcept.objects.filter(project=project).values_list('concept__concept',flat=True)
-    project_concept_count=ProjectConcept.objects.filter(project=project).values_list('concept__concept',flat=True).count()
-    total_concept=talent_concept_count+project_concept_count
+def talent_project_match(talent_obj, project):
+    talent_concept_list = TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',
+                                                                                         flat=True)
+    talent_concept_count = len(talent_concept_list)
+    project_concept_list = ProjectConcept.objects.filter(project=project).values_list('concept__concept', flat=True)
+    project_concept_count = len(project_concept_list)
     count = 0
-    if talent_concept_count<=project_concept_count:
+    if talent_concept_count <= project_concept_count:
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
                 ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
-                if ratio >= 90:
-                    count += 1
+                # if ratio >= 90:
+                count += (ratio / 100)
         # match = math.ceil(round((count/project_concept_count), 2))
-        match = round(count / project_concept_count * 100)
-        if match >= 100:
-            match = 100
-            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
-        else:
-            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+        match = (count / (project_concept_count * talent_concept_count)) * 100
     else:
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
-                ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower() )
-                if ratio >= 90:
-                    count += 1
+                ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
+                # if ratio >= 90:
+                count += (ratio / 100.0)
         # match = math.ceil(round((count/project_concept_count), 2))
-        match = round(count / talent_concept_count * 100)
-        if match >= 100:
-            match = 100
-            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
-        else:
-            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+        match = count / (project_concept_count * talent_concept_count) * 100
+    TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
 
 
 # View Talent's Current stage for a single project and Add Talent's stage for a single project
@@ -522,7 +512,7 @@ class TalentAdd(generics.ListCreateAPIView):
             return util.returnSuccessShorcut(context)
         else:
             result = add_edit_talent(profile_data, user)
-            if result == False:
+            if result is False:
                 return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
             # add updated serializer data to context
             else:
@@ -956,5 +946,30 @@ class DeleteEdu(View):
                 profile_data['talent_id']))
         talent_id = talent_objs[0]
         TalentEducation.objects.filter(talent=talent_id, id=profile_data['id']).delete()
+        param_dict['success'] = True
+        return util.returnSuccessShorcut(param_dict)
+
+
+class DeleteConcept(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DeleteConcept, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        return HttpResponse("405 ERROR:-Method is not allowed")
+
+    def post(self, request):
+        param_dict = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
+        concept = TalentConcept.objects.filter(id=profile_data['id'])
+        if not concept:
+            return util.returnErrorShorcut(400, 'Concept id {} dosen\'t exist in database.'.format(
+                profile_data['id']))
+        talent_objs = Talent.objects.filter(id=profile_data['talent_id'])
+        if not talent_objs:
+            return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(
+                profile_data['talent_id']))
+        talent_id = talent_objs[0]
+        TalentConcept.objects.filter(talent=talent_id, id=profile_data['id']).delete()
         param_dict['success'] = True
         return util.returnSuccessShorcut(param_dict)
