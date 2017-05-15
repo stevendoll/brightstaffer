@@ -573,8 +573,13 @@ def add_edit_talent(profile_data, user):
                               linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               image=profile_data.get('profile_image', '')
                               )
-            TalentLocation.objects.get_or_create(talent=talent_obj[0], city=profile_data.get('city', ''),
+            #talent_name=Talent.objects.filter(id=profile_data.get('id', '')).values('talent_name')
+            talent_location=TalentLocation.objects.filter(talent=talent_obj[0], city=profile_data.get('city', ''),
                                           state=profile_data.get('state', ''), country=profile_data.get('country', ''))
+            if not talent_location:
+                TalentLocation.objects.filter(talent=talent_obj[0]).update(city=profile_data.get('city', ''),
+                                                                        state=profile_data.get('state', ''),
+                                                                        country=profile_data.get('country', '') )
             talent_obj = talent_obj[0]
             email = profile_data.get('email', '')
             contact = profile_data.get('phone', '')
