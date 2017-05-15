@@ -514,7 +514,7 @@ class TalentAdd(generics.ListCreateAPIView):
             return util.returnSuccessShorcut(context)
         else:
             linkedin_url = profile_data.get('linkedinProfileUrl', '')
-            linkedin = Talent.objects.filter(id=id, talent_active__is_active=True, linkedin_url=linkedin_url)
+            linkedin = Talent.objects.filter(id=request.data['id'], talent_active__is_active=True, linkedin_url=linkedin_url)
             if linkedin:
                 Talent.objects.update(linkedin_url=linkedin_url)
             else:
