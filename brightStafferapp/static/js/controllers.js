@@ -1720,6 +1720,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         createTalentFormService.removeTopConcepts({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
             if(response.success){
                 arr.splice(index, 1);
+                if(!arr.length){
+                    $("#view-all-concepts").modal('hide');
+                }
             }else{
                 $('#view-all-concepts').modal('hide');
                 $scope.showNotification(false, response.errorstring || 'Error in removing concept.');
@@ -1796,6 +1799,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         if (!$scope.talentData.linkedinProfileUrl) return;
         var param = {
             url: $scope.talentData.linkedinProfileUrl
+        }
+        if($scope.talentData.id){
+           param.id = $scope.talentData.id
         }
 
         //        $scope.talentData.profile_image = '';
@@ -3497,15 +3503,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        var totalExp = calcTotal(arr);
         arr.forEach(function (talent) {
             if (talent.talent_company.length) {
-                var currentComp = {};
+                var currentComp = [];
                 var arr = talent.talent_company.filter(function (company) {
                     if (company.is_current) {
-                        currentComp = company;
+                        currentComp.push(company);
                     }
                     return !company.is_current;
                 });
                 talent.talent_company = arr;
-                Object.keys(currentComp).length ? talent.talent_company.unshift(currentComp): '';
+                if(currentComp.length){
+                    talent.talent_company = currentComp.concat(talent.talent_company);
+                }
             }
             talent.talent_concepts = talent.talent_concepts.sort(function (a, b) {
                 return parseFloat(a.match) - parseFloat(b.match);
@@ -3591,38 +3599,71 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             });
         });
 
-        if (talent.talent_company.length && talent.talent_company[0].is_current) {
-            var organisation = {
-                JobTitle: ''
-                , name: ''
-                , from: ''
-                , to: ''
-            };
-            organisation.name = talent.talent_company[0].company ? talent.talent_company[0].company.trim() : '';
-            organisation.JobTitle = talent.talent_company[0].designation ? talent.talent_company[0].designation.trim() : '';
-            if (talent.talent_company[0].start_date) {
-                var date = new Date(talent.talent_company[0].start_date);
-                organisation.from = date.getFullYear().toString();
-            }
-            if (talent.talent_company[0].end_date) {
-                var date = new Date(talent.talent_company[0].end_date);
-                organisation.to = date.getFullYear().toString();
-            }
-            organisation.id = talent.talent_company[0].id;
-            $scope.talentEditableData.currentOrganization.push(organisation);
-        } else {
-            $scope.talentEditableData.currentOrganization.push({
-                JobTitle: ''
-                , name: ''
-                , from: ''
-                , to: ''
-            });
-        }
+//        if (talent.talent_company.length && talent.talent_company[0].is_current) {
+//            var organisation = {
+//                JobTitle: ''
+//                , name: ''
+//                , from: ''
+//                , to: ''
+//            };
+//            organisation.name = talent.talent_company[0].company ? talent.talent_company[0].company.trim() : '';
+//            organisation.JobTitle = talent.talent_company[0].designation ? talent.talent_company[0].designation.trim() : '';
+//            if (talent.talent_company[0].start_date) {
+//                var date = new Date(talent.talent_company[0].start_date);
+//                organisation.from = date.getFullYear().toString();
+//            }
+//            if (talent.talent_company[0].end_date) {
+//                var date = new Date(talent.talent_company[0].end_date);
+//                organisation.to = date.getFullYear().toString();
+//            }
+//            organisation.id = talent.talent_company[0].id;
+//            $scope.talentEditableData.currentOrganization.push(organisation);
+//        } else {
+//            $scope.talentEditableData.currentOrganization.push({
+//                JobTitle: ''
+//                , name: ''
+//                , from: ''
+//                , to: ''
+//            });
+//        }
 
+//        if (talent.talent_company.length) {
+//
+//            var index = 0;
+//            talent.talent_company[0].is_current ? index = 1 : 0
+//
+//            for (var i = index; i < talent.talent_company.length; i++) {
+//                var organisation = {
+//                    JobTitle: ''
+//                    , name: ''
+//                    , from: ''
+//                    , to: ''
+//                };
+//                organisation.name = talent.talent_company[i].company ? talent.talent_company[i].company.trim() : '';
+//                organisation.JobTitle = talent.talent_company[i].designation ? talent.talent_company[i].designation.trim() : '';
+//                if (talent.talent_company[i].start_date) {
+//                    var date = new Date(talent.talent_company[i].start_date);
+//                    organisation.from = date.getFullYear().toString();
+//                }
+//                if (talent.talent_company[i].end_date) {
+//                    var date = new Date(talent.talent_company[i].end_date);
+//                    organisation.to = date.getFullYear().toString();
+//                }
+//                organisation.id = talent.talent_company[i].id;
+//                $scope.talentEditableData.pastOrganization.push(organisation);
+//            }
+//        } else {
+//            $scope.talentEditableData.pastOrganization.push({
+//                JobTitle: ''
+//                , name: ''
+//                , from: ''
+//                , to: ''
+//            });
+//        }
+        
         if (talent.talent_company.length) {
 
             var index = 0;
-            talent.talent_company[0].is_current ? index = 1 : 0
 
             for (var i = index; i < talent.talent_company.length; i++) {
                 var organisation = {
@@ -3642,9 +3683,22 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     organisation.to = date.getFullYear().toString();
                 }
                 organisation.id = talent.talent_company[i].id;
-                $scope.talentEditableData.pastOrganization.push(organisation);
+                
+                if(talent.talent_company[i].is_current){
+                   $scope.talentEditableData.currentOrganization.push(organisation);
+                }else{
+                   $scope.talentEditableData.pastOrganization.push(organisation);
+                }
             }
         } else {
+            
+            $scope.talentEditableData.currentOrganization.push({
+                JobTitle: ''
+                , name: ''
+                , from: ''
+                , to: ''
+            });
+            
             $scope.talentEditableData.pastOrganization.push({
                 JobTitle: ''
                 , name: ''

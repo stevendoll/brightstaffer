@@ -713,7 +713,7 @@ def convert_to_date(duration):
     return start_date, end_date
 
 
-# To fetch Linkedin Public Profile Data
+# To fetch Linkedin Public Profile Data:-Edit and Create Profile
 class LinkedinDataView(View):
 
     @method_decorator(csrf_exempt)
@@ -722,11 +722,23 @@ class LinkedinDataView(View):
 
     def get(self, request):
         url = request.GET['url']
-        if url != '':
-            linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
-                                                    Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
-            if linkedin_talent:
-                return util.returnErrorShorcut(400, 'Recruiter have same user in an account')
+        if "id" in request.GET :
+            id = request.GET['id']
+            if url != '':
+                linkedin =Talent.objects.filter(id=id,talent_active__is_active=True,linkedin_url=url)
+                if linkedin:
+                    Talent.objects.update(id=id,linkedin_url=url)
+                else:
+                    linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                            Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
+                    if linkedin_talent:
+                        return util.returnErrorShorcut(400, 'Recruiter have same user in an account')
+        else:
+            if url != '':
+                linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                            Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
+                if linkedin_talent:
+                    return util.returnErrorShorcut(400, 'Recruiter have same user in an account')
         context = dict()
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(url)
