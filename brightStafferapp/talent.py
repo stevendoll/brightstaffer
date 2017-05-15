@@ -589,7 +589,7 @@ def add_edit_talent(profile_data, user):
                                                             Q(recruiter__username=user) & Q(
                         linkedin_url=linkedin_url))
                     if linkedin_talent:
-
+                        return 2
                     else:
                         Talent.objects.filter(id=profile_data.get('id', '')).update(linkedin_url=linkedin_url)
 
