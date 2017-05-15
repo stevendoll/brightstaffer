@@ -713,7 +713,7 @@ def convert_to_date(duration):
     return start_date, end_date
 
 
-# To fetch Linkedin Public Profile Data
+# To fetch Linkedin Public Profile Data:-Edit and Create Profile
 class LinkedinDataView(View):
 
     @method_decorator(csrf_exempt)

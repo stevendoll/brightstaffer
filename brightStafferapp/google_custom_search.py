@@ -5,7 +5,10 @@ import json
 class GoogleCustomSearch(object):
 
     def google_custom(self,url):
-        load_data=requests.get('https://www.googleapis.com/customsearch/v1?q='+url+'&cx=002086705837668586439:l1o6lrd_few&num=1'
+        split_string=url.split('/')
+        list_var=split_string[-2]
+        linkedin_id=json.dumps(list_var)
+        load_data=requests.get('https://www.googleapis.com/customsearch/v1?q='+linkedin_id+'&cx=002086705837668586439:l1o6lrd_few&num=1'
                                                                              '&key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU')
         data=json.loads(load_data.text)
         try:

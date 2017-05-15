@@ -551,7 +551,7 @@ def add_edit_talent(profile_data, user):
                     TalentEmail.objects.filter(talent=talent_obj).update(email=email)
                 else:
                     email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
-                                                    Q(recruiter__username=user) & Q(talent_email__email=contact))
+                                                    Q(recruiter__username=user) & Q(talent_email__email=email))
                     if email_talent:
                         return 0
                     else:
@@ -785,7 +785,7 @@ def talent_validation(user_data):
     else:
         return True
 
-
+#For Talent View Card
 class LinkedinAddUrl(generics.ListCreateAPIView):
 
     @method_decorator(csrf_exempt)
@@ -823,6 +823,13 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             talent.designation = content['talent_designation']
             talent.image = content['profile_image']
             talent.linkedin_url = linkedin_url
+            #for values in content['currentOrganization']:
+            #    print (values)
+            #id = TalentCompany.objects.filter(talent=talent, is_current=True).values('id')
+            #if id:
+            #    TalentCompany.objects.update(id=id[0]['id'], is_current=True,company=values['name'] )
+            #else:
+            #    TalentCompany.objects.get_or_create(is_current=True, company=values['name'])
             talent.save()
             talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
             talent_loc.city = content['city']
