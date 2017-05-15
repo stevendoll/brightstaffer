@@ -727,12 +727,14 @@ class LinkedinDataView(View):
             if url != '':
                 linkedin =Talent.objects.filter(id=id,talent_active__is_active=True,linkedin_url=url)
                 if linkedin:
-                    Talent.objects.update(linkedin_url=url)
+                    Talent.objects.filter(id=id).update(linkedin_url=url)
                 else:
                     linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
                                                             Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
                     if linkedin_talent:
                         return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
+                    else:
+                        Talent.objects.filter(id=id).update(linkedin_url=url)
         else:
             if url != '':
                 linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
