@@ -1896,7 +1896,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 if (onEdit) {
                     $('#edit-profile').modal('hide');
                 }
-                $scope.showNotification(false, response.errorstring);
+                $scope.showNotification(false, response.errorstring, true);
             }
             $window.scrollTo(0, 0);
         });
