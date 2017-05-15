@@ -1541,7 +1541,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     /* create talent code */
     $scope.notification = {
         show: false,
-        status: 'wow',
+        status: '',
         message: ''
     };
     $scope.talentData = {};
