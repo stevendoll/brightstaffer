@@ -586,18 +586,18 @@ def add_edit_talent(profile_data, user):
                 return 1
 
         else:
-            talent_obj = Talent.objects.create(
+            talent_objs = Talent.objects.create(
                 talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                 recruiter=user, status='New', industry_focus=profile_data.get('industryFocus','')['name'],
                 industry_focus_percentage=profile_data.get('industryFocus','')['percentage'],
                 linkedin_url=profile_data.get('linkedinProfileUrl', ''), image=profile_data.get('profile_image', ''),
                 request_by=profile_data.get('request_by', ''),
                 create_date=datetime.datetime.now())
-            TalentLocation.objects.create(talent=talent_obj,city=profile_data.get('city', ''),
+            TalentLocation.objects.create(talent=talent_objs,city=profile_data.get('city', ''),
                                           state=profile_data.get('state', ''), country=profile_data.get('country', ''))
-            TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user, is_active=True)
-            TalentContact.objects.get_or_create(talent=talent_obj, contact=profile_data.get('phone', ''))
-            TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
+            TalentRecruiter.objects.get_or_create(talent=talent_objs, recruiter=user, is_active=True)
+            TalentContact.objects.get_or_create(talent=talent_objs, contact=profile_data.get('phone', ''))
+            TalentEmail.objects.get_or_create(talent=talent_objs, email=profile_data.get('email', ''))
             # add top concepts for talent
             if 'topConcepts' in profile_data:
                 for skill in profile_data.get('topConcepts', ''):
@@ -612,7 +612,7 @@ def add_edit_talent(profile_data, user):
                         if match and match > 100:
                             match = 100
                         concept, created = Concept.objects.get_or_create(concept=skill.get('name'))
-                        TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept, match=match)
+                        TalentConcept.objects.get_or_create(talent=talent_objs, concept=concept, match=match)
 
     if "education" in profile_data:
         for education in profile_data.get('education', ''):
@@ -631,10 +631,10 @@ def add_edit_talent(profile_data, user):
                                                                                           )
                     else:
                         if start_date and end_date:
-                            TalentEducation.objects.get_or_create(talent=talent_obj, education=org, start_date=start_date,
+                            TalentEducation.objects.get_or_create(talent=talent_objs, education=org, start_date=start_date,
                                                                   end_date=end_date)
                         else:
-                            TalentEducation.objects.get_or_create(talent=talent_obj,education=org)
+                            TalentEducation.objects.get_or_create(talent=talent_objs,education=org)
     if 'currentOrganization' in profile_data:
         for organization in profile_data.get('currentOrganization', ''):
             if bool(organization):
