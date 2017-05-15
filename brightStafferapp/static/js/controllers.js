@@ -3503,15 +3503,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        var totalExp = calcTotal(arr);
         arr.forEach(function (talent) {
             if (talent.talent_company.length) {
-                var currentComp = {};
+                var currentComp = [];
                 var arr = talent.talent_company.filter(function (company) {
                     if (company.is_current) {
-                        currentComp = company;
+                        currentComp.push(company);
                     }
                     return !company.is_current;
                 });
                 talent.talent_company = arr;
-                Object.keys(currentComp).length ? talent.talent_company.unshift(currentComp): '';
+                if(currentComp.length){
+                    talent.talent_company = currentComp.concat(talent.talent_company);
+                }
             }
             talent.talent_concepts = talent.talent_concepts.sort(function (a, b) {
                 return parseFloat(a.match) - parseFloat(b.match);
