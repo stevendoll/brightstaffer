@@ -1649,10 +1649,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 from: '',
                 to: ''
         }],
-            topConcepts: [{
-                name: '',
-                match: ''
-        }],
+            topConcepts: [],
             careerHistory: {
                 total: '',
                 history: [{}]
