@@ -727,18 +727,18 @@ class LinkedinDataView(View):
             if url != '':
                 linkedin =Talent.objects.filter(id=id,talent_active__is_active=True,linkedin_url=url)
                 if linkedin:
-                    Talent.objects.update(id=id,linkedin_url=url)
+                    Talent.objects.update(linkedin_url=url)
                 else:
                     linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
                                                             Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
                     if linkedin_talent:
-                        return util.returnErrorShorcut(400, 'Recruiter have same user in an account')
+                        return util.returnErrorShorcut(400, 'Oops! You have added the entered LinkedIn URL already exists.')
         else:
             if url != '':
                 linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
                                                             Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
                 if linkedin_talent:
-                    return util.returnErrorShorcut(400, 'Recruiter have same user in an account')
+                    return util.returnErrorShorcut(400, 'Oops! You have added the entered LinkedIn URL already exists.')
         context = dict()
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(url)

@@ -497,6 +497,12 @@ class TalentAdd(generics.ListCreateAPIView):
             user = user[0]
         profile_data = json.loads(request.body.decode("utf-8"))
         if 'id' not in profile_data:
+            linkedin_url = profile_data.get('linkedinProfileUrl', '')
+            linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                    Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(
+                linkedin_url=linkedin_url))
+            if linkedin_talent:
+                return util.returnErrorShorcut(400, 'Oops! You have added the entered LinkedIn URL already exists.')
             add_edit_talent(profile_data, user)
             #if result is 0:
             #    return util.returnErrorShorcut(400, 'Talent with this email already exists for the same recruiter')
@@ -507,6 +513,16 @@ class TalentAdd(generics.ListCreateAPIView):
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
+            linkedin_url = profile_data.get('linkedinProfileUrl', '')
+            linkedin = Talent.objects.filter(id=id, talent_active__is_active=True, linkedin_url=linkedin_url)
+            if linkedin:
+                Talent.objects.update(linkedin_url=linkedin_url)
+            else:
+                linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                        Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(
+                    linkedin_url=linkedin_url))
+                if linkedin_talent:
+                    return util.returnErrorShorcut(400, 'Oops! You have added the entered LinkedIn URL already exists.')
             result = add_edit_talent(profile_data, user)
             if result is 0:
                 return util.returnErrorShorcut(400, 'Talent with email already exists for the same recruiter')
@@ -792,7 +808,7 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
                                                         Q(recruiter__username=request.META['HTTP_RECRUITER']) &
                                                         Q(linkedin_url=linkedin_url))
                 if linkedin_talent:
-                    return util.returnErrorShorcut(400, 'Recruiter have same user in an account')
+                    return util.returnErrorShorcut(400, 'Oops! You have added the entered LinkedIn URL already exists.')
         talent_id = request.data['id']
         talent = Talent.objects.filter(id=talent_id)
         Talent.objects.filter(id=talent).update(activation_date=timezone.now())
