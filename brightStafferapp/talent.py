@@ -832,10 +832,10 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
         content = googleCSE.google_custom(linkedin_url)
         if content=={}:
             context['success'] = False
-            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record.")
         if content is None:
             context['success'] = False
-            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record.")
         else:
             talent.talent_name = content['firstName'] + " " + content['lastName']
             talent.designation = content['talent_designation']

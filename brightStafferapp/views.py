@@ -744,10 +744,10 @@ class LinkedinDataView(View):
         content = googleCSE.google_custom(url)
         if content == {}:
             context['success'] = False
-            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record.")
         if content is None:
             context['success'] = False
-            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record.")
         else:
             context['results'] = content
             context['success'] = True
