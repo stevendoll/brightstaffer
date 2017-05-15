@@ -1553,7 +1553,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.notification.message = message;
         });
         $timeout(function () {
-            $scope.notification.show = false;
+            $scope.notification = {
+                show: false,
+                status: '',
+                message: ''
+            };
         }, 3000);
     }
 
@@ -2967,25 +2971,29 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             function requestCallback(response) {
                 response = JSON.parse(response);
 
-                if (!$rootScope.talentDetails.talent_contact || !$rootScope.talentDetails.talent_contact.length) {
-                    $rootScope.talentDetails.talent_contact = [{}];
-                }
-                $rootScope.talentDetails.talent_contact[0].contact = candidateContactAdd;
-                sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
-                //console.log(response);
-                $scope.closeCandidateInfo();
-                // candidateContact ='';
-                //                $('#contactSuccess').css('display', 'block');
-                //                setTimeout(function () {
-                //                    $('#contactSuccess').css('display', 'none');
-                //                }, 2000);
-                $rootScope.showLoader(false);
+                
 
                 if (response.success) {
                     $scope.showNotification(true, "Talent contact has been added.");
+                    $rootScope.talentDetails.talent_contact[0].contact = candidateContactAdd;
+                sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
+                
+                
                 } else {
+                    $rootScope.talentDetails.talent_contact = [{}];
                     $scope.showNotification(false, response.errorstring, true);
                 }
+                
+//                if (!$rootScope.talentDetails.talent_contact || !$rootScope.talentDetails.talent_contact.length) {
+//                    $rootScope.talentDetails.talent_contact = [{}];
+//                }
+//                $rootScope.talentDetails.talent_contact[0].contact = candidateContactAdd;
+//                sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
+//                
+//                $scope.closeCandidateInfo();
+                $rootScope.showLoader(false);
+                $scope.closeCandidateInfo();
+                
             }
         } else {
             $scope.isContact = true;
