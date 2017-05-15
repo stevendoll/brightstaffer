@@ -139,6 +139,7 @@ class TalentContactAPI(View):
 
         if_exists = self.validate_contact(contact)
         if if_exists:
+            context['success'] = False
             return util.returnErrorShorcut(409, 'Oops! The Contact Number you have entered already exists.')
         talent_contact_obj, created = TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
         if created:
@@ -500,19 +501,23 @@ class TalentAdd(generics.ListCreateAPIView):
             linkedin_url = profile_data.get('linkedinProfileUrl', '')
             contact = profile_data.get('phone', '')
             email = profile_data.get('email', '')
-            linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
-                                                    Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(
-                linkedin_url=linkedin_url))
-            if linkedin_talent:
-                return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
-            email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
-                                                 Q(recruiter__username=user) & Q(talent_email__email=email))
-            if email_talent:
-                return util.returnErrorShorcut(400, 'Oops! The Email Id you have entered already exists.')
-            contact_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
-                                                   Q(recruiter__username=user) & Q(talent_contact__contact=contact))
-            if contact_talent:
-                return util.returnErrorShorcut(400, 'Oops! The Contact Number you have entered already exists')
+            if linkedin_url!= '':
+                linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                        Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(
+                    linkedin_url=linkedin_url))
+                if linkedin_talent:
+                    return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
+            if email!= '':
+                email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                     Q(recruiter__username=user) & Q(talent_email__email=email))
+                if email_talent:
+                    return util.returnErrorShorcut(400, 'Oops! The Email Id you have entered already exists.')
+
+            if contact!= '':
+                contact_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                       Q(recruiter__username=user) & Q(talent_contact__contact=contact))
+                if contact_talent:
+                    return util.returnErrorShorcut(400, 'Oops! The Contact Number you have entered already exists')
             add_edit_talent(profile_data, user)
             #if result is 0:
             #    return util.returnErrorShorcut(400, 'Talent with this email already exists for the same recruiter')
@@ -523,21 +528,23 @@ class TalentAdd(generics.ListCreateAPIView):
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
-            linkedin_url = profile_data.get('linkedinProfileUrl', '')
-            linkedin = Talent.objects.filter(id=request.data['id'], talent_active__is_active=True, linkedin_url=linkedin_url)
-            if linkedin:
-                Talent.objects.update(linkedin_url=linkedin_url)
-            else:
-                linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
-                                                        Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(
-                    linkedin_url=linkedin_url))
-                if linkedin_talent:
-                    return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
+            # linkedin_url = profile_data.get('linkedinProfileUrl', '')
+            # linkedin = Talent.objects.filter(id=request.data['id'], talent_active__is_active=True, linkedin_url=linkedin_url)
+            # if linkedin:
+            #     Talent.objects.update(linkedin_url=linkedin_url)
+            # else:
+            #     linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+            #                                             Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(
+            #         linkedin_url=linkedin_url))
+            #     if linkedin_talent:
+            #         return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
             result = add_edit_talent(profile_data, user)
             if result is 0:
                 return util.returnErrorShorcut(400, 'Oops! The Email Id you have entered already exists.')
             if result is 1:
                 return util.returnErrorShorcut(400, 'Oops! The Contact Number you have entered already exists.')
+            if result is 2:
+                return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
             # add updated serializer data to context
             else:
                 #add_edit_talent(profile_data, user)
@@ -571,6 +578,22 @@ def add_edit_talent(profile_data, user):
             talent_obj = talent_obj[0]
             email = profile_data.get('email', '')
             contact = profile_data.get('phone', '')
+            linkedin_url = profile_data.get('linkedinProfileUrl', '')
+            if linkedin_url != '':
+                linkedin = Talent.objects.filter(id=profile_data.get('id', ''),
+                                                 talent_active__is_active=True, linkedin_url=linkedin_url)
+                if linkedin:
+                    Talent.objects.filter(id=profile_data.get('id', '')).update(linkedin_url=linkedin_url)
+
+                else:
+                    linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                            Q(recruiter__username=user) & Q(
+                        linkedin_url=linkedin_url))
+                    if linkedin_talent:
+                        return 2
+                    else:
+                        Talent.objects.filter(id=profile_data.get('id', '')).update(linkedin_url=linkedin_url)
+
             if email != '':
                 email_talent = TalentEmail.objects.filter(email=email, talent=talent_obj)
                 if email_talent:
