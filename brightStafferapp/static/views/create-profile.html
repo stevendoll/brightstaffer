@@ -345,6 +345,6 @@
 
 
         <div class="" ng-class="{'pro-success-box': notification.status == 'Success', 'pro-error-box': notification.status != 'Success'}" id="nameSuccess" ng-show="notification.show">
-            <span><strong>[[notification.status]]!</strong> [[notification.message]]</span>
+            <span><strong ng-show="notification.status">[[notification.status]]!</strong> [[notification.message]]</span>
         </div>
     </div>
