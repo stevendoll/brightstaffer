@@ -216,9 +216,9 @@
                     <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company">
                         <span ng-show="role.designation">[[role.designation | capitalizeWord]] at</span> [[role.company | capitalizeWord]]
                         <span ng-show="role.start_date || role.end_date">
-                            [[role.start_date | yearFormat]] - 
-                            <span ng-show="$index == 0">Present</span>
-                        <span ng-show="$index != 0">[[role.end_date | yearFormat]]</span>
+                            [[role.start_date | yearFormat]] 
+                            <span ng-show="role.is_current">- Present</span>
+                        <span ng-show="!role.is_current">- [[role.end_date | yearFormat]]</span>
                         </span>
                     </div>
                     <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
