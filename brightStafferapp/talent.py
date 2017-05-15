@@ -139,6 +139,7 @@ class TalentContactAPI(View):
 
         if_exists = self.validate_contact(contact)
         if if_exists:
+            context['success'] = False
             return util.returnErrorShorcut(409, 'Oops! The Contact Number you have entered already exists.')
         talent_contact_obj, created = TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
         if created:
