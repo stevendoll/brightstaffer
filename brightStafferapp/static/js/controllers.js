@@ -1545,10 +1545,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         message: ''
     };
     $scope.talentData = {};
-    $scope.showNotification = function (success, message) {
+    $scope.showNotification = function (success, message, hideStatus) {
         $timeout(function () {
             $scope.notification.show = true;
-            $scope.notification.status = success ? 'Success' : 'Error';
+            if(!hideStatus)
+                $scope.notification.status = success ? 'Success' : 'Error';
             $scope.notification.message = message;
         });
         $timeout(function () {
@@ -1852,7 +1853,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 }
                 $('#linkedinUrl').blur();
             } else {
-                $scope.showNotification(false, response.errorstring);
+                $scope.showNotification(false, response.errorstring, true);
                 $window.scrollTo(0, 0);
             }
         })
@@ -1931,7 +1932,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $rootScope.getCandidateData();
                 } else {
                     console.log('error');
-                    $scope.showNotification(false, response.errorstring);
+                    $scope.showNotification(false, response.errorstring, true);
                     $window.scrollTo(0, 0);
                 }
             });
@@ -2896,7 +2897,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 } else if (response.success == false) {
                     $scope.candidateEmail = '';
                     $scope.closeCandidateInfo();
-                    $scope.showNotification(false, response.errorstring);
+                    $scope.showNotification(false, response.errorstring, true);
                     $scope.$apply();
                 }
             }
@@ -2942,7 +2943,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     //                    setTimeout(function () {
                     //                        $('#emailError').css('display', 'none');
                     //                    }, 2000);
-                    $scope.showNotification(false, response.errorstring);
+                    $scope.showNotification(false, response.errorstring, true);
                 }
             }
         } else {
@@ -2983,7 +2984,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 if (response.success) {
                     $scope.showNotification(true, "Talent contact has been added.");
                 } else {
-                    $scope.showNotification(false, response.errorstring);
+                    $scope.showNotification(false, response.errorstring, true);
                 }
             }
         } else {
@@ -3019,7 +3020,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     //                    }, 2000);
 
                 } else {
-                    $scope.showNotification(false, response.errorstring);
+                    $scope.showNotification(false, response.errorstring, true);
                     //                    $('#contactError').css('display', 'block');
                     //                    setTimeout(function () {
                     //                        $('#contactError').css('display', 'none');

@@ -267,7 +267,7 @@
                               <h2>Industry Focus</h2>
                               <h3>Relevance</h3>
                               <div class="top-concept-input-div">
-                                <input type="" class="form-control top-concept-input-part" id="" placeholder="Industry focus" maxlength="100" ng-model="talentData.industryFocus.name" />
+                                <input type="" class="form-control top-concept-input-part" id="" placeholder="Industry focus" maxlength="100" ng-model="talentData.industryFocus.name" ng-required='talentData.industryFocus.percentage'/>
                                 <input type="" class="form-control top-concept-right-input-div" id="" placeholder="%" ng-model="talentData.industryFocus.percentage" ng-change="numberonly(talentData.industryFocus, 'percentage', true);" maxlength="3"/>
                               </div>
                             </div>
