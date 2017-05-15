@@ -496,7 +496,7 @@ class TalentAdd(generics.ListCreateAPIView):
         if user:
             user = user[0]
         profile_data = json.loads(request.body.decode("utf-8"))
-        if "id" not in profile_data:
+        if 'id' not in profile_data:
             result =add_edit_talent(profile_data, user)
             if result is 0:
                 return util.returnErrorShorcut(400, 'Talent with this email already exists for the same recruiter')
@@ -515,6 +515,7 @@ class TalentAdd(generics.ListCreateAPIView):
                                                     'same recruiter')
             # add updated serializer data to context
             else:
+                #add_edit_talent(profile_data, user)
                 talent_id = profile_data.get('id', '')
                 if talent_id:
                     talent = Talent.objects.filter(id=talent_id)
