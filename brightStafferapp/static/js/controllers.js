@@ -1649,10 +1649,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 from: '',
                 to: ''
         }],
-            topConcepts: [{
-                name: '',
-                match: ''
-        }],
+            topConcepts: [],
             careerHistory: {
                 total: '',
                 history: [{}]
@@ -3522,6 +3519,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     }
                     return !company.is_current;
                 });
+                talent.pastCompanyLength = arr.length;
+                talent.currentCompanyLength = currentComp.length;
                 talent.talent_company = arr;
                 if (currentComp.length) {
                     talent.talent_company = currentComp.concat(talent.talent_company);
