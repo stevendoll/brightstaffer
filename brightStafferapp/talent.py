@@ -498,11 +498,21 @@ class TalentAdd(generics.ListCreateAPIView):
         profile_data = json.loads(request.body.decode("utf-8"))
         if 'id' not in profile_data:
             linkedin_url = profile_data.get('linkedinProfileUrl', '')
+            contact = profile_data.get('phone', '')
+            email = profile_data.get('email', '')
             linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
                                                     Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(
                 linkedin_url=linkedin_url))
             if linkedin_talent:
                 return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
+            email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                 Q(recruiter__username=user) & Q(talent_email__email=email))
+            if email_talent:
+                return util.returnErrorShorcut(400, 'Oops! The Email Id you have entered already exists.')
+            contact_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                   Q(recruiter__username=user) & Q(talent_contact__contact=contact))
+            if contact_talent:
+                return util.returnErrorShorcut(400, 'The Contact Number you have entered already exists.')
             add_edit_talent(profile_data, user)
             #if result is 0:
             #    return util.returnErrorShorcut(400, 'Talent with this email already exists for the same recruiter')
