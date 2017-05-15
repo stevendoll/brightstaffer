@@ -277,6 +277,7 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
             talent_project_match(talent_obj,project)
         return talent_result
 
+
 def talent_project_match(talent_obj, project):
     talent_concept_list = TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',
                                                                                          flat=True)
@@ -496,24 +497,22 @@ class TalentAdd(generics.ListCreateAPIView):
             user = user[0]
         profile_data = json.loads(request.body.decode("utf-8"))
         if "id" not in profile_data:
-            # phone and email
-            # phone = profile_data.get('phone', '')
-            email = profile_data.get('email', '')
-            # linkedin_url = profile_data.get('linkedinProfileUrl', '')
-            if email != '':
-                email_talent = TalentEmail.objects.filter(email=email, talent__talent_active__is_active=True)
-                if email_talent:
-                    return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
-            # profile_data["currentOrganization"].extend(profile_data["pastOrganization"])
-            # del profile_data["pastOrganization"]
-            add_edit_talent(profile_data, user)
+            result =add_edit_talent(profile_data, user)
+            if result is 0:
+                return util.returnErrorShorcut(400, 'Talent with this email already exists for the same recruiter')
+            if result is 1:
+                return util.returnErrorShorcut(400, 'Talent with contact number is already exists for the '
+                                                    'same recruiter')
             context['message'] = 'Talent Added Successfully'
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
             result = add_edit_talent(profile_data, user)
-            if result is False:
-                return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
+            if result is 0:
+                return util.returnErrorShorcut(400, 'Talent with email already exists for the same recruiter')
+            if result is 1:
+                return util.returnErrorShorcut(400, 'Talent with contact number is already exists for the '
+                                                    'same recruiter')
             # add updated serializer data to context
             else:
                 talent_id = profile_data.get('id', '')
@@ -545,44 +544,74 @@ def add_edit_talent(profile_data, user):
                                           state=profile_data.get('state', ''), country=profile_data.get('country', ''))
             talent_obj = talent_obj[0]
             email = profile_data.get('email', '')
+            contact = profile_data.get('phone', '')
             if email != '':
-                email_talent = TalentEmail.objects.filter(email=email, talent__talent_active__is_active=True)
+                email_talent = TalentEmail.objects.filter(email=email, talent=talent_obj)
                 if email_talent:
-                    return False
+                    TalentEmail.objects.filter(talent=talent_obj).update(email=email)
                 else:
-                    TalentEmail.objects.filter(talent=talent_obj).update(email=profile_data.get('email', ''))
-            TalentContact.objects.filter(talent=talent_obj).update(contact=profile_data.get('phone', ''))
+                    email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                    Q(recruiter__username=user) & Q(talent_email__email=contact))
+                    if email_talent:
+                        return 0
+                    else:
+                        TalentEmail.objects.filter(talent=talent_obj).update(email=email)
+            else:
+                TalentEmail.objects.filter(talent=talent_obj).update(email=email)
+
+            if contact != '':
+                contact_talent = TalentContact.objects.filter(contact=contact, talent=talent_obj)
+                if contact_talent:
+                    TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+                else:
+                    contact_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                    Q(recruiter__username=user) & Q(talent_contact__contact=contact))
+                    if contact_talent:
+                        return 1
+                    else:
+                        TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+            else:
+                TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
     else:
-        talent_obj = Talent.objects.create(
-            talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
-            recruiter=user, status='New', industry_focus=profile_data.get('industryFocus','')['name'],
-            industry_focus_percentage=profile_data.get('industryFocus','')['percentage'],
-            linkedin_url=profile_data.get('linkedinProfileUrl', ''), image=profile_data.get('profile_image', ''),
-            request_by=profile_data.get('request_by', ''),
-            create_date=datetime.datetime.now())
-        TalentLocation.objects.create(talent=talent_obj,city=profile_data.get('city', ''),
-                                      state=profile_data.get('state', ''), country=profile_data.get('country', ''))
-        TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user, is_active=True)
+        if profile_data.get('email', '') != '':
+            email_talent = Talent.objects.filter(Q(talent_active__is_active=True) & Q(recruiter__username=user) &
+                                                 Q(talent_email__email=profile_data.get('email', '')))
+            if email_talent:
+                return 0
+        elif profile_data.get('phone', '') != '':
+            contact_talent = Talent.objects.filter(Q(talent_active__is_active=True) & Q(recruiter__username=user) &
+                                                 Q(talent_contact__contact=profile_data.get('phone', '')))
+            if contact_talent:
+                return 1
 
-        # add email and phone for talent
-        TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
-        TalentContact.objects.get_or_create(talent=talent_obj, contact=profile_data.get('phone', ''))
-
-        # add top concepts for talent
-        if 'topConcepts' in profile_data:
-            for skill in profile_data.get('topConcepts', ''):
-                if bool(skill):
-                    try:
-                        match = float(skill.get('percentage', skill.get('match', '')))
-                    except:
-                        match = 0
-                    if match and match < 1:
-                        match *= 100
-                        match = round(match, 2)
-                    if match and match > 100:
-                        match = 100
-                    concept, created = Concept.objects.get_or_create(concept=skill.get('name'))
-                    TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept, match=match)
+        else:
+            talent_obj = Talent.objects.create(
+                talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
+                recruiter=user, status='New', industry_focus=profile_data.get('industryFocus','')['name'],
+                industry_focus_percentage=profile_data.get('industryFocus','')['percentage'],
+                linkedin_url=profile_data.get('linkedinProfileUrl', ''), image=profile_data.get('profile_image', ''),
+                request_by=profile_data.get('request_by', ''),
+                create_date=datetime.datetime.now())
+            TalentLocation.objects.create(talent=talent_obj,city=profile_data.get('city', ''),
+                                          state=profile_data.get('state', ''), country=profile_data.get('country', ''))
+            TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user, is_active=True)
+            TalentContact.objects.get_or_create(talent=talent_obj, contact=profile_data.get('phone', ''))
+            TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
+            # add top concepts for talent
+            if 'topConcepts' in profile_data:
+                for skill in profile_data.get('topConcepts', ''):
+                    if bool(skill):
+                        try:
+                            match = float(skill.get('percentage', skill.get('match', '')))
+                        except:
+                            match = 0
+                        if match and match < 1:
+                            match *= 100
+                            match = round(match, 2)
+                        if match and match > 100:
+                            match = 100
+                        concept, created = Concept.objects.get_or_create(concept=skill.get('name'))
+                        TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept, match=match)
 
     if "education" in profile_data:
         for education in profile_data.get('education', ''):
@@ -635,12 +664,12 @@ def add_edit_talent(profile_data, user):
                             else:
                                 TalentCompany.objects.get_or_create(
                                     talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
-                                    is_current=organization.get('is_current', ''))
+                                    is_current=True)
                         else:
                             if start_date:
                                 talent_company, created = TalentCompany.objects.get_or_create(
                                     talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
-                                    start_date=start_date,is_current=organization.get('is_current', ''))
+                                    start_date=start_date,is_current=True)
                                 if end_date:
                                     talent_company.end_date = end_date
                                     talent_company.is_current = True
@@ -766,9 +795,11 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         linkedin_url = request.data['url']
         if linkedin_url != '':
-            linkedin_talent = Talent.objects.filter(linkedin_url=linkedin_url, talent_active__is_active=True)
+            linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                    Q(recruiter__username=request.META['HTTP_RECRUITER'])
+                                                    & Q(linkedin_url=linkedin_url))
             if linkedin_talent:
-                return util.returnErrorShorcut(400, 'Linkedin URL is already exists in the system')
+                return util.returnErrorShorcut(400, 'Recruiter have same user in an account')
         talent_id = request.data['id']
         talent = Talent.objects.filter(id=talent_id)
         Talent.objects.filter(id=talent).update(activation_date=timezone.now())

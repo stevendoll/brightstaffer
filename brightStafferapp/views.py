@@ -35,6 +35,7 @@ from brightStafferapp.linkedin_scrap import LinkedInParser
 from brightStafferapp.google_custom_search import GoogleCustomSearch
 from brightStaffer.settings import ml_url
 from datetime import date
+from django.db.models import Q
 
 class UserData(View):
     @method_decorator(csrf_exempt)
@@ -722,9 +723,10 @@ class LinkedinDataView(View):
     def get(self, request):
         url = request.GET['url']
         if url != '':
-            linkedin_talent = Talent.objects.filter(linkedin_url=url, talent_active__is_active=True)
+            linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                    Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
             if linkedin_talent:
-                return util.returnErrorShorcut(400, 'Linkedin URL is already exists in the system')
+                return util.returnErrorShorcut(400, 'Recruiter have same user in an account')
         context = dict()
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(url)
