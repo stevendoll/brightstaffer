@@ -1720,6 +1720,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         createTalentFormService.removeTopConcepts({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
             if(response.success){
                 arr.splice(index, 1);
+                if(!arr.length){
+                    $("#view-all-concepts").modal('hide');
+                }
             }else{
                 $('#view-all-concepts').modal('hide');
                 $scope.showNotification(false, response.errorstring || 'Error in removing concept.');
