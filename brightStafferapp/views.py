@@ -35,6 +35,7 @@ from brightStafferapp.linkedin_scrap import LinkedInParser
 from brightStafferapp.google_custom_search import GoogleCustomSearch
 from brightStaffer.settings import ml_url
 from datetime import date
+from django.db.models import Q
 
 class UserData(View):
     @method_decorator(csrf_exempt)
@@ -602,8 +603,10 @@ def handle_talent_data(talent_data, user):
                     except:
                         pass
                 else:
+                    is_current = False
                     try:
                         current['name'] = experience['Company']
+                        current['is_current'] = is_current
                         current['JobTitle'] = experience['JobTitle']
                         if start_date==[]:
                             current['from'] = ''
@@ -710,7 +713,7 @@ def convert_to_date(duration):
     return start_date, end_date
 
 
-# To fetch Linkedin Public Profile Data
+# To fetch Linkedin Public Profile Data:-Edit and Create Profile
 class LinkedinDataView(View):
 
     @method_decorator(csrf_exempt)
@@ -718,13 +721,33 @@ class LinkedinDataView(View):
         return super(LinkedinDataView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        url=request.GET['url']
+        url = request.GET['url']
+        if "id" in request.GET :
+            id = request.GET['id']
+            if url != '':
+                linkedin =Talent.objects.filter(id=id,talent_active__is_active=True,linkedin_url=url)
+                if linkedin:
+                    Talent.objects.update(linkedin_url=url)
+                else:
+                    linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                            Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
+                    if linkedin_talent:
+                        return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
+        else:
+            if url != '':
+                linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                            Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
+                if linkedin_talent:
+                    return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
         context = dict()
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(url)
-        if content == None:
+        if content == {}:
             context['success'] = False
-            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record.")
+        if content is None:
+            context['success'] = False
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record.")
         else:
             context['results'] = content
             context['success'] = True

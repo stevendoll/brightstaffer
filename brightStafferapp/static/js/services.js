@@ -664,6 +664,50 @@ function createTalentFormService($rootScope, REQUEST_URL, appService) {
             }
             appService.httpRequest(obj, callback);
         }
+        
+        , removePastOrganization: function(param, callback) {
+            var param = {
+                url: REQUEST_URL + 'delete_org/'
+                , method: "POST"
+                , headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                    , 'token': $rootScope.globals.currentUser.token
+                    , 'recruiter': $rootScope.globals.currentUser.user_email
+                }
+                , data: param
+                , dataType: 'json'
+            }
+            appService.httpRequest(param, callback);
+        }
+        , removeTalentEducation: function(param, callback) {
+            var param = {
+                url: REQUEST_URL + 'delete_edu/'
+                , method: "POST"
+                , headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                    , 'token': $rootScope.globals.currentUser.token
+                    , 'recruiter': $rootScope.globals.currentUser.user_email
+                }
+                , data: param
+                , dataType: 'json'
+            }
+            appService.httpRequest(param, callback);
+        }
+        , removeTopConcepts: function(param, callback) {
+            var param = {
+                url: REQUEST_URL + 'delete_concept/'
+                , method: "POST"
+                , headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                    , 'token': $rootScope.globals.currentUser.token
+                    , 'recruiter': $rootScope.globals.currentUser.user_email
+                }
+                , data: param
+                , dataType: 'json'
+            }
+            appService.httpRequest(param, callback);
+        }
+        
     }
 }
 

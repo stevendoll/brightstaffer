@@ -128,7 +128,7 @@ class TalentContactAPI(View):
             if_exists = self.validate_contact(updated_contact)
             if if_exists:
                 context['success'] = False
-                return util.returnErrorShorcut(409, 'Contact is already exist in the System.')
+                return util.returnErrorShorcut(409, 'Oops! The Contact Number you have entered already exists.')
             talent_contact_obj = TalentContact.objects.filter(contact=contact)
             if talent_contact_obj:
                 talent_contact_obj = talent_contact_obj[0]
@@ -139,14 +139,14 @@ class TalentContactAPI(View):
 
         if_exists = self.validate_contact(contact)
         if if_exists:
-            return util.returnErrorShorcut(409, 'Contact is already exist in the System.')
+            return util.returnErrorShorcut(409, 'Oops! The Contact Number you have entered already exists.')
         talent_contact_obj, created = TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
         if created:
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
             context['success'] = False
-            context['error'] = 'Contact is already exist in the System.'
+            context['error'] = 'Oops! The Contact Number you have entered already exists.'
             return util.returnErrorShorcut(409, context)
 
     def delete(self, request):
@@ -199,7 +199,7 @@ class TalentEmailAPI(View):
             if_exists = self.validate_email(updated_email)
             if if_exists:
                 context['success'] = False
-                return util.returnErrorShorcut(409, 'Email is already exist in the System.')
+                return util.returnErrorShorcut(409, 'Oops! The Email Id you have entered already exists.')
             talent_email_obj = TalentEmail.objects.filter(email=email)
             if talent_email_obj:
                 talent_email_obj = talent_email_obj[0]
@@ -211,14 +211,14 @@ class TalentEmailAPI(View):
         if_exists = self.validate_email(email)
         if if_exists:
             context['success'] = False
-            return util.returnErrorShorcut(409, 'Email is already exist in the System.')
+            return util.returnErrorShorcut(409, 'Oops! The Email Id you have entered already exists.')
         talent_email_obj, created = TalentEmail.objects.get_or_create(talent=talent_obj, email=email)
         if created:
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
             context['success'] = False
-            context['error'] = 'Email is already exist in the System.'
+            context['error'] = 'Oops! The Email Id you have entered already exists.'
             return util.returnErrorShorcut(409, context)
 
     def delete(self, request):
@@ -278,39 +278,30 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
         return talent_result
 
 
-def talent_project_match(talent_obj,project):
-    talent_concept_list=TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',flat=True)
-    talent_concept_count=TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',flat=True).count()
-    project_concept_list=ProjectConcept.objects.filter(project=project).values_list('concept__concept',flat=True)
-    project_concept_count=ProjectConcept.objects.filter(project=project).values_list('concept__concept',flat=True).count()
-    total_concept=talent_concept_count+project_concept_count
+def talent_project_match(talent_obj, project):
+    talent_concept_list = TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',
+                                                                                         flat=True)
+    talent_concept_count = len(talent_concept_list)
+    project_concept_list = ProjectConcept.objects.filter(project=project).values_list('concept__concept', flat=True)
+    project_concept_count = len(project_concept_list)
     count = 0
-    if talent_concept_count<=project_concept_count:
+    if talent_concept_count <= project_concept_count:
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
                 ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
-                if ratio >= 90:
-                    count += 1
+                # if ratio >= 90:
+                count += (ratio / 100)
         # match = math.ceil(round((count/project_concept_count), 2))
-        match = round(count / project_concept_count * 100)
-        if match >= 100:
-            match = 100
-            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
-        else:
-            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+        match = (count / (project_concept_count * talent_concept_count)) * 100
     else:
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
-                ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower() )
-                if ratio >= 90:
-                    count += 1
+                ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
+                # if ratio >= 90:
+                count += (ratio / 100.0)
         # match = math.ceil(round((count/project_concept_count), 2))
-        match = round(count / talent_concept_count * 100)
-        if match >= 100:
-            match = 100
-            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
-        else:
-            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+        match = count / (project_concept_count * talent_concept_count) * 100
+    TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
 
 
 # View Talent's Current stage for a single project and Add Talent's stage for a single project
@@ -389,6 +380,8 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
         notes = profile_data['notes']
         stage_id = profile_data['stage_id']
         date = profile_data['create_date']
+        if date is '':
+            date = datetime.datetime.now().strftime("%d/%m/%Y")
         date = datetime.datetime.strptime(date, "%d/%m/%Y")
         talent_objs = Talent.objects.filter(id=talent)
         if not talent_objs:
@@ -503,54 +496,108 @@ class TalentAdd(generics.ListCreateAPIView):
         if user:
             user = user[0]
         profile_data = json.loads(request.body.decode("utf-8"))
-        if "id" not in profile_data:
-            # phone and email
-            phone = profile_data.get('phone', '')
-            email = profile_data.get('email', '')
+        if 'id' not in profile_data:
             linkedin_url = profile_data.get('linkedinProfileUrl', '')
-            if email != '':
-                email_talent = TalentEmail.objects.filter(email=email, talent__talent_active__is_active=True)
-                if email_talent:
-                    return util.returnErrorShorcut(400, 'Talent with this email already exists in the system')
-            profile_data["currentOrganization"].extend(profile_data["pastOrganization"])
-            del profile_data["pastOrganization"]
+            contact = profile_data.get('phone', '')
+            email = profile_data.get('email', '')
+            linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                    Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(
+                linkedin_url=linkedin_url))
+            if linkedin_talent:
+                return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
+            email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                 Q(recruiter__username=user) & Q(talent_email__email=email))
+            if email_talent:
+                return util.returnErrorShorcut(400, 'Oops! The Email Id you have entered already exists.')
+            contact_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                   Q(recruiter__username=user) & Q(talent_contact__contact=contact))
+            if contact_talent:
+                return util.returnErrorShorcut(400, 'Oops! The Contact Number you have entered already exists')
             add_edit_talent(profile_data, user)
+            #if result is 0:
+            #    return util.returnErrorShorcut(400, 'Talent with this email already exists for the same recruiter')
+            #if result is 1:
+            #    return util.returnErrorShorcut(400, 'Talent with contact number is already exists for the '
+            #                                        'same recruiter')
             context['message'] = 'Talent Added Successfully'
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
-            add_edit_talent(profile_data, user)
+            linkedin_url = profile_data.get('linkedinProfileUrl', '')
+            linkedin = Talent.objects.filter(id=request.data['id'], talent_active__is_active=True, linkedin_url=linkedin_url)
+            if linkedin:
+                Talent.objects.update(linkedin_url=linkedin_url)
+            else:
+                linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                        Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(
+                    linkedin_url=linkedin_url))
+                if linkedin_talent:
+                    return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
+            result = add_edit_talent(profile_data, user)
+            if result is 0:
+                return util.returnErrorShorcut(400, 'Oops! The Email Id you have entered already exists.')
+            if result is 1:
+                return util.returnErrorShorcut(400, 'Oops! The Contact Number you have entered already exists.')
             # add updated serializer data to context
-            talent_id = profile_data.get('id', '')
-            if talent_id:
-                talent = Talent.objects.filter(id=talent_id)
-                if talent:
-                    talent = talent[0]
-                    Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
-                    Talent.objects.filter(id=talent_id).update(request_by=profile_data.get('request_by', ''))
-                    serializer_data = TalentSerializer(talent)
-                    context['talent_updated_data'] = serializer_data.data
-            context['message'] = 'Talent Updated Successfully'
-            context['success'] = True
-            return util.returnSuccessShorcut(context)
+            else:
+                #add_edit_talent(profile_data, user)
+                talent_id = profile_data.get('id', '')
+                if talent_id:
+                    talent = Talent.objects.filter(id=talent_id)
+                    if talent:
+                        talent = talent[0]
+                        Talent.objects.filter(id=talent_id).update(activation_date=timezone.now())
+                        Talent.objects.filter(id=talent_id).update(request_by=profile_data.get('request_by', ''))
+                        serializer_data = TalentSerializer(talent)
+                        context['talent_updated_data'] = serializer_data.data
+                context['message'] = 'Talent Updated Successfully'
+                context['success'] = True
+                return util.returnSuccessShorcut(context)
 
 
 def add_edit_talent(profile_data, user):
     if "id" in profile_data:
         talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
         if talent_obj:
-            talent_location, created = TalentLocation.objects.get_or_create(talent=talent_obj[0],
-                                                                            city=profile_data.get('city', ''),
-                                                                            state=profile_data.get('state', ''),
-                                                                            country=profile_data.get('country', ''))
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
                               industry_focus=profile_data.get('industryFocus','')['name'],
-                              industry_focus_percentage=profile_data.get('industryFocus','')['percentage'],
+                              industry_focus_percentage=profile_data.get('industryFocus', '')['percentage'],
                               linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               image=profile_data.get('profile_image', '')
                               )
+            TalentLocation.objects.get_or_create(talent=talent_obj[0], city=profile_data.get('city', ''),
+                                          state=profile_data.get('state', ''), country=profile_data.get('country', ''))
             talent_obj = talent_obj[0]
+            email = profile_data.get('email', '')
+            contact = profile_data.get('phone', '')
+            if email != '':
+                email_talent = TalentEmail.objects.filter(email=email, talent=talent_obj)
+                if email_talent:
+                    TalentEmail.objects.filter(talent=talent_obj).update(email=email)
+                else:
+                    email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                    Q(recruiter__username=user) & Q(talent_email__email=email))
+                    if email_talent:
+                        return 0
+                    else:
+                        TalentEmail.objects.filter(talent=talent_obj).update(email=email)
+            else:
+                TalentEmail.objects.filter(talent=talent_obj).update(email=email)
+
+            if contact != '':
+                contact_talent = TalentContact.objects.filter(contact=contact, talent=talent_obj)
+                if contact_talent:
+                    TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+                else:
+                    contact_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                    Q(recruiter__username=user) & Q(talent_contact__contact=contact))
+                    if contact_talent:
+                        return 1
+                    else:
+                        TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+            else:
+                TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
     else:
         talent_obj = Talent.objects.create(
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
@@ -559,19 +606,11 @@ def add_edit_talent(profile_data, user):
             linkedin_url=profile_data.get('linkedinProfileUrl', ''), image=profile_data.get('profile_image', ''),
             request_by=profile_data.get('request_by', ''),
             create_date=datetime.datetime.now())
-        talent_location = TalentLocation.objects.create(talent=talent_obj,
-                                                        city=profile_data.get('city', ''),
-                                                        state=profile_data.get('state', ''),
-                                                        country=profile_data.get('country', ''),
-
-                                                        )
-        talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
-                                                                          is_active=True)
-
-    if talent_obj:
-        # add email and phone for talent
-        TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
+        talent_location = TalentLocation.objects.create(talent=talent_obj,city=profile_data.get('city', ''),
+                                      state=profile_data.get('state', ''), country=profile_data.get('country', ''))
+        talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user, is_active=True)
         TalentContact.objects.get_or_create(talent=talent_obj, contact=profile_data.get('phone', ''))
+        TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
         # add top concepts for talent
         if 'topConcepts' in profile_data:
             for skill in profile_data.get('topConcepts', ''):
@@ -586,8 +625,7 @@ def add_edit_talent(profile_data, user):
                     if match and match > 100:
                         match = 100
                     concept, created = Concept.objects.get_or_create(concept=skill.get('name'))
-                    tpconcept, created = TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept,
-                                                                             match=match)
+                    TalentConcept.objects.get_or_create(talent=talent_obj, concept=concept, match=match)
 
     if "education" in profile_data:
         for education in profile_data.get('education', ''):
@@ -606,11 +644,10 @@ def add_edit_talent(profile_data, user):
                                                                                           )
                     else:
                         if start_date and end_date:
-                            tporg, created = TalentEducation.objects.get_or_create(talent=talent_obj,
-                                                                                   education=org,
-                                                                                   start_date=start_date,
-                                                                                   end_date=end_date
-                                                                                   )
+                            TalentEducation.objects.get_or_create(talent=talent_obj, education=org, start_date=start_date,
+                                                                  end_date=end_date)
+                        else:
+                            TalentEducation.objects.get_or_create(talent=talent_obj,education=org)
     if 'currentOrganization' in profile_data:
         for organization in profile_data.get('currentOrganization', ''):
             if bool(organization):
@@ -629,17 +666,37 @@ def add_edit_talent(profile_data, user):
                     else:
                         talent_obj.designation = organization.get('JobTitle', '')
                         talent_obj.save()
-                        if start_date:
-                            talent_company, created = TalentCompany.objects.get_or_create(
-                                talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
-                                start_date=start_date)
-                            if end_date:
-                                talent_company.end_date = end_date
-                                talent_company.is_current = False
-                                talent_company.save()
+                        if organization.get('is_current', '') is True:
+                            if start_date:
+                                talent_company, created = TalentCompany.objects.get_or_create(
+                                    talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
+                                    start_date=start_date, is_current=True)
+                                if end_date:
+                                    talent_company.end_date = end_date
+                                    talent_company.is_current = True
+                                    talent_company.save()
+                            else:
+                                TalentCompany.objects.get_or_create(
+                                    talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
+                                    is_current=True)
                         else:
-                            talent_company, created = TalentCompany.objects.get_or_create(
-                                talent=talent_obj, company=company, designation=organization.get('JobTitle', ''))
+                            if start_date:
+                                talent_company, created = TalentCompany.objects.get_or_create(
+                                    talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
+                                    start_date=start_date,is_current=True)
+                                if end_date:
+                                    talent_company.end_date = end_date
+                                    talent_company.is_current = True
+                                    talent_company.save()
+                            else:
+                                TalentCompany.objects.get_or_create(
+                                    talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
+                                    is_current=True,)
+                else:
+                    if "id" in organization:
+                        TalentCompany.objects.filter(id=organization.get('id', '')).update(
+                            talent=talent_obj,
+                            company=company_name, designation=organization.get('JobTitle', ''), is_current=True)
 
     if 'pastOrganization' in profile_data:
         for organization in profile_data.get('pastOrganization', ''):
@@ -655,21 +712,22 @@ def add_edit_talent(profile_data, user):
                         TalentCompany.objects.filter(id=organization.get('id', '')).update(
                             talent=talent_obj,
                             company=company, designation=organization.get('JobTitle', ''), is_current=False,
-                            start_date=start_date)
+                            start_date=start_date, end_date=end_date)
                     else:
                         talent_obj.designation = organization.get('JobTitle', '')
                         talent_obj.save()
                         if start_date:
                             talent_company, created = TalentCompany.objects.get_or_create(
                                 talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
-                                start_date=start_date)
+                                start_date=start_date, is_current=False)
                             if end_date:
                                 talent_company.end_date = end_date
                                 talent_company.is_current = False
                                 talent_company.save()
                         else:
-                            talent_company, created = TalentCompany.objects.get_or_create(
-                                talent=talent_obj, company=company, designation=organization.get('JobTitle', ''))
+                            TalentCompany.objects.get_or_create(
+                                talent=talent_obj, company=company, designation=organization.get('JobTitle', ''),
+                                is_current=False)
 
     if "JobTitle" in profile_data:
         talent_obj.designation = profile_data.get('JobTitle', '')
@@ -741,7 +799,7 @@ def talent_validation(user_data):
     else:
         return True
 
-
+#For Talent View Card
 class LinkedinAddUrl(generics.ListCreateAPIView):
 
     @method_decorator(csrf_exempt)
@@ -750,29 +808,50 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         linkedin_url = request.data['url']
+        if linkedin_url != '':
+            linkedin =Talent.objects.filter(id=request.data['id'],talent_active__is_active=True,linkedin_url=linkedin_url)
+            if linkedin:
+                Talent.objects.update(id=request.data['id'],linkedin_url=linkedin_url)
+            else:
+                linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                        Q(recruiter__username=request.META['HTTP_RECRUITER']) &
+                                                        Q(linkedin_url=linkedin_url))
+                if linkedin_talent:
+                    return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
         talent_id = request.data['id']
         talent = Talent.objects.filter(id=talent_id)
         Talent.objects.filter(id=talent).update(activation_date=timezone.now())
         if not talent:
             return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
         talent = talent[0]
-        talent.linkedin_url = linkedin_url
-        talent.save()
         # {'lastName': 'Lyden', 'currentOrganization': [{'name': 'BrightStaffer', 'to': 'Present', 'from': ''}],
         #  'city': 'Washington D.C. Metro Area', 'profile_image': 'https://me',
         # 'firstName': 'Matt', 'talent_designation': 'Co-founder, CEO at BrightStaffer'}
         context = dict()
         googleCSE = GoogleCustomSearch()
         content = googleCSE.google_custom(linkedin_url)
-        if content==None:
+        if content=={}:
             context['success'] = False
-            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record")
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record.")
+        if content is None:
+            context['success'] = False
+            return util.returnErrorShorcut(400, "Sorry but the system was unable to locate this linkedin record.")
         else:
             talent.talent_name = content['firstName'] + " " + content['lastName']
             talent.designation = content['talent_designation']
             talent.image = content['profile_image']
+            talent.linkedin_url = linkedin_url
+            #for values in content['currentOrganization']:
+            #    print (values)
+            #id = TalentCompany.objects.filter(talent=talent, is_current=True).values('id')
+            #if id:
+            #    TalentCompany.objects.update(id=id[0]['id'], is_current=True,company=values['name'] )
+            #else:
+            #    TalentCompany.objects.get_or_create(is_current=True, company=values['name'])
             talent.save()
-            #TalentLocation.objects.filter(id=talent).update(city=content['city'])
+            talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
+            talent_loc.city = content['city']
+            talent_loc.save()
         context['success'] = True
         return util.returnSuccessShorcut(context)
 
@@ -878,3 +957,75 @@ class TalentSearch(generics.ListCreateAPIView):
 
 
 
+class DeleteOrg(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DeleteOrg, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        return HttpResponse("405 ERROR:-Method is not allowed")
+
+    def post(self, request):
+        param_dict = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
+        company = TalentCompany.objects.filter(id=profile_data['id'])
+        if not company:
+            return util.returnErrorShorcut(400, 'Company id {} dosen\'t exist in database.'.format(
+                profile_data['id']))
+        talent_objs = Talent.objects.filter(id=profile_data['talent_id'])
+        if not talent_objs:
+            return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(profile_data['talent_id']))
+        talent_id = talent_objs[0]
+        TalentCompany.objects.filter(talent=talent_id, id=profile_data['id']).delete()
+        param_dict['success'] = True
+        return util.returnSuccessShorcut(param_dict)
+
+
+class DeleteEdu(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DeleteEdu, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        return HttpResponse("405 ERROR:-Method is not allowed")
+
+    def post(self, request):
+        param_dict = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
+        education = TalentEducation.objects.filter(id=profile_data['id'])
+        if not education:
+            return util.returnErrorShorcut(400, 'Education id {} dosen\'t exist in database.'.format(
+                profile_data['id']))
+        talent_objs = Talent.objects.filter(id=profile_data['talent_id'])
+        if not talent_objs:
+            return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(
+                profile_data['talent_id']))
+        talent_id = talent_objs[0]
+        TalentEducation.objects.filter(talent=talent_id, id=profile_data['id']).delete()
+        param_dict['success'] = True
+        return util.returnSuccessShorcut(param_dict)
+
+
+class DeleteConcept(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DeleteConcept, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        return HttpResponse("405 ERROR:-Method is not allowed")
+
+    def post(self, request):
+        param_dict = {}
+        profile_data = json.loads(request.body.decode("utf-8"))
+        concept = TalentConcept.objects.filter(id=profile_data['id'])
+        if not concept:
+            return util.returnErrorShorcut(400, 'Concept id {} dosen\'t exist in database.'.format(
+                profile_data['id']))
+        talent_objs = Talent.objects.filter(id=profile_data['talent_id'])
+        if not talent_objs:
+            return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(
+                profile_data['talent_id']))
+        talent_id = talent_objs[0]
+        TalentConcept.objects.filter(talent=talent_id, id=profile_data['id']).delete()
+        param_dict['success'] = True
+        return util.returnSuccessShorcut(param_dict)

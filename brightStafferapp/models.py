@@ -157,7 +157,7 @@ class Talent(models.Model):
         if self.create_date:
             return self.create_date.date().strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return datetime.datetime.now().strftime("%d/%m/%Y")
 
     @property
     def get_activation_date(self):
@@ -165,9 +165,9 @@ class Talent(models.Model):
             if self.activation_date:
                 return self.activation_date.date().strftime('%d/%m/%Y')
             else:
-                return self.get_date
+                return datetime.datetime.now().strftime("%d/%m/%Y")
         except:
-            return self.get_date
+            return datetime.datetime.now().strftime("%d/%m/%Y")
 
 
 class TalentLocation(models.Model):
@@ -254,7 +254,7 @@ class TalentEducation(models.Model):
 
 class TalentCompany(models.Model):
     talent = models.ForeignKey(Talent, null=False, blank=True, verbose_name='Talent', related_name='talent_company')
-    company = models.ForeignKey(Company, null=False, blank=True)
+    company = models.ForeignKey(Company,default='', null=True, blank=True)
     designation = models.CharField(max_length=100, default='', null=True, blank=True)
     start_date = models.DateField(verbose_name='Start Date', null=True, blank=True)
     end_date = models.DateField(verbose_name='End Date', null=True, blank=True)
