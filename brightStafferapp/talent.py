@@ -128,7 +128,7 @@ class TalentContactAPI(View):
             if_exists = self.validate_contact(updated_contact)
             if if_exists:
                 context['success'] = False
-                return util.returnErrorShorcut(409, 'Contact is already exist in the System.')
+                return util.returnErrorShorcut(409, 'Oops! The Contact Number you have entered already exists.')
             talent_contact_obj = TalentContact.objects.filter(contact=contact)
             if talent_contact_obj:
                 talent_contact_obj = talent_contact_obj[0]
@@ -139,14 +139,14 @@ class TalentContactAPI(View):
 
         if_exists = self.validate_contact(contact)
         if if_exists:
-            return util.returnErrorShorcut(409, 'Contact is already exist in the System.')
+            return util.returnErrorShorcut(409, 'Oops! The Contact Number you have entered already exists.')
         talent_contact_obj, created = TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
         if created:
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
             context['success'] = False
-            context['error'] = 'Contact is already exist in the System.'
+            context['error'] = 'Oops! The Contact Number you have entered already exists.'
             return util.returnErrorShorcut(409, context)
 
     def delete(self, request):
@@ -199,7 +199,7 @@ class TalentEmailAPI(View):
             if_exists = self.validate_email(updated_email)
             if if_exists:
                 context['success'] = False
-                return util.returnErrorShorcut(409, 'Email is already exist in the System.')
+                return util.returnErrorShorcut(409, 'Oops! The Email Id you have entered already exists.')
             talent_email_obj = TalentEmail.objects.filter(email=email)
             if talent_email_obj:
                 talent_email_obj = talent_email_obj[0]
@@ -211,14 +211,14 @@ class TalentEmailAPI(View):
         if_exists = self.validate_email(email)
         if if_exists:
             context['success'] = False
-            return util.returnErrorShorcut(409, 'Email is already exist in the System.')
+            return util.returnErrorShorcut(409, 'Oops! The Email Id you have entered already exists.')
         talent_email_obj, created = TalentEmail.objects.get_or_create(talent=talent_obj, email=email)
         if created:
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
             context['success'] = False
-            context['error'] = 'Email is already exist in the System.'
+            context['error'] = 'Oops! The Email Id you have entered already exists.'
             return util.returnErrorShorcut(409, context)
 
     def delete(self, request):
@@ -512,7 +512,7 @@ class TalentAdd(generics.ListCreateAPIView):
             contact_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
                                                    Q(recruiter__username=user) & Q(talent_contact__contact=contact))
             if contact_talent:
-                return util.returnErrorShorcut(400, 'The Contact Number you have entered already exists.')
+                return util.returnErrorShorcut(400, 'Oops! The Contact Number you have entered already exists')
             add_edit_talent(profile_data, user)
             #if result is 0:
             #    return util.returnErrorShorcut(400, 'Talent with this email already exists for the same recruiter')
@@ -566,7 +566,7 @@ def add_edit_talent(profile_data, user):
                               linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               image=profile_data.get('profile_image', '')
                               )
-            TalentLocation.objects.update(talent=talent_obj[0], city=profile_data.get('city', ''),
+            TalentLocation.objects.get_or_create(talent=talent_obj[0], city=profile_data.get('city', ''),
                                           state=profile_data.get('state', ''), country=profile_data.get('country', ''))
             talent_obj = talent_obj[0]
             email = profile_data.get('email', '')
