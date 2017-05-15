@@ -45,8 +45,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         }, 'fast');
         var requestObject = {
             'token': $rootScope.globals.currentUser.token, // username field value
-            'recruiter': $rootScope.globals.currentUser.user_email
-            , 'count': count // password filed value
+            'recruiter': $rootScope.globals.currentUser.user_email,
+            'count': count // password filed value
         };
         getAllProjects.allProjects(requestObject).then(function (response) {
             if (response.message == "success") {
@@ -60,8 +60,8 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
                 $rootScope.StagesProjectList = [];
                 for (var i = 0; i < $rootScope.allProjectList.length; i++) {
                     var project = {
-                        name: '#' + $rootScope.allProjectList[i].project_name
-                        , value: $rootScope.allProjectList[i].id
+                        name: '#' + $rootScope.allProjectList[i].project_name,
+                        value: $rootScope.allProjectList[i].id
                     };
                     $rootScope.projectListView.push(project);
                     $rootScope.StagesProjectList.push(project);
@@ -114,8 +114,8 @@ function loginCtrl($scope, $rootScope, $state, $http, $cookies, $cookieStore, $t
     $scope.isDisabled = false;
     $scope.emailPattern = /^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/; //email validation pattern
     $scope.data = {
-        user_name: ''
-        , user_password: ''
+        user_name: '',
+        user_password: ''
     };
     /**Create function for user login **/
     this.userLogin = function () {
@@ -178,10 +178,10 @@ function signupCtrl($scope, $rootScope, $state, $http, $window, $timeout, $cooki
         $scope.errorMessage = '';
         $rootScope.checkReqValidation('signupForm');
         var requestObject = {
-            'firstName': $scope.userRegistration.first_name
-            , 'lastName': $scope.userRegistration.last_name
-            , 'userEmail': $scope.userRegistration.user_email
-            , 'password': $scope.userRegistration.password
+            'firstName': $scope.userRegistration.first_name,
+            'lastName': $scope.userRegistration.last_name,
+            'userEmail': $scope.userRegistration.user_email,
+            'password': $scope.userRegistration.password
         };
         if ($scope.signupForm.$valid) {
             $scope.isDisabled = true;
@@ -263,8 +263,8 @@ function resetPwCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $
     $scope.changePassword = function () {
         $scope.isDisabled = true;
         var requestObject = {
-            'token': token
-            , 'password': $scope.data.password
+            'token': token,
+            'password': $scope.data.password
         };
         resetPasswordService.resetPassword(requestObject).then(function (response) {
             if (response.message == "success") {
@@ -315,9 +315,9 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
             $rootScope.filterReset();
 
             var requestObject = {
-                'keyword': $rootScope.search.searchKeywords || ''
-                , page: $rootScope.candidatePagination.page
-                , count: $rootScope.candidatePagination.count
+                'keyword': $rootScope.search.searchKeywords || '',
+                page: $rootScope.candidatePagination.page,
+                count: $rootScope.candidatePagination.count
             };
             searchApis.talentSearch(requestObject).then(function (response) {
                 $rootScope.Filter = false;
@@ -348,8 +348,8 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
         if (check == 'sideNav') {
             $scope.recordCount = 10;
             $rootScope.candidatePagination = {
-                page: 1
-                , count: parseInt($scope.recordCount)
+                page: 1,
+                count: parseInt($scope.recordCount)
             }
             $rootScope.search.searchKeywords = '';
             //$rootScope.filterReset();
@@ -370,10 +370,10 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
 
 function createProjectCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $cookies, $cookieStore, $location, $timeout, jobPostService, alchemyAnalysis, updateConcepts, publishProject) {
     $scope.projectForm = {
-        project_name: ''
-        , company_name: ''
-        , location: ''
-        , description: ''
+        project_name: '',
+        company_name: '',
+        location: '',
+        description: ''
     };
     $rootScope.globals.currentProject_id = '';
     $scope.isProjMaxlength = false;
@@ -555,23 +555,23 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
         var prevTabId;
         var currentTabId;
         switch (currentState) {
-        case 'create.step1':
-            prevTabId = '#form-t-0';
-            currentTabId = '#form-t-1';
-            $scope.takeNext(currentState, prevTabId, currentTabId);
-            break;
-        case 'create.step2':
-            $scope.updateJobDescription($scope.projectForm.description);
-            prevTabId = '#form-t-1';
-            currentTabId = '#form-t-2';
-            $scope.takeToStepThree(currentState, prevTabId, currentTabId);
-            break;
-        case 'create.step3':
-            prevTabId = '#form-t-2';
-            currentTabId = '#form-t-3';
-            $scope.isDescriptionError = false;
-            $scope.takeToStepFour(currentState, prevTabId, currentTabId);
-            break;
+            case 'create.step1':
+                prevTabId = '#form-t-0';
+                currentTabId = '#form-t-1';
+                $scope.takeNext(currentState, prevTabId, currentTabId);
+                break;
+            case 'create.step2':
+                $scope.updateJobDescription($scope.projectForm.description);
+                prevTabId = '#form-t-1';
+                currentTabId = '#form-t-2';
+                $scope.takeToStepThree(currentState, prevTabId, currentTabId);
+                break;
+            case 'create.step3':
+                prevTabId = '#form-t-2';
+                currentTabId = '#form-t-3';
+                $scope.isDescriptionError = false;
+                $scope.takeToStepFour(currentState, prevTabId, currentTabId);
+                break;
         }
 
     }
@@ -609,21 +609,21 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
     $scope.goToBack = function () {
         var currentState = $state.current.name;
         switch (currentState) {
-        case 'create.step2':
-            prevTabId = '#form-t-0';
-            currentTabId = '#form-t-1';
-            $scope.takeBack(currentState, prevTabId, currentTabId);
-            break;
-        case 'create.step3':
-            prevTabId = '#form-t-1';
-            currentTabId = '#form-t-2';
-            $scope.takeBack(currentState, prevTabId, currentTabId);
-            break;
-        case 'create.step4':
-            prevTabId = '#form-t-2';
-            currentTabId = '#form-t-3';
-            $scope.takeBack(currentState, prevTabId, currentTabId);
-            break;
+            case 'create.step2':
+                prevTabId = '#form-t-0';
+                currentTabId = '#form-t-1';
+                $scope.takeBack(currentState, prevTabId, currentTabId);
+                break;
+            case 'create.step3':
+                prevTabId = '#form-t-1';
+                currentTabId = '#form-t-2';
+                $scope.takeBack(currentState, prevTabId, currentTabId);
+                break;
+            case 'create.step4':
+                prevTabId = '#form-t-2';
+                currentTabId = '#form-t-3';
+                $scope.takeBack(currentState, prevTabId, currentTabId);
+                break;
         }
 
     }
@@ -664,13 +664,13 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
                         $rootScope.globals.currentProject_id = response.project_id;
                     var ProjectData = [];
                     var valueObj = {
-                        'key': 'project_id'
-                        , 'value': $rootScope.globals.currentProject_id
+                        'key': 'project_id',
+                        'value': $rootScope.globals.currentProject_id
                     };
                     ProjectData.push(valueObj);
                     valueObj = {
-                        'key': 'project_name'
-                        , 'value': projectName
+                        'key': 'project_name',
+                        'value': projectName
                     };
                     ProjectData.push(valueObj);
                     $cookies.put('currentProjectId', JSON.stringify(ProjectData));
@@ -875,17 +875,17 @@ function createProjectCtrl($scope, $rootScope, $state, $http, $window, $statePar
 
 function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, getTopSixProjects, getAllProjects, paginationData, $window, $state, $timeout, tableService) { /*global controller */
     $scope.options = [{
-        name: '10'
-        , value: 10
+        name: '10',
+        value: 10
     }, {
-        name: '25'
-        , value: 25
+        name: '25',
+        value: 25
     }, {
-        name: '50'
-        , value: 50
+        name: '50',
+        value: 50
     }, {
-        name: '100'
-        , value: 100
+        name: '100',
+        value: 100
     }]; // select drop-down options
     $rootScope.countList = $scope.options[0];
     $scope.hidenData = {};
@@ -1079,32 +1079,32 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
     var tableInitialise = function () {
         $scope.hidenData = {};
         var table = $('.dataTables').DataTable({
-            responsive: true
-            , retrieve: true
-            , paging: true
-            , autoWidth: false
-            , buttons: [
+            responsive: true,
+            retrieve: true,
+            paging: true,
+            autoWidth: false,
+            buttons: [
                 {
-                    extend: 'copy'
-                    , className: 'btn btn-default btn-sm'
-                    , title: 'Copy'
+                    extend: 'copy',
+                    className: 'btn btn-default btn-sm',
+                    title: 'Copy'
                 }, {
-                    extend: 'csv'
-                    , className: 'btn btn-default btn-sm'
-                    , title: 'CSV'
+                    extend: 'csv',
+                    className: 'btn btn-default btn-sm',
+                    title: 'CSV'
                 }, {
-                    extend: 'excel'
-                    , className: 'btn btn-default btn-sm'
-                    , title: 'Excel'
+                    extend: 'excel',
+                    className: 'btn btn-default btn-sm',
+                    title: 'Excel'
                 }, {
-                    extend: 'pdf'
-                    , className: 'btn btn-default btn-sm'
-                    , title: 'PDF'
+                    extend: 'pdf',
+                    className: 'btn btn-default btn-sm',
+                    title: 'PDF'
                 }, {
-                    extend: 'print'
-                    , className: 'btn btn-default btn-sm'
-                    , title: 'Print'
-                    , customize: function ($window) {
+                    extend: 'print',
+                    className: 'btn btn-default btn-sm',
+                    title: 'Print',
+                    customize: function ($window) {
                         $window.document.body.addClass('white-bg');
                         $window.document.body.css('font-size', '15px');
 
@@ -1182,26 +1182,26 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 function scoreCardCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout) {
     this.analysedData = [
         {
-            "key": "analysedData"
-            , "values": [[6, 5], [7, 11], [8, 6], [9, 11], [10, 30], [11, 10], [12, 13], [13, 4], [14, 3], [15, 3], [16, 6]]
+            "key": "analysedData",
+            "values": [[6, 5], [7, 11], [8, 6], [9, 11], [10, 30], [11, 10], [12, 13], [13, 4], [14, 3], [15, 3], [16, 6]]
         }];
 
     this.activeCardData = [
         {
-            "key": "activeCardData"
-            , "values": [[6, 1], [7, 5], [8, 2], [9, 3], [10, 2], [11, 1], [12, 0], [13, 2], [14, 8], [15, 0], [16, 0]]
+            "key": "activeCardData",
+            "values": [[6, 1], [7, 5], [8, 2], [9, 3], [10, 2], [11, 1], [12, 0], [13, 2], [14, 8], [15, 0], [16, 0]]
         }];
 
     this.interviewCardData = [
         {
-            "key": "interviewCardData"
-            , "values": [[4, 1], [8, 3], [12, 1], [16, 5], [20, 2], [24, 3], [28, 2]]
+            "key": "interviewCardData",
+            "values": [[4, 1], [8, 3], [12, 1], [16, 5], [20, 2], [24, 3], [28, 2]]
         }];
 
     this.fourthCardData = [
         {
-            "key": "fourthCardData"
-            , "values": [[3, 0], [8, 1], [13, 0], [18, 2], [28, 8], [38, 0], [56, 0]]
+            "key": "fourthCardData",
+            "values": [[3, 0], [8, 1], [13, 0], [18, 2], [28, 8], [38, 0], [56, 0]]
         }];
 
     $scope.xAxisTicksFunction = function () {
@@ -1252,19 +1252,19 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.filesArr = [];
 
     $scope.filesExits = function () {
-            var fileContainers = document.getElementsByClassName('dz-preview');
-            for (var i = 0; i < fileContainers.length; i++) {
-                if (fileContainers[i].classList.contains('dz-error') || !fileContainers[i].classList.contains('dz-complete')) {
-                    return true;
-                }
-
+        var fileContainers = document.getElementsByClassName('dz-preview');
+        for (var i = 0; i < fileContainers.length; i++) {
+            if (fileContainers[i].classList.contains('dz-error') || !fileContainers[i].classList.contains('dz-complete')) {
+                return true;
             }
-            return false;
+
         }
-        //    $rootScope.dirOptions = {};
-        //    $scope.callDirFunc = function () {
-        //        $scope.dirOptions.clearFiles();
-        //    };
+        return false;
+    }
+    //    $rootScope.dirOptions = {};
+    //    $scope.callDirFunc = function () {
+    //        $scope.dirOptions.clearFiles();
+    //    };
     $scope.closePopup = function () {
         var file = $scope.filesExits();
         if (file) {
@@ -1419,48 +1419,48 @@ function sideNavCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStor
 function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, $window, $state, $timeout, talentApis, searchData, $cookieStore, createTalentFormService, $filter) {
 
     $scope.priceSlider = {
-        value: 0
-        , options: {
-            floor: 0
-            , ceil: 100
-            , showSelectionBar: true
+        value: 0,
+        options: {
+            floor: 0,
+            ceil: 100,
+            showSelectionBar: true
         }
     }
 
     $scope.exportOptions = [{
-        name: 'Export Data'
-        , value: 'Export Data'
+        name: 'Export Data',
+        value: 'Export Data'
     }, {
-        name: 'Copy'
-        , value: 'Copy'
+        name: 'Copy',
+        value: 'Copy'
     }, {
-        name: 'CSV'
-        , value: 'CSV'
+        name: 'CSV',
+        value: 'CSV'
     }, {
-        name: 'Excel'
-        , value: 'Excel'
+        name: 'Excel',
+        value: 'Excel'
     }, {
-        name: 'PDF'
-        , value: 'PDF'
+        name: 'PDF',
+        value: 'PDF'
     }, {
-        name: 'Print'
-        , value: 'Print'
+        name: 'Print',
+        value: 'Print'
     }]; // select drop-down options
     $scope.recordOptions = [{
-            name: '10'
-            , value: '10'
+        name: '10',
+        value: '10'
         }, {
-            name: '20'
-            , value: '20'
+        name: '20',
+        value: '20'
         }, {
-            name: '30'
-            , value: '30'
+        name: '30',
+        value: '30'
         }, {
-            name: '40'
-            , value: '40'
+        name: '40',
+        value: '40'
         }, {
-            name: '50'
-            , value: '50'
+        name: '50',
+        value: '50'
         }] // select drop-down options
     $scope.exportType = $scope.exportOptions[0];
     //    $scope.recordCount = $scope.recordOptions[0];
@@ -1469,16 +1469,16 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $rootScope.talentList = [];
 
     $scope.stagesName = {
-        'Replied': 'fa-mail-reply'
-        , 'Contacted': 'fa-phone'
-        , 'Under Review': 'fa-file-text'
-        , 'Interested': 'fa-thumbs-up'
-        , 'Not Interested': 'fa-thumbs-down'
-        , 'Scheduled for Interview': 'fa-briefcase'
-        , 'Offer': 'fa-file-text-o'
-        , 'Interviewing': 'fa-group'
-        , 'Hired': 'fa-check'
-        , 'Rejected': 'fa-user-times'
+        'Replied': 'fa-mail-reply',
+        'Contacted': 'fa-phone',
+        'Under Review': 'fa-file-text',
+        'Interested': 'fa-thumbs-up',
+        'Not Interested': 'fa-thumbs-down',
+        'Scheduled for Interview': 'fa-briefcase',
+        'Offer': 'fa-file-text-o',
+        'Interviewing': 'fa-group',
+        'Hired': 'fa-check',
+        'Rejected': 'fa-user-times'
     };
     //$rootScope.talentDetails = ;
     $scope.selectedCandidate = {};
@@ -1509,13 +1509,13 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
     var stagesTemp = [];
     $scope.stage = {
-        stage: ''
-        , project: ''
-        , date: ''
-        , detail: ''
-        , notes: ''
-        , isStage: false
-        , stagesCard: $rootScope.talentAllStages ? $rootScope.talentAllStages : stagesTemp
+        stage: '',
+        project: '',
+        date: '',
+        detail: '',
+        notes: '',
+        isStage: false,
+        stagesCard: $rootScope.talentAllStages ? $rootScope.talentAllStages : stagesTemp
     };
     $scope.isStage = false;
     $scope.isProject = false;
@@ -1524,25 +1524,25 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.isNotes = false;
     $scope.filterValue = {
         //stage:'Select Stage',
-        project: ''
-        , match: $scope.priceSlider.value + '%'
-        , rating: ''
-        , lastContacted: ''
-        , analysed: ''
-        , company: ''
-        , concepts: ''
-        , recruiter_name: ''
-        , ordering: ''
-        , active: ''
+        project: '',
+        match: $scope.priceSlider.value + '%',
+        rating: '',
+        lastContacted: '',
+        analysed: '',
+        company: '',
+        concepts: '',
+        recruiter_name: '',
+        ordering: '',
+        active: ''
     };
     $rootScope.Filter = false;
     /*edit talent details*/
 
     /* create talent code */
     $scope.notification = {
-        show: false
-        , status: 'wow'
-        , message: ''
+        show: false,
+        status: 'wow',
+        message: ''
     };
     $scope.talentData = {};
     $scope.showNotification = function (success, message) {
@@ -1629,42 +1629,42 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
 
         $scope.talentData = {
-            profile_image: ''
-            , industryFocus: {
-                name: ''
-                , percentage: ''
-            }
-            , currentOrganization: [{
-                name: ''
-                , from: ''
-                , to: 'Present'
-        }]
-            , pastOrganization: [{
-                name: ''
-                , from: ''
-                , to: ''
-        }]
-            , education: [{
-                name: ''
-                , from: ''
-                , to: ''
-        }]
-            , topConcepts: [{
-                name: ''
-                , match: ''
-        }]
-            , careerHistory: {
-                total: ''
-                , history: [{}]
+            profile_image: '',
+            industryFocus: {
+                name: '',
+                percentage: ''
+            },
+            currentOrganization: [{
+                name: '',
+                from: '',
+                to: 'Present'
+        }],
+            pastOrganization: [{
+                name: '',
+                from: '',
+                to: ''
+        }],
+            education: [{
+                name: '',
+                from: '',
+                to: ''
+        }],
+            topConcepts: [{
+                name: '',
+                match: ''
+        }],
+            careerHistory: {
+                total: '',
+                history: [{}]
             }
         };
     }
     $scope.initTalenData();
     $scope.addEducation = function () {
         $scope.talentData.education.push({
-            name: ''
-            , from: ''
-            , to: ''
+            name: '',
+            from: '',
+            to: ''
         });
     }
     $scope.addSkill = function () {
@@ -1675,17 +1675,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.addTalentPast = function () {
         $scope.talentData.pastOrganization.push({
-            name: ''
-            , from: ''
-            , to: ''
+            name: '',
+            from: '',
+            to: ''
         });
     }
-    
+
     $scope.addCurrentOrganization = function () {
         $scope.talentData.currentOrganization.push({
-            name: ''
-            , from: ''
-            , to: ''
+            name: '',
+            from: '',
+            to: ''
         });
     }
 
@@ -1701,107 +1701,119 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.talentDataValidation.phone = true;
         }
     }
-    
-    $scope.removeTopConcepts = function(arr, index) {
-//        arr.splice(index, 1);
-//            return;
-        if(!$scope.talentData.id){
+
+    $scope.removeTopConcepts = function (arr, index) {
+        //        arr.splice(index, 1);
+        //            return;
+        if (!$scope.talentData.id) {
             arr.splice(index, 1);
             return;
         }
-        
+
         var removeObj = arr[index];
-        
-        if(!removeObj.id){
+
+        if (!removeObj.id) {
             arr.splice(index, 1);
             return;
         }
-        
-        createTalentFormService.removeTopConcepts({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
-            if(response.success){
+
+        createTalentFormService.removeTopConcepts({
+            id: removeObj.id,
+            talent_id: $scope.talentData.id
+        }, function (response) {
+            if (response.success) {
                 arr.splice(index, 1);
-                if(!arr.length){
+                if (!arr.length) {
                     $("#view-all-concepts").modal('hide');
                 }
-            }else{
+            } else {
                 $('#view-all-concepts').modal('hide');
                 $scope.showNotification(false, response.errorstring || 'Error in removing concept.');
-                $window.scrollTo(0,0);
+                $window.scrollTo(0, 0);
             }
         });
     }
-    
-    $scope.removeCurrentOrganization = function(arr, index){
-        if(!$scope.talentData.id){
+
+    $scope.removeCurrentOrganization = function (arr, index) {
+        if (!$scope.talentData.id) {
             arr.splice(index, 1);
             return;
         }
-        
+
         var removeObj = arr[index];
-        
-        if(!removeObj.id){
+
+        if (!removeObj.id) {
             arr.splice(index, 1);
             return;
         }
-        
-        createTalentFormService.removePastOrganization({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
-            if(response.success){
+
+        createTalentFormService.removePastOrganization({
+            id: removeObj.id,
+            talent_id: $scope.talentData.id
+        }, function (response) {
+            if (response.success) {
                 arr.splice(index, 1);
-            }else{
+            } else {
                 $scope.showNotification(false, response.errorstring || 'Error in removing current organisation.');
             }
         });
     }
-    
-    $scope.removePastOrganization = function(arr, index){
-        if(!$scope.talentData.id){
+
+    $scope.removePastOrganization = function (arr, index) {
+        if (!$scope.talentData.id) {
             arr.splice(index, 1);
             return;
         }
-        
+
         var removeObj = arr[index];
-        
-        if(!removeObj.id){
+
+        if (!removeObj.id) {
             arr.splice(index, 1);
             return;
         }
-        
-        createTalentFormService.removePastOrganization({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
-            if(response.success){
+
+        createTalentFormService.removePastOrganization({
+            id: removeObj.id,
+            talent_id: $scope.talentData.id
+        }, function (response) {
+            if (response.success) {
                 arr.splice(index, 1);
-            }else{
+            } else {
                 $scope.showNotification(false, response.errorstring || 'Error in removing past organisation.');
             }
         });
     }
-    
-    $scope.removeTalentEducation = function(arr, index){
-        if(!$scope.talentData.id){
+
+    $scope.removeTalentEducation = function (arr, index) {
+        if (!$scope.talentData.id) {
             arr.splice(index, 1);
             return;
         }
         var removeObj = arr[index];
-        if(!removeObj.id){
+        if (!removeObj.id) {
             arr.splice(index, 1);
             return;
         }
-        createTalentFormService.removeTalentEducation({id: removeObj.id, talent_id: $scope.talentData.id}, function(response){
-            if(response.success){
+        createTalentFormService.removeTalentEducation({
+            id: removeObj.id,
+            talent_id: $scope.talentData.id
+        }, function (response) {
+            if (response.success) {
                 arr.splice(index, 1);
-            }else{
+            } else {
                 $scope.showNotification(false, response.errorstring || 'Error in education.');
             }
         });
     }
-    
-    
+
+
     $scope.fetchLinkedinData = function () {
         if (!$scope.talentData.linkedinProfileUrl) return;
         var param = {
             url: $scope.talentData.linkedinProfileUrl
         }
-        if($scope.talentData.id){
-           param.id = $scope.talentData.id
+        if ($scope.talentData.id) {
+            param.id = $scope.talentData.id
         }
 
         //        $scope.talentData.profile_image = '';
@@ -1946,19 +1958,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.contactFormat = function (obj, key) {
-            if (obj[key] && obj[key] != "string") {
-                obj[key] = obj[key].replace(/(^0$)|[^0-9]/g, "");
-            }
-            var regexPhoneNumber = /^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/;
-            if (obj[key] && obj[key].match(regexPhoneNumber)) {
-                obj[key] = obj[key].toString();
-                obj[key] = obj[key].substr(0, 3) + '-' + obj[key].substr(3);
-                obj[key] = obj[key].substr(0, 7) + '-' + obj[key].substr(7);
-            } else if (typeof (obj[key]) == "string") {
-                obj[key] = obj[key].replace(/\D+/g, '');
-            }
+        if (obj[key] && obj[key] != "string") {
+            obj[key] = obj[key].replace(/(^0$)|[^0-9]/g, "");
         }
-        /* create talent code ends */
+        var regexPhoneNumber = /^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/;
+        if (obj[key] && obj[key].match(regexPhoneNumber)) {
+            obj[key] = obj[key].toString();
+            obj[key] = obj[key].substr(0, 3) + '-' + obj[key].substr(3);
+            obj[key] = obj[key].substr(0, 7) + '-' + obj[key].substr(7);
+        } else if (typeof (obj[key]) == "string") {
+            obj[key] = obj[key].replace(/\D+/g, '');
+        }
+    }
+    /* create talent code ends */
 
     $scope.$watch('priceSlider.value', function (n, o) {
         $scope.filterValue.match = n + '%';
@@ -2084,8 +2096,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.filterChanged = 0;
     $rootScope.candidatePagination = {
-        page: 1
-        , count: parseInt($scope.recordCount)
+        page: 1,
+        count: parseInt($scope.recordCount)
     }
     $scope.getcandidateData = function () {
         //        $rootScope.getCandidateData();
@@ -2120,32 +2132,32 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope[variable] = value;
     }
     $scope.deleteStage = function (id) {
-            if (!id) return;
-            talentApis.delteStage({
-                stage_id: id
-                , talent_id: $rootScope.talentDetails.id
-            }, function (response) {
-                console.log(response);
-                if (response.success) {
-                    //$scope.showNotification(true, 'Stage has been successfully removed');
+        if (!id) return;
+        talentApis.delteStage({
+            stage_id: id,
+            talent_id: $rootScope.talentDetails.id
+        }, function (response) {
+            console.log(response);
+            if (response.success) {
+                //$scope.showNotification(true, 'Stage has been successfully removed');
 
-                    $scope.talentDetails = response.result;
-                    $rootScope.talentAllStages = response.result.talent_stages;
+                $scope.talentDetails = response.result;
+                $rootScope.talentAllStages = response.result.talent_stages;
 
-                    $scope.loadProfileData($rootScope.talentDetails.id, $rootScope.talentDetails, 'deleteStage');
-                    $rootScope.talentAllStages = response.result.talent_stages;
-                    $scope.stage.stagesCard = response.result.talent_stages;
-                    sessionStorage.removeItem('talentAllStages');
-                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
-                } else {
-                    $scope.showNotification(false, response.errorstring || 'Some problem occured');
-                }
-                $('#delteStageModal').modal('hide');
-                $window.scroll(0, 0);
+                $scope.loadProfileData($rootScope.talentDetails.id, $rootScope.talentDetails, 'deleteStage');
+                $rootScope.talentAllStages = response.result.talent_stages;
+                $scope.stage.stagesCard = response.result.talent_stages;
+                sessionStorage.removeItem('talentAllStages');
+                sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+            } else {
+                $scope.showNotification(false, response.errorstring || 'Some problem occured');
+            }
+            $('#delteStageModal').modal('hide');
+            $window.scroll(0, 0);
 
-            });
-        }
-        /*  edit-stage code start */
+        });
+    }
+    /*  edit-stage code start */
     function convertToIso(date) {
         var d = date.split('/');
         d = d[1] + '/' + d[0] + '/' + d[2];
@@ -2167,30 +2179,30 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.saveProjectStage = function () {
-            console.log($scope.selectedStage);
-            $scope.selectedStage.create_date = $rootScope.formatDate($('#editStageDate').val());
-            //            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
-            var requestObj = $scope.selectedStage;
-            requestObj.talent_id = $rootScope.talentDetails.id;
-            talentApis.editStage(requestObj, function (response) {
-                if (response.message == 'success') {
+        console.log($scope.selectedStage);
+        $scope.selectedStage.create_date = $rootScope.formatDate($('#editStageDate').val());
+        //            $scope.selectedStage.create_date = $rootScope.formatDate($scope.selectedStage.create_date);
+        var requestObj = $scope.selectedStage;
+        requestObj.talent_id = $rootScope.talentDetails.id;
+        talentApis.editStage(requestObj, function (response) {
+            if (response.message == 'success') {
 
-                    $scope.talentDetails = response.result;
+                $scope.talentDetails = response.result;
 
-                    $rootScope.talentAllStages = response.result.talent_stages;
-                    $scope.stage.stagesCard = response.result.talent_stages;
-                    sessionStorage.removeItem('talentAllStages');
-                    sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
-                    $('#edit-stage').modal('hide');
-                    $scope.showNotification(true, 'Stage has been updated Successfully.');
-                } else if (response.success == false) {
-                    $('#edit-stage').modal('hide');
-                    $scope.showNotification(true, 'Stage has been updated Successfully.');
-                }
-                $window.scrollTo(0, 0);
-            });
-        }
-        /* edit-stage code end */
+                $rootScope.talentAllStages = response.result.talent_stages;
+                $scope.stage.stagesCard = response.result.talent_stages;
+                sessionStorage.removeItem('talentAllStages');
+                sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
+                $('#edit-stage').modal('hide');
+                $scope.showNotification(true, 'Stage has been updated Successfully.');
+            } else if (response.success == false) {
+                $('#edit-stage').modal('hide');
+                $scope.showNotification(true, 'Stage has been updated Successfully.');
+            }
+            $window.scrollTo(0, 0);
+        });
+    }
+    /* edit-stage code end */
 
     $scope.getTalents = function (recordCount) { // function to fetch top 6 projects
 
@@ -2402,9 +2414,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#add-talent-btn').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
-                'token': $rootScope.globals.currentUser.token
-                , 'project_id': selectedProjectId
-                , 'talent': talent
+                'token': $rootScope.globals.currentUser.token,
+                'project_id': selectedProjectId,
+                'talent': talent
             };
             talentApis.addTalentsToProject(requestObject).then(function (response) {
                 //console.log(response);
@@ -2531,8 +2543,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             //$('#confirm').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
-                'talent': talent
-                , 'is_active': 'False'
+                'talent': talent,
+                'is_active': 'False'
             };
             //$('#delete-talent-popup').modal('hide');
             talentApis.deleteTalents(requestObject).then(function (response) {
@@ -2628,8 +2640,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.talentSorted = key;
             arr.sort(function (a, b) {
 
-                var str1 = 0
-                    , str2 = 0;
+                var str1 = 0,
+                    str2 = 0;
 
                 if (a[arrKey].length && a[arrKey][0][key]) {
                     var d = a[arrKey][0][key].replace(/^(\d{1,2}\/)(\d{1,2}\/)(\d{4})$/, "$2$1$3");
@@ -2687,9 +2699,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.sortjsonArray = function (arr, arrKey, key, lastIndex) {
-        var index1 = 0
-            , index2 = 0
-            , sorted = false;
+        var index1 = 0,
+            index2 = 0,
+            sorted = false;
         if (key == $scope.talentSorted && $scope.tListsorted) {
             arr = arr.reverse();
         } else if (key == $scope.talentSorted && !$scope.tListsorted) {
@@ -2698,8 +2710,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.talentSorted = key;
             arr.sort(function (a, b) {
 
-                var str1 = null
-                    , str2 = null;
+                var str1 = null,
+                    str2 = null;
 
                 if (!a[arrKey].length) {
                     str1 = '';
@@ -3061,54 +3073,54 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     function initDatePicker(id) {
         $("#" + id).datepicker({
-            dateFormat: 'M d, yy'
-            , changeYear: true
-            , yearRange: '1900:' + new Date().getFullYear()
-            , yearRange: '1900:' + new Date().getFullYear()
-            , maxDate: new Date()
+            dateFormat: 'M d, yy',
+            changeYear: true,
+            yearRange: '1900:' + new Date().getFullYear(),
+            yearRange: '1900:' + new Date().getFullYear(),
+            maxDate: new Date()
         });
     }
 
     $scope.openAddStagePopup = function (id) {
-            $('#addStageDate').val('')
-            $scope.stage = {
-                stage: ''
-                , project: ''
-                , date: ''
-                , detail: ''
-                , notes: ''
-                , isStage: false
-                , stagesCard: $rootScope.talentAllStages ? $rootScope.talentAllStages : stagesTemp
-            };
-            $('.select-date').val('');
-            $('#add-stage-date').val('');
-            //$('#datepicker').datepicker({});
-            $scope.isStage = false;
-            $scope.isProject = false;
-            $scope.isDate = false;
-            $scope.isDetail = false;
-            $scope.isNotes = false;
+        $('#addStageDate').val('')
+        $scope.stage = {
+            stage: '',
+            project: '',
+            date: '',
+            detail: '',
+            notes: '',
+            isStage: false,
+            stagesCard: $rootScope.talentAllStages ? $rootScope.talentAllStages : stagesTemp
+        };
+        $('.select-date').val('');
+        $('#add-stage-date').val('');
+        //$('#datepicker').datepicker({});
+        $scope.isStage = false;
+        $scope.isProject = false;
+        $scope.isDate = false;
+        $scope.isDetail = false;
+        $scope.isNotes = false;
 
-            $('#projectListD2').change(function () {
-                $scope.hideValidation();
-                var sbId = $('#projectListD2').attr('sb');
-                var selectedValue = $('#sbSelector_' + sbId).text();
-                if (selectedValue != 'Select Project')
-                    $scope.stage.project = selectedValue;
-                // console.log($scope.stage.project);
-            });
-            $('#stageSelect').change(function () {
-                $scope.hideValidation();
-                var sbId = $('#stageSelect').attr('sb');
-                var selectedValue = $('#sbSelector_' + sbId).text();
-                if (selectedValue != 'Select Stage')
-                    $scope.stage.stage = selectedValue;
-                // console.log($scope.stage.stage);
-            });
-            initDatePicker('addStageDate');
-            $('#add-stage').modal('show');
-        }
-        //$scope.stage.stagesArray = [];
+        $('#projectListD2').change(function () {
+            $scope.hideValidation();
+            var sbId = $('#projectListD2').attr('sb');
+            var selectedValue = $('#sbSelector_' + sbId).text();
+            if (selectedValue != 'Select Project')
+                $scope.stage.project = selectedValue;
+            // console.log($scope.stage.project);
+        });
+        $('#stageSelect').change(function () {
+            $scope.hideValidation();
+            var sbId = $('#stageSelect').attr('sb');
+            var selectedValue = $('#sbSelector_' + sbId).text();
+            if (selectedValue != 'Select Stage')
+                $scope.stage.stage = selectedValue;
+            // console.log($scope.stage.stage);
+        });
+        initDatePicker('addStageDate');
+        $('#add-stage').modal('show');
+    }
+    //$scope.stage.stagesArray = [];
     function convertDate(inputFormat) {
         function pad(s) {
             return (s < 10) ? '0' + s : s;
@@ -3182,9 +3194,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var selectedValue = $('#sbSelector_' + sbId).text('Select Project');
         $scope.stage.project = selectedValue;
         $('.select-date').datepicker({
-            dateFormat: "dd/mm/yyyy"
-            , changeMonth: true
-            , changeYear: true
+            dateFormat: "dd/mm/yyyy",
+            changeMonth: true,
+            changeYear: true
         }).val('');
         $('#add-stage').modal('hide');
         //$.datepicker._clearDate(this);
@@ -3196,9 +3208,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
         var d = new Date(date);
         if (d == 'Invalid Date') return date;
-        var month = '' + (d.getMonth() + 1)
-            , day = '' + d.getDate()
-            , year = d.getFullYear();
+        var month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
         if (month.length < 2) month = '0' + month;
         if (day.length < 2) day = '0' + day;
@@ -3211,25 +3223,25 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.isDate = date ? false : true;
     }
     $scope.addProjectCheckValidation = function (stage, removeValidation) {
-            stage.date = stage.date ? stage.date : $('#addStageDate').val();
-            if (removeValidation) {
-                $scope.isStage = false;
-                $scope.isProject = false;
-                $scope.isDate = false;
-                $scope.isDetail = false;
-                $scope.isNotes = false;
-            } else {
-                $scope.isStage = stage.stage ? false : true;
-                $scope.isProject = stage.project ? false : true;
-                $scope.isDate = stage.date ? false : true;
-                $scope.isDetail = $scope.stage.detail ? false : true;
-                $scope.isNotes = stage.notes ? false : true;
-            }
+        stage.date = stage.date ? stage.date : $('#addStageDate').val();
+        if (removeValidation) {
+            $scope.isStage = false;
+            $scope.isProject = false;
+            $scope.isDate = false;
+            $scope.isDetail = false;
+            $scope.isNotes = false;
+        } else {
+            $scope.isStage = stage.stage ? false : true;
+            $scope.isProject = stage.project ? false : true;
+            $scope.isDate = stage.date ? false : true;
+            $scope.isDetail = $scope.stage.detail ? false : true;
+            $scope.isNotes = stage.notes ? false : true;
         }
-        /* $scope.notification = {
-              show:false,
-              message:''
-         };*/
+    }
+    /* $scope.notification = {
+          show:false,
+          message:''
+     };*/
 
     $scope.addProjectStage = function (stage) {
         stage.date = stage.date ? stage.date : $('#addStageDate').val();
@@ -3303,9 +3315,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         $scope.stage.project = selectedValue;
 
                         $('.select-date').datepicker({
-                            dateFormat: "dd/mm/yyyy"
-                            , changeMonth: true
-                            , changeYear: true
+                            dateFormat: "dd/mm/yyyy",
+                            changeMonth: true,
+                            changeYear: true
                         }).val('');
                         //                        sessionStorage.talentAllStages = JSON.stringify($scope.stage.stagesCard);
                     }
@@ -3329,11 +3341,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     function initDatepicker(id) {
         $("#" + id).datepicker({
-            dateFormat: 'M d, yy'
-            , changeYear: true
-            , yearRange: '1900:' + new Date().getFullYear()
-            , yearRange: '1900:' + new Date().getFullYear()
-            , maxDate: new Date()
+            dateFormat: 'M d, yy',
+            changeYear: true,
+            yearRange: '1900:' + new Date().getFullYear(),
+            yearRange: '1900:' + new Date().getFullYear(),
+            maxDate: new Date()
         });
     }
 
@@ -3444,18 +3456,18 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             }
 
         var requestObject = {
-            'company': $scope.filterValue.company
-            , 'rating': $scope.filterValue.rating
-            , 'project_match': $scope.filterValue.match
-            , 'recruiter': $scope.filterValue.recruiter_name
-            , 'concepts': $scope.filterValue.concepts
-            , 'projects': selectedProjectId
-            , 'stages': $scope.filterValue.stage
-            , 'contacted': $scope.filterValue.lastContacted
-            , 'date': $scope.filterValue.analysed
-            , 'active': $scope.filterValue.active
-            , 'ordering': $scope.filterValue.ordering
-            , 'term': ($rootScope.search && $rootScope.search.searchKeywords) ? $rootScope.search.searchKeywords : ''
+            'company': $scope.filterValue.company,
+            'rating': $scope.filterValue.rating,
+            'project_match': $scope.filterValue.match,
+            'recruiter': $scope.filterValue.recruiter_name,
+            'concepts': $scope.filterValue.concepts,
+            'projects': selectedProjectId,
+            'stages': $scope.filterValue.stage,
+            'contacted': $scope.filterValue.lastContacted,
+            'date': $scope.filterValue.analysed,
+            'active': $scope.filterValue.active,
+            'ordering': $scope.filterValue.ordering,
+            'term': ($rootScope.search && $rootScope.search.searchKeywords) ? $rootScope.search.searchKeywords : ''
         };
         requestObject.active = requestObject.active ? (requestObject.active == 'active' ? true : false) : '';
         requestObject.project_match = parseInt(requestObject.project_match.split('%')[0]) || '';
@@ -3511,7 +3523,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     return !company.is_current;
                 });
                 talent.talent_company = arr;
-                if(currentComp.length){
+                if (currentComp.length) {
                     talent.talent_company = currentComp.concat(talent.talent_company);
                 }
             }
@@ -3562,115 +3574,115 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.openEditProfileForm = function (data) {
         // $scope.talentEditableData = talent;
-        
+
         $scope.search.searchKeywords = '';
-        
+
         var talent = angular.copy(data);
-        
+
         var talentName = talent.talent_name.split(' ');
         var location = talent.current_location.split(',');
         $scope.talentEditableData = {
-            currentOrganization: []
-            , pastOrganization: []
-            , education: []
-            , topConcepts: []
-            , email: talent.talent_email.length ? talent.talent_email[0].email : ''
-            , phone: talent.talent_contact.length ? talent.talent_contact[0].contact : ''
-            , profile_image: talent.image
-            , linkedinProfileUrl: talent.linkedin_url
-            , city: location[0] ? location[0].trim() : ""
-            , country: location[2] ? location[2].trim() : ""
-            , state: location[1] ? location[1].trim() : ""
-            , designation: talent.designation ? talent.designation.trim() : ''
-            , industryFocus: {
-                name: talent.industry_focus ? talent.industry_focus.trim() : ''
-                , percentage: talent.industry_focus_percentage ? talent.industry_focus_percentage : ''
-            }
-            , firstName: talentName[0] ? talentName[0].trim() : ''
-            , lastName: talentName[1] ? talentName[1].trim() : ''
-            , id: talent.id
+            currentOrganization: [],
+            pastOrganization: [],
+            education: [],
+            topConcepts: [],
+            email: talent.talent_email.length ? talent.talent_email[0].email : '',
+            phone: talent.talent_contact.length ? talent.talent_contact[0].contact : '',
+            profile_image: talent.image,
+            linkedinProfileUrl: talent.linkedin_url,
+            city: location[0] ? location[0].trim() : "",
+            country: location[2] ? location[2].trim() : "",
+            state: location[1] ? location[1].trim() : "",
+            designation: talent.designation ? talent.designation.trim() : '',
+            industryFocus: {
+                name: talent.industry_focus ? talent.industry_focus.trim() : '',
+                percentage: talent.industry_focus_percentage ? talent.industry_focus_percentage : ''
+            },
+            firstName: talentName[0] ? talentName[0].trim() : '',
+            lastName: talentName[1] ? talentName[1].trim() : '',
+            id: talent.id
         };
 
         talent.talent_concepts.forEach(function (concept) {
             $scope.talentEditableData.topConcepts.push({
                 name: concept.concept,
-                id: concept.id
-                , //                match: concept.match
+                id: concept.id, //                match: concept.match
             });
         });
 
-//        if (talent.talent_company.length && talent.talent_company[0].is_current) {
-//            var organisation = {
-//                JobTitle: ''
-//                , name: ''
-//                , from: ''
-//                , to: ''
-//            };
-//            organisation.name = talent.talent_company[0].company ? talent.talent_company[0].company.trim() : '';
-//            organisation.JobTitle = talent.talent_company[0].designation ? talent.talent_company[0].designation.trim() : '';
-//            if (talent.talent_company[0].start_date) {
-//                var date = new Date(talent.talent_company[0].start_date);
-//                organisation.from = date.getFullYear().toString();
-//            }
-//            if (talent.talent_company[0].end_date) {
-//                var date = new Date(talent.talent_company[0].end_date);
-//                organisation.to = date.getFullYear().toString();
-//            }
-//            organisation.id = talent.talent_company[0].id;
-//            $scope.talentEditableData.currentOrganization.push(organisation);
-//        } else {
-//            $scope.talentEditableData.currentOrganization.push({
-//                JobTitle: ''
-//                , name: ''
-//                , from: ''
-//                , to: ''
-//            });
-//        }
+        //        if (talent.talent_company.length && talent.talent_company[0].is_current) {
+        //            var organisation = {
+        //                JobTitle: ''
+        //                , name: ''
+        //                , from: ''
+        //                , to: ''
+        //            };
+        //            organisation.name = talent.talent_company[0].company ? talent.talent_company[0].company.trim() : '';
+        //            organisation.JobTitle = talent.talent_company[0].designation ? talent.talent_company[0].designation.trim() : '';
+        //            if (talent.talent_company[0].start_date) {
+        //                var date = new Date(talent.talent_company[0].start_date);
+        //                organisation.from = date.getFullYear().toString();
+        //            }
+        //            if (talent.talent_company[0].end_date) {
+        //                var date = new Date(talent.talent_company[0].end_date);
+        //                organisation.to = date.getFullYear().toString();
+        //            }
+        //            organisation.id = talent.talent_company[0].id;
+        //            $scope.talentEditableData.currentOrganization.push(organisation);
+        //        } else {
+        //            $scope.talentEditableData.currentOrganization.push({
+        //                JobTitle: ''
+        //                , name: ''
+        //                , from: ''
+        //                , to: ''
+        //            });
+        //        }
 
-//        if (talent.talent_company.length) {
-//
-//            var index = 0;
-//            talent.talent_company[0].is_current ? index = 1 : 0
-//
-//            for (var i = index; i < talent.talent_company.length; i++) {
-//                var organisation = {
-//                    JobTitle: ''
-//                    , name: ''
-//                    , from: ''
-//                    , to: ''
-//                };
-//                organisation.name = talent.talent_company[i].company ? talent.talent_company[i].company.trim() : '';
-//                organisation.JobTitle = talent.talent_company[i].designation ? talent.talent_company[i].designation.trim() : '';
-//                if (talent.talent_company[i].start_date) {
-//                    var date = new Date(talent.talent_company[i].start_date);
-//                    organisation.from = date.getFullYear().toString();
-//                }
-//                if (talent.talent_company[i].end_date) {
-//                    var date = new Date(talent.talent_company[i].end_date);
-//                    organisation.to = date.getFullYear().toString();
-//                }
-//                organisation.id = talent.talent_company[i].id;
-//                $scope.talentEditableData.pastOrganization.push(organisation);
-//            }
-//        } else {
-//            $scope.talentEditableData.pastOrganization.push({
-//                JobTitle: ''
-//                , name: ''
-//                , from: ''
-//                , to: ''
-//            });
-//        }
-        
+        //        if (talent.talent_company.length) {
+        //
+        //            var index = 0;
+        //            talent.talent_company[0].is_current ? index = 1 : 0
+        //
+        //            for (var i = index; i < talent.talent_company.length; i++) {
+        //                var organisation = {
+        //                    JobTitle: ''
+        //                    , name: ''
+        //                    , from: ''
+        //                    , to: ''
+        //                };
+        //                organisation.name = talent.talent_company[i].company ? talent.talent_company[i].company.trim() : '';
+        //                organisation.JobTitle = talent.talent_company[i].designation ? talent.talent_company[i].designation.trim() : '';
+        //                if (talent.talent_company[i].start_date) {
+        //                    var date = new Date(talent.talent_company[i].start_date);
+        //                    organisation.from = date.getFullYear().toString();
+        //                }
+        //                if (talent.talent_company[i].end_date) {
+        //                    var date = new Date(talent.talent_company[i].end_date);
+        //                    organisation.to = date.getFullYear().toString();
+        //                }
+        //                organisation.id = talent.talent_company[i].id;
+        //                $scope.talentEditableData.pastOrganization.push(organisation);
+        //            }
+        //        } else {
+        //            $scope.talentEditableData.pastOrganization.push({
+        //                JobTitle: ''
+        //                , name: ''
+        //                , from: ''
+        //                , to: ''
+        //            });
+        //        }
+        var isCurrentCompany = false,
+            isPastCompany = false;
         if (talent.talent_company.length) {
 
             var index = 0;
 
             for (var i = index; i < talent.talent_company.length; i++) {
                 var organisation = {
-                    JobTitle: ''
-                    , name: ''
-                    , from: ''
-                    , to: ''
+                    JobTitle: '',
+                    name: '',
+                    from: '',
+                    to: ''
                 };
                 organisation.name = talent.talent_company[i].company ? talent.talent_company[i].company.trim() : '';
                 organisation.JobTitle = talent.talent_company[i].designation ? talent.talent_company[i].designation.trim() : '';
@@ -3683,36 +3695,40 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     organisation.to = date.getFullYear().toString();
                 }
                 organisation.id = talent.talent_company[i].id;
-                
-                if(talent.talent_company[i].is_current){
-                   $scope.talentEditableData.currentOrganization.push(organisation);
-                }else{
-                   $scope.talentEditableData.pastOrganization.push(organisation);
+
+                if (talent.talent_company[i].is_current) {
+                    $scope.talentEditableData.currentOrganization.push(organisation);
+                    isCurrentCompany = true;
+                } else {
+                    $scope.talentEditableData.pastOrganization.push(organisation);
+                    isPastCompany = true
                 }
             }
-        } else {
-            
+        }
+
+        if (!isCurrentCompany) {
             $scope.talentEditableData.currentOrganization.push({
-                JobTitle: ''
-                , name: ''
-                , from: ''
-                , to: ''
+                JobTitle: '',
+                name: '',
+                from: '',
+                to: ''
             });
-            
+        }
+        if (!isPastCompany) {
             $scope.talentEditableData.pastOrganization.push({
-                JobTitle: ''
-                , name: ''
-                , from: ''
-                , to: ''
+                JobTitle: '',
+                name: '',
+                from: '',
+                to: ''
             });
         }
 
         if (talent.talent_education.length) {
             for (var i = 0; i < talent.talent_education.length; i++) {
                 var organisation = {
-                    name: ''
-                    , from: ''
-                    , to: ''
+                    name: '',
+                    from: '',
+                    to: ''
                 };
                 organisation.name = talent.talent_education[i].education ? talent.talent_education[i].education.trim() : '';
                 if (talent.talent_education[i].start_date) {
@@ -3728,9 +3744,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             }
         } else {
             $scope.talentEditableData.education.push({
-                name: ''
-                , from: ''
-                , to: ''
+                name: '',
+                from: '',
+                to: ''
             });
         }
 
@@ -3746,17 +3762,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#filter-to').val('');
         $scope.priceSlider.value = 0;
         $scope.filterValue = {
-            stage: ''
-            , project: ''
-            , match: $scope.priceSlider.value + '%'
-            , rating: ''
-            , lastContacted: ''
-            , analysed: ''
-            , company: ''
-            , concepts: ''
-            , recruiter_name: ''
-            , ordering: ''
-            , active: ''
+            stage: '',
+            project: '',
+            match: $scope.priceSlider.value + '%',
+            rating: '',
+            lastContacted: '',
+            analysed: '',
+            company: '',
+            concepts: '',
+            recruiter_name: '',
+            ordering: '',
+            active: ''
         };
         $('#filterStage').val('').prop('selectedIndex', 0);
         var selectedValue = $('#filterStage :selected').text(); 
@@ -3797,10 +3813,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
 function createTalentFormCtrl($scope, createTalentFormService) {
     $scope.talentData = {
-        currentOrganization: {}
-        , pastOrganization: [{}]
-        , education: [{}]
-        , topConcepts: [{}]
+        currentOrganization: {},
+        pastOrganization: [{}],
+        education: [{}],
+        topConcepts: [{}]
     };
 
     $scope.addPastOrganization = function () {
@@ -3816,9 +3832,9 @@ function createTalentFormCtrl($scope, createTalentFormService) {
 
     $scope.createTalent = function (data) {
         console.log(data)
-            //        createTalentFormService.createTalent(data, function(response){
-            //            console.log(response)
-            //        });
+        //        createTalentFormService.createTalent(data, function(response){
+        //            console.log(response)
+        //        });
     }
 }
 
