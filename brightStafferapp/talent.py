@@ -795,11 +795,15 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         linkedin_url = request.data['url']
         if linkedin_url != '':
-            linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
-                                                    Q(recruiter__username=request.META['HTTP_RECRUITER'])
-                                                    & Q(linkedin_url=linkedin_url))
-            if linkedin_talent:
-                return util.returnErrorShorcut(400, 'Recruiter have same user in an account')
+            linkedin =Talent.objects.filter(id=request.data['id'],talent_active__is_active=True,linkedin_url=linkedin_url)
+            if linkedin:
+                Talent.objects.update(id=request.data['id'],linkedin_url=linkedin_url)
+            else:
+                linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                        Q(recruiter__username=request.META['HTTP_RECRUITER']) &
+                                                        Q(linkedin_url=linkedin_url))
+                if linkedin_talent:
+                    return util.returnErrorShorcut(400, 'Recruiter have same user in an account')
         talent_id = request.data['id']
         talent = Talent.objects.filter(id=talent_id)
         Talent.objects.filter(id=talent).update(activation_date=timezone.now())
