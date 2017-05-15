@@ -525,7 +525,7 @@
                 <div class="contact-info-modal-div border-bttm">
                     <div class="left-section-div">Contact Phone</div>
                     <div class="right-section-div">
-                        <span>[[talentDetails.talent_contact[0].contact]]</span>
+                        <span>[[talentDetails.talent_contact[0].contact | contactFormat]]</span>
                         <div class="contact-edit">
                             <span ng-show="talentDetails.talent_contact.length && talentDetails.talent_contact[0].contact" ng-click="showContactEdit(talentDetails.talent_contact)">Edit</span>
                             <span ng-click="Contact2.contact_add.focus = true;candidateInfo.candidateContactAdd = '';showContactAdd()">Add</span>
