@@ -2975,6 +2975,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
                 if (response.success) {
                     $scope.showNotification(true, "Talent contact has been added.");
+                    if (!$rootScope.talentDetails.talent_contact || !$rootScope.talentDetails.talent_contact.length) {
+                        $rootScope.talentDetails.talent_contact = [{}];
+                    }
                     $rootScope.talentDetails.talent_contact[0].contact = candidateContactAdd;
                 sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                 
