@@ -307,30 +307,39 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
         return talent_result
 
 
-def talent_project_match(talent_obj, project):
-    talent_concept_list = TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',
-                                                                                         flat=True)
-    talent_concept_count = len(talent_concept_list)
-    project_concept_list = ProjectConcept.objects.filter(project=project).values_list('concept__concept', flat=True)
-    project_concept_count = len(project_concept_list)
+def talent_project_match(talent_obj,project):
+    talent_concept_list=TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',flat=True)
+    talent_concept_count=TalentConcept.objects.filter(talent_id=talent_obj).values_list('concept__concept',flat=True).count()
+    project_concept_list=ProjectConcept.objects.filter(project=project).values_list('concept__concept',flat=True)
+    project_concept_count=ProjectConcept.objects.filter(project=project).values_list('concept__concept',flat=True).count()
+    total_concept=talent_concept_count+project_concept_count
     count = 0
-    if talent_concept_count <= project_concept_count:
+    if talent_concept_count<=project_concept_count:
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
                 ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
-                # if ratio >= 90:
-                count += (ratio / 100)
+                if ratio >= 90:
+                    count += 1
         # match = math.ceil(round((count/project_concept_count), 2))
-        match = (count / (project_concept_count * talent_concept_count)) * 100
+        match = round(count / project_concept_count * 100)
+        if match >= 100:
+            match = 100
+            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+        else:
+            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
     else:
         for t_concept in talent_concept_list:
             for p_conecpt in project_concept_list:
-                ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
-                # if ratio >= 90:
-                count += (ratio / 100.0)
+                ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower() )
+                if ratio >= 90:
+                    count += 1
         # match = math.ceil(round((count/project_concept_count), 2))
-        match = count / (project_concept_count * talent_concept_count) * 100
-    TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+        match = round(count / talent_concept_count * 100)
+        if match >= 100:
+            match = 100
+            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
+        else:
+            TalentProject.objects.filter(talent=talent_obj, project=project).update(project_match=match)
 
 
 # View Talent's Current stage for a single project and Add Talent's stage for a single project
