@@ -117,6 +117,7 @@ class TalentContactAPI(View):
         context = {}
         talent_id = request.POST['talent_id']
         contact = request.POST['contact']
+        recruiter = request.POST['recruiter']
         talent_objs = Talent.objects.filter(id=talent_id)
         if not talent_objs:
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent_id))
@@ -125,20 +126,21 @@ class TalentContactAPI(View):
         if 'updated_contact' in request.POST:
             # request to update the existing email address
             updated_contact = request.POST['updated_contact']
-            if_exists = self.validate_contact(updated_contact)
-            if if_exists:
+            if_exists = self.validate_contact(updated_contact,recruiter,talent_objs)
+            if if_exists is 0:
                 context['success'] = False
                 return util.returnErrorShorcut(409, 'Oops! The Contact Number you have entered already exists.')
-            talent_contact_obj = TalentContact.objects.filter(contact=contact)
-            if talent_contact_obj:
-                talent_contact_obj = talent_contact_obj[0]
+            #talent_contact_obj = TalentContact.objects.filter(contact=contact)
+            #if talent_contact_obj:
+            else:
+                talent_contact_obj = talent_obj
                 talent_contact_obj.contact = updated_contact
                 talent_contact_obj.save()
                 context['success'] = True
                 return util.returnSuccessShorcut(context)
 
-        if_exists = self.validate_contact(contact)
-        if if_exists:
+        if_exists = self.validate_contact(contact,recruiter,talent_objs)
+        if if_exists is 0:
             context['success'] = False
             return util.returnErrorShorcut(409, 'Oops! The Contact Number you have entered already exists.')
         talent_contact_obj, created = TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
@@ -146,9 +148,10 @@ class TalentContactAPI(View):
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
-            context['success'] = False
-            context['error'] = 'Oops! The Contact Number you have entered already exists.'
-            return util.returnErrorShorcut(409, context)
+            #TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+            context['success'] = True
+            #context['error'] = 'Oops! The Contact Number you have entered already exists.'
+            return util.returnSuccessShorcut(context)
 
     def delete(self, request):
         context = dict()
@@ -170,14 +173,23 @@ class TalentContactAPI(View):
             context['success'] = False
             return util.returnErrorShorcut(400, 'Contact not found')
 
-    def validate_contact(self,contact):
-        users = TalentContact.objects.filter(contact=contact,talent__talent_active__is_active=True)
-        if users:
-            return True
-        else:
-            return False
-
-
+    def validate_contact(self,contact,recruiter,talent_obj):
+        if contact!= '':
+            talent_contact = TalentContact.objects.filter(contact=contact, talent=talent_obj)
+            if talent_contact:
+                TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+            else:
+                talent_contact = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                     Q(recruiter__username=recruiter) & Q(talent_contact__contact=contact))
+                if talent_contact:
+                    return 0
+                else:
+                    TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+            # users = TalentContact.objects.filter(contact=contact,talent__talent_active__is_active=True)
+            # if users:
+            #     return True
+            # else:
+            #     return False
 class TalentEmailAPI(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -188,6 +200,7 @@ class TalentEmailAPI(View):
         context = {}
         talent_id = request.POST['talent_id']
         email = request.POST['email']
+        recruiter = request.POST['recruiter']
         talent_objs = Talent.objects.filter(id=talent_id)
         if not talent_objs:
             context['success'] = False
@@ -197,30 +210,33 @@ class TalentEmailAPI(View):
         if 'updated_email' in request.POST:
             # request to update the existing email address
             updated_email = request.POST['updated_email']
-            if_exists = self.validate_email(updated_email)
-            if if_exists:
+            if_exists = self.validate_email(updated_email,recruiter,talent_objs)
+            if if_exists is 0:
                 context['success'] = False
-                return util.returnErrorShorcut(409, 'Oops! The Email Id you have entered already exists.')
-            talent_email_obj = TalentEmail.objects.filter(email=email)
-            if talent_email_obj:
-                talent_email_obj = talent_email_obj[0]
-                talent_email_obj.email = updated_email
-                talent_email_obj.save()
+                return util.returnErrorShorcut(409, 'Oops! The Email you have entered already exists.')
+            #talent_contact_obj = TalentContact.objects.filter(contact=contact)
+            #if talent_contact_obj:
+            else:
+                talent_contact_obj = talent_obj
+                talent_contact_obj.contact = updated_email
+                talent_contact_obj.save()
                 context['success'] = True
                 return util.returnSuccessShorcut(context)
 
-        if_exists = self.validate_email(email)
-        if if_exists:
+        if_exists = self.validate_email(email,recruiter,talent_objs)
+        if if_exists is 0:
             context['success'] = False
-            return util.returnErrorShorcut(409, 'Oops! The Email Id you have entered already exists.')
-        talent_email_obj, created = TalentEmail.objects.get_or_create(talent=talent_obj, email=email)
+            return util.returnErrorShorcut(409, 'Oops! The Email you have entered already exists.')
+        talent_contact_obj, created = TalentEmail.objects.get_or_create(talent=talent_obj, email=email)
         if created:
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
-            context['success'] = False
-            context['error'] = 'Oops! The Email Id you have entered already exists.'
-            return util.returnErrorShorcut(409, context)
+            #TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+            context['success'] = True
+            #context['error'] = 'Oops! The Contact Number you have entered already exists.'
+            return util.returnSuccessShorcut(context)
+
 
     def delete(self, request):
         context = dict()
@@ -242,12 +258,24 @@ class TalentEmailAPI(View):
             context['success'] = False
             return util.returnErrorShorcut(400, 'Email not found')
 
-    def validate_email(self, email):
-        users = TalentEmail.objects.filter(email=email,talent__talent_active__is_active=True)
-        if users:
-            return True
-        else:
-            return False
+    def validate_email(self, email,recruiter,talent_objs):
+        if email!= '':
+            talent_contact = TalentEmail.objects.filter(email=email, talent=talent_objs)
+            if talent_contact:
+                TalentEmail.objects.filter(talent=talent_objs).update(email=email)
+            else:
+                email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                     Q(recruiter__username=recruiter) & Q(talent_email__email=email))
+                if email_talent:
+                    return 0
+                else:
+                    TalentEmail.objects.filter(talent=talent_objs).update(email=email)
+        # users = TalentEmail.objects.filter(email=email,talent__talent_active__is_active=True)
+        # if users:
+        #     return True
+        # else:
+        #     return False
+
 
 
 class TalentProjectAddAPI(generics.ListCreateAPIView):
