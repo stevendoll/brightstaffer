@@ -2071,7 +2071,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     });
 
-
+    $scope.detailCurrent = false;
+    $scope.detailPast = false;
 
     $scope.getSelectedRating = function (rating) {
         //console.log(rating);
@@ -2137,6 +2138,28 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.setScopeVariable = function (variable, value) {
         $scope[variable] = value;
     }
+
+    var setCurrenPastInDetail = function(obj){
+        console.log('details', obj);
+        if(!obj.currentCompanyLength){
+            if (obj.talent_company.length) {
+                var currentComp = [];
+                var arr = obj.talent_company.filter(function (company) {
+                    if (company.is_current) {
+                        currentComp.push(company);
+                    }
+                    return !company.is_current;
+                });
+                obj.pastCompanyLength = arr.length;
+                obj.currentCompanyLength = currentComp.length;
+                obj.talent_company = arr;
+                if (currentComp.length) {
+                    obj.talent_company = currentComp.concat(obj.talent_company);
+                }
+            }
+        }
+    }
+
     $scope.deleteStage = function (id) {
         if (!id) return;
         talentApis.delteStage({
@@ -2148,6 +2171,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 //$scope.showNotification(true, 'Stage has been successfully removed');
 
                 $scope.talentDetails = response.result;
+                setCurrenPastInDetail($scope.talentDetails);
                 $rootScope.talentAllStages = response.result.talent_stages;
 
                 $scope.loadProfileData($rootScope.talentDetails.id, $rootScope.talentDetails, 'deleteStage');
@@ -2194,7 +2218,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if (response.message == 'success') {
 
                 $scope.talentDetails = response.result;
-
+                setCurrenPastInDetail($scope.talentDetails);
                 $rootScope.talentAllStages = response.result.talent_stages;
                 $scope.stage.stagesCard = response.result.talent_stages;
                 sessionStorage.removeItem('talentAllStages');
@@ -2288,6 +2312,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $rootScope.isFilterChecked = false;
         if (talent && id) {
             $rootScope.talentDetails = talent;
+            setCurrenPastInDetail($rootScope.talentDetails);
         }
         var requestObject = {
             'token': $rootScope.globals.currentUser.token, // username field value
@@ -2305,6 +2330,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $rootScope.createCareerHistoryData(a);
 
             $rootScope.talentDetails = a[0];
+            setCurrenPastInDetail($rootScope.talentDetails);
             sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
             getTalentStages(id);
         });
@@ -2458,6 +2484,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     for (var i = 0; i < response.length; i++) {
                         if (response[i].id == $scope.currentTalentId) {
                             $rootScope.talentDetails = response[i];
+                            setCurrenPastInDetail($rootScope.talentDetails);
                             sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                         }
                     }
@@ -3308,6 +3335,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
                         //                            $scope.stage.stagesCard.push(response);
                         $scope.talentDetails = response.result;
+                        setCurrenPastInDetail($scope.talentDetails);
                         //                       $rootScope.talentDetails = response.result;
                         sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                         //                        $scope.stage.stagesCard.unshift(response);
