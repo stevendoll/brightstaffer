@@ -2140,7 +2140,6 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     var setCurrenPastInDetail = function(obj){
-        console.log('details', obj);
         if(!obj.currentCompanyLength){
             if (obj.talent_company.length) {
                 var currentComp = [];
