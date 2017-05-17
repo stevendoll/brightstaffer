@@ -1593,8 +1593,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.removeFile = function () {
         $scope.talentFileobj = {};
         //        $scope.talentData.topConcepts = [{}];
-        createTalentFormService.setTalentDetails({});
-        $scope.initTalenData();
+        if(!$scope.talentData.id){
+            createTalentFormService.setTalentDetails({});
+            $scope.initTalenData();
+        }
     }
 
     $scope.uploadTalentFile = function () {
@@ -1875,9 +1877,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
 
         if (!valid) return;
-
+        
         data.id ? data.request_by = 'edit' : data.request_by = "create";
-
+        
+        $scope.talentFileobj.name ? data.file_name = $scope.talentFileobj.name : '';
+        
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
@@ -3591,7 +3595,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var talent = angular.copy(data);
 
         var talentName = talent.talent_name.split(' ');
-        var location = talent.current_location.split(',');
+//        var location = talent.current_location.split(',');
+        var location = talent.current_location[0] || {};
+        var fileObj = talent.file_upload[0] || {};
         $scope.talentEditableData = {
             currentOrganization: [],
             pastOrganization: [],
@@ -3611,11 +3617,17 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             },
             firstName: talentName[0] ? talentName[0].trim() : '',
             lastName: talentName[1] ? talentName[1].trim() : '',
+            city: location.city || '',
+            state: location.state || '',
+            country: location.country || '',
+            file_name: fileObj.file_name || '',
+            create_date: fileObj.create_date || '',
             id: talent.id
         };
 
         talent.talent_concepts.forEach(function (concept) {
             $scope.talentEditableData.topConcepts.push({
+                match: concept.match,
                 name: concept.concept,
                 id: concept.id, //                match: concept.match
             });

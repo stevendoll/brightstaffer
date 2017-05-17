@@ -176,15 +176,15 @@ class TalentLocation(models.Model):
     state = models.CharField(max_length=50, null=True, blank=True)
     country = models.CharField(max_length=50, null=True, blank=True)
 
-    def __str__(self):
-        current_location = ''
-        if self.city:
-            current_location += self.city
-        if self.state:
-            current_location += ', ' + self.state
-        if self.country:
-            current_location += ', ' + self.country
-        return current_location
+    # def __str__(self):
+    #     current_location = ''
+    #     if self.city:
+    #         current_location += self.city
+    #     if self.state:
+    #         current_location += ', ' + self.state
+    #     if self.country:
+    #         current_location += ', ' + self.country
+    #     return current_location
 
 
 class TalentRecruiter(models.Model):
@@ -287,8 +287,8 @@ class TalentCompany(models.Model):
         else:
             return ""
 
-    def __str__(self):
-        return str(self.talent.talent_name + " works at " + self.company.company_name)
+    # def __str__(self):
+    #     return str(self.talent.talent_name + " works at " + self.company.company_name)
 
 
 class TalentProject(models.Model):
