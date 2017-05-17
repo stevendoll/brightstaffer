@@ -1877,9 +1877,11 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         }
 
         if (!valid) return;
-
+        
         data.id ? data.request_by = 'edit' : data.request_by = "create";
-
+        
+        $scope.talentFileobj.name ? data.file_name = $scope.talentFileobj.name : '';
+        
         createTalentFormService.createTalent(data, function (response) {
             if (response.success) {
                 if (onEdit) {
