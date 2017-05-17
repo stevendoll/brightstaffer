@@ -3591,7 +3591,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var talent = angular.copy(data);
 
         var talentName = talent.talent_name.split(' ');
-        var location = talent.current_location.split(',');
+//        var location = talent.current_location.split(',');
+        var location = talent.current_location[0] || {};
         $scope.talentEditableData = {
             currentOrganization: [],
             pastOrganization: [],
@@ -3611,6 +3612,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             },
             firstName: talentName[0] ? talentName[0].trim() : '',
             lastName: talentName[1] ? talentName[1].trim() : '',
+            city: location.city || '',
+            state: location.state || '',
+            country: location.country || '',
             id: talent.id
         };
 
