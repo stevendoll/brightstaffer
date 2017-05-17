@@ -556,8 +556,14 @@ def handle_talent_data(talent_data, user):
     if talent_data:
         if 'name' in talent_data and talent_data['name']:
             talent_name = talent_data['name'].split(' ')
-            result['firstName'] = talent_name[0]
-            result['lastName'] = talent_name[1]
+            try:
+                result['firstName'] = talent_name[0]
+            except:
+                result['firstName'] = ''
+            try:
+                result['lastName'] = talent_name[1]
+            except:
+                result['lastName'] = ''
             # result['recruiter'] = user
             result['status'] = 'New'
             #result['linkedin_url'] = ''
