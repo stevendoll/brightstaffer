@@ -194,7 +194,7 @@ class TalentLocationSerializer(serializers.ModelSerializer):
 
 class TalentSerializer(serializers.ModelSerializer):
     talent_name = serializers.CharField()
-    current_location = serializers.SerializerMethodField()
+    #current_location = serializers.SerializerMethodField()
     talent_education = TalentEducationSerializer(many=True)
     recruiter = serializers.CharField()
     request_by = serializers.CharField()
@@ -206,14 +206,14 @@ class TalentSerializer(serializers.ModelSerializer):
     talent_email = TalentEmailSerializer(many=True)
     talent_contact = TalentContactSerializer(many=True)
     talent_stages = TalentStageSerializer(many=True)
-    #current_location = TalentLocationSerializer(many=True)
+    current_location = TalentLocationSerializer(many=True)
     file_upload = FileStageSerializer(many=True)
 
-    def get_current_location(self, obj):
-        if obj.current_location.all():
-            return str(obj.current_location.all()[0])
-        else:
-            return ''
+    # def get_current_location(self, obj):
+    #     if obj.current_location.all():
+    #         return str(obj.current_location.all()[0])
+    #     else:
+    #         return ''
 
     class Meta:
         model = Talent
