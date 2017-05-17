@@ -948,6 +948,8 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             talent.save()
             talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
             talent_loc.city = content['city']
+            talent_loc.state = ''
+            talent_loc.country = ''
             talent_loc.save()
         context['success'] = True
         return util.returnSuccessShorcut(context)
