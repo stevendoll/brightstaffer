@@ -1593,8 +1593,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.removeFile = function () {
         $scope.talentFileobj = {};
         //        $scope.talentData.topConcepts = [{}];
-        createTalentFormService.setTalentDetails({});
-        $scope.initTalenData();
+        if(!$scope.talentData.id){
+            createTalentFormService.setTalentDetails({});
+            $scope.initTalenData();
+        }
     }
 
     $scope.uploadTalentFile = function () {
@@ -3620,6 +3622,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
         talent.talent_concepts.forEach(function (concept) {
             $scope.talentEditableData.topConcepts.push({
+                match: concept.match,
                 name: concept.concept,
                 id: concept.id, //                match: concept.match
             });
