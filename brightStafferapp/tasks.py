@@ -29,14 +29,12 @@ def bulk_extract_text_from_pdf(file_upload_obj, user,request):
     :return: None or error
     """
     text = textract.process(file_upload_obj.file.path).decode('utf-8')
-    file_upload_obj.text = text
-    file_upload_obj.save()
     url = ml_url
     content = requests.post(url, data=text.encode('utf-8')).json()
-    handle_talent_data(content, user,request)
+    handle_talent_data(content, user,request,text,file_upload_obj)
 
 
-def handle_talent_data(talent_data, user,request):
+def handle_talent_data(talent_data, user,request,text, file_upload_obj):
     if talent_data:
         if 'name' in talent_data and talent_data['name']:
             talent_obj = models.Talent.objects.create(talent_name=talent_data['name'], recruiter=user,
@@ -46,6 +44,10 @@ def handle_talent_data(talent_data, user,request):
                                                       create_date=datetime.datetime.now())
             talent_recruiter, created = models.TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                                      is_active=True)
+            file_upload_obj.text = text
+            file_upload_obj.talent = talent_obj
+            file_upload_obj.save()
+
             if talent_obj:
                 if 'skills' in talent_data:
                     for skill in talent_data['skills']:
@@ -78,7 +80,9 @@ def handle_talent_data(talent_data, user,request):
                                 talent=talent_obj, company=company, is_current=is_current,
                                 designation=experience['JobTitle'], start_date=start_date, end_date=end_date)
                         except:
-                            pass
+                            models.TalentCompany.objects.get_or_create(
+                                talent=talent_obj, company=company, is_current=is_current,
+                                designation=experience['JobTitle'])
             if "education" in talent_data:
                 for education in talent_data['education']:
                     # save user education information

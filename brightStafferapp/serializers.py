@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from brightStafferapp.models import Projects, Concept, Talent, Education, Company, TalentProject, TalentConcept, \
-    TalentCompany, TalentEducation,TalentContact, TalentEmail, TalentStage
+    TalentCompany, TalentEducation,TalentContact, TalentEmail, TalentStage, FileUpload, TalentLocation
 from django.contrib.auth.models import User
 import datetime
 
@@ -169,6 +169,29 @@ class TalentStageSerializer(serializers.ModelSerializer):
         fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'create_date', 'date_updated')
 
 
+class FileStageSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
+    file = serializers.FileField()
+    file_name = serializers.CharField()
+    user = serializers.CharField()
+    talent = serializers.CharField()
+    create_date = serializers.CharField(source='get_date_created')
+    class Meta:
+        model = FileUpload
+        fields = ('id', 'name', 'file','file_name', 'user', 'talent','create_date')
+
+
+class TalentLocationSerializer(serializers.ModelSerializer):
+    city = serializers.CharField()
+    state = serializers.CharField()
+    country = serializers.CharField()
+    talent = serializers.CharField()
+    #create_date = serializers.CharField(source='get_date_created')
+    class Meta:
+        model = TalentLocation
+        fields = ('id', 'city', 'state', 'country', 'talent')
+
+
 class TalentSerializer(serializers.ModelSerializer):
     talent_name = serializers.CharField()
     current_location = serializers.SerializerMethodField()
@@ -183,6 +206,8 @@ class TalentSerializer(serializers.ModelSerializer):
     talent_email = TalentEmailSerializer(many=True)
     talent_contact = TalentContactSerializer(many=True)
     talent_stages = TalentStageSerializer(many=True)
+    #current_location = TalentLocationSerializer(many=True)
+    file_upload = FileStageSerializer(many=True)
 
     def get_current_location(self, obj):
         if obj.current_location.all():
@@ -192,7 +217,9 @@ class TalentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Talent
-        fields = ('id', 'image', 'talent_name', 'designation', 'industry_focus', 'activation_date', 'industry_focus_percentage',
-                  'status', 'rating', 'talent_email', 'talent_stages', 'talent_contact', 'linkedin_url', 'recruiter',
-                  'create_date', 'current_location', 'talent_company', 'talent_education', 'talent_project','request_by',
+        fields = ('id', 'image', 'talent_name','current_location', 'designation', 'industry_focus', 'activation_date',
+                  'industry_focus_percentage',
+                  'status', 'rating', 'talent_email', 'talent_stages', 'file_upload', 'talent_contact',
+                  'linkedin_url', 'recruiter',
+                  'create_date', 'talent_company', 'talent_education', 'talent_project','request_by',
                   'talent_concepts')

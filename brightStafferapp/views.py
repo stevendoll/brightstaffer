@@ -477,7 +477,7 @@ class FileUploadView(View):
         """
         try:
             file_name = str(uuid.uuid4())
-            file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user)
+            file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user, file_name=f.name)
             return file_upload_obj
         except Exception as e:
             return util.returnErrorShorcut(400, "Error Connection Refused")
@@ -560,8 +560,8 @@ def handle_talent_data(talent_data, user):
             result['lastName'] = talent_name[1]
             # result['recruiter'] = user
             result['status'] = 'New'
-            result['linkedin_url'] = ''
-            result['linkedinProfileUrl'] = ''
+            #result['linkedin_url'] = ''
+            #result['linkedinProfileUrl'] = ''
             result['email'] = ''
             result['phone'] = ''
             result['city'] = ''
@@ -586,7 +586,7 @@ def handle_talent_data(talent_data, user):
                 current = dict()
                 current['company_name'] = experience['Company']
                 start_date, end_date = convert_to_date(experience['Duration'])
-                if end_date == 'Present':
+                if experience['type'] == 'Current':
                     is_current = True
                     try:
                         current['name'] = experience['Company']

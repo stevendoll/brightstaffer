@@ -335,7 +335,7 @@ class TalentConcept(models.Model):
         if self.date_created:
             return self.date_created.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return datetime.datetime.now().strftime("%d/%m/%Y")
 
 
 class TalentStage(models.Model):
@@ -356,14 +356,15 @@ class TalentStage(models.Model):
         if self.date_created:
             return self.date_created.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return datetime.datetime.now().strftime("%d/%m/%Y")
 
     @property
     def get_date_updated(self):
         if self.date_updated:
             return self.date_updated.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return datetime.datetime.now().strftime("%d/%m/%Y")
+
 
 class ProjectConcept(models.Model):
     project = models.ForeignKey(Projects)
@@ -392,11 +393,20 @@ def get_image_file_dir(instance):
 class FileUpload(models.Model):
     name = models.CharField(null=True, blank=True, max_length=200)
     file = models.FileField(upload_to=get_upload_file_dir)
+    file_name = models.CharField(null=True, blank=True, max_length=200)
     user = models.ForeignKey(User, null=True, blank=True)
+    talent = models.ForeignKey(Talent, null=True, blank=True, related_name='file_upload')
     text = models.TextField(default=None, blank=True, null=True)
+    create_date = models.DateField(auto_now_add=True,blank=False, null=False)
 
     def __str__(self):
         return "{} uploaded {}".format(self.user.username, self.name)
+
+    def get_date_created(self):
+        if self.create_date:
+            return self.create_date.strftime('%d/%m/%Y')
+        else:
+            return datetime.datetime.now().strftime("%d/%m/%Y")
 
 
 class PdfImages(models.Model):

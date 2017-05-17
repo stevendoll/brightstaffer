@@ -314,13 +314,14 @@ def talent_project_match(talent_obj,project):
     project_concept_count=ProjectConcept.objects.filter(project=project).values_list('concept__concept',flat=True).count()
     total_concept=talent_concept_count+project_concept_count
     count = 0
-    if talent_concept_count<=project_concept_count:
+    if talent_concept_count <= project_concept_count:
+        #talent_c_list = set(talent_concept_list).intersection(project_concept_list)
         for t_concept in talent_concept_list:
-            for p_conecpt in project_concept_list:
+           for p_conecpt in project_concept_list:
                 ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
                 if ratio >= 90:
                     count += 1
-        # match = math.ceil(round((count/project_concept_count), 2))
+        match = math.ceil(round((count/project_concept_count), 2))
         match = round(count / project_concept_count * 100)
         if match >= 100:
             match = 100
@@ -646,7 +647,7 @@ def add_edit_talent(profile_data, user):
                     if email_talent:
                         return 0
                     else:
-                        TalentEmail.objects.filter(talent=talent_obj).update(email=email)
+                        TalentEmail.objects.get_or_create(talent=talent_obj,email=email)
             else:
                 TalentEmail.objects.filter(talent=talent_obj).update(email=email)
 
@@ -660,9 +661,32 @@ def add_edit_talent(profile_data, user):
                     if contact_talent:
                         return 1
                     else:
-                        TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+                        TalentContact.objects.get_or_create(talent=talent_obj,contact=contact)
             else:
                 TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+
+            if 'topConcepts' in profile_data:
+                project_concepts = []
+                if talent_obj:
+                    project_concepts = list(TalentConcept.objects.filter(talent=talent_obj).values_list('id', flat=True))
+                for skill in profile_data.get('topConcepts', ''):
+                    concept, created = Concept.objects.get_or_create(concept=skill['name'])
+                    if bool(skill):
+                        try:
+                            match = float(skill.get('percentage', skill.get('match', '')))
+                        except:
+                            match = 0
+                        if match and match < 1:
+                            match *= 100
+                            match = round(match, 2)
+                        if match and match > 100:
+                            match = 100
+                    talent_concept, proj_created = TalentConcept.objects.get_or_create(talent=talent_obj,
+                                                                                         concept=concept,match=match)
+                    if talent_concept.id in project_concepts:
+                        project_concepts.remove(talent_concept.id)
+                TalentConcept.objects.filter(id__in=project_concepts).delete()
+
     else:
         talent_obj = Talent.objects.create(
             talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
@@ -906,13 +930,23 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             talent.designation = content['talent_designation']
             talent.image = content['profile_image']
             talent.linkedin_url = linkedin_url
-            #for values in content['currentOrganization']:
-            #    print (values)
-            #id = TalentCompany.objects.filter(talent=talent, is_current=True).values('id')
-            #if id:
-            #    TalentCompany.objects.update(id=id[0]['id'], is_current=True,company=values['name'] )
-            #else:
-            #    TalentCompany.objects.get_or_create(is_current=True, company=values['name'])
+            ids = TalentCompany.objects.filter(talent=talent, is_current=True).values('id')[0]['id']
+            if ids:
+                company = Company.objects.filter(company_name=content['currentOrganization'][0]['name'])
+                if company:
+                    company = Company.objects.filter(company_name=content['currentOrganization'][0]['name']).values('id')[0]['id'].hex
+                    TalentCompany.objects.filter(id=ids).update(is_current=True, company=company,
+                                                                designation=content['talent_designation'])
+                else:
+                    Company.objects.get_or_create(company_name=content['currentOrganization'][0]['name'])
+                    company = Company.objects.filter(company_name=content['currentOrganization'][0]['name']).values('id')[0]['id'].hex
+                    TalentCompany.objects.filter(id=ids).update(is_current=True, company=company,
+                                                                designation=content['talent_designation'])
+            else:
+                Company.objects.get_or_create(company_name=content['currentOrganization'][0]['name'])
+                company = Company.objects.filter(company_name=content['currentOrganization'][0]['name']).values('id')[0]['id'].hex
+                TalentCompany.objects.filter(id=ids).update(is_current=True, company=company,
+                                                            designation=content['talent_designation'])
             talent.save()
             talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
             talent_loc.city = content['city']
