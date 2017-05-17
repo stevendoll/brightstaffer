@@ -315,14 +315,13 @@ def talent_project_match(talent_obj,project):
     total_concept=talent_concept_count+project_concept_count
     count = 0
     if talent_concept_count <= project_concept_count:
-        talent_c_list = set(talent_concept_list).intersection(project_concept_list)
-
-        #for t_concept in talent_concept_list:
-        #    for p_conecpt in project_concept_list:
-        #        ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
-        #       if ratio >= 90:
-        #            count += 1
-        # match = math.ceil(round((count/project_concept_count), 2))
+        #talent_c_list = set(talent_concept_list).intersection(project_concept_list)
+        for t_concept in talent_concept_list:
+           for p_conecpt in project_concept_list:
+                ratio = fuzz.partial_ratio(t_concept.lower(), p_conecpt.lower())
+                if ratio >= 90:
+                    count += 1
+        match = math.ceil(round((count/project_concept_count), 2))
         match = round(count / project_concept_count * 100)
         if match >= 100:
             match = 100
