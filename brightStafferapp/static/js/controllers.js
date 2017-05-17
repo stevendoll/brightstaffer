@@ -3597,6 +3597,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var talentName = talent.talent_name.split(' ');
 //        var location = talent.current_location.split(',');
         var location = talent.current_location[0] || {};
+        var fileObj = talent.file_upload[0] || {};
         $scope.talentEditableData = {
             currentOrganization: [],
             pastOrganization: [],
@@ -3619,6 +3620,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             city: location.city || '',
             state: location.state || '',
             country: location.country || '',
+            file_name: fileObj.file_name || '',
+            create_date: fileObj.create_date || '',
             id: talent.id
         };
 
