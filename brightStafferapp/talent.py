@@ -608,7 +608,6 @@ def add_edit_talent(profile_data, user):
                               recruiter=user, status='New',
                               industry_focus=profile_data.get('industryFocus','')['name'],
                               industry_focus_percentage=profile_data.get('industryFocus', '')['percentage'],
-                              linkedin_url=profile_data.get('linkedinProfileUrl', ''),
                               image=profile_data.get('profile_image', '')
                               )
             #talent_name=Talent.objects.filter(id=profile_data.get('id', '')).values('talent_name')
