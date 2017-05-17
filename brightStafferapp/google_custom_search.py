@@ -15,20 +15,15 @@ class GoogleCustomSearch(object):
             for dt in data['items']:
                 result={}
                 currentOrganization = []
-                current_location = []
                 for key,values in dt['pagemap'].items():
                     if key in ['hcard', 'person']:
                         if key == 'person':
                             for j in values:
                                 current = dict()
-                                location = dict()
                                 try:
-                                    location['city']=j['location']
+                                    result['city']=j['location']
                                 except:
-                                    location['city'] = ''
-
-                                location['state'] = ''
-                                location['country']= ''
+                                    result['city'] = ''
                                 try:
                                     result['talent_designation']=j['role']
                                 except:
@@ -45,8 +40,6 @@ class GoogleCustomSearch(object):
                                     result['currentOrganization']= currentOrganization
                                 except:
                                     result['currentOrganization'] = ''
-                                result['current_location']=current_location
-                                current_location.append(location)
                                 currentOrganization.append(current)
                         else:
                             if key == 'hcard':
