@@ -105,38 +105,40 @@ function contactFormat() {
 
 function locationFormat() {
     return function (input) {
-        
-        var obj = input[0];
-        if(!obj)
-            return '';
-        
-        var str = '';
-        var city = capitalizeString(obj.city.trim());
-        var state = capitalizeString(obj.state.trim());
-        var country = capitalizeString(obj.country.trim());
-        
-        city ? str += city + ', ' : '';
-        state ? str += state + ', ' : '';
-        country ? str += country : '';
-        
-        return str;
-        
-//        input = input.trim();
-//        if (input == ',')
-//            return '';
-//        var b = input.split(',');
-//        if (b[0]) {
-//            b[0] = capitalizeString(b[0].trim());
-//        }
-//        if (b[1]) {
-//            b[1] = capitalizeString(b[1].trim());
-//        }
-//        if (b[2]) {
-//            b[2] = capitalizeString(b[2].trim());
-//        }
-//        input = b.join(', ')
-//        return input;
-//
+
+        if (typeof (input) == "object") {
+            var obj = input[0];
+            if (!obj)
+                return '';
+
+            var str = '';
+            var city = capitalizeString(obj.city.trim());
+            var state = capitalizeString(obj.state.trim());
+            var country = capitalizeString(obj.country.trim());
+
+            city ? str += city + ', ' : '';
+            state ? str += state + ', ' : '';
+            country ? str += country : '';
+
+            return str;
+        } else {
+            input = input.trim();
+            if (input == ',')
+                return '';
+            var b = input.split(',');
+            if (b[0]) {
+                b[0] = capitalizeString(b[0].trim());
+            }
+            if (b[1]) {
+                b[1] = capitalizeString(b[1].trim());
+            }
+            if (b[2]) {
+                b[2] = capitalizeString(b[2].trim());
+            }
+            input = b.join(', ')
+            return input;
+        }
+
         function capitalizeString(inputString) {
             return inputString.substring(0, 1).toUpperCase() + inputString.substring(1);
         }
