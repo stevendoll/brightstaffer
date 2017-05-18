@@ -1369,7 +1369,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .view-add-pro-panel {
     width: auto;
     position: absolute;
-    top: 0px;
+    top: 1px;
     right: 0;
 }
 
@@ -4159,6 +4159,20 @@ div.dt-button-info {
     margin: 15px 0;
 }
 
+.right-more-div {
+    float: right;
+    width: 86%;
+    margin-top: -4px;
+}
+
+.right-more-div span.more {
+    font-family: 'open_sansregular';
+    color: #4176bb;
+    display: block;
+    padding-top: 5px;
+    outline: none;
+    font-size: 12px;
+}
 
 /* ANIMATION */
 
@@ -6199,14 +6213,13 @@ body {
     font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 13px;
     color: #676a6c;
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
     /*background-color: #2f4050 !important;*/
 }
 
 html,
 body {
     height: 100%;
-    padding-right: 0 !important;
 }
 
 body.full-height-layout #wrapper,
@@ -6390,7 +6403,7 @@ video {
 
 #wrapper {
     width: 100%;
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
 }
 
 .wrapper {
@@ -6410,6 +6423,11 @@ video {
 .width55 {
     width: 60% !important;
     word-wrap: break-word;
+}
+
+.yscroll {
+    min-width: 1100px;
+    overflow: auto;
 }
 
 @media (min-width: 768px) {
