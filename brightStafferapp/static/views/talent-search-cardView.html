@@ -44,26 +44,39 @@
                     </div>
                 </div>
                 
-                <div ng-show="talent.currentCompanyLength" ng-repeat="company in talent.talent_company | limitTo: 2">
+                <div ng-repeat="company in talent.talent_company | limitTo: 1">
                     <div>
-                        <div ng-if="$index == 0 && company.is_current">
+                        <div>
                             <div class="col-xs-12 padding-zero" ng-init="current = company;">
                                 <div class="left-div search-result-current">Current</div>
-                                <div class="right-div search-detail-current">
+                                <div class="right-div search-detail-current" ng-show="company.is_current">
                                     <span class="bold-font" ng-show="current.designation">[[current.designation]] -</span>
                                     <span>[[current.company]] [[current.start_date | yearFormat]] - Present</span>
+                                </div>
+                                <div class="right-div search-detail-current" ng-show="!company.is_current">
+                                    -
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div ng-show="talent.pastCompanyLength" class="col-xs-12 padding-zero">
+                <div class="col-xs-12 padding-zero">
                     <div class="left-div search-result-past">Past</div>
-                    <div class="right-div search-detail-past">
-                        <span class="bold-font">[[talent.talent_company[talent.currentCompanyLength].designation]]</span> - [[talent.talent_company[talent.currentCompanyLength].company ]] [[talent.talent_company[talent.currentCompanyLength].start_date | yearFormat]] - [[talent.talent_company[talent.currentCompanyLength].end_date | yearFormat]]
-                        <span class="more"  ng-show="talent.pastCompanyLength > 1 || talent.talent_education.length>1"><a href="" data-toggle="modal" ng-click="showDetails(talent)">More</a></span>
+                    <div class="right-div search-detail-past" ng-show="talent.pastCompanyLength">
+                        <span class="bold-font">[[talent.talent_company[talent.currentCompanyLength].designation]]</span>
+                        <span ng-show="talent.talent_company[talent.currentCompanyLength].company">
+                            - [[talent.talent_company[talent.currentCompanyLength].company ]]
+                        </span>
+                        [[talent.talent_company[talent.currentCompanyLength].start_date | yearFormat]] 
+                        <span ng-show="talent.talent_company[talent.currentCompanyLength].end_date">
+                            - [[talent.talent_company[talent.currentCompanyLength].end_date | yearFormat]]
+                        </span>
                     </div>
+                    <div class="right-div search-detail-past" ng-show="!talent.pastCompanyLength">
+                        -
+                    </div>
+                    <span class="more"  ng-show="talent.currentCompanyLength > 1 || talent.pastCompanyLength > 1 || talent.talent_education.length>1"><a href="" data-toggle="modal" ng-click="showDetails(talent)">More</a></span>
                 </div>
 
                 <div class="col-xs-12 padding-zero">
@@ -213,12 +226,23 @@
             <div class="modal-content">
                 <div class="modal-body roles-body">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                    
+                    
+                    <div class="past-roles" ng-show="selectedCandidate.currentCompanyLength">Current Roles</div>
+                    <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company" ng-show="role.is_current">
+                        <span ng-show="role.designation">[[role.designation]] at</span> [[role.company]]
+                        <span ng-show="role.start_date || role.end_date">
+                            [[role.start_date | yearFormat]] 
+                            <span> - Present</span>
+                        </span>
+                    </div>
+                    
+                    
                     <div class="past-roles" ng-show="selectedCandidate.pastCompanyLength">Past Roles</div>
                     <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company" ng-show="!role.is_current">
                         <span ng-show="role.designation">[[role.designation]] at</span> [[role.company]]
                         <span ng-show="role.start_date || role.end_date">
                             [[role.start_date | yearFormat]] 
-                            <span ng-show="role.is_current">- Present</span>
                         <span ng-show="!role.is_current">- [[role.end_date | yearFormat]]</span>
                         </span>
                     </div>
