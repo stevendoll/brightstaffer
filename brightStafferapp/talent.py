@@ -1,6 +1,6 @@
 from brightStafferapp.models import Talent, User, Projects, TalentProject, TalentEmail, TalentContact, \
     TalentStage, TalentRecruiter, TalentConcept, ProjectConcept,Concept, Education, TalentEducation, Company,\
-    TalentCompany, TalentLocation
+    TalentCompany, TalentLocation, FileUpload
 from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer, \
     TalentStageSerializer
 from brightStafferapp import util
@@ -557,11 +557,6 @@ class TalentAdd(generics.ListCreateAPIView):
                 if contact_talent:
                     return util.returnErrorShorcut(400, 'Oops! The Contact Number you have entered already exists')
             add_edit_talent(profile_data, user)
-            #if result is 0:
-            #    return util.returnErrorShorcut(400, 'Talent with this email already exists for the same recruiter')
-            #if result is 1:
-            #    return util.returnErrorShorcut(400, 'Talent with contact number is already exists for the '
-            #                                        'same recruiter')
             context['message'] = 'Talent Added Successfully'
             context['success'] = True
             return util.returnSuccessShorcut(context)
@@ -645,6 +640,15 @@ def add_edit_talent(profile_data, user):
                               industry_focus_percentage=profile_data.get('industryFocus', '')['percentage'],
                               image=profile_data.get('profile_image', '')
                               )
+
+            file_upload = FileUpload.objects.filter(talent=talent_obj[0])
+            if file_upload:
+                FileUpload.objects.filter(talent=talent_obj[0]).update(file_name=profile_data.get('file_name', ''),
+                                                 user=user, create_date=datetime.datetime.now())
+            else:
+                FileUpload.objects.get_or_create(talent=talent_obj[0], file_name=profile_data.get('file_name', ''),
+                                                 user=user, create_date=datetime.datetime.now())
+
             #talent_name=Talent.objects.filter(id=profile_data.get('id', '')).values('talent_name')
             talent_location=TalentLocation.objects.filter(talent=talent_obj[0], city=profile_data.get('city', ''),
                                           state=profile_data.get('state', ''), country=profile_data.get('country', ''))
@@ -689,6 +693,10 @@ def add_edit_talent(profile_data, user):
         TalentContact.objects.get_or_create(talent=talent_obj, contact=profile_data.get('phone', ''))
         TalentEmail.objects.get_or_create(talent=talent_obj, email=profile_data.get('email', ''))
         # add top concepts for talent
+        file_upload = FileUpload.objects.filter(talent=talent_obj, file=profile_data.get('file_name', ''))
+        if not file_upload:
+            FileUpload.objects.get_or_create(talent=talent_obj, file_name=profile_data.get('file_name', ''),
+                                             user=user, create_date=datetime.datetime.now())
         if 'topConcepts' in profile_data:
             for skill in profile_data.get('topConcepts', ''):
                 if bool(skill):
