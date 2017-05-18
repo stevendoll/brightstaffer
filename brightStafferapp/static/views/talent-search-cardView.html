@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 
-                <div ng-show="talent.talent_company.length" ng-repeat="company in talent.talent_company | limitTo: 2">
+                <div ng-show="talent.currentCompanyLength" ng-repeat="company in talent.talent_company | limitTo: 2">
                     <div>
                         <div ng-if="$index == 0 && company.is_current">
                             <div class="col-xs-12 padding-zero" ng-init="current = company;">
@@ -58,7 +58,7 @@
                     </div>
                 </div>
 
-                <div ng-show="talent.talent_company.length" class="col-xs-12 padding-zero" ng-init="index = talent.talent_company[0].is_current ? 1: 0;">
+                <div ng-show="talent.pastCompanyLength" class="col-xs-12 padding-zero">
                     <div class="left-div search-result-past">Past</div>
                     <div class="right-div search-detail-past">
                         <span class="bold-font">[[talent.talent_company[talent.currentCompanyLength].designation]]</span> - [[talent.talent_company[talent.currentCompanyLength].company ]] [[talent.talent_company[talent.currentCompanyLength].start_date | yearFormat]] - [[talent.talent_company[talent.currentCompanyLength].end_date | yearFormat]]
@@ -213,7 +213,7 @@
             <div class="modal-content">
                 <div class="modal-body roles-body">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-                    <div class="past-roles">Past Roles</div>
+                    <div class="past-roles" ng-show="selectedCandidate.pastCompanyLength">Past Roles</div>
                     <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company" ng-show="!role.is_current">
                         <span ng-show="role.designation">[[role.designation]] at</span> [[role.company]]
                         <span ng-show="role.start_date || role.end_date">

@@ -15,7 +15,7 @@
                         <!--                  <span></span> [[talentDetails.industry_focus | capitalizeAll]]-->
                     </div>
                     <button type="" class="btn view-con-info hvr-fade" data-toggle="modal" ng-click="openContactInfo()">View Contact Info</button>
-                    <div class="linkedin-analysis" target="_blank" href="[[talentDetails.linkedin_url]]"><i class="fa fa-linkedin-square"></i></div>
+                    <a class="linkedin-analysis" target="_blank" href="[[talentDetails.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>
                 </div>
                 <div class="talent-analysis-activity">
                     <div class="talent-activity-panel">
@@ -86,11 +86,19 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div ng-if="talentDetails.pastCompanyLength">
-                                        <div class="col-xs-12 padding-zero">
+                                    <div>
+                                        <div class="col-xs-12 padding-zero" ng-if="talentDetails.pastCompanyLength">
                                             <div class="left-div search-result-past">Past</div>
                                             <div class="right-div search-detail-past">
-                                                <span class="bold-font">[[talentDetails.talent_company[talentDetails.currentCompanyLength].designation]]</span>- at [[talentDetails.talent_company[talentDetails.currentCompanyLength].company]] [[talentDetails.talent_company[talentDetails.currentCompanyLength].start_date | yearFormat]] - [[talentDetails.talent_company[talentDetails.currentCompanyLength].end_date | yearFormat]] <span class="more"><a href="" data-toggle="modal" ng-click="showDetails(talentDetails)">More</a></span>
+                                                <span class="bold-font">[[talentDetails.talent_company[talentDetails.currentCompanyLength].designation]]</span>- at [[talentDetails.talent_company[talentDetails.currentCompanyLength].company]] [[talentDetails.talent_company[talentDetails.currentCompanyLength].start_date | yearFormat]] - [[talentDetails.talent_company[talentDetails.currentCompanyLength].end_date | yearFormat]]
+                                                
+<!--                                                <span class="more" ng-show="talentDetails.pastCompanyLength > 1 || talentDetails.talent_education.length>1"><a href="" data-toggle="modal" ng-click="showDetails(talentDetails)">More</a></span>-->
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 padding-zero">
+                                            <div class="right-more-div">
+                                                <span class="more" ng-show="talentDetails.pastCompanyLength > 1 || talentDetails.talent_education.length>1"><a href="" data-toggle="modal" ng-click="showDetails(talentDetails)">More</a></span>
                                             </div>
                                         </div>
                                     </div>
@@ -613,7 +621,7 @@
         <div class="modal-content">
             <div class="modal-body roles-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
-                <div class="past-roles">Past Roles</div>
+                <div class="past-roles" ng-show="selectedCandidate.pastCompanyLength">Past Roles</div>
                 <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company" ng-show="!role.is_current">[[role.designation]] at [[role.company]] [[role.start_date | yearFormat]] - [[role.end_date| yearFormat]]</div>
                 <!--<div class="past-roles-descp">Full Stack Developer at Kiwitech Pvt. Ltd. 2008-2010</div>-->
                 <div class="cls"></div>

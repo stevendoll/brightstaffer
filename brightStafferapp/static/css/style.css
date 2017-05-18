@@ -4159,6 +4159,20 @@ div.dt-button-info {
     margin: 15px 0;
 }
 
+.right-more-div {
+    float: right;
+    width: 86%;
+    margin-top: -4px;
+}
+
+.right-more-div span.more {
+    font-family: 'open_sansregular';
+    color: #4176bb;
+    display: block;
+    padding-top: 5px;
+    outline: none;
+    font-size: 12px;
+}
 
 /* ANIMATION */
 
