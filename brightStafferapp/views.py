@@ -448,11 +448,27 @@ class FileUploadView(View):
                 os.makedirs(dest_path)
 
             for key, file in files.items():
-                file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
-                # extract all images from pdf
-                self.extract_image_from_pdf(file_upload_obj, dest_path='images')
-                # extract text from pdf
+                if request.POST['request_by'] == 'edit':
+                    #file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
+                    # extract all images from pdf
+                    #self.extract_image_from_pdf(file_upload_obj, dest_path='images')
+                    # extract text from pdf
+                    destination = os.path.join(dest_path, file.name)
+                    with open(destination, 'wb+') as f:
+                        for chunk in file.chunks():
+                            f.write(chunk)
+                    content = extract_text(self, destination, user)
+                    result = handle_talent_data(content, user)
+                    context = dict()
+                    context['results'] = result
+                    context['success'] = True
+                    return util.returnSuccessShorcut(context)
+
                 if request.POST['request_by'] == 'create':
+                    file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
+                    # extract all images from pdf
+                    self.extract_image_from_pdf(file_upload_obj, dest_path='images')
+                    # extract text from pdf
                     content = extract_text_from_pdf(self, file_upload_obj, user)
                     result = handle_talent_data(content, user)
                     context = dict()
@@ -461,6 +477,10 @@ class FileUploadView(View):
                     return util.returnSuccessShorcut(context)
 
                 if request.POST['request_by'] == 'bulk':
+                    file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
+                    # extract all images from pdf
+                    self.extract_image_from_pdf(file_upload_obj, dest_path='images')
+                    # extract text from pdf
                     request = request.POST['request_by']
                     bulk_extract_text_from_pdf.delay(file_upload_obj, user,request)
                     context = dict()
@@ -546,6 +566,17 @@ def extract_text_from_pdf(self, file_upload_obj, user):
     text = textract.process(file_upload_obj.file.path).decode('utf-8')
     file_upload_obj.text = text
     file_upload_obj.save()
+    url = ml_url
+    content = requests.post(url, data=text.encode('utf-8')).json()
+    return content
+
+def extract_text(self, destination, user):
+    """
+    :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
+    and is now sent to extract text from the pdf file
+    :return: None or error
+    """
+    text = textract.process(destination).decode('utf-8')
     url = ml_url
     content = requests.post(url, data=text.encode('utf-8')).json()
     return content
