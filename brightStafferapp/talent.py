@@ -603,6 +603,51 @@ class TalentAdd(generics.ListCreateAPIView):
 def add_edit_talent(profile_data, user):
     if "id" in profile_data:
         talent_obj = Talent.objects.filter(id=profile_data.get('id', ''))
+        email = profile_data.get('email', '')
+        contact = profile_data.get('phone', '')
+        linkedin_url = profile_data.get('linkedinProfileUrl', '')
+        if linkedin_url != '':
+            linkedin = Talent.objects.filter(id=profile_data.get('id', ''),
+                                             talent_active__is_active=True, linkedin_url=linkedin_url)
+            if linkedin:
+                Talent.objects.filter(id=profile_data.get('id', '')).update(linkedin_url=linkedin_url)
+
+            else:
+                linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                        Q(recruiter__username=user) & Q(
+                    linkedin_url=linkedin_url))
+                if linkedin_talent:
+                    return 2
+                else:
+                    Talent.objects.filter(id=profile_data.get('id', '')).update(linkedin_url=linkedin_url)
+
+        if email != '':
+            email_talent = TalentEmail.objects.filter(email=email, talent=talent_obj)
+            if email_talent:
+                TalentEmail.objects.filter(talent=talent_obj).update(email=email)
+            else:
+                email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                     Q(recruiter__username=user) & Q(talent_email__email=email))
+                if email_talent:
+                    return 0
+                else:
+                    TalentEmail.objects.get_or_create(talent=talent_obj, email=email)
+        else:
+            TalentEmail.objects.filter(talent=talent_obj).update(email=email)
+
+        if contact != '':
+            contact_talent = TalentContact.objects.filter(contact=contact, talent=talent_obj)
+            if contact_talent:
+                TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+            else:
+                contact_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
+                                                       Q(recruiter__username=user) & Q(talent_contact__contact=contact))
+                if contact_talent:
+                    return 1
+                else:
+                    TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
+        else:
+            TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
         if talent_obj:
             talent_obj.update(talent_name=profile_data.get('firstName', '') + ' ' + profile_data.get('lastName', ''),
                               recruiter=user, status='New',
@@ -618,52 +663,6 @@ def add_edit_talent(profile_data, user):
                                                                         state=profile_data.get('state', ''),
                                                                         country=profile_data.get('country', '') )
             talent_obj = talent_obj[0]
-            email = profile_data.get('email', '')
-            contact = profile_data.get('phone', '')
-            linkedin_url = profile_data.get('linkedinProfileUrl', '')
-            if linkedin_url != '':
-                linkedin = Talent.objects.filter(id=profile_data.get('id', ''),
-                                                 talent_active__is_active=True, linkedin_url=linkedin_url)
-                if linkedin:
-                    Talent.objects.filter(id=profile_data.get('id', '')).update(linkedin_url=linkedin_url)
-
-                else:
-                    linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
-                                                            Q(recruiter__username=user) & Q(
-                        linkedin_url=linkedin_url))
-                    if linkedin_talent:
-                        return 2
-                    else:
-                        Talent.objects.filter(id=profile_data.get('id', '')).update(linkedin_url=linkedin_url)
-
-            if email != '':
-                email_talent = TalentEmail.objects.filter(email=email, talent=talent_obj)
-                if email_talent:
-                    TalentEmail.objects.filter(talent=talent_obj).update(email=email)
-                else:
-                    email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
-                                                    Q(recruiter__username=user) & Q(talent_email__email=email))
-                    if email_talent:
-                        return 0
-                    else:
-                        TalentEmail.objects.get_or_create(talent=talent_obj,email=email)
-            else:
-                TalentEmail.objects.filter(talent=talent_obj).update(email=email)
-
-            if contact != '':
-                contact_talent = TalentContact.objects.filter(contact=contact, talent=talent_obj)
-                if contact_talent:
-                    TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
-                else:
-                    contact_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
-                                                    Q(recruiter__username=user) & Q(talent_contact__contact=contact))
-                    if contact_talent:
-                        return 1
-                    else:
-                        TalentContact.objects.get_or_create(talent=talent_obj,contact=contact)
-            else:
-                TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
-
             if 'topConcepts' in profile_data:
                 project_concepts = []
                 if talent_obj:
@@ -949,6 +948,8 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             talent.save()
             talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
             talent_loc.city = content['city']
+            talent_loc.state = ''
+            talent_loc.country = ''
             talent_loc.save()
         context['success'] = True
         return util.returnSuccessShorcut(context)
