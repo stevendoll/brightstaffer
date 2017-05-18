@@ -199,6 +199,7 @@ class TalentSerializer(serializers.ModelSerializer):
     recruiter = serializers.CharField()
     request_by = serializers.CharField()
     create_date = serializers.CharField(source='get_date')
+    update_date = serializers.CharField(source='get_update_date')
     activation_date = serializers.CharField(source='get_activation_date')
     talent_company = TalentCompanySerializer(many=True)
     talent_project = TalentProjectSerializer(many=True)
@@ -221,5 +222,5 @@ class TalentSerializer(serializers.ModelSerializer):
                   'industry_focus_percentage',
                   'status', 'rating', 'talent_email', 'talent_stages', 'file_upload', 'talent_contact',
                   'linkedin_url', 'recruiter',
-                  'create_date', 'talent_company', 'talent_education', 'talent_project','request_by',
+                  'create_date', 'update_date','talent_company', 'talent_education', 'talent_project','request_by',
                   'talent_concepts')
