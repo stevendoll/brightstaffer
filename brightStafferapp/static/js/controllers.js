@@ -1330,6 +1330,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     $scope.openCreateProfile = function () {
         createTalentFormService.setTalentDetails({});
         $('#add-talent').modal('hide');
+        $scope.search.searchKeywords = '';
         $state.go('talent.create-profile');
     }
 }
@@ -1601,7 +1602,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
 
     $scope.uploadTalentFile = function () {
         $scope.disableUploadBtn = true;
-        createTalentFormService.uploadTalentFile($scope.talentFileobj, function (response) {
+        var mode = $scope.talentData.id ? 'edit' : 'create';
+        createTalentFormService.uploadTalentFile($scope.talentFileobj, mode, function (response) {
             $(".top-concepts-panel").css('display', 'block');
             if (typeof (response) == "string")
                 response = JSON.parse(response);

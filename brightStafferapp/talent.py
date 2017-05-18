@@ -1061,7 +1061,7 @@ class TalentSearch(generics.ListCreateAPIView):
         else:
             queryset = queryset.filter(status__in=['New', 'Active'])
         if not ordering:
-            queryset = queryset.order_by('-create_date')
+            queryset = queryset.order_by('-update_date')
         return queryset.distinct()
 
 
