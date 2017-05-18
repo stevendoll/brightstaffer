@@ -648,8 +648,8 @@ function createTalentFormService($rootScope, REQUEST_URL, appService) {
             var fd = new FormData();
             fd.append('FILES', file);
             fd.append('recruiter', $rootScope.globals.currentUser.user_email);
-            fd.append('request_by', 'create');
-//            fd.append('request_by', mode);
+//            fd.append('request_by', 'create');
+            fd.append('request_by', mode);
             
             var obj = {
                 withCredentials: false
