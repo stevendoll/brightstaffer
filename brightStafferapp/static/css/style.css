@@ -1237,7 +1237,8 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .padd-left32 {
-    padding-left: 32px !important;
+    text-align: center;
+    padding-left: 0px !important;
 }
 
 .right-sideline {
@@ -1827,7 +1828,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     height: 25px;
 }
 
-.table>thead>tr>th,
+.table>thead>tr>th {
+    vertical-align: bottom !important;
+}
 .table>tbody>tr>td {
     vertical-align: middle !important;
 }
@@ -13374,7 +13377,7 @@ input[type=password] {
     font-family: 'open_sansregular';
     position: absolute;
     top: 20px;
-    right: 30px;
+    right: 20px;
     text-align: center;
     padding: 6px 0px;
 }
@@ -13382,7 +13385,7 @@ input[type=password] {
 .search-star-panel {
     width: auto;
     float: right;
-    padding: 55px 30px 0px 0px;
+    padding: 55px 20px 0px 0px;
 }
 
 .schdule-list {
@@ -13921,9 +13924,13 @@ input[type="radio"] + label.radio-black {
 }
 
 .top-concept-panel {
-    width: 33%;
+    width: 33.3%;
     float: left;
     padding: 0px 20px 0px 5px;
+}
+
+.top-concept-panel:last-child {
+    padding: 0px 5px 0px 5px;
 }
 
 .top-concept-text {
@@ -14002,10 +14009,10 @@ table.dataTables > tbody > tr > td:last-child {
 .indus-focus {
     width: 100%;
     float: left;
-    font-size: 13px;
+    font-size: 15px;
     font-family: 'open_sansregular';
     color: #6a6a6a;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .circle-bg {
@@ -14064,7 +14071,7 @@ table.dataTables > tbody > tr > td:last-child {
     font-size: 14px;
     color: #337ab7;
     float: left;
-    width: 26%;
+    width: calc(100% - 200px);
     margin-left: 10px;
     margin-top: 9px;
     white-space: nowrap;
@@ -15410,6 +15417,10 @@ a.sbSelector:hover {
 
 a {
     cursor: pointer;
+}
+
+.width67{
+    width: 66.33% !important;
 }
 
 /*create-profile-css-ends*/

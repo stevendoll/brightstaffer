@@ -2729,6 +2729,64 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             sorted ? $scope.tListsorted = true : $scope.tListsorted = false;
         }
     }
+    
+    
+    $scope.sortProjectMatch = function (arr, arrKey, key, lastIndex) {
+        var index1 = 0,
+            index2 = 0,
+            sorted = false;
+        if (key == $scope.talentSorted && $scope.tListsorted) {
+            arr = arr.reverse();
+        } else if (key == $scope.talentSorted && !$scope.tListsorted) {
+            return;
+        } else {
+            $scope.talentSorted = key;
+            arr.sort(function (a, b) {
+
+                var str1 = '',
+                    str2 = '';
+
+                if (!a[arrKey].length) {
+                    str1 = '';
+                };
+
+                if (!b[arrKey].length) {
+                    str2 = '';
+                };
+                if (lastIndex) {
+                    index1 = a[arrKey].length ? a[arrKey].length - 1 : 0;
+                    index2 = b[arrKey].length ? b[arrKey].length - 1 : 0;
+                }
+                
+                
+                if(a[arrKey].length){
+                    str1 = a[arrKey][index1][key];
+                }
+                
+                if(b[arrKey].length){
+                    str2 = b[arrKey][index2][key];
+                }
+
+                if (str1 !== str2) {
+                    sorted = true;
+                }
+
+                if(typeof(str1) == 'string' && typeof(str2) == 'string'){
+                    return 0;
+                }
+                
+                if(typeof(str1) == 'string') return 1;
+                if(typeof(str2) == 'string') return -1;
+                
+                if (str1 < str2) return 1;
+                if (str1 > str2) return -1;
+                return 0;
+            });
+            sorted ? $scope.tListsorted = true : $scope.tListsorted = false;
+        }
+    }
+
+    
 
     $scope.sortjsonArray = function (arr, arrKey, key, lastIndex) {
         var index1 = 0,
