@@ -255,7 +255,7 @@ class TalentEducation(models.Model):
 class TalentCompany(models.Model):
     talent = models.ForeignKey(Talent, null=False, blank=True, verbose_name='Talent', related_name='talent_company')
     company = models.ForeignKey(Company,default='', null=True, blank=True)
-    designation = models.CharField(max_length=100, default='', null=True, blank=True)
+    designation = models.CharField(max_length=500, default='', null=True, blank=True)
     start_date = models.DateField(verbose_name='Start Date', null=True, blank=True)
     end_date = models.DateField(verbose_name='End Date', null=True, blank=True)
     is_current = models.BooleanField(verbose_name='Currently Working Here', default=False, null=False)
