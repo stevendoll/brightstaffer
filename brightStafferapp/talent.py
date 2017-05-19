@@ -607,7 +607,7 @@ def add_edit_talent(profile_data, user):
                     Talent.objects.filter(id=profile_data.get('id', '')).update(linkedin_url=linkedin_url)
 
         if email != '':
-            email_talent = TalentEmail.objects.filter(email=email, talent=talent_obj)
+            email_talent = TalentEmail.objects.filter(email=email, talent=talent_obj[0])
             if email_talent:
                 TalentEmail.objects.filter(talent=talent_obj).update(email=email)
             else:
@@ -616,7 +616,7 @@ def add_edit_talent(profile_data, user):
                 if email_talent:
                     return 0
                 else:
-                    TalentEmail.objects.get_or_create(talent=talent_obj, email=email)
+                    TalentEmail.objects.get_or_create(talent=talent_obj[0], email=email)
         else:
             TalentEmail.objects.filter(talent=talent_obj).update(email=email)
 
@@ -630,7 +630,7 @@ def add_edit_talent(profile_data, user):
                 if contact_talent:
                     return 1
                 else:
-                    TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
+                    TalentContact.objects.get_or_create(talent=talent_obj[0], contact=contact)
         else:
             TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
         if talent_obj:
