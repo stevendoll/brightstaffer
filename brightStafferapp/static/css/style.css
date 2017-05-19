@@ -15474,7 +15474,7 @@ a {
 .error-panel-text {
   width: 100%;
   display: table-cell;
-  color: #ffffff;
+  color: #494949;
   font-size: 140px;
   font-family: 'OpenSans-Semibold';
   vertical-align: middle;
@@ -15485,7 +15485,7 @@ a {
   width: 100%;
   float: left;
   font-size: 24px;
-  color: #eeeeee;
+  color: #494949;
   font-family: 'open_sansregular';
 }
 
@@ -15496,8 +15496,8 @@ a {
 }
 
 .opps-error-bttn {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: #494949;
+  color: #ffffff;
   height: 50px;
   padding: 8px 25px;
   font-size: 16px;
