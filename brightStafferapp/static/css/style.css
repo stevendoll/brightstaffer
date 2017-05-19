@@ -4178,6 +4178,22 @@ div.dt-button-info {
     font-size: 12px;
 }
 
+
+.right-more-talent {
+    float: right;
+    width: 82%;
+    margin-top: -4px;
+}
+
+.right-more-talent span.more {
+    font-family: 'open_sansregular';
+    color: #4176bb;
+    display: block;
+    padding-top: 5px;
+    outline: none;
+    font-size: 12px;
+}
+
 /* ANIMATION */
 
 .css-animation-box h1 {
@@ -15446,3 +15462,44 @@ a {
 }
 
 /*create-profile-css-ends*/
+
+
+/*404-error-css-starts*/
+.error-panel-div {
+  width: 100%;
+  display: table;
+  height: 100%;
+}
+
+.error-panel-text {
+  width: 100%;
+  display: table-cell;
+  color: #494949;
+  font-size: 140px;
+  font-family: 'OpenSans-Semibold';
+  vertical-align: middle;
+  text-align: center;
+}
+
+.oops-text-panel {
+  width: 100%;
+  float: left;
+  font-size: 24px;
+  color: #494949;
+  font-family: 'open_sansregular';
+}
+
+.oops-text-panel span {
+  display: block;
+  font-size: 15px;
+  padding-top: 10px;
+}
+
+.opps-error-bttn {
+  background-color: #494949;
+  color: #ffffff;
+  height: 50px;
+  padding: 8px 25px;
+  font-size: 16px;
+}
+/*404-error-css-ends*/
