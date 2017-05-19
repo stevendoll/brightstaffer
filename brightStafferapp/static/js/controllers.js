@@ -2034,6 +2034,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if ($scope.filterData)
                 $scope.filterData();
         }
+        
+        $window.scrollTo(0,0);
     });
 
     //    $scope.changePage = function (add, pageNo) {
