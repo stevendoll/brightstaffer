@@ -3475,6 +3475,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('.talent-search-icon').removeClass('active');
         }
     }
+    
+    $rootScope.isFilterChecked = false;
+    $('.talent-search-icon').removeClass('active');
 
     $scope.advanceSearchOpen = function () {
         if (!$scope.isAdvanceSearch) {
