@@ -2218,6 +2218,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.selectedStage.details = selectedStage.details;
         $scope.selectedStage.notes = selectedStage.notes;
         $scope.selectedStage.stage_id = selectedStage.id;
+        
+        var date = $filter('dateFormat')(selectedStage.create_date);
+        
+        $('#editStageDate').val(date);
         $('#edit-stage').modal('show');
     }
 
