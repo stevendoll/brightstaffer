@@ -1538,6 +1538,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
     $rootScope.Filter = false;
     /*edit talent details*/
+    
+    
+    $rootScope.hideDatePickerPopUp = function(e){
+        $(e).datepicker('hide');
+    }
+    
 
     /* create talent code */
     $scope.notification = {
@@ -1592,6 +1598,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
 
     $scope.removeFile = function () {
+        $scope.talentData.file_name = $scope.talentFileobj.name;
+        var d = new Date();
+        var dateStr = d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear();
+        $scope.talentData.create_date = dateStr;
         $scope.talentFileobj = {};
         //        $scope.talentData.topConcepts = [{}];
         if(!$scope.talentData.id){
@@ -2475,6 +2485,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     setTimeout(function () {
                         $('#projectSuccess').css('display', 'none');
                     }, 2000);
+                    $window.scrollTo(0,0);
                 } else if (callFrom == 'profile') {
                     $('#add-project').modal('hide');
                     $('html, body').animate({
