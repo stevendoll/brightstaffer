@@ -2485,6 +2485,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     setTimeout(function () {
                         $('#projectSuccess').css('display', 'none');
                     }, 2000);
+                    $window.scrollTo(0,0);
                 } else if (callFrom == 'profile') {
                     $('#add-project').modal('hide');
                     $('html, body').animate({
