@@ -1598,6 +1598,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
 
     $scope.removeFile = function () {
+        $scope.talentData.file_name = $scope.talentFileobj.name;
+        $scope.talentData.create_date = new date();
         $scope.talentFileobj = {};
         //        $scope.talentData.topConcepts = [{}];
         if(!$scope.talentData.id){
