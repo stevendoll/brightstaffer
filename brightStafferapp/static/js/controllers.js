@@ -1538,6 +1538,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
     $rootScope.Filter = false;
     /*edit talent details*/
+    
+    
+    $rootScope.hideDatePickerPopUp = function(e){
+        $(e).datepicker('hide');
+    }
+    
 
     /* create talent code */
     $scope.notification = {
@@ -2034,6 +2040,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             if ($scope.filterData)
                 $scope.filterData();
         }
+        
+        $window.scrollTo(0,0);
     });
 
     //    $scope.changePage = function (add, pageNo) {
@@ -3475,6 +3483,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('.talent-search-icon').removeClass('active');
         }
     }
+    
+    $rootScope.isFilterChecked = false;
+    $('.talent-search-icon').removeClass('active');
 
     $scope.advanceSearchOpen = function () {
         if (!$scope.isAdvanceSearch) {
