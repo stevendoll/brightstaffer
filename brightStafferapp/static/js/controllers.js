@@ -1538,6 +1538,12 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
     $rootScope.Filter = false;
     /*edit talent details*/
+    
+    
+    $rootScope.hideDatePickerPopUp = function(e){
+        $(e).datepicker('hide');
+    }
+    
 
     /* create talent code */
     $scope.notification = {

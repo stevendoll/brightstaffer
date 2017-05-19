@@ -839,7 +839,7 @@
                         
 <!--                            <input type="text" id="addStageDate" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="stage.date" placeholder="DD MM, YYYY" ng-change="addProjectCheckValidation(stage, true)" />-->
 
-                            <input id="addStageDate" type="text" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" placeholder="Select Date" ng-blur="addProjectCheckValidation(stage, true)" readonly/>
+                            <input id="addStageDate" type="text" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" placeholder="Select Date" ng-blur="addProjectCheckValidation(stage, true)" onblur="angular.element(this).scope().hideDatePickerPopUp(this);" readonly/>
                       
 
                         <span class="msg-error" style="color:red;" ng-show="isDate">Required.</span>
@@ -897,7 +897,7 @@
                     <div class="form-group">
 <!--                        <input type="date" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" ng-model="selectedStage.create_date" placeholder="Select Date" required>-->
                         
-                        <input id="editStageDate" type="text" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" placeholder="Select Date" readonly/>
+                        <input id="editStageDate" type="text" class="datepicker unstyled form-control auto-cursor input-right-padding recruiter-selct-date" onblur="angular.element(this).scope().hideDatePickerPopUp(this);" placeholder="Select Date" readonly/>
                         
                     </div>
                     <div class="form-group">
