@@ -1016,7 +1016,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     border: solid 1px #e7eaec;
     min-width: 120px;
     border-radius: 0px;
-    margin: 0 6px 0 0;
+    margin: 0 5px 0 1px;
     text-align: center;
     font-family: 'open_sansregular';
     font-weight: normal;
@@ -1028,8 +1028,12 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .talents-tabs-panel .left-section .nav > li.active > a {
-    border: solid 1px #ffffff;
+    border: solid 1px transparent;
     color: #3680ca;
+}
+
+.font-20 {
+    font-size: 20px !important;
 }
 
 .analysis-panel {
