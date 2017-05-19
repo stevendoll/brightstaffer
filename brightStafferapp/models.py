@@ -141,6 +141,7 @@ class Talent(models.Model):
     rating = models.IntegerField(default=0)
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(auto_now_add=True,verbose_name='CreateDate', null=True, blank=True)
+    update_date = models.DateTimeField(auto_now=True, verbose_name='CreateDate', null=True, blank=True)
     activation_date = models.DateTimeField(verbose_name='Activation Date', null=True, blank=True)
     request_by = models.CharField(max_length=100, default='', null=True, blank=True)
 
@@ -156,6 +157,13 @@ class Talent(models.Model):
     def get_date(self):
         if self.create_date:
             return self.create_date.date().strftime('%d/%m/%Y')
+        else:
+            return datetime.datetime.now().strftime("%d/%m/%Y")
+
+    @property
+    def get_update_date(self):
+        if self.update_date:
+            return self.update_date.date().strftime('%d/%m/%Y')
         else:
             return datetime.datetime.now().strftime("%d/%m/%Y")
 
