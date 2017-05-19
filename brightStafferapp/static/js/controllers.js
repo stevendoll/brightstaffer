@@ -2218,6 +2218,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $scope.selectedStage.details = selectedStage.details;
         $scope.selectedStage.notes = selectedStage.notes;
         $scope.selectedStage.stage_id = selectedStage.id;
+        
+        var date = $filter('dateFormat')(selectedStage.create_date);
+        
+        $('#editStageDate').val(date);
         $('#edit-stage').modal('show');
     }
 
@@ -3219,6 +3223,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             var selectedValue = $('#sbSelector_' + sbId).text();
             if (selectedValue != 'Select Project')
                 $scope.stage.project = selectedValue;
+            else
+                $scope.stage.project = '';
             // console.log($scope.stage.project);
         });
         $('#stageSelect').change(function () {
@@ -3227,6 +3233,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             var selectedValue = $('#sbSelector_' + sbId).text();
             if (selectedValue != 'Select Stage')
                 $scope.stage.stage = selectedValue;
+            else
+                $scope.stage.stage = '';
             // console.log($scope.stage.stage);
         });
         initDatePicker('addStageDate');
