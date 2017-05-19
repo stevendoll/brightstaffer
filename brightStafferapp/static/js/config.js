@@ -3,7 +3,7 @@
 function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $interpolateProvider) {
     $interpolateProvider.startSymbol('[[').endSymbol(']]');
 
-    $urlRouterProvider.otherwise("/page-not-found");
+    $urlRouterProvider.otherwise("/dashboard");
     $ocLazyLoadProvider.config({
         // Set to true if you want to see what and when is dynamically loaded
         debug: true
