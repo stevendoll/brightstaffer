@@ -3219,6 +3219,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             var selectedValue = $('#sbSelector_' + sbId).text();
             if (selectedValue != 'Select Project')
                 $scope.stage.project = selectedValue;
+            else
+                $scope.stage.project = '';
             // console.log($scope.stage.project);
         });
         $('#stageSelect').change(function () {
@@ -3227,6 +3229,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             var selectedValue = $('#sbSelector_' + sbId).text();
             if (selectedValue != 'Select Stage')
                 $scope.stage.stage = selectedValue;
+            else
+                $scope.stage.stage = '';
             // console.log($scope.stage.stage);
         });
         initDatePicker('addStageDate');
