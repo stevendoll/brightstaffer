@@ -1033,7 +1033,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 }
 
 .font-20 {
-    font-size: 20px;
+    font-size: 20px !important;
 }
 
 .analysis-panel {
