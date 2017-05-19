@@ -805,7 +805,7 @@
             <div class="modal-body roles-body">
                 <button type="button" class="close" ng-click="closeStageModal()" aria-label="Close"><span aria-hidden="true"><i class="fa fa-close"></i></span></button>
                 <from class="edit-modal-recruiter" name="stageForm" id="stageForm" novalidate>
-                    <span>Add Stage</span>
+                    <span class="font-20">Add Stage</span>
                     <div class="cls"></div>
                     <div class="form-group export">
                         <select class="form-control select-arrow" id="stageSelect" name="add_stages" ng-model="stage.stage" drop-down>
@@ -823,6 +823,7 @@
                         </select>
                         <span class="msg-error" style="color:red;" ng-show="isStage">Required.</span>
                     </div>
+                    <div class="cls"></div>
                     <div class="form-group export">
                         <select class="form-control select-arrow" ng-model="stage.project" id="projectListD2" ng-options="option.name for option in StagesProjectList" drop-down>
                             <option value="" style="display: none;">Select Project</option>

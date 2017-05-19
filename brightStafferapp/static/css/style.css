@@ -1032,6 +1032,10 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     color: #3680ca;
 }
 
+.font-20 {
+    font-size: 20px;
+}
+
 .analysis-panel {
     width: 100%;
     float: left;
