@@ -29,17 +29,17 @@
                                   <span>Print</span>
                               </a>
                              <!-- <button ng-click="deleteProjects()">Delete Projects</button>-->
-                              <div class="talent-search-delete-icon" ng-click="deleteProjects()"><i class="fa fa-trash"></i></div>
+                              <div class="talent-search-delete-list-icon" ng-click="deleteProjects()"><i class="fa fa-trash"></i></div>
                           </div>
                       </div>
-                    <div class="col-sm-6 col-md-4 p-a-0 m-t small text-muted text-center">
-                        <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing [[projectCountStart]] to [[projectCountEnd]] of [[totalProjectCount]] entries</div>
-                    </div>
                     <div class="col-sm-6 col-md-4 p-a-0 m-t input-group-sm small right-side-search">
                         <div id="DataTables_Table_0_filter" class="dataTables_filter">
                             <label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="DataTables_Table_0"></label>
                         </div>
-                        <div class="checkbox-right-fx mtop8">
+                    </div>
+                    <div class="col-sm-6 col-md-4 p-a-0 m-t small text-muted text-center">
+                        <div class="dataTables_info pro-list-align" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing [[projectCountStart]] to [[projectCountEnd]] of [[totalProjectCount]] entries</div>
+                        <div class="checkbox-right-fx pro-list-chkbox">
                             <div class="checkbox">
                               <input type="checkbox" id="projectCheckAll" ng-click="projectCheckAll()" class="css-checkbox" name="">
                               <label class="css-label" for="projectCheckAll"></label>
@@ -70,7 +70,7 @@
                         <td>-</td>
                         <td>[[projects.get_date | dateFormat]]</td>
                         <td>
-                            <div class="checkbox-right-fx mtop8">
+                            <div class="checkbox-right-fx pro-list-checkbx">
                                 <div class="checkbox">
                                   <input type="checkbox" id="check_[[projects.id]]" ng-click="updateSelection(projects.id)" class="css-checkbox proj-checkbox" value="[[projects.id]]" name="">
                                   <label class="css-label" for="check_[[projects.id]]"></label>
