@@ -737,6 +737,14 @@ def add_edit_talent(profile_data, user):
                                                                   end_date=end_date)
                         else:
                             TalentEducation.objects.get_or_create(talent=talent_obj,education=org)
+                else:
+                    if start_date:
+                        talent_edu, created = TalentEducation.objects.get_or_create(
+                            talent=talent_obj,start_date=start_date)
+                    if end_date:
+                        talent_edu, created = TalentEducation.objects.get_or_create(
+                            talent=talent_obj, end_date=end_date)
+
     if 'currentOrganization' in profile_data:
         talent_current = TalentCompany.objects.filter(talent=talent_obj, is_current=True)
         if talent_current:
