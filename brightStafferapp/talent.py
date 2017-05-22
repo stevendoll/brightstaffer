@@ -962,7 +962,7 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
                     return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
         talent_id = request.data['id']
         talent = Talent.objects.filter(id=talent_id)
-        Talent.objects.filter(id=talent).update(activation_date=timezone.now())
+        Talent.objects.filter(id=talent).update(activation_date=timezone.now(),update_date=timezone.now())
         if not talent:
             return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
         talent = talent[0]
@@ -996,10 +996,11 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
                     TalentCompany.objects.filter(id=ids).update(is_current=True, company=company,
                                                                 designation=content['talent_designation'])
             else:
-                Company.objects.get_or_create(company_name=content['currentOrganization'][0]['name'])
-                company = Company.objects.filter(company_name=content['currentOrganization'][0]['name']).values('id')[0]['id'].hex
-                TalentCompany.objects.filter(id=ids).update(is_current=True, company=company,
-                                                            designation=content['talent_designation'])
+                company,created=Company.objects.get_or_create(company_name=content['currentOrganization'][0]['name'])
+                if created:
+                    company_id = Company.objects.filter(company_name=content['currentOrganization'][0]['name']).values('id')[0]['id'].hex
+                    TalentCompany.objects.get_or_create(talent=talent, is_current=True, company=company,
+                                                        designation=content['talent_designation'])
             talent.save()
             talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
             talent_loc.city = content['city']

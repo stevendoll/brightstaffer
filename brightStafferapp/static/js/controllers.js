@@ -1339,6 +1339,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         createTalentFormService.setTalentDetails({});
         $('#add-talent').modal('hide');
         $scope.search.searchKeywords = '';
+        $cookieStore.remove('talentEditedData');
         $state.go('talent.create-profile');
     }
 }
@@ -1549,7 +1550,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     
     
     $rootScope.hideDatePickerPopUp = function(e){
-        $(e).datepicker('hide');
+//        $(e).datepicker('hide');
     }
     
 
@@ -1649,10 +1650,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         phone: true
     };
     $scope.initTalenData = function () {
+        
         var details = createTalentFormService.getTalentDetails();
         if (Object.keys(details).length) {
             $scope.talentData = details;
+            $cookieStore.put('talentEditedData', details);
             return;
+        }
+        
+        var detailsfromCookie = $cookieStore.get('talentEditedData');
+
+        if(detailsfromCookie){
+            $scope.talentData = detailsfromCookie;
+            return;   
         }
 
         $scope.talentData = {
@@ -1920,6 +1930,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     $rootScope.getCandidateData();
                 }
                 createTalentFormService.setTalentDetails({});
+                $cookieStore.remove('talentEditedData');
             } else {
                 if (onEdit) {
                     $('#edit-profile').modal('hide');

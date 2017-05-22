@@ -15,7 +15,11 @@
                         <!--                  <span></span> [[talentDetails.industry_focus | capitalizeAll]]-->
                     </div>
                     <button type="" class="btn view-con-info hvr-fade" data-toggle="modal" ng-click="openContactInfo()">View Contact Info</button>
-                    <a class="linkedin-analysis" target="_blank" href="[[talentDetails.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>
+                    <a ng-show="talentDetails.linkedin_url" class="linkedin-analysis" target="_blank" href="[[talentDetails.linkedin_url]]"><i class="fa fa-linkedin-square"></i></a>
+                    
+                    <span  class="linkedin-analysis" ng-show="!talentDetails.linkedin_url" style="    cursor: not-allowed;">
+                        <i ng-show="!talentDetails.linkedin_url" ng-disabled="true" class="fa fa-linkedin-square"></i>
+                    </span>
                 </div>
                 <div class="talent-analysis-activity">
                     <div class="talent-activity-panel">
