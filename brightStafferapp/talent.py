@@ -136,6 +136,7 @@ class TalentContactAPI(View):
                 talent_contact_obj = talent_obj
                 talent_contact_obj.contact = updated_contact
                 talent_contact_obj.save()
+                Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
                 context['success'] = True
                 return util.returnSuccessShorcut(context)
 
@@ -145,6 +146,8 @@ class TalentContactAPI(View):
             return util.returnErrorShorcut(409, 'Oops! The Contact Number you have entered already exists.')
         talent_contact_obj, created = TalentContact.objects.get_or_create(talent=talent_obj, contact=contact)
         if created:
+            Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(),
+                                                        update_date=timezone.now())
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
@@ -164,6 +167,8 @@ class TalentContactAPI(View):
         talent_obj = talent_objs[0]
         if contact:
             is_deleted = TalentContact.objects.filter(talent=talent_obj, contact=contact).delete()[0]
+            Talent.objects.filter(id=talent_obj).update(activation_date=timezone.now(),
+                                                        update_date=timezone.now())
             if not is_deleted:
                 context['success'] = False
                 return util.returnErrorShorcut(400, 'No entry found or already deleted')
@@ -178,6 +183,8 @@ class TalentContactAPI(View):
             talent_contact = TalentContact.objects.filter(contact=contact, talent=talent_obj)
             if talent_contact:
                 TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+                Talent.objects.filter(id=talent_obj).update(activation_date=timezone.now(),
+                                                            update_date=timezone.now())
             else:
                 talent_contact = Talent.objects.filter(Q(talent_active__is_active=True) &
                                                      Q(recruiter__username=recruiter) & Q(talent_contact__contact=contact))
@@ -185,6 +192,8 @@ class TalentContactAPI(View):
                     return 0
                 else:
                     TalentContact.objects.filter(talent=talent_obj).update(contact=contact)
+                    Talent.objects.filter(id=talent_obj).update(activation_date=timezone.now(),
+                                                                 update_date=timezone.now())
             # users = TalentContact.objects.filter(contact=contact,talent__talent_active__is_active=True)
             # if users:
             #     return True
@@ -220,6 +229,7 @@ class TalentEmailAPI(View):
                 talent_contact_obj = talent_obj
                 talent_contact_obj.contact = updated_email
                 talent_contact_obj.save()
+                Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
                 context['success'] = True
                 return util.returnSuccessShorcut(context)
 
@@ -229,6 +239,7 @@ class TalentEmailAPI(View):
             return util.returnErrorShorcut(409, 'Oops! The Email you have entered already exists.')
         talent_contact_obj, created = TalentEmail.objects.get_or_create(talent=talent_obj, email=email)
         if created:
+            Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
             context['success'] = True
             return util.returnSuccessShorcut(context)
         else:
@@ -249,6 +260,7 @@ class TalentEmailAPI(View):
         talent_obj = talent_objs[0]
         if email:
             is_deleted = TalentEmail.objects.filter(talent=talent_obj, email=email).delete()[0]
+            Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
             if not is_deleted:
                 context['success'] = False
                 return util.returnErrorShorcut(400, 'No entry found or already deleted')
@@ -263,6 +275,7 @@ class TalentEmailAPI(View):
             talent_contact = TalentEmail.objects.filter(email=email, talent=talent_objs)
             if talent_contact:
                 TalentEmail.objects.filter(talent=talent_objs).update(email=email)
+                Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
             else:
                 email_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
                                                      Q(recruiter__username=recruiter) & Q(talent_email__email=email))
@@ -270,6 +283,8 @@ class TalentEmailAPI(View):
                     return 0
                 else:
                     TalentEmail.objects.filter(talent=talent_objs).update(email=email)
+                    Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(),
+                                                                 update_date=timezone.now())
         # users = TalentEmail.objects.filter(email=email,talent__talent_active__is_active=True)
         # if users:
         #     return True
@@ -435,10 +450,10 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
             return util.returnErrorShorcut(400,
                                            'Talent stage and info is exist in database,Please update the stage')
         else:
-            Talent.objects.filter(id=talent).update(activation_date=timezone.now(), update_date=timezone.now())
             updated = TalentStage.objects.filter(id=str(stage_id)).update(stage=stage, details=details,
                                                                           notes=notes, date_created=date)
             if updated:
+                Talent.objects.filter(id=talent).update(activation_date=timezone.now(), update_date=timezone.now())
                 queryset = super(TalentStageEditAPI, self).get_queryset()
                 queryset = queryset.filter(talent_id=talent)
                 serializer_data = TalentSerializer(talent_obj)
@@ -968,7 +983,7 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             talent.designation = content['talent_designation']
             talent.image = content['profile_image']
             talent.linkedin_url = linkedin_url
-            ids = TalentCompany.objects.filter(talent=talent, is_current=True).values('id')[0]['id']
+            ids = TalentCompany.objects.filter(talent=talent, is_current=True).values('id')#[0]['id']
             if ids:
                 company = Company.objects.filter(company_name=content['currentOrganization'][0]['name'])
                 if company:
