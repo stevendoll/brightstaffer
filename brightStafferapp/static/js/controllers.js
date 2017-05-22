@@ -1549,7 +1549,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     
     
     $rootScope.hideDatePickerPopUp = function(e){
-        $(e).datepicker('hide');
+//        $(e).datepicker('hide');
     }
     
 
