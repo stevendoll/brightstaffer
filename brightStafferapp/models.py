@@ -235,7 +235,7 @@ class TalentContact(models.Model):
 
 class TalentEducation(models.Model):
     talent = models.ForeignKey(Talent, related_name='talent_education')
-    education = models.ForeignKey(Education)
+    education = models.ForeignKey(Education,default='', null=True, blank=True)
     course = models.CharField(max_length=100, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
