@@ -753,12 +753,12 @@ def add_edit_talent(profile_data, user):
                         else:
                             TalentEducation.objects.get_or_create(talent=talent_obj,education=org)
                 else:
-                    if start_date:
+                    if start_date is not None:
                         talent_edu, created = TalentEducation.objects.get_or_create(
                             talent=talent_obj,start_date=start_date)
-                    if end_date:
-                        talent_edu, created = TalentEducation.objects.get_or_create(
-                            talent=talent_obj, end_date=end_date)
+                        if end_date is not None:
+                            talent_edu.end_date = end_date
+                            talent_edu.save()
 
     if 'currentOrganization' in profile_data:
         talent_current = TalentCompany.objects.filter(talent=talent_obj, is_current=True)
@@ -864,12 +864,22 @@ def add_edit_talent(profile_data, user):
                                 is_current=False)
                 else:
                     if designation is not "":
-                        TalentCompany.objects.get_or_create(talent=talent_obj,
+                        talent_comp,create=TalentCompany.objects.get_or_create(talent=talent_obj,
                                                             designation=organization.get('JobTitle', ''),
-                                                            is_current=False,start_date=start_date,)
-                    if start_date is not None:
-                        TalentCompany.objects.get_or_create(talent=talent_obj,
-                                                            is_current=False, start_date=start_date, )
+                                                            is_current=False)
+                        if start_date is not None:
+                            talent_comp.start_date = start_date
+                            talent_comp.save()
+                        if end_date is not None:
+                            talent_comp.end_date = end_date
+                            talent_comp.save()
+                    else:
+                        if start_date is not None:
+                            talent_comp, create = TalentCompany.objects.get_or_create(talent=talent_obj,is_current=False,
+                                                                                      start_date=start_date)
+                            if end_date is not None:
+                                talent_comp.end_date = end_date
+                                talent_comp.save()
 
     if "JobTitle" in profile_data:
         talent_obj.designation = profile_data.get('JobTitle', '')
