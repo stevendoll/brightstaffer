@@ -112,7 +112,7 @@
             </div>
             <div class="cls"></div>
             <div class="col-xs-12">
-                <div class="top-concept-panel">
+                <div class="top-concept-panel" ng-show="talent.talent_concepts.length">
                     <div class="top-concept-text">
                         Top Concepts
                         <div class="top-slash-div" ng-show="!talent.talent_concepts.length">-</div><span data-toggle="modal" ng-show="talent.talent_concepts.length > 6" ng-click="allConcepts(talent.talent_concepts)">View All</span>
