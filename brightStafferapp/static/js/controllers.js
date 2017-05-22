@@ -19,6 +19,14 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
         $scope.showLoader = show;
     }
 
+    $scope.projectCheckAll = function(){
+        console.log('www');
+        var checked = $('#projectCheckAll').is(':checked');
+        $('.proj-check-box').each(function(){
+            $(this).prop('checked', checked);
+        })
+    }
+    
     $rootScope.getTopSixProjects = function () { // function to fetch top 6 projects
         var requestObject = {
             'token': $rootScope.globals.currentUser.token, // username field value

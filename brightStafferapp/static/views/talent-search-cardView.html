@@ -236,7 +236,7 @@
                     <div class="past-roles" ng-show="selectedCandidate.currentCompanyLength">Current Roles</div>
                     <div class="past-roles-descp" ng-repeat="role in selectedCandidate.talent_company" ng-show="role.is_current">
                         <span ng-show="role.designation">[[role.designation]] at</span> [[role.company]]
-                        <span ng-show="role.start_date || role.end_date">
+                        <span ng-show="role.start_date">
                             [[role.start_date | yearFormat]] - Present
                         </span>
                     </div>
