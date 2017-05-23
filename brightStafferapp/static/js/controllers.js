@@ -3922,6 +3922,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#filter-from').val('');
         $('#filter-to').val('');
         $scope.priceSlider.value = 0;
+        $scope.tFilter.stage = "0";
+        $('#filterStage').val("0").selectpicker('refresh');
         $scope.filterValue = {
             stage: '',
             project: '',
