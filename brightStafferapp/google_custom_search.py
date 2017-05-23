@@ -12,12 +12,12 @@ class GoogleCustomSearch(object):
             list_var = split_string[-1]
             linkedin_id = json.dumps(list_var)
             load_data = requests.get(
-                'https://www.googleapis.com/customsearch/v1?q=' + linkedin_id + '/''+&cx=002086705837668586439:l1o6lrd_few&num=1'
+                'https://www.googleapis.com/customsearch/v1?q=' + linkedin_id + '&cx=002086705837668586439:l1o6lrd_few&num=1'
                                                                                 '&key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU')
             data = json.loads(load_data.text)
         else:
             load_data = requests.get(
-                'https://www.googleapis.com/customsearch/v1?q=' + linkedin_id + '/''+&cx=002086705837668586439:l1o6lrd_few&num=1'
+                'https://www.googleapis.com/customsearch/v1?q=' + linkedin_id + '&cx=002086705837668586439:l1o6lrd_few&num=1'
                                                                                 '&key=AIzaSyCMGfdDaSfjqv5zYoS0mTJnOT3e9MURWkU')
             data = json.loads(load_data.text)
         try:
