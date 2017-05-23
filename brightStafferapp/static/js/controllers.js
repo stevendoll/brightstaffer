@@ -328,6 +328,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                 count: $rootScope.candidatePagination.count
             };
             searchApis.talentSearch(requestObject).then(function (response) {
+                $scope.talentSorted = '';
                 $rootScope.Filter = false;
                 $rootScope.topSearch = true;
                 $rootScope.talentList = [];
@@ -2055,7 +2056,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.$watch('candidatePagination.page + candidatePagination.count', function () {
         //        if ($rootScope.getCandidateData)
         //            $rootScope.getCandidateData(true);
-
+        $scope.talentSorted = '';
         if ($rootScope.globalSearch) {
             if ($rootScope.getCandidateData)
                 $rootScope.getCandidateData(true);
@@ -2142,7 +2143,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.getcandidateData = function () {
         //        $rootScope.getCandidateData();
         //        $rootScope.$emit('fetchCandidateData');
-        $rootScope.getCandidateData()
+        $rootScope.getCandidateData();
     }
     $scope.changeState = function () {
 
@@ -2306,7 +2307,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             //            $('#nameUpdate').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
-                'display_name': $rootScope.recruiter.recruiterName
+                'display_name': $rootScope.recruiter.recruiterName,
+                id: $scope.talentDetails.id
             };
             talentApis.updateRecruiterName(requestObject).then(function (response) {
                 if (response.message == "success") {
@@ -3623,6 +3625,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.filterTalentData(requestObject).then(function (response) {
             $rootScope.candidatePages = [];
             if (response.results.length > 0) {
+                $scope.talentSorted = '';
                 $rootScope.Filter = false;
                 console.log(response.results);
                 $rootScope.talentList = [];

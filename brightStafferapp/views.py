@@ -406,10 +406,13 @@ class UpdateRecruiter(View):
         param_dict = {}
         recruiter = request.GET['recruiter']
         display_name = request.GET['display_name']
+        talent_id = request.GET['id']
         user = User.objects.filter(username=recruiter)
         if not user:
             return util.returnErrorShorcut(403, 'Recruiter Email is not valid')
         Recruiter.objects.filter(user=user[0]).update(display_name=display_name)
+        talent_objs = Talent.objects.filter(id=talent_id)
+        Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
         param_dict['display_name'] = display_name
         return util.returnSuccessShorcut(param_dict)
 
