@@ -997,6 +997,12 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             talent.designation = content['talent_designation']
             talent.image = content['profile_image']
             talent.linkedin_url = linkedin_url
+            talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
+            talent_loc.city = content['city']
+            talent_loc.state = ''
+            talent_loc.country = ''
+            Talent.objects.filter(id=talent_id).update(activation_date=timezone.now(), update_date=timezone.now())
+            talent_loc.save()
             ids = TalentCompany.objects.filter(talent=talent, is_current=True).values('id')#[0]['id']
             if ids:
                 company = Company.objects.filter(company_name=content['currentOrganization'][0]['name'])
@@ -1016,12 +1022,6 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
                     TalentCompany.objects.get_or_create(talent=talent, is_current=True, company=company,
                                                         designation=content['talent_designation'])
             talent.save()
-            talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
-            talent_loc.city = content['city']
-            talent_loc.state = ''
-            talent_loc.country = ''
-            Talent.objects.filter(id=talent).update(activation_date=timezone.now(), update_date=timezone.now())
-            talent_loc.save()
         context['success'] = True
         return util.returnSuccessShorcut(context)
 
