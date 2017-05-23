@@ -355,6 +355,8 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     $rootScope.getCandidateData = function (check) {
         console.log('fetching candidate data');
         if (check == 'sideNav') {
+            $('.bar-view').addClass('active');
+            $('.table-view').removeClass('active');
             $scope.recordCount = 10;
             $rootScope.candidatePagination = {
                 page: 1,
@@ -1289,12 +1291,14 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         $state.go('dashboard', '');
         $scope.removeCompletedFiles();
         $('#delete-popup').modal('hide');
+        $scope.search.searchKeywords = '';
     }
 
     $scope.done = function () {
         $('#add-talent').modal('hide');
         $('#successBox').css('display', 'block');
         $scope.removeCompletedFiles();
+        $scope.search.searchKeywords = '';
         setTimeout(
             function () {
                 $('#successBox').css('display', 'none');
@@ -2145,6 +2149,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        $rootScope.$emit('fetchCandidateData');
         $rootScope.getCandidateData();
     }
+    
     $scope.changeState = function () {
 
         $rootScope.candidatePagination.page = 1;
