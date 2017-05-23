@@ -1655,14 +1655,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var details = createTalentFormService.getTalentDetails();
         if (Object.keys(details).length) {
             $scope.talentData = details;
-            $cookieStore.put('talentEditedData', details);
+            $cookieStore.put('talentEditedData', JSON.stringify(details));
             return;
         }
         
         var detailsfromCookie = $cookieStore.get('talentEditedData');
 
         if(detailsfromCookie){
-            $scope.talentData = detailsfromCookie;
+            $scope.talentData = JSON.parse(detailsfromCookie);
             return;   
         }
 
