@@ -64,7 +64,7 @@ def handle_talent_data(talent_data, user,request,text, file_upload_obj):
                         company, created = models.Company.objects.get_or_create(company_name=experience['Company'])
                         models.TalentCompany.objects.get_or_create(
                             talent=talent_obj, company=company, is_current=True,
-                            designation=experience['JobTitle'], start_date=start_date, end_date=end_date)
+                            designation=experience['JobTitle'], start_date=start_date)
                     else:
                         if experience['type'].lower() == '':
                             company, created = models.Company.objects.get_or_create(company_name=experience['Company'])
