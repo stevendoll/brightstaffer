@@ -2,7 +2,7 @@ from brightStafferapp.models import Talent, User, Projects, TalentProject, Talen
     TalentStage, TalentRecruiter, TalentConcept, ProjectConcept,Concept, Education, TalentEducation, Company,\
     TalentCompany, TalentLocation, FileUpload
 from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer, \
-    TalentStageSerializer
+    TalentStageSerializer,TalentProjectSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
@@ -294,12 +294,13 @@ class TalentEmailAPI(View):
 
 
 class TalentProjectAddAPI(generics.ListCreateAPIView):
-    queryset = Talent.objects.all()
+    queryset = TalentProject.objects.all()
     serializer_class = TalentSerializer
     http_method_names = ['get']
 
-    def get_queryset(self):
-        queryset = super(TalentProjectAddAPI, self).get_queryset()
+    def get(self, request, *args, **kwargs):
+        # queryset = super(TalentProjectAddAPI, self).get_queryset()
+        context = dict()
         talent_result = None
         project_id = self.request.query_params.get('project_id')
         recruiter = self.request.query_params.get('recruiter')
@@ -317,9 +318,12 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
             talent_obj = talent_objs[0]
             tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
             Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(),update_date=timezone.now())
-            talent_result = queryset.filter(talent_active__is_active=True)
-            talent_project_match(talent_obj,project)
-        return talent_result
+            #queryset = super(TalentProjectAddAPI, self).get_queryset()
+            #queryset = queryset.filter(talent_id=talent_id)
+            serializer_data = TalentSerializer(talent_obj)
+            talent_project_match(talent_obj, project)
+            context['result'] = serializer_data.data
+        return util.returnSuccessShorcut(context)
 
 
 def talent_project_match(talent_obj,project):
