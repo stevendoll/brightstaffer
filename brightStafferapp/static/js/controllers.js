@@ -2372,7 +2372,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             var a = [response];
             $rootScope.createCareerHistoryData(a);
 
-            $rootScope.talentDetails = a[0];
+            $scope.talentDetails = a[0];
             setCurrenPastInDetail($rootScope.talentDetails);
             sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
             getTalentStages(id);
