@@ -2306,7 +2306,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             //            $('#nameUpdate').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
-                'display_name': $rootScope.recruiter.recruiterName
+                'display_name': $rootScope.recruiter.recruiterName,
+                id: $scope.talentDetails.id
             };
             talentApis.updateRecruiterName(requestObject).then(function (response) {
                 if (response.message == "success") {

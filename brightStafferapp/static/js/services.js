@@ -278,7 +278,7 @@ function talentApis($rootScope, $http, REQUEST_URL, appService) {
         updateRecruiterName: function (data) {
             $rootScope.showLoader(true);
             return $http({
-                url: REQUEST_URL + 'update_recruiter/?recruiter=' + data.recruiter + '&display_name=' + data.display_name
+                url: REQUEST_URL + 'update_recruiter/?recruiter=' + data.recruiter + '&display_name=' + data.display_name + '&id=' + data.id
                 , method: "GET", // or "get"
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
