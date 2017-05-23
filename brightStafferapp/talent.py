@@ -393,6 +393,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         Talent.objects.filter(id=talent).update(activation_date=timezone.now(),update_date=timezone.now())
         tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage,
                                                             details=details, notes=notes, date_created=date)
+        Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
         if created:
             queryset = super(TalentStageAddAPI, self).get_queryset()
             queryset = queryset.filter(talent_id=talent)
@@ -972,7 +973,6 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
                     return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
         talent_id = request.data['id']
         talent = Talent.objects.filter(id=talent_id)
-        Talent.objects.filter(id=talent).update(activation_date=timezone.now(),update_date=timezone.now())
         if not talent:
             return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
         talent = talent[0]
@@ -1016,6 +1016,7 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             talent_loc.city = content['city']
             talent_loc.state = ''
             talent_loc.country = ''
+            Talent.objects.filter(id=talent).update(activation_date=timezone.now(), update_date=timezone.now())
             talent_loc.save()
         context['success'] = True
         return util.returnSuccessShorcut(context)
@@ -1102,6 +1103,11 @@ class TalentSearch(generics.ListCreateAPIView):
                                        int(date_added.split('/')[0]))
             queryset = queryset.filter(create_date__range=(datetime.datetime.combine(date_added, datetime.time.min),
                                                            datetime.datetime.combine(date_added, datetime.time.max)))
+        if last_contacted:
+            last_contacted = datetime.date(int(last_contacted.split('/')[2]), int(last_contacted.split('/')[1]),
+                                       int(last_contacted.split('/')[0]))
+            queryset = queryset.filter(activation_date__range=(datetime.datetime.combine(last_contacted, datetime.time.min),
+                                                           datetime.datetime.combine(last_contacted, datetime.time.max)))
         if projects:
             queryset = queryset.order_by('-talent_project__project_match')
             return queryset

@@ -174,7 +174,7 @@
                              <tbody>
 <!--                                 <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">-->
                                  <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">
-                                     <td><a href="" class="tbl-link-td" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</a></td>
+                                     <td><span class="tbl-link-td" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</span></td>
                                      <td>
                                          <span ng-show="talent.talent_company.length && talent.talent_company[0].designation">              [[talent.talent_company[0].designation | capitalizeWord]]
                                          </span>
@@ -318,3 +318,7 @@
   </div>
 </div>
 <!-- add-project-Modal-ends -->
+
+<div class="" ng-class="{'main-success-box': notification.status == 'Success', 'pro-error-box': notification.status != 'Success'}" id="" ng-show="notification.show">
+    <span><strong ng-show="notification.status">[[notification.status]]!</strong> [[notification.message]]</span>
+</div>

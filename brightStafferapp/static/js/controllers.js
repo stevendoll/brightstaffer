@@ -328,6 +328,7 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
                 count: $rootScope.candidatePagination.count
             };
             searchApis.talentSearch(requestObject).then(function (response) {
+                $scope.talentSorted = '';
                 $rootScope.Filter = false;
                 $rootScope.topSearch = true;
                 $rootScope.talentList = [];
@@ -354,6 +355,8 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     $rootScope.getCandidateData = function (check) {
         console.log('fetching candidate data');
         if (check == 'sideNav') {
+            $('.bar-view').addClass('active');
+            $('.table-view').removeClass('active');
             $scope.recordCount = 10;
             $rootScope.candidatePagination = {
                 page: 1,
@@ -1288,12 +1291,14 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         $state.go('dashboard', '');
         $scope.removeCompletedFiles();
         $('#delete-popup').modal('hide');
+        $scope.search.searchKeywords = '';
     }
 
     $scope.done = function () {
         $('#add-talent').modal('hide');
         $('#successBox').css('display', 'block');
         $scope.removeCompletedFiles();
+        $scope.search.searchKeywords = '';
         setTimeout(
             function () {
                 $('#successBox').css('display', 'none');
@@ -1654,14 +1659,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         var details = createTalentFormService.getTalentDetails();
         if (Object.keys(details).length) {
             $scope.talentData = details;
-            $cookieStore.put('talentEditedData', details);
+            $cookieStore.put('talentEditedData', JSON.stringify(details));
             return;
         }
         
         var detailsfromCookie = $cookieStore.get('talentEditedData');
 
         if(detailsfromCookie){
-            $scope.talentData = detailsfromCookie;
+            $scope.talentData = JSON.parse(detailsfromCookie);
             return;   
         }
 
@@ -2055,7 +2060,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.$watch('candidatePagination.page + candidatePagination.count', function () {
         //        if ($rootScope.getCandidateData)
         //            $rootScope.getCandidateData(true);
-
+        $scope.talentSorted = '';
         if ($rootScope.globalSearch) {
             if ($rootScope.getCandidateData)
                 $rootScope.getCandidateData(true);
@@ -2142,8 +2147,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.getcandidateData = function () {
         //        $rootScope.getCandidateData();
         //        $rootScope.$emit('fetchCandidateData');
-        $rootScope.getCandidateData()
+        $rootScope.getCandidateData();
     }
+    
     $scope.changeState = function () {
 
         $rootScope.candidatePagination.page = 1;
@@ -2306,7 +2312,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             //            $('#nameUpdate').css('pointer-events', 'none');
             var requestObject = {
                 'recruiter': $rootScope.globals.currentUser.user_email, // password field value
-                'display_name': $rootScope.recruiter.recruiterName
+                'display_name': $rootScope.recruiter.recruiterName,
+                id: $scope.talentDetails.id
             };
             talentApis.updateRecruiterName(requestObject).then(function (response) {
                 if (response.message == "success") {
@@ -2365,7 +2372,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             var a = [response];
             $rootScope.createCareerHistoryData(a);
 
-            $rootScope.talentDetails = a[0];
+            $scope.talentDetails = a[0];
             setCurrenPastInDetail($rootScope.talentDetails);
             sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
             getTalentStages(id);
@@ -3623,6 +3630,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         talentApis.filterTalentData(requestObject).then(function (response) {
             $rootScope.candidatePages = [];
             if (response.results.length > 0) {
+                $scope.talentSorted = '';
                 $rootScope.Filter = false;
                 console.log(response.results);
                 $rootScope.talentList = [];
@@ -3914,6 +3922,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         $('#filter-from').val('');
         $('#filter-to').val('');
         $scope.priceSlider.value = 0;
+        $scope.tFilter.stage = "0";
+        $('#filterStage').val("0").selectpicker('refresh');
         $scope.filterValue = {
             stage: '',
             project: '',

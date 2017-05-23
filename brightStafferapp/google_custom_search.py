@@ -44,7 +44,10 @@ class GoogleCustomSearch(object):
                                 current['from'] = ''
                                 current['to'] = 'Present'
                                 current['is_current'] = True
-                                current['JobTitle'] = j['role']
+                                try:
+                                    current['JobTitle'] = j['role']
+                                except:
+                                    current['JobTitle'] = ''
                                 try:
                                     result['currentOrganization']= currentOrganization
                                 except:
