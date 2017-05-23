@@ -2839,6 +2839,15 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     width: 2455px !important;
 }
 
+/*----new changes----*/
+
+.project-table:after{
+    display:none !important;
+}
+
+
+
+
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
         display: block;
