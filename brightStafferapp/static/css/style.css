@@ -2456,6 +2456,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     border-right: 0px solid transparent;
     border-left: 0px solid transparent;
     right: 4px !important;
+    border: 0 !important;
 }
 
 .bs-actionsbox,
@@ -2844,7 +2845,21 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .project-table:after{
     display:none !important;
 }
-
+.industy-div{
+    width:auto !important;
+    float:left;
+}
+.talent-lst .tbl-link-td:hover{
+    color: #23527c;
+    text-decoration: none;
+    cursor:pointer;
+}
+.ui-icon-circle-triangle-w {
+    background: url(../img/left-arrow.svg) no-repeat 92% 0px !important;
+}
+.ui-icon-circle-triangle-e {
+    background: url(../img/right-arrow.svg) no-repeat 92% 0px !important;
+}
 
 
 
