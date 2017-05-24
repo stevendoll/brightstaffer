@@ -323,6 +323,7 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
             serializer_data = TalentSerializer(talent_obj)
             talent_project_match(talent_obj, project)
             context['result'] = serializer_data.data
+            context['success'] = True
         return util.returnSuccessShorcut(context)
 
 
