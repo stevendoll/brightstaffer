@@ -2863,12 +2863,6 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 
 
 
-@media (max-width: 1500px) {
-    .width67 {
-        width: 45% !important;
-    }
-}
-
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
         display: block;
