@@ -1030,29 +1030,25 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             talent_loc.state = ''
             talent_loc.country = ''
             Talent.objects.filter(id=talent_id).update(activation_date=timezone.now(), update_date=timezone.now())
-            #talent_loc.save()
-            ids = TalentCompany.objects.filter(talent=talent, is_current=True).values('id')#[0]['id']
-            if ids:
-                company = Company.objects.filter(company_name=content['currentOrganization'][0]['name'])
-                if company:
-                    company = Company.objects.filter(company_name=content['currentOrganization'][0]['name']).values('id')[0]['id'].hex
-                    TalentCompany.objects.filter(id=ids).update(is_current=True, company=company,
-                                                                designation=content['talent_designation'])
-                else:
-                    Company.objects.get_or_create(company_name=content['currentOrganization'][0]['name'])
-                    company = Company.objects.filter(company_name=content['currentOrganization'][0]['name']).values('id')[0]['id'].hex
-                    TalentCompany.objects.filter(id=ids).update(is_current=True, company=company,
-                                                                designation=content['talent_designation'])
-            else:
-                company,created=Company.objects.get_or_create(company_name=content['currentOrganization'][0]['name'])
-                if created:
-                    company_id = Company.objects.filter(company_name=content['currentOrganization'][0]['name']).values('id')[0]['id'].hex
-                    TalentCompany.objects.get_or_create(talent=talent, is_current=True, company=company,
-                                                        designation=content['talent_designation'])
             talent.save()
             talent_loc.save()
-        context['success'] = True
-        return util.returnSuccessShorcut(context)
+            if content['currentOrganization'][0]['name']:
+                company, create =Company.objects.get_or_create(company_name=content['currentOrganization'][0]['name'])
+                if not create:
+                    company_r = TalentCompany.objects.filter(talent=talent, is_current=True,company=company)
+                    if not company_r :
+                        company_check = TalentCompany.objects.filter(talent=talent, company=company,is_current=False)
+                        if not company_check:
+                            #company_id = Company.objects.filter(company_name=content['currentOrganization'][0]['name']).values('id')[0]['id'].hex
+                            TalentCompany.objects.get_or_create(talent=talent, is_current=True, company=company,
+                                                                designation=content['talent_designation'])
+                else:
+                    TalentCompany.objects.get_or_create(talent=talent, is_current=True,
+                                                        company=company,
+                                                        designation=content['talent_designation'])
+
+            context['success'] = True
+            return util.returnSuccessShorcut(context)
 
 
 class TalentSearch(generics.ListCreateAPIView):

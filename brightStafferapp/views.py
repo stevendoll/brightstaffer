@@ -14,12 +14,12 @@ from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept, PdfImages, FileUpload, Recruiter,\
-    Talent, Company, TalentCompany, Education, TalentEducation
+    Talent, Company, TalentCompany, Education, TalentEducation,TalentProject
 from brightStafferapp import util
 from brightStafferapp.util import require_post_params, required_headers
 from django.shortcuts import render, HttpResponse
 from itertools import chain
-from brightStafferapp.serializers import ProjectSerializer, TopProjectSerializer, UserSerializer
+from brightStafferapp.serializers import ProjectSerializer, TopProjectSerializer, UserSerializer,TalentSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.pagination import PageNumberPagination
@@ -397,13 +397,14 @@ class ProjectDelete(generics.ListCreateAPIView):
 
 
 #Update Recruiter API
-class UpdateRecruiter(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(UpdateRecruiter, self).dispatch(request, *args, **kwargs)
+class UpdateRecruiter(generics.ListCreateAPIView):
+    serializer_class = TalentSerializer()
+    http_method_names = ['get']
+    allow_null = True
+    many = True
 
-    def get(self, request):
-        param_dict = {}
+    def get(self, request, *args, **kwargs):
+        context = {}
         recruiter = request.GET['recruiter']
         display_name = request.GET['display_name']
         talent_id = request.GET['id']
@@ -413,8 +414,12 @@ class UpdateRecruiter(View):
         Recruiter.objects.filter(user=user[0]).update(display_name=display_name)
         talent_objs = Talent.objects.filter(id=talent_id)
         Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
-        param_dict['display_name'] = display_name
-        return util.returnSuccessShorcut(param_dict)
+        context['display_name'] = display_name
+        serializer_data = TalentSerializer(talent_objs[0])
+        result = serializer_data.data
+        context['result'] = result
+        context['success'] = True
+        return util.returnSuccessShorcut(context)
 
 
 # TO upload Bulk upload Talent's Data
