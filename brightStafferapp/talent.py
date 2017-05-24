@@ -300,7 +300,7 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         # queryset = super(TalentProjectAddAPI, self).get_queryset()
-        context = dict()
+        #context = dict()
         talent_result = None
         project_id = self.request.query_params.get('project_id')
         recruiter = self.request.query_params.get('recruiter')
@@ -322,9 +322,9 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
             #queryset = queryset.filter(talent_id=talent_id)
             serializer_data = TalentSerializer(talent_obj)
             talent_project_match(talent_obj, project)
-            context['result'] = serializer_data.data
-            context['success'] = True
-        return util.returnSuccessShorcut(context)
+            result = serializer_data.data
+            #context['success'] = True
+        return util.returnSuccessShorcut(result)
 
 
 def talent_project_match(talent_obj,project):
