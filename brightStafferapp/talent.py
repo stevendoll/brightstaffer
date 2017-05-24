@@ -2,7 +2,7 @@ from brightStafferapp.models import Talent, User, Projects, TalentProject, Talen
     TalentStage, TalentRecruiter, TalentConcept, ProjectConcept,Concept, Education, TalentEducation, Company,\
     TalentCompany, TalentLocation, FileUpload
 from brightStafferapp.serializers import TalentSerializer, TalentContactEmailSerializer, TalentProjectStageSerializer, \
-    TalentStageSerializer
+    TalentStageSerializer,TalentProjectSerializer
 from brightStafferapp import util
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
@@ -294,12 +294,13 @@ class TalentEmailAPI(View):
 
 
 class TalentProjectAddAPI(generics.ListCreateAPIView):
-    queryset = Talent.objects.all()
+    queryset = TalentProject.objects.all()
     serializer_class = TalentSerializer
     http_method_names = ['get']
 
-    def get_queryset(self):
-        queryset = super(TalentProjectAddAPI, self).get_queryset()
+    def get(self, request, *args, **kwargs):
+        # queryset = super(TalentProjectAddAPI, self).get_queryset()
+        #context = dict()
         talent_result = None
         project_id = self.request.query_params.get('project_id')
         recruiter = self.request.query_params.get('recruiter')
@@ -317,9 +318,13 @@ class TalentProjectAddAPI(generics.ListCreateAPIView):
             talent_obj = talent_objs[0]
             tp_obj, created = TalentProject.objects.get_or_create(talent=talent_obj, project=project)
             Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(),update_date=timezone.now())
-            talent_result = queryset.filter(talent_active__is_active=True)
-            talent_project_match(talent_obj,project)
-        return talent_result
+            #queryset = super(TalentProjectAddAPI, self).get_queryset()
+            #queryset = queryset.filter(talent_id=talent_id)
+            serializer_data = TalentSerializer(talent_obj)
+            talent_project_match(talent_obj, project)
+            result = serializer_data.data
+            #context['success'] = True
+        return util.returnSuccessShorcut(result)
 
 
 def talent_project_match(talent_obj,project):
@@ -993,6 +998,12 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             talent.designation = content['talent_designation']
             talent.image = content['profile_image']
             talent.linkedin_url = linkedin_url
+            talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
+            talent_loc.city = content['city']
+            talent_loc.state = ''
+            talent_loc.country = ''
+            Talent.objects.filter(id=talent_id).update(activation_date=timezone.now(), update_date=timezone.now())
+            #talent_loc.save()
             ids = TalentCompany.objects.filter(talent=talent, is_current=True).values('id')#[0]['id']
             if ids:
                 company = Company.objects.filter(company_name=content['currentOrganization'][0]['name'])
@@ -1012,11 +1023,6 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
                     TalentCompany.objects.get_or_create(talent=talent, is_current=True, company=company,
                                                         designation=content['talent_designation'])
             talent.save()
-            talent_loc, created = TalentLocation.objects.get_or_create(talent=talent)
-            talent_loc.city = content['city']
-            talent_loc.state = ''
-            talent_loc.country = ''
-            Talent.objects.filter(id=talent).update(activation_date=timezone.now(), update_date=timezone.now())
             talent_loc.save()
         context['success'] = True
         return util.returnSuccessShorcut(context)
