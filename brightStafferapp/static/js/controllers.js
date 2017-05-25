@@ -3264,10 +3264,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     function initDatePicker(id) {
         $("#" + id).datepicker({
             dateFormat: 'M d, yy',
-            changeYear: true,
-            yearRange: '1900:' + new Date().getFullYear(),
-            yearRange: '1900:' + new Date().getFullYear(),
-            maxDate: new Date()
+            changeYear: true
         });
     }
 
@@ -3537,10 +3534,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     function initDatepicker(id) {
         $("#" + id).datepicker({
             dateFormat: 'M d, yy',
-            changeYear: true,
-            yearRange: '1900:' + new Date().getFullYear(),
-            yearRange: '1900:' + new Date().getFullYear(),
-            maxDate: new Date()
+            changeYear: true
         });
     }
 
