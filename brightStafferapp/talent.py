@@ -1033,6 +1033,7 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             Talent.objects.filter(id=talent_id).update(activation_date=timezone.now(), update_date=timezone.now())
             talent.save()
             talent_loc.save()
+            TalentCompany.objects.filter(talent=talent, is_current=True).delete()
             if content['currentOrganization'][0]['name']:
                 company, create =Company.objects.get_or_create(company_name=content['currentOrganization'][0]['name'])
                 if not create:
