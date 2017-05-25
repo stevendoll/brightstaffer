@@ -604,16 +604,16 @@ def handle_talent_data(talent_data, user):
             except:
                 result['lastName'] = ''
             # result['recruiter'] = user
-            result['status'] = 'New'
+            #result['status'] = 'New'
             #result['linkedin_url'] = ''
             #result['linkedinProfileUrl'] = ''
-            result['email'] = ''
-            result['phone'] = ''
-            result['city'] = ''
-            result['state'] = ''
-            result['country'] = ''
+            #result['email'] = ''
+            #result['phone'] = ''
+            #result['city'] = ''
+            #result['state'] = ''
+            #result['country'] = ''
             result['industryFocus'] = {'name':'', 'percentage':''}
-            result['create_date'] = ''
+            #result['create_date'] = ''
 
         skills = []
         if 'skills' in talent_data:
