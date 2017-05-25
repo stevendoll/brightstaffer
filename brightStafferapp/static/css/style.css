@@ -2860,6 +2860,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .ui-icon-circle-triangle-e {
     background: url(../img/right-arrow.svg) no-repeat 92% 0px !important;
 }
+.talent-search-delete-list-icon:hover{
+   background-color: #e6e6e6;
+}
 
 
 
