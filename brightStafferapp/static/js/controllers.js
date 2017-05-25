@@ -2595,21 +2595,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $scope.talentSelected = false;
         }
         
-        if ($scope.choosenCandidates.length > 0) {
-            $('#assignToProject').removeClass('disabled-talent');
-            $('#assignToProject').addClass('add-talent');
-            $('#assignToProject').css('pointer-events', '');
-            $('#talent-delete').css('pointer-events', '');
-
-            $('#talent-delete').css('background-color', '#e7eaec');
-        } else {
-            $('#assignToProject').removeClass('add-talent');
-            $('#assignToProject').addClass('disabled-talent');
-            $('#talent-delete').css('pointer-events', 'none');
-
-            $('#talent-delete').css('background-color', '');
-            $('#assignToProject').css('pointer-events', 'none');
-        }
+//        if ($scope.choosenCandidates.length > 0) {
+//            $('#assignToProject').removeClass('disabled-talent');
+//            $('#assignToProject').addClass('add-talent');
+//            $('#assignToProject').css('pointer-events', '');
+//            $('#talent-delete').css('pointer-events', '');
+//
+//            $('#talent-delete').css('background-color', '#e7eaec');
+//        } else {
+//            $('#assignToProject').removeClass('add-talent');
+//            $('#assignToProject').addClass('disabled-talent');
+//            $('#talent-delete').css('pointer-events', 'none');
+//
+//            $('#talent-delete').css('background-color', '');
+//            $('#assignToProject').css('pointer-events', 'none');
+//        }
         //console.log($scope.choosenCandidates);
     }
     $scope.talentSelected = false;
@@ -2635,21 +2635,21 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 $scope.choosenCandidates.splice($scope.choosenCandidates.indexOf($rootScope.talentList[i].id), 1);
             }
         }
-        if ($scope.choosenCandidates.length > 0) {
-            $('#assignToProject').removeClass('disabled-talent');
-            $('#assignToProject').addClass('add-talent');
-            $('#assignToProject').css('pointer-events', '');
-            $('#talent-delete').css('pointer-events', '');
-
-            $('#talent-delete').css('background-color', '#e7eaec');
-        } else {
-            $('#assignToProject').removeClass('add-talent');
-            $('#assignToProject').addClass('disabled-talent');
-            $('#talent-delete').css('pointer-events', 'none');
-            $('#assignToProject').css('pointer-events', 'none');
-
-            $('#talent-delete').css('background-color', '');
-        }
+//        if ($scope.choosenCandidates.length > 0) {
+//            $('#assignToProject').removeClass('disabled-talent');
+//            $('#assignToProject').addClass('add-talent');
+//            $('#assignToProject').css('pointer-events', '');
+//            $('#talent-delete').css('pointer-events', '');
+//
+//            $('#talent-delete').css('background-color', '#e7eaec');
+//        } else {
+//            $('#assignToProject').removeClass('add-talent');
+//            $('#assignToProject').addClass('disabled-talent');
+//            $('#talent-delete').css('pointer-events', 'none');
+//            $('#assignToProject').css('pointer-events', 'none');
+//
+//            $('#talent-delete').css('background-color', '');
+//        }
     }
 
     $scope.deleteTalents = function () {
@@ -2687,14 +2687,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     //                    var count = talent.length
                     //                    $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
                     //                    $rootScope.talentCountEnd = response.length;
+                    
                     $('#selectall').prop('checked', false);
-                    $('#assignToProject').removeClass('add-talent');
-                    $('#assignToProject').addClass('disabled-talent');
-                    $('#assignToProject').css('pointer-events', 'none');
-                    $('#talent-delete').css('pointer-events', 'none');
-
-                    $('#talent-delete').css('background-color', '');
                     $('#delete-talent-popup').modal('hide');
+                    
                     $('html, body').animate({
                         scrollTop: 0
                     }, 'fast');
