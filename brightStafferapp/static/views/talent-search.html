@@ -5,7 +5,7 @@
             <div class="talent-container">
                 <div class="talent-search-bar">
                     <button type="" class="btn add-talent" data-toggle="modal" oncontextmenu="return false;" data-target="#add-talent" ng-click="resetModal()">Add Talent</button>
-                    <button type="" class="btn disabled-talent" id="assignToProject" ng-click="openProjectList()">Send to Project</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="!talentSelected" ng-click="openProjectList()">Send to Project</button>
                 </div>
                 <div class="talent-advance-search-div">
                     <button type="" class="btn advance-search">Advanced Search</button>
@@ -32,7 +32,7 @@
                             <select class="form-control select-arrow" ng-model="exportType" id="export" ng-options="option.name for option in exportOptions">
                             </select>
                         </div>
-                        <div class="talent-search-delete-icon" id="talent-delete" style="pointer-events:none;" ng-click="deleteTalents()"><i class="fa fa-trash"></i></div>
+                        <div class="talent-search-delete-icon" ng-class="{'pointer-evt-none': !talentSelected, 'del-btn-color': talentSelected}" ng-click="deleteTalents()"><i class="fa fa-trash"></i></div>
                     </div>
                     <div class="showing-talent-search">
                         <div class="checkbox" ng-show="talentList.length">
