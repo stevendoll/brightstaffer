@@ -487,7 +487,8 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
             updated = TalentStage.objects.filter(id=str(stage_id)).update(stage=stage, details=details,
                                                                           notes=notes, date_created=date)
             if updated:
-                Talent.objects.filter(id=talent).update(activation_date=timezone.now(), update_date=timezone.now())
+                Talent.objects.filter(id=talent).update(activation_date=timezone.now())
+                Talent.objects.filter(id=talent).update(update_date=timezone.now())
                 queryset = super(TalentStageEditAPI, self).get_queryset()
                 queryset = queryset.filter(talent_id=talent)
                 serializer_data = TalentSerializer(talent_obj)
