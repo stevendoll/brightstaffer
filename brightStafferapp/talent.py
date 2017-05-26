@@ -425,9 +425,10 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
         Talent.objects.filter(id=talent).update(activation_date=timezone.now(),update_date=timezone.now())
         tp_obj, created = TalentStage.objects.get_or_create(talent=talent_obj, project=project, stage=stage,
                                                             details=details, notes=notes, date_created=date)
-        Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
         if created:
             queryset = super(TalentStageAddAPI, self).get_queryset()
+            Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now())
+            Talent.objects.filter(id=talent_objs).update(update_date=timezone.now())
             queryset = queryset.filter(talent_id=talent)
             # context['talent_id']=tp_obj.talent.talent_name
             # context['stage_id']=tp_obj.id
@@ -486,7 +487,8 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
             updated = TalentStage.objects.filter(id=str(stage_id)).update(stage=stage, details=details,
                                                                           notes=notes, date_created=date)
             if updated:
-                Talent.objects.filter(id=talent).update(activation_date=timezone.now(), update_date=timezone.now())
+                Talent.objects.filter(id=talent).update(activation_date=timezone.now())
+                Talent.objects.filter(id=talent).update(update_date=timezone.now())
                 queryset = super(TalentStageEditAPI, self).get_queryset()
                 queryset = queryset.filter(talent_id=talent)
                 serializer_data = TalentSerializer(talent_obj)
@@ -1032,6 +1034,7 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
             Talent.objects.filter(id=talent_id).update(activation_date=timezone.now(), update_date=timezone.now())
             talent.save()
             talent_loc.save()
+            TalentCompany.objects.filter(talent=talent, is_current=True).delete()
             if content['currentOrganization'][0]['name']:
                 company, create =Company.objects.get_or_create(company_name=content['currentOrganization'][0]['name'])
                 if not create:

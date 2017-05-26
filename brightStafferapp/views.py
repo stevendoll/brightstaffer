@@ -604,16 +604,16 @@ def handle_talent_data(talent_data, user):
             except:
                 result['lastName'] = ''
             # result['recruiter'] = user
-            result['status'] = 'New'
+            #result['status'] = 'New'
             #result['linkedin_url'] = ''
             #result['linkedinProfileUrl'] = ''
-            result['email'] = ''
-            result['phone'] = ''
-            result['city'] = ''
-            result['state'] = ''
-            result['country'] = ''
+            #result['email'] = ''
+            #result['phone'] = ''
+            #result['city'] = ''
+            #result['state'] = ''
+            #result['country'] = ''
             result['industryFocus'] = {'name':'', 'percentage':''}
-            result['create_date'] = ''
+            #result['create_date'] = ''
 
         skills = []
         if 'skills' in talent_data:
@@ -772,14 +772,16 @@ class LinkedinDataView(View):
             if url != '':
                 linkedin =Talent.objects.filter(id=id,talent_active__is_active=True,linkedin_url=url)
                 if linkedin:
-                    Talent.objects.filter(id=id).update(linkedin_url=url)
+                    pass
+                    #Talent.objects.filter(id=id).update(linkedin_url=url)
                 else:
                     linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
                                                             Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
                     if linkedin_talent:
                         return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
                     else:
-                        Talent.objects.filter(id=id).update(linkedin_url=url)
+                        pass
+                        #Talent.objects.filter(id=id).update(linkedin_url=url)
         else:
             if url != '':
                 linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &

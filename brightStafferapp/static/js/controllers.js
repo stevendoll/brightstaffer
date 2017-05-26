@@ -18,7 +18,19 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
     $rootScope.showLoader = function (show) {
         $scope.showLoader = show;
     }
-
+    
+    $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+        // Select open modal(s)
+        $rootScope.$broadcast('disableButton')
+        var $openModalSelector = $(".modal.fade.in"); 
+        if( ($openModalSelector.data('bs.modal') || {}).isShown == true){
+            // Close open modal(s)
+            $openModalSelector.modal("hide");
+            // Prevent page transition
+            event.preventDefault();
+        }
+    });
+    
     $scope.projectCheckAll = function(){
         console.log('www');
         var checked = $('#projectCheckAll').is(':checked');
@@ -1296,14 +1308,17 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
 
     $scope.done = function () {
         $('#add-talent').modal('hide');
-        $('#successBox').css('display', 'block');
+//        $('#successBox').css('display', 'block');
         $scope.removeCompletedFiles();
         $scope.search.searchKeywords = '';
-        setTimeout(
-            function () {
-                $('#successBox').css('display', 'none');
-                //            $state.go('talent.talent-search.talent-search-card', '');
-            }, 2000);
+        
+        $state.go('talent.talent-search.talent-search-card');
+        
+//        setTimeout(
+//            function () {
+//                $('#successBox').css('display', 'none');
+//                //            $state.go('talent.talent-search.talent-search-card', '');
+//            }, 2000);
     }
 
     $scope.reopen = function () {
@@ -1742,8 +1757,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.removeTopConcepts = function (arr, index) {
-        //        arr.splice(index, 1);
-        //            return;
+        
+        arr.splice(index, 1);    
+        return;
+
         if (!$scope.talentData.id) {
             arr.splice(index, 1);
             return;
@@ -1774,6 +1791,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.removeCurrentOrganization = function (arr, index) {
+        arr.splice(index, 1);
+        return;
+        
         if (!$scope.talentData.id) {
             arr.splice(index, 1);
             return;
@@ -1799,6 +1819,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.removePastOrganization = function (arr, index) {
+        
+        arr.splice(index, 1);
+        return;
+        
         if (!$scope.talentData.id) {
             arr.splice(index, 1);
             return;
@@ -1824,6 +1848,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 
     $scope.removeTalentEducation = function (arr, index) {
+        
+        arr.splice(index, 1);
+        return;
+        
         if (!$scope.talentData.id) {
             arr.splice(index, 1);
             return;
@@ -2322,11 +2350,18 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                         scrollTop: 0
                     }, 'fast');
                     $('#edit-recruiter').modal('hide');
-                    $('#nameSuccess').css('display', 'block');
-                    setTimeout(
-                        function () {
+                    
+                    
+                    if($state.current.name == 'talent.talent-search.talent-search-card'){
+                        $rootScope.candidatePagination.page = 1;
+                        $rootScope.getCandidateData();
+                    }else{
+                        $('#nameSuccess').css('display', 'block');
+                        setTimeout(function () {
                             $('#nameSuccess').css('display', 'none');
-                        }, 1000);
+                        }, 2000);
+                    }
+                    
                 } else {
                     console.log('error');
                 }
@@ -2496,6 +2531,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             talentApis.addTalentsToProject(requestObject).then(function (response) {
                 //console.log(response);
                 if (!callFrom) {
+                    $rootScope.candidatePagination.page = 1;
                     //                    $rootScope.$emit('fetchCandidateData');
                     $rootScope.getCandidateData();
                     //                    $rootScope.talentList = response;
@@ -2527,9 +2563,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     }, 2000);
                     for (var i = 0; i < response.length; i++) {
                         if (response[i].id == $scope.currentTalentId) {
-                            $rootScope.talentDetails = response[i];
-                            setCurrenPastInDetail($rootScope.talentDetails);
-                            sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
+                            $scope.talentDetails = response[i];
+                            setCurrenPastInDetail($scope.talentDetails);
+                            sessionStorage.talentDetails = JSON.stringify($scope.talentDetails);
                         }
                     }
                     $('.selectpicker').selectpicker();
@@ -2552,53 +2588,68 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('#selectall').prop('checked', false);
             $scope.choosenCandidates.splice($scope.choosenCandidates.indexOf(id), 1);
         }
-        if ($scope.choosenCandidates.length > 0) {
-            $('#assignToProject').removeClass('disabled-talent');
-            $('#assignToProject').addClass('add-talent');
-            $('#assignToProject').css('pointer-events', '');
-            $('#talent-delete').css('pointer-events', '');
-
-            $('#talent-delete').css('background-color', '#e7eaec');
-        } else {
-            $('#assignToProject').removeClass('add-talent');
-            $('#assignToProject').addClass('disabled-talent');
-            $('#talent-delete').css('pointer-events', 'none');
-
-            $('#talent-delete').css('background-color', '');
-            $('#assignToProject').css('pointer-events', 'none');
+        
+        if($scope.choosenCandidates.length){
+            $scope.talentSelected = true;
+        }else{
+            $scope.talentSelected = false;
         }
+        
+//        if ($scope.choosenCandidates.length > 0) {
+//            $('#assignToProject').removeClass('disabled-talent');
+//            $('#assignToProject').addClass('add-talent');
+//            $('#assignToProject').css('pointer-events', '');
+//            $('#talent-delete').css('pointer-events', '');
+//
+//            $('#talent-delete').css('background-color', '#e7eaec');
+//        } else {
+//            $('#assignToProject').removeClass('add-talent');
+//            $('#assignToProject').addClass('disabled-talent');
+//            $('#talent-delete').css('pointer-events', 'none');
+//
+//            $('#talent-delete').css('background-color', '');
+//            $('#assignToProject').css('pointer-events', 'none');
+//        }
         //console.log($scope.choosenCandidates);
     }
-
+    $scope.talentSelected = false;
+    
+    $rootScope.$on('disableButton', function(){
+        $scope.talentSelected = false;
+        $scope.choosenCandidates = [];
+    });
+    
     $scope.selectAll = function () {
         var state = $('#selectall').prop('checked');
         if (state) {
+            $scope.talentSelected = true;
             $scope.choosenCandidates = [];
             for (var i = 0; i < $rootScope.talentList.length; i++) {
                 $('#check_' + $rootScope.talentList[i].id).prop('checked', true);
                 $scope.choosenCandidates.push($rootScope.talentList[i].id);
             }
         } else {
+            $scope.talentSelected = false;
             for (var i = 0; i < $rootScope.talentList.length; i++) {
                 $('#check_' + $rootScope.talentList[i].id).prop('checked', false);
                 $scope.choosenCandidates.splice($scope.choosenCandidates.indexOf($rootScope.talentList[i].id), 1);
             }
         }
-        if ($scope.choosenCandidates.length > 0) {
-            $('#assignToProject').removeClass('disabled-talent');
-            $('#assignToProject').addClass('add-talent');
-            $('#assignToProject').css('pointer-events', '');
-            $('#talent-delete').css('pointer-events', '');
-
-            $('#talent-delete').css('background-color', '#e7eaec');
-        } else {
-            $('#assignToProject').removeClass('add-talent');
-            $('#assignToProject').addClass('disabled-talent');
-            $('#talent-delete').css('pointer-events', 'none');
-            $('#assignToProject').css('pointer-events', 'none');
-
-            $('#talent-delete').css('background-color', '');
-        }
+//        if ($scope.choosenCandidates.length > 0) {
+//            $('#assignToProject').removeClass('disabled-talent');
+//            $('#assignToProject').addClass('add-talent');
+//            $('#assignToProject').css('pointer-events', '');
+//            $('#talent-delete').css('pointer-events', '');
+//
+//            $('#talent-delete').css('background-color', '#e7eaec');
+//        } else {
+//            $('#assignToProject').removeClass('add-talent');
+//            $('#assignToProject').addClass('disabled-talent');
+//            $('#talent-delete').css('pointer-events', 'none');
+//            $('#assignToProject').css('pointer-events', 'none');
+//
+//            $('#talent-delete').css('background-color', '');
+//        }
     }
 
     $scope.deleteTalents = function () {
@@ -2626,6 +2677,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             //$('#delete-talent-popup').modal('hide');
             talentApis.deleteTalents(requestObject).then(function (response) {
                 if (response) {
+                    $scope.talentSelected = false;
                     $rootScope.search.searchKeywords = '';
                     $('.talent-search-icon').removeClass('active');
                     $rootScope.isFilterChecked = false;
@@ -2635,14 +2687,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     //                    var count = talent.length
                     //                    $rootScope.totalTalentCount = $rootScope.totalTalentCount - count;
                     //                    $rootScope.talentCountEnd = response.length;
+                    
                     $('#selectall').prop('checked', false);
-                    $('#assignToProject').removeClass('add-talent');
-                    $('#assignToProject').addClass('disabled-talent');
-                    $('#assignToProject').css('pointer-events', 'none');
-                    $('#talent-delete').css('pointer-events', 'none');
-
-                    $('#talent-delete').css('background-color', '');
                     $('#delete-talent-popup').modal('hide');
+                    
                     $('html, body').animate({
                         scrollTop: 0
                     }, 'fast');
@@ -3216,10 +3264,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     function initDatePicker(id) {
         $("#" + id).datepicker({
             dateFormat: 'M d, yy',
-            changeYear: true,
-            yearRange: '1900:' + new Date().getFullYear(),
-            yearRange: '1900:' + new Date().getFullYear(),
-            maxDate: new Date()
+            changeYear: true
         });
     }
 
@@ -3489,10 +3534,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     function initDatepicker(id) {
         $("#" + id).datepicker({
             dateFormat: 'M d, yy',
-            changeYear: true,
-            yearRange: '1900:' + new Date().getFullYear(),
-            yearRange: '1900:' + new Date().getFullYear(),
-            maxDate: new Date()
+            changeYear: true
         });
     }
 
