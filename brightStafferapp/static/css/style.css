@@ -2863,7 +2863,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .talent-search-delete-list-icon:hover{
    background-color: #e6e6e6;
 }
-
+.bar-view, .table-view{
+    cursor: pointer;
+}
 
 
 @media (max-width: 768px) {
