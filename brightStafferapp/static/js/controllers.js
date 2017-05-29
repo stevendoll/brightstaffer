@@ -1366,6 +1366,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         $('#add-talent').modal('hide');
         $scope.search.searchKeywords = '';
         $cookieStore.remove('talentEditedData');
+        $cookieStore.remove('editTalentId');
         $state.go('talent.create-profile');
     }
 }
