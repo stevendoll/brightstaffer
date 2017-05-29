@@ -4,10 +4,12 @@
 </div></div>
 
 <div class="col-xs-12 padding-zero" ng-show="talentList.length > 0">
-                  <div class="col-sm-12 tabl-fl-height padding-zero" ng-init="initPagination()">
+                  <div class="col-sm-12 tabl-fl-height padding-zero list-table-modify" ng-init="initPagination()">
                       <div class="mCustomScrollbar tabl-scrol" data-mcs-theme="dark" table-scroll>
-                         <table class="table talent-lst">
+                         <table class="table talent-lst table-hover">
                              <thead id="headRow">
+                                <th></th>
+
                                  <th id="talent_name" tabindex="0" >Name
 <!--                                     <span class="sor-cont" ng-click="sortBy('talent_name')" ng-init="propertyName === 'talent_name'" >-->
                                      <span class="sor-cont" ng-click="setAndGetSortedArr(talentList, 'talent_name')" >
@@ -174,6 +176,16 @@
                              <tbody>
 <!--                                 <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">-->
                                  <tr ng-repeat="talent in talentList | orderBy:propertyName:reverse" on-finish-render="ngRepeatFinished">
+                                     <td>
+
+                                         <div class="checkbox-right-fx">
+                                            <div class="checkbox">
+                                              <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
+                                              <label class="css-label" for="check_[[talent.id]]"></label>
+                                            </div>
+                                         </div>
+                                     </td>
+
                                      <td><span class="tbl-link-td" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</span></td>
                                      <td>
                                          <span ng-show="talent.talent_company.length && talent.talent_company[0].designation">              [[talent.talent_company[0].designation | capitalizeWord]]
@@ -268,14 +280,14 @@
                                 </ul>
                               </div>-->
                   </div>
-                 <div class="chk-bx-rt">
+                 <!-- <div class="chk-bx-rt">
                      <div class="checkbox-right-fx" ng-repeat="talent in talentList">
                         <div class="checkbox">
                           <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
                           <label class="css-label" for="check_[[talent.id]]"></label>
                         </div>
                      </div>
-                    <!-- <div class="checkbox-right-fx">
+                    <div class="checkbox-right-fx">
                         <div class="checkbox">
                           <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
                           <label class="css-label" for="check_[[talent.id]]"></label>
@@ -292,8 +304,8 @@
                           <input type="checkbox" id="check_[[talent.id]]" ng-click="updateSelection(talent.id,$index, talentList)" class="css-checkbox" name="">
                           <label class="css-label" for="check_[[talent.id]]"></label>
                         </div>
-                     </div>-->
-                 </div>
+                     </div>
+                 </div>-->
     </div>
 
   <!-- add-project-Modal-starts -->
