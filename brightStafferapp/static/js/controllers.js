@@ -1796,6 +1796,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     
     $scope.initTalenData = function () {
         
+        if($state.current.name != "talent.create-profile")return;
+        
         var details = createTalentFormService.getTalentDetails();
         if (Object.keys(details).length) {
             $scope.talentData = details;
