@@ -1805,6 +1805,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $cookieStore.put('editTalentId', details.id);
             return;
         }
+<<<<<<< Updated upstream
 
         var talentId = $cookieStore.get('editTalentId');
         
@@ -1819,12 +1820,18 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             });
             return;
         }
+=======
+>>>>>>> Stashed changes
         
 //        var detailsfromCookie = $cookieStore.get('talentEditedData');
 //
 //        if(detailsfromCookie){
 //            $scope.talentData = JSON.parse(detailsfromCookie);
+<<<<<<< Updated upstream
 //            return;   
+=======
+//            return;
+>>>>>>> Stashed changes
 //        }
 
         $scope.talentData = {
