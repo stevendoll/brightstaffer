@@ -2872,6 +2872,7 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
   .list-check-left{
     width:100% !important;
     float:left;
+    padding-left:5px;
   }
   .list-check-left .checkbox{
     float: left !important;
