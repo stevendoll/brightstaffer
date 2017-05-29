@@ -2324,9 +2324,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        $rootScope.$emit('fetchCandidateData');
         $rootScope.getCandidateData();
     }
-    
-    $scope.changeState = function () {
-
+    $scope.talentView = 'list'
+    $scope.changeState = function (view) {
+        $scope.talentView = view;
         $rootScope.candidatePagination.page = 1;
 
         $scope.choosenCandidates = [];
