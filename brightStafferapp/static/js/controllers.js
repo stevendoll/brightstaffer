@@ -30,10 +30,14 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
             event.preventDefault();
         }
     });
-    
+    $scope.anyProjectChecked = false;
     $scope.projectCheckAll = function(){
-        console.log('www');
         var checked = $('#projectCheckAll').is(':checked');
+        
+        if(checked){
+            $scope.anyProjectChecked = true;
+        }
+        
         $('.proj-check-box').each(function(){
             $(this).prop('checked', checked);
         })
@@ -986,6 +990,8 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
     $scope.deleteProjects = function () {
         var ids = $scope.getSelectedProjectIds();
+        if(!ids)return;
+        
         var data = {
             project: ids
         };
@@ -2000,6 +2006,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 //                }, 'fast');
                 if (response.success) {
                     //$scope.showNotification(true, 'Linkedin URL added successfully.');
+                    if($state.current.name == "talent.talent-search.talent-search-card"){
+                        $scope.candidatePagination.page = 1;  
+                    }
+                    
                     $scope.candidate = {};
                     $rootScope.getCandidateData();
                 } else {
@@ -2677,6 +2687,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             //$('#delete-talent-popup').modal('hide');
             talentApis.deleteTalents(requestObject).then(function (response) {
                 if (response) {
+                    $scope.talentSorted = '';
                     $scope.talentSelected = false;
                     $rootScope.search.searchKeywords = '';
                     $('.talent-search-icon').removeClass('active');
