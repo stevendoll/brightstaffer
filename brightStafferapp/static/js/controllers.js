@@ -30,10 +30,14 @@ function MainCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore, 
             event.preventDefault();
         }
     });
-    
+    $scope.anyProjectChecked = false;
     $scope.projectCheckAll = function(){
-        console.log('www');
         var checked = $('#projectCheckAll').is(':checked');
+        
+        if(checked){
+            $scope.anyProjectChecked = true;
+        }
+        
         $('.proj-check-box').each(function(){
             $(this).prop('checked', checked);
         })
@@ -986,6 +990,8 @@ function tableCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore,
 
     $scope.deleteProjects = function () {
         var ids = $scope.getSelectedProjectIds();
+        if(!ids)return;
+        
         var data = {
             project: ids
         };
@@ -1360,6 +1366,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
         $('#add-talent').modal('hide');
         $scope.search.searchKeywords = '';
         $cookieStore.remove('talentEditedData');
+        $cookieStore.remove('editTalentId');
         $state.go('talent.create-profile');
     }
 }
@@ -1669,21 +1676,157 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     $scope.talentDataValidation = {
         phone: true
     };
+    
+    $scope.convertJson = function (talent) {
+        var talentName = talent.talent_name.split(' ');
+        var location = talent.current_location[0] || {};
+        var fileObj = talent.file_upload[0] || {};
+        $scope.talentData = {
+            currentOrganization: [],
+            pastOrganization: [],
+            education: [],
+            topConcepts: [],
+            email: talent.talent_email.length ? talent.talent_email[0].email : '',
+            phone: talent.talent_contact.length ? talent.talent_contact[0].contact : '',
+            profile_image: talent.image,
+            linkedinProfileUrl: talent.linkedin_url,
+            city: location[0] ? location[0].trim() : "",
+            country: location[2] ? location[2].trim() : "",
+            state: location[1] ? location[1].trim() : "",
+            designation: talent.designation ? talent.designation.trim() : '',
+            industryFocus: {
+                name: talent.industry_focus ? talent.industry_focus.trim() : '',
+                percentage: talent.industry_focus_percentage ? talent.industry_focus_percentage : ''
+            },
+            firstName: talentName[0] ? talentName[0].trim() : '',
+            lastName: talentName[1] ? talentName[1].trim() : '',
+            city: location.city || '',
+            state: location.state || '',
+            country: location.country || '',
+            file_name: fileObj.file_name || '',
+            create_date: fileObj.create_date || '',
+            id: talent.id
+        };
+
+        talent.talent_concepts.forEach(function (concept) {
+            $scope.talentData.topConcepts.push({
+                match: concept.match,
+                name: concept.concept,
+                id: concept.id, //                match: concept.match
+            });
+        });
+        var isCurrentCompany = false,
+            isPastCompany = false;
+        if (talent.talent_company.length) {
+
+            var index = 0;
+
+            for (var i = index; i < talent.talent_company.length; i++) {
+                var organisation = {
+                    JobTitle: '',
+                    name: '',
+                    from: '',
+                    to: ''
+                };
+                organisation.name = talent.talent_company[i].company ? talent.talent_company[i].company.trim() : '';
+                organisation.JobTitle = talent.talent_company[i].designation ? talent.talent_company[i].designation.trim() : '';
+                if (talent.talent_company[i].start_date) {
+                    var date = new Date(talent.talent_company[i].start_date);
+                    organisation.from = date.getFullYear().toString();
+                }
+                if (talent.talent_company[i].end_date) {
+                    var date = new Date(talent.talent_company[i].end_date);
+                    organisation.to = date.getFullYear().toString();
+                }
+                organisation.id = talent.talent_company[i].id;
+
+                if (talent.talent_company[i].is_current) {
+                    $scope.talentData.currentOrganization.push(organisation);
+                    isCurrentCompany = true;
+                } else {
+                    $scope.talentData.pastOrganization.push(organisation);
+                    isPastCompany = true
+                }
+            }
+        }
+
+        if (!isCurrentCompany) {
+            $scope.talentData.currentOrganization.push({
+                JobTitle: '',
+                name: '',
+                from: '',
+                to: ''
+            });
+        }
+        if (!isPastCompany) {
+            $scope.talentData.pastOrganization.push({
+                JobTitle: '',
+                name: '',
+                from: '',
+                to: ''
+            });
+        }
+
+        if (talent.talent_education.length) {
+            for (var i = 0; i < talent.talent_education.length; i++) {
+                var organisation = {
+                    name: '',
+                    from: '',
+                    to: ''
+                };
+                organisation.name = talent.talent_education[i].education ? talent.talent_education[i].education.trim() : '';
+                if (talent.talent_education[i].start_date) {
+                    var date = new Date(talent.talent_education[i].start_date);
+                    organisation.from = date.getFullYear().toString();
+                }
+                if (talent.talent_education[i].end_date) {
+                    var date = new Date(talent.talent_education[i].end_date);
+                    organisation.to = date.getFullYear().toString();
+                }
+                organisation.id = talent.talent_education[i].id;
+                $scope.talentData.education.push(organisation);
+            }
+        } else {
+            $scope.talentData.education.push({
+                name: '',
+                from: '',
+                to: ''
+            });
+        }
+    }
+    
     $scope.initTalenData = function () {
+        
+        if($state.current.name != "talent.create-profile")return;
         
         var details = createTalentFormService.getTalentDetails();
         if (Object.keys(details).length) {
             $scope.talentData = details;
-            $cookieStore.put('talentEditedData', JSON.stringify(details));
+//            $cookieStore.put('talentEditedData', JSON.stringify(details));
+            $cookieStore.put('editTalentId', details.id);
+            return;
+        }
+
+        var talentId = $cookieStore.get('editTalentId');
+        
+        if(talentId){
+            var requestObject = {
+                'token': $rootScope.globals.currentUser.token, // username field value
+                'recruiter': $rootScope.globals.currentUser.user_email, // password field value
+                'id': talentId
+            };
+            talentApis.getCandidateProfile(requestObject).then(function (response) {
+                $scope.convertJson(response);
+            });
             return;
         }
         
-        var detailsfromCookie = $cookieStore.get('talentEditedData');
-
-        if(detailsfromCookie){
-            $scope.talentData = JSON.parse(detailsfromCookie);
-            return;   
-        }
+//        var detailsfromCookie = $cookieStore.get('talentEditedData');
+//
+//        if(detailsfromCookie){
+//            $scope.talentData = JSON.parse(detailsfromCookie);
+//            return;   
+//        }
 
         $scope.talentData = {
             profile_image: '',
@@ -2000,6 +2143,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                 //                }, 'fast');
                 if (response.success) {
                     //$scope.showNotification(true, 'Linkedin URL added successfully.');
+                    if($state.current.name == "talent.talent-search.talent-search-card"){
+                        $scope.candidatePagination.page = 1;  
+                    }
+                    
                     $scope.candidate = {};
                     $rootScope.getCandidateData();
                 } else {
@@ -2677,6 +2824,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             //$('#delete-talent-popup').modal('hide');
             talentApis.deleteTalents(requestObject).then(function (response) {
                 if (response) {
+                    $scope.talentSorted = '';
                     $scope.talentSelected = false;
                     $rootScope.search.searchKeywords = '';
                     $('.talent-search-icon').removeClass('active');

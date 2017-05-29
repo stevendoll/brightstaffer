@@ -459,9 +459,18 @@
                             <em></em>
                             <h1>[[st.stage]]</h1>
                             <div class="info-box-panels">Date: <span>[[st.create_date | dateFormat]]</span></div>
+<!--
                             <div class="info-box-panels" tooltip="[[st.project]]">Project: <span>#[[st.project]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.details]]">Details: <span>[[st.details]]</span></div>
                             <div class="info-box-panels" tooltip="[[st.notes]]">Notes: <span>[[st.notes]]</span></div>
+-->
+                            <div class="info-box-panels" data-toggle="tooltip" title="[[st.project]]">Project: <span>#[[st.project]]</span></div>
+                            <div class="info-box-panels" data-toggle="tooltip" title="[[st.details]]">
+                                Details: <span>[[st.details]]</span>
+                            </div>
+                            <div class="info-box-panels" data-toggle="tooltip" title="[[st.notes]]">
+                                Notes: <span>[[st.notes]]</span>
+                            </div>
                             <div class="info-box-bottom-links" style="cursor:default;">
 
                                 <span data-toggle="modal" ng-click="editStageModal(st)">Edit</span>
