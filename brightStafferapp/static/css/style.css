@@ -2866,6 +2866,33 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .bar-view, .table-view{
     cursor: pointer;
 }
+/*.tabl-fl-height > thead > tr > th:first-child, .tabl-fl-height > tbody > tr > td:first-child{
+    width:50px !important;
+  }*/
+  .list-check-left{
+    width:100% !important;
+    float:left;
+    padding-left:5px;
+  }
+  .list-check-left .checkbox{
+    float: left !important;
+  }
+  .checkbox-right-fx{
+    margin-bottom: 0px !important;
+  }
+
+  .list-check-left .totalcount-div{
+    float: left;
+    margin-left: 10px;
+  }
+    .list-table-modify .mCustomScrollBox{
+         max-width: 100%;
+    }
+    .list-table-modify #mCSB_2_container{
+        width: 2650px !important;
+    }
+
+
 
 
 @media (max-width: 768px) {
