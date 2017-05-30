@@ -2327,6 +2327,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 //    $rootScope.talentView = 'list';
     $scope.changeState = function (view) {
+        $scope.talentSelected = false;
         $rootScope.talentView = view;
         $rootScope.candidatePagination.page = 1;
 
