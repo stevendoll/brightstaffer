@@ -112,9 +112,9 @@ function locationFormat() {
                 return '';
 
             var str = '';
-            var city = capitalizeString(obj.city.trim());
-            var state = capitalizeString(obj.state.trim());
-            var country = capitalizeString(obj.country.trim());
+            var city = obj.city ? capitalizeString(obj.city.trim()) : '';
+            var state = obj.state ? capitalizeString(obj.state.trim()) : '';
+            var country = obj.country ? capitalizeString(obj.country.trim()) : '';
 
             city ? str += city + ', ' : '';
             state ? str += state + ', ' : '';
