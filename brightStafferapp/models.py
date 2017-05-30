@@ -172,10 +172,10 @@ class Talent(models.Model):
         try:
             if self.activation_date:
                 return self.activation_date.date().strftime('%d/%m/%Y')
-            else:
-                return datetime.datetime.now().strftime("%d/%m/%Y")
-        except:
-            return datetime.datetime.now().strftime("%d/%m/%Y")
+            #else:
+                #return datetime.datetime.now().strftime("%d/%m/%Y")
+        #except:
+        #    return datetime.datetime.now().strftime("%d/%m/%Y")
 
 
 class TalentLocation(models.Model):
