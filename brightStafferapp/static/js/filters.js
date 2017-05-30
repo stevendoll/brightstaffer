@@ -120,6 +120,10 @@ function locationFormat() {
             state ? str += state + ', ' : '';
             country ? str += country : '';
 
+            if(str[str.length-2]+str[str.length-1] == ", "){
+                str = str.substr(0, str.length-2)
+            }
+            
             return str;
         } else {
             input = input.trim();
