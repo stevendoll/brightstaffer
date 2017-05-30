@@ -367,10 +367,11 @@ function topnavCtrl($scope, $rootScope, $state, $http, $window, $stateParams, $c
     }
 
     //    $scope.getSearchData(true);
-
+    $rootScope.talentView = 'list';
     $rootScope.getCandidateData = function (check) {
         console.log('fetching candidate data');
         if (check == 'sideNav') {
+            $rootScope.talentView = 'list';
             $('.bar-view').addClass('active');
             $('.table-view').removeClass('active');
             $scope.recordCount = 10;
@@ -2324,9 +2325,9 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
         //        $rootScope.$emit('fetchCandidateData');
         $rootScope.getCandidateData();
     }
-    $scope.talentView = 'list'
+//    $rootScope.talentView = 'list';
     $scope.changeState = function (view) {
-        $scope.talentView = view;
+        $rootScope.talentView = view;
         $rootScope.candidatePagination.page = 1;
 
         $scope.choosenCandidates = [];
