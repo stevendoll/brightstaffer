@@ -1793,7 +1793,9 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     padding-bottom: 0px;
     color: #4e4e4e;
 }
-
+.table.talent-lst>tbody>tr>td:first-child {
+    min-width: 50px;
+}
 .table.talent-lst>tbody>tr>td:nth-child(3) {
     min-width: 180px;
 }
