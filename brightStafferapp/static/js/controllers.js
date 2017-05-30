@@ -2148,7 +2148,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     if($state.current.name == "talent.talent-search.talent-search-card"){
                         $scope.candidatePagination.page = 1;  
                     }
-                    
+                    $window.scrollTo(0, 0);
                     $scope.candidate = {};
                     $rootScope.getCandidateData();
                 } else {
