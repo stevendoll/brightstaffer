@@ -12,8 +12,8 @@
                     <div class="talent-search-icon" ng-click="initDatePickers();filterOpen()"><i class="fa fa-filter"></i></div>
                     <div class="view-as-panel">
                         <span>View as</span>
-                        <div class="bar-view active" ng-click="changeState()"><i class="fa fa-bars"></i></div>
-                        <div class="table-view" ng-click="changeState();talentSorted='';"><i class="fa fa-table"></i></div>
+                        <div class="bar-view active" ng-click="changeState('list')"><i class="fa fa-bars"></i></div>
+                        <div class="table-view" ng-click="changeState('grid');talentSorted='';"><i class="fa fa-table"></i></div>
                     </div>
                     <div class="show-entry-panel">
                         <span>Show entries/page</span>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="talent-search-delete-icon" ng-class="{'pointer-evt-none': !talentSelected, 'del-btn-color': talentSelected}" ng-click="deleteTalents()"><i class="fa fa-trash"></i></div>
                     </div>
-                    <div class="showing-talent-search list-check-left">
+                    <div class="showing-talent-search" ng-class="{'list-check-left': talentView == 'grid'}">
                         <div class="checkbox" ng-show="talentList.length">
                             <input type="checkbox" value="1" id="selectall" class="css-checkbox" ng-click="selectAll()">
                             <label class="css-label" for="selectall"></label>
