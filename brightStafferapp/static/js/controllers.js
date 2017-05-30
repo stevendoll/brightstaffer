@@ -1363,6 +1363,7 @@ function uploadFileCtrl($scope, $rootScope, $location, $http, $cookies, $cookieS
     });
 
     $scope.openCreateProfile = function () {
+        $rootScope.filterReset();
         createTalentFormService.setTalentDetails({});
         $('#add-talent').modal('hide');
         $scope.search.searchKeywords = '';
@@ -3902,7 +3903,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
     $scope.openEditProfileForm = function (data) {
         // $scope.talentEditableData = talent;
-
+        $rootScope.filterReset();
         $scope.search.searchKeywords = '';
 
         var talent = angular.copy(data);
