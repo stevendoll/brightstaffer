@@ -2453,31 +2453,14 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     /* edit-stage code end */
 
     $scope.getTalents = function (recordCount) { // function to fetch top 6 projects
-
+        $('#selectall').prop('checked', false);
+        $('.css-checkbox').each(function(){
+            $(this).prop('checked', false);
+        });
+        $scope.talentSelected = false;
+        
         $rootScope.candidatePagination.page = 1;
         $rootScope.candidatePagination.count = parseInt(recordCount);
-        //        $scope.getcandidateData();
-
-        //        if (recordCount) {
-        //            var count = recordCount;
-        //        } else {
-        //            var count = $scope.recordCount.value;
-        //        }
-        //        var requestObject = {
-        //            'token': $rootScope.globals.currentUser.token, // username field value
-        //            'recruiter': $rootScope.globals.currentUser.user_email, // password field value
-        //            'count': count
-        //        };
-        //        talentApis.getAllTalents(requestObject).then(function (response) {
-        //            if (response.message == "success") {
-        //                $rootScope.talentList = response.talent_list;
-        //                $scope.recruiter.recruiterName = response.display_name;
-        //                $rootScope.totalTalentCount = response.count;
-        //                $rootScope.talentCountEnd = response.talent_list.length;
-        //            } else {
-        //                console.log('error');
-        //            }
-        //        });
     }
 
     $scope.updateRecruiterName = function (name) { // function to fetch top 6 projects
