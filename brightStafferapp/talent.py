@@ -972,17 +972,18 @@ class DeleteTalent(generics.ListCreateAPIView):
             talent_objs = Talent.objects.filter(id=talent_id)
             if not talent_objs:
                 return util.returnErrorShorcut(400, 'Talent with id {} dosen\'t exist in database.'.format(talent_id))
-            talent_id = talent_objs[0]
-            to_delete = TalentRecruiter.objects.filter(talent=talent_id, recruiter__username=recruiter)
+            talent_obj = talent_objs[0]
+            to_delete = TalentRecruiter.objects.filter(talent=talent_obj, recruiter__username=recruiter)
             if to_delete:
                 to_delete = to_delete[0]
                 to_delete.is_active = False
                 to_delete.save()
 
-        return queryset.filter(Q(talent_active__is_active=True) & Q(recruiter__username=recruiter) &
-                               Q(talent_active__recruiter__username=recruiter) &
-                               Q(status__in=['New', 'Active'])).order_by('-update_date')
-
+        # return queryset.filter(Q(talent_active__is_active=True) & Q(recruiter__username=recruiter) &
+        #                        Q(talent_active__recruiter__username=recruiter) &
+        #                        Q(status__in=['New', 'Active'])).order_by('-update_date')
+            queryset = queryset.filter(id=talent_id)
+            return queryset
 
 def talent_validation(user_data):
     values = Talent.objects.filter(talent_name=user_data['talent'], id=user_data['id'])
