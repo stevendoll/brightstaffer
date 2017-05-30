@@ -164,8 +164,8 @@ class Talent(models.Model):
     def get_update_date(self):
         if self.update_date:
             return self.update_date.date().strftime('%d/%m/%Y')
-        else:
-            return datetime.datetime.now().strftime("%d/%m/%Y")
+        #else:
+        #    return datetime.datetime.now().strftime("%d/%m/%Y")
 
     @property
     def get_activation_date(self):
