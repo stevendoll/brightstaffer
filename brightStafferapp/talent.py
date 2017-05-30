@@ -1051,6 +1051,9 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
                             #company_id = Company.objects.filter(company_name=content['currentOrganization'][0]['name']).values('id')[0]['id'].hex
                             TalentCompany.objects.get_or_create(talent=talent, is_current=True, company=company,
                                                                 designation=content['talent_designation'])
+                        else:
+                            TalentCompany.objects.get_or_create(talent=talent, is_current=True, company=company,
+                                                                designation=content['talent_designation'])
                 else:
                     TalentCompany.objects.get_or_create(talent=talent, is_current=True,
                                                         company=company,
