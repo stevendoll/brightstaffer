@@ -427,8 +427,11 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
                                                             details=details, notes=notes, date_created=date)
         if created:
             queryset = super(TalentStageAddAPI, self).get_queryset()
-            Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now())
-            Talent.objects.filter(id=talent_objs).update(update_date=timezone.now())
+            talent_var = Talent.objects.filter(id=talent_objs)
+            if talent_var:
+                talent_var.update(activation_date=timezone.now(),update_date=timezone.now())
+                talent_var = talent_var[0]
+            #Talent.objects.filter(id=talent_objs).update(update_date=timezone.now())
             queryset = queryset.filter(talent_id=talent)
             # context['talent_id']=tp_obj.talent.talent_name
             # context['stage_id']=tp_obj.id
@@ -437,7 +440,7 @@ class TalentStageAddAPI(generics.ListCreateAPIView):
             # context['details'] = tp_obj.details
             # context['notes'] = tp_obj.notes
             # context['create_date'] = tp_obj.get_date_created
-            serializer_data = TalentSerializer(talent_obj)
+            serializer_data = TalentSerializer(talent_var)
             context['result'] = serializer_data.data
             return util.returnSuccessShorcut(context)
         else:
@@ -487,11 +490,13 @@ class TalentStageEditAPI(generics.ListCreateAPIView):
             updated = TalentStage.objects.filter(id=str(stage_id)).update(stage=stage, details=details,
                                                                           notes=notes, date_created=date)
             if updated:
-                Talent.objects.filter(id=talent).update(activation_date=timezone.now())
-                Talent.objects.filter(id=talent).update(update_date=timezone.now())
+                talent_var = Talent.objects.filter(id=talent_objs)
+                if talent_var:
+                    talent_var.update(activation_date=timezone.now(), update_date=timezone.now())
+                    talent_var = talent_var[0]
                 queryset = super(TalentStageEditAPI, self).get_queryset()
                 queryset = queryset.filter(talent_id=talent)
-                serializer_data = TalentSerializer(talent_obj)
+                serializer_data = TalentSerializer(talent_var)
                 context['result'] = serializer_data.data
                 context['message'] = 'Talent Stage Updated Successfully'
                 context['success'] = True
@@ -688,7 +693,7 @@ def add_edit_talent(profile_data, user):
                               recruiter=user, status='New',
                               industry_focus=profile_data.get('industryFocus','')['name'],
                               industry_focus_percentage=profile_data.get('industryFocus', '')['percentage'],
-                              image=profile_data.get('profile_image', '')
+                              image=profile_data.get('profile_image', ''),activation_date=datetime.datetime.now(),
                               )
 
             file_upload = FileUpload.objects.filter(talent=talent_obj[0])
@@ -736,7 +741,7 @@ def add_edit_talent(profile_data, user):
             industry_focus_percentage=profile_data.get('industryFocus','')['percentage'],
             linkedin_url=profile_data.get('linkedinProfileUrl', ''), image=profile_data.get('profile_image', ''),
             request_by=profile_data.get('request_by', ''),
-            create_date=datetime.datetime.now())
+            create_date=datetime.datetime.now(),activation_date=datetime.datetime.now())
         talent_location = TalentLocation.objects.create(talent=talent_obj,city=profile_data.get('city', ''),
                                       state=profile_data.get('state', ''), country=profile_data.get('country', ''))
         talent_recruiter, created = TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user, is_active=True)

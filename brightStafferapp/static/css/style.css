@@ -13394,7 +13394,7 @@ input[type=password] {
     margin: 20px 0px 0px 0px;
 }
 
-.search-detail-current span {
+.search-detail-current span:first-child {
     font-family: 'OpenSans-Bold';
     word-wrap: break-word;
 }
@@ -13413,7 +13413,7 @@ input[type=password] {
     margin: 8px 0px 0px 0px;
 }
 
-.search-detail-past span {
+.search-detail-past span:first-child {
     font-family: 'OpenSans-Bold';
     word-wrap: break-word;
 }
