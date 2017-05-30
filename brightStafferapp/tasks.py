@@ -41,7 +41,8 @@ def handle_talent_data(talent_data, user,request,text, file_upload_obj):
                                                       status='New',
                                                       linkedin_url='',
                                                       request_by=request,
-                                                      create_date=datetime.datetime.now())
+                                                      create_date=datetime.datetime.now(),
+                                                      activation_date=datetime.datetime.now())
             talent_recruiter, created = models.TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                                      is_active=True)
             file_upload_obj.text = text
