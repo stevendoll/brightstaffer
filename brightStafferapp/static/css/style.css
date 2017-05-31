@@ -1007,6 +1007,14 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .talent-panel #mCSB_2_container {
     width: 100% !important;
 }
+/*
+#add-talent .talent-panel .mCSB_container {
+    max-width: 100%;
+}
+*/
+#add-talent .talent-panel .mCSB_container {
+    width: 96% !important;
+}
 
 .talents-tabs-panel .left-section .nav-tabs > li > a {
     color: #6a6a6a;
