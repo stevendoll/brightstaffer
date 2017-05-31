@@ -128,7 +128,7 @@ class Talent(models.Model):
     talent_name = models.CharField(max_length=100, verbose_name='Talent Name', null=False, blank=False,
                                    default='')
     image = models.URLField(null=True, blank=True)
-    designation = models.CharField(max_length=100, default='', null=True, blank=True)
+    designation = models.CharField(max_length=500, default='', null=True, blank=True)
     industry_focus = models.CharField(max_length=100, default='', null=True, blank=True)
     industry_focus_percentage = models.CharField(max_length=30, default='', null=True, blank=True)
     linkedin_url = models.URLField(null=True, blank=True, max_length=300)
