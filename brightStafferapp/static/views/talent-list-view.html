@@ -194,8 +194,11 @@
                                          </span>
                                          <span ng-show="!talent.talent_company.length"> N/A </span>
                                      </td>
-                                     <td><span ng-show="talent.talent_company.length && talent.talent_company[0].company">[[talent.talent_company[0].company | capitalizeWord]]</span>
-                                         <span ng-show="!talent.talent_company.length"> N/A </span>
+                                     <td>
+                                         <span ng-show="talent.currentCompanyLength">
+                                            [[talent.talent_company[0].company | capitalizeWord]]
+                                         </span>
+                                         <span ng-show="!talent.currentCompanyLength"> N/A </span>
                                      </td>
                                      <td><span ng-show="talent.talent_stages.length && talent.talent_stages[0].stage">[[talent.talent_stages[0].stage]]</span>
                                          <span ng-show="!talent.talent_stages.length">  N/A </span></td>

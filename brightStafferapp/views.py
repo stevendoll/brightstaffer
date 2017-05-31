@@ -412,10 +412,12 @@ class UpdateRecruiter(generics.ListCreateAPIView):
         if not user:
             return util.returnErrorShorcut(403, 'Recruiter Email is not valid')
         Recruiter.objects.filter(user=user[0]).update(display_name=display_name)
-        talent_objs = Talent.objects.filter(id=talent_id)
-        Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
+        talent_var = Talent.objects.filter(id=talent_id)
+        if talent_var:
+            talent_var.update(activation_date=timezone.now(), update_date=timezone.now())
+            talent_var = talent_var[0]
         context['display_name'] = display_name
-        serializer_data = TalentSerializer(talent_objs[0])
+        serializer_data = TalentSerializer(talent_var)
         result = serializer_data.data
         context['result'] = result
         context['success'] = True
@@ -612,7 +614,7 @@ def handle_talent_data(talent_data, user):
             #result['city'] = ''
             #result['state'] = ''
             #result['country'] = ''
-            result['industryFocus'] = {'name':'', 'percentage':''}
+            #result['industryFocus'] = {'name':'', 'percentage':''}
             #result['create_date'] = ''
 
         skills = []
