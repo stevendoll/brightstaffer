@@ -3042,7 +3042,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     index2 = b[arrKey].length ? b[arrKey].length - 1 : 0;
                 }
                 
-                if(arrKey == 'talent_company'){
+                if(arrKey == 'talent_company' && key == "company"){
                     if(str1 == null && a[arrKey][index1].is_current){
                         str1 = a[arrKey][index1][key].toLowerCase();
                     }else{
