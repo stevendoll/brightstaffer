@@ -2307,7 +2307,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             talentApis.updateRatings(requestObject).then(function (response) {
                 if (response.message == "success") {
                     console.log('success');
-                    $rootScope.talentDetails.rating = rating;
+                    $rootScope.talentDetails = response.result;
                     sessionStorage.talentDetails = JSON.stringify($rootScope.talentDetails);
                 } else {
                     console.log('error');
@@ -3041,9 +3041,23 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     index1 = a[arrKey].length ? a[arrKey].length - 1 : 0;
                     index2 = b[arrKey].length ? b[arrKey].length - 1 : 0;
                 }
-                str1 = str1 == null ? a[arrKey][index1][key] ? a[arrKey][index1][key].toLowerCase() : '' : str1;
-                str2 = str2 == null ? b[arrKey][index2][key] ? b[arrKey][index2][key].toLowerCase() : '' : str2;
-
+                
+                if(arrKey == 'talent_company'){
+                    if(str1 == null && a[arrKey][index1].is_current){
+                        str1 = a[arrKey][index1][key].toLowerCase();
+                    }else{
+                        str1 = '';
+                    }
+                    
+                    if(str2 == null && b[arrKey][index2].is_current){
+                        str2 = b[arrKey][index2][key].toLowerCase();
+                    }else{
+                        str2 = '';
+                    }
+                }else{
+                    str1 = str1 == null ? a[arrKey][index1][key] ? a[arrKey][index1][key].toLowerCase() : '' : str1;
+                    str2 = str2 == null ? b[arrKey][index2][key] ? b[arrKey][index2][key].toLowerCase() : '' : str2;
+                }
                 if (str1 != str2) {
                     sorted = true;
                 }
