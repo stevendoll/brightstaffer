@@ -1059,7 +1059,9 @@ class LinkedinAddUrl(generics.ListCreateAPIView):
                     TalentCompany.objects.get_or_create(talent=talent, is_current=True,
                                                         company=company,
                                                         designation=content['talent_designation'])
-
+            else:
+                TalentCompany.objects.get_or_create(talent=talent, is_current=True,
+                                                    designation=content['talent_designation'])
             context['success'] = True
             return util.returnSuccessShorcut(context)
 
