@@ -2328,8 +2328,19 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     }
 //    $rootScope.talentView = 'list';
     $scope.changeState = function (view) {
+        if($rootScope.talentView == view){
+            if($rootScope.talentView == 'list')
+                $rootScope.talentView = 'grid';
+            
+            if($rootScope.talentView == 'grid')
+                $rootScope.talentView = 'list';
+        }else{
+            $rootScope.talentView = view;
+        }
+        
+        $scope.talentSorted = '';
         $scope.talentSelected = false;
-        $rootScope.talentView = view;
+        
         $rootScope.candidatePagination.page = 1;
 
         $scope.choosenCandidates = [];
@@ -2350,6 +2361,10 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
             $('.table-view').removeClass('active');
             $state.go('talent.talent-search.talent-search-card', '');
         }
+        
+        $timeout(function(){
+            $scope.$apply();
+        })
     }
     $scope.stageIdToBeDeleted = null;
     $scope.setScopeVariable = function (variable, value) {
@@ -2520,6 +2535,8 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
     };
 
     $scope.loadProfileData = function (id, talent, callFrom) {
+        $rootScope.talentView = 'list';
+//        $rootScope.talentView = ''
         $rootScope.isFilterChecked = false;
         if (talent && id) {
             $rootScope.talentDetails = talent;
@@ -3042,7 +3059,7 @@ function talentCtrl($scope, $rootScope, $location, $http, $cookies, $cookieStore
                     index2 = b[arrKey].length ? b[arrKey].length - 1 : 0;
                 }
                 
-                if(arrKey == 'talent_company' && key == "company"){
+                if(arrKey == 'talent_company' && (key == "company" || key == "designation")){
                     if(str1 == null && a[arrKey][index1].is_current){
                         str1 = a[arrKey][index1][key].toLowerCase();
                     }else{
