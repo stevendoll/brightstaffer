@@ -34,26 +34,7 @@
                         </div>
                         <div class="talent-search-delete-icon" ng-class="{'pointer-evt-none': !talentSelected, 'del-btn-color': talentSelected}" ng-click="deleteTalents()"><i class="fa fa-trash"></i></div>
                     </div>
-                    <div class="showing-talent-search" ng-class="{'list-check-left': talentView == 'grid'}">
-                        <div class="checkbox" ng-show="talentList.length">
-                            <input type="checkbox" value="1" id="selectall" class="css-checkbox" ng-click="selectAll()">
-                            <label class="css-label" for="selectall"></label>
-                        </div>
-
-
-                        <!--                <span ng-show="totalTalentCount">Showing [[talentCountStart]] – [[talentCountEnd]] entries of [[totalTalentCount]] entries</span>-->
-
-                        <div ng-show="totalTalentCount" class="totalcount-div">
-                            <span>Showing [[((candidatePagination.page-1) * candidatePagination.count)+1]]</span>
-                            <span>–</span>
-                            <span ng-show="((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count < totalTalentCount">    [[((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count]]
-                    </span>
-                            <span ng-show="((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count > totalTalentCount">    [[totalTalentCount]]
-                    </span>
-                            <span>entries of [[totalTalentCount]] entries</span>
-                        </div>
-                        <span ng-show="!totalTalentCount">Showing 0 entry of [[totalTalentCount]] entries</span>
-                    </div>
+                   
                     <div class="cls"></div>
                     <div class="col-xs-12 padding-zero" ng-show="isFilterChecked">
                         <div class="filter-search-panel">
@@ -193,7 +174,29 @@
                             </form>
                         </div>
                     </div>
+                    
                     <div class="cls"></div>
+                     <div class="showing-talent-search" ng-class="{'list-check-left': talentView == 'grid'}">
+                        <div class="checkbox" ng-show="talentList.length">
+                            <input type="checkbox" value="1" id="selectall" class="css-checkbox" ng-click="selectAll()">
+                            <label class="css-label" for="selectall"></label>
+                        </div>
+
+
+                        <!--                <span ng-show="totalTalentCount">Showing [[talentCountStart]] – [[talentCountEnd]] entries of [[totalTalentCount]] entries</span>-->
+
+                        <div ng-show="totalTalentCount" class="totalcount-div">
+                            <span>Showing [[((candidatePagination.page-1) * candidatePagination.count)+1]]</span>
+                            <span>–</span>
+                            <span ng-show="((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count < totalTalentCount">    [[((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count]]
+                    </span>
+                            <span ng-show="((candidatePagination.page-1) * candidatePagination.count)+candidatePagination.count > totalTalentCount">    [[totalTalentCount]]
+                    </span>
+                            <span>entries of [[totalTalentCount]] entries</span>
+                        </div>
+                        <span ng-show="!totalTalentCount">Showing 0 entry of [[totalTalentCount]] entries</span>
+                    </div>
+                    
                     <div ui-view></div>
                     <!--
                   <div class="search-pagination" ng-show="talentList.length">

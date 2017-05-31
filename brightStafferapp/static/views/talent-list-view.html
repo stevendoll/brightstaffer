@@ -188,15 +188,16 @@
 
                                      <td><span class="tbl-link-td" ng-click="loadProfileData(talent.id,talent)">[[talent.talent_name | capitalizeWord]]</span></td>
                                      <td>
-                                         <span ng-show="talent.talent_company.length && talent.talent_company[0].designation">              [[talent.talent_company[0].designation | capitalizeWord]]
+                                         <span ng-show="talent.currentCompanyLength && talent.talent_company[0].designation">              [[talent.talent_company[0].designation | capitalizeWord]]
                                          </span>
-                                         <span ng-show="talent.talent_company.length && !talent.talent_company[0].designation">              N/A
+                                         <span ng-show="talent.currentCompanyLength && !talent.talent_company[0].designation">              N/A
                                          </span>
-                                         <span ng-show="!talent.talent_company.length"> N/A </span>
+                                         <span ng-show="!talent.currentCompanyLength"> N/A </span>
                                      </td>
                                      <td>
                                          <span ng-show="talent.currentCompanyLength">
-                                            [[talent.talent_company[0].company | capitalizeWord]]
+                                            <span ng-show="talent.talent_company[0].company">[[talent.talent_company[0].company | capitalizeWord]]</span>
+                                            <span ng-show="!talent.talent_company[0].company"> N/A </span>
                                          </span>
                                          <span ng-show="!talent.currentCompanyLength"> N/A </span>
                                      </td>
