@@ -561,14 +561,12 @@ class TalentUpdateRank(View):
         talent_objs = Talent.objects.filter(id=talent)
         if not talent_objs:
             return util.returnErrorShorcut(400, 'Talent with id {} not found'.format(talent))
-
-        talent = Talent.objects.filter(id=talent)
-        if talent:
-            talent = talent[0]
-            Talent.objects.filter(id=talent_objs).update(activation_date=timezone.now(), update_date=timezone.now())
-            talent.rating = request.GET['rating']
-            talent.save()
-            context['message'] = 'success'
+        if talent_objs:
+            talent_objs.update(activation_date=timezone.now(), update_date=timezone.now(),rating=request.GET['rating'])
+            talent_var = talent_objs[0]
+            serializer_data = TalentSerializer(talent_var)
+            context['result'] = serializer_data.data
+            return util.returnSuccessShorcut(context)
         return util.returnSuccessShorcut(context)
 
 
