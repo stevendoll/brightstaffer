@@ -981,7 +981,7 @@ class DeleteTalent(generics.ListCreateAPIView):
         #                        Q(talent_active__recruiter__username=recruiter) &
         #                        Q(status__in=['New', 'Active'])).order_by('-update_date')
             queryset = queryset.filter(id=talent_id)
-            return queryset
+        return queryset
 
 def talent_validation(user_data):
     values = Talent.objects.filter(talent_name=user_data['talent'], id=user_data['id'])
