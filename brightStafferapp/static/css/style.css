@@ -15607,3 +15607,7 @@ a {
 .del-btn-color {
     background-color: rgb(231, 234, 236);
 }
+
+.mg-top40 {
+    margin-top: -40px;
+}
