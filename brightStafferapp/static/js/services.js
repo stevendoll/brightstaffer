@@ -278,7 +278,7 @@ function talentApis($rootScope, $http, REQUEST_URL, appService) {
         updateRecruiterName: function (data) {
             $rootScope.showLoader(true);
             return $http({
-                url: REQUEST_URL + 'update_recruiter/?recruiter=' + data.recruiter + '&display_name=' + data.display_name
+                url: REQUEST_URL + 'update_recruiter/?recruiter=' + data.recruiter + '&display_name=' + data.display_name + '&id=' + data.id
                 , method: "GET", // or "get"
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
@@ -644,11 +644,13 @@ function createTalentFormService($rootScope, REQUEST_URL, appService) {
             }
             appService.httpRequest(param, callback);
         }
-        , uploadTalentFile: function (file, callback) {
+        , uploadTalentFile: function (file, mode, callback) {
             var fd = new FormData();
             fd.append('FILES', file);
             fd.append('recruiter', $rootScope.globals.currentUser.user_email);
-            fd.append('request_by', 'create');
+//            fd.append('request_by', 'create');
+            fd.append('request_by', mode);
+            
             var obj = {
                 withCredentials: false
                 , method: 'POST'

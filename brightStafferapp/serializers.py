@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from brightStafferapp.models import Projects, Concept, Talent, Education, Company, TalentProject, TalentConcept, \
-    TalentCompany, TalentEducation,TalentContact, TalentEmail, TalentStage
+    TalentCompany, TalentEducation,TalentContact, TalentEmail, TalentStage, FileUpload, TalentLocation
 from django.contrib.auth.models import User
 import datetime
 
@@ -146,10 +146,15 @@ class TalentCompanySerializer(serializers.ModelSerializer):
 
     def get_career_gap(self, obj):
         check_date = obj.start_date
+        end_date = obj.end_date
         if check_date:
-            previous_company = obj.talent.talent_company.filter(end_date__lt=check_date).order_by('start_date').last()
+            previous_company = obj.talent.talent_company.filter(end_date__lte=check_date).order_by('start_date').last()
+            #previous_company = obj.talent.talent_company.filter(start_date__lte=check_date).order_by('start_date').last()
             if not previous_company:
                 return 0
+            # if previous_company.end_date is None:
+            #     previous_company.end_date = datetime.date()
+            #     print (previous_company.end_date)
             date_diff = (obj.start_date - previous_company.end_date).days/365
             return date_diff
 
@@ -169,13 +174,37 @@ class TalentStageSerializer(serializers.ModelSerializer):
         fields = ('id', 'talent', 'project', 'stage', 'details', 'notes', 'create_date', 'date_updated')
 
 
+class FileStageSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
+    file = serializers.FileField()
+    file_name = serializers.CharField()
+    user = serializers.CharField()
+    talent = serializers.CharField()
+    create_date = serializers.CharField(source='get_date_created')
+    class Meta:
+        model = FileUpload
+        fields = ('id', 'name', 'file','file_name', 'user', 'talent','create_date')
+
+
+class TalentLocationSerializer(serializers.ModelSerializer):
+    city = serializers.CharField()
+    state = serializers.CharField()
+    country = serializers.CharField()
+    talent = serializers.CharField()
+    #create_date = serializers.CharField(source='get_date_created')
+    class Meta:
+        model = TalentLocation
+        fields = ('id', 'city', 'state', 'country', 'talent')
+
+
 class TalentSerializer(serializers.ModelSerializer):
     talent_name = serializers.CharField()
-    current_location = serializers.SerializerMethodField()
+    #current_location = serializers.SerializerMethodField()
     talent_education = TalentEducationSerializer(many=True)
     recruiter = serializers.CharField()
     request_by = serializers.CharField()
     create_date = serializers.CharField(source='get_date')
+    update_date = serializers.CharField(source='get_update_date')
     activation_date = serializers.CharField(source='get_activation_date')
     talent_company = TalentCompanySerializer(many=True)
     talent_project = TalentProjectSerializer(many=True)
@@ -183,16 +212,20 @@ class TalentSerializer(serializers.ModelSerializer):
     talent_email = TalentEmailSerializer(many=True)
     talent_contact = TalentContactSerializer(many=True)
     talent_stages = TalentStageSerializer(many=True)
+    current_location = TalentLocationSerializer(many=True)
+    file_upload = FileStageSerializer(many=True)
 
-    def get_current_location(self, obj):
-        if obj.current_location.all():
-            return str(obj.current_location.all()[0])
-        else:
-            return ''
+    # def get_current_location(self, obj):
+    #     if obj.current_location.all():
+    #         return str(obj.current_location.all()[0])
+    #     else:
+    #         return ''
 
     class Meta:
         model = Talent
-        fields = ('id', 'image', 'talent_name', 'designation', 'industry_focus', 'activation_date', 'industry_focus_percentage',
-                  'status', 'rating', 'talent_email', 'talent_stages', 'talent_contact', 'linkedin_url', 'recruiter',
-                  'create_date', 'current_location', 'talent_company', 'talent_education', 'talent_project','request_by',
+        fields = ('id', 'image', 'talent_name','current_location', 'designation', 'industry_focus', 'activation_date',
+                  'industry_focus_percentage',
+                  'status', 'rating', 'talent_email', 'talent_stages', 'file_upload', 'talent_contact',
+                  'linkedin_url', 'recruiter',
+                  'create_date', 'update_date','talent_company', 'talent_education', 'talent_project','request_by',
                   'talent_concepts')

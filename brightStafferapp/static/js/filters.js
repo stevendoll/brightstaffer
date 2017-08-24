@@ -105,21 +105,43 @@ function contactFormat() {
 
 function locationFormat() {
     return function (input) {
-        input = input.trim();
-        if (input == ',')
-            return '';
-        var b = input.split(',');
-        if (b[0]) {
-            b[0] = capitalizeString(b[0].trim());
+
+        if (typeof (input) == "object") {
+            var obj = input[0];
+            if (!obj)
+                return '';
+
+            var str = '';
+            var city = obj.city ? capitalizeString(obj.city.trim()) : '';
+            var state = obj.state ? capitalizeString(obj.state.trim()) : '';
+            var country = obj.country ? capitalizeString(obj.country.trim()) : '';
+
+            city ? str += city + ', ' : '';
+            state ? str += state + ', ' : '';
+            country ? str += country : '';
+
+            if(str[str.length-2]+str[str.length-1] == ", "){
+                str = str.substr(0, str.length-2)
+            }
+            
+            return str;
+        } else {
+            input = input.trim();
+            if (input == ',')
+                return '';
+            var b = input.split(',');
+            if (b[0]) {
+                b[0] = capitalizeString(b[0].trim());
+            }
+            if (b[1]) {
+                b[1] = capitalizeString(b[1].trim());
+            }
+            if (b[2]) {
+                b[2] = capitalizeString(b[2].trim());
+            }
+            input = b.join(', ')
+            return input;
         }
-        if (b[1]) {
-            b[1] = capitalizeString(b[1].trim());
-        }
-        if (b[2]) {
-            b[2] = capitalizeString(b[2].trim());
-        }
-        input = b.join(', ')
-        return input;
 
         function capitalizeString(inputString) {
             return inputString.substring(0, 1).toUpperCase() + inputString.substring(1);

@@ -29,23 +29,26 @@ def bulk_extract_text_from_pdf(file_upload_obj, user,request):
     :return: None or error
     """
     text = textract.process(file_upload_obj.file.path).decode('utf-8')
-    file_upload_obj.text = text
-    file_upload_obj.save()
     url = ml_url
     content = requests.post(url, data=text.encode('utf-8')).json()
-    handle_talent_data(content, user,request)
+    handle_talent_data(content, user,request,text,file_upload_obj)
 
 
-def handle_talent_data(talent_data, user,request):
+def handle_talent_data(talent_data, user,request,text, file_upload_obj):
     if talent_data:
         if 'name' in talent_data and talent_data['name']:
             talent_obj = models.Talent.objects.create(talent_name=talent_data['name'], recruiter=user,
                                                       status='New',
                                                       linkedin_url='',
                                                       request_by=request,
-                                                      create_date=datetime.datetime.now())
+                                                      create_date=datetime.datetime.now(),
+                                                      activation_date=datetime.datetime.now())
             talent_recruiter, created = models.TalentRecruiter.objects.get_or_create(talent=talent_obj, recruiter=user,
                                                                                      is_active=True)
+            file_upload_obj.text = text
+            file_upload_obj.talent = talent_obj
+            file_upload_obj.save()
+
             if talent_obj:
                 if 'skills' in talent_data:
                     for skill in talent_data['skills']:
@@ -55,30 +58,52 @@ def handle_talent_data(talent_data, user,request):
                             match=round(float(skill['score']), 2)*100)
             if "work-experience" in talent_data:
                 for experience in talent_data["work-experience"]:
-                    is_current = False
+                    #is_current = False
                      # save all talent experience information
-                    company, created = models.Company.objects.get_or_create(company_name=experience['Company'])
-                    if experience['type'].lower() == "current":
-                        is_current = True
-                        designation = experience['JobTitle']
-                        talent_obj.designation = designation
-                        talent_obj.save()
                     start_date, end_date = convert_to_date(experience['Duration'])
-                    if end_date == 'Present':
-                        is_current = True
-                        try:
-                            models.TalentCompany.objects.get_or_create(
-                                talent=talent_obj, company=company, is_current=is_current,
-                                designation=experience['JobTitle'], start_date=start_date)
-                        except:
-                            pass
+                    if experience['type'].lower() == "current":
+                        company, created = models.Company.objects.get_or_create(company_name=experience['Company'])
+                        models.TalentCompany.objects.get_or_create(
+                            talent=talent_obj, company=company, is_current=True,
+                            designation=experience['JobTitle'], start_date=start_date)
                     else:
-                        try:
-                            models.TalentCompany.objects.get_or_create(
-                                talent=talent_obj, company=company, is_current=is_current,
-                                designation=experience['JobTitle'], start_date=start_date, end_date=end_date)
-                        except:
-                            pass
+                        if experience['type'].lower() == '':
+                            company, created = models.Company.objects.get_or_create(company_name=experience['Company'])
+                            #talent_obj.designation = experience.get('JobTitle', '')
+                            talent_obj.save()
+                            if start_date:
+                                talent_company, created = models.TalentCompany.objects.get_or_create(
+                                    talent=talent_obj, company=company, designation=experience.get('JobTitle', ''),
+                                    start_date=start_date, is_current=False)
+                                if end_date:
+                                    talent_company.end_date = end_date
+                                    talent_company.is_current = False
+                                    talent_company.save()
+                            else:
+                                try:
+                                    talent_company, created=models.TalentCompany.objects.get_or_create(
+                                        talent=talent_obj, company=company, designation=experience.get('JobTitle', ''),
+                                        is_current=False)
+                                except:
+                                    pass
+                        else:
+                            company, created = models.Company.objects.get_or_create(
+                                company_name=experience['Company'])
+                            talent_obj.designation = experience.get('JobTitle', '')
+                            talent_obj.save()
+                            if start_date:
+                                talent_company, created = models.TalentCompany.objects.get_or_create(
+                                    talent=talent_obj, company=company, designation=experience.get('JobTitle', ''),
+                                    start_date=start_date, is_current=False)
+                                if end_date:
+                                    talent_company.end_date = end_date
+                                    talent_company.is_current = False
+                                    talent_company.save()
+                            else:
+                                models.TalentCompany.objects.get_or_create(
+                                    talent=talent_obj, company=company, designation=experience.get('JobTitle', ''),
+                                    is_current=False)
+
             if "education" in talent_data:
                 for education in talent_data['education']:
                     # save user education information

@@ -14,12 +14,12 @@ from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from brightStafferapp.models import Projects, Concept, ProjectConcept, TalentConcept, PdfImages, FileUpload, Recruiter,\
-    Talent, Company, TalentCompany, Education, TalentEducation
+    Talent, Company, TalentCompany, Education, TalentEducation,TalentProject
 from brightStafferapp import util
 from brightStafferapp.util import require_post_params, required_headers
 from django.shortcuts import render, HttpResponse
 from itertools import chain
-from brightStafferapp.serializers import ProjectSerializer, TopProjectSerializer, UserSerializer
+from brightStafferapp.serializers import ProjectSerializer, TopProjectSerializer, UserSerializer,TalentSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.pagination import PageNumberPagination
@@ -33,9 +33,11 @@ from PIL import Image
 from .tasks import bulk_extract_text_from_pdf
 from brightStafferapp.linkedin_scrap import LinkedInParser
 from brightStafferapp.google_custom_search import GoogleCustomSearch
-from brightStaffer.settings import ml_url
+from brightStaffer.settings import ml_url, AWS_S3_CUSTOM_DOMAIN,AWS_STORAGE_BUCKET_NAME,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,PDF_UPLOAD_PATH
 from datetime import date
 from django.db.models import Q
+import boto
+from boto.s3.key import Key
 
 class UserData(View):
     @method_decorator(csrf_exempt)
@@ -397,21 +399,31 @@ class ProjectDelete(generics.ListCreateAPIView):
 
 
 #Update Recruiter API
-class UpdateRecruiter(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-        return super(UpdateRecruiter, self).dispatch(request, *args, **kwargs)
+class UpdateRecruiter(generics.ListCreateAPIView):
+    serializer_class = TalentSerializer()
+    http_method_names = ['get']
+    allow_null = True
+    many = True
 
-    def get(self, request):
-        param_dict = {}
+    def get(self, request, *args, **kwargs):
+        context = {}
         recruiter = request.GET['recruiter']
         display_name = request.GET['display_name']
+        talent_id = request.GET['id']
         user = User.objects.filter(username=recruiter)
         if not user:
             return util.returnErrorShorcut(403, 'Recruiter Email is not valid')
         Recruiter.objects.filter(user=user[0]).update(display_name=display_name)
-        param_dict['display_name'] = display_name
-        return util.returnSuccessShorcut(param_dict)
+        talent_var = Talent.objects.filter(id=talent_id)
+        if talent_var:
+            talent_var.update(activation_date=timezone.now(), update_date=timezone.now())
+            talent_var = talent_var[0]
+        context['display_name'] = display_name
+        serializer_data = TalentSerializer(talent_var)
+        result = serializer_data.data
+        context['result'] = result
+        context['success'] = True
+        return util.returnSuccessShorcut(context)
 
 
 # TO upload Bulk upload Talent's Data
@@ -442,17 +454,33 @@ class FileUploadView(View):
             user = User.objects.filter(username=user_username)
             if user:
                 user = user[0]
-            dest_path = os.path.join(settings.MEDIA_URL, user_username)
+            dest_path = settings.MEDIA_URL
             # create destination path if not exists, send this to utils later, since will occur in many scenarios
             if not os.path.exists(dest_path):
                 os.makedirs(dest_path)
 
             for key, file in files.items():
-                file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
-                # extract all images from pdf
-                self.extract_image_from_pdf(file_upload_obj, dest_path='images')
-                # extract text from pdf
+                if request.POST['request_by'] == 'edit':
+                    #file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
+                    # extract all images from pdf
+                    #self.extract_image_from_pdf(file_upload_obj, dest_path='images')
+                    # extract text from pdf
+                    destination = os.path.join(dest_path, file.name)
+                    with open(destination, 'wb+') as f:
+                        for chunk in file.chunks():
+                            f.write(chunk)
+                    content = extract_text(self, destination, user)
+                    result = handle_talent_data(content, user)
+                    context = dict()
+                    context['results'] = result
+                    context['success'] = True
+                    return util.returnSuccessShorcut(context)
+
                 if request.POST['request_by'] == 'create':
+                    file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
+                    # extract all images from pdf
+                    self.extract_image_from_pdf(file_upload_obj, dest_path='images')
+                    # extract text from pdf
                     content = extract_text_from_pdf(self, file_upload_obj, user)
                     result = handle_talent_data(content, user)
                     context = dict()
@@ -461,6 +489,10 @@ class FileUploadView(View):
                     return util.returnSuccessShorcut(context)
 
                 if request.POST['request_by'] == 'bulk':
+                    file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
+                    # extract all images from pdf
+                    self.extract_image_from_pdf(file_upload_obj, dest_path='images')
+                    # extract text from pdf
                     request = request.POST['request_by']
                     bulk_extract_text_from_pdf.delay(file_upload_obj, user,request)
                     context = dict()
@@ -477,7 +509,20 @@ class FileUploadView(View):
         """
         try:
             file_name = str(uuid.uuid4())
-            file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user)
+            file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user, file_name=f.name)
+            file_upload_obj.save()
+            print(file_upload_obj.file.path)
+            print (AWS_STORAGE_BUCKET_NAME)
+            bucket_name = AWS_STORAGE_BUCKET_NAME
+            conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+            bucket = conn.get_bucket(bucket_name)
+            id = f.name
+            key = id
+            fn = file_upload_obj.file.path
+            k = Key(bucket)
+            k.key = key
+            k.set_contents_from_filename(fn)
+            os.remove(fn)
             return file_upload_obj
         except Exception as e:
             return util.returnErrorShorcut(400, "Error Connection Refused")
@@ -550,25 +595,42 @@ def extract_text_from_pdf(self, file_upload_obj, user):
     content = requests.post(url, data=text.encode('utf-8')).json()
     return content
 
+def extract_text(self, destination, user):
+    """
+    :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
+    and is now sent to extract text from the pdf file
+    :return: None or error
+    """
+    text = textract.process(destination).decode('utf-8')
+    url = ml_url
+    content = requests.post(url, data=text.encode('utf-8')).json()
+    return content
+
 
 def handle_talent_data(talent_data, user):
     result = {}
     if talent_data:
         if 'name' in talent_data and talent_data['name']:
             talent_name = talent_data['name'].split(' ')
-            result['firstName'] = talent_name[0]
-            result['lastName'] = talent_name[1]
+            try:
+                result['firstName'] = talent_name[0]
+            except:
+                result['firstName'] = ''
+            try:
+                result['lastName'] = talent_name[1]
+            except:
+                result['lastName'] = ''
             # result['recruiter'] = user
-            result['status'] = 'New'
-            result['linkedin_url'] = ''
-            result['linkedinProfileUrl'] = ''
-            result['email'] = ''
-            result['phone'] = ''
-            result['city'] = ''
-            result['state'] = ''
-            result['country'] = ''
-            result['industryFocus'] = {'name':'', 'percentage':''}
-            result['create_date'] = ''
+            #result['status'] = 'New'
+            #result['linkedin_url'] = ''
+            #result['linkedinProfileUrl'] = ''
+            #result['email'] = ''
+            #result['phone'] = ''
+            #result['city'] = ''
+            #result['state'] = ''
+            #result['country'] = ''
+            #result['industryFocus'] = {'name':'', 'percentage':''}
+            #result['create_date'] = ''
 
         skills = []
         if 'skills' in talent_data:
@@ -586,7 +648,7 @@ def handle_talent_data(talent_data, user):
                 current = dict()
                 current['company_name'] = experience['Company']
                 start_date, end_date = convert_to_date(experience['Duration'])
-                if end_date == 'Present':
+                if experience['type'] == 'Current':
                     is_current = True
                     try:
                         current['name'] = experience['Company']
@@ -727,14 +789,16 @@ class LinkedinDataView(View):
             if url != '':
                 linkedin =Talent.objects.filter(id=id,talent_active__is_active=True,linkedin_url=url)
                 if linkedin:
-                    Talent.objects.filter(id=id).update(linkedin_url=url)
+                    pass
+                    #Talent.objects.filter(id=id).update(linkedin_url=url)
                 else:
                     linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
                                                             Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
                     if linkedin_talent:
                         return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
                     else:
-                        Talent.objects.filter(id=id).update(linkedin_url=url)
+                        pass
+                        #Talent.objects.filter(id=id).update(linkedin_url=url)
         else:
             if url != '':
                 linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &

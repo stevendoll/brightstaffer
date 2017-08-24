@@ -128,7 +128,7 @@ class Talent(models.Model):
     talent_name = models.CharField(max_length=100, verbose_name='Talent Name', null=False, blank=False,
                                    default='')
     image = models.URLField(null=True, blank=True)
-    designation = models.CharField(max_length=100, default='', null=True, blank=True)
+    designation = models.CharField(max_length=500, default='', null=True, blank=True)
     industry_focus = models.CharField(max_length=100, default='', null=True, blank=True)
     industry_focus_percentage = models.CharField(max_length=30, default='', null=True, blank=True)
     linkedin_url = models.URLField(null=True, blank=True, max_length=300)
@@ -141,6 +141,7 @@ class Talent(models.Model):
     rating = models.IntegerField(default=0)
     status = models.CharField(choices=TALENT_CHOICES, null=True, blank=True, max_length=40)
     create_date = models.DateTimeField(auto_now_add=True,verbose_name='CreateDate', null=True, blank=True)
+    update_date = models.DateTimeField(auto_now=True, verbose_name='UpdateDate', null=True, blank=True)
     activation_date = models.DateTimeField(verbose_name='Activation Date', null=True, blank=True)
     request_by = models.CharField(max_length=100, default='', null=True, blank=True)
 
@@ -160,14 +161,21 @@ class Talent(models.Model):
             return datetime.datetime.now().strftime("%d/%m/%Y")
 
     @property
-    def get_activation_date(self):
-        try:
-            if self.activation_date:
-                return self.activation_date.date().strftime('%d/%m/%Y')
-            else:
-                return datetime.datetime.now().strftime("%d/%m/%Y")
-        except:
+    def get_update_date(self):
+        if self.update_date:
+            return self.update_date.date().strftime('%d/%m/%Y')
+        else:
             return datetime.datetime.now().strftime("%d/%m/%Y")
+
+    @property
+    def get_activation_date(self):
+        #try:
+        if self.activation_date:
+            return self.activation_date.date().strftime('%d/%m/%Y')
+        else:
+            return datetime.datetime.now().strftime("%d/%m/%Y")
+        #except:
+        #    return datetime.datetime.now().strftime("%d/%m/%Y")
 
 
 class TalentLocation(models.Model):
@@ -176,15 +184,15 @@ class TalentLocation(models.Model):
     state = models.CharField(max_length=50, null=True, blank=True)
     country = models.CharField(max_length=50, null=True, blank=True)
 
-    def __str__(self):
-        current_location = ''
-        if self.city:
-            current_location += self.city
-        if self.state:
-            current_location += ', ' + self.state
-        if self.country:
-            current_location += ', ' + self.country
-        return current_location
+    # def __str__(self):
+    #     current_location = ''
+    #     if self.city:
+    #         current_location += self.city
+    #     if self.state:
+    #         current_location += ', ' + self.state
+    #     if self.country:
+    #         current_location += ', ' + self.country
+    #     return current_location
 
 
 class TalentRecruiter(models.Model):
@@ -227,7 +235,7 @@ class TalentContact(models.Model):
 
 class TalentEducation(models.Model):
     talent = models.ForeignKey(Talent, related_name='talent_education')
-    education = models.ForeignKey(Education)
+    education = models.ForeignKey(Education,default='', null=True, blank=True)
     course = models.CharField(max_length=100, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
@@ -255,7 +263,7 @@ class TalentEducation(models.Model):
 class TalentCompany(models.Model):
     talent = models.ForeignKey(Talent, null=False, blank=True, verbose_name='Talent', related_name='talent_company')
     company = models.ForeignKey(Company,default='', null=True, blank=True)
-    designation = models.CharField(max_length=100, default='', null=True, blank=True)
+    designation = models.CharField(max_length=500, default='', null=True, blank=True)
     start_date = models.DateField(verbose_name='Start Date', null=True, blank=True)
     end_date = models.DateField(verbose_name='End Date', null=True, blank=True)
     is_current = models.BooleanField(verbose_name='Currently Working Here', default=False, null=False)
@@ -287,8 +295,8 @@ class TalentCompany(models.Model):
         else:
             return ""
 
-    def __str__(self):
-        return str(self.talent.talent_name + " works at " + self.company.company_name)
+    # def __str__(self):
+    #     return str(self.talent.talent_name + " works at " + self.company.company_name)
 
 
 class TalentProject(models.Model):
@@ -335,7 +343,7 @@ class TalentConcept(models.Model):
         if self.date_created:
             return self.date_created.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return datetime.datetime.now().strftime("%d/%m/%Y")
 
 
 class TalentStage(models.Model):
@@ -356,14 +364,15 @@ class TalentStage(models.Model):
         if self.date_created:
             return self.date_created.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return datetime.datetime.now().strftime("%d/%m/%Y")
 
     @property
     def get_date_updated(self):
         if self.date_updated:
             return self.date_updated.strftime('%d/%m/%Y')
         else:
-            return "01/01/1900"
+            return datetime.datetime.now().strftime("%d/%m/%Y")
+
 
 class ProjectConcept(models.Model):
     project = models.ForeignKey(Projects)
@@ -382,21 +391,30 @@ class ProjectConcept(models.Model):
 
 
 def get_upload_file_dir(instance, filename):
-    return str(settings.PDF_UPLOAD_PATH + "/" + instance.user.username + "/" + filename)
+    return str(settings.PDF_UPLOAD_PATH + filename)
 
 
 def get_image_file_dir(instance):
-    return str(settings.PDF_UPLOAD_PATH + "/" + instance.user.username + "/" + "images")
+    return str(settings.PDF_UPLOAD_PATH + "images")
 
 
 class FileUpload(models.Model):
     name = models.CharField(null=True, blank=True, max_length=200)
     file = models.FileField(upload_to=get_upload_file_dir)
+    file_name = models.CharField(null=True, blank=True, max_length=200)
     user = models.ForeignKey(User, null=True, blank=True)
+    talent = models.ForeignKey(Talent, null=True, blank=True, related_name='file_upload')
     text = models.TextField(default=None, blank=True, null=True)
+    create_date = models.DateField(auto_now_add=True,blank=False, null=False)
 
     def __str__(self):
         return "{} uploaded {}".format(self.user.username, self.name)
+
+    def get_date_created(self):
+        if self.create_date:
+            return self.create_date.strftime('%d/%m/%Y')
+        else:
+            return datetime.datetime.now().strftime("%d/%m/%Y")
 
 
 class PdfImages(models.Model):

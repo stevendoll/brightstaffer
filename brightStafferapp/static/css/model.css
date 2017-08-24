@@ -30,7 +30,8 @@
 }
 
 .spinner-container .path {
-  stroke-dasharray: 1,150; /* 1%, 101% circumference */
+  /*stroke-dasharray: 1,150;*/ /* 1%, 101% circumference */
+  stroke-dasharray: 100%;
   stroke-dashoffset: 0;
   fill: none;
   stroke-width: 4;
