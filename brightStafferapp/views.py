@@ -33,9 +33,11 @@ from PIL import Image
 from .tasks import bulk_extract_text_from_pdf
 from brightStafferapp.linkedin_scrap import LinkedInParser
 from brightStafferapp.google_custom_search import GoogleCustomSearch
-from brightStaffer.settings import ml_url
+from brightStaffer.settings import ml_url, AWS_S3_CUSTOM_DOMAIN,AWS_STORAGE_BUCKET_NAME,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,PDF_UPLOAD_PATH
 from datetime import date
 from django.db.models import Q
+import boto
+from boto.s3.key import Key
 
 class UserData(View):
     @method_decorator(csrf_exempt)
@@ -452,7 +454,7 @@ class FileUploadView(View):
             user = User.objects.filter(username=user_username)
             if user:
                 user = user[0]
-            dest_path = os.path.join(settings.MEDIA_URL, user_username)
+            dest_path = settings.MEDIA_URL
             # create destination path if not exists, send this to utils later, since will occur in many scenarios
             if not os.path.exists(dest_path):
                 os.makedirs(dest_path)
@@ -508,6 +510,19 @@ class FileUploadView(View):
         try:
             file_name = str(uuid.uuid4())
             file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user, file_name=f.name)
+            file_upload_obj.save()
+            print(file_upload_obj.file.path)
+            print (AWS_STORAGE_BUCKET_NAME)
+            bucket_name = AWS_STORAGE_BUCKET_NAME
+            conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+            bucket = conn.get_bucket(bucket_name)
+            id = f.name
+            key = id
+            fn = file_upload_obj.file.path
+            k = Key(bucket)
+            k.key = key
+            k.set_contents_from_filename(fn)
+            os.remove(fn)
             return file_upload_obj
         except Exception as e:
             return util.returnErrorShorcut(400, "Error Connection Refused")

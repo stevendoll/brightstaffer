@@ -391,11 +391,11 @@ class ProjectConcept(models.Model):
 
 
 def get_upload_file_dir(instance, filename):
-    return str(settings.PDF_UPLOAD_PATH + "/" + instance.user.username + "/" + filename)
+    return str(settings.PDF_UPLOAD_PATH + filename)
 
 
 def get_image_file_dir(instance):
-    return str(settings.PDF_UPLOAD_PATH + "/" + instance.user.username + "/" + "images")
+    return str(settings.PDF_UPLOAD_PATH + "images")
 
 
 class FileUpload(models.Model):
