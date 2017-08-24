@@ -511,8 +511,6 @@ class FileUploadView(View):
             file_name = str(uuid.uuid4())
             file_upload_obj = FileUpload.objects.create(name=file_name, file=f, user=user, file_name=f.name)
             file_upload_obj.save()
-            print(file_upload_obj.file.path)
-            print (AWS_STORAGE_BUCKET_NAME)
             bucket_name = AWS_STORAGE_BUCKET_NAME
             conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
             bucket = conn.get_bucket(bucket_name)
