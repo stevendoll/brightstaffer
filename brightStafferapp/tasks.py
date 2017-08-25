@@ -7,7 +7,7 @@ import textract
 from ResumeParser.core import create_resume
 import requests
 from brightStaffer.settings import ml_url
-
+import os
 
 @app.task
 def add(x, y):
@@ -29,12 +29,13 @@ def bulk_extract_text_from_pdf(file_upload_obj, user,request):
     :return: None or error
     """
     text = textract.process(file_upload_obj.file.path).decode('utf-8')
+    fn = file_upload_obj.file.path
     url = ml_url
     content = requests.post(url, data=text.encode('utf-8')).json()
-    handle_talent_data(content, user,request,text,file_upload_obj)
+    handle_talent_data(content, user,request,text,file_upload_obj,fn)
 
 
-def handle_talent_data(talent_data, user,request,text, file_upload_obj):
+def handle_talent_data(talent_data, user,request,text, file_upload_obj,fn):
     if talent_data:
         if 'name' in talent_data and talent_data['name']:
             talent_obj = models.Talent.objects.create(talent_name=talent_data['name'], recruiter=user,
@@ -48,6 +49,7 @@ def handle_talent_data(talent_data, user,request,text, file_upload_obj):
             file_upload_obj.text = text
             file_upload_obj.talent = talent_obj
             file_upload_obj.save()
+            os.remove(fn)
 
             if talent_obj:
                 if 'skills' in talent_data:
