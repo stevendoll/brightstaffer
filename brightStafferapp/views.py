@@ -520,7 +520,6 @@ class FileUploadView(View):
             k = Key(bucket)
             k.key = key
             k.set_contents_from_filename(fn)
-            os.remove(fn)
             return file_upload_obj
         except Exception as e:
             return util.returnErrorShorcut(400, "Error Connection Refused")
