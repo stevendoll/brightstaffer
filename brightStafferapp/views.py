@@ -462,19 +462,19 @@ class FileUploadView(View):
             for key, file in files.items():
                 if request.POST['request_by'] == 'edit':
                     destination = os.path.join(dest_path, file.name)
-                    with open(destination, 'wb+') as f:
-                        for chunk in file.chunks():
-                            f.write(chunk)
+                    file_name = str(uuid.uuid4())
+                    file_upload_obj = FileUpload.objects.create(name=file_name, file=file, user=user, file_name=file.name)
+                    file_upload_obj.save()
                     bucket_name = AWS_STORAGE_BUCKET_NAME
                     conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
                     bucket = conn.get_bucket(bucket_name)
-                    id = f.name
+                    id = file.name
                     key = id
-                    fn = destination
+                    fn = file_upload_obj.file.path
                     k = Key(bucket)
                     k.key = key
                     k.set_contents_from_filename(fn)
-                    content = extract_text(self, destination, user)
+                    content = extract_text(self, destination, user,fn)
                     result = handle_talent_data(content, user)
                     context = dict()
                     context['results'] = result
@@ -536,7 +536,7 @@ def extract_text_from_pdf(self, file_upload_obj, user):
     content = requests.post(url, data=text.encode('utf-8')).json()
     return content
 
-def extract_text(self, destination, user):
+def extract_text(self, destination, user,fn):
     """
     :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
     and is now sent to extract text from the pdf file
@@ -545,7 +545,7 @@ def extract_text(self, destination, user):
     text = textract.process(destination).decode('utf-8')
     url = ml_url
     content = requests.post(url, data=text.encode('utf-8')).json()
-    os.remove(destination)
+    os.remove(fn)
     return content
 
 
