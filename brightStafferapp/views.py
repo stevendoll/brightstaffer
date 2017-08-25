@@ -479,7 +479,7 @@ class FileUploadView(View):
                 if request.POST['request_by'] == 'create':
                     file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
                     # extract all images from pdf
-                    self.extract_image_from_pdf(file_upload_obj, dest_path='images')
+                    #self.extract_image_from_pdf(file_upload_obj, dest_path='images')
                     # extract text from pdf
                     content = extract_text_from_pdf(self, file_upload_obj, user)
                     result = handle_talent_data(content, user)
@@ -491,7 +491,7 @@ class FileUploadView(View):
                 if request.POST['request_by'] == 'bulk':
                     file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
                     # extract all images from pdf
-                    self.extract_image_from_pdf(file_upload_obj, dest_path='images')
+                    #self.extract_image_from_pdf(file_upload_obj, dest_path='images')
                     # extract text from pdf
                     request = request.POST['request_by']
                     bulk_extract_text_from_pdf.delay(file_upload_obj, user,request)
