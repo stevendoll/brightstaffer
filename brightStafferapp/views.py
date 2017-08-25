@@ -461,15 +461,20 @@ class FileUploadView(View):
 
             for key, file in files.items():
                 if request.POST['request_by'] == 'edit':
-                    #file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
-                    # extract all images from pdf
-                    #self.extract_image_from_pdf(file_upload_obj, dest_path='images')
-                    # extract text from pdf
                     destination = os.path.join(dest_path, file.name)
-                    with open(destination, 'wb+') as f:
-                        for chunk in file.chunks():
-                            f.write(chunk)
-                    content = extract_text(self, destination, user)
+                    file_name = str(uuid.uuid4())
+                    file_upload_obj = FileUpload.objects.create(name=file_name, file=file, user=user, file_name=file.name)
+                    file_upload_obj.save()
+                    bucket_name = AWS_STORAGE_BUCKET_NAME
+                    conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+                    bucket = conn.get_bucket(bucket_name)
+                    id = file.name
+                    key = id
+                    fn = file_upload_obj.file.path
+                    k = Key(bucket)
+                    k.key = key
+                    k.set_contents_from_filename(fn)
+                    content = extract_text(self, destination, user,fn)
                     result = handle_talent_data(content, user)
                     context = dict()
                     context['results'] = result
@@ -478,9 +483,6 @@ class FileUploadView(View):
 
                 if request.POST['request_by'] == 'create':
                     file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
-                    # extract all images from pdf
-                    #self.extract_image_from_pdf(file_upload_obj, dest_path='images')
-                    # extract text from pdf
                     content = extract_text_from_pdf(self, file_upload_obj, user)
                     result = handle_talent_data(content, user)
                     context = dict()
@@ -490,9 +492,6 @@ class FileUploadView(View):
 
                 if request.POST['request_by'] == 'bulk':
                     file_upload_obj = self.handle_uploaded_file(dest_path, file, user)
-                    # extract all images from pdf
-                    #self.extract_image_from_pdf(file_upload_obj, dest_path='images')
-                    # extract text from pdf
                     request = request.POST['request_by']
                     bulk_extract_text_from_pdf.delay(file_upload_obj, user,request)
                     context = dict()
@@ -524,61 +523,6 @@ class FileUploadView(View):
         except Exception as e:
             return util.returnErrorShorcut(400, "Error Connection Refused")
 
-    def extract_image_from_pdf(self, file_upload_obj, dest_path=None):
-        """
-        :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
-        and is now sent to extract images from the pdf file
-        :param dest_path: destination path for extracted images
-        :return: None or error
-        """
-        input1 = PyPDF2.PdfFileReader(open(file_upload_obj.file.path, "rb"))
-        page0 = input1.getPage(0)
-        dest_path = os.path.join("/".join(file_upload_obj.file.path.split('/')[:-1]), dest_path)
-        if not os.path.exists(dest_path):
-            os.makedirs(dest_path)
-        # check if /XObject is present in page. This object checks if there is any image present in pdf file.
-        if '/XObject' not in page0['/Resources']:
-            return
-        xobject = page0['/Resources']['/XObject'].getObject()
-        for obj in xobject:
-            if xobject[obj]['/Subtype'] == '/Image':
-                size = (xobject[obj]['/Width'], xobject[obj]['/Height'])
-                data = xobject[obj].getData()
-                unique_name = str(uuid.uuid4())
-                img_obj = PdfImages()
-                img_obj.file = file_upload_obj
-                img_obj.name = unique_name
-                img_obj.save()
-                if xobject[obj]['/ColorSpace'] == '/DeviceRGB':
-                    mode = "RGB"
-                else:
-                    mode = "P"
-
-                img_name = os.path.join(dest_path, unique_name)
-
-                # /FlateDecode for .png
-                if xobject[obj]['/Filter'] == '/FlateDecode':
-                    img = Image.frombytes(mode, size, data)
-                    img_name += self.FILTER_DICT[xobject[obj]['/Filter']]
-                    img.save(img_name)
-                    img_obj.image = img_name
-                elif xobject[obj]['/Filter'] == '/DCTDecode':
-                    img_name += self.FILTER_DICT[xobject[obj]['/Filter']]
-                    img = open(img_name, "wb+")
-                    img.write(data)
-                    img_obj.image = img_name
-                    img.close()
-                elif xobject[obj]['/Filter'] == '/JPXDecode':
-                    img_name += self.FILTER_DICT[xobject[obj]['/Filter']]
-                    img = open(img_name, "wb")
-                    img.write(data)
-                    img_obj.image = img_name
-                    img.close()
-                img_obj.save()
-
-
-
-
 def extract_text_from_pdf(self, file_upload_obj, user):
     """
     :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
@@ -592,7 +536,7 @@ def extract_text_from_pdf(self, file_upload_obj, user):
     content = requests.post(url, data=text.encode('utf-8')).json()
     return content
 
-def extract_text(self, destination, user):
+def extract_text(self, destination, user,fn):
     """
     :param file_upload_obj: model object of the newly uploaded file. This object is already saved in database
     and is now sent to extract text from the pdf file
@@ -601,6 +545,7 @@ def extract_text(self, destination, user):
     text = textract.process(destination).decode('utf-8')
     url = ml_url
     content = requests.post(url, data=text.encode('utf-8')).json()
+    os.remove(fn)
     return content
 
 
@@ -617,17 +562,6 @@ def handle_talent_data(talent_data, user):
                 result['lastName'] = talent_name[1]
             except:
                 result['lastName'] = ''
-            # result['recruiter'] = user
-            #result['status'] = 'New'
-            #result['linkedin_url'] = ''
-            #result['linkedinProfileUrl'] = ''
-            #result['email'] = ''
-            #result['phone'] = ''
-            #result['city'] = ''
-            #result['state'] = ''
-            #result['country'] = ''
-            #result['industryFocus'] = {'name':'', 'percentage':''}
-            #result['create_date'] = ''
 
         skills = []
         if 'skills' in talent_data:
@@ -787,7 +721,6 @@ class LinkedinDataView(View):
                 linkedin =Talent.objects.filter(id=id,talent_active__is_active=True,linkedin_url=url)
                 if linkedin:
                     pass
-                    #Talent.objects.filter(id=id).update(linkedin_url=url)
                 else:
                     linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
                                                             Q(recruiter__username=request.META['HTTP_RECRUITER']) & Q(linkedin_url=url))
@@ -795,7 +728,6 @@ class LinkedinDataView(View):
                         return util.returnErrorShorcut(400, 'Oops! The LinkedIn URL you have entered already exists.')
                     else:
                         pass
-                        #Talent.objects.filter(id=id).update(linkedin_url=url)
         else:
             if url != '':
                 linkedin_talent = Talent.objects.filter(Q(talent_active__is_active=True) &
